@@ -80,15 +80,18 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 
   //// Public Area
 
-  public final SubLSymbol getType() {
+  @Override
+public final SubLSymbol getType() {
     return Types.$dtp_hash_table$;
   }
 
-  public final SubLFixnum getTypeCode() {
+  @Override
+public final SubLFixnum getTypeCode() {
     return CommonSymbols.NINE_INTEGER;
   }
 
-  public final boolean canFastHash() {
+  @Override
+public final boolean canFastHash() {
     return false;
   }
 
@@ -97,11 +100,13 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   // extremely slow on _some_ hashmaps
   public boolean check4Bugs = false;
 
-  public String toTypeName() {
+  @Override
+public String toTypeName() {
     return HASHTABLE_TYPE_NAME;
   }
 
-  public int hashCode(int currentDepth) {
+  @Override
+public int hashCode(int currentDepth) {
     if (currentDepth < MAX_HASH_DEPTH) {
       return 0; // @hack
     } else {
@@ -109,7 +114,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     }
   }
 
-  public String toString() {
+  @Override
+public String toString() {
     return "#<HASH-TABLE " + test.getFunction().getFunctionSymbol() + " " + toTypeName() + " with " + size() + " entries @ " + super.toString() + ">";
   }
   //
@@ -121,7 +127,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     return test;
   }
 
-  public void clear() {
+  @Override
+public void clear() {
     hash.clear();
   }
 
@@ -144,7 +151,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
           final boolean hasKey = withTest(key2, hkey);
           if (hasKey) {
             boolean result1 = hash.containsKey(hkey);
-            boolean result2 = hash.containsKey((Object) key);
+            boolean result2 = hash.containsKey(key);
             // if (false) {
             Debug.bug();
             // }
@@ -167,7 +174,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     return hash.entrySet();
   }
 
-  public SubLObject get(SubLObject objI) {
+  @Override
+public SubLObject get(SubLObject objI) {
     return get0(objI, false);
   }
 
@@ -262,7 +270,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     return null;
   }
 
-  public SubLObject put(SubLObject hkey, SubLObject value) {
+  @Override
+public SubLObject put(SubLObject hkey, SubLObject value) {
     if (isAltTest()) {
       // this implementation lets the last representation of the key
       // survive, rather than the first; this is justified by Steele (1983), p282
@@ -319,7 +328,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     final SubLObject subLObject = (SubLObject) hkey;
     final SubLHashtableKeyEntry key;
     if (subLObject.canFastHash()) {
-      key = ((SubLKeyEntryFactory) keyFactory).makeKeyEntry(subLObject);
+      key = keyFactory.makeKeyEntry(subLObject);
     } else {
       key = new SubLHashtableKeyEntryImpl();
       key.init(subLObject, test);
@@ -333,7 +342,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     Errors.unimplementedMethod("SubLHashtable.putAll()");
   }
 
-  public SubLObject remove(SubLObject hkey) {
+  @Override
+public SubLObject remove(SubLObject hkey) {
     if (test == BinaryFunction.EQ_TEST) {
       SubLHashtableKeyEntry key = SubLProcess.currentSubLThread().hashtableEqKeyEntry;
       key.init(hkey);
@@ -375,7 +385,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     }
   }
 
-  public int size() {
+  @Override
+public int size() {
     return hash.size();
   }
 
@@ -392,155 +403,193 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   }
 
   /** Method created to avoid casting */
-  public final SubLHashtable toHashtable() { // SubLHashtable
+  @Override
+public final SubLHashtable toHashtable() { // SubLHashtable
     return this;
   }
 
-  public final boolean isNil() {
+  @Override
+public final boolean isNil() {
     return false;
   }
 
-  public final boolean isBoolean() {
+  @Override
+public final boolean isBoolean() {
     return false;
   }
 
-  public final boolean isSymbol() {
+  @Override
+public final boolean isSymbol() {
     return false;
   }
 
-  public final boolean isKeyword() {
+  @Override
+public final boolean isKeyword() {
     return false;
   }
 
-  public final boolean isAtom() {
+  @Override
+public final boolean isAtom() {
     return true;
   }
 
-  public final boolean isCons() {
+  @Override
+public final boolean isCons() {
     return false;
   }
 
-  public final boolean isList() {
+  @Override
+public final boolean isList() {
     return false;
   }
 
-  public final boolean isSequence() {
+  @Override
+public final boolean isSequence() {
     return false;
   }
 
-  public final boolean isNumber() {
+  @Override
+public final boolean isNumber() {
     return false;
   }
 
-  public final boolean isFixnum() {
+  @Override
+public final boolean isFixnum() {
     return false;
   }
 
-  public final boolean isBignum() {
+  @Override
+public final boolean isBignum() {
     return false;
   }
 
-  public final boolean isIntBignum() {
+  @Override
+public final boolean isIntBignum() {
     return false;
   }
 
-  public final boolean isLongBignum() {
+  @Override
+public final boolean isLongBignum() {
     return false;
   }
 
-  public final boolean isBigIntegerBignum() {
+  @Override
+public final boolean isBigIntegerBignum() {
     return false;
   }
 
-  public final boolean isInteger() {
+  @Override
+public final boolean isInteger() {
     return false;
   }
 
-  public final boolean isDouble() {
+  @Override
+public final boolean isDouble() {
     return false;
   }
 
-  public final boolean isChar() {
+  @Override
+public final boolean isChar() {
     return false;
   }
 
-  public final boolean isString() {
+  @Override
+public final boolean isString() {
     return false;
   }
 
-  public final boolean isVector() {
+  @Override
+public final boolean isVector() {
     return false;
   }
 
-  public final boolean isFunction() {
+  @Override
+public final boolean isFunction() {
     return false;
   }
 
-  public final boolean isFunctionSpec() {
+  @Override
+public final boolean isFunctionSpec() {
     return false;
   }
 
-  public final boolean isMacroOperator() {
+  @Override
+public final boolean isMacroOperator() {
     return false;
   }
 
-  public final boolean isHashtable() {
+  @Override
+public final boolean isHashtable() {
     return true;
   }
 
-  public final boolean isProcess() {
+  @Override
+public final boolean isProcess() {
     return false;
   }
 
-  public final boolean isLock() {
+  @Override
+public final boolean isLock() {
     return false;
   }
 
-  public final boolean isReadWriteLock() {
+  @Override
+public final boolean isReadWriteLock() {
     return false;
   }
 
-  public final boolean isStructure() {
+  @Override
+public final boolean isStructure() {
     return false;
   }
 
-  public final boolean isStream() {
+  @Override
+public final boolean isStream() {
     return false;
   }
 
-  public final boolean isPackage() {
+  @Override
+public final boolean isPackage() {
     return false;
   }
 
-  public final boolean isError() {
+  @Override
+public final boolean isError() {
     return false;
   }
 
-  public final boolean isGuid() {
+  @Override
+public final boolean isGuid() {
     return false;
   }
 
-  public final boolean isSemaphore() {
+  @Override
+public final boolean isSemaphore() {
     return false;
   }
 
-  public final boolean isEnvironment() {
+  @Override
+public final boolean isEnvironment() {
     return false;
   }
 
-  public final boolean isHashtableIterator() {
+  @Override
+public final boolean isHashtableIterator() {
     return false;
   }
 
-  public final boolean isRegexPattern() {
+  @Override
+public final boolean isRegexPattern() {
     return false;
   }
 
-  public final boolean isKeyhash() {
+  @Override
+public final boolean isKeyhash() {
     return false;
   }
 
-  public final boolean isKeyhashIterator() {
+  @Override
+public final boolean isKeyhashIterator() {
     return false;
   }
 
@@ -578,18 +627,21 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
      */
     @Override
     public String toString() {
-      return "#<KeyTest " + getSimpleName(test.getClass()) + ": " + stringValueOf((LispObject) getSKey()) + " hc=" + hashCode() + ">";
+      return "#<KeyTest " + getSimpleName(test.getClass()) + ": " + stringValueOf(getSKey()) + " hc=" + hashCode() + ">";
     }
 
+    @Override
     public void init(SubLObject key, BinaryFunction test) {
       this.key = key;
       this.test = test;
     }
 
+    @Override
     public void init(SubLObject key) {
       Errors.error("Ugh."); // this shouldn't happen'
     }
 
+    @Override
     public boolean equals(Object hkey) {
       if (hkey == this)
         return true;
@@ -600,6 +652,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return result;
     }
 
+    @Override
     public int hashCode() {
       if (key == null)
         return -1;
@@ -624,11 +677,13 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return ((LispObject) key).psxhash();
     }
 
+    @Override
     public void clear() {
       key = null;
       test = null;
     }
 
+    @Override
     public SubLObject getSKey() {
       return key;
     }
@@ -656,20 +711,23 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
      */
     @Override
     public String toString() {
-      return "#<KeyTest EQ: " + stringValueOf((LispObject) getSKey()) + " hc=" + hashCode() + ">";
+      return "#<KeyTest EQ: " + stringValueOf(getSKey()) + " hc=" + hashCode() + ">";
     }
 
     public SubLEqHashtableKeyEntryImpl() {
     }
 
+    @Override
     public void init(SubLObject key) {
       this.key = key;
     }
 
+    @Override
     public void init(SubLObject key, BinaryFunction test) {
       Errors.error("Ugh."); // this shouldn't happen'
     }
 
+    @Override
     public boolean equals(Object hkey) {
       if (hkey == this)
         return true;
@@ -679,6 +737,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return key == hkey;
     }
 
+    @Override
     public int hashCode() {
       if (true)
         return key.hashCode(0);
@@ -686,10 +745,12 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return key.hashCode(0);
     }
 
+    @Override
     public void clear() {
       key = null;
     }
 
+    @Override
     public SubLObject getSKey() {
       return key;
     }
@@ -706,25 +767,29 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
      */
     @Override
     public String toString() {
-      return "#<KeyTest EQL: " + stringValueOf((LispObject) getSKey()) + " hc=" + hashCode() + ">";
+      return "#<KeyTest EQL: " + stringValueOf(getSKey()) + " hc=" + hashCode() + ">";
     }
 
     public SubLEqlHashtableKeyEntryImpl() {
     }
 
+    @Override
     public void init(SubLObject key) {
       this.key = key;
     }
 
+    @Override
     public void init(SubLObject key, BinaryFunction test) {
       Errors.error("Ugh."); // this shouldn't happen'
     }
 
+    @Override
     public boolean equals(Object hkey) {
       hkey = unwrap(hkey);
       return key.eql((SubLObject) hkey);
     }
 
+    @Override
     public int hashCode() {
       if (true)
         return key.hashCode(0);
@@ -732,10 +797,12 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return ((LispObject) key).sxhash();
     }
 
+    @Override
     public void clear() {
       key = null;
     }
 
+    @Override
     public SubLObject getSKey() {
       return key;
     }
@@ -752,25 +819,29 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
      */
     @Override
     public String toString() {
-      return "#<KeyTest EQUAL: " + stringValueOf((LispObject) getSKey()) + " hc=" + hashCode() + ">";
+      return "#<KeyTest EQUAL: " + stringValueOf(getSKey()) + " hc=" + hashCode() + ">";
     }
 
     public SubLEqualHashtableKeyEntryImpl() {
     }
 
+    @Override
     public void init(SubLObject key) {
       this.key = key;
     }
 
+    @Override
     public void init(SubLObject key, BinaryFunction test) {
       Errors.error("Ugh."); // this shouldn't happen'
     }
 
+    @Override
     public boolean equals(Object hkey) {
       hkey = unwrap(hkey);
       return key.equal((SubLObject) hkey);
     }
 
+    @Override
     public int hashCode() {
       if (true)
         return key.hashCode(0);
@@ -778,10 +849,12 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return key.hashCode(0);
     }
 
+    @Override
     public void clear() {
       key = null;
     }
 
+    @Override
     public SubLObject getSKey() {
       return key;
     }
@@ -793,26 +866,30 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
 
     @Override
     public String toString() {
-      return "#<KeyTest EQUALP: " + stringValueOf((LispObject) getSKey()) + " hc=" + hashCode() + ">";
+      return "#<KeyTest EQUALP: " + stringValueOf(getSKey()) + " hc=" + hashCode() + ">";
 
     }
 
     public SubLEqualpHashtableKeyEntryImpl() {
     }
 
+    @Override
     public void init(SubLObject key) {
       this.key = key;
     }
 
+    @Override
     public void init(SubLObject key, BinaryFunction test) {
       Errors.error("Ugh."); // this shouldn't happen'
     }
 
+    @Override
     public boolean equals(Object hkey) {
       hkey = unwrap(hkey);
       return key.equalp((SubLObject) hkey);
     }
 
+    @Override
     public int hashCode() {
       if (true)
         return key.hashCode(0);
@@ -820,10 +897,12 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
       return ((LispObject) key).psxhash();
     }
 
+    @Override
     public void clear() {
       key = null;
     }
 
+    @Override
     public SubLObject getSKey() {
       return key;
     }
@@ -838,6 +917,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   }
 
   static final SubLKeyEntryFactory EQ_KEY_FACTORY = new SubLKeyEntryFactory() {
+    @Override
     public final SubLHashtableKeyEntry makeKeyEntry() {
       return SubLProcess.currentSubLThread().hashtableEqKeyEntry;
     }
@@ -861,6 +941,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   };
 
   static final SubLKeyEntryFactory EQL_KEY_FACTORY = new SubLKeyEntryFactory() {
+    @Override
     public final SubLHashtableKeyEntry makeKeyEntry() {
       return SubLProcess.currentSubLThread().hashtableEqlKeyEntry;
     }
@@ -885,6 +966,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   };
 
   static final SubLKeyEntryFactory EQUAL_KEY_FACTORY = new SubLKeyEntryFactory() {
+    @Override
     public final SubLHashtableKeyEntry makeKeyEntry() {
       return SubLProcess.currentSubLThread().hashtableEqualKeyEntry;
     }
@@ -908,6 +990,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   };
 
   static final SubLKeyEntryFactory EQUALP_KEY_FACTORY = new SubLKeyEntryFactory() {
+    @Override
     public final SubLHashtableKeyEntry makeKeyEntry() {
       return SubLProcess.currentSubLThread().hashtableEqualpKeyEntry;
     }
@@ -933,7 +1016,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
   //// Internal Rep
 
   private final BinaryFunction test;
-  private final HashMap<SubLHashtableKeyEntry, SubLObject> hash;
+    public HashMap<SubLHashtableKeyEntry, SubLObject> hash;
   private final SubLKeyEntryFactory keyFactory;
   //
   //	@Override
@@ -1069,7 +1152,7 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     return getEntries();
   }
 
-  private Map hashMe() {
+    public Map hashMe() {
     return this.hash;
   }
 
@@ -1114,7 +1197,8 @@ public class SubLHashtable extends FromSubLisp implements SubLObject, LispHashTa
     return NIL;
   }
 
-  public LispObject getRehashThreshold() {
+  @Override
+public LispObject getRehashThreshold() {
     Map<SubLHashtableKeyEntry, SubLObject> hash = hashMe();
     if (true)
       throw new UnsupportedOperationException("Not supported yet.");

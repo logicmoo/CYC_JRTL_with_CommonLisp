@@ -158,8 +158,7 @@ public  final class guardian extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_guardian_file() {
-    // CVS_ID("Id: guardian.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_GUARDIAN_PROCESS_);
+        subl_macro_promotions.declare_defglobal($sym0$_GUARDIAN_PROCESS_);
     subl_macro_promotions.declare_defglobal($sym1$_GUARDING_REQUESTS_);
     subl_macro_promotions.declare_defglobal($sym2$_GUARDIAN_ISG_);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_guardian_request$.getGlobalValue(), Symbols.symbol_function($sym10$GUARDIAN_REQUEST_PRINT_FUNCTION_TRAMPOLINE));

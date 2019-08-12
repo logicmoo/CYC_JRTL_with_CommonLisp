@@ -162,8 +162,7 @@ public  final class sbhl_search_datastructures extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_search_datastructures_file() {
-    // CVS_ID("Id: sbhl-search-datastructures.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_stack$.getGlobalValue(), Symbols.symbol_function($sym7$SBHL_STACK_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_stack$.getGlobalValue(), Symbols.symbol_function($sym7$SBHL_STACK_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$SBHL_STACK_NUM, $sym9$_CSETF_SBHL_STACK_NUM);
     Structures.def_csetf($sym10$SBHL_STACK_ELEMENTS, $sym11$_CSETF_SBHL_STACK_ELEMENTS);
     Equality.identity($sym0$SBHL_STACK);

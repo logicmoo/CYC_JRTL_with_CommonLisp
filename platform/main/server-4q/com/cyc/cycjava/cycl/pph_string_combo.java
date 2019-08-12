@@ -1,36 +1,8 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.pph_string_combo;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.pph_string_combo.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -44,15 +16,26 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class pph_string_combo extends SubLTranslatedFile {
+public final class pph_string_combo extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_string_combo();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_string_combo";
+    public static final String myName = "com.cyc.cycjava_2.cycl.pph_string_combo";
 
-    public static final String myFingerPrint = "cc3e2a897b7193a62a74c59162d3721108c958884863878e37b98c1b7f492c04";
 
     private static final SubLSymbol $sym0$PPH_STRING_COMBO_ = makeSymbol("PPH-STRING-COMBO?");
 
@@ -706,26 +689,26 @@ public final class pph_string_combo extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_pph_string_combo_file() {
-        declareFunction(me, "pph_string_comboP", "PPH-STRING-COMBO?", 1, 0, false);
-        declareFunction(me, "explode_pph_string_combo", "EXPLODE-PPH-STRING-COMBO", 1, 1, false);
-        declareFunction(me, "explode_pph_string_combo_int", "EXPLODE-PPH-STRING-COMBO-INT", 3, 0, false);
-        declareFunction(me, "pph_string_combo_size_estimate", "PPH-STRING-COMBO-SIZE-ESTIMATE", 1, 0, false);
-        declareFunction(me, "pph_string_combo_max_word_count_estimate", "PPH-STRING-COMBO-MAX-WORD-COUNT-ESTIMATE", 1, 0, false);
-        declareFunction(me, "pph_string_combo_min_word_count_estimate", "PPH-STRING-COMBO-MIN-WORD-COUNT-ESTIMATE", 1, 0, false);
-        declareFunction(me, "pph_string_combo_unsubsumed_subphrases", "PPH-STRING-COMBO-UNSUBSUMED-SUBPHRASES", 2, 1, false);
-        declareFunction(me, "pph_phrase_string_combo", "PPH-PHRASE-STRING-COMBO", 1, 1, false);
-        declareFunction(me, "pph_string_combo_has_sentential_forceP", "PPH-STRING-COMBO-HAS-SENTENTIAL-FORCE?", 2, 0, false);
-        declareFunction(me, "pph_string_combo_has_sentence_initial_forceP", "PPH-STRING-COMBO-HAS-SENTENCE-INITIAL-FORCE?", 2, 0, false);
-        declareFunction(me, "pph_string_combo_has_sentence_final_forceP", "PPH-STRING-COMBO-HAS-SENTENCE-FINAL-FORCE?", 2, 0, false);
-        declareFunction(me, "pph_string_combo_add_sentential_force", "PPH-STRING-COMBO-ADD-SENTENTIAL-FORCE", 2, 0, false);
-        declareFunction(me, "pph_string_combo_add_sentence_initial_force", "PPH-STRING-COMBO-ADD-SENTENCE-INITIAL-FORCE", 2, 0, false);
-        declareFunction(me, "pph_string_combo_add_sentence_final_force", "PPH-STRING-COMBO-ADD-SENTENCE-FINAL-FORCE", 2, 0, false);
-        declareFunction(me, "pph_string_combo_generates_token_sequenceP", "PPH-STRING-COMBO-GENERATES-TOKEN-SEQUENCE?", 2, 4, false);
-        declareFunction(me, "pph_string_generates_token_sequenceP", "PPH-STRING-GENERATES-TOKEN-SEQUENCE?", 5, 1, false);
-        declareFunction(me, "pph_string_combo_token_list_generates_token_sequenceP", "PPH-STRING-COMBO-TOKEN-LIST-GENERATES-TOKEN-SEQUENCE?", 5, 1, false);
-        declareFunction(me, "try_one_string_combo_token", "TRY-ONE-STRING-COMBO-TOKEN", 5, 1, false);
-        declareFunction(me, "pph_phrase_string_combo_internal", "PPH-PHRASE-STRING-COMBO-INTERNAL", 3, 0, false);
-        declareFunction(me, "pph_phrase_string_combos", "PPH-PHRASE-STRING-COMBOS", 3, 0, false);
+        declareFunction("pph_string_comboP", "PPH-STRING-COMBO?", 1, 0, false);
+        declareFunction("explode_pph_string_combo", "EXPLODE-PPH-STRING-COMBO", 1, 1, false);
+        declareFunction("explode_pph_string_combo_int", "EXPLODE-PPH-STRING-COMBO-INT", 3, 0, false);
+        declareFunction("pph_string_combo_size_estimate", "PPH-STRING-COMBO-SIZE-ESTIMATE", 1, 0, false);
+        declareFunction("pph_string_combo_max_word_count_estimate", "PPH-STRING-COMBO-MAX-WORD-COUNT-ESTIMATE", 1, 0, false);
+        declareFunction("pph_string_combo_min_word_count_estimate", "PPH-STRING-COMBO-MIN-WORD-COUNT-ESTIMATE", 1, 0, false);
+        declareFunction("pph_string_combo_unsubsumed_subphrases", "PPH-STRING-COMBO-UNSUBSUMED-SUBPHRASES", 2, 1, false);
+        declareFunction("pph_phrase_string_combo", "PPH-PHRASE-STRING-COMBO", 1, 1, false);
+        declareFunction("pph_string_combo_has_sentential_forceP", "PPH-STRING-COMBO-HAS-SENTENTIAL-FORCE?", 2, 0, false);
+        declareFunction("pph_string_combo_has_sentence_initial_forceP", "PPH-STRING-COMBO-HAS-SENTENCE-INITIAL-FORCE?", 2, 0, false);
+        declareFunction("pph_string_combo_has_sentence_final_forceP", "PPH-STRING-COMBO-HAS-SENTENCE-FINAL-FORCE?", 2, 0, false);
+        declareFunction("pph_string_combo_add_sentential_force", "PPH-STRING-COMBO-ADD-SENTENTIAL-FORCE", 2, 0, false);
+        declareFunction("pph_string_combo_add_sentence_initial_force", "PPH-STRING-COMBO-ADD-SENTENCE-INITIAL-FORCE", 2, 0, false);
+        declareFunction("pph_string_combo_add_sentence_final_force", "PPH-STRING-COMBO-ADD-SENTENCE-FINAL-FORCE", 2, 0, false);
+        declareFunction("pph_string_combo_generates_token_sequenceP", "PPH-STRING-COMBO-GENERATES-TOKEN-SEQUENCE?", 2, 4, false);
+        declareFunction("pph_string_generates_token_sequenceP", "PPH-STRING-GENERATES-TOKEN-SEQUENCE?", 5, 1, false);
+        declareFunction("pph_string_combo_token_list_generates_token_sequenceP", "PPH-STRING-COMBO-TOKEN-LIST-GENERATES-TOKEN-SEQUENCE?", 5, 1, false);
+        declareFunction("try_one_string_combo_token", "TRY-ONE-STRING-COMBO-TOKEN", 5, 1, false);
+        declareFunction("pph_phrase_string_combo_internal", "PPH-PHRASE-STRING-COMBO-INTERNAL", 3, 0, false);
+        declareFunction("pph_phrase_string_combos", "PPH-PHRASE-STRING-COMBOS", 3, 0, false);
         return NIL;
     }
 

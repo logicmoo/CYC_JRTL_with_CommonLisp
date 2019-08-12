@@ -1,26 +1,26 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cyc_kernel;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.dictionary_utilities;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.inference_trampolines;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subsets_and_sublists;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.cycjava.cycl.wff;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -31,52 +31,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$cheap_hl_module_check_cost$;
-import static com.cyc.cycjava.cycl.control_vars.$expensive_hl_module_check_cost$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subsets_and_sublists.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_subsets_and_sublists extends SubLTranslatedFile {
+public final class removal_modules_subsets_and_sublists extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_subsets_and_sublists();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subsets_and_sublists";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_subsets_and_sublists";
 
-    public static final String myFingerPrint = "7c4fb9e1736f45eda716013de32cf84984dc2f1ee3f8ddea7874401f52e43bb2";
 
     // defparameter
     private static final SubLSymbol $default_list_has_max_sublist_meeting_condition_cost$ = makeSymbol("*DEFAULT-LIST-HAS-MAX-SUBLIST-MEETING-CONDITION-COST*");
@@ -155,7 +115,7 @@ public final class removal_modules_subsets_and_sublists extends SubLTranslatedFi
 
     private static final SubLSymbol $REMOVAL_MAXIMAL_COMPATIBLE_LISTS_FROM_LIST_CHECK_POS = makeKeyword("REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-CHECK-POS");
 
-    private static final SubLList $list37 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("maximalCompatibleListsFromList")), makeKeyword("CHECK"), T, makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("maximalCompatibleListsFromList")), cons(reader_make_constant_shell(makeString("TheList")), makeKeyword("FULLY-BOUND")), cons(reader_make_constant_shell(makeString("TheSet")), makeKeyword("FULLY-BOUND")), cons(reader_make_constant_shell(makeString("TheList")), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("maximalCompatibleListsFromList")), list(makeKeyword("BIND"), makeSymbol("INPUT-LIST")), list(makeKeyword("BIND"), makeSymbol("INCOMPATIBLE-PAIRS")), list(makeKeyword("BIND"), makeSymbol("MAXIMAL-LIST"))), list(list(makeKeyword("VALUE"), makeSymbol("INPUT-LIST")), list(makeKeyword("VALUE"), makeSymbol("INCOMPATIBLE-PAIRS")), list(makeKeyword("VALUE"), makeSymbol("MAXIMAL-LIST")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-POS-CHECK"), list(makeKeyword("VALUE"), makeSymbol("INPUT-LIST")), list(makeKeyword("VALUE"), makeSymbol("INCOMPATIBLE-PAIRS")), list(makeKeyword("VALUE"), makeSymbol("MAXIMAL-LIST"))), makeKeyword("DOCUMENTATION"), makeString("(#$maximalCompatibleListsFromList <fully-bound> <fully-bound> <fully-bound>)"), makeKeyword("EXAMPLE"), makeString("(#$maximalCompatibleListsFromList\n  (#$TheList 0 1 2 3)\n  (#$TheSet\n    (#$TheSet 0 1)(#$TheSet 1 2)(#$TheSet 2 0)\n    (#$TheSet 0 3)(#$TheSet 1 3)(#$TheSet 2 3))\n  (#$TheList 2))") });
+    private static final SubLList $list37 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("maximalCompatibleListsFromList")), makeKeyword("CHECK"), T, makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("maximalCompatibleListsFromList")), cons(reader_make_constant_shell(makeString("TheList")), makeKeyword("FULLY-BOUND")), cons(reader_make_constant_shell(makeString("TheSet")), makeKeyword("FULLY-BOUND")), cons(reader_make_constant_shell(makeString("TheList")), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("maximalCompatibleListsFromList")), list($BIND, makeSymbol("INPUT-LIST")), list($BIND, makeSymbol("INCOMPATIBLE-PAIRS")), list($BIND, makeSymbol("MAXIMAL-LIST"))), list(list(makeKeyword("VALUE"), makeSymbol("INPUT-LIST")), list(makeKeyword("VALUE"), makeSymbol("INCOMPATIBLE-PAIRS")), list(makeKeyword("VALUE"), makeSymbol("MAXIMAL-LIST")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list($CALL, makeSymbol("REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-POS-CHECK"), list(makeKeyword("VALUE"), makeSymbol("INPUT-LIST")), list(makeKeyword("VALUE"), makeSymbol("INCOMPATIBLE-PAIRS")), list(makeKeyword("VALUE"), makeSymbol("MAXIMAL-LIST"))), makeKeyword("DOCUMENTATION"), makeString("(#$maximalCompatibleListsFromList <fully-bound> <fully-bound> <fully-bound>)"), makeKeyword("EXAMPLE"), makeString("(#$maximalCompatibleListsFromList\n  (#$TheList 0 1 2 3)\n  (#$TheSet\n    (#$TheSet 0 1)(#$TheSet 1 2)(#$TheSet 2 0)\n    (#$TheSet 0 3)(#$TheSet 1 3)(#$TheSet 2 3))\n  (#$TheList 2))") });
 
 
 
@@ -171,13 +131,13 @@ public final class removal_modules_subsets_and_sublists extends SubLTranslatedFi
 
     private static final SubLSymbol $REMOVAL_NTHINLIST_UNIFY_POS = makeKeyword("REMOVAL-NTHINLIST-UNIFY-POS");
 
-    private static final SubLList $list45 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("nthInList")), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), list(reader_make_constant_shell(makeString("nthInList")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), listS(reader_make_constant_shell(makeString("nthInList")), list(makeKeyword("TEST"), makeSymbol("EL-LIST-P")), makeKeyword("ANYTHING"))), makeKeyword("COST"), makeSymbol("REMOVAL-NTHINLIST-UNIFY-POS-COST"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NTHINLIST-UNIFY-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$nthInList <fully-bound> <anything> <anything>)"), makeKeyword("EXAMPLE"), makeString("(#$nthInList (#$TheList 5 4 3 2 1) ?N ?ITEM)") });
+    private static final SubLList $list45 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("nthInList")), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), list(reader_make_constant_shell(makeString("nthInList")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), listS(reader_make_constant_shell(makeString("nthInList")), list($TEST, makeSymbol("EL-LIST-P")), makeKeyword("ANYTHING"))), $COST, makeSymbol("REMOVAL-NTHINLIST-UNIFY-POS-COST"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NTHINLIST-UNIFY-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$nthInList <fully-bound> <anything> <anything>)"), makeKeyword("EXAMPLE"), makeString("(#$nthInList (#$TheList 5 4 3 2 1) ?N ?ITEM)") });
 
     private static final SubLObject $$numberOfOccurencesOfItemInList = reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList"));
 
     private static final SubLSymbol $REMOVAL_NUMBEROFOCCURENCESOFITEMINLIST_UNIFY_POS = makeKeyword("REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS");
 
-    private static final SubLList $list48 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList")), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), list(reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), listS(reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList")), list(makeKeyword("TEST"), makeSymbol("EL-LIST-P")), makeKeyword("ANYTHING"))), makeKeyword("COST"), makeSymbol("REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-COST"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$numberOfOccurencesOfItemInList <fully-bound> <anything> <anything>)"), makeKeyword("EXAMPLE"), makeString("(#$numberOfOccurencesOfItemInList (#$TheList 5 4 3 2 1) ?ITEM ?N)") });
+    private static final SubLList $list48 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList")), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), list(reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), listS(reader_make_constant_shell(makeString("numberOfOccurencesOfItemInList")), list($TEST, makeSymbol("EL-LIST-P")), makeKeyword("ANYTHING"))), $COST, makeSymbol("REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-COST"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$numberOfOccurencesOfItemInList <fully-bound> <anything> <anything>)"), makeKeyword("EXAMPLE"), makeString("(#$numberOfOccurencesOfItemInList (#$TheList 5 4 3 2 1) ?ITEM ?N)") });
 
     private static final SubLSymbol TEST_REMOVAL_NUMBEROFOCCURENCESOFITEMINLIST_EXPAND = makeSymbol("TEST-REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-EXPAND");
 
@@ -512,21 +472,21 @@ public final class removal_modules_subsets_and_sublists extends SubLTranslatedFi
     }
 
     public static SubLObject declare_removal_modules_subsets_and_sublists_file() {
-        declareFunction(me, "removal_list_has_max_sublist_meeting_condition_expand", "REMOVAL-LIST-HAS-MAX-SUBLIST-MEETING-CONDITION-EXPAND", 1, 1, false);
-        declareFunction(me, "el_list_for_query_var_satisfies_queryP", "EL-LIST-FOR-QUERY-VAR-SATISFIES-QUERY?", 3, 0, false);
-        declareFunction(me, "removal_resultofsubstitutingtermslistfortermslistinformula_expand", "REMOVAL-RESULTOFSUBSTITUTINGTERMSLISTFORTERMSLISTINFORMULA-EXPAND", 1, 1, false);
-        declareFunction(me, "test_removal_resultofsubstitutingtermslistfortermslistinformula_expand", "TEST-REMOVAL-RESULTOFSUBSTITUTINGTERMSLISTFORTERMSLISTINFORMULA-EXPAND", 1, 2, false);
-        declareFunction(me, "removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand", "REMOVAL-RESULTOFSUBSTITUTINGLISTOFTERMSLISTFORLISTOFTERMSLISTINFORMULA-EXPAND", 1, 1, false);
-        declareFunction(me, "test_removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand", "TEST-REMOVAL-RESULTOFSUBSTITUTINGLISTOFTERMSLISTFORLISTOFTERMSLISTINFORMULA-EXPAND", 1, 2, false);
-        declareFunction(me, "extract_lists_from_el_set_of_sets", "EXTRACT-LISTS-FROM-EL-SET-OF-SETS", 1, 0, false);
-        declareFunction(me, "extract_lists_from_el_set_of_lists", "EXTRACT-LISTS-FROM-EL-SET-OF-LISTS", 1, 0, false);
-        declareFunction(me, "removal_maximal_compatible_lists_from_list_pos_check", "REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-POS-CHECK", 3, 0, false);
-        declareFunction(me, "removal_maximal_compatible_lists_from_list_unify_pos_expand", "REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-UNIFY-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "removal_nthinlist_unify_pos_cost", "REMOVAL-NTHINLIST-UNIFY-POS-COST", 1, 0, false);
-        declareFunction(me, "removal_nthinlist_unify_pos_expand", "REMOVAL-NTHINLIST-UNIFY-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "removal_numberofoccurencesofiteminlist_unify_pos_cost", "REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-COST", 1, 0, false);
-        declareFunction(me, "removal_numberofoccurencesofiteminlist_unify_pos_expand", "REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "test_removal_numberofoccurencesofiteminlist_expand", "TEST-REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-EXPAND", 1, 2, false);
+        declareFunction("removal_list_has_max_sublist_meeting_condition_expand", "REMOVAL-LIST-HAS-MAX-SUBLIST-MEETING-CONDITION-EXPAND", 1, 1, false);
+        declareFunction("el_list_for_query_var_satisfies_queryP", "EL-LIST-FOR-QUERY-VAR-SATISFIES-QUERY?", 3, 0, false);
+        declareFunction("removal_resultofsubstitutingtermslistfortermslistinformula_expand", "REMOVAL-RESULTOFSUBSTITUTINGTERMSLISTFORTERMSLISTINFORMULA-EXPAND", 1, 1, false);
+        declareFunction("test_removal_resultofsubstitutingtermslistfortermslistinformula_expand", "TEST-REMOVAL-RESULTOFSUBSTITUTINGTERMSLISTFORTERMSLISTINFORMULA-EXPAND", 1, 2, false);
+        declareFunction("removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand", "REMOVAL-RESULTOFSUBSTITUTINGLISTOFTERMSLISTFORLISTOFTERMSLISTINFORMULA-EXPAND", 1, 1, false);
+        declareFunction("test_removal_resultofsubstitutinglistoftermslistforlistoftermslistinformula_expand", "TEST-REMOVAL-RESULTOFSUBSTITUTINGLISTOFTERMSLISTFORLISTOFTERMSLISTINFORMULA-EXPAND", 1, 2, false);
+        declareFunction("extract_lists_from_el_set_of_sets", "EXTRACT-LISTS-FROM-EL-SET-OF-SETS", 1, 0, false);
+        declareFunction("extract_lists_from_el_set_of_lists", "EXTRACT-LISTS-FROM-EL-SET-OF-LISTS", 1, 0, false);
+        declareFunction("removal_maximal_compatible_lists_from_list_pos_check", "REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-POS-CHECK", 3, 0, false);
+        declareFunction("removal_maximal_compatible_lists_from_list_unify_pos_expand", "REMOVAL-MAXIMAL-COMPATIBLE-LISTS-FROM-LIST-UNIFY-POS-EXPAND", 2, 0, false);
+        declareFunction("removal_nthinlist_unify_pos_cost", "REMOVAL-NTHINLIST-UNIFY-POS-COST", 1, 0, false);
+        declareFunction("removal_nthinlist_unify_pos_expand", "REMOVAL-NTHINLIST-UNIFY-POS-EXPAND", 2, 0, false);
+        declareFunction("removal_numberofoccurencesofiteminlist_unify_pos_cost", "REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-COST", 1, 0, false);
+        declareFunction("removal_numberofoccurencesofiteminlist_unify_pos_expand", "REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-UNIFY-POS-EXPAND", 2, 0, false);
+        declareFunction("test_removal_numberofoccurencesofiteminlist_expand", "TEST-REMOVAL-NUMBEROFOCCURENCESOFITEMINLIST-EXPAND", 1, 2, false);
         return NIL;
     }
 

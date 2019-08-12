@@ -605,8 +605,7 @@ public  final class sbhl_module_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_module_utilities_file() {
-    // CVS_ID("Id: sbhl-module-utilities.lisp 128897 2009-10-03 02:11:28Z rck ");
-    memoization_state.note_globally_cached_function($sym1$GET_SBHL_PREDICATES);
+        memoization_state.note_globally_cached_function($sym1$GET_SBHL_PREDICATES);
     return NIL;
   }
 

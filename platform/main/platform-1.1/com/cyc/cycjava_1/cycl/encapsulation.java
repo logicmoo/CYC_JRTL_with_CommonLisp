@@ -174,8 +174,7 @@ public  final class encapsulation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_encapsulation_file() {
-    // CVS_ID("Id: encapsulation.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method($encapsulate_method_table$.getGlobalValue(), Types.$dtp_cons$.getGlobalValue(), Symbols.symbol_function($sym1$ENCAPSULATE_CONS_METHOD));
+        Structures.register_method($encapsulate_method_table$.getGlobalValue(), Types.$dtp_cons$.getGlobalValue(), Symbols.symbol_function($sym1$ENCAPSULATE_CONS_METHOD));
     Structures.register_method($encapsulate_method_table$.getGlobalValue(), constant_handles.$dtp_constant$.getGlobalValue(), Symbols.symbol_function($sym2$ENCAPSULATE_CONSTANT_METHOD));
     Structures.register_method($encapsulate_method_table$.getGlobalValue(), nart_handles.$dtp_nart$.getGlobalValue(), Symbols.symbol_function($sym3$ENCAPSULATE_NART_METHOD));
     subl_macro_promotions.declare_defglobal($sym13$_UNENCAPSULATE_FIND_CONSTANT_LOOKASIDE_TABLE_);

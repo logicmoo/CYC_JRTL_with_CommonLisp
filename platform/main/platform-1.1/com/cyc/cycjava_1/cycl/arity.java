@@ -388,8 +388,7 @@ public  final class arity extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_arity_file() {
-    // CVS_ID("Id: arity.lisp 128423 2009-07-28 19:02:50Z goolsbey ");
-    subl_macro_promotions.declare_defglobal($sym0$_KB_ARITY_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym0$_KB_ARITY_TABLE_);
     utilities_macros.register_cyc_api_function($sym4$ARITY, $list5, $str6$Return_the_arity_for_relation_con, NIL, NIL);
     subl_macro_promotions.declare_defglobal($sym19$_KB_ARITY_MIN_TABLE_);
     subl_macro_promotions.declare_defglobal($sym23$_KB_ARITY_MAX_TABLE_);

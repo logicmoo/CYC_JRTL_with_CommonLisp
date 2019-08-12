@@ -1088,8 +1088,7 @@ some assertions have already been made with it in other mts. */
   }
 
   public static final SubLObject setup_hl_storage_modules_file() {
-    // CVS_ID("Id: hl-storage-modules.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_HL_STORAGE_MODULES_);
+        subl_macro_promotions.declare_defglobal($sym0$_HL_STORAGE_MODULES_);
     subl_macro_promotions.declare_defglobal($sym1$_PREDICATE_GENERIC_HL_STORAGE_MODULES_);
     subl_macro_promotions.declare_defglobal($sym2$_PREDICATE_SPECIFIC_HL_STORAGE_MODULES_TABLE_);
     subl_macro_promotions.declare_defglobal($sym3$_ARGUMENT_TYPE_SPECIFIC_HL_STORAGE_MODULES_TABLE_);

@@ -410,8 +410,7 @@ has not been initialized yet, should we initialize it? If NIL, we'll error inste
   }
 
   public static final SubLObject setup_somewhere_cache_file() {
-    // CVS_ID("Id: somewhere-cache.lisp 128471 2009-08-03 20:26:07Z pace ");
-    subl_macro_promotions.declare_defglobal($sym3$_SOME_PRED_ASSERTION_SOMEWHERE_CACHE_);
+        subl_macro_promotions.declare_defglobal($sym3$_SOME_PRED_ASSERTION_SOMEWHERE_CACHE_);
     subl_macro_promotions.declare_defglobal($sym15$_INTER_ARG_RESULT_ISA_SOMEWHERE_CACHE_);
     return NIL;
   }

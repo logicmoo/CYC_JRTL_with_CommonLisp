@@ -357,8 +357,7 @@ public  final class file_vector extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_file_vector_file() {
-    // CVS_ID("Id: file-vector.lisp 128666 2009-09-01 15:44:24Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_fvector$.getGlobalValue(), Symbols.symbol_function($sym7$FVECTOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_fvector$.getGlobalValue(), Symbols.symbol_function($sym7$FVECTOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$FVECTOR_DATA_STREAM, $sym9$_CSETF_FVECTOR_DATA_STREAM);
     Structures.def_csetf($sym10$FVECTOR_INDEX_STREAM, $sym11$_CSETF_FVECTOR_INDEX_STREAM);
     Equality.identity($sym0$FVECTOR);

@@ -500,8 +500,7 @@ or a preference of anything other than :disallowed. */
   }
 
   public static final SubLObject setup_inference_tactician_utilities_file() {
-    // CVS_ID("Id: inference-tactician-utilities.lisp 128166 2009-06-29 16:05:13Z pace ");
-    memoization_state.note_memoized_function($sym0$MEMOIZED_PROBLEM_GLOBAL_PREFERENCE_LEVEL);
+        memoization_state.note_memoized_function($sym0$MEMOIZED_PROBLEM_GLOBAL_PREFERENCE_LEVEL);
     return NIL;
   }
 

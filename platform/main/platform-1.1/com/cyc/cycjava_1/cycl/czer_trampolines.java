@@ -212,8 +212,7 @@ public  final class czer_trampolines extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_czer_trampolines_file() {
-    // CVS_ID("Id: czer-trampolines.lisp 126861 2009-01-20 15:44:40Z pace ");
-    memoization_state.note_memoized_function($sym2$CZER_ARGN_QUOTED_ISA_INT);
+        memoization_state.note_memoized_function($sym2$CZER_ARGN_QUOTED_ISA_INT);
     return NIL;
   }
 

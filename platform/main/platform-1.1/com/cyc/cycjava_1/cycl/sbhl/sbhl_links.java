@@ -927,8 +927,7 @@ public  final class sbhl_links extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_links_file() {
-    // CVS_ID("Id: sbhl-links.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_directed_link$.getGlobalValue(), Symbols.symbol_function($sym8$SBHL_DIRECTED_LINK_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_directed_link$.getGlobalValue(), Symbols.symbol_function($sym8$SBHL_DIRECTED_LINK_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$SBHL_DIRECTED_LINK_PREDICATE_LINKS, $sym10$_CSETF_SBHL_DIRECTED_LINK_PREDICATE_LINKS);
     Structures.def_csetf($sym11$SBHL_DIRECTED_LINK_INVERSE_LINKS, $sym12$_CSETF_SBHL_DIRECTED_LINK_INVERSE_LINKS);
     Equality.identity($sym0$SBHL_DIRECTED_LINK);

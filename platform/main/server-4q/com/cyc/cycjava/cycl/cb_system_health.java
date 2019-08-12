@@ -1,8 +1,18 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_parameters;
-import com.cyc.cycjava.cycl.cb_system_health;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -13,40 +23,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_system_health.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cb_system_health extends SubLTranslatedFile {
+public final class cb_system_health extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_system_health();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_system_health";
+    public static final String myName = "com.cyc.cycjava_2.cycl.cb_system_health";
 
-    public static final String myFingerPrint = "54087acbf7cd66791a958b72e78791f97f92ed6a991ff981eb29660f1233a104";
 
     // defparameter
     public static final SubLSymbol $cb_system_health_show_details$ = makeSymbol("*CB-SYSTEM-HEALTH-SHOW-DETAILS*");
@@ -1723,13 +1705,13 @@ public final class cb_system_health extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_system_health_file() {
-        declareFunction(me, "cb_system_health", "CB-SYSTEM-HEALTH", 0, 1, false);
-        declareFunction(me, "cb_system_health_show_statistics", "CB-SYSTEM-HEALTH-SHOW-STATISTICS", 0, 0, false);
-        declareFunction(me, "cb_system_health_show_kbfrag", "CB-SYSTEM-HEALTH-SHOW-KBFRAG", 0, 0, false);
-        declareFunction(me, "cb_system_health_show_kbfrag_statistics", "CB-SYSTEM-HEALTH-SHOW-KBFRAG-STATISTICS", 1, 0, false);
-        declareFunction(me, "launch_cb_system_health_kbfrag_gatherer", "LAUNCH-CB-SYSTEM-HEALTH-KBFRAG-GATHERER", 0, 1, false);
-        declareFunction(me, "cb_system_health_possible_checkups", "CB-SYSTEM-HEALTH-POSSIBLE-CHECKUPS", 0, 0, false);
-        declareFunction(me, "cb_system_health_routine_maintenance", "CB-SYSTEM-HEALTH-ROUTINE-MAINTENANCE", 0, 0, false);
+        declareFunction("cb_system_health", "CB-SYSTEM-HEALTH", 0, 1, false);
+        declareFunction("cb_system_health_show_statistics", "CB-SYSTEM-HEALTH-SHOW-STATISTICS", 0, 0, false);
+        declareFunction("cb_system_health_show_kbfrag", "CB-SYSTEM-HEALTH-SHOW-KBFRAG", 0, 0, false);
+        declareFunction("cb_system_health_show_kbfrag_statistics", "CB-SYSTEM-HEALTH-SHOW-KBFRAG-STATISTICS", 1, 0, false);
+        declareFunction("launch_cb_system_health_kbfrag_gatherer", "LAUNCH-CB-SYSTEM-HEALTH-KBFRAG-GATHERER", 0, 1, false);
+        declareFunction("cb_system_health_possible_checkups", "CB-SYSTEM-HEALTH-POSSIBLE-CHECKUPS", 0, 0, false);
+        declareFunction("cb_system_health_routine_maintenance", "CB-SYSTEM-HEALTH-ROUTINE-MAINTENANCE", 0, 0, false);
         return NIL;
     }
 

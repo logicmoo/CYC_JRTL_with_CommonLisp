@@ -1415,8 +1415,7 @@ public  final class assertions_low extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_assertions_low_file() {
-    // CVS_ID("Id: assertions-low.lisp 128721 2009-09-08 22:22:50Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_assertion_content$.getGlobalValue(), Symbols.symbol_function($sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_assertion_content$.getGlobalValue(), Symbols.symbol_function($sym8$ASSERTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$AS_CONTENT_FORMULA_DATA, $sym10$_CSETF_AS_CONTENT_FORMULA_DATA);
     Structures.def_csetf($sym11$AS_CONTENT_MT, $sym12$_CSETF_AS_CONTENT_MT);
     Structures.def_csetf($sym13$AS_CONTENT_FLAGS, $sym14$_CSETF_AS_CONTENT_FLAGS);

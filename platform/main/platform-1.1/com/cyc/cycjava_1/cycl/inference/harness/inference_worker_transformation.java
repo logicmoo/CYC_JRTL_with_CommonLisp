@@ -2279,8 +2279,7 @@ in either MERGE-DNF or RULE-DNF.  Otherwise returns LITERAL. */
   }
 
   public static final SubLObject setup_inference_worker_transformation_file() {
-    // CVS_ID("Id: inference-worker-transformation.lisp 128648 2009-08-27 17:23:55Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_transformation_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$TRANSFORMATION_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_transformation_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$TRANSFORMATION_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$TRANS_LINK_DATA_HL_MODULE, $sym9$_CSETF_TRANS_LINK_DATA_HL_MODULE);
     Structures.def_csetf($sym10$TRANS_LINK_DATA_BINDINGS, $sym11$_CSETF_TRANS_LINK_DATA_BINDINGS);
     Structures.def_csetf($sym12$TRANS_LINK_DATA_SUPPORTS, $sym13$_CSETF_TRANS_LINK_DATA_SUPPORTS);

@@ -186,8 +186,7 @@ public  final class removal_module_tests extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_module_tests_file() {
-    // CVS_ID("Id: removal-module-tests.lisp 128334 2009-07-16 15:49:52Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_module_test$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_MODULE_TEST_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_module_test$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_MODULE_TEST_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$RMT_HL_MODULE, $sym9$_CSETF_RMT_HL_MODULE);
     Structures.def_csetf($sym10$RMT_ID, $sym11$_CSETF_RMT_ID);
     Structures.def_csetf($sym12$RMT_SENTENCE, $sym13$_CSETF_RMT_SENTENCE);

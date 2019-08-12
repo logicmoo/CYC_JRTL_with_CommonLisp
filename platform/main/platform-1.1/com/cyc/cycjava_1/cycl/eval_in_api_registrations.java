@@ -61,8 +61,7 @@ public  final class eval_in_api_registrations extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_eval_in_api_registrations_file() {
-    // CVS_ID("Id: eval-in-api-registrations.lisp 128642 2009-08-27 01:08:04Z rck ");
-    eval_in_api.register_api_immutable_global($sym0$_NULL_OUTPUT_);
+        eval_in_api.register_api_immutable_global($sym0$_NULL_OUTPUT_);
     eval_in_api.register_api_mutable_global($sym1$_IT_VERBOSE_);
     eval_in_api.register_api_mutable_global($sym2$_PROGRESS_NOTE_);
     eval_in_api.register_api_mutable_global($sym3$_PROGRESS_SOFAR_);

@@ -161,8 +161,7 @@ public  final class mt_relevance_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_mt_relevance_cache_file() {
-    // CVS_ID("Id: mt-relevance-cache.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym4$_MONAD_MT_FORT_CACHE_);
+        subl_macro_promotions.declare_defglobal($sym4$_MONAD_MT_FORT_CACHE_);
     subl_macro_promotions.declare_defglobal($sym6$_MONAD_MT_NAUT_CACHE_);
     return NIL;
   }

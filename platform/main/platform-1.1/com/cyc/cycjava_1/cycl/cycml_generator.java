@@ -179,8 +179,7 @@ are more likely to be interpreted as el nats. */
   }
 
   public static final SubLObject setup_cycml_generator_file() {
-    // CVS_ID("Id: cycml-generator.lisp 126721 2008-12-18 19:14:07Z baxter ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cycml_kp_info$.getGlobalValue(), Symbols.symbol_function($sym34$CYCML_KP_INFO_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cycml_kp_info$.getGlobalValue(), Symbols.symbol_function($sym34$CYCML_KP_INFO_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym35$CYCML_KP_INFO_KNOWLEDGE_PACKAGE_ID, $sym36$_CSETF_CYCML_KP_INFO_KNOWLEDGE_PACKAGE_ID);
     Structures.def_csetf($sym37$CYCML_KP_INFO_KNOWLEDGE_PACKAGE_DEPENDENCIES, $sym38$_CSETF_CYCML_KP_INFO_KNOWLEDGE_PACKAGE_DEPENDENCIES);
     Structures.def_csetf($sym39$CYCML_KP_INFO_OPERATIONS, $sym40$_CSETF_CYCML_KP_INFO_OPERATIONS);

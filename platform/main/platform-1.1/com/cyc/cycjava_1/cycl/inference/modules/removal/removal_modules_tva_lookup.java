@@ -1427,8 +1427,7 @@ public  final class removal_modules_tva_lookup extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_tva_lookup_file() {
-    // CVS_ID("Id: removal-modules-tva-lookup.lisp 128723 2009-09-08 22:43:51Z goolsbey ");
-    preference_modules.inference_preference_module($kw0$TVA_POS, $list1);
+        preference_modules.inference_preference_module($kw0$TVA_POS, $list1);
     inference_modules.inference_removal_module($kw2$REMOVAL_TVA_CHECK, $list33);
     memoization_state.note_memoized_function($sym34$REMOVAL_TVA_UNIFY_REQUIRED_INT);
     inference_modules.inference_removal_module($kw3$REMOVAL_TVA_UNIFY, $list56);

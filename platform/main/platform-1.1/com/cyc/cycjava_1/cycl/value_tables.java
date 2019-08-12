@@ -257,8 +257,7 @@ public  final class value_tables extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_value_tables_file() {
-    // CVS_ID("Id: value-tables.lisp 126721 2008-12-18 19:14:07Z baxter ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_value_table_column$.getGlobalValue(), Symbols.symbol_function($sym7$VALUE_TABLE_COLUMN_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_value_table_column$.getGlobalValue(), Symbols.symbol_function($sym7$VALUE_TABLE_COLUMN_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$VALUE_TABLE_COLUMN_QUERY, $sym9$_CSETF_VALUE_TABLE_COLUMN_QUERY);
     Structures.def_csetf($sym10$VALUE_TABLE_COLUMN_LABEL, $sym11$_CSETF_VALUE_TABLE_COLUMN_LABEL);
     Structures.def_csetf($sym12$VALUE_TABLE_COLUMN_VALUES, $sym13$_CSETF_VALUE_TABLE_COLUMN_VALUES);

@@ -1,25 +1,28 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.backward_utilities;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.enumeration_types;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.harness.removal_module_utilities;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cycl_utilities.*;
+import static com.cyc.cycjava.cycl.list_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.inference_completeness_utilities;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.harness.removal_module_utilities;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.cycjava.cycl.virtual_indexing;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
@@ -30,88 +33,50 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$cheap_hl_module_check_cost$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_lookup extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      REMOVAL-MODULES-LOOKUP
+ * source file: /cyc/top/cycl/inference/modules/removal/removal-modules-lookup.lisp
+ * created:     2019/07/03 17:37:44
+ */
+public final class removal_modules_lookup extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_lookup();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup";
-
-    public static final String myFingerPrint = "2f1559201bb3ce65a5b5b2f0a14e34e3fc30af0dfd1577d5ce59048102611a35";
-
-
-
-
-
-
-
-
-
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup";
 
 
     private static final SubLSymbol $REMOVAL_LOOKUP_POS = makeKeyword("REMOVAL-LOOKUP-POS");
 
-    public static final SubLList $list6 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), cons(makeKeyword("FORT"), makeKeyword("ANYTHING")), makeKeyword("COST"), makeSymbol("REMOVAL-LOOKUP-POS-COST"), makeKeyword("COMPLETE-PATTERN"), list(makeKeyword("TEST"), makeSymbol("REMOVAL-COMPLETELY-ASSERTED-ASENT?")), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REMOVAL-LOOKUP-POS-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("CALL"), makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(<fort> . <whatever>)\nusing true assertions and GAF indexing in the KB"), makeKeyword("EXAMPLE"), makeString("(#$bordersOn #$UnitedStatesOfAmerica ?COUNTRY)\n (#$bordersOn #$UnitedStatesOfAmerica #$Canada)\n (#$resultIsa #$JuvenileFn #$JuvenileAnimal)") });
-
-
-
-
-
-
+    static private final SubLList $list6 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), cons($FORT, makeKeyword("ANYTHING")), $COST, makeSymbol("REMOVAL-LOOKUP-POS-COST"), makeKeyword("COMPLETE-PATTERN"), list($TEST, makeSymbol("REMOVAL-COMPLETELY-ASSERTED-ASENT?")), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-LOOKUP-POS-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(<fort> . <whatever>)\nusing true assertions and GAF indexing in the KB"), makeKeyword("EXAMPLE"), makeString("(#$bordersOn #$UnitedStatesOfAmerica ?COUNTRY)\n (#$bordersOn #$UnitedStatesOfAmerica #$Canada)\n (#$resultIsa #$JuvenileFn #$JuvenileAnimal)") });
 
     private static final SubLSymbol $REMOVAL_LOOKUP_NEG = makeKeyword("REMOVAL-LOOKUP-NEG");
 
-    public static final SubLList $list11 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), cons(makeKeyword("FORT"), makeKeyword("ANYTHING")), makeKeyword("COST"), makeSymbol("REMOVAL-LOOKUP-NEG-COST"), makeKeyword("COMPLETENESS-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REMOVAL-LOOKUP-NEG-COMPLETENESS"), makeKeyword("INPUT")), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REMOVAL-LOOKUP-NEG-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("CALL"), makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(#$not (<predicate> . <whatever>))\nusing false assertions and GAF indexing in the KB") });
+    static private final SubLList $list11 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), cons($FORT, makeKeyword("ANYTHING")), $COST, makeSymbol("REMOVAL-LOOKUP-NEG-COST"), makeKeyword("COMPLETENESS-PATTERN"), list($CALL, makeSymbol("REMOVAL-LOOKUP-NEG-COMPLETENESS"), makeKeyword("INPUT")), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-LOOKUP-NEG-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(#$not (<predicate> . <whatever>))\nusing false assertions and GAF indexing in the KB") });
 
 
-
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
     private static final SubLSymbol $REMOVAL_PRED_UNBOUND = makeKeyword("REMOVAL-PRED-UNBOUND");
 
-    public static final SubLList $list15 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), cons(list(makeKeyword("NOT"), makeKeyword("FORT")), makeKeyword("ANYTHING")), list(makeKeyword("TEST"), makeSymbol("FORMULA-CONTAINS-INDEXED-TERM?"))), makeKeyword("COST"), makeSymbol("REMOVAL-PRED-UNBOUND-COST"), makeKeyword("COMPLETENESS"), makeKeyword("GROSSLY-INCOMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REMOVAL-PRED-UNBOUND-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("CALL"), makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(<variable> ... <fort> ... )\nusing true assertions and GAF indexing on <fort>.\nThis is a last-resort if <variable> occurs elsewhere."), makeKeyword("EXAMPLE"), makeString("(?PREDICATE #$UnitedStatesOfAmerica #$Canada)") });
+    static private final SubLList $list15 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), cons(list(makeKeyword("NOT"), $FORT), makeKeyword("ANYTHING")), list($TEST, makeSymbol("FORMULA-CONTAINS-INDEXED-TERM?"))), $COST, makeSymbol("REMOVAL-PRED-UNBOUND-COST"), makeKeyword("COMPLETENESS"), makeKeyword("GROSSLY-INCOMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-PRED-UNBOUND-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(<variable> ... <fort> ... )\nusing true assertions and GAF indexing on <fort>.\nThis is a last-resort if <variable> occurs elsewhere."), makeKeyword("EXAMPLE"), makeString("(?PREDICATE #$UnitedStatesOfAmerica #$Canada)") });
 
     private static final SubLSymbol $PRED_UNBOUND_POS = makeKeyword("PRED-UNBOUND-POS");
 
-    public static final SubLList $list17 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("PREFERENCE"), makeSymbol("PRED-UNBOUND-POS-PREFERENCE"));
+    static private final SubLList $list17 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("PREFERENCE"), makeSymbol("PRED-UNBOUND-POS-PREFERENCE"));
 
+    // Definitions
+    public static final SubLObject removal_lookup_pos_cost_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        if (NIL != variables.fully_bound_p(asent)) {
+            return $cheap_hl_module_check_cost$.getGlobalValue();
+        } else {
+            return inference_trampolines.inference_num_gaf_lookup_index(asent, $POS);
+        }
+    }
 
-
-
-
-
-
-
-
+    // Definitions
     public static SubLObject removal_lookup_pos_cost(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -122,8 +87,342 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return inference_trampolines.inference_num_gaf_lookup_index(asent, $POS);
     }
 
+    public static final SubLObject removal_completely_asserted_asentP_alt(SubLObject asent) {
+        return inference_completeness_utilities.inference_completely_asserted_asentP(asent, mt_relevance_macros.inference_relevant_mt());
+    }
+
     public static SubLObject removal_completely_asserted_asentP(final SubLObject asent) {
         return makeBoolean((NIL != inference_completeness_utilities.inference_completely_asserted_asentP(asent, mt_relevance_macros.inference_relevant_mt())) && (NIL == kb_utilities.at_least_partially_commutative_predicate_p(cycl_utilities.atomic_sentence_predicate(asent))));
+    }
+
+    public static final SubLObject removal_lookup_pos_iterator_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject l_index = inference_trampolines.inference_gaf_lookup_index(asent, $POS);
+                SubLObject method = kb_mapping_macros.do_gli_extract_method(l_index);
+                SubLObject pcase_var = method;
+                if (pcase_var.eql($GAF_ARG)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_term = kb_mapping_macros.do_gli_vga_extract_keys(l_index);
+                        SubLObject argnum = thread.secondMultipleValue();
+                        SubLObject predicate = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != argnum) {
+                            if (NIL != predicate) {
+                                {
+                                    SubLObject pred_var = predicate;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_1 = NIL;
+                                                                    SubLObject token_var_2 = NIL;
+                                                                    while (NIL == done_var_1) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_2);
+                                                                            SubLObject valid_3 = makeBoolean(token_var_2 != assertion);
+                                                                            if (NIL != valid_3) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_1 = makeBoolean(NIL == valid_3);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_4 = NIL;
+                                                                    SubLObject token_var_5 = NIL;
+                                                                    while (NIL == done_var_4) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_5);
+                                                                            SubLObject valid_6 = makeBoolean(token_var_5 != assertion);
+                                                                            if (NIL != valid_6) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_4 = makeBoolean(NIL == valid_6);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if (NIL != predicate) {
+                                {
+                                    SubLObject pred_var = predicate;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_7 = NIL;
+                                                                    SubLObject token_var_8 = NIL;
+                                                                    while (NIL == done_var_7) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_8);
+                                                                            SubLObject valid_9 = makeBoolean(token_var_8 != assertion);
+                                                                            if (NIL != valid_9) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_7 = makeBoolean(NIL == valid_9);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_10 = NIL;
+                                                                    SubLObject token_var_11 = NIL;
+                                                                    while (NIL == done_var_10) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_11);
+                                                                            SubLObject valid_12 = makeBoolean(token_var_11 != assertion);
+                                                                            if (NIL != valid_12) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_10 = makeBoolean(NIL == valid_12);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (pcase_var.eql($PREDICATE_EXTENT)) {
+                        {
+                            SubLObject pred_var = kb_mapping_macros.do_gli_vpe_extract_key(l_index);
+                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                        {
+                                                            SubLObject done_var_13 = NIL;
+                                                            SubLObject token_var_14 = NIL;
+                                                            while (NIL == done_var_13) {
+                                                                {
+                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_14);
+                                                                    SubLObject valid_15 = makeBoolean(token_var_14 != assertion);
+                                                                    if (NIL != valid_15) {
+                                                                        if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                            if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                result = cons(assertion, result);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var_13 = makeBoolean(NIL == valid_15);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($OVERLAP)) {
+                            {
+                                SubLObject cdolist_list_var = virtual_indexing.gather_overlap_index(kb_mapping_macros.do_gli_vo_extract_key(l_index), UNPROVIDED);
+                                SubLObject assertion = NIL;
+                                for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                    if ((NIL == enumeration_types.sense_truth($POS)) || (NIL != assertions_high.assertion_has_truth(assertion, enumeration_types.sense_truth($POS)))) {
+                                        if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                            if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                result = cons(assertion, result);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            kb_mapping_macros.do_gli_method_error(l_index, method);
+                        }
+                    }
+                }
+                if (NIL != result) {
+                    return iteration.new_list_iterator(result);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject removal_lookup_pos_iterator(final SubLObject asent) {
@@ -398,6 +697,14 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject removal_lookup_neg_completeness_alt(SubLObject asent) {
+        if (NIL != removal_module_utilities.negation_grossly_incompleteP(asent, $NEG)) {
+            return $GROSSLY_INCOMPLETE;
+        } else {
+            return $INCOMPLETE;
+        }
+    }
+
     public static SubLObject removal_lookup_neg_completeness(final SubLObject asent) {
         if (NIL != removal_module_utilities.negation_grossly_incompleteP(asent, $NEG)) {
             return $GROSSLY_INCOMPLETE;
@@ -405,11 +712,336 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return $INCOMPLETE;
     }
 
+    public static final SubLObject removal_lookup_neg_cost_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        return inference_trampolines.inference_num_gaf_lookup_index(asent, $NEG);
+    }
+
     public static SubLObject removal_lookup_neg_cost(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
         return inference_trampolines.inference_num_gaf_lookup_index(asent, $NEG);
+    }
+
+    public static final SubLObject removal_lookup_neg_iterator_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject l_index = inference_trampolines.inference_gaf_lookup_index(asent, $NEG);
+                SubLObject method = kb_mapping_macros.do_gli_extract_method(l_index);
+                SubLObject pcase_var = method;
+                if (pcase_var.eql($GAF_ARG)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_term = kb_mapping_macros.do_gli_vga_extract_keys(l_index);
+                        SubLObject argnum = thread.secondMultipleValue();
+                        SubLObject predicate = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != argnum) {
+                            if (NIL != predicate) {
+                                {
+                                    SubLObject pred_var = predicate;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($NEG), NIL);
+                                                                {
+                                                                    SubLObject done_var_16 = NIL;
+                                                                    SubLObject token_var_17 = NIL;
+                                                                    while (NIL == done_var_16) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_17);
+                                                                            SubLObject valid_18 = makeBoolean(token_var_17 != assertion);
+                                                                            if (NIL != valid_18) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    result = cons(assertion, result);
+                                                                                }
+                                                                            }
+                                                                            done_var_16 = makeBoolean(NIL == valid_18);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($NEG), NIL);
+                                                                {
+                                                                    SubLObject done_var_19 = NIL;
+                                                                    SubLObject token_var_20 = NIL;
+                                                                    while (NIL == done_var_19) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_20);
+                                                                            SubLObject valid_21 = makeBoolean(token_var_20 != assertion);
+                                                                            if (NIL != valid_21) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    result = cons(assertion, result);
+                                                                                }
+                                                                            }
+                                                                            done_var_19 = makeBoolean(NIL == valid_21);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if (NIL != predicate) {
+                                {
+                                    SubLObject pred_var = predicate;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($NEG), NIL);
+                                                                {
+                                                                    SubLObject done_var_22 = NIL;
+                                                                    SubLObject token_var_23 = NIL;
+                                                                    while (NIL == done_var_22) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_23);
+                                                                            SubLObject valid_24 = makeBoolean(token_var_23 != assertion);
+                                                                            if (NIL != valid_24) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    result = cons(assertion, result);
+                                                                                }
+                                                                            }
+                                                                            done_var_22 = makeBoolean(NIL == valid_24);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($NEG), NIL);
+                                                                {
+                                                                    SubLObject done_var_25 = NIL;
+                                                                    SubLObject token_var_26 = NIL;
+                                                                    while (NIL == done_var_25) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_26);
+                                                                            SubLObject valid_27 = makeBoolean(token_var_26 != assertion);
+                                                                            if (NIL != valid_27) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    result = cons(assertion, result);
+                                                                                }
+                                                                            }
+                                                                            done_var_25 = makeBoolean(NIL == valid_27);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (pcase_var.eql($PREDICATE_EXTENT)) {
+                        {
+                            SubLObject pred_var = kb_mapping_macros.do_gli_vpe_extract_key(l_index);
+                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($NEG), NIL);
+                                                        {
+                                                            SubLObject done_var_28 = NIL;
+                                                            SubLObject token_var_29 = NIL;
+                                                            while (NIL == done_var_28) {
+                                                                {
+                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_29);
+                                                                    SubLObject valid_30 = makeBoolean(token_var_29 != assertion);
+                                                                    if (NIL != valid_30) {
+                                                                        if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                            result = cons(assertion, result);
+                                                                        }
+                                                                    }
+                                                                    done_var_28 = makeBoolean(NIL == valid_30);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($OVERLAP)) {
+                            {
+                                SubLObject cdolist_list_var = virtual_indexing.gather_overlap_index(kb_mapping_macros.do_gli_vo_extract_key(l_index), UNPROVIDED);
+                                SubLObject assertion = NIL;
+                                for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                    if ((NIL == enumeration_types.sense_truth($NEG)) || (NIL != assertions_high.assertion_has_truth(assertion, enumeration_types.sense_truth($NEG)))) {
+                                        if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                            result = cons(assertion, result);
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            kb_mapping_macros.do_gli_method_error(l_index, method);
+                        }
+                    }
+                }
+                if (NIL != result) {
+                    return iteration.new_list_iterator(result);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject removal_lookup_neg_iterator(final SubLObject asent) {
@@ -684,6 +1316,28 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject removal_lookup_expand_internal_alt(SubLObject assertion, SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                {
+                    SubLObject gaf_formula = assertions_high.gaf_formula(assertion);
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_bindings = unification_utilities.gaf_asent_unify(asent, gaf_formula, T, T);
+                        SubLObject gaf_asent = thread.secondMultipleValue();
+                        SubLObject unify_justification = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != v_bindings) {
+                            backward.removal_add_node(assertion, v_bindings, unify_justification);
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject removal_lookup_expand_internal(final SubLObject assertion, final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != backward_utilities.direction_is_relevant(assertion)) {
@@ -698,6 +1352,31 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject removal_pred_unbound_cost_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        result = inference_trampolines.inference_num_gaf_lookup_index(asent, $POS);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject removal_pred_unbound_cost(final SubLObject asent, SubLObject sense) {
@@ -717,6 +1396,336 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return result;
+    }
+
+    public static final SubLObject removal_pred_unbound_iterator_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject l_index = inference_trampolines.inference_gaf_lookup_index(asent, $POS);
+                SubLObject method = kb_mapping_macros.do_gli_extract_method(l_index);
+                SubLObject pcase_var = method;
+                if (pcase_var.eql($GAF_ARG)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_term = kb_mapping_macros.do_gli_vga_extract_keys(l_index);
+                        SubLObject argnum = thread.secondMultipleValue();
+                        SubLObject predicate = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != argnum) {
+                            if (NIL != predicate) {
+                                {
+                                    SubLObject pred_var = predicate;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_31 = NIL;
+                                                                    SubLObject token_var_32 = NIL;
+                                                                    while (NIL == done_var_31) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_32);
+                                                                            SubLObject valid_33 = makeBoolean(token_var_32 != assertion);
+                                                                            if (NIL != valid_33) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_31 = makeBoolean(NIL == valid_33);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, argnum, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, argnum, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_34 = NIL;
+                                                                    SubLObject token_var_35 = NIL;
+                                                                    while (NIL == done_var_34) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_35);
+                                                                            SubLObject valid_36 = makeBoolean(token_var_35 != assertion);
+                                                                            if (NIL != valid_36) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_34 = makeBoolean(NIL == valid_36);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if (NIL != predicate) {
+                                {
+                                    SubLObject pred_var = predicate;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_37 = NIL;
+                                                                    SubLObject token_var_38 = NIL;
+                                                                    while (NIL == done_var_37) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_38);
+                                                                            SubLObject valid_39 = makeBoolean(token_var_38 != assertion);
+                                                                            if (NIL != valid_39) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_37 = makeBoolean(NIL == valid_39);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, NIL, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, NIL, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                                {
+                                                                    SubLObject done_var_40 = NIL;
+                                                                    SubLObject token_var_41 = NIL;
+                                                                    while (NIL == done_var_40) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_41);
+                                                                            SubLObject valid_42 = makeBoolean(token_var_41 != assertion);
+                                                                            if (NIL != valid_42) {
+                                                                                if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                                    if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                        result = cons(assertion, result);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_40 = makeBoolean(NIL == valid_42);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (pcase_var.eql($PREDICATE_EXTENT)) {
+                        {
+                            SubLObject pred_var = kb_mapping_macros.do_gli_vpe_extract_key(l_index);
+                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, enumeration_types.sense_truth($POS), NIL);
+                                                        {
+                                                            SubLObject done_var_43 = NIL;
+                                                            SubLObject token_var_44 = NIL;
+                                                            while (NIL == done_var_43) {
+                                                                {
+                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_44);
+                                                                    SubLObject valid_45 = makeBoolean(token_var_44 != assertion);
+                                                                    if (NIL != valid_45) {
+                                                                        if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                                                            if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                                                result = cons(assertion, result);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var_43 = makeBoolean(NIL == valid_45);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($OVERLAP)) {
+                            {
+                                SubLObject cdolist_list_var = virtual_indexing.gather_overlap_index(kb_mapping_macros.do_gli_vo_extract_key(l_index), UNPROVIDED);
+                                SubLObject assertion = NIL;
+                                for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                    if ((NIL == enumeration_types.sense_truth($POS)) || (NIL != assertions_high.assertion_has_truth(assertion, enumeration_types.sense_truth($POS)))) {
+                                        if (NIL != backward_utilities.direction_is_relevant(assertion)) {
+                                            if (NIL != unification_utilities.gaf_asent_unify(asent, assertions_high.gaf_formula(assertion), UNPROVIDED, UNPROVIDED)) {
+                                                result = cons(assertion, result);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            kb_mapping_macros.do_gli_method_error(l_index, method);
+                        }
+                    }
+                }
+                if (NIL != result) {
+                    return iteration.new_list_iterator(result);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject removal_pred_unbound_iterator(final SubLObject asent) {
@@ -991,11 +2000,26 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pred_unbound_pos_preference_alt(SubLObject asent, SubLObject bindable_vars, SubLObject strategic_context) {
+        if (NIL != com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup.formula_contains_indexed_termP(asent, UNPROVIDED)) {
+            return $GROSSLY_DISPREFERRED;
+        } else {
+            return $DISALLOWED;
+        }
+    }
+
     public static SubLObject pred_unbound_pos_preference(final SubLObject asent, final SubLObject bindable_vars, final SubLObject strategic_context) {
         if ((NIL != formula_contains_indexed_termP(asent, UNPROVIDED)) && (NIL == list_utilities.member_eqP(cycl_utilities.atomic_sentence_predicate(asent), bindable_vars))) {
             return $GROSSLY_DISPREFERRED;
         }
         return $DISALLOWED;
+    }
+
+    public static final SubLObject formula_contains_indexed_termP_alt(SubLObject formula, SubLObject penetrate_hl_structuresP) {
+        if (penetrate_hl_structuresP == UNPROVIDED) {
+            penetrate_hl_structuresP = NIL;
+        }
+        return sublisp_boolean(expression_find_if(symbol_function(INDEXED_TERM_P), formula, penetrate_hl_structuresP, UNPROVIDED));
     }
 
     public static SubLObject formula_contains_indexed_termP(final SubLObject formula, SubLObject penetrate_hl_structuresP) {
@@ -1005,11 +2029,25 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return list_utilities.sublisp_boolean(cycl_utilities.expression_find_if(symbol_function(INDEXED_TERM_P), formula, penetrate_hl_structuresP, UNPROVIDED));
     }
 
+    public static final SubLObject formula_has_indexed_term_arg_p_alt(SubLObject formula, SubLObject seqvar_handling) {
+        if (seqvar_handling == UNPROVIDED) {
+            seqvar_handling = NIL;
+        }
+        return sublisp_boolean(find_if(symbol_function(INDEXED_TERM_P), formula_args(formula, seqvar_handling), UNPROVIDED, UNPROVIDED, UNPROVIDED));
+    }
+
     public static SubLObject formula_has_indexed_term_arg_p(final SubLObject formula, SubLObject seqvar_handling) {
         if (seqvar_handling == UNPROVIDED) {
             seqvar_handling = NIL;
         }
         return list_utilities.sublisp_boolean(find_if(symbol_function(INDEXED_TERM_P), cycl_utilities.formula_args(formula, seqvar_handling), UNPROVIDED, UNPROVIDED, UNPROVIDED));
+    }
+
+    public static final SubLObject formula_has_fort_arg_p_alt(SubLObject formula, SubLObject seqvar_handling) {
+        if (seqvar_handling == UNPROVIDED) {
+            seqvar_handling = NIL;
+        }
+        return sublisp_boolean(find_if(symbol_function(FORT_P), formula_args(formula, seqvar_handling), UNPROVIDED, UNPROVIDED, UNPROVIDED));
     }
 
     public static SubLObject formula_has_fort_arg_p(final SubLObject formula, SubLObject seqvar_handling) {
@@ -1019,11 +2057,25 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
         return list_utilities.sublisp_boolean(find_if(symbol_function(FORT_P), cycl_utilities.formula_args(formula, seqvar_handling), UNPROVIDED, UNPROVIDED, UNPROVIDED));
     }
 
+    public static final SubLObject asent_has_fort_arg_p_alt(SubLObject asent, SubLObject seqvar_handling) {
+        if (seqvar_handling == UNPROVIDED) {
+            seqvar_handling = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup.formula_has_fort_arg_p(asent, seqvar_handling);
+    }
+
     public static SubLObject asent_has_fort_arg_p(final SubLObject asent, SubLObject seqvar_handling) {
         if (seqvar_handling == UNPROVIDED) {
             seqvar_handling = NIL;
         }
         return formula_has_fort_arg_p(asent, seqvar_handling);
+    }
+
+    public static final SubLObject asent_has_indexed_term_arg_p_alt(SubLObject asent, SubLObject seqvar_handling) {
+        if (seqvar_handling == UNPROVIDED) {
+            seqvar_handling = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lookup.formula_has_indexed_term_arg_p(asent, seqvar_handling);
     }
 
     public static SubLObject asent_has_indexed_term_arg_p(final SubLObject asent, SubLObject seqvar_handling) {
@@ -1034,25 +2086,25 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_lookup_file() {
-        declareFunction(me, "removal_lookup_pos_cost", "REMOVAL-LOOKUP-POS-COST", 1, 1, false);
+        declareFunction("removal_lookup_pos_cost", "REMOVAL-LOOKUP-POS-COST", 1, 1, false);
         new removal_modules_lookup.$removal_lookup_pos_cost$UnaryFunction();
         new removal_modules_lookup.$removal_lookup_pos_cost$BinaryFunction();
-        declareFunction(me, "removal_completely_asserted_asentP", "REMOVAL-COMPLETELY-ASSERTED-ASENT?", 1, 0, false);
+        declareFunction("removal_completely_asserted_asentP", "REMOVAL-COMPLETELY-ASSERTED-ASENT?", 1, 0, false);
         new removal_modules_lookup.$removal_completely_asserted_asentP$UnaryFunction();
-        declareFunction(me, "removal_lookup_pos_iterator", "REMOVAL-LOOKUP-POS-ITERATOR", 1, 0, false);
+        declareFunction("removal_lookup_pos_iterator", "REMOVAL-LOOKUP-POS-ITERATOR", 1, 0, false);
         new removal_modules_lookup.$removal_lookup_pos_iterator$UnaryFunction();
-        declareFunction(me, "removal_lookup_neg_completeness", "REMOVAL-LOOKUP-NEG-COMPLETENESS", 1, 0, false);
-        declareFunction(me, "removal_lookup_neg_cost", "REMOVAL-LOOKUP-NEG-COST", 1, 1, false);
-        declareFunction(me, "removal_lookup_neg_iterator", "REMOVAL-LOOKUP-NEG-ITERATOR", 1, 0, false);
-        declareFunction(me, "removal_lookup_expand_internal", "REMOVAL-LOOKUP-EXPAND-INTERNAL", 2, 0, false);
-        declareFunction(me, "removal_pred_unbound_cost", "REMOVAL-PRED-UNBOUND-COST", 1, 1, false);
-        declareFunction(me, "removal_pred_unbound_iterator", "REMOVAL-PRED-UNBOUND-ITERATOR", 1, 0, false);
-        declareFunction(me, "pred_unbound_pos_preference", "PRED-UNBOUND-POS-PREFERENCE", 3, 0, false);
-        declareFunction(me, "formula_contains_indexed_termP", "FORMULA-CONTAINS-INDEXED-TERM?", 1, 1, false);
-        declareFunction(me, "formula_has_indexed_term_arg_p", "FORMULA-HAS-INDEXED-TERM-ARG-P", 1, 1, false);
-        declareFunction(me, "formula_has_fort_arg_p", "FORMULA-HAS-FORT-ARG-P", 1, 1, false);
-        declareFunction(me, "asent_has_fort_arg_p", "ASENT-HAS-FORT-ARG-P", 1, 1, false);
-        declareFunction(me, "asent_has_indexed_term_arg_p", "ASENT-HAS-INDEXED-TERM-ARG-P", 1, 1, false);
+        declareFunction("removal_lookup_neg_completeness", "REMOVAL-LOOKUP-NEG-COMPLETENESS", 1, 0, false);
+        declareFunction("removal_lookup_neg_cost", "REMOVAL-LOOKUP-NEG-COST", 1, 1, false);
+        declareFunction("removal_lookup_neg_iterator", "REMOVAL-LOOKUP-NEG-ITERATOR", 1, 0, false);
+        declareFunction("removal_lookup_expand_internal", "REMOVAL-LOOKUP-EXPAND-INTERNAL", 2, 0, false);
+        declareFunction("removal_pred_unbound_cost", "REMOVAL-PRED-UNBOUND-COST", 1, 1, false);
+        declareFunction("removal_pred_unbound_iterator", "REMOVAL-PRED-UNBOUND-ITERATOR", 1, 0, false);
+        declareFunction("pred_unbound_pos_preference", "PRED-UNBOUND-POS-PREFERENCE", 3, 0, false);
+        declareFunction("formula_contains_indexed_termP", "FORMULA-CONTAINS-INDEXED-TERM?", 1, 1, false);
+        declareFunction("formula_has_indexed_term_arg_p", "FORMULA-HAS-INDEXED-TERM-ARG-P", 1, 1, false);
+        declareFunction("formula_has_fort_arg_p", "FORMULA-HAS-FORT-ARG-P", 1, 1, false);
+        declareFunction("asent_has_fort_arg_p", "ASENT-HAS-FORT-ARG-P", 1, 1, false);
+        declareFunction("asent_has_indexed_term_arg_p", "ASENT-HAS-INDEXED-TERM-ARG-P", 1, 1, false);
         new removal_modules_lookup.$asent_has_indexed_term_arg_p$UnaryFunction();
         new removal_modules_lookup.$asent_has_indexed_term_arg_p$BinaryFunction();
         return NIL;
@@ -1086,29 +2138,6 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $removal_lookup_pos_cost$UnaryFunction extends UnaryFunction {
@@ -1176,6 +2205,14 @@ public final class removal_modules_lookup extends SubLTranslatedFile {
             return asent_has_indexed_term_arg_p(arg1, arg2);
         }
     }
+
+    static private final SubLList $list_alt6 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), cons($FORT, makeKeyword("ANYTHING")), $COST, makeSymbol("REMOVAL-LOOKUP-POS-COST"), makeKeyword("COMPLETE-PATTERN"), list($TEST, makeSymbol("REMOVAL-COMPLETELY-ASSERTED-ASENT?")), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-LOOKUP-POS-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(<fort> . <whatever>)\nusing true assertions and GAF indexing in the KB"), makeKeyword("EXAMPLE"), makeString("(#$bordersOn #$UnitedStatesOfAmerica ?COUNTRY)\n (#$bordersOn #$UnitedStatesOfAmerica #$Canada)\n (#$resultIsa #$JuvenileFn #$JuvenileAnimal)") });
+
+    static private final SubLList $list_alt11 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), cons($FORT, makeKeyword("ANYTHING")), $COST, makeSymbol("REMOVAL-LOOKUP-NEG-COST"), makeKeyword("COMPLETENESS-PATTERN"), list($CALL, makeSymbol("REMOVAL-LOOKUP-NEG-COMPLETENESS"), makeKeyword("INPUT")), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-LOOKUP-NEG-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(#$not (<predicate> . <whatever>))\nusing false assertions and GAF indexing in the KB") });
+
+    static private final SubLList $list_alt15 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ARITY"), NIL, makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), cons(list(makeKeyword("NOT"), $FORT), makeKeyword("ANYTHING")), list($TEST, makeSymbol("FORMULA-CONTAINS-INDEXED-TERM?"))), $COST, makeSymbol("REMOVAL-PRED-UNBOUND-COST"), makeKeyword("COMPLETENESS"), makeKeyword("GROSSLY-INCOMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASENT")), list(makeKeyword("VALUE"), makeSymbol("ASENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-PRED-UNBOUND-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("ASSERTION")), list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("GAF-FORMULA"), makeKeyword("INPUT")), makeKeyword("SUPPORT-PATTERN"), list(list(makeKeyword("VALUE"), makeSymbol("ASSERTION"))), makeKeyword("DOCUMENTATION"), makeString("(<variable> ... <fort> ... )\nusing true assertions and GAF indexing on <fort>.\nThis is a last-resort if <variable> occurs elsewhere."), makeKeyword("EXAMPLE"), makeString("(?PREDICATE #$UnitedStatesOfAmerica #$Canada)") });
+
+    static private final SubLList $list_alt17 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("PREFERENCE"), makeSymbol("PRED-UNBOUND-POS-PREFERENCE"));
 }
 
 /**

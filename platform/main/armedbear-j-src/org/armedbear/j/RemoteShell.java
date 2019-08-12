@@ -22,9 +22,11 @@
 package org.armedbear.j;
 
 import java.io.OutputStreamWriter;
+
 import javax.swing.SwingUtilities;
 
-import org.logicmoo.system.BeanShellCntrl.LispMethod;
+import com.cyc.tool.subl.util.SubLFiles.LispMethod;
+
 
 public class RemoteShell extends Shell
 {
@@ -310,7 +312,7 @@ public class RemoteShell extends Shell
         }
     }
 
-    @LispMethod
+    @com.cyc.tool.subl.util.SubLFiles.LispMethod
     public static void ssh()
     {
         if (!Editor.checkExperimental())
@@ -325,7 +327,7 @@ public class RemoteShell extends Shell
         ssh(host);
     }
 
-    @LispMethod
+    @com.cyc.tool.subl.util.SubLFiles.LispMethod
     public static void ssh(String host)
     {
         if (!Editor.checkExperimental())

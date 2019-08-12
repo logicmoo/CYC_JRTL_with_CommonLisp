@@ -1927,8 +1927,7 @@ the #$fanOutArg for hierarchically transitive PRED. */
   }
 
   public static final SubLObject setup_kb_accessors_file() {
-    // CVS_ID("Id: kb-accessors.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym0$RELATION_, $list1, $str2$Return_T_iff_RELATION_is_a_relati, NIL, $list3);
+        utilities_macros.register_cyc_api_function($sym0$RELATION_, $list1, $str2$Return_T_iff_RELATION_is_a_relati, NIL, $list3);
     utilities_macros.register_cyc_api_function($sym7$REFLEXIVE_PREDICATE_, $list8, $str9$Return_T_iff_PREDICATE_is_a_refle, NIL, $list3);
     utilities_macros.register_cyc_api_function($sym10$IRREFLEXIVE_PREDICATE_, $list8, $str11$Return_T_iff_PREDICATE_is_an_irre, NIL, $list3);
     utilities_macros.register_cyc_api_function($sym12$SYMMETRIC_PREDICATE_, $list8, $str13$Return_T_iff_PREDICATE_is_a_symme, NIL, $list3);

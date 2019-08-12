@@ -1,8 +1,22 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_parameters;
-import com.cyc.cycjava.cycl.cb_process_inspector;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
@@ -18,46 +32,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_process_inspector.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cb_process_inspector extends SubLTranslatedFile {
+public final class cb_process_inspector extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_process_inspector();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_process_inspector";
+    public static final String myName = "com.cyc.cycjava_2.cycl.cb_process_inspector";
 
-    public static final String myFingerPrint = "96a0bd1130c9080b5b5372cedc96113c2201fbbd30d16967f23cc954ac66d733";
 
     private static final SubLString $str0$_Process_Inspector_ = makeString("[Process Inspector]");
 
@@ -1060,20 +1044,20 @@ public final class cb_process_inspector extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_process_inspector_file() {
-        declareFunction(me, "cb_link_process_inspector", "CB-LINK-PROCESS-INSPECTOR", 0, 1, false);
-        declareFunction(me, "cb_process_inspector", "CB-PROCESS-INSPECTOR", 0, 1, false);
-        declareFunction(me, "cb_process_inspector_guts", "CB-PROCESS-INSPECTOR-GUTS", 0, 0, false);
-        declareFunction(me, "cb_show_process_inspector_header_line", "CB-SHOW-PROCESS-INSPECTOR-HEADER-LINE", 0, 0, false);
-        declareFunction(me, "cb_show_process_inspector_line", "CB-SHOW-PROCESS-INSPECTOR-LINE", 1, 0, false);
-        declareFunction(me, "cb_link_kill_process", "CB-LINK-KILL-PROCESS", 1, 1, false);
-        declareFunction(me, "cb_confirm_kill_process", "CB-CONFIRM-KILL-PROCESS", 1, 0, false);
-        declareFunction(me, "cb_kill_process", "CB-KILL-PROCESS", 1, 0, false);
-        declareFunction(me, "cb_active_processes_for_display", "CB-ACTIVE-PROCESSES-FOR-DISPLAY", 0, 0, false);
-        declareFunction(me, "cb_process_runningP", "CB-PROCESS-RUNNING?", 1, 0, false);
-        declareFunction(me, "cb_show_process_form", "CB-SHOW-PROCESS-FORM", 1, 0, false);
-        declareFunction(me, "cb_guess_process", "CB-GUESS-PROCESS", 1, 0, false);
-        declareFunction(me, "inference_object_p", "INFERENCE-OBJECT-P", 1, 0, false);
-        declareFunction(me, "kb_object_p", "KB-OBJECT-P", 1, 0, false);
+        declareFunction("cb_link_process_inspector", "CB-LINK-PROCESS-INSPECTOR", 0, 1, false);
+        declareFunction("cb_process_inspector", "CB-PROCESS-INSPECTOR", 0, 1, false);
+        declareFunction("cb_process_inspector_guts", "CB-PROCESS-INSPECTOR-GUTS", 0, 0, false);
+        declareFunction("cb_show_process_inspector_header_line", "CB-SHOW-PROCESS-INSPECTOR-HEADER-LINE", 0, 0, false);
+        declareFunction("cb_show_process_inspector_line", "CB-SHOW-PROCESS-INSPECTOR-LINE", 1, 0, false);
+        declareFunction("cb_link_kill_process", "CB-LINK-KILL-PROCESS", 1, 1, false);
+        declareFunction("cb_confirm_kill_process", "CB-CONFIRM-KILL-PROCESS", 1, 0, false);
+        declareFunction("cb_kill_process", "CB-KILL-PROCESS", 1, 0, false);
+        declareFunction("cb_active_processes_for_display", "CB-ACTIVE-PROCESSES-FOR-DISPLAY", 0, 0, false);
+        declareFunction("cb_process_runningP", "CB-PROCESS-RUNNING?", 1, 0, false);
+        declareFunction("cb_show_process_form", "CB-SHOW-PROCESS-FORM", 1, 0, false);
+        declareFunction("cb_guess_process", "CB-GUESS-PROCESS", 1, 0, false);
+        declareFunction("inference_object_p", "INFERENCE-OBJECT-P", 1, 0, false);
+        declareFunction("kb_object_p", "KB-OBJECT-P", 1, 0, false);
         return NIL;
     }
 

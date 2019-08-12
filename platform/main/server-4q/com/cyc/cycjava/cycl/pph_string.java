@@ -1,37 +1,9 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.pph_string;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.pph_string.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_o;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
@@ -44,15 +16,24 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class pph_string extends SubLTranslatedFile {
+public final class pph_string extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_string();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_string";
+    public static final String myName = "com.cyc.cycjava_2.cycl.pph_string";
 
-    public static final String myFingerPrint = "5661bd411fab9aaf0b548258695e5a22862c139900a7cff4b1bb8d82347669bc";
 
     // deflexical
     private static final SubLSymbol $pph_string_from_utf8_string_caching_state$ = makeSymbol("*PPH-STRING-FROM-UTF8-STRING-CACHING-STATE*");
@@ -65,7 +46,7 @@ public final class pph_string extends SubLTranslatedFile {
 
     private static final SubLList $list0 = list(list(makeSymbol("CHAR"), makeSymbol("STRING"), makeSymbol("&KEY"), list(makeSymbol("START"), ZERO_INTEGER), makeSymbol("END"), makeSymbol("CHAR-NUM"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list1 = list(makeKeyword("START"), makeKeyword("END"), makeKeyword("CHAR-NUM"), makeKeyword("DONE"));
+    private static final SubLList $list1 = list(makeKeyword("START"), makeKeyword("END"), makeKeyword("CHAR-NUM"), $DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
@@ -153,7 +134,7 @@ public final class pph_string extends SubLTranslatedFile {
 
     private static final SubLSymbol PPH_STRING_TO_OUTPUT_FORMAT = makeSymbol("PPH-STRING-TO-OUTPUT-FORMAT");
 
-    private static final SubLList $list45 = list(list(list(makeString("")), makeString("")), list(list(vector(EMPTY_SUBL_OBJECT_ARRAY)), makeString("")), list(list(makeString("foo")), makeString("foo")), list(list(vector(new SubLObject[]{ makeInteger(32879), makeInteger(37030), makeInteger(24555), makeInteger(36958) }), makeKeyword("TEXT")), list(reader_make_constant_shell(makeString("UnicodeStringFn")), makeString("&u806F;&u90A6;&u5FEB;&u905E;"))));
+    private static final SubLList $list45 = list(list(list(makeString("")), makeString("")), list(list(vector(EMPTY_SUBL_OBJECT_ARRAY)), makeString("")), list(list(makeString("foo")), makeString("foo")), list(list(vector(new SubLObject[]{ makeInteger(32879), makeInteger(37030), makeInteger(24555), makeInteger(36958) }), $TEXT), list(reader_make_constant_shell(makeString("UnicodeStringFn")), makeString("&u806F;&u90A6;&u5FEB;&u905E;"))));
 
     private static final SubLSymbol PPH_STRING_COPY = makeSymbol("PPH-STRING-COPY");
 
@@ -735,56 +716,56 @@ public final class pph_string extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_pph_string_file() {
-        declareMacro(me, "do_pph_string", "DO-PPH-STRING");
-        declareFunction(me, "pph_string_p", "PPH-STRING-P", 1, 0, false);
-        declareFunction(me, "clear_pph_string_from_utf8_string", "CLEAR-PPH-STRING-FROM-UTF8-STRING", 0, 0, false);
-        declareFunction(me, "remove_pph_string_from_utf8_string", "REMOVE-PPH-STRING-FROM-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "pph_string_from_utf8_string_internal", "PPH-STRING-FROM-UTF8-STRING-INTERNAL", 1, 0, false);
-        declareFunction(me, "pph_string_from_utf8_string", "PPH-STRING-FROM-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "pph_string_from_unicode_naut", "PPH-STRING-FROM-UNICODE-NAUT", 1, 0, false);
-        declareFunction(me, "pph_string_from_cycl_string", "PPH-STRING-FROM-CYCL-STRING", 1, 0, false);
-        declareFunction(me, "pph_string_starts_with", "PPH-STRING-STARTS-WITH", 2, 1, false);
-        declareFunction(me, "pph_string_ends_with", "PPH-STRING-ENDS-WITH", 2, 1, false);
-        declareFunction(me, "pph_string_pre_remove", "PPH-STRING-PRE-REMOVE", 2, 1, false);
-        declareFunction(me, "pph_string_copy", "PPH-STRING-COPY", 1, 0, false);
-        declareFunction(me, "pph_char_downcase", "PPH-CHAR-DOWNCASE", 1, 0, false);
-        declareFunction(me, "pph_string_ndowncase_leading", "PPH-STRING-NDOWNCASE-LEADING", 1, 0, false);
-        declareFunction(me, "pph_string_starts_with_one_of", "PPH-STRING-STARTS-WITH-ONE-OF", 2, 0, false);
-        declareFunction(me, "pph_string_equalP", "PPH-STRING-EQUAL?", 2, 0, false);
-        declareFunction(me, "pph_string_concatenate", "PPH-STRING-CONCATENATE", 2, 0, false);
-        declareFunction(me, "pph_string_tokenize", "PPH-STRING-TOKENIZE", 1, 1, false);
-        declareFunction(me, "pph_string_from_char_list", "PPH-STRING-FROM-CHAR-LIST", 1, 0, false);
-        declareFunction(me, "preds_of_pph_string", "PREDS-OF-PPH-STRING", 1, 1, false);
-        declareFunction(me, "pph_string_last_char", "PPH-STRING-LAST-CHAR", 1, 0, false);
-        declareFunction(me, "pph_string_char_from_end", "PPH-STRING-CHAR-FROM-END", 2, 0, false);
-        declareFunction(me, "pph_bunge", "PPH-BUNGE", 1, 0, false);
-        declareFunction(me, "pph_string_find_if", "PPH-STRING-FIND-IF", 2, 0, false);
-        declareFunction(me, "pph_string_position", "PPH-STRING-POSITION", 2, 4, false);
-        declareFunction(me, "pph_string_char", "PPH-STRING-CHAR", 2, 0, false);
-        declareFunction(me, "pph_char_E", "PPH-CHAR-=", 2, 0, false);
-        declareFunction(me, "pph_set_nth_char", "PPH-SET-NTH-CHAR", 3, 1, false);
-        declareFunction(me, "pph_substringP", "PPH-SUBSTRING?", 2, 3, false);
-        declareFunction(me, "pph_substring", "PPH-SUBSTRING", 2, 1, false);
-        declareFunction(me, "pph_string_to_display", "PPH-STRING-TO-DISPLAY", 1, 0, false);
-        declareFunction(me, "pph_string_if_non_null_to_output_format", "PPH-STRING-IF-NON-NULL-TO-OUTPUT-FORMAT", 1, 1, false);
-        declareFunction(me, "pph_string_to_cycl", "PPH-STRING-TO-CYCL", 1, 0, false);
-        declareFunction(me, "pph_string_to_output_format", "PPH-STRING-TO-OUTPUT-FORMAT", 1, 1, false);
-        declareFunction(me, "pph_string_if_non_null_to_html_escaped", "PPH-STRING-IF-NON-NULL-TO-HTML-ESCAPED", 1, 0, false);
-        declareFunction(me, "pph_string_to_html_escaped", "PPH-STRING-TO-HTML-ESCAPED", 1, 1, false);
-        declareFunction(me, "pph_string_if_non_null_to_utf8", "PPH-STRING-IF-NON-NULL-TO-UTF8", 1, 0, false);
-        declareFunction(me, "pph_string_to_utf8", "PPH-STRING-TO-UTF8", 1, 0, false);
-        declareFunction(me, "non_empty_pph_stringP", "NON-EMPTY-PPH-STRING?", 1, 0, false);
-        declareFunction(me, "pph_string_canonicalize", "PPH-STRING-CANONICALIZE", 1, 0, false);
-        declareFunction(me, "pph_nupcase_nth", "PPH-NUPCASE-NTH", 2, 1, false);
-        declareFunction(me, "pph_string_downcase", "PPH-STRING-DOWNCASE", 1, 0, false);
-        declareFunction(me, "pph_remove_substring", "PPH-REMOVE-SUBSTRING", 2, 0, false);
-        declareFunction(me, "pph_code_char", "PPH-CODE-CHAR", 1, 0, false);
-        declareFunction(me, "pph_char_code", "PPH-CHAR-CODE", 1, 0, false);
-        declareFunction(me, "get_pph_code_char", "GET-PPH-CODE-CHAR", 1, 0, false);
-        declareFunction(me, "get_pph_char_code", "GET-PPH-CHAR-CODE", 1, 0, false);
-        declareFunction(me, "pph_string_find_ifP", "PPH-STRING-FIND-IF?", 2, 0, false);
-        declareFunction(me, "pph_canonicalizing_bunge", "PPH-CANONICALIZING-BUNGE", 1, 0, false);
-        declareFunction(me, "pph_noncanonicalizing_bunge", "PPH-NONCANONICALIZING-BUNGE", 1, 0, false);
+        declareMacro("do_pph_string", "DO-PPH-STRING");
+        declareFunction("pph_string_p", "PPH-STRING-P", 1, 0, false);
+        declareFunction("clear_pph_string_from_utf8_string", "CLEAR-PPH-STRING-FROM-UTF8-STRING", 0, 0, false);
+        declareFunction("remove_pph_string_from_utf8_string", "REMOVE-PPH-STRING-FROM-UTF8-STRING", 1, 0, false);
+        declareFunction("pph_string_from_utf8_string_internal", "PPH-STRING-FROM-UTF8-STRING-INTERNAL", 1, 0, false);
+        declareFunction("pph_string_from_utf8_string", "PPH-STRING-FROM-UTF8-STRING", 1, 0, false);
+        declareFunction("pph_string_from_unicode_naut", "PPH-STRING-FROM-UNICODE-NAUT", 1, 0, false);
+        declareFunction("pph_string_from_cycl_string", "PPH-STRING-FROM-CYCL-STRING", 1, 0, false);
+        declareFunction("pph_string_starts_with", "PPH-STRING-STARTS-WITH", 2, 1, false);
+        declareFunction("pph_string_ends_with", "PPH-STRING-ENDS-WITH", 2, 1, false);
+        declareFunction("pph_string_pre_remove", "PPH-STRING-PRE-REMOVE", 2, 1, false);
+        declareFunction("pph_string_copy", "PPH-STRING-COPY", 1, 0, false);
+        declareFunction("pph_char_downcase", "PPH-CHAR-DOWNCASE", 1, 0, false);
+        declareFunction("pph_string_ndowncase_leading", "PPH-STRING-NDOWNCASE-LEADING", 1, 0, false);
+        declareFunction("pph_string_starts_with_one_of", "PPH-STRING-STARTS-WITH-ONE-OF", 2, 0, false);
+        declareFunction("pph_string_equalP", "PPH-STRING-EQUAL?", 2, 0, false);
+        declareFunction("pph_string_concatenate", "PPH-STRING-CONCATENATE", 2, 0, false);
+        declareFunction("pph_string_tokenize", "PPH-STRING-TOKENIZE", 1, 1, false);
+        declareFunction("pph_string_from_char_list", "PPH-STRING-FROM-CHAR-LIST", 1, 0, false);
+        declareFunction("preds_of_pph_string", "PREDS-OF-PPH-STRING", 1, 1, false);
+        declareFunction("pph_string_last_char", "PPH-STRING-LAST-CHAR", 1, 0, false);
+        declareFunction("pph_string_char_from_end", "PPH-STRING-CHAR-FROM-END", 2, 0, false);
+        declareFunction("pph_bunge", "PPH-BUNGE", 1, 0, false);
+        declareFunction("pph_string_find_if", "PPH-STRING-FIND-IF", 2, 0, false);
+        declareFunction("pph_string_position", "PPH-STRING-POSITION", 2, 4, false);
+        declareFunction("pph_string_char", "PPH-STRING-CHAR", 2, 0, false);
+        declareFunction("pph_char_E", "PPH-CHAR-=", 2, 0, false);
+        declareFunction("pph_set_nth_char", "PPH-SET-NTH-CHAR", 3, 1, false);
+        declareFunction("pph_substringP", "PPH-SUBSTRING?", 2, 3, false);
+        declareFunction("pph_substring", "PPH-SUBSTRING", 2, 1, false);
+        declareFunction("pph_string_to_display", "PPH-STRING-TO-DISPLAY", 1, 0, false);
+        declareFunction("pph_string_if_non_null_to_output_format", "PPH-STRING-IF-NON-NULL-TO-OUTPUT-FORMAT", 1, 1, false);
+        declareFunction("pph_string_to_cycl", "PPH-STRING-TO-CYCL", 1, 0, false);
+        declareFunction("pph_string_to_output_format", "PPH-STRING-TO-OUTPUT-FORMAT", 1, 1, false);
+        declareFunction("pph_string_if_non_null_to_html_escaped", "PPH-STRING-IF-NON-NULL-TO-HTML-ESCAPED", 1, 0, false);
+        declareFunction("pph_string_to_html_escaped", "PPH-STRING-TO-HTML-ESCAPED", 1, 1, false);
+        declareFunction("pph_string_if_non_null_to_utf8", "PPH-STRING-IF-NON-NULL-TO-UTF8", 1, 0, false);
+        declareFunction("pph_string_to_utf8", "PPH-STRING-TO-UTF8", 1, 0, false);
+        declareFunction("non_empty_pph_stringP", "NON-EMPTY-PPH-STRING?", 1, 0, false);
+        declareFunction("pph_string_canonicalize", "PPH-STRING-CANONICALIZE", 1, 0, false);
+        declareFunction("pph_nupcase_nth", "PPH-NUPCASE-NTH", 2, 1, false);
+        declareFunction("pph_string_downcase", "PPH-STRING-DOWNCASE", 1, 0, false);
+        declareFunction("pph_remove_substring", "PPH-REMOVE-SUBSTRING", 2, 0, false);
+        declareFunction("pph_code_char", "PPH-CODE-CHAR", 1, 0, false);
+        declareFunction("pph_char_code", "PPH-CHAR-CODE", 1, 0, false);
+        declareFunction("get_pph_code_char", "GET-PPH-CODE-CHAR", 1, 0, false);
+        declareFunction("get_pph_char_code", "GET-PPH-CHAR-CODE", 1, 0, false);
+        declareFunction("pph_string_find_ifP", "PPH-STRING-FIND-IF?", 2, 0, false);
+        declareFunction("pph_canonicalizing_bunge", "PPH-CANONICALIZING-BUNGE", 1, 0, false);
+        declareFunction("pph_noncanonicalizing_bunge", "PPH-NONCANONICALIZING-BUNGE", 1, 0, false);
         return NIL;
     }
 

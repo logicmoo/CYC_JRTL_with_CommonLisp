@@ -221,8 +221,7 @@ public  final class inference_worker_residual_transformation extends SubLTransla
   }
 
   public static final SubLObject setup_inference_worker_residual_transformation_file() {
-    // CVS_ID("Id: inference-worker-residual-transformation.lisp 128648 2009-08-27 17:23:55Z pace ");
-    access_macros.define_obsolete_register($sym11$PROBLEM_STORE_PROBLEMATIC_RESIDUAL_TRANSFORMATION_LINKS, $list12);
+        access_macros.define_obsolete_register($sym11$PROBLEM_STORE_PROBLEMATIC_RESIDUAL_TRANSFORMATION_LINKS, $list12);
     access_macros.define_obsolete_register($sym13$PROBLEM_STORE_PROBLEMATIC_RESIDUAL_TRANSFORMATION_LINK_COUNT, $list14);
     return NIL;
   }

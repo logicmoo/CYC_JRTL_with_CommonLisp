@@ -2974,8 +2974,7 @@ override the one from the inference. */
   }
 
   public static final SubLObject setup_inference_datastructures_strategy_file() {
-    // CVS_ID("Id: inference-datastructures-strategy.lisp 128760 2009-09-15 04:40:33Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_strategy$.getGlobalValue(), Symbols.symbol_function($sym7$STRATEGY_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_strategy$.getGlobalValue(), Symbols.symbol_function($sym7$STRATEGY_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$STRAT_SUID, $sym9$_CSETF_STRAT_SUID);
     Structures.def_csetf($sym10$STRAT_INFERENCE, $sym11$_CSETF_STRAT_INFERENCE);
     Structures.def_csetf($sym12$STRAT_RESULT_UNIQUENESS_CRITERION, $sym13$_CSETF_STRAT_RESULT_UNIQUENESS_CRITERION);

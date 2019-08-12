@@ -276,8 +276,7 @@ public  final class c_backend extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_c_backend_file() {
-    // CVS_ID("Id: c-backend.lisp 128371 2009-07-22 15:40:43Z goolsbey ");
-    memoization_state.note_memoized_function($sym54$C_BACKEND_SECURE_LOCAL_ID);
+        memoization_state.note_memoized_function($sym54$C_BACKEND_SECURE_LOCAL_ID);
     memoization_state.note_memoized_function($sym56$C_BACKEND_LOCAL_VARIABLE_NAME);
     memoization_state.note_memoized_function($sym59$C_BACKEND_COMPUTE_GLOBAL_VARIABLE_NAME);
     memoization_state.note_memoized_function($sym71$C_BACKEND_COMPUTED_FUNCTION_NAME);

@@ -1,39 +1,32 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.arguments;
 import com.cyc.cycjava.cycl.backward;
 import com.cyc.cycjava.cycl.bindings;
 import com.cyc.cycjava.cycl.cardinality_estimates;
 import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kb_estimates;
-import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kb_estimates.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_kb_estimates extends SubLTranslatedFile {
+public final class removal_modules_kb_estimates extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_kb_estimates();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_kb_estimates";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_kb_estimates";
 
-    public static final String myFingerPrint = "61327860202280ad9b985f2ce37a9df245a017107e6311ca16de10c838a9ddef";
 
     private static final SubLObject $$termGeneralityEstimate = reader_make_constant_shell(makeString("termGeneralityEstimate"));
 
@@ -60,7 +53,7 @@ public final class removal_modules_kb_estimates extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_kb_estimates_file() {
-        declareFunction(me, "removal_term_generality_estimate_pos", "REMOVAL-TERM-GENERALITY-ESTIMATE-POS", 1, 1, false);
+        declareFunction("removal_term_generality_estimate_pos", "REMOVAL-TERM-GENERALITY-ESTIMATE-POS", 1, 1, false);
         return NIL;
     }
 

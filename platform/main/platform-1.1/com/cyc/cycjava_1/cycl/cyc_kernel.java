@@ -247,8 +247,7 @@ public  final class cyc_kernel extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cyc_kernel_file() {
-    // CVS_ID("Id: cyc-kernel.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym2$CYC_CREATE_NEW_PERMANENT, $list3, $str4$Creates_a_new_constant_with_name_, $list5, $list6);
+        utilities_macros.register_cyc_api_function($sym2$CYC_CREATE_NEW_PERMANENT, $list3, $str4$Creates_a_new_constant_with_name_, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym7$CYC_CREATE_NEW_EPHEMERAL, $list3, $str8$Creates_a_new_constant_with_name_, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym1$CYC_CREATE, $list10, $str11$Create_a_new_constant_with_id_EXT, $list12, $list6);
     utilities_macros.register_cyc_api_function($sym14$CYC_FIND_OR_CREATE, $list10, $str15$Return_constant_with_NAME_if_it_i, $list16, $list6);

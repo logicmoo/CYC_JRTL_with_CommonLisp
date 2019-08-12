@@ -361,8 +361,7 @@ of the prefix in @xref print-variable */
   }
 
   public static final SubLObject setup_variables_file() {
-    // CVS_ID("Id: variables.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_variable$.getGlobalValue(), Symbols.symbol_function($sym8$VARIABLE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_variable$.getGlobalValue(), Symbols.symbol_function($sym8$VARIABLE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$VAR_ID, $sym10$_CSETF_VAR_ID);
     Equality.identity($sym1$VARIABLE);
     Structures.register_method(Sxhash.$sxhash_method_table$.getGlobalValue(), $dtp_variable$.getGlobalValue(), Symbols.symbol_function($sym15$SXHASH_VARIABLE_METHOD));

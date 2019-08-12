@@ -1,71 +1,37 @@
 package com.cyc.cycjava.cycl.nl;
 
 
-import com.cyc.cycjava.cycl.builder_utilities;
-import com.cyc.cycjava.cycl.cycl_string;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.document;
-import com.cyc.cycjava.cycl.fort_types_interface;
-import com.cyc.cycjava.cycl.instances;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.lexicon_accessors;
-import com.cyc.cycjava.cycl.linkage;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.methods;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.nl.syntactic_coverage;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.nl.syntactic_coverage.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$with_timeout_nesting_depth$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$within_with_timeout$;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class syntactic_coverage extends SubLTranslatedFile {
+public final class syntactic_coverage extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new syntactic_coverage();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl.syntactic_coverage";
+    public static final String myName = "com.cyc.cycjava_2.cycl.nl.syntactic_coverage";
 
-    public static final String myFingerPrint = "dcb1a14ce3db24f1ad00f69a67a584cbeb252a12f9ec40b13a845470be730e0f";
 
 
 
@@ -490,18 +456,18 @@ public final class syntactic_coverage extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_syntactic_coverage_file() {
-        declareFunction(me, "clear_get_syntactic_document_stats", "CLEAR-GET-SYNTACTIC-DOCUMENT-STATS", 0, 0, false);
-        declareFunction(me, "remove_get_syntactic_document_stats", "REMOVE-GET-SYNTACTIC-DOCUMENT-STATS", 1, 1, false);
-        declareFunction(me, "get_syntactic_document_stats_internal", "GET-SYNTACTIC-DOCUMENT-STATS-INTERNAL", 2, 0, false);
-        declareFunction(me, "get_syntactic_document_stats", "GET-SYNTACTIC-DOCUMENT-STATS", 1, 1, false);
-        declareFunction(me, "get_sentence_size", "GET-SENTENCE-SIZE", 1, 0, false);
-        declareFunction(me, "simple_semantic_distance", "SIMPLE-SEMANTIC-DISTANCE", 2, 1, false);
-        declareFunction(me, "get_useless_preds", "GET-USELESS-PREDS", 0, 0, false);
-        declareFunction(me, "useless_intermediary_nodeP", "USELESS-INTERMEDIARY-NODE?", 2, 0, false);
-        declareFunction(me, "clear_higher_order_collectionP_cached", "CLEAR-HIGHER-ORDER-COLLECTION?-CACHED", 0, 0, false);
-        declareFunction(me, "remove_higher_order_collectionP_cached", "REMOVE-HIGHER-ORDER-COLLECTION?-CACHED", 1, 0, false);
-        declareFunction(me, "higher_order_collectionP_cached_internal", "HIGHER-ORDER-COLLECTION?-CACHED-INTERNAL", 1, 0, false);
-        declareFunction(me, "higher_order_collectionP_cached", "HIGHER-ORDER-COLLECTION?-CACHED", 1, 0, false);
+        declareFunction("clear_get_syntactic_document_stats", "CLEAR-GET-SYNTACTIC-DOCUMENT-STATS", 0, 0, false);
+        declareFunction("remove_get_syntactic_document_stats", "REMOVE-GET-SYNTACTIC-DOCUMENT-STATS", 1, 1, false);
+        declareFunction("get_syntactic_document_stats_internal", "GET-SYNTACTIC-DOCUMENT-STATS-INTERNAL", 2, 0, false);
+        declareFunction("get_syntactic_document_stats", "GET-SYNTACTIC-DOCUMENT-STATS", 1, 1, false);
+        declareFunction("get_sentence_size", "GET-SENTENCE-SIZE", 1, 0, false);
+        declareFunction("simple_semantic_distance", "SIMPLE-SEMANTIC-DISTANCE", 2, 1, false);
+        declareFunction("get_useless_preds", "GET-USELESS-PREDS", 0, 0, false);
+        declareFunction("useless_intermediary_nodeP", "USELESS-INTERMEDIARY-NODE?", 2, 0, false);
+        declareFunction("clear_higher_order_collectionP_cached", "CLEAR-HIGHER-ORDER-COLLECTION?-CACHED", 0, 0, false);
+        declareFunction("remove_higher_order_collectionP_cached", "REMOVE-HIGHER-ORDER-COLLECTION?-CACHED", 1, 0, false);
+        declareFunction("higher_order_collectionP_cached_internal", "HIGHER-ORDER-COLLECTION?-CACHED-INTERNAL", 1, 0, false);
+        declareFunction("higher_order_collectionP_cached", "HIGHER-ORDER-COLLECTION?-CACHED", 1, 0, false);
         return NIL;
     }
 

@@ -1,7 +1,21 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.modification_counting_map;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -15,39 +29,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.modification_counting_map.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class modification_counting_map extends SubLTranslatedFile {
+import com.cyc.tool.subl.util.SubLTranslatedFile; 
+ public final class modification_counting_map extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new modification_counting_map();
 
-    public static final String myName = "com.cyc.cycjava.cycl.modification_counting_map";
+    public static final String myName = "com.cyc.cycjava_2.cycl.modification_counting_map";
 
-    public static final String myFingerPrint = "9646675d5d0d965bddc6b59dbbe3f5d139563b5da75488c72108496c3cb83f49";
 
     // defconstant
     public static final SubLSymbol $dtp_modification_counting_map$ = makeSymbol("*DTP-MODIFICATION-COUNTING-MAP*");
@@ -143,36 +130,36 @@ public final class modification_counting_map extends SubLTranslatedFile {
     }
 
     public static SubLObject modification_counting_map_p(final SubLObject v_object) {
-        return v_object.getClass() == modification_counting_map.$modification_counting_map_native.class ? T : NIL;
+        return v_object.getClass() == $modification_counting_map_native.class ? T : NIL;
     }
 
     public static SubLObject mcmap_map(final SubLObject v_object) {
-        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p(v_object) " + "CommonSymbols.NIL != modification_counting_map.modification_counting_map_p(v_object) " + v_object;
+        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject mcmap_put_count(final SubLObject v_object) {
-        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p(v_object) " + "CommonSymbols.NIL != modification_counting_map.modification_counting_map_p(v_object) " + v_object;
+        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject mcmap_remove_count(final SubLObject v_object) {
-        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p(v_object) " + "CommonSymbols.NIL != modification_counting_map.modification_counting_map_p(v_object) " + v_object;
+        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject _csetf_mcmap_map(final SubLObject v_object, final SubLObject value) {
-        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p(v_object) " + "CommonSymbols.NIL != modification_counting_map.modification_counting_map_p(v_object) " + v_object;
+        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_mcmap_put_count(final SubLObject v_object, final SubLObject value) {
-        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p(v_object) " + "CommonSymbols.NIL != modification_counting_map.modification_counting_map_p(v_object) " + v_object;
+        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_mcmap_remove_count(final SubLObject v_object, final SubLObject value) {
-        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p(v_object) " + "CommonSymbols.NIL != modification_counting_map.modification_counting_map_p(v_object) " + v_object;
+        assert NIL != modification_counting_map_p(v_object) : "modification_counting_map.modification_counting_map_p error :" + v_object;
         return v_object.setField4(value);
     }
 
@@ -180,7 +167,7 @@ public final class modification_counting_map extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new modification_counting_map.$modification_counting_map_native();
+        final SubLObject v_new = new $modification_counting_map_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -340,46 +327,46 @@ public final class modification_counting_map extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_modification_counting_map_file() {
-        declareFunction(me, "create_modification_counting_map", "CREATE-MODIFICATION-COUNTING-MAP", 1, 0, false);
-        declareFunction(me, "modification_counting_map_print_function_trampoline", "MODIFICATION-COUNTING-MAP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "modification_counting_map_p", "MODIFICATION-COUNTING-MAP-P", 1, 0, false);
+        declareFunction("create_modification_counting_map", "CREATE-MODIFICATION-COUNTING-MAP", 1, 0, false);
+        declareFunction("modification_counting_map_print_function_trampoline", "MODIFICATION-COUNTING-MAP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("modification_counting_map_p", "MODIFICATION-COUNTING-MAP-P", 1, 0, false);
         new modification_counting_map.$modification_counting_map_p$UnaryFunction();
-        declareFunction(me, "mcmap_map", "MCMAP-MAP", 1, 0, false);
-        declareFunction(me, "mcmap_put_count", "MCMAP-PUT-COUNT", 1, 0, false);
-        declareFunction(me, "mcmap_remove_count", "MCMAP-REMOVE-COUNT", 1, 0, false);
-        declareFunction(me, "_csetf_mcmap_map", "_CSETF-MCMAP-MAP", 2, 0, false);
-        declareFunction(me, "_csetf_mcmap_put_count", "_CSETF-MCMAP-PUT-COUNT", 2, 0, false);
-        declareFunction(me, "_csetf_mcmap_remove_count", "_CSETF-MCMAP-REMOVE-COUNT", 2, 0, false);
-        declareFunction(me, "make_modification_counting_map", "MAKE-MODIFICATION-COUNTING-MAP", 0, 1, false);
-        declareFunction(me, "visit_defstruct_modification_counting_map", "VISIT-DEFSTRUCT-MODIFICATION-COUNTING-MAP", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_modification_counting_map_method", "VISIT-DEFSTRUCT-OBJECT-MODIFICATION-COUNTING-MAP-METHOD", 2, 0, false);
-        declareFunction(me, "print_modification_counting_map", "PRINT-MODIFICATION-COUNTING-MAP", 3, 0, false);
-        declareFunction(me, "is_map_object_p_modification_counting_map_method", "IS-MAP-OBJECT-P-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_size_modification_counting_map_method", "MAP-OBJECT-SIZE-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_test_modification_counting_map_method", "MAP-OBJECT-TEST-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_put_modification_counting_map_method", "MAP-OBJECT-PUT-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "modification_counting_map_put", "MODIFICATION-COUNTING-MAP-PUT", 3, 0, false);
-        declareFunction(me, "map_object_get_modification_counting_map_method", "MAP-OBJECT-GET-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "modification_counting_map_get", "MODIFICATION-COUNTING-MAP-GET", 3, 0, false);
-        declareFunction(me, "map_object_get_without_values_modification_counting_map_method", "MAP-OBJECT-GET-WITHOUT-VALUES-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "modification_counting_map_get_without_values", "MODIFICATION-COUNTING-MAP-GET-WITHOUT-VALUES", 3, 0, false);
-        declareFunction(me, "map_object_remove_modification_counting_map_method", "MAP-OBJECT-REMOVE-MODIFICATION-COUNTING-MAP-METHOD", 2, 0, false);
-        declareFunction(me, "modification_counting_map_remove", "MODIFICATION-COUNTING-MAP-REMOVE", 2, 0, false);
-        declareFunction(me, "new_map_object_with_same_properties_modification_counting_map_method", "NEW-MAP-OBJECT-WITH-SAME-PROPERTIES-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "map_object_arbitrary_key_modification_counting_map_method", "MAP-OBJECT-ARBITRARY-KEY-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "new_map_object_iterator_modification_counting_map_method", "NEW-MAP-OBJECT-ITERATOR-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_remove_all_modification_counting_map_method", "MAP-OBJECT-REMOVE-ALL-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "modification_counting_map_remove_all", "MODIFICATION-COUNTING-MAP-REMOVE-ALL", 1, 0, false);
-        declareFunction(me, "map_object_keys_modification_counting_map_method", "MAP-OBJECT-KEYS-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_values_modification_counting_map_method", "MAP-OBJECT-VALUES-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "new_modification_counting_map", "NEW-MODIFICATION-COUNTING-MAP", 1, 0, false);
-        declareFunction(me, "modification_counting_map_map", "MODIFICATION-COUNTING-MAP-MAP", 1, 0, false);
-        declareFunction(me, "modification_counting_map_put_count", "MODIFICATION-COUNTING-MAP-PUT-COUNT", 1, 0, false);
-        declareFunction(me, "mcmap_note_put", "MCMAP-NOTE-PUT", 1, 0, false);
-        declareFunction(me, "modification_counting_map_remove_count", "MODIFICATION-COUNTING-MAP-REMOVE-COUNT", 1, 0, false);
-        declareFunction(me, "mcmap_note_remove", "MCMAP-NOTE-REMOVE", 1, 0, false);
-        declareFunction(me, "sxhash_modification_counting_map_method", "SXHASH-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "sxhash_modification_counting_map", "SXHASH-MODIFICATION-COUNTING-MAP", 1, 0, false);
+        declareFunction("mcmap_map", "MCMAP-MAP", 1, 0, false);
+        declareFunction("mcmap_put_count", "MCMAP-PUT-COUNT", 1, 0, false);
+        declareFunction("mcmap_remove_count", "MCMAP-REMOVE-COUNT", 1, 0, false);
+        declareFunction("_csetf_mcmap_map", "_CSETF-MCMAP-MAP", 2, 0, false);
+        declareFunction("_csetf_mcmap_put_count", "_CSETF-MCMAP-PUT-COUNT", 2, 0, false);
+        declareFunction("_csetf_mcmap_remove_count", "_CSETF-MCMAP-REMOVE-COUNT", 2, 0, false);
+        declareFunction("make_modification_counting_map", "MAKE-MODIFICATION-COUNTING-MAP", 0, 1, false);
+        declareFunction("visit_defstruct_modification_counting_map", "VISIT-DEFSTRUCT-MODIFICATION-COUNTING-MAP", 2, 0, false);
+        declareFunction("visit_defstruct_object_modification_counting_map_method", "VISIT-DEFSTRUCT-OBJECT-MODIFICATION-COUNTING-MAP-METHOD", 2, 0, false);
+        declareFunction("print_modification_counting_map", "PRINT-MODIFICATION-COUNTING-MAP", 3, 0, false);
+        declareFunction("is_map_object_p_modification_counting_map_method", "IS-MAP-OBJECT-P-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_size_modification_counting_map_method", "MAP-OBJECT-SIZE-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_test_modification_counting_map_method", "MAP-OBJECT-TEST-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_put_modification_counting_map_method", "MAP-OBJECT-PUT-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
+        declareFunction("modification_counting_map_put", "MODIFICATION-COUNTING-MAP-PUT", 3, 0, false);
+        declareFunction("map_object_get_modification_counting_map_method", "MAP-OBJECT-GET-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
+        declareFunction("modification_counting_map_get", "MODIFICATION-COUNTING-MAP-GET", 3, 0, false);
+        declareFunction("map_object_get_without_values_modification_counting_map_method", "MAP-OBJECT-GET-WITHOUT-VALUES-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
+        declareFunction("modification_counting_map_get_without_values", "MODIFICATION-COUNTING-MAP-GET-WITHOUT-VALUES", 3, 0, false);
+        declareFunction("map_object_remove_modification_counting_map_method", "MAP-OBJECT-REMOVE-MODIFICATION-COUNTING-MAP-METHOD", 2, 0, false);
+        declareFunction("modification_counting_map_remove", "MODIFICATION-COUNTING-MAP-REMOVE", 2, 0, false);
+        declareFunction("new_map_object_with_same_properties_modification_counting_map_method", "NEW-MAP-OBJECT-WITH-SAME-PROPERTIES-MODIFICATION-COUNTING-MAP-METHOD", 3, 0, false);
+        declareFunction("map_object_arbitrary_key_modification_counting_map_method", "MAP-OBJECT-ARBITRARY-KEY-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("new_map_object_iterator_modification_counting_map_method", "NEW-MAP-OBJECT-ITERATOR-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_remove_all_modification_counting_map_method", "MAP-OBJECT-REMOVE-ALL-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("modification_counting_map_remove_all", "MODIFICATION-COUNTING-MAP-REMOVE-ALL", 1, 0, false);
+        declareFunction("map_object_keys_modification_counting_map_method", "MAP-OBJECT-KEYS-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_values_modification_counting_map_method", "MAP-OBJECT-VALUES-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("new_modification_counting_map", "NEW-MODIFICATION-COUNTING-MAP", 1, 0, false);
+        declareFunction("modification_counting_map_map", "MODIFICATION-COUNTING-MAP-MAP", 1, 0, false);
+        declareFunction("modification_counting_map_put_count", "MODIFICATION-COUNTING-MAP-PUT-COUNT", 1, 0, false);
+        declareFunction("mcmap_note_put", "MCMAP-NOTE-PUT", 1, 0, false);
+        declareFunction("modification_counting_map_remove_count", "MODIFICATION-COUNTING-MAP-REMOVE-COUNT", 1, 0, false);
+        declareFunction("mcmap_note_remove", "MCMAP-NOTE-REMOVE", 1, 0, false);
+        declareFunction("sxhash_modification_counting_map_method", "SXHASH-MODIFICATION-COUNTING-MAP-METHOD", 1, 0, false);
+        declareFunction("sxhash_modification_counting_map", "SXHASH-MODIFICATION-COUNTING-MAP", 1, 0, false);
         return NIL;
     }
 
@@ -483,7 +470,7 @@ public final class modification_counting_map extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $modification_counting_map_native() {
+        private $modification_counting_map_native() {
             this.$map = Lisp.NIL;
             this.$put_count = Lisp.NIL;
             this.$remove_count = Lisp.NIL;
@@ -525,7 +512,7 @@ public final class modification_counting_map extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(modification_counting_map.$modification_counting_map_native.class, MODIFICATION_COUNTING_MAP, MODIFICATION_COUNTING_MAP_P, $list3, $list4, new String[]{ "$map", "$put_count", "$remove_count" }, $list5, $list6, PRINT_MODIFICATION_COUNTING_MAP);
+            structDecl = makeStructDeclNative($modification_counting_map_native.class, MODIFICATION_COUNTING_MAP, MODIFICATION_COUNTING_MAP_P, $list3, $list4, new String[]{ "$map", "$put_count", "$remove_count" }, $list5, $list6, PRINT_MODIFICATION_COUNTING_MAP);
         }
     }
 

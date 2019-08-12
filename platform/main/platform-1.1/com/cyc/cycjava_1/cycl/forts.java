@@ -365,8 +365,7 @@ public  final class forts extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_forts_file() {
-    // CVS_ID("Id: forts.lisp 128359 2009-07-20 17:32:34Z goolsbey ");
-    utilities_macros.register_cyc_api_function($sym0$FORT_P, $list1, $str2$Return_T_iff_OBJECT_is_a_first_or, NIL, $list3);
+        utilities_macros.register_cyc_api_function($sym0$FORT_P, $list1, $str2$Return_T_iff_OBJECT_is_a_first_or, NIL, $list3);
     utilities_macros.register_cyc_api_function($sym4$FORT_EL_FORMULA, $list5, $str6$Return_the_EL_formula_for_any_FOR, $list7, $list8);
     utilities_macros.register_cyc_api_macro($sym26$DO_FORTS, $list9, $str29$Iterate_over_all_HL_FORT_datastru);
     access_macros.register_macro_helper($sym30$DO_FORTS_TABLES, $sym26$DO_FORTS);

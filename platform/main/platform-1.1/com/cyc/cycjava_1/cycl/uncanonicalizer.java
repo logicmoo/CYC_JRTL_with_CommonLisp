@@ -241,8 +241,7 @@ public  final class uncanonicalizer extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_uncanonicalizer_file() {
-    // CVS_ID("Id: uncanonicalizer.lisp 127877 2009-05-27 15:07:45Z pace ");
-    memoization_state.note_memoized_function($sym7$ASSERTION_EL_FORMULA_MEMOIZED);
+        memoization_state.note_memoized_function($sym7$ASSERTION_EL_FORMULA_MEMOIZED);
     utilities_macros.register_cyc_api_function($sym12$ASSERTION_EL_FORMULA, $list13, $str14$Return_the_EL_formula_for_ASSERTI, $list15, $list16);
     utilities_macros.register_cyc_api_function($sym17$ASSERTION_EL_IST_FORMULA, $list13, $str18$Return_the_el_formula_in___ist_fo, $list15, $list19);
     memoization_state.note_globally_cached_function($sym30$CACHED_ASSERTION_EL_FORMULA_INT);

@@ -143,8 +143,7 @@ public  final class removal_modules_relation_all extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_relation_all_file() {
-    // CVS_ID("Id: removal-modules-relation-all.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym2$_RELATION_ALL_DEFINING_MT_);
+        subl_macro_promotions.declare_defglobal($sym2$_RELATION_ALL_DEFINING_MT_);
     mt_vars.note_mt_var($sym2$_RELATION_ALL_DEFINING_MT_, $const0$relationAll);
     inference_modules.inference_removal_module($kw9$REMOVAL_RELATION_ALL_CHECK, $list10);
     return NIL;

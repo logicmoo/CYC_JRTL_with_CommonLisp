@@ -145,8 +145,7 @@ NIL means that the KB purpose is generic extension of Cyc's knowledge. */
   }
 
   public static final SubLObject setup_api_control_vars_file() {
-    // CVS_ID("Id: api-control-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Initializers

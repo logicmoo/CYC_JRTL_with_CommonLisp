@@ -1044,8 +1044,7 @@ public  final class file_hash_table extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_file_hash_table_file() {
-    // CVS_ID("Id: file-hash-table.lisp 128717 2009-09-08 17:00:19Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_file_hash_table$.getGlobalValue(), Symbols.symbol_function($sym7$FILE_HASH_TABLE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_file_hash_table$.getGlobalValue(), Symbols.symbol_function($sym7$FILE_HASH_TABLE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$FILE_HASH_TABLE_STREAM, $sym9$_CSETF_FILE_HASH_TABLE_STREAM);
     Structures.def_csetf($sym10$FILE_HASH_TABLE_HEADER, $sym11$_CSETF_FILE_HASH_TABLE_HEADER);
     Structures.def_csetf($sym12$FILE_HASH_TABLE_LOCK, $sym13$_CSETF_FILE_HASH_TABLE_LOCK);

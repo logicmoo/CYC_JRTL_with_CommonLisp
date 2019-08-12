@@ -321,8 +321,7 @@ public  final class red_infrastructure extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_red_infrastructure_file() {
-    // CVS_ID("Id: red-infrastructure.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_RED_VARIABLES_DICTIONARY_);
+        subl_macro_promotions.declare_defglobal($sym0$_RED_VARIABLES_DICTIONARY_);
     subl_macro_promotions.declare_defglobal($sym1$_RED_SYMBOLS_LIST_);
     subl_macro_promotions.declare_defglobal($sym2$_RED_KEYS_DICTIONARY_);
     subl_macro_promotions.declare_defglobal($sym3$_RED_RELOAD_CALLBACK_MONIKER_DICTIONARY_);

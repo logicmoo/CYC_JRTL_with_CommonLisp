@@ -393,8 +393,7 @@ public  final class removal_modules_genls extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_genls_file() {
-    // CVS_ID("Id: removal-modules-genls.lisp 128095 2009-06-22 21:35:57Z pace ");
-    inference_modules.register_solely_specific_removal_module_predicate($const0$genls);
+        inference_modules.register_solely_specific_removal_module_predicate($const0$genls);
     inference_modules.inference_removal_module_use_generic($const0$genls, $kw1$REMOVAL_BACKCHAIN_REQUIRED_PRUNE);
     preference_modules.inference_preference_module($kw2$GENLS_X_Y_POS, $list3);
     preference_modules.inference_preference_module($kw4$ALL_SPECS_OF_FORT_POS, $list5);

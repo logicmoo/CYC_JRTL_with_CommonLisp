@@ -1883,8 +1883,7 @@ enabled, prevents the motivation from flowing. */
   }
 
   public static final SubLObject setup_inference_balanced_tactician_motivation_file() {
-    // CVS_ID("Id: inference-balanced-tactician-motivation.lisp 128006 2009-06-16 15:51:35Z pace ");
-    utilities_macros.note_funcall_helper_function($sym24$BALANCED_STRATEGY_NOTE_NEW_TACTIC);
+        utilities_macros.note_funcall_helper_function($sym24$BALANCED_STRATEGY_NOTE_NEW_TACTIC);
     utilities_macros.note_funcall_helper_function($sym26$BALANCED_STRATEGY_NOTE_SPLIT_TACTICS_STRATEGICALLY_POSSIBLE);
     return NIL;
   }

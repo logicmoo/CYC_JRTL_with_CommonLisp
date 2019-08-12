@@ -26,400 +26,400 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackageIterator;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public interface SubLObject extends Cloneable {
-	public static boolean DO_CHECK_TYPES = false;
-	public static boolean DO_PARANOID_TYPE_CHECKING = false;
-	public static int MAX_HASH_LENGTH = 8;
-	public static int MAX_HASH_DEPTH = 8;
-	public static int DEFAULT_EXCEEDED_HASH_VALUE = 0;
-	
-	SubLObject add(SubLObject p0);
+    public static boolean DO_CHECK_TYPES = false;
+    public static boolean DO_PARANOID_TYPE_CHECKING = false;
+    public static int MAX_HASH_LENGTH = 8;
+    public static int MAX_HASH_DEPTH = 8;
+    public static int DEFAULT_EXCEEDED_HASH_VALUE = 0;
 
-	void addKey(SubLObject p0);
-	
-	public boolean lispEquals(Object obj);	
-	
-	SubLList asArrayList();
+    SubLObject add(SubLObject p0);
 
-	SubLList asConsList();
+    void addKey(SubLObject p0);
 
-	BigInteger bigIntegerValue();
+    public boolean lispEquals(Object obj);
 
-	void bind(SubLObject p0, SubLObject[] p1);
+    SubLList asArrayList();
 
-	boolean canFastHash();
+    SubLList asConsList();
 
-	char charValue();
+    BigInteger bigIntegerValue();
 
-	void checkType(SubLSymbol p0) throws SubLException;
+    void bind(SubLObject p0, SubLObject[] p1);
 
-	void checkTypeInternal(SubLSymbol p0) throws SubLException;
+    boolean canFastHash();
 
-	Object clone();
+    char charValue();
 
-	SubLObject currentBinding(SubLObject[] p0);
+    void checkType(SubLSymbol p0) throws SubLException;
 
-	SubLObject dec();
+    void checkTypeInternal(SubLSymbol p0) throws SubLException;
 
-	double doubleValue();
+    Object clone();
 
-	SubLObject eighth();
+    SubLObject currentBinding(SubLObject[] p0);
 
-	void enforceType(SubLSymbol p0) throws SubLException;
+    SubLObject dec();
 
-	void enforceTypeInternal(SubLSymbol p0) throws SubLException;
+    double doubleValue();
 
-	boolean eql(SubLObject p0);
+    SubLObject eighth();
 
-	boolean equal(SubLObject p0);
+    void enforceType(SubLSymbol p0) throws SubLException;
 
-	boolean equalp(SubLObject p0);
+    void enforceTypeInternal(SubLSymbol p0) throws SubLException;
 
-	SubLObject eval(SubLEnvironment p0) throws InvalidSubLExpressionException;
+    boolean eql(SubLObject p0);
 
-	SubLObject fifth();
+    boolean equal(SubLObject p0);
 
-	SubLObject first();
+    boolean equalp(SubLObject p0);
 
-	SubLObject fourth();
+    SubLObject eval(SubLEnvironment p0) throws InvalidSubLExpressionException;
 
-	SubLObject get(int p0);
+    SubLObject fifth();
 
-	SubLObject get(SubLObject p0);
+    SubLObject first();
 
-	SubLCharacter getCharacter(int p0);
+    SubLObject fourth();
 
-	SubLObject getField(int p0);
+    SubLObject get(int p0);
 
-	SubLObject getField0();
+    SubLObject get(SubLObject p0);
 
-	SubLObject getField1();
+    SubLCharacter getCharacter(int p0);
 
-	SubLObject getField10();
+    SubLObject getField(int p0);
 
-	SubLObject getField11();
+    SubLObject getField0();
 
-	SubLObject getField12();
+    SubLObject getField1();
 
-	SubLObject getField13();
+    SubLObject getField10();
 
-	SubLObject getField14();
+    SubLObject getField11();
 
-	SubLObject getField15();
+    SubLObject getField12();
 
-	SubLObject getField16();
+    SubLObject getField13();
 
-	SubLObject getField17();
+    SubLObject getField14();
 
-	SubLObject getField18();
+    SubLObject getField15();
 
-	SubLObject getField19();
+    SubLObject getField16();
 
-	SubLObject getField2();
+    SubLObject getField17();
 
-	SubLObject getField20();
+    SubLObject getField18();
 
-	SubLObject getField3();
+    SubLObject getField19();
 
-	SubLObject getField4();
+    SubLObject getField2();
 
-	SubLObject getField5();
+    SubLObject getField20();
 
-	SubLObject getField6();
+    SubLObject getField3();
 
-	SubLObject getField7();
+    SubLObject getField4();
 
-	SubLObject getField8();
+    SubLObject getField5();
 
-	SubLObject getField9();
+    SubLObject getField6();
 
-	String getFileDesignator();
+    SubLObject getField7();
 
-	SubLFunction getFunc();
+    SubLObject getField8();
 
-	int getNumSize();
+    SubLObject getField9();
 
-	SubLStream getStream(boolean p0);
+    String getFileDesignator();
 
-	String getString();
+    SubLFunction getFunc();
 
-	SubLSymbol getType();
+    int getNumSize();
 
-	SubLFixnum getTypeCode();
+    SubLStream getStream(boolean p0);
 
-	int hashCode(int p0);
+    String getString();
 
-	boolean hasKey(SubLObject p0);
+    SubLSymbol getType();
 
-	SubLObject inc();
+    SubLFixnum getTypeCode();
 
-	int intValue();
+    int hashCode(int p0);
 
-	boolean isAlien();
+    boolean hasKey(SubLObject p0);
 
-	boolean isArrayBased();
+    SubLObject inc();
 
-	boolean isAtom();
+    int intValue();
 
-	boolean isBigIntegerBignum();
+    boolean isAlien();
 
-	boolean isBignum();
+    boolean isArrayBased();
 
-	boolean isBoolean();
+    boolean isAtom();
 
-	boolean isChar();
+    boolean isBigIntegerBignum();
 
-	boolean isCons();
+    boolean isBignum();
 
-	boolean isDouble();
+    boolean isBoolean();
 
-	boolean isEnvironment();
+    boolean isChar();
 
-	boolean isError();
+    boolean isCons();
 
-	boolean isFixnum();
+    boolean isDouble();
 
-	boolean isFunction();
+    boolean isEnvironment();
 
-	boolean isFunctionSpec();
+    boolean isError();
 
-	boolean isGuid();
+    boolean isFixnum();
 
-	boolean isHashtable();
+    boolean isFunction();
 
-	boolean isHashtableIterator();
+    boolean isFunctionSpec();
 
-	boolean isIntBignum();
+    boolean isGuid();
 
-	boolean isInteger();
+    boolean isHashtable();
 
-	boolean isKeyhash();
+    boolean isHashtableIterator();
 
-	boolean isKeyhashIterator();
+    boolean isIntBignum();
 
-	boolean isKeyword();
+    boolean isInteger();
 
-	boolean isList();
+    boolean isKeyhash();
 
-	boolean isLock();
+    boolean isKeyhashIterator();
 
-	boolean isLongBignum();
+    boolean isKeyword();
 
-	boolean isMacroOperator();
+    boolean isList();
 
-	boolean isNegative();
+    boolean isLock();
 
-	boolean isNil();
+    boolean isLongBignum();
 
-	boolean isNumber();
+    boolean isMacroOperator();
 
-	boolean isPackage();
+    boolean isNegative();
 
-	boolean isPackageIterator();
+    boolean isNil();
 
-	boolean isPositive();
+    boolean isNumber();
 
-	boolean isProcess();
+    boolean isPackage();
 
-	boolean isReadWriteLock();
+    boolean isPackageIterator();
 
-	boolean isRegexPattern();
+    boolean isPositive();
 
-	boolean isSemaphore();
+    boolean isProcess();
 
-	boolean isSequence();
+    boolean isReadWriteLock();
 
-	boolean isStream();
+    boolean isRegexPattern();
 
-	boolean isString();
+    boolean isSemaphore();
 
-	boolean isStructure();
+    boolean isSequence();
 
-	boolean isSymbol();
+    boolean isStream();
 
-	boolean isVector();
+    boolean isString();
 
-	boolean isZero();
+    boolean isStructure();
 
-	SubLObject last(int p0);
+    boolean isSymbol();
 
-	long longValue();
+    boolean isVector();
 
-	SubLObject makeCopy();
+    boolean isZero();
 
-	SubLObject makeDeepCopy();
+    SubLObject last(int p0);
 
-	SubLObject mult(SubLObject p0);
+    long longValue();
 
-	SubLObject ninth();
+    SubLObject makeCopy();
 
-	SubLObject nthCdr(int p0);
+    SubLObject makeDeepCopy();
 
-	boolean numE(SubLObject p0);
+    SubLObject mult(SubLObject p0);
 
-	boolean numG(SubLObject p0);
+    SubLObject ninth();
 
-	boolean numGE(SubLObject p0);
+    SubLObject nthCdr(int p0);
 
-	boolean numL(SubLObject p0);
+    boolean numE(SubLObject p0);
 
-	boolean numLE(SubLObject p0);
+    boolean numG(SubLObject p0);
 
-	SubLObject put(SubLObject p0, SubLObject p1);
+    boolean numGE(SubLObject p0);
 
-	void rebind(SubLObject p0, SubLObject[] p1);
+    boolean numL(SubLObject p0);
 
-	boolean remKey(SubLObject p0);
+    boolean numLE(SubLObject p0);
 
-	SubLObject remove(SubLObject p0);
+    SubLObject put(SubLObject p0, SubLObject p1);
 
-	SubLObject rest();
+    void rebind(SubLObject p0, SubLObject[] p1);
 
-	SubLSequence reverse(boolean p0);
+    boolean remKey(SubLObject p0);
 
-	SubLObject second();
+    SubLObject remove(SubLObject p0);
 
-	void set(int p0, SubLObject p1);
+    SubLObject rest();
 
-	void setField(int p0, SubLObject p1);
+    SubLSequence reverse(boolean p0);
 
-	SubLObject setField0(SubLObject p0);
+    SubLObject second();
 
-	SubLObject setField1(SubLObject p0);
+    void set(int p0, SubLObject p1);
 
-	SubLObject setField10(SubLObject p0);
+    void setField(int p0, SubLObject p1);
 
-	SubLObject setField11(SubLObject p0);
+    SubLObject setField0(SubLObject p0);
 
-	SubLObject setField12(SubLObject p0);
+    SubLObject setField1(SubLObject p0);
 
-	SubLObject setField13(SubLObject p0);
+    SubLObject setField10(SubLObject p0);
 
-	SubLObject setField14(SubLObject p0);
+    SubLObject setField11(SubLObject p0);
 
-	SubLObject setField15(SubLObject p0);
+    SubLObject setField12(SubLObject p0);
 
-	SubLObject setField16(SubLObject p0);
+    SubLObject setField13(SubLObject p0);
 
-	SubLObject setField17(SubLObject p0);
+    SubLObject setField14(SubLObject p0);
 
-	SubLObject setField18(SubLObject p0);
+    SubLObject setField15(SubLObject p0);
 
-	SubLObject setField19(SubLObject p0);
+    SubLObject setField16(SubLObject p0);
 
-	SubLObject setField2(SubLObject p0);
+    SubLObject setField17(SubLObject p0);
 
-	SubLObject setField20(SubLObject p0);
+    SubLObject setField18(SubLObject p0);
 
-	SubLObject setField3(SubLObject p0);
+    SubLObject setField19(SubLObject p0);
 
-	SubLObject setField4(SubLObject p0);
+    SubLObject setField2(SubLObject p0);
 
-	SubLObject setField5(SubLObject p0);
+    SubLObject setField20(SubLObject p0);
 
-	SubLObject setField6(SubLObject p0);
+    SubLObject setField3(SubLObject p0);
 
-	SubLObject setField7(SubLObject p0);
+    SubLObject setField4(SubLObject p0);
 
-	SubLObject setField8(SubLObject p0);
+    SubLObject setField5(SubLObject p0);
 
-	SubLObject setField9(SubLObject p0);
+    SubLObject setField6(SubLObject p0);
 
-	SubLCons setFirst(SubLObject p0);
+    SubLObject setField7(SubLObject p0);
 
-	SubLCons setRest(SubLObject p0);
+    SubLObject setField8(SubLObject p0);
 
-	SubLObject seventh();
+    SubLObject setField9(SubLObject p0);
 
-	SubLObject sixth();
+    SubLCons setFirst(SubLObject p0);
 
-	int size();
+    SubLCons setRest(SubLObject p0);
 
-	int size(int p0);
+    SubLObject seventh();
 
-	SubLObject sub(SubLObject p0);
+    SubLObject sixth();
 
-	int superHash();
+    int size();
 
-	SubLObject tenth();
+    int size(int p0);
 
-	SubLObject third();
+    SubLObject sub(SubLObject p0);
 
-	SubLCharacter toChar();
+    int superHash();
 
-	SubLCons toCons();
+    SubLObject tenth();
 
-	SubLDoubleFloat toDouble();
+    SubLObject third();
 
-	SubLEnvironment toEnv();
+    SubLCharacter toChar();
 
-	SubLFixnum toFixnum();
+    SubLCons toCons();
 
-	SubLGuid toGuid();
+    SubLDoubleFloat toDouble();
 
-	SubLHashtable toHashtable();
+    SubLEnvironment toEnv();
 
-	SubLHashtableIterator toHashtableIterator();
+    SubLFixnum toFixnum();
 
-	SubLInputBinaryStream toInputBinaryStream();
+    SubLGuid toGuid();
 
-	SubLInputStream toInputStream();
+    SubLHashtable toHashtable();
 
-	SubLInputTextStream toInputTextStream();
+    SubLHashtableIterator toHashtableIterator();
 
-	SubLInteger toInteger();
+    SubLInputBinaryStream toInputBinaryStream();
 
-	SubLKeyhash toKeyhash();
+    SubLInputStream toInputStream();
 
-	SubLKeyhashIterator toKeyhashIterator();
+    SubLInputTextStream toInputTextStream();
 
-	SubLList toList();
+    SubLInteger toInteger();
 
-	SubLLock toLock();
+    SubLKeyhash toKeyhash();
 
-	SubLMacro toMacro();
+    SubLKeyhashIterator toKeyhashIterator();
 
-	SubLNumber toNumber();
+    SubLList toList();
 
-	SubLOutputBinaryStream toOutputBinaryStream();
+    SubLLock toLock();
 
-	SubLOutputStream toOutputStream();
+    SubLMacro toMacro();
 
-	SubLOutputTextStream toOutputTextStream();
+    SubLNumber toNumber();
 
-	SubLPackage toPackage();
+    SubLOutputBinaryStream toOutputBinaryStream();
 
-	SubLPackageIterator toPackageIterator();
+    SubLOutputStream toOutputStream();
 
-	SubLProcess toProcess();
+    SubLOutputTextStream toOutputTextStream();
 
-	SubLReadWriteLock toReadWriteLock();
+    SubLPackage toPackage();
 
-	SubLRegexPattern toRegexPattern();
+    SubLPackageIterator toPackageIterator();
 
-	SubLSemaphore toSemaphore();
+    SubLProcess toProcess();
 
-	SubLSequence toSeq();
+    SubLReadWriteLock toReadWriteLock();
 
-	SubLString toStr();
+    SubLRegexPattern toRegexPattern();
 
-	SubLStruct toStruct();
+    SubLSemaphore toSemaphore();
 
-	SubLSymbol toSymbol();
+    SubLSequence toSeq();
 
-	String toTypeName();
+    SubLString toStr();
 
-	SubLVector toVect();
+    SubLStruct toStruct();
 
-	String printObject();
+    SubLSymbol toSymbol();
 
-	String getStringValue();
+    String toTypeName();
 
-	LispObject toLispObject();
+    SubLVector toVect();
 
-	BigDecimal bigDecimalValue();
+    String printObject();
 
-	Object javaInstance();
-	
-	String princToString();
+    String getStringValue();
+
+    LispObject toLispObject();
+
+    BigDecimal bigDecimalValue();
+
+    Object javaInstance();
+
+    String princToString();
 
 }

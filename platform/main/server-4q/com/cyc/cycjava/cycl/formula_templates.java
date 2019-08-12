@@ -1,11 +1,40 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cfasl;
-import com.cyc.cycjava.cycl.formula_templates;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.fort_types_interface.*;
+import static com.cyc.cycjava.cycl.forts.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.inference_trampolines;
+import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -24,118 +53,278 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.formula_templates.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.$features$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class formula_templates extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      FORMULA-TEMPLATES
+ * source file: /cyc/top/cycl/formula-templates.lisp
+ * created:     2019/07/03 17:38:02
+ */
+public final class formula_templates extends SubLTranslatedFile implements V12 {
+    public static final SubLObject verify_template_ordering(SubLObject template_type, SubLObject elmt) {
+        {
+            SubLObject ordered_templates = formula_template_load_topic_template_ordering(template_type, elmt);
+            SubLObject supported_ordering_constraints = inference_kernel.new_cyc_query(list($$assertedSentence, list($$higherPriorityTemplateForType, $sym312$_HIGHER, $sym313$_LOWER, template_type)), elmt, $list_alt314);
+            SubLObject problem = NIL;
+            if (NIL == problem) {
+                {
+                    SubLObject csome_list_var = supported_ordering_constraints;
+                    SubLObject supported_ordering_constraint = NIL;
+                    for (supported_ordering_constraint = csome_list_var.first(); !((NIL != problem) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , supported_ordering_constraint = csome_list_var.first()) {
+                        {
+                            SubLObject datum = supported_ordering_constraint;
+                            SubLObject current = datum;
+                            SubLObject v_bindings = NIL;
+                            SubLObject supports = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt315);
+                            v_bindings = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt315);
+                            supports = current.first();
+                            current = current.rest();
+                            if (NIL == current) {
+                                {
+                                    SubLObject higher = bindings.variable_lookup($sym312$_HIGHER, v_bindings);
+                                    SubLObject higher_position = position(higher, ordered_templates, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    SubLObject lower = bindings.variable_lookup($sym313$_LOWER, v_bindings);
+                                    SubLObject lower_position = position(lower, ordered_templates, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    if (!higher_position.isInteger()) {
+                                        Errors.warn($str_alt316$Couldn_t_find__S_in__S___for__S, higher, ordered_templates, template_type);
+                                        problem = list(higher, lower, supports);
+                                    } else {
+                                        if (higher_position.numG(lower_position)) {
+                                            problem = list(higher, lower, supports);
+                                        }
+                                    }
+                                }
+                            } else {
+                                cdestructuring_bind_error(datum, $list_alt315);
+                            }
+                        }
+                    }
+                }
+            }
+            if (NIL != problem) {
+                {
+                    SubLObject datum = problem;
+                    SubLObject current = datum;
+                    SubLObject higher = NIL;
+                    SubLObject lower = NIL;
+                    SubLObject supports = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt317);
+                    higher = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt317);
+                    lower = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt317);
+                    supports = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        Errors.warn($str_alt318$_S_comes_before__S___in_ordering_, new SubLObject[]{ lower, higher, template_type, elmt, ordered_templates, supports });
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt317);
+                    }
+                }
+            }
+            return makeBoolean(NIL == problem);
+        }
+    }
+
+    public static final class $arg_position_details_native extends SubLStructNative {
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        public SubLObject getField2() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$argument_position;
+        }
+
+        public SubLObject getField3() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$ordering;
+        }
+
+        public SubLObject getField4() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$gloss;
+        }
+
+        public SubLObject getField5() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$invisible_replacement_positions;
+        }
+
+        public SubLObject getField6() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$replacement_constraints;
+        }
+
+        public SubLObject getField7() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$candidate_replacements;
+        }
+
+        public SubLObject getField8() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$is_editable;
+        }
+
+        public SubLObject getField9() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$explanation;
+        }
+
+        public SubLObject getField10() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$requires_validation;
+        }
+
+        public SubLObject getField11() {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$unknown_replacement;
+        }
+
+        public SubLObject setField2(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$argument_position = value;
+        }
+
+        public SubLObject setField3(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$ordering = value;
+        }
+
+        public SubLObject setField4(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$gloss = value;
+        }
+
+        public SubLObject setField5(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$invisible_replacement_positions = value;
+        }
+
+        public SubLObject setField6(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$replacement_constraints = value;
+        }
+
+        public SubLObject setField7(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$candidate_replacements = value;
+        }
+
+        public SubLObject setField8(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$is_editable = value;
+        }
+
+        public SubLObject setField9(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$explanation = value;
+        }
+
+        public SubLObject setField10(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$requires_validation = value;
+        }
+
+        public SubLObject setField11(SubLObject value) {
+            return com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.this.$unknown_replacement = value;
+        }
+
+        public SubLObject $argument_position = Lisp.NIL;
+
+        public SubLObject $ordering = Lisp.NIL;
+
+        public SubLObject $gloss = Lisp.NIL;
+
+        public SubLObject $invisible_replacement_positions = Lisp.NIL;
+
+        public SubLObject $replacement_constraints = Lisp.NIL;
+
+        public SubLObject $candidate_replacements = Lisp.NIL;
+
+        public SubLObject $is_editable = Lisp.NIL;
+
+        public SubLObject $explanation = Lisp.NIL;
+
+        public SubLObject $requires_validation = Lisp.NIL;
+
+        public SubLObject $unknown_replacement = Lisp.NIL;
+
+        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.class, ARG_POSITION_DETAILS, ARG_POSITION_DETAILS_P, $list_alt49, $list_alt50, new String[]{ "$argument_position", "$ordering", "$gloss", "$invisible_replacement_positions", "$replacement_constraints", "$candidate_replacements", "$is_editable", "$explanation", "$requires_validation", "$unknown_replacement" }, $list_alt51, $list_alt52, PRINT_ARG_POSITION_DETAILS);
+    }
+
     public static final SubLFile me = new formula_templates();
 
-    public static final String myName = "com.cyc.cycjava.cycl.formula_templates";
+ public static final String myName = "com.cyc.cycjava.cycl.formula_templates";
 
-    public static final String myFingerPrint = "9c5f506c169b4ec38e3687e8c05192a19d0215ed387b43f2a3115eea736e3671";
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_template_topic$ = makeSymbol("*DTP-TEMPLATE-TOPIC*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cfasl_guid_opcode_template_topic$ = makeSymbol("*CFASL-GUID-OPCODE-TEMPLATE-TOPIC*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_arg_position_details$ = makeSymbol("*DTP-ARG-POSITION-DETAILS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cfasl_guid_opcode_arg_position_details$ = makeSymbol("*CFASL-GUID-OPCODE-ARG-POSITION-DETAILS*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_formula_template$ = makeSymbol("*DTP-FORMULA-TEMPLATE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cfasl_guid_opcode_formula_template$ = makeSymbol("*CFASL-GUID-OPCODE-FORMULA-TEMPLATE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $make_ftemplate_loading_supporting_ask_browsableP$ = makeSymbol("*MAKE-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?*");
-
-
 
     // defparameter
     // A useful switch to test things that should not be made available yet.
+    /**
+     * A useful switch to test things that should not be made available yet.
+     */
+    @LispMethod(comment = "A useful switch to test things that should not be made available yet.\ndefparameter")
     private static final SubLSymbol $xml_suppress_future_template_extensions$ = makeSymbol("*XML-SUPPRESS-FUTURE-TEMPLATE-EXTENSIONS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $xml_template_topic_revisions$ = makeSymbol("*XML-TEMPLATE-TOPIC-REVISIONS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $formula_template_dtd_uri$ = makeSymbol("*FORMULA-TEMPLATE-DTD-URI*");
 
     // defparameter
     // Bound to dictionary mapping terms to lists of lower priority terms.
+    /**
+     * Bound to dictionary mapping terms to lists of lower priority terms.
+     */
+    @LispMethod(comment = "Bound to dictionary mapping terms to lists of lower priority terms.\ndefparameter")
     private static final SubLSymbol $high_to_low_priorities$ = makeSymbol("*HIGH-TO-LOW-PRIORITIES*");
 
     // deflexical
     // Only emit output that something is bad, dont actually stop.
+    /**
+     * Only emit output that something is bad, dont actually stop.
+     */
+    @LispMethod(comment = "Only emit output that something is bad, dont actually stop.\ndeflexical")
     private static final SubLSymbol $warn_on_template_topic_validation_only$ = makeSymbol("*WARN-ON-TEMPLATE-TOPIC-VALIDATION-ONLY*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $template_count_mt$ = makeSymbol("*TEMPLATE-COUNT-MT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $xml_template_topic_assertions_revisions$ = makeSymbol("*XML-TEMPLATE-TOPIC-ASSERTIONS-REVISIONS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $quaternary_fet_evaluation_pred$ = makeSymbol("*QUATERNARY-FET-EVALUATION-PRED*");
 
-
-
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $unique_variables_list_for_formula_templates$ = makeSymbol("*UNIQUE-VARIABLES-LIST-FOR-FORMULA-TEMPLATES*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $elmt_variable_for_formula_templates$ = makeSymbol("*ELMT-VARIABLE-FOR-FORMULA-TEMPLATES*");
 
     // defparameter
@@ -144,28 +333,34 @@ public final class formula_templates extends SubLTranslatedFile {
      * opposed to finding bindings, substituting, and then looking for matching
      * assertions?
      */
+    @LispMethod(comment = "BOOLEANP; Should we try to get assertion objects via our first ask, as\r\nopposed to finding bindings, substituting, and then looking for matching\r\nassertions?\ndefparameter\nBOOLEANP; Should we try to get assertion objects via our first ask, as\nopposed to finding bindings, substituting, and then looking for matching\nassertions?")
     public static final SubLSymbol $get_assertions_from_initial_askP$ = makeSymbol("*GET-ASSERTIONS-FROM-INITIAL-ASK?*");
 
     // deflexical
     // All the constructions we dont currently deal with.
+    /**
+     * All the constructions we dont currently deal with.
+     */
+    @LispMethod(comment = "All the constructions we dont currently deal with.\ndeflexical")
     private static final SubLSymbol $ftemplate_constraint_to_collection_skiplist$ = makeSymbol("*FTEMPLATE-CONSTRAINT-TO-COLLECTION-SKIPLIST*");
 
     // Internal Constants
-    public static final SubLSymbol TEMPLATE_TOPIC = makeSymbol("TEMPLATE-TOPIC");
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol TEMPLATE_TOPIC = makeSymbol("TEMPLATE-TOPIC");
 
-    public static final SubLSymbol TEMPLATE_TOPIC_P = makeSymbol("TEMPLATE-TOPIC-P");
+    private static final SubLSymbol TEMPLATE_TOPIC_P = makeSymbol("TEMPLATE-TOPIC-P");
 
-    public static final SubLList $list2 = list(new SubLObject[]{ makeSymbol("SUPERTOPIC"), makeSymbol("TOPIC"), makeSymbol("SUBTOPICS"), makeSymbol("TEMPLATES"), makeSymbol("ORDERING"), makeSymbol("TITLE"), makeSymbol("TERM-PREFIX"), makeSymbol("INTRO-TEMPLATE"), makeSymbol("SOURCE-TYPES"), makeSymbol("SOURCE-MT"), makeSymbol("QUERY-MT"), makeSymbol("DEFINITIONAL-MT") });
+    static private final SubLList $list2 = list(new SubLObject[]{ makeSymbol("SUPERTOPIC"), makeSymbol("TOPIC"), makeSymbol("SUBTOPICS"), makeSymbol("TEMPLATES"), makeSymbol("ORDERING"), makeSymbol("TITLE"), makeSymbol("TERM-PREFIX"), makeSymbol("INTRO-TEMPLATE"), makeSymbol("SOURCE-TYPES"), makeSymbol("SOURCE-MT"), makeSymbol("QUERY-MT"), makeSymbol("DEFINITIONAL-MT") });
 
-    public static final SubLList $list3 = list(new SubLObject[]{ makeKeyword("SUPERTOPIC"), makeKeyword("TOPIC"), makeKeyword("SUBTOPICS"), makeKeyword("TEMPLATES"), makeKeyword("ORDERING"), makeKeyword("TITLE"), makeKeyword("TERM-PREFIX"), makeKeyword("INTRO-TEMPLATE"), makeKeyword("SOURCE-TYPES"), makeKeyword("SOURCE-MT"), makeKeyword("QUERY-MT"), makeKeyword("DEFINITIONAL-MT") });
+    static private final SubLList $list3 = list(new SubLObject[]{ makeKeyword("SUPERTOPIC"), makeKeyword("TOPIC"), makeKeyword("SUBTOPICS"), makeKeyword("TEMPLATES"), makeKeyword("ORDERING"), makeKeyword("TITLE"), makeKeyword("TERM-PREFIX"), makeKeyword("INTRO-TEMPLATE"), makeKeyword("SOURCE-TYPES"), makeKeyword("SOURCE-MT"), makeKeyword("QUERY-MT"), makeKeyword("DEFINITIONAL-MT") });
 
-    public static final SubLList $list4 = list(new SubLObject[]{ makeSymbol("TEMPLATE-TOPIC-SUPERTOPIC"), makeSymbol("TEMPLATE-TOPIC-TOPIC"), makeSymbol("TEMPLATE-TOPIC-SUBTOPICS"), makeSymbol("TEMPLATE-TOPIC-TEMPLATES"), makeSymbol("TEMPLATE-TOPIC-ORDERING"), makeSymbol("TEMPLATE-TOPIC-TITLE"), makeSymbol("TEMPLATE-TOPIC-TERM-PREFIX"), makeSymbol("TEMPLATE-TOPIC-INTRO-TEMPLATE"), makeSymbol("TEMPLATE-TOPIC-SOURCE-TYPES"), makeSymbol("TEMPLATE-TOPIC-SOURCE-MT"), makeSymbol("TEMPLATE-TOPIC-QUERY-MT"), makeSymbol("TEMPLATE-TOPIC-DEFINITIONAL-MT") });
+    static private final SubLList $list4 = list(new SubLObject[]{ makeSymbol("TEMPLATE-TOPIC-SUPERTOPIC"), makeSymbol("TEMPLATE-TOPIC-TOPIC"), makeSymbol("TEMPLATE-TOPIC-SUBTOPICS"), makeSymbol("TEMPLATE-TOPIC-TEMPLATES"), makeSymbol("TEMPLATE-TOPIC-ORDERING"), makeSymbol("TEMPLATE-TOPIC-TITLE"), makeSymbol("TEMPLATE-TOPIC-TERM-PREFIX"), makeSymbol("TEMPLATE-TOPIC-INTRO-TEMPLATE"), makeSymbol("TEMPLATE-TOPIC-SOURCE-TYPES"), makeSymbol("TEMPLATE-TOPIC-SOURCE-MT"), makeSymbol("TEMPLATE-TOPIC-QUERY-MT"), makeSymbol("TEMPLATE-TOPIC-DEFINITIONAL-MT") });
 
-    public static final SubLList $list5 = list(new SubLObject[]{ makeSymbol("_CSETF-TEMPLATE-TOPIC-SUPERTOPIC"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TOPIC"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SUBTOPICS"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TEMPLATES"), makeSymbol("_CSETF-TEMPLATE-TOPIC-ORDERING"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TITLE"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TERM-PREFIX"), makeSymbol("_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SOURCE-MT"), makeSymbol("_CSETF-TEMPLATE-TOPIC-QUERY-MT"), makeSymbol("_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT") });
+    static private final SubLList $list5 = list(new SubLObject[]{ makeSymbol("_CSETF-TEMPLATE-TOPIC-SUPERTOPIC"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TOPIC"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SUBTOPICS"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TEMPLATES"), makeSymbol("_CSETF-TEMPLATE-TOPIC-ORDERING"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TITLE"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TERM-PREFIX"), makeSymbol("_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SOURCE-MT"), makeSymbol("_CSETF-TEMPLATE-TOPIC-QUERY-MT"), makeSymbol("_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT") });
 
-    public static final SubLSymbol PRINT_TEMPLATE_TOPIC = makeSymbol("PRINT-TEMPLATE-TOPIC");
+    private static final SubLSymbol PRINT_TEMPLATE_TOPIC = makeSymbol("PRINT-TEMPLATE-TOPIC");
 
-    public static final SubLSymbol TEMPLATE_TOPIC_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("TEMPLATE-TOPIC-PRINT-FUNCTION-TRAMPOLINE");
+    private static final SubLSymbol TEMPLATE_TOPIC_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("TEMPLATE-TOPIC-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list8 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("TEMPLATE-TOPIC-P"));
 
@@ -217,39 +412,9 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_TEMPLATE_TOPIC_DEFINITIONAL_MT = makeSymbol("_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLString $str45$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_TEMPLATE_TOPIC = makeSymbol("MAKE-TEMPLATE-TOPIC");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_TEMPLATE_TOPIC_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-TEMPLATE-TOPIC-METHOD");
 
@@ -315,23 +480,7 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_ARG_POSITION_DETAILS_UNKNOWN_REPLACEMENT = makeSymbol("_CSETF-ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT");
 
-
-
-
-
     private static final SubLSymbol $INVISIBLE_REPLACEMENT_POSITIONS = makeKeyword("INVISIBLE-REPLACEMENT-POSITIONS");
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol MAKE_ARG_POSITION_DETAILS = makeSymbol("MAKE-ARG-POSITION-DETAILS");
 
@@ -347,7 +496,7 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLList $list97 = list(new SubLObject[]{ makeSymbol("TOPIC"), makeSymbol("ID"), makeSymbol("FORMULA"), makeSymbol("QUERY-SPECIFICATION"), makeSymbol("ELMT"), makeSymbol("FOCAL-TERM"), makeSymbol("ARGPOS-DETAILS"), makeSymbol("ARGPOS-ORDERING"), makeSymbol("EXAMPLES"), makeSymbol("ENTRY-FORMAT"), makeSymbol("FOLLOW-UPS"), makeSymbol("GLOSS"), makeSymbol("REFSPEC") });
 
-    private static final SubLList $list98 = list(new SubLObject[]{ makeKeyword("TOPIC"), makeKeyword("ID"), makeKeyword("FORMULA"), makeKeyword("QUERY-SPECIFICATION"), makeKeyword("ELMT"), makeKeyword("FOCAL-TERM"), makeKeyword("ARGPOS-DETAILS"), makeKeyword("ARGPOS-ORDERING"), makeKeyword("EXAMPLES"), makeKeyword("ENTRY-FORMAT"), makeKeyword("FOLLOW-UPS"), makeKeyword("GLOSS"), makeKeyword("REFSPEC") });
+    private static final SubLList $list98 = list(new SubLObject[]{ makeKeyword("TOPIC"), makeKeyword("ID"), makeKeyword("FORMULA"), makeKeyword("QUERY-SPECIFICATION"), $ELMT, makeKeyword("FOCAL-TERM"), makeKeyword("ARGPOS-DETAILS"), makeKeyword("ARGPOS-ORDERING"), makeKeyword("EXAMPLES"), makeKeyword("ENTRY-FORMAT"), makeKeyword("FOLLOW-UPS"), makeKeyword("GLOSS"), makeKeyword("REFSPEC") });
 
     private static final SubLList $list99 = list(new SubLObject[]{ makeSymbol("FORMULA-TEMPLATE-TOPIC"), makeSymbol("FORMULA-TEMPLATE-ID"), makeSymbol("FORMULA-TEMPLATE-FORMULA"), makeSymbol("FORMULA-TEMPLATE-QUERY-SPECIFICATION"), makeSymbol("FORMULA-TEMPLATE-ELMT"), makeSymbol("FORMULA-TEMPLATE-FOCAL-TERM"), makeSymbol("FORMULA-TEMPLATE-ARGPOS-DETAILS"), makeSymbol("FORMULA-TEMPLATE-ARGPOS-ORDERING"), makeSymbol("FORMULA-TEMPLATE-EXAMPLES"), makeSymbol("FORMULA-TEMPLATE-ENTRY-FORMAT"), makeSymbol("FORMULA-TEMPLATE-FOLLOW-UPS"), makeSymbol("FORMULA-TEMPLATE-GLOSS"), makeSymbol("FORMULA-TEMPLATE-REFSPEC") });
 
@@ -411,28 +560,6 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_FORMULA_TEMPLATE_REFSPEC = makeSymbol("_CSETF-FORMULA-TEMPLATE-REFSPEC");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLSymbol MAKE_FORMULA_TEMPLATE = makeSymbol("MAKE-FORMULA-TEMPLATE");
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_FORMULA_TEMPLATE_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-FORMULA-TEMPLATE-METHOD");
@@ -441,27 +568,19 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol CFASL_INPUT_FORMULA_TEMPLATE = makeSymbol("CFASL-INPUT-FORMULA-TEMPLATE");
 
-
-
     private static final SubLList $list146 = list(list(makeSymbol("*MAKE-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?*"), T));
 
-
-
     private static final SubLSymbol REUSING_RKF_SD_PROBLEM_STORE = makeSymbol("REUSING-RKF-SD-PROBLEM-STORE");
-
-
 
     private static final SubLList $list150 = list(list(makeSymbol("NON-EDITABLES")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     public static final SubLSymbol $non_editable_assertions_for_template_topic_instance$ = makeSymbol("*NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE*");
 
-
-
     private static final SubLList $list153 = list(makeSymbol("SET-P"));
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
+
 
     private static final SubLList $list156 = list(list(makeSymbol("INSTANCE"), makeSymbol("TEMPLATE-ID"), makeSymbol("TEMPLATE-ELMT"), makeSymbol("QUERY-MT")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -478,12 +597,6 @@ public final class formula_templates extends SubLTranslatedFile {
     private static final SubLString $str162$_S_is_not_POSSIBLY_MT_P_ = makeString("~S is not POSSIBLY-MT-P.");
 
     private static final SubLString $str163$bad_formula_template___S__ = makeString("bad formula template: ~S~%");
-
-
-
-
-
-
 
     private static final SubLString $str167$_TemplateTopic__ = makeString("<TemplateTopic: ");
 
@@ -510,8 +623,6 @@ public final class formula_templates extends SubLTranslatedFile {
     private static final SubLString $str178$_ = makeString(">");
 
     private static final SubLList $list179 = list(list(makeSymbol("LOCAL-NAME"), makeSymbol("&OPTIONAL"), makeSymbol("ATTRIBUTES"), makeSymbol("ATOMIC?")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-
 
     private static final SubLList $list181 = list(NIL, NIL, list(makeSymbol("FORMULA-TEMPLATE-NAMESPACE")));
 
@@ -555,9 +666,9 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLString $str201$CFASL_INPUT_TEMPLATE_TOPIC_has_lo = makeString("CFASL-INPUT-TEMPLATE-TOPIC has loaded a subtopic for ~A which claims to belong to ~A");
 
-    private static final SubLObject $$SingleAssertionEntry = reader_make_constant_shell(makeString("SingleAssertionEntry"));
 
-    private static final SubLObject $$MultipleAssertionEntry = reader_make_constant_shell(makeString("MultipleAssertionEntry"));
+
+
 
     private static final SubLString $str204$_Formula_Template__ = makeString("<Formula Template: ");
 
@@ -585,11 +696,7 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLString $$$_ = makeString(" ");
 
-
-
     private static final SubLSymbol $sym218$ISA_MT_ = makeSymbol("ISA-MT?");
-
-
 
     private static final SubLSymbol NEW_CYCL_QUERY_SPECIFICATION_P = makeSymbol("NEW-CYCL-QUERY-SPECIFICATION-P");
 
@@ -606,8 +713,6 @@ public final class formula_templates extends SubLTranslatedFile {
     private static final SubLString $$$argPositions = makeString("argPositions");
 
     private static final SubLString $$$singleEntry = makeString("singleEntry");
-
-
 
     private static final SubLString $$$multipleEntry = makeString("multipleEntry");
 
@@ -695,21 +800,19 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLString $$$position = makeString("position");
 
-
-
     private static final SubLString $str273$Can_t_load_a_formula_template_wit = makeString("Can't load a formula template without a FORT id: ~S");
 
-    private static final SubLObject $const274$formulaTemplateHasArgumentPositio = reader_make_constant_shell(makeString("formulaTemplateHasArgumentPositionInformation"));
+    private static final SubLObject $const274$formulaTemplateHasArgumentPositio = reader_make_constant_shell("formulaTemplateHasArgumentPositionInformation");
 
     private static final SubLList $list275 = list(makeSymbol("GLOSS-TEXT"), makeSymbol("ARGPOS"), makeSymbol("ORDERING"));
 
-    public static final SubLList $list276 = list(makeSymbol("EXPLANATION-TEXT"), makeSymbol("ARGPOS"));
+    static private final SubLList $list276 = list(makeSymbol("EXPLANATION-TEXT"), makeSymbol("ARGPOS"));
 
     private static final SubLList $list277 = list(makeSymbol("ARGPOS"), makeSymbol("REPLACE-CONSTRAINTS"));
 
     private static final SubLList $list278 = list(makeSymbol("ARGPOS"), makeSymbol("CANDIDATES"));
 
-    public static final SubLList $list279 = list(makeSymbol("ARGPOS"), makeSymbol("THING"));
+    static private final SubLList $list279 = list(makeSymbol("ARGPOS"), makeSymbol("THING"));
 
     private static final SubLSymbol ORDERED_BY_ARGUMENT_POSITION = makeSymbol("ORDERED-BY-ARGUMENT-POSITION");
 
@@ -721,45 +824,37 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLList $list284 = list(TWO_INTEGER);
 
-    private static final SubLObject $const285$reformulateTemplateViaSpecificati = reader_make_constant_shell(makeString("reformulateTemplateViaSpecification"));
+    private static final SubLObject $const285$reformulateTemplateViaSpecificati = reader_make_constant_shell("reformulateTemplateViaSpecification");
 
-    private static final SubLObject $$TemplateFromTestQueryFn = reader_make_constant_shell(makeString("TemplateFromTestQueryFn"));
 
-    private static final SubLObject $const287$querySpecificationForFormulaTempl = reader_make_constant_shell(makeString("querySpecificationForFormulaTemplate"));
 
-    private static final SubLObject $$formulaForFormulaTemplate = reader_make_constant_shell(makeString("formulaForFormulaTemplate"));
+    private static final SubLObject $const287$querySpecificationForFormulaTempl = reader_make_constant_shell("querySpecificationForFormulaTemplate");
 
-    private static final SubLObject $$assertMtForFormulaTemplate = reader_make_constant_shell(makeString("assertMtForFormulaTemplate"));
 
-    private static final SubLObject $$formulaTemplateFollowUp = reader_make_constant_shell(makeString("formulaTemplateFollowUp"));
+
+
+
+
 
     private static final SubLSymbol $sym291$COMMUTATIVE_RELATION_ = makeSymbol("COMMUTATIVE-RELATION?");
 
-
-
     private static final SubLList $list293 = list(makeSymbol("FOLLOW-UP"), makeSymbol("CONNECTIVE"));
 
-    private static final SubLObject $$formulaTemplateGloss = reader_make_constant_shell(makeString("formulaTemplateGloss"));
 
 
+    private static final SubLList $list296 = list(reader_make_constant_shell("MtTimeWithGranularityDimFn"), reader_make_constant_shell("Now"), reader_make_constant_shell("CalendarSecond"));
 
-    private static final SubLList $list296 = list(reader_make_constant_shell(makeString("MtTimeWithGranularityDimFn")), reader_make_constant_shell(makeString("Now")), reader_make_constant_shell(makeString("CalendarSecond")));
 
-    private static final SubLObject $$AnytimePSC = reader_make_constant_shell(makeString("AnytimePSC"));
 
     private static final SubLList $list298 = list(FOUR_INTEGER, THREE_INTEGER, FIVE_INTEGER);
 
-    private static final SubLObject $$glossForFormulaTemplate = reader_make_constant_shell(makeString("glossForFormulaTemplate"));
 
-    public static final SubLList $list300 = list(FOUR_INTEGER, THREE_INTEGER);
 
-    private static final SubLObject $$formulaTemplateArgExplanation = reader_make_constant_shell(makeString("formulaTemplateArgExplanation"));
-
-    private static final SubLObject $$formulaTemplateExample = reader_make_constant_shell(makeString("formulaTemplateExample"));
+    static private final SubLList $list300 = list(FOUR_INTEGER, THREE_INTEGER);
 
 
 
-    private static final SubLObject $$assertedSentence = reader_make_constant_shell(makeString("assertedSentence"));
+
 
 
 
@@ -767,45 +862,31 @@ public final class formula_templates extends SubLTranslatedFile {
 
 
 
+    private static final SubLObject $const314$focalTermPositionForFormulaTempla = reader_make_constant_shell("focalTermPositionForFormulaTemplate");
 
 
 
+    private static final SubLObject $const316$templateReplacementsInvisibleForP = reader_make_constant_shell("templateReplacementsInvisibleForPosition");
+
+    static private final SubLList $list317 = list(TWO_INTEGER, THREE_INTEGER);
 
 
-
-
-
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
-
-
-    private static final SubLObject $const314$focalTermPositionForFormulaTempla = reader_make_constant_shell(makeString("focalTermPositionForFormulaTemplate"));
-
-    private static final SubLObject $$assertionFormatForFormulaTemplate = reader_make_constant_shell(makeString("assertionFormatForFormulaTemplate"));
-
-    private static final SubLObject $const316$templateReplacementsInvisibleForP = reader_make_constant_shell(makeString("templateReplacementsInvisibleForPosition"));
-
-    public static final SubLList $list317 = list(TWO_INTEGER, THREE_INTEGER);
-
-    private static final SubLObject $$constraintOnReplacement = reader_make_constant_shell(makeString("constraintOnReplacement"));
 
     private static final SubLList $list319 = list(makeSymbol("POSITION"), makeSymbol("CONSTRAINT"));
 
-    private static final SubLObject $$TheSet = reader_make_constant_shell(makeString("TheSet"));
+
 
     private static final SubLSymbol $sym321$_X = makeSymbol("?X");
 
-    private static final SubLObject $$unknownTermForTemplatePosition = reader_make_constant_shell(makeString("unknownTermForTemplatePosition"));
 
-    private static final SubLObject $$candidateReplacementForPosition = reader_make_constant_shell(makeString("candidateReplacementForPosition"));
 
-    public static final SubLList $list324 = list(makeSymbol("POSITION"), makeSymbol("CANDIDATE"));
 
-    private static final SubLObject $const325$positionInFormulaTemplateIsReplac = reader_make_constant_shell(makeString("positionInFormulaTemplateIsReplaceable"));
 
-    private static final SubLObject $const326$validationRequiredOnTemplatePosit = reader_make_constant_shell(makeString("validationRequiredOnTemplatePosition"));
+    static private final SubLList $list324 = list(makeSymbol("POSITION"), makeSymbol("CANDIDATE"));
 
-    private static final SubLObject $$InducedFormulaTemplateTopicType = reader_make_constant_shell(makeString("InducedFormulaTemplateTopicType"));
+    private static final SubLObject $const325$positionInFormulaTemplateIsReplac = reader_make_constant_shell("positionInFormulaTemplateIsReplaceable");
+
+    private static final SubLObject $const326$validationRequiredOnTemplatePosit = reader_make_constant_shell("validationRequiredOnTemplatePosition");
 
 
 
@@ -825,37 +906,33 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLList $list336 = list(makeKeyword("MAX-TRANSFORMATION-DEPTH"), ZERO_INTEGER);
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
-    private static final SubLList $list338 = list(reader_make_constant_shell(makeString("higherPriorityTemplateType")), makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
 
-    private static final SubLList $list339 = list(reader_make_constant_shell(makeString("different")), makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
+    private static final SubLList $list338 = list(reader_make_constant_shell("higherPriorityTemplateType"), makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
 
-    private static final SubLObject $$formulaTemplateTypeHasTopicType = reader_make_constant_shell(makeString("formulaTemplateTypeHasTopicType"));
+    private static final SubLList $list339 = list(reader_make_constant_shell("different"), makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
+
+
 
     private static final SubLList $list341 = list(makeKeyword("MAX-TRANSFORMATION-DEPTH"), ONE_INTEGER);
 
-    private static final SubLObject $$higherPriorityTemplateForType = reader_make_constant_shell(makeString("higherPriorityTemplateForType"));
+
 
     private static final SubLSymbol STABLE_TEMPLATE_ID_COMPARE = makeSymbol("STABLE-TEMPLATE-ID-COMPARE");
-
-
-
-
 
     private static final SubLString $str346$Invalid_formula_template__A_in_to = makeString("Invalid formula template ~A in topic ~A: template topic query mt ~A cannot see formula template mt ~A");
 
     private static final SubLString $$$FactivoreTab = makeString("FactivoreTab");
 
-    private static final SubLObject $$FormulaTemplateTopicType = reader_make_constant_shell(makeString("FormulaTemplateTopicType"));
 
-    private static final SubLObject $$FirstOrderCollection = reader_make_constant_shell(makeString("FirstOrderCollection"));
+
+
 
     private static final SubLSymbol $sym350$_TEMPLATE = makeSymbol("?TEMPLATE");
 
-    private static final SubLObject $$formulaTemplateHasType = reader_make_constant_shell(makeString("formulaTemplateHasType"));
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
+
 
     private static final SubLSymbol $sym353$_ = makeSymbol(">");
 
@@ -867,31 +944,27 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol $MAX_TRANSFORMATION_DEPTH = makeKeyword("MAX-TRANSFORMATION-DEPTH");
 
-
-
     private static final SubLSymbol $sym359$_MT = makeSymbol("?MT");
 
-    private static final SubLObject $$definingMt = reader_make_constant_shell(makeString("definingMt"));
 
-    public static final SubLList $list361 = list(makeSymbol("?VOCABULARY-MT"));
 
-    private static final SubLList $list362 = list(list(reader_make_constant_shell(makeString("genlMt-Vocabulary")), makeSymbol("?MT"), makeSymbol("?VOCABULARY-MT")));
+    static private final SubLList $list361 = list(makeSymbol("?VOCABULARY-MT"));
 
-    private static final SubLObject $$DataForNLMt = reader_make_constant_shell(makeString("DataForNLMt"));
+    private static final SubLList $list362 = list(list(reader_make_constant_shell("genlMt-Vocabulary"), makeSymbol("?MT"), makeSymbol("?VOCABULARY-MT")));
+
+
 
     private static final SubLSymbol FORT_OR_NAUT_P = makeSymbol("FORT-OR-NAUT-P");
 
-    private static final SubLObject $$sourcesForTopic = reader_make_constant_shell(makeString("sourcesForTopic"));
 
-    private static final SubLObject $$focalTermIntroduction = reader_make_constant_shell(makeString("focalTermIntroduction"));
 
-    private static final SubLObject $const367$titleForFormulaTemplateType_Strin = reader_make_constant_shell(makeString("titleForFormulaTemplateType-String"));
 
-    private static final SubLObject $$templateTopicPrefix = reader_make_constant_shell(makeString("templateTopicPrefix"));
 
-    private static final SubLObject $$queryMtForTopicAssertions = reader_make_constant_shell(makeString("queryMtForTopicAssertions"));
+    private static final SubLObject $const367$titleForFormulaTemplateType_Strin = reader_make_constant_shell("titleForFormulaTemplateType-String");
 
-    private static final SubLObject $$definitionalMtForTopicAssertions = reader_make_constant_shell(makeString("definitionalMtForTopicAssertions"));
+
+
+
 
 
 
@@ -953,13 +1026,13 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym400$_EVAL = makeSymbol("?EVAL");
 
-    public static final SubLList $list401 = list(makeSymbol("?BY"), makeSymbol("??ON"));
+    static private final SubLList $list401 = list(makeSymbol("?BY"), makeSymbol("??ON"));
 
     private static final SubLList $list402 = list(makeKeyword("ANSWER-LANGUAGE"), makeKeyword("HL"));
 
     private static final SubLSymbol $sym403$_JUDGMENT = makeSymbol("?JUDGMENT");
 
-    private static final SubLObject $$evaluationOutputSentences = reader_make_constant_shell(makeString("evaluationOutputSentences"));
+
 
     private static final SubLList $list405 = list(list(makeSymbol("?JUDGMENT"), makeSymbol("?SENTENCE")));
 
@@ -971,27 +1044,21 @@ public final class formula_templates extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$contextOfPCW = reader_make_constant_shell(makeString("contextOfPCW"));
-
     private static final SubLSymbol $map_elmt_to_published_conceptual_work_caching_state$ = makeSymbol("*MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-CACHING-STATE*");
 
     private static final SubLList $list412 = list(new SubLObject[]{ makeSymbol("?A"), makeSymbol("?B"), makeSymbol("?C"), makeSymbol("?D"), makeSymbol("?E"), makeSymbol("?F"), makeSymbol("?G"), makeSymbol("?H"), makeSymbol("?J"), makeSymbol("?K"), makeSymbol("?L"), makeSymbol("?M"), makeSymbol("?N"), makeSymbol("?O"), makeSymbol("?P"), makeSymbol("?Q"), makeSymbol("?R"), makeSymbol("?S"), makeSymbol("?T"), makeSymbol("?U"), makeSymbol("?V"), makeSymbol("?W"), makeSymbol("?X"), makeSymbol("?Y"), makeSymbol("?Z") });
 
     private static final SubLSymbol $sym413$_POLY_ELMT = makeSymbol("?POLY-ELMT");
 
-    private static final SubLObject $$ist_Intermediate = reader_make_constant_shell(makeString("ist-Intermediate"));
+    private static final SubLObject $$ist_Intermediate = reader_make_constant_shell("ist-Intermediate");
 
-    private static final SubLObject $$MtUnionFn = reader_make_constant_shell(makeString("MtUnionFn"));
 
-    private static final SubLObject $$RKFInteractionContextMicrotheory = reader_make_constant_shell(makeString("RKFInteractionContextMicrotheory"));
+
+
 
     private static final SubLSymbol $sym417$__REFSPEC = makeSymbol("??REFSPEC");
 
     private static final SubLSymbol $sym418$__ASSERTION = makeSymbol("??ASSERTION");
-
-
-
-
 
     private static final SubLSymbol $PROBABLY_APPROXIMATELY_DONE = makeKeyword("PROBABLY-APPROXIMATELY-DONE");
 
@@ -1001,190 +1068,378 @@ public final class formula_templates extends SubLTranslatedFile {
 
     private static final SubLSymbol $kw424$ALLOW_INDETERMINATE_RESULTS_ = makeKeyword("ALLOW-INDETERMINATE-RESULTS?");
 
-
-
     private static final SubLList $list426 = cons(makeSymbol("VARIABLE"), makeSymbol("TERM"));
 
     private static final SubLSymbol $sym427$DEDUCED_ASSERTION_ = makeSymbol("DEDUCED-ASSERTION?");
 
     private static final SubLSymbol EL_TERM_P = makeSymbol("EL-TERM-P");
 
-
-
-
-
     private static final SubLSymbol FTEMPLATE_POLYCANONICALIZED_ASSERTION_P = makeSymbol("FTEMPLATE-POLYCANONICALIZED-ASSERTION-P");
 
-    private static final SubLObject $$equals = reader_make_constant_shell(makeString("equals"));
 
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
+
+
 
     private static final SubLList $list434 = list(makeSymbol("IST-PART"), makeSymbol("MT-PART"), makeSymbol("FORMULA-PART"));
 
     private static final SubLSymbol $sym435$_FET_ASSERTION_VAR_524 = makeSymbol("?FET-ASSERTION-VAR-524");
 
-    public static final SubLList $list436 = list(makeSymbol("QUANTIFIER"), makeSymbol("VARIABLE"), makeSymbol("CLAUSES"));
-
-    private static final SubLObject $$assertionSentence = reader_make_constant_shell(makeString("assertionSentence"));
-
-    private static final SubLObject $$ist_Asserted = reader_make_constant_shell(makeString("ist-Asserted"));
-
-    private static final SubLObject $$assertionProducedByReformulation = reader_make_constant_shell(makeString("assertionProducedByReformulation"));
-
-    private static final SubLList $list440 = list(list(reader_make_constant_shell(makeString("SomeExampleFn")), reader_make_constant_shell(makeString("TimeInterval"))));
-
-    private static final SubLObject $$SpecsFn = reader_make_constant_shell(makeString("SpecsFn"));
-
-    private static final SubLObject $$SomeExampleFn = reader_make_constant_shell(makeString("SomeExampleFn"));
-
-    private static final SubLObject $$SomeExampleSpecFn = reader_make_constant_shell(makeString("SomeExampleSpecFn"));
-
-    private static final SubLObject $$defnIff = reader_make_constant_shell(makeString("defnIff"));
-
-    private static final SubLObject $$defnSufficient = reader_make_constant_shell(makeString("defnSufficient"));
+    static private final SubLList $list436 = list(makeSymbol("QUANTIFIER"), makeSymbol("VARIABLE"), makeSymbol("CLAUSES"));
 
 
 
-    private static final SubLList $list447 = list(reader_make_constant_shell(makeString("isa")), makeKeyword("LEXICAL-MT"), reader_make_constant_shell(makeString("TemporaryLexicalMicrotheory")));
+    private static final SubLObject $$ist_Asserted = reader_make_constant_shell("ist-Asserted");
 
-    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+
+
+    private static final SubLList $list440 = list(list(reader_make_constant_shell("SomeExampleFn"), reader_make_constant_shell("TimeInterval")));
+
+
+
+
+
+
+
+
+
+
+
+    private static final SubLList $list447 = list(reader_make_constant_shell("isa"), makeKeyword("LEXICAL-MT"), reader_make_constant_shell("TemporaryLexicalMicrotheory"));
+
+
 
     static final boolean assertionsDisabledSynth = true;
+
+    public static final SubLObject template_topic_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_template_topic(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
 
     public static SubLObject template_topic_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_template_topic(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject template_topic_p(final SubLObject v_object) {
-        return v_object.getClass() == formula_templates.$template_topic_native.class ? T : NIL;
+    public static final SubLObject template_topic_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.formula_templates.$template_topic_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject template_topic_supertopic(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.formula_templates.$template_topic_native.class ? T : NIL;
+    }
+
+    public static final SubLObject template_topic_supertopic_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField2();
     }
 
-    public static SubLObject template_topic_topic(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_supertopic(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject template_topic_topic_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField3();
     }
 
-    public static SubLObject template_topic_subtopics(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_topic(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject template_topic_subtopics_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField4();
     }
 
-    public static SubLObject template_topic_templates(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_subtopics(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject template_topic_templates_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField5();
     }
 
-    public static SubLObject template_topic_ordering(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_templates(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject template_topic_ordering_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField6();
     }
 
-    public static SubLObject template_topic_title(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_ordering(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField6();
+    }
+
+    public static final SubLObject template_topic_title_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField7();
     }
 
-    public static SubLObject template_topic_term_prefix(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_title(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField7();
+    }
+
+    public static final SubLObject template_topic_term_prefix_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField8();
     }
 
-    public static SubLObject template_topic_intro_template(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_term_prefix(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField8();
+    }
+
+    public static final SubLObject template_topic_intro_template_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField9();
     }
 
-    public static SubLObject template_topic_source_types(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_intro_template(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField9();
+    }
+
+    public static final SubLObject template_topic_source_types_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField10();
     }
 
-    public static SubLObject template_topic_source_mt(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_source_types(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField10();
+    }
+
+    public static final SubLObject template_topic_source_mt_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField11();
     }
 
-    public static SubLObject template_topic_query_mt(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_source_mt(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField11();
+    }
+
+    public static final SubLObject template_topic_query_mt_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField12();
     }
 
-    public static SubLObject template_topic_definitional_mt(final SubLObject v_object) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_query_mt(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField12();
+    }
+
+    public static final SubLObject template_topic_definitional_mt_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.getField13();
     }
 
-    public static SubLObject _csetf_template_topic_supertopic(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject template_topic_definitional_mt(final SubLObject v_object) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.getField13();
+    }
+
+    public static final SubLObject _csetf_template_topic_supertopic_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_template_topic_topic(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_supertopic(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_topic_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_template_topic_subtopics(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_topic(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_subtopics_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_template_topic_templates(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_subtopics(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_templates_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField5(value);
     }
 
-    public static SubLObject _csetf_template_topic_ordering(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_templates(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_ordering_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField6(value);
     }
 
-    public static SubLObject _csetf_template_topic_title(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_ordering(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField6(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_title_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField7(value);
     }
 
-    public static SubLObject _csetf_template_topic_term_prefix(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_title(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField7(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_term_prefix_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField8(value);
     }
 
-    public static SubLObject _csetf_template_topic_intro_template(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_term_prefix(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField8(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_intro_template_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField9(value);
     }
 
-    public static SubLObject _csetf_template_topic_source_types(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_intro_template(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField9(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_source_types_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField10(value);
     }
 
-    public static SubLObject _csetf_template_topic_source_mt(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_source_types(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField10(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_source_mt_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField11(value);
     }
 
-    public static SubLObject _csetf_template_topic_query_mt(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_source_mt(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField11(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_query_mt_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField12(value);
     }
 
-    public static SubLObject _csetf_template_topic_definitional_mt(final SubLObject v_object, final SubLObject value) {
-        assert NIL != template_topic_p(v_object) : "formula_templates.template_topic_p(v_object) " + "CommonSymbols.NIL != formula_templates.template_topic_p(v_object) " + v_object;
+    public static SubLObject _csetf_template_topic_query_mt(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField12(value);
+    }
+
+    public static final SubLObject _csetf_template_topic_definitional_mt_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, TEMPLATE_TOPIC_P);
         return v_object.setField13(value);
+    }
+
+    public static SubLObject _csetf_template_topic_definitional_mt(final SubLObject v_object, final SubLObject value) {
+        assert NIL != template_topic_p(v_object) : "! formula_templates.template_topic_p(v_object) " + "formula_templates.template_topic_p error :" + v_object;
+        return v_object.setField13(value);
+    }
+
+    public static final SubLObject make_template_topic_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.formula_templates.$template_topic_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($SUPERTOPIC)) {
+                        _csetf_template_topic_supertopic(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($TOPIC)) {
+                            _csetf_template_topic_topic(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($SUBTOPICS)) {
+                                _csetf_template_topic_subtopics(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($TEMPLATES)) {
+                                    _csetf_template_topic_templates(v_new, current_value);
+                                } else {
+                                    if (pcase_var.eql($ORDERING)) {
+                                        _csetf_template_topic_ordering(v_new, current_value);
+                                    } else {
+                                        if (pcase_var.eql($TITLE)) {
+                                            _csetf_template_topic_title(v_new, current_value);
+                                        } else {
+                                            if (pcase_var.eql($TERM_PREFIX)) {
+                                                _csetf_template_topic_term_prefix(v_new, current_value);
+                                            } else {
+                                                if (pcase_var.eql($INTRO_TEMPLATE)) {
+                                                    _csetf_template_topic_intro_template(v_new, current_value);
+                                                } else {
+                                                    if (pcase_var.eql($SOURCE_TYPES)) {
+                                                        _csetf_template_topic_source_types(v_new, current_value);
+                                                    } else {
+                                                        if (pcase_var.eql($SOURCE_MT)) {
+                                                            _csetf_template_topic_source_mt(v_new, current_value);
+                                                        } else {
+                                                            if (pcase_var.eql($QUERY_MT)) {
+                                                                _csetf_template_topic_query_mt(v_new, current_value);
+                                                            } else {
+                                                                if (pcase_var.eql($DEFINITIONAL_MT)) {
+                                                                    _csetf_template_topic_definitional_mt(v_new, current_value);
+                                                                } else {
+                                                                    Errors.error($str_alt44$Invalid_slot__S_for_construction_, current_arg);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_template_topic(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new formula_templates.$template_topic_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.formula_templates.$template_topic_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1268,120 +1523,288 @@ public final class formula_templates extends SubLTranslatedFile {
         return visit_defstruct_template_topic(obj, visitor_fn);
     }
 
+    public static final SubLObject arg_position_details_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_arg_position_details(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject arg_position_details_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_arg_position_details(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject arg_position_details_p(final SubLObject v_object) {
-        return v_object.getClass() == formula_templates.$arg_position_details_native.class ? T : NIL;
+    public static final SubLObject arg_position_details_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject arg_position_details_argument_position(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native.class ? T : NIL;
+    }
+
+    public static final SubLObject arg_position_details_argument_position_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField2();
     }
 
-    public static SubLObject arg_position_details_ordering(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_argument_position(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject arg_position_details_ordering_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField3();
     }
 
-    public static SubLObject arg_position_details_gloss(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_ordering(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject arg_position_details_gloss_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField4();
     }
 
-    public static SubLObject arg_position_details_invisible_replacement_positions(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_gloss(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject arg_position_details_invisible_replacement_positions_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField5();
     }
 
-    public static SubLObject arg_position_details_replacement_constraints(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_invisible_replacement_positions(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject arg_position_details_replacement_constraints_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField6();
     }
 
-    public static SubLObject arg_position_details_candidate_replacements(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_replacement_constraints(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField6();
+    }
+
+    public static final SubLObject arg_position_details_candidate_replacements_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField7();
     }
 
-    public static SubLObject arg_position_details_is_editable(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_candidate_replacements(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField7();
+    }
+
+    public static final SubLObject arg_position_details_is_editable_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField8();
     }
 
-    public static SubLObject arg_position_details_explanation(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_is_editable(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField8();
+    }
+
+    public static final SubLObject arg_position_details_explanation_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField9();
     }
 
-    public static SubLObject arg_position_details_requires_validation(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_explanation(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField9();
+    }
+
+    public static final SubLObject arg_position_details_requires_validation_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField10();
     }
 
-    public static SubLObject arg_position_details_unknown_replacement(final SubLObject v_object) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_requires_validation(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField10();
+    }
+
+    public static final SubLObject arg_position_details_unknown_replacement_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.getField11();
     }
 
-    public static SubLObject _csetf_arg_position_details_argument_position(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject arg_position_details_unknown_replacement(final SubLObject v_object) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.getField11();
+    }
+
+    public static final SubLObject _csetf_arg_position_details_argument_position_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_ordering(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_argument_position(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_ordering_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_gloss(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_ordering(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_gloss_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_invisible_replacement_positions(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_gloss(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_invisible_replacement_positions_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField5(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_replacement_constraints(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_invisible_replacement_positions(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_replacement_constraints_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField6(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_candidate_replacements(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_replacement_constraints(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField6(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_candidate_replacements_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField7(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_is_editable(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_candidate_replacements(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField7(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_is_editable_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField8(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_explanation(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_is_editable(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField8(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_explanation_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField9(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_requires_validation(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_explanation(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField9(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_requires_validation_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField10(value);
     }
 
-    public static SubLObject _csetf_arg_position_details_unknown_replacement(final SubLObject v_object, final SubLObject value) {
-        assert NIL != arg_position_details_p(v_object) : "formula_templates.arg_position_details_p(v_object) " + "CommonSymbols.NIL != formula_templates.arg_position_details_p(v_object) " + v_object;
+    public static SubLObject _csetf_arg_position_details_requires_validation(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField10(value);
+    }
+
+    public static final SubLObject _csetf_arg_position_details_unknown_replacement_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, ARG_POSITION_DETAILS_P);
         return v_object.setField11(value);
+    }
+
+    public static SubLObject _csetf_arg_position_details_unknown_replacement(final SubLObject v_object, final SubLObject value) {
+        assert NIL != arg_position_details_p(v_object) : "! formula_templates.arg_position_details_p(v_object) " + "formula_templates.arg_position_details_p error :" + v_object;
+        return v_object.setField11(value);
+    }
+
+    public static final SubLObject make_arg_position_details_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($ARGUMENT_POSITION)) {
+                        _csetf_arg_position_details_argument_position(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($ORDERING)) {
+                            _csetf_arg_position_details_ordering(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($GLOSS)) {
+                                _csetf_arg_position_details_gloss(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($INVISIBLE_REPLACEMENT_POSITIONS)) {
+                                    _csetf_arg_position_details_invisible_replacement_positions(v_new, current_value);
+                                } else {
+                                    if (pcase_var.eql($REPLACEMENT_CONSTRAINTS)) {
+                                        _csetf_arg_position_details_replacement_constraints(v_new, current_value);
+                                    } else {
+                                        if (pcase_var.eql($CANDIDATE_REPLACEMENTS)) {
+                                            _csetf_arg_position_details_candidate_replacements(v_new, current_value);
+                                        } else {
+                                            if (pcase_var.eql($IS_EDITABLE)) {
+                                                _csetf_arg_position_details_is_editable(v_new, current_value);
+                                            } else {
+                                                if (pcase_var.eql($EXPLANATION)) {
+                                                    _csetf_arg_position_details_explanation(v_new, current_value);
+                                                } else {
+                                                    if (pcase_var.eql($REQUIRES_VALIDATION)) {
+                                                        _csetf_arg_position_details_requires_validation(v_new, current_value);
+                                                    } else {
+                                                        if (pcase_var.eql($UNKNOWN_REPLACEMENT)) {
+                                                            _csetf_arg_position_details_unknown_replacement(v_new, current_value);
+                                                        } else {
+                                                            Errors.error($str_alt44$Invalid_slot__S_for_construction_, current_arg);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_arg_position_details(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new formula_templates.$arg_position_details_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.formula_templates.$arg_position_details_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1455,150 +1878,360 @@ public final class formula_templates extends SubLTranslatedFile {
         return visit_defstruct_arg_position_details(obj, visitor_fn);
     }
 
+    public static final SubLObject formula_template_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_formula_template(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject formula_template_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_formula_template(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject formula_template_p(final SubLObject v_object) {
-        return v_object.getClass() == formula_templates.$formula_template_native.class ? T : NIL;
+    public static final SubLObject formula_template_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.formula_templates.$formula_template_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject formula_template_topic(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.formula_templates.$formula_template_native.class ? T : NIL;
+    }
+
+    public static final SubLObject formula_template_topic_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField2();
     }
 
-    public static SubLObject formula_template_id(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_topic(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject formula_template_id_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField3();
     }
 
-    public static SubLObject formula_template_formula(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_id(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject formula_template_formula_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField4();
     }
 
-    public static SubLObject formula_template_query_specification(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_formula(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject formula_template_query_specification_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField5();
     }
 
-    public static SubLObject formula_template_elmt(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_query_specification(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject formula_template_elmt_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField6();
     }
 
-    public static SubLObject formula_template_focal_term(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_elmt(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField6();
+    }
+
+    public static final SubLObject formula_template_focal_term_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField7();
     }
 
-    public static SubLObject formula_template_argpos_details(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_focal_term(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField7();
+    }
+
+    public static final SubLObject formula_template_argpos_details_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField8();
     }
 
-    public static SubLObject formula_template_argpos_ordering(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_argpos_details(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField8();
+    }
+
+    public static final SubLObject formula_template_argpos_ordering_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField9();
     }
 
-    public static SubLObject formula_template_examples(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_argpos_ordering(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField9();
+    }
+
+    public static final SubLObject formula_template_examples_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField10();
     }
 
-    public static SubLObject formula_template_entry_format(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_examples(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField10();
+    }
+
+    public static final SubLObject formula_template_entry_format_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField11();
     }
 
-    public static SubLObject formula_template_follow_ups(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_entry_format(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField11();
+    }
+
+    public static final SubLObject formula_template_follow_ups_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField12();
     }
 
-    public static SubLObject formula_template_gloss(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_follow_ups(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField12();
+    }
+
+    public static final SubLObject formula_template_gloss_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField13();
     }
 
-    public static SubLObject formula_template_refspec(final SubLObject v_object) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_gloss(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField13();
+    }
+
+    public static final SubLObject formula_template_refspec_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.getField14();
     }
 
-    public static SubLObject _csetf_formula_template_topic(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject formula_template_refspec(final SubLObject v_object) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.getField14();
+    }
+
+    public static final SubLObject _csetf_formula_template_topic_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_formula_template_id(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_topic(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_id_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_formula_template_formula(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_id(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_formula_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_formula_template_query_specification(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_formula(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_query_specification_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField5(value);
     }
 
-    public static SubLObject _csetf_formula_template_elmt(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_query_specification(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_elmt_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField6(value);
     }
 
-    public static SubLObject _csetf_formula_template_focal_term(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_elmt(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField6(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_focal_term_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField7(value);
     }
 
-    public static SubLObject _csetf_formula_template_argpos_details(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_focal_term(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField7(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_argpos_details_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField8(value);
     }
 
-    public static SubLObject _csetf_formula_template_argpos_ordering(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_argpos_details(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField8(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_argpos_ordering_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField9(value);
     }
 
-    public static SubLObject _csetf_formula_template_examples(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_argpos_ordering(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField9(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_examples_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField10(value);
     }
 
-    public static SubLObject _csetf_formula_template_entry_format(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_examples(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField10(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_entry_format_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField11(value);
     }
 
-    public static SubLObject _csetf_formula_template_follow_ups(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_entry_format(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField11(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_follow_ups_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField12(value);
     }
 
-    public static SubLObject _csetf_formula_template_gloss(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_follow_ups(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField12(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_gloss_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField13(value);
     }
 
-    public static SubLObject _csetf_formula_template_refspec(final SubLObject v_object, final SubLObject value) {
-        assert NIL != formula_template_p(v_object) : "formula_templates.formula_template_p(v_object) " + "CommonSymbols.NIL != formula_templates.formula_template_p(v_object) " + v_object;
+    public static SubLObject _csetf_formula_template_gloss(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField13(value);
+    }
+
+    public static final SubLObject _csetf_formula_template_refspec_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORMULA_TEMPLATE_P);
         return v_object.setField14(value);
+    }
+
+    public static SubLObject _csetf_formula_template_refspec(final SubLObject v_object, final SubLObject value) {
+        assert NIL != formula_template_p(v_object) : "! formula_templates.formula_template_p(v_object) " + "formula_templates.formula_template_p error :" + v_object;
+        return v_object.setField14(value);
+    }
+
+    public static final SubLObject make_formula_template_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.formula_templates.$formula_template_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($TOPIC)) {
+                        _csetf_formula_template_topic(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($ID)) {
+                            _csetf_formula_template_id(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($FORMULA)) {
+                                _csetf_formula_template_formula(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($QUERY_SPECIFICATION)) {
+                                    _csetf_formula_template_query_specification(v_new, current_value);
+                                } else {
+                                    if (pcase_var.eql($ELMT)) {
+                                        _csetf_formula_template_elmt(v_new, current_value);
+                                    } else {
+                                        if (pcase_var.eql($FOCAL_TERM)) {
+                                            _csetf_formula_template_focal_term(v_new, current_value);
+                                        } else {
+                                            if (pcase_var.eql($ARGPOS_DETAILS)) {
+                                                _csetf_formula_template_argpos_details(v_new, current_value);
+                                            } else {
+                                                if (pcase_var.eql($ARGPOS_ORDERING)) {
+                                                    _csetf_formula_template_argpos_ordering(v_new, current_value);
+                                                } else {
+                                                    if (pcase_var.eql($EXAMPLES)) {
+                                                        _csetf_formula_template_examples(v_new, current_value);
+                                                    } else {
+                                                        if (pcase_var.eql($ENTRY_FORMAT)) {
+                                                            _csetf_formula_template_entry_format(v_new, current_value);
+                                                        } else {
+                                                            if (pcase_var.eql($FOLLOW_UPS)) {
+                                                                _csetf_formula_template_follow_ups(v_new, current_value);
+                                                            } else {
+                                                                if (pcase_var.eql($GLOSS)) {
+                                                                    _csetf_formula_template_gloss(v_new, current_value);
+                                                                } else {
+                                                                    if (pcase_var.eql($REFSPEC)) {
+                                                                        _csetf_formula_template_refspec(v_new, current_value);
+                                                                    } else {
+                                                                        Errors.error($str_alt44$Invalid_slot__S_for_construction_, current_arg);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_formula_template(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new formula_templates.$formula_template_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.formula_templates.$formula_template_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1687,9 +2320,25 @@ public final class formula_templates extends SubLTranslatedFile {
         return visit_defstruct_formula_template(obj, visitor_fn);
     }
 
+    public static final SubLObject is_ftemplate_loading_supporting_ask_browsableP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return list_utilities.sublisp_boolean($make_ftemplate_loading_supporting_ask_browsableP$.getDynamicValue(thread));
+        }
+    }
+
     public static SubLObject is_ftemplate_loading_supporting_ask_browsableP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return list_utilities.sublisp_boolean($make_ftemplate_loading_supporting_ask_browsableP$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject with_browsable_ftemplate_loading_supporting_ask_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject body = current;
+            return listS(CLET, $list_alt134, append(body, NIL));
+        }
     }
 
     public static SubLObject with_browsable_ftemplate_loading_supporting_ask(final SubLObject macroform, final SubLObject environment) {
@@ -1699,6 +2348,30 @@ public final class formula_templates extends SubLTranslatedFile {
         return listS(CLET, $list146, append(body, NIL));
     }
 
+    /**
+     * If we have the feature :Cyc-RKF, then execute BODY within the scope of REUSING-RKF-SD-PROBLEM-STORE.
+     */
+    @LispMethod(comment = "If we have the feature :Cyc-RKF, then execute BODY within the scope of REUSING-RKF-SD-PROBLEM-STORE.")
+    public static final SubLObject reusing_rkf_sd_problem_store_if_available_alt(SubLObject macroform, SubLObject environment) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject datum = macroform.rest();
+                SubLObject current = datum;
+                SubLObject body = current;
+                if (NIL != find($CYC_RKF, $features$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                    return bq_cons(REUSING_RKF_SD_PROBLEM_STORE, append(body, NIL));
+                } else {
+                    return bq_cons(PROGN, append(body, NIL));
+                }
+            }
+        }
+    }
+
+    /**
+     * If we have the feature :Cyc-RKF, then execute BODY within the scope of REUSING-RKF-SD-PROBLEM-STORE.
+     */
+    @LispMethod(comment = "If we have the feature :Cyc-RKF, then execute BODY within the scope of REUSING-RKF-SD-PROBLEM-STORE.")
     public static SubLObject reusing_rkf_sd_problem_store_if_available(final SubLObject macroform, final SubLObject environment) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject datum = macroform.rest();
@@ -1710,9 +2383,44 @@ public final class formula_templates extends SubLTranslatedFile {
         return bq_cons(PROGN, append(body, NIL));
     }
 
+    public static final SubLObject get_non_editable_assertions_for_template_topic_instance_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $non_editable_assertions_for_template_topic_instance$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject get_non_editable_assertions_for_template_topic_instance() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $non_editable_assertions_for_template_topic_instance$.getDynamicValue(thread);
+    }
+
+    public static final SubLObject with_known_non_editable_assertions_for_template_topic_instance_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt138);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject non_editables = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt138);
+                    non_editables = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return listS(CLET, list(list($non_editable_assertions_for_template_topic_instance$, non_editables)), listS(CHECK_TYPE, non_editables, $list_alt141), append(body, NIL));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt138);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject with_known_non_editable_assertions_for_template_topic_instance(final SubLObject macroform, final SubLObject environment) {
@@ -1732,6 +2440,43 @@ public final class formula_templates extends SubLTranslatedFile {
         }
         cdestructuring_bind_error(datum, $list150);
         return NIL;
+    }
+
+    public static final SubLObject compute_non_editable_assertions_for_template_topic_instance_alt(SubLObject instance, SubLObject template_id, SubLObject template_elmt, SubLObject query_mt) {
+        {
+            SubLObject non_editables = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject isas = formula_template_utilities.template_type_for_focal_term_types(template_id, template_elmt);
+            SubLObject v_genls = formula_template_utilities.template_topic_genls(template_id, template_elmt);
+            {
+                SubLObject cdolist_list_var = isas;
+                SubLObject v_isa = NIL;
+                for (v_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_isa = cdolist_list_var.first()) {
+                    {
+                        SubLObject sentence = list($$isa, instance, v_isa);
+                        SubLObject cdolist_list_var_1 = smarter_find_visible_assertions_cycl(sentence, query_mt);
+                        SubLObject assertion = NIL;
+                        for (assertion = cdolist_list_var_1.first(); NIL != cdolist_list_var_1; cdolist_list_var_1 = cdolist_list_var_1.rest() , assertion = cdolist_list_var_1.first()) {
+                            set.set_add(assertion, non_editables);
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = v_genls;
+                SubLObject genl = NIL;
+                for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
+                    {
+                        SubLObject sentence = list($$genls, instance, genl);
+                        SubLObject cdolist_list_var_2 = smarter_find_visible_assertions_cycl(sentence, query_mt);
+                        SubLObject assertion = NIL;
+                        for (assertion = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , assertion = cdolist_list_var_2.first()) {
+                            set.set_add(assertion, non_editables);
+                        }
+                    }
+                }
+            }
+            return non_editables;
+        }
     }
 
     public static SubLObject compute_non_editable_assertions_for_template_topic_instance(final SubLObject instance, final SubLObject template_id, final SubLObject template_elmt, final SubLObject query_mt) {
@@ -1773,10 +2518,61 @@ public final class formula_templates extends SubLTranslatedFile {
         return non_editables;
     }
 
+    public static final SubLObject is_non_editable_assertion_for_template_topic_instanceP_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != set.set_p($non_editable_assertions_for_template_topic_instance$.getDynamicValue(thread))) {
+                return set.set_memberP(assertion, $non_editable_assertions_for_template_topic_instance$.getDynamicValue(thread));
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject is_non_editable_assertion_for_template_topic_instanceP(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != set.set_p($non_editable_assertions_for_template_topic_instance$.getDynamicValue(thread))) {
             return set.set_memberP(assertion, $non_editable_assertions_for_template_topic_instance$.getDynamicValue(thread));
+        }
+        return NIL;
+    }
+
+    public static final SubLObject with_non_editable_assertions_for_template_topic_instance_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt144);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject instance = NIL;
+                    SubLObject template_id = NIL;
+                    SubLObject template_elmt = NIL;
+                    SubLObject query_mt = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt144);
+                    instance = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt144);
+                    template_id = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt144);
+                    template_elmt = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt144);
+                    query_mt = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            SubLObject non_editable = $sym145$NON_EDITABLE;
+                            return list(CLET, list(list(non_editable, list(COMPUTE_NON_EDITABLE_ASSERTIONS_FOR_TEMPLATE_TOPIC_INSTANCE, instance, template_id, template_elmt, query_mt))), listS(WITH_KNOWN_NON_EDITABLE_ASSERTIONS_FOR_TEMPLATE_TOPIC_INSTANCE, list(non_editable), append(body, NIL)));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt144);
+                    }
+                }
+            }
         }
         return NIL;
     }
@@ -1813,6 +2609,33 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject valid_formula_template_p_alt(SubLObject template) {
+        {
+            SubLObject result = NIL;
+            if (NIL == formula_template_p(template)) {
+                Errors.warn($str_alt148$_S_is_not_a_FORMULA_TEMPLATE_P_, template);
+            } else {
+                if (((NIL != new_cycl_query_specification.new_cycl_query_specification_p(formula_template_query_specification(template))) && (NIL != el_formula_p(new_cycl_query_specification.new_cycl_query_specification_formula(formula_template_query_specification(template))))) && (NIL != hlmt.possibly_mt_p(new_cycl_query_specification.new_cycl_query_specification_mt(formula_template_query_specification(template))))) {
+                    result = T;
+                } else {
+                    if (NIL == el_formula_p(formula_template_formula(template))) {
+                        Errors.warn($str_alt149$_S_is_not_EL_FORMULA_P_, formula_template_formula(template));
+                    } else {
+                        if (NIL == hlmt.possibly_mt_p(formula_template_elmt(template))) {
+                            Errors.warn($str_alt150$_S_is_not_POSSIBLY_MT_P_, formula_template_elmt(template));
+                        } else {
+                            result = T;
+                        }
+                    }
+                }
+            }
+            if (NIL == result) {
+                Errors.warn($str_alt151$bad_formula_template___S__, template);
+            }
+            return result;
+        }
+    }
+
     public static SubLObject valid_formula_template_p(final SubLObject template) {
         SubLObject result = NIL;
         if (NIL == formula_template_p(template)) {
@@ -1838,6 +2661,20 @@ public final class formula_templates extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject new_template_topic_alt(SubLObject topic, SubLObject supertopic) {
+        if (supertopic == UNPROVIDED) {
+            supertopic = NIL;
+        }
+        {
+            SubLObject tmplt_topic = make_template_topic(UNPROVIDED);
+            _csetf_template_topic_topic(tmplt_topic, topic);
+            if (NIL != supertopic) {
+                _csetf_template_topic_supertopic(tmplt_topic, supertopic);
+            }
+            return tmplt_topic;
+        }
+    }
+
     public static SubLObject new_template_topic(final SubLObject topic, SubLObject supertopic) {
         if (supertopic == UNPROVIDED) {
             supertopic = NIL;
@@ -1850,47 +2687,156 @@ public final class formula_templates extends SubLTranslatedFile {
         return tmplt_topic;
     }
 
-    public static SubLObject template_topic_add_subtopic(final SubLObject tmplt_topic, final SubLObject subtopic) {
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
-        assert NIL != template_topic_p(subtopic) : "formula_templates.template_topic_p(subtopic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(subtopic) " + subtopic;
+    public static final SubLObject template_topic_add_subtopic_alt(SubLObject tmplt_topic, SubLObject subtopic) {
+        SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+        SubLTrampolineFile.checkType(subtopic, TEMPLATE_TOPIC_P);
         _csetf_template_topic_supertopic(subtopic, tmplt_topic);
         _csetf_template_topic_subtopics(tmplt_topic, cons(subtopic, template_topic_subtopics(tmplt_topic)));
         return tmplt_topic;
     }
 
-    public static SubLObject template_topic_add_template(final SubLObject tmplt_topic, final SubLObject ftemplate) {
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
+    public static SubLObject template_topic_add_subtopic(final SubLObject tmplt_topic, final SubLObject subtopic) {
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
+        assert NIL != template_topic_p(subtopic) : "! formula_templates.template_topic_p(subtopic) " + ("formula_templates.template_topic_p(subtopic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(subtopic) ") + subtopic;
+        _csetf_template_topic_supertopic(subtopic, tmplt_topic);
+        _csetf_template_topic_subtopics(tmplt_topic, cons(subtopic, template_topic_subtopics(tmplt_topic)));
+        return tmplt_topic;
+    }
+
+    public static final SubLObject template_topic_add_template_alt(SubLObject tmplt_topic, SubLObject ftemplate) {
+        SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
         _csetf_formula_template_topic(ftemplate, tmplt_topic);
         _csetf_template_topic_templates(tmplt_topic, cons(ftemplate, template_topic_templates(tmplt_topic)));
         return tmplt_topic;
     }
 
-    public static SubLObject template_topic_add_title(final SubLObject tmplt_topic, final SubLObject title) {
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
-        assert NIL != stringp(title) : "Types.stringp(title) " + "CommonSymbols.NIL != Types.stringp(title) " + title;
+    public static SubLObject template_topic_add_template(final SubLObject tmplt_topic, final SubLObject ftemplate) {
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        _csetf_formula_template_topic(ftemplate, tmplt_topic);
+        _csetf_template_topic_templates(tmplt_topic, cons(ftemplate, template_topic_templates(tmplt_topic)));
+        return tmplt_topic;
+    }
+
+    public static final SubLObject template_topic_add_title_alt(SubLObject tmplt_topic, SubLObject title) {
+        SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+        SubLTrampolineFile.checkType(title, STRINGP);
         _csetf_template_topic_title(tmplt_topic, title);
         return tmplt_topic;
     }
 
-    public static SubLObject template_topic_add_term_prefix(final SubLObject tmplt_topic, final SubLObject term_prefix) {
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
-        assert NIL != stringp(term_prefix) : "Types.stringp(term_prefix) " + "CommonSymbols.NIL != Types.stringp(term_prefix) " + term_prefix;
+    public static SubLObject template_topic_add_title(final SubLObject tmplt_topic, final SubLObject title) {
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
+        assert NIL != stringp(title) : "! stringp(title) " + ("Types.stringp(title) " + "CommonSymbols.NIL != Types.stringp(title) ") + title;
+        _csetf_template_topic_title(tmplt_topic, title);
+        return tmplt_topic;
+    }
+
+    public static final SubLObject template_topic_add_term_prefix_alt(SubLObject tmplt_topic, SubLObject term_prefix) {
+        SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+        SubLTrampolineFile.checkType(term_prefix, STRINGP);
         _csetf_template_topic_term_prefix(tmplt_topic, term_prefix);
         return tmplt_topic;
     }
 
-    public static SubLObject template_topic_set_introductory_template(final SubLObject tmplt_topic, final SubLObject v_term) {
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
-        assert NIL != forts.fort_p(v_term) : "forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) " + v_term;
+    public static SubLObject template_topic_add_term_prefix(final SubLObject tmplt_topic, final SubLObject term_prefix) {
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
+        assert NIL != stringp(term_prefix) : "! stringp(term_prefix) " + ("Types.stringp(term_prefix) " + "CommonSymbols.NIL != Types.stringp(term_prefix) ") + term_prefix;
+        _csetf_template_topic_term_prefix(tmplt_topic, term_prefix);
+        return tmplt_topic;
+    }
+
+    public static final SubLObject template_topic_set_introductory_template_alt(SubLObject tmplt_topic, SubLObject v_term) {
+        SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+        SubLTrampolineFile.checkType(v_term, FORT_P);
         _csetf_template_topic_intro_template(tmplt_topic, v_term);
         return tmplt_topic;
     }
 
-    public static SubLObject template_topic_set_source_types(final SubLObject tmplt_topic, final SubLObject source_types) {
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
-        assert NIL != listp(source_types) : "Types.listp(source_types) " + "CommonSymbols.NIL != Types.listp(source_types) " + source_types;
+    public static SubLObject template_topic_set_introductory_template(final SubLObject tmplt_topic, final SubLObject v_term) {
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
+        assert NIL != forts.fort_p(v_term) : "! forts.fort_p(v_term) " + ("forts.fort_p(v_term) " + "CommonSymbols.NIL != forts.fort_p(v_term) ") + v_term;
+        _csetf_template_topic_intro_template(tmplt_topic, v_term);
+        return tmplt_topic;
+    }
+
+    public static final SubLObject template_topic_set_source_types_alt(SubLObject tmplt_topic, SubLObject source_types) {
+        SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+        SubLTrampolineFile.checkType(source_types, LISTP);
         _csetf_template_topic_source_types(tmplt_topic, source_types);
+        return tmplt_topic;
+    }
+
+    public static SubLObject template_topic_set_source_types(final SubLObject tmplt_topic, final SubLObject source_types) {
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
+        assert NIL != listp(source_types) : "! listp(source_types) " + ("Types.listp(source_types) " + "CommonSymbols.NIL != Types.listp(source_types) ") + source_types;
+        _csetf_template_topic_source_types(tmplt_topic, source_types);
+        return tmplt_topic;
+    }
+
+    public static final SubLObject print_template_topic_alt(SubLObject tmplt_topic, SubLObject stream, SubLObject depth) {
+        write_string($str_alt155$_TemplateTopic__, stream, UNPROVIDED, UNPROVIDED);
+        format(stream, $str_alt156$Parent___S___Topic___S_, NIL != template_topic_supertopic(tmplt_topic) ? ((SubLObject) (template_topic_topic(template_topic_supertopic(tmplt_topic)))) : NIL, template_topic_topic(tmplt_topic));
+        if (template_topic_title(tmplt_topic).isString()) {
+            write_string($str_alt157$_named_, stream, UNPROVIDED, UNPROVIDED);
+            write_string(template_topic_title(tmplt_topic), stream, UNPROVIDED, UNPROVIDED);
+            princ(CHAR_space, stream);
+        }
+        if (template_topic_term_prefix(tmplt_topic).isString()) {
+            write_string($str_alt158$_Term_Prefix__, stream, UNPROVIDED, UNPROVIDED);
+            write_string(template_topic_term_prefix(tmplt_topic), stream, UNPROVIDED, UNPROVIDED);
+            princ(CHAR_space, stream);
+        }
+        if (NIL != template_topic_subtopics(tmplt_topic)) {
+            write_string($str_alt159$___SubTopics__, stream, UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = template_topic_subtopics(tmplt_topic);
+                SubLObject subtopic = NIL;
+                for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                    princ(CHAR_space, stream);
+                    prin1(template_topic_topic(subtopic), stream);
+                }
+            }
+        }
+        if (NIL != template_topic_source_types(tmplt_topic)) {
+            write_string($str_alt160$___Sources__, stream, UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = template_topic_source_types(tmplt_topic);
+                SubLObject source = NIL;
+                for (source = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , source = cdolist_list_var.first()) {
+                    princ(CHAR_space, stream);
+                    prin1(source, stream);
+                }
+            }
+        }
+        if (NIL != template_topic_source_mt(tmplt_topic)) {
+            write_string($str_alt161$___Template_Source_Mt__, stream, UNPROVIDED, UNPROVIDED);
+            prin1(template_topic_source_mt(tmplt_topic), stream);
+        }
+        if (NIL != template_topic_query_mt(tmplt_topic)) {
+            write_string($str_alt162$___Template_Query_Mt__, stream, UNPROVIDED, UNPROVIDED);
+            prin1(template_topic_query_mt(tmplt_topic), stream);
+        }
+        if (NIL != template_topic_definitional_mt(tmplt_topic)) {
+            write_string($str_alt163$___Template_Definitional_Mt__, stream, UNPROVIDED, UNPROVIDED);
+            prin1(template_topic_definitional_mt(tmplt_topic), stream);
+        }
+        if (NIL != template_topic_templates(tmplt_topic)) {
+            write_string($str_alt164$___Templates_, stream, UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = template_topic_templates(tmplt_topic);
+                SubLObject ftemplate = NIL;
+                for (ftemplate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ftemplate = cdolist_list_var.first()) {
+                    princ(CHAR_space, stream);
+                    prin1(formula_template_id(ftemplate), stream);
+                    if (formula_template_id(ftemplate) == template_topic_intro_template(tmplt_topic)) {
+                        princ($str_alt165$____introductory_template__, stream);
+                    }
+                }
+            }
+        }
+        write_string($str_alt166$_, stream, UNPROVIDED, UNPROVIDED);
         return tmplt_topic;
     }
 
@@ -1987,8 +2933,295 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject xml_template_topic_current_revision_alt() {
+        return $xml_template_topic_revisions$.getGlobalValue().first().first();
+    }
+
     public static SubLObject xml_template_topic_current_revision() {
         return $xml_template_topic_revisions$.getGlobalValue().first().first();
+    }
+
+    public static final SubLObject xml_serialize_template_topic_alt(SubLObject tmplt_topic, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(tmplt_topic, TEMPLATE_TOPIC_P);
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_3 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$templateTopic, NIL, NIL);
+                            if (NIL == $xml_suppress_future_template_extensions$.getDynamicValue(thread)) {
+                                {
+                                    SubLObject _prev_bind_0_4 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_5 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$templateTopicRevision, NIL, NIL);
+                                        cycml.cycml_serialize_number(xml_template_topic_current_revision(), UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_5, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_4, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$templateTopicRevision);
+                            }
+                            {
+                                SubLObject _prev_bind_0_6 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_7 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$topic, NIL, NIL);
+                                    cycml_generator.cycml_serialize_fort(template_topic_topic(tmplt_topic));
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_7, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_6, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$topic);
+                            if (NIL != template_topic_supertopic(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_8 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_9 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$superTopic, NIL, NIL);
+                                        cycml_generator.cycml_serialize_fort(template_topic_topic(template_topic_supertopic(tmplt_topic)));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_9, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_8, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$superTopic);
+                            }
+                            if (NIL != template_topic_title(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_10 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_11 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$title, NIL, NIL);
+                                        xml_utilities.xml_write_string(template_topic_title(tmplt_topic), UNPROVIDED, UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_11, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_10, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$title);
+                            }
+                            if (NIL != template_topic_term_prefix(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_12 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_13 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$termPrefix, NIL, NIL);
+                                        xml_utilities.xml_write_string(template_topic_term_prefix(tmplt_topic), UNPROVIDED, UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_13, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_12, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$termPrefix);
+                            }
+                            if (NIL != template_topic_intro_template(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_14 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_15 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$introductoryTemplate, NIL, NIL);
+                                        cycml_generator.cycml_serialize_fort(template_topic_intro_template(tmplt_topic));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_15, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_14, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$introductoryTemplate);
+                            }
+                            if (NIL != template_topic_subtopics(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_16 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_17 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$subTopics, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = template_topic_subtopics(tmplt_topic);
+                                            SubLObject subtopic = NIL;
+                                            for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_18 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_19 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$subTopic, NIL, NIL);
+                                                        xml_serialize_template_topic(subtopic, stream);
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_19, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_18, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$subTopic);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_17, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_16, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$subTopics);
+                            }
+                            if (NIL != template_topic_source_types(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_20 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_21 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$sourcesOfTopic, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = template_topic_source_types(tmplt_topic);
+                                            SubLObject source_type = NIL;
+                                            for (source_type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , source_type = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_22 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_23 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$sourceOfTopic, NIL, NIL);
+                                                        cycml.cycml_serialize_term(source_type);
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_23, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_22, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$sourceOfTopic);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_21, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_20, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$sourcesOfTopic);
+                            }
+                            if (NIL != template_topic_source_mt(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_24 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_25 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$templateSourceMt, NIL, NIL);
+                                        cycml.cycml_serialize_term(template_topic_source_mt(tmplt_topic));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_25, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_24, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$templateSourceMt);
+                            }
+                            if (NIL != template_topic_query_mt(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_26 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_27 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$templateQueryMt, NIL, NIL);
+                                        cycml.cycml_serialize_term(template_topic_query_mt(tmplt_topic));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_27, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_26, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$templateQueryMt);
+                            }
+                            if (NIL != template_topic_definitional_mt(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_28 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_29 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$templateDefinitionalMt, NIL, NIL);
+                                        cycml.cycml_serialize_term(template_topic_definitional_mt(tmplt_topic));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_29, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_28, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$templateDefinitionalMt);
+                            }
+                            if (NIL != template_topic_templates(tmplt_topic)) {
+                                {
+                                    SubLObject _prev_bind_0_30 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_31 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$formulaTemplates, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = template_topic_templates(tmplt_topic);
+                                            SubLObject ftemplate = NIL;
+                                            for (ftemplate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ftemplate = cdolist_list_var.first()) {
+                                                if (NIL != valid_formula_template_p(ftemplate)) {
+                                                    xml_serialize_formula_template(ftemplate, stream);
+                                                }
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_31, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_30, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$formulaTemplates);
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_3, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$templateTopic);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return tmplt_topic;
+        }
     }
 
     public static SubLObject xml_serialize_template_topic(final SubLObject tmplt_topic, SubLObject stream) {
@@ -1996,7 +3229,7 @@ public final class formula_templates extends SubLTranslatedFile {
             stream = xml_vars.$xml_stream$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != template_topic_p(tmplt_topic) : "formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) " + tmplt_topic;
+        assert NIL != template_topic_p(tmplt_topic) : "! formula_templates.template_topic_p(tmplt_topic) " + ("formula_templates.template_topic_p(tmplt_topic) " + "CommonSymbols.NIL != formula_templates.template_topic_p(tmplt_topic) ") + tmplt_topic;
         final SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
         try {
             xml_vars.$xml_stream$.bind(stream, thread);
@@ -2588,8 +3821,35 @@ public final class formula_templates extends SubLTranslatedFile {
         return tmplt_topic;
     }
 
+    public static final SubLObject cfasl_output_object_template_topic_method_alt(SubLObject v_object, SubLObject stream) {
+        return cfasl_output_template_topic(v_object, stream);
+    }
+
     public static SubLObject cfasl_output_object_template_topic_method(final SubLObject v_object, final SubLObject stream) {
         return cfasl_output_template_topic(v_object, stream);
+    }
+
+    public static final SubLObject cfasl_output_template_topic_alt(SubLObject tmplt_topic, SubLObject stream) {
+        write_cfasl_guid_denoted_type_opcode(stream, $cfasl_guid_opcode_template_topic$.getGlobalValue());
+        cfasl_output(template_topic_topic(tmplt_topic), stream);
+        {
+            SubLObject parent_topic = (NIL != template_topic_p(template_topic_supertopic(tmplt_topic))) ? ((SubLObject) (template_topic_topic(template_topic_supertopic(tmplt_topic)))) : NIL;
+            cfasl_output(parent_topic, stream);
+        }
+        cfasl_output(template_topic_title(tmplt_topic), stream);
+        cfasl_output(template_topic_term_prefix(tmplt_topic), stream);
+        cfasl_output(template_topic_intro_template(tmplt_topic), stream);
+        cfasl_output(template_topic_subtopics(tmplt_topic), stream);
+        cfasl_output(template_topic_source_types(tmplt_topic), stream);
+        cfasl_output(template_topic_source_mt(tmplt_topic), stream);
+        cfasl_output(template_topic_query_mt(tmplt_topic), stream);
+        cfasl_output(template_topic_definitional_mt(tmplt_topic), stream);
+        {
+            SubLObject ftemplates = copy_list(template_topic_templates(tmplt_topic));
+            SubLObject valid_ftemplates = list_utilities.remove_if_not(VALID_FORMULA_TEMPLATE_P, ftemplates, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            cfasl_output(valid_ftemplates, stream);
+        }
+        return tmplt_topic;
     }
 
     public static SubLObject cfasl_output_template_topic(final SubLObject tmplt_topic, final SubLObject stream) {
@@ -2609,6 +3869,39 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject valid_ftemplates = list_utilities.remove_if_not(VALID_FORMULA_TEMPLATE_P, ftemplates, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         cfasl_output(valid_ftemplates, stream);
         return tmplt_topic;
+    }
+
+    public static final SubLObject cfasl_input_template_topic_alt(SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject tmplt_topic = make_template_topic(UNPROVIDED);
+                _csetf_template_topic_topic(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_supertopic(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_title(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_term_prefix(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_intro_template(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_subtopics(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_source_types(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_source_mt(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_query_mt(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_definitional_mt(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                _csetf_template_topic_templates(tmplt_topic, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                {
+                    SubLObject cdolist_list_var = template_topic_subtopics(tmplt_topic);
+                    SubLObject subtopic = NIL;
+                    for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (template_topic_supertopic(subtopic) != template_topic_topic(tmplt_topic)) {
+                                Errors.error($str_alt185$CFASL_INPUT_TEMPLATE_TOPIC_has_lo, template_topic_supertopic(subtopic), template_topic_topic(tmplt_topic));
+                            }
+                        }
+                        _csetf_template_topic_supertopic(subtopic, tmplt_topic);
+                    }
+                }
+                return tmplt_topic;
+            }
+        }
     }
 
     public static SubLObject cfasl_input_template_topic(final SubLObject stream) {
@@ -2639,6 +3932,23 @@ public final class formula_templates extends SubLTranslatedFile {
         return tmplt_topic;
     }
 
+    public static final SubLObject new_formula_template_alt(SubLObject identifier, SubLObject topic) {
+        if (topic == UNPROVIDED) {
+            topic = NIL;
+        }
+        {
+            SubLObject ftemplate = make_formula_template(UNPROVIDED);
+            _csetf_formula_template_id(ftemplate, identifier);
+            if (NIL != template_topic_p(topic)) {
+                template_topic_add_template(topic, ftemplate);
+            } else {
+                _csetf_formula_template_topic(ftemplate, topic);
+            }
+            _csetf_formula_template_argpos_details(ftemplate, dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED));
+            return ftemplate;
+        }
+    }
+
     public static SubLObject new_formula_template(final SubLObject identifier, SubLObject topic) {
         if (topic == UNPROVIDED) {
             topic = NIL;
@@ -2654,16 +3964,86 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject formula_template_is_single_entryP_alt(SubLObject ftemplate) {
+        return eq($$SingleAssertionEntry, formula_template_entry_format(ftemplate));
+    }
+
     public static SubLObject formula_template_is_single_entryP(final SubLObject ftemplate) {
         return eq($$SingleAssertionEntry, formula_template_entry_format(ftemplate));
+    }
+
+    public static final SubLObject formula_template_is_multiple_entryP_alt(SubLObject ftemplate) {
+        return eq($$MultipleAssertionEntry, formula_template_entry_format(ftemplate));
     }
 
     public static SubLObject formula_template_is_multiple_entryP(final SubLObject ftemplate) {
         return eq($$MultipleAssertionEntry, formula_template_entry_format(ftemplate));
     }
 
+    public static final SubLObject formula_template_has_reformulation_specificationP_alt(SubLObject ftemplate) {
+        return list_utilities.sublisp_boolean(formula_template_refspec(ftemplate));
+    }
+
     public static SubLObject formula_template_has_reformulation_specificationP(final SubLObject ftemplate) {
         return list_utilities.sublisp_boolean(formula_template_refspec(ftemplate));
+    }
+
+    public static final SubLObject print_formula_template_alt(SubLObject ftemplate, SubLObject stream, SubLObject depth) {
+        write_string($str_alt188$_Formula_Template__, stream, UNPROVIDED, UNPROVIDED);
+        format(stream, $str_alt189$_A_, formula_template_id(ftemplate));
+        if (NIL != template_topic_p(formula_template_topic(ftemplate))) {
+            format(stream, $str_alt190$of_topic__A__, template_topic_topic(formula_template_topic(ftemplate)));
+        } else {
+            terpri(stream);
+        }
+        string_utilities.indent(stream, depth);
+        if (NIL != formula_template_formula(ftemplate)) {
+            format(stream, $str_alt191$_formula__A_in__A__, formula_template_formula(ftemplate), formula_template_elmt(ftemplate));
+        } else {
+            format(stream, $str_alt192$_query_spec__A_in__A__, formula_template_query_specification(ftemplate), formula_template_elmt(ftemplate));
+        }
+        string_utilities.indent(stream, depth);
+        if (NIL != formula_template_focal_term(ftemplate)) {
+            if (NIL != list_utilities.singletonP(formula_template_focal_term(ftemplate))) {
+                format(stream, $str_alt193$_focal_term__A___A___, formula_template_focal_term(ftemplate).first(), formula_template_entry_format(ftemplate));
+            } else {
+                format(stream, $str_alt194$_focal_term_occurrences__A___A___, formula_template_focal_term(ftemplate), formula_template_entry_format(ftemplate));
+            }
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != formula_template_examples(ftemplate)) {
+            format(stream, $str_alt195$_examples___A__, formula_template_examples(ftemplate));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != formula_template_follow_ups(ftemplate)) {
+            format(stream, $str_alt196$_follow_ups___A__, formula_template_follow_ups(ftemplate));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != formula_template_gloss(ftemplate)) {
+            format(stream, $str_alt197$_template_gloss___A__, formula_template_gloss(ftemplate));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != formula_template_refspec(ftemplate)) {
+            format(stream, $str_alt198$_reformulation_specification___A_, formula_template_refspec(ftemplate));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != formula_template_argpos_details(ftemplate)) {
+            write_string($str_alt199$_argpos_details__, stream, UNPROVIDED, UNPROVIDED);
+            if (NIL == formula_template_argpos_ordering(ftemplate)) {
+                princ(formula_template_argpos_details(ftemplate), stream);
+            } else {
+                {
+                    SubLObject cdolist_list_var = formula_template_argpos_ordering(ftemplate);
+                    SubLObject argpos_detail = NIL;
+                    for (argpos_detail = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argpos_detail = cdolist_list_var.first()) {
+                        print_arg_position_details(argpos_detail, stream, add(depth, ONE_INTEGER));
+                        princ($str_alt200$_, stream);
+                    }
+                }
+            }
+        }
+        write_string($str_alt166$_, stream, UNPROVIDED, UNPROVIDED);
+        return ftemplate;
     }
 
     public static SubLObject print_formula_template(final SubLObject ftemplate, final SubLObject stream, final SubLObject depth) {
@@ -2725,53 +4105,479 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_formula(final SubLObject ftemplate, final SubLObject formula) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != el_formula_p(formula) : "el_utilities.el_formula_p(formula) " + "CommonSymbols.NIL != el_utilities.el_formula_p(formula) " + formula;
+    public static final SubLObject formula_template_set_formula_alt(SubLObject ftemplate, SubLObject formula) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(formula, EL_FORMULA_P);
         _csetf_formula_template_formula(ftemplate, formula);
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_examples(final SubLObject ftemplate, final SubLObject examples) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != listp(examples) : "Types.listp(examples) " + "CommonSymbols.NIL != Types.listp(examples) " + examples;
+    public static SubLObject formula_template_set_formula(final SubLObject ftemplate, final SubLObject formula) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != el_formula_p(formula) : "! el_utilities.el_formula_p(formula) " + ("el_utilities.el_formula_p(formula) " + "CommonSymbols.NIL != el_utilities.el_formula_p(formula) ") + formula;
+        _csetf_formula_template_formula(ftemplate, formula);
+        return ftemplate;
+    }
+
+    public static final SubLObject formula_template_set_examples_alt(SubLObject ftemplate, SubLObject examples) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(examples, LISTP);
         _csetf_formula_template_examples(ftemplate, examples);
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_focal_term(final SubLObject ftemplate, final SubLObject focal_term) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != forts.fort_p(focal_term) : "forts.fort_p(focal_term) " + "CommonSymbols.NIL != forts.fort_p(focal_term) " + focal_term;
+    public static SubLObject formula_template_set_examples(final SubLObject ftemplate, final SubLObject examples) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != listp(examples) : "! listp(examples) " + ("Types.listp(examples) " + "CommonSymbols.NIL != Types.listp(examples) ") + examples;
+        _csetf_formula_template_examples(ftemplate, examples);
+        return ftemplate;
+    }
+
+    public static final SubLObject formula_template_set_focal_term_alt(SubLObject ftemplate, SubLObject focal_term) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(focal_term, FORT_P);
         _csetf_formula_template_focal_term(ftemplate, focal_term);
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_elmt(final SubLObject ftemplate, final SubLObject elmt) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != fort_types_interface.isa_mtP(elmt, UNPROVIDED) : "fort_types_interface.isa_mtP(elmt, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != fort_types_interface.isa_mtP(elmt, CommonSymbols.UNPROVIDED) " + elmt;
+    public static SubLObject formula_template_set_focal_term(final SubLObject ftemplate, final SubLObject focal_term) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != forts.fort_p(focal_term) : "! forts.fort_p(focal_term) " + ("forts.fort_p(focal_term) " + "CommonSymbols.NIL != forts.fort_p(focal_term) ") + focal_term;
+        _csetf_formula_template_focal_term(ftemplate, focal_term);
+        return ftemplate;
+    }
+
+    public static final SubLObject formula_template_set_elmt_alt(SubLObject ftemplate, SubLObject elmt) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(elmt, $sym202$ISA_MT_);
         _csetf_formula_template_elmt(ftemplate, elmt);
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_entry_format(final SubLObject ftemplate, final SubLObject entry_format) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != constant_p(entry_format) : "constant_handles.constant_p(entry_format) " + "CommonSymbols.NIL != constant_handles.constant_p(entry_format) " + entry_format;
+    public static SubLObject formula_template_set_elmt(final SubLObject ftemplate, final SubLObject elmt) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != fort_types_interface.isa_mtP(elmt, UNPROVIDED) : "! fort_types_interface.isa_mtP(elmt, .UNPROVIDED) " + ("fort_types_interface.isa_mtP(elmt, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != fort_types_interface.isa_mtP(elmt, CommonSymbols.UNPROVIDED) ") + elmt;
+        _csetf_formula_template_elmt(ftemplate, elmt);
+        return ftemplate;
+    }
+
+    public static final SubLObject formula_template_set_entry_format_alt(SubLObject ftemplate, SubLObject entry_format) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(entry_format, CONSTANT_P);
         _csetf_formula_template_entry_format(ftemplate, entry_format);
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_gloss(final SubLObject ftemplate, final SubLObject gloss) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != stringp(gloss) : "Types.stringp(gloss) " + "CommonSymbols.NIL != Types.stringp(gloss) " + gloss;
+    public static SubLObject formula_template_set_entry_format(final SubLObject ftemplate, final SubLObject entry_format) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != constant_p(entry_format) : "! constant_handles.constant_p(entry_format) " + ("constant_handles.constant_p(entry_format) " + "CommonSymbols.NIL != constant_handles.constant_p(entry_format) ") + entry_format;
+        _csetf_formula_template_entry_format(ftemplate, entry_format);
+        return ftemplate;
+    }
+
+    public static final SubLObject formula_template_set_gloss_alt(SubLObject ftemplate, SubLObject gloss) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(gloss, STRINGP);
         _csetf_formula_template_gloss(ftemplate, gloss);
         return ftemplate;
     }
 
-    public static SubLObject formula_template_set_query_specification(final SubLObject ftemplate, final SubLObject spec) {
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != new_cycl_query_specification.new_cycl_query_specification_p(spec) : "new_cycl_query_specification.new_cycl_query_specification_p(spec) " + "CommonSymbols.NIL != new_cycl_query_specification.new_cycl_query_specification_p(spec) " + spec;
+    public static SubLObject formula_template_set_gloss(final SubLObject ftemplate, final SubLObject gloss) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != stringp(gloss) : "! stringp(gloss) " + ("Types.stringp(gloss) " + "CommonSymbols.NIL != Types.stringp(gloss) ") + gloss;
+        _csetf_formula_template_gloss(ftemplate, gloss);
+        return ftemplate;
+    }
+
+    public static final SubLObject formula_template_set_query_specification_alt(SubLObject ftemplate, SubLObject spec) {
+        SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+        SubLTrampolineFile.checkType(spec, NEW_CYCL_QUERY_SPECIFICATION_P);
         _csetf_formula_template_query_specification(ftemplate, spec);
         return ftemplate;
+    }
+
+    public static SubLObject formula_template_set_query_specification(final SubLObject ftemplate, final SubLObject spec) {
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != new_cycl_query_specification.new_cycl_query_specification_p(spec) : "! new_cycl_query_specification.new_cycl_query_specification_p(spec) " + ("new_cycl_query_specification.new_cycl_query_specification_p(spec) " + "CommonSymbols.NIL != new_cycl_query_specification.new_cycl_query_specification_p(spec) ") + spec;
+        _csetf_formula_template_query_specification(ftemplate, spec);
+        return ftemplate;
+    }
+
+    public static final SubLObject xml_serialize_formula_template_alt(SubLObject ftemplate, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_32 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$formulaTemplate, NIL, NIL);
+                            {
+                                SubLObject _prev_bind_0_33 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_34 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$id, NIL, NIL);
+                                    cycml.cycml_serialize_term(formula_template_id(ftemplate));
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_34, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_33, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$id);
+                            if (NIL != formula_template_formula(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_35 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_36 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$formula, NIL, NIL);
+                                        cycml.cycml_serialize_el_formula(formula_template_formula(ftemplate));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_36, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_35, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$formula);
+                            }
+                            {
+                                SubLObject query_spec = formula_template_query_specification(ftemplate);
+                                if ((NIL != query_spec) && (NIL != cycl_grammar.cycl_sentence_p(possibly_unquote(new_cycl_query_specification.new_cycl_query_specification_formula(query_spec))))) {
+                                    new_cycl_query_specification.xml_serialize_new_cycl_query_specification(query_spec, UNPROVIDED);
+                                }
+                            }
+                            {
+                                SubLObject _prev_bind_0_37 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_38 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$elmt, NIL, NIL);
+                                    cycml.cycml_serialize_term(formula_template_elmt(ftemplate));
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_38, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_37, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$elmt);
+                            if (NIL != formula_template_focal_term(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_39 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_40 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$focalTerm, NIL, NIL);
+                                        if (NIL != list_utilities.singletonP(formula_template_focal_term(ftemplate))) {
+                                            xml_serialize_arg_position(formula_template_focal_term(ftemplate).first(), UNPROVIDED);
+                                        } else {
+                                            {
+                                                SubLObject _prev_bind_0_41 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                SubLObject _prev_bind_1_42 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                try {
+                                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                    xml_utilities.xml_start_tag_internal($$$argPositions, NIL, NIL);
+                                                    {
+                                                        SubLObject cdolist_list_var = formula_template_focal_term(ftemplate);
+                                                        SubLObject focus = NIL;
+                                                        for (focus = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , focus = cdolist_list_var.first()) {
+                                                            xml_serialize_arg_position(focus, UNPROVIDED);
+                                                        }
+                                                    }
+                                                } finally {
+                                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_42, thread);
+                                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_41, thread);
+                                                }
+                                            }
+                                            xml_utilities.xml_terpri();
+                                            xml_utilities.xml_end_tag_internal($$$argPositions);
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_40, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_39, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$focalTerm);
+                            }
+                            if (NIL != formula_template_is_single_entryP(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_43 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_44 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$singleEntry, NIL, $ATOMIC);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_44, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_43, thread);
+                                    }
+                                }
+                                if (false) {
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($$$singleEntry);
+                                }
+                            } else {
+                                {
+                                    SubLObject _prev_bind_0_45 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_46 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$multipleEntry, NIL, $ATOMIC);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_46, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_45, thread);
+                                    }
+                                }
+                                if (false) {
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($$$multipleEntry);
+                                }
+                            }
+                            if (NIL != formula_template_examples(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_47 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_48 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$usageExamples, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = formula_template_examples(ftemplate);
+                                            SubLObject example = NIL;
+                                            for (example = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , example = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_49 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_50 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$example, NIL, NIL);
+                                                        cycml.cycml_serialize_el_formula(example);
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_50, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_49, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$example);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_48, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_47, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$usageExamples);
+                            }
+                            if (NIL != formula_template_gloss(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_51 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_52 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$glossForTemplate, NIL, NIL);
+                                        xml_utilities.xml_write(formula_template_gloss(ftemplate), UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_52, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_51, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$glossForTemplate);
+                            }
+                            if (NIL != formula_template_follow_ups(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_53 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_54 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$followUps, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = formula_template_follow_ups(ftemplate);
+                                            SubLObject follow_up = NIL;
+                                            for (follow_up = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , follow_up = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_55 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_56 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$followUp, NIL, NIL);
+                                                        {
+                                                            SubLObject datum = follow_up;
+                                                            SubLObject current = datum;
+                                                            SubLObject v_term = NIL;
+                                                            SubLObject connective = NIL;
+                                                            SubLObject load_mt = NIL;
+                                                            destructuring_bind_must_consp(current, datum, $list_alt219);
+                                                            v_term = current.first();
+                                                            current = current.rest();
+                                                            destructuring_bind_must_consp(current, datum, $list_alt219);
+                                                            connective = current.first();
+                                                            current = current.rest();
+                                                            destructuring_bind_must_consp(current, datum, $list_alt219);
+                                                            load_mt = current.first();
+                                                            current = current.rest();
+                                                            if (NIL == current) {
+                                                                {
+                                                                    SubLObject _prev_bind_0_57 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_58 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                    try {
+                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                        xml_utilities.xml_start_tag_internal($$$templateId, NIL, NIL);
+                                                                        cycml.cycml_serialize_term(v_term);
+                                                                    } finally {
+                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_58, thread);
+                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_57, thread);
+                                                                    }
+                                                                }
+                                                                xml_utilities.xml_terpri();
+                                                                xml_utilities.xml_end_tag_internal($$$templateId);
+                                                                {
+                                                                    SubLObject _prev_bind_0_59 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_60 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                    try {
+                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                        xml_utilities.xml_start_tag_internal($$$connective, NIL, NIL);
+                                                                        cycml.cycml_serialize_term(connective);
+                                                                    } finally {
+                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_60, thread);
+                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_59, thread);
+                                                                    }
+                                                                }
+                                                                xml_utilities.xml_terpri();
+                                                                xml_utilities.xml_end_tag_internal($$$connective);
+                                                                {
+                                                                    SubLObject _prev_bind_0_61 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_62 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                    try {
+                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                        xml_utilities.xml_start_tag_internal($$$loadMt, NIL, NIL);
+                                                                        cycml.cycml_serialize_term(load_mt);
+                                                                    } finally {
+                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_62, thread);
+                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_61, thread);
+                                                                    }
+                                                                }
+                                                                xml_utilities.xml_terpri();
+                                                                xml_utilities.xml_end_tag_internal($$$loadMt);
+                                                            } else {
+                                                                cdestructuring_bind_error(datum, $list_alt219);
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_56, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_55, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$followUp);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_54, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_53, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$followUps);
+                            }
+                            if (NIL != formula_template_refspec(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_63 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_64 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$reformulationSpecification, NIL, NIL);
+                                        cycml.cycml_serialize_term(formula_template_refspec(ftemplate));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_64, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_63, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$reformulationSpecification);
+                            }
+                            if (NIL != formula_template_argpos_details(ftemplate)) {
+                                {
+                                    SubLObject _prev_bind_0_65 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_66 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$argumentPositionDetails, NIL, NIL);
+                                        if (NIL != formula_template_argpos_ordering(ftemplate)) {
+                                            {
+                                                SubLObject cdolist_list_var = formula_template_argpos_ordering(ftemplate);
+                                                SubLObject argpos_details = NIL;
+                                                for (argpos_details = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argpos_details = cdolist_list_var.first()) {
+                                                    if (NIL != valid_arg_position_details_p(argpos_details)) {
+                                                        xml_serialize_arg_position_details(argpos_details, UNPROVIDED);
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            {
+                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(formula_template_argpos_details(ftemplate)));
+                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                    thread.resetMultipleValues();
+                                                    {
+                                                        SubLObject argpos = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                        SubLObject argpos_details = thread.secondMultipleValue();
+                                                        thread.resetMultipleValues();
+                                                        if (NIL != valid_arg_position_details_p(argpos_details)) {
+                                                            xml_serialize_arg_position_details(argpos_details, UNPROVIDED);
+                                                        }
+                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                    }
+                                                } 
+                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_66, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_65, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$argumentPositionDetails);
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_32, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$formulaTemplate);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return ftemplate;
+        }
     }
 
     public static SubLObject xml_serialize_formula_template(final SubLObject ftemplate, SubLObject stream) {
@@ -3512,6 +5318,15 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject xml_serialize_formula_template_as_document_alt(SubLObject ftemplate, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        xml_serialize_formula_template_header(stream);
+        xml_serialize_formula_template(ftemplate, stream);
+        return ftemplate;
+    }
+
     public static SubLObject xml_serialize_formula_template_as_document(final SubLObject ftemplate, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -3523,6 +5338,27 @@ public final class formula_templates extends SubLTranslatedFile {
 
     public static SubLObject formula_template_dtd_uri() {
         return $formula_template_dtd_uri$.getGlobalValue();
+    }
+
+    public static final SubLObject xml_serialize_formula_template_header_alt(SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    princ($str_alt225$__xml_version__1_0__encoding__US_, xml_vars.$xml_stream$.getDynamicValue(thread));
+                    terpri(xml_vars.$xml_stream$.getDynamicValue(thread));
+                    princ($str_alt226$__DOCTYPE_formulaTemplate_SYSTEM_, xml_vars.$xml_stream$.getDynamicValue(thread));
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject xml_serialize_formula_template_header(SubLObject stream) {
@@ -3542,8 +5378,36 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cfasl_output_object_formula_template_method_alt(SubLObject v_object, SubLObject stream) {
+        return cfasl_output_formula_template(v_object, stream);
+    }
+
     public static SubLObject cfasl_output_object_formula_template_method(final SubLObject v_object, final SubLObject stream) {
         return cfasl_output_formula_template(v_object, stream);
+    }
+
+    public static final SubLObject cfasl_output_formula_template_alt(SubLObject ftemplate, SubLObject stream) {
+        write_cfasl_guid_denoted_type_opcode(stream, $cfasl_guid_opcode_formula_template$.getGlobalValue());
+        cfasl_output(formula_template_id(ftemplate), stream);
+        cfasl_output(formula_template_formula(ftemplate), stream);
+        cfasl_output(formula_template_query_specification(ftemplate), stream);
+        cfasl_output(formula_template_elmt(ftemplate), stream);
+        cfasl_output(formula_template_focal_term(ftemplate), stream);
+        cfasl_output(formula_template_entry_format(ftemplate), stream);
+        cfasl_output(formula_template_examples(ftemplate), stream);
+        cfasl_output(formula_template_gloss(ftemplate), stream);
+        cfasl_output(formula_template_follow_ups(ftemplate), stream);
+        cfasl_output(formula_template_refspec(ftemplate), stream);
+        if (NIL == formula_template_argpos_ordering(ftemplate)) {
+            cfasl_output(NIL, stream);
+        } else {
+            {
+                SubLObject argpos_ordering_keys = Mapping.mapcar(ARG_POSITION_DETAILS_ARGUMENT_POSITION, formula_template_argpos_ordering(ftemplate));
+                cfasl_output(argpos_ordering_keys, stream);
+            }
+        }
+        cfasl_output(formula_template_argpos_details(ftemplate), stream);
+        return ftemplate;
     }
 
     public static SubLObject cfasl_output_formula_template(final SubLObject ftemplate, final SubLObject stream) {
@@ -3566,6 +5430,39 @@ public final class formula_templates extends SubLTranslatedFile {
         }
         cfasl_output(formula_template_argpos_details(ftemplate), stream);
         return ftemplate;
+    }
+
+    public static final SubLObject cfasl_input_formula_template_alt(SubLObject stream) {
+        {
+            SubLObject ftemplate = make_formula_template(UNPROVIDED);
+            _csetf_formula_template_id(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_formula(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_query_specification(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_elmt(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_focal_term(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_entry_format(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_examples(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_gloss(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_follow_ups(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_formula_template_refspec(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            {
+                SubLObject argpos_ordering_keys = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
+                SubLObject ordering = NIL;
+                _csetf_formula_template_argpos_details(ftemplate, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+                {
+                    SubLObject cdolist_list_var = argpos_ordering_keys;
+                    SubLObject argpos_key = NIL;
+                    for (argpos_key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argpos_key = cdolist_list_var.first()) {
+                        {
+                            SubLObject argpos_detail = dictionary.dictionary_lookup(formula_template_argpos_details(ftemplate), argpos_key, UNPROVIDED);
+                            ordering = cons(argpos_detail, ordering);
+                        }
+                    }
+                }
+                _csetf_formula_template_argpos_ordering(ftemplate, nreverse(ordering));
+            }
+            return ftemplate;
+        }
     }
 
     public static SubLObject cfasl_input_formula_template(final SubLObject stream) {
@@ -3596,14 +5493,81 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject new_arg_position_details_alt(SubLObject argpos) {
+        {
+            SubLObject argpos_details = make_arg_position_details(UNPROVIDED);
+            _csetf_arg_position_details_argument_position(argpos_details, argpos);
+            return argpos_details;
+        }
+    }
+
     public static SubLObject new_arg_position_details(final SubLObject argpos) {
         final SubLObject argpos_details = make_arg_position_details(UNPROVIDED);
         _csetf_arg_position_details_argument_position(argpos_details, argpos);
         return argpos_details;
     }
 
+    /**
+     *
+     *
+     * @unknown this needs to be fixed in OE
+     */
+    @LispMethod(comment = "@unknown this needs to be fixed in OE")
+    public static final SubLObject valid_arg_position_details_p_alt(SubLObject argpos) {
+        return makeBoolean((NIL != arg_position_details_p(argpos)) && (((NIL != arg_position_details_candidate_replacements(argpos)) || (NIL != arg_position_details_replacement_constraints(argpos))) || (NIL != arg_position_details_gloss(argpos))));
+    }
+
+    /**
+     *
+     *
+     * @unknown this needs to be fixed in OE
+     */
+    @LispMethod(comment = "@unknown this needs to be fixed in OE")
     public static SubLObject valid_arg_position_details_p(final SubLObject argpos) {
         return makeBoolean((NIL != arg_position_details_p(argpos)) && (((NIL != arg_position_details_candidate_replacements(argpos)) || (NIL != arg_position_details_replacement_constraints(argpos))) || (NIL != arg_position_details_gloss(argpos))));
+    }
+
+    public static final SubLObject print_arg_position_details_alt(SubLObject argpos_details, SubLObject stream, SubLObject depth) {
+        write_string($str_alt228$__ArgPos_Details__, stream, UNPROVIDED, UNPROVIDED);
+        format(stream, $str_alt229$_for_position__A_, arg_position_details_argument_position(argpos_details));
+        if (arg_position_details_ordering(argpos_details).isFixnum()) {
+            format(stream, $str_alt230$__ordering_slot__D_, arg_position_details_ordering(argpos_details));
+        } else {
+            write_string($str_alt231$__no_ordering_info_, stream, UNPROVIDED, UNPROVIDED);
+        }
+        if (NIL == arg_position_details_is_editable(argpos_details)) {
+            write_string($str_alt232$_READ_ONLY, stream, UNPROVIDED, UNPROVIDED);
+        }
+        terpri(stream);
+        if (NIL != arg_position_details_gloss(argpos_details)) {
+            format(stream, $str_alt233$_gloss___A__, arg_position_details_gloss(argpos_details));
+        }
+        if (NIL != arg_position_details_invisible_replacement_positions(argpos_details)) {
+            format(stream, $str_alt234$_replacementInvisible___A__, arg_position_details_invisible_replacement_positions(argpos_details));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != arg_position_details_replacement_constraints(argpos_details)) {
+            format(stream, $str_alt235$_candidate_replacements___A__, arg_position_details_candidate_replacements(argpos_details));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != arg_position_details_replacement_constraints(argpos_details)) {
+            format(stream, $str_alt236$_constraints___A__, arg_position_details_replacement_constraints(argpos_details));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != arg_position_details_requires_validation(argpos_details)) {
+            format(stream, $str_alt237$__requires_validation____);
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != arg_position_details_explanation(argpos_details)) {
+            format(stream, $str_alt238$_explanation___A__, arg_position_details_explanation(argpos_details));
+            string_utilities.indent(stream, depth);
+        }
+        if (NIL != arg_position_details_unknown_replacement(argpos_details)) {
+            format(stream, $str_alt239$_term_for_unknown___A__, arg_position_details_unknown_replacement(argpos_details));
+            string_utilities.indent(stream, depth);
+        }
+        write_string($str_alt166$_, stream, UNPROVIDED, UNPROVIDED);
+        return argpos_details;
     }
 
     public static SubLObject print_arg_position_details(final SubLObject argpos_details, final SubLObject stream, final SubLObject depth) {
@@ -3647,6 +5611,235 @@ public final class formula_templates extends SubLTranslatedFile {
         }
         write_string($str178$_, stream, UNPROVIDED, UNPROVIDED);
         return argpos_details;
+    }
+
+    public static final SubLObject xml_serialize_arg_position_details_alt(SubLObject argpos_details, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_67 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$argumentPositionDetail, NIL, NIL);
+                            xml_serialize_arg_position(arg_position_details_argument_position(argpos_details), UNPROVIDED);
+                            if (arg_position_details_ordering(argpos_details).isFixnum()) {
+                                {
+                                    SubLObject _prev_bind_0_68 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_69 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$ordering, NIL, NIL);
+                                        xml_utilities.xml_prin1(arg_position_details_ordering(argpos_details), UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_69, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_68, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$ordering);
+                            }
+                            if (arg_position_details_gloss(argpos_details).isString()) {
+                                {
+                                    SubLObject _prev_bind_0_70 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_71 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$glossText, NIL, NIL);
+                                        xml_utilities.xml_write_string(arg_position_details_gloss(argpos_details), UNPROVIDED, UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_71, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_70, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$glossText);
+                            }
+                            if (NIL != arg_position_details_candidate_replacements(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_72 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_73 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$candidateReplacementsForPosition, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = arg_position_details_candidate_replacements(argpos_details);
+                                            SubLObject candidate = NIL;
+                                            for (candidate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_74 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_75 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$candidateReplacementForPosition, NIL, NIL);
+                                                        cycml.cycml_serialize_term(candidate);
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_75, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_74, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$candidateReplacementForPosition);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_73, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_72, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$candidateReplacementsForPosition);
+                            }
+                            if (NIL != arg_position_details_invisible_replacement_positions(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_76 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_77 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($str_alt245$templateReplacementsInvisibleForP, NIL, $ATOMIC);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_77, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_76, thread);
+                                    }
+                                }
+                                if (false) {
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($str_alt245$templateReplacementsInvisibleForP);
+                                }
+                            }
+                            if (NIL != arg_position_details_is_editable(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_78 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_79 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$isEditable, NIL, $ATOMIC);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_79, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_78, thread);
+                                    }
+                                }
+                                if (false) {
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($$$isEditable);
+                                }
+                            }
+                            if (NIL != arg_position_details_requires_validation(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_80 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_81 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$validationRequired, NIL, $ATOMIC);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_81, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_80, thread);
+                                    }
+                                }
+                                if (false) {
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($$$validationRequired);
+                                }
+                            }
+                            if (NIL != arg_position_details_explanation(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_82 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_83 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$explanation, NIL, NIL);
+                                        xml_utilities.xml_write_string(arg_position_details_explanation(argpos_details), UNPROVIDED, UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_83, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_82, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$explanation);
+                            }
+                            if (NIL != arg_position_details_unknown_replacement(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_84 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_85 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$unknownTermForTemplatePosition, NIL, NIL);
+                                        cycml.cycml_serialize_term(arg_position_details_unknown_replacement(argpos_details));
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_85, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_84, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$unknownTermForTemplatePosition);
+                            }
+                            if (NIL != arg_position_details_replacement_constraints(argpos_details)) {
+                                {
+                                    SubLObject _prev_bind_0_86 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_87 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$constraintsOnReplacement, NIL, NIL);
+                                        {
+                                            SubLObject cdolist_list_var = arg_position_details_replacement_constraints(argpos_details);
+                                            SubLObject constraint = NIL;
+                                            for (constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constraint = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_88 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_89 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$constraintOnReplacement, NIL, NIL);
+                                                        cycml.cycml_serialize_term(constraint);
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_89, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_88, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$constraintOnReplacement);
+                                            }
+                                        }
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_87, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_86, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$constraintsOnReplacement);
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_67, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$argumentPositionDetail);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return argpos_details;
+        }
     }
 
     public static SubLObject xml_serialize_arg_position_details(final SubLObject argpos_details, SubLObject stream) {
@@ -4116,8 +6309,27 @@ public final class formula_templates extends SubLTranslatedFile {
         return argpos_details;
     }
 
+    public static final SubLObject cfasl_output_object_arg_position_details_method_alt(SubLObject v_object, SubLObject stream) {
+        return cfasl_output_arg_position_details(v_object, stream);
+    }
+
     public static SubLObject cfasl_output_object_arg_position_details_method(final SubLObject v_object, final SubLObject stream) {
         return cfasl_output_arg_position_details(v_object, stream);
+    }
+
+    public static final SubLObject cfasl_output_arg_position_details_alt(SubLObject argpos_details, SubLObject stream) {
+        write_cfasl_guid_denoted_type_opcode(stream, $cfasl_guid_opcode_arg_position_details$.getGlobalValue());
+        cfasl_output(arg_position_details_argument_position(argpos_details), stream);
+        cfasl_output(arg_position_details_ordering(argpos_details), stream);
+        cfasl_output(arg_position_details_gloss(argpos_details), stream);
+        cfasl_output(arg_position_details_candidate_replacements(argpos_details), stream);
+        cfasl_output(arg_position_details_invisible_replacement_positions(argpos_details), stream);
+        cfasl_output(arg_position_details_is_editable(argpos_details), stream);
+        cfasl_output(arg_position_details_requires_validation(argpos_details), stream);
+        cfasl_output(arg_position_details_explanation(argpos_details), stream);
+        cfasl_output(arg_position_details_unknown_replacement(argpos_details), stream);
+        cfasl_output(arg_position_details_replacement_constraints(argpos_details), stream);
+        return argpos_details;
     }
 
     public static SubLObject cfasl_output_arg_position_details(final SubLObject argpos_details, final SubLObject stream) {
@@ -4135,6 +6347,23 @@ public final class formula_templates extends SubLTranslatedFile {
         return argpos_details;
     }
 
+    public static final SubLObject cfasl_input_arg_position_details_alt(SubLObject stream) {
+        {
+            SubLObject argpos_details = make_arg_position_details(UNPROVIDED);
+            _csetf_arg_position_details_argument_position(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_ordering(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_gloss(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_candidate_replacements(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_invisible_replacement_positions(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_is_editable(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_requires_validation(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_explanation(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_unknown_replacement(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            _csetf_arg_position_details_replacement_constraints(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
+            return argpos_details;
+        }
+    }
+
     public static SubLObject cfasl_input_arg_position_details(final SubLObject stream) {
         final SubLObject argpos_details = make_arg_position_details(UNPROVIDED);
         _csetf_arg_position_details_argument_position(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
@@ -4148,6 +6377,59 @@ public final class formula_templates extends SubLTranslatedFile {
         _csetf_arg_position_details_unknown_replacement(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
         _csetf_arg_position_details_replacement_constraints(argpos_details, cfasl_input(stream, UNPROVIDED, UNPROVIDED));
         return argpos_details;
+    }
+
+    public static final SubLObject xml_serialize_arg_position_alt(SubLObject position, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_90 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$argPosition, NIL, NIL);
+                            {
+                                SubLObject cdolist_list_var = position.rest();
+                                SubLObject index = NIL;
+                                for (index = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , index = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject _prev_bind_0_91 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_92 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                        try {
+                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                            xml_utilities.xml_start_tag_internal($$$position, NIL, NIL);
+                                            xml_utilities.xml_prin1(index, UNPROVIDED);
+                                        } finally {
+                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_92, thread);
+                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_91, thread);
+                                        }
+                                    }
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($$$position);
+                                }
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_90, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$argPosition);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return position;
+        }
     }
 
     public static SubLObject xml_serialize_arg_position(SubLObject position, SubLObject stream) {
@@ -4242,13 +6524,54 @@ public final class formula_templates extends SubLTranslatedFile {
         return position;
     }
 
+    /**
+     * Given a template and its role within the TOPIC ELMT tuple, load all the other details
+     * for that template and return this information.
+     */
+    @LispMethod(comment = "Given a template and its role within the TOPIC ELMT tuple, load all the other details\r\nfor that template and return this information.\nGiven a template and its role within the TOPIC ELMT tuple, load all the other details\nfor that template and return this information.")
+    public static final SubLObject formula_template_load_topic_template_details_alt(SubLObject topic_id, SubLObject ftemplate, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != topic_id) {
+                SubLTrampolineFile.checkType(topic_id, FORT_P);
+            }
+            SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+            SubLTrampolineFile.checkType(elmt, HLMT_P);
+            {
+                SubLObject template_id = formula_template_id(ftemplate);
+                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                    if (NIL == fort_p(template_id)) {
+                        Errors.error($str_alt256$Can_t_load_a_formula_template_wit, ftemplate);
+                    }
+                }
+                _csetf_formula_template_formula(ftemplate, ftemplate_get_template_formula(template_id, elmt));
+                _csetf_formula_template_elmt(ftemplate, ftemplate_get_template_elmt(template_id, elmt));
+                _csetf_formula_template_follow_ups(ftemplate, ftemplate_get_template_follow_ups(template_id, elmt));
+                _csetf_formula_template_gloss(ftemplate, ftemplate_get_template_gloss(template_id, elmt));
+                _csetf_formula_template_refspec(ftemplate, ftemplate_get_template_reformulation_specification(template_id, elmt));
+                if (NIL != fort_p(topic_id)) {
+                    _csetf_formula_template_focal_term(ftemplate, ftemplate_get_template_focal_term(template_id, topic_id, elmt));
+                    _csetf_formula_template_entry_format(ftemplate, ftemplate_get_template_format(template_id, topic_id, elmt));
+                    _csetf_formula_template_examples(ftemplate, ftemplate_get_template_examples(template_id, topic_id, elmt));
+                }
+            }
+            ftemplate_load_argument_position_detail_information(ftemplate, elmt, topic_id);
+            return ftemplate;
+        }
+    }
+
+    /**
+     * Given a template and its role within the TOPIC ELMT tuple, load all the other details
+     * for that template and return this information.
+     */
+    @LispMethod(comment = "Given a template and its role within the TOPIC ELMT tuple, load all the other details\r\nfor that template and return this information.\nGiven a template and its role within the TOPIC ELMT tuple, load all the other details\nfor that template and return this information.")
     public static SubLObject formula_template_load_topic_template_details(final SubLObject topic_id, final SubLObject ftemplate, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (((NIL != topic_id) && (!assertionsDisabledSynth)) && (NIL == forts.fort_p(topic_id))) {
             throw new AssertionError(topic_id);
         }
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
-        assert NIL != hlmt.hlmt_p(elmt) : "hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) " + elmt;
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
+        assert NIL != hlmt.hlmt_p(elmt) : "! hlmt.hlmt_p(elmt) " + ("hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) ") + elmt;
         final SubLObject template_id = formula_template_id(ftemplate);
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == forts.fort_p(template_id))) {
             Errors.error($str273$Can_t_load_a_formula_template_wit, ftemplate);
@@ -4265,6 +6588,39 @@ public final class formula_templates extends SubLTranslatedFile {
         }
         ftemplate_load_argument_position_detail_information(ftemplate, elmt, topic_id);
         return ftemplate;
+    }
+
+    public static final SubLObject ftemplate_load_argument_position_detail_information_alt(SubLObject ftemplate, SubLObject elmt, SubLObject topic_id) {
+        if (topic_id == UNPROVIDED) {
+            topic_id = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template_id = formula_template_id(ftemplate);
+                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                    if (NIL == fort_p(template_id)) {
+                        Errors.error($str_alt256$Can_t_load_a_formula_template_wit, ftemplate);
+                    }
+                }
+                if ((NIL != valid_constantP($const257$formulaTemplateHasArgumentPositio, UNPROVIDED)) && (NIL != somewhere_cache.some_pred_assertion_somewhereP($const257$formulaTemplateHasArgumentPositio, template_id, ONE_INTEGER, T))) {
+                    update_ftemplate_argpos_detail_invisible_replacement_positions(ftemplate, ftemplate_get_template_invisible_replacement_positions(template_id, topic_id, elmt));
+                    update_ftemplate_argpos_detail_replacable_positions(ftemplate, ftemplate_get_template_replacable_positions(template_id, elmt));
+                    update_ftemplate_argpos_detail_replacement_constraints(ftemplate, ftemplate_get_template_replacement_constraints(template_id, elmt));
+                    update_ftemplate_argpos_detail_candidate_replacements(ftemplate, ftemplate_get_template_candidate_replacements_for_position(template_id, elmt));
+                    if (NIL != fort_p(topic_id)) {
+                        update_ftemplate_argpos_detail_glosses(ftemplate, ftemplate_get_template_glosses(template_id, topic_id, elmt));
+                        update_ftemplate_argpos_detail_explanations(ftemplate, ftemplate_get_template_explanations(template_id, topic_id, elmt));
+                    }
+                    update_ftemplate_argpos_detail_validation_required(ftemplate, ftemplate_get_template_validation_requirements(template_id, elmt));
+                    update_ftemplate_argpos_detail_unknown_replacements(ftemplate, ftemplate_get_template_unknown_replacements(template_id, elmt));
+                    update_ftemplate_argpos_detail_ordering_information(ftemplate);
+                    if (NIL == dictionary.dictionary_empty_p(formula_template_argpos_details(ftemplate))) {
+                    }
+                }
+            }
+            return ftemplate;
+        }
     }
 
     public static SubLObject ftemplate_load_argument_position_detail_information(final SubLObject ftemplate, final SubLObject elmt, SubLObject topic_id) {
@@ -4289,6 +6645,41 @@ public final class formula_templates extends SubLTranslatedFile {
             update_ftemplate_argpos_detail_unknown_replacements(ftemplate, ftemplate_get_template_unknown_replacements(template_id, elmt));
             update_ftemplate_argpos_detail_ordering_information(ftemplate);
             if (NIL == dictionary.dictionary_empty_p(formula_template_argpos_details(ftemplate))) {
+            }
+        }
+        return ftemplate;
+    }
+
+    public static final SubLObject update_ftemplate_argpos_detail_glosses_alt(SubLObject ftemplate, SubLObject glosses) {
+        {
+            SubLObject cdolist_list_var = glosses;
+            SubLObject gloss_definition = NIL;
+            for (gloss_definition = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gloss_definition = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = gloss_definition;
+                    SubLObject current = datum;
+                    SubLObject gloss_text = NIL;
+                    SubLObject argpos = NIL;
+                    SubLObject ordering = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt258);
+                    gloss_text = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt258);
+                    argpos = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt258);
+                    ordering = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, argpos);
+                            _csetf_arg_position_details_ordering(argpos_details, ordering);
+                            _csetf_arg_position_details_gloss(argpos_details, gloss_text);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt258);
+                    }
+                }
             }
         }
         return ftemplate;
@@ -4326,6 +6717,36 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject update_ftemplate_argpos_detail_explanations_alt(SubLObject ftemplate, SubLObject explanations) {
+        {
+            SubLObject cdolist_list_var = explanations;
+            SubLObject explanation_definition = NIL;
+            for (explanation_definition = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , explanation_definition = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = explanation_definition;
+                    SubLObject current = datum;
+                    SubLObject explanation_text = NIL;
+                    SubLObject argpos = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt259);
+                    explanation_text = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt259);
+                    argpos = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, argpos);
+                            _csetf_arg_position_details_explanation(argpos_details, explanation_text);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt259);
+                    }
+                }
+            }
+        }
+        return ftemplate;
+    }
+
     public static SubLObject update_ftemplate_argpos_detail_explanations(final SubLObject ftemplate, final SubLObject explanations) {
         SubLObject cdolist_list_var = explanations;
         SubLObject explanation_definition = NIL;
@@ -4353,6 +6774,20 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject update_ftemplate_argpos_detail_invisible_replacement_positions_alt(SubLObject ftemplate, SubLObject invisible_pos) {
+        {
+            SubLObject cdolist_list_var = invisible_pos;
+            SubLObject invisible_position = NIL;
+            for (invisible_position = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , invisible_position = cdolist_list_var.first()) {
+                {
+                    SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, invisible_position);
+                    _csetf_arg_position_details_invisible_replacement_positions(argpos_details, T);
+                }
+            }
+        }
+        return ftemplate;
+    }
+
     public static SubLObject update_ftemplate_argpos_detail_invisible_replacement_positions(final SubLObject ftemplate, final SubLObject invisible_pos) {
         SubLObject cdolist_list_var = invisible_pos;
         SubLObject invisible_position = NIL;
@@ -4366,6 +6801,20 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject update_ftemplate_argpos_detail_replacable_positions_alt(SubLObject ftemplate, SubLObject replacable_pos) {
+        {
+            SubLObject cdolist_list_var = replacable_pos;
+            SubLObject replacable_position = NIL;
+            for (replacable_position = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , replacable_position = cdolist_list_var.first()) {
+                {
+                    SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, replacable_position);
+                    _csetf_arg_position_details_is_editable(argpos_details, T);
+                }
+            }
+        }
+        return ftemplate;
+    }
+
     public static SubLObject update_ftemplate_argpos_detail_replacable_positions(final SubLObject ftemplate, final SubLObject replacable_pos) {
         SubLObject cdolist_list_var = replacable_pos;
         SubLObject replacable_position = NIL;
@@ -4376,6 +6825,36 @@ public final class formula_templates extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             replacable_position = cdolist_list_var.first();
         } 
+        return ftemplate;
+    }
+
+    public static final SubLObject update_ftemplate_argpos_detail_replacement_constraints_alt(SubLObject ftemplate, SubLObject constraints) {
+        {
+            SubLObject cdolist_list_var = constraints;
+            SubLObject constraint = NIL;
+            for (constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constraint = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = constraint;
+                    SubLObject current = datum;
+                    SubLObject argpos = NIL;
+                    SubLObject replace_constraints = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt260);
+                    argpos = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt260);
+                    replace_constraints = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, argpos);
+                            _csetf_arg_position_details_replacement_constraints(argpos_details, replace_constraints);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt260);
+                    }
+                }
+            }
+        }
         return ftemplate;
     }
 
@@ -4406,6 +6885,36 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject update_ftemplate_argpos_detail_candidate_replacements_alt(SubLObject ftemplate, SubLObject replacements) {
+        {
+            SubLObject cdolist_list_var = replacements;
+            SubLObject candidate_replacement = NIL;
+            for (candidate_replacement = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate_replacement = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = candidate_replacement;
+                    SubLObject current = datum;
+                    SubLObject argpos = NIL;
+                    SubLObject candidates = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt261);
+                    argpos = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt261);
+                    candidates = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, argpos);
+                            _csetf_arg_position_details_candidate_replacements(argpos_details, candidates);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt261);
+                    }
+                }
+            }
+        }
+        return ftemplate;
+    }
+
     public static SubLObject update_ftemplate_argpos_detail_candidate_replacements(final SubLObject ftemplate, final SubLObject replacements) {
         SubLObject cdolist_list_var = replacements;
         SubLObject candidate_replacement = NIL;
@@ -4433,6 +6942,20 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject update_ftemplate_argpos_detail_validation_required_alt(SubLObject ftemplate, SubLObject required) {
+        {
+            SubLObject cdolist_list_var = required;
+            SubLObject argpos = NIL;
+            for (argpos = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argpos = cdolist_list_var.first()) {
+                {
+                    SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, argpos);
+                    _csetf_arg_position_details_requires_validation(argpos_details, T);
+                }
+            }
+        }
+        return ftemplate;
+    }
+
     public static SubLObject update_ftemplate_argpos_detail_validation_required(final SubLObject ftemplate, final SubLObject required) {
         SubLObject cdolist_list_var = required;
         SubLObject argpos = NIL;
@@ -4443,6 +6966,36 @@ public final class formula_templates extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             argpos = cdolist_list_var.first();
         } 
+        return ftemplate;
+    }
+
+    public static final SubLObject update_ftemplate_argpos_detail_unknown_replacements_alt(SubLObject ftemplate, SubLObject replacements) {
+        {
+            SubLObject cdolist_list_var = replacements;
+            SubLObject replacement = NIL;
+            for (replacement = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , replacement = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = replacement;
+                    SubLObject current = datum;
+                    SubLObject argpos = NIL;
+                    SubLObject thing = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt262);
+                    argpos = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt262);
+                    thing = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject argpos_details = get_ftemplate_arg_position_details(ftemplate, argpos);
+                            _csetf_arg_position_details_unknown_replacement(argpos_details, thing);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt262);
+                    }
+                }
+            }
+        }
         return ftemplate;
     }
 
@@ -4473,6 +7026,18 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject get_ftemplate_arg_position_details_alt(SubLObject ftemplate, SubLObject argpos) {
+        {
+            SubLObject details = formula_template_argpos_details(ftemplate);
+            SubLObject argpos_details = dictionary.dictionary_lookup(details, argpos, NIL);
+            if (NIL == arg_position_details_p(argpos_details)) {
+                argpos_details = new_arg_position_details(argpos);
+                dictionary.dictionary_enter(details, argpos, argpos_details);
+            }
+            return argpos_details;
+        }
+    }
+
     public static SubLObject get_ftemplate_arg_position_details(final SubLObject ftemplate, final SubLObject argpos) {
         final SubLObject details = formula_template_argpos_details(ftemplate);
         SubLObject argpos_details = dictionary.dictionary_lookup(details, argpos, NIL);
@@ -4481,6 +7046,36 @@ public final class formula_templates extends SubLTranslatedFile {
             dictionary.dictionary_enter(details, argpos, argpos_details);
         }
         return argpos_details;
+    }
+
+    public static final SubLObject update_ftemplate_argpos_detail_ordering_information_alt(SubLObject ftemplate) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ordering = NIL;
+                SubLObject ordered = NIL;
+                SubLObject unordered = NIL;
+                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(formula_template_argpos_details(ftemplate)));
+                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject argpos = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                        SubLObject argpos_details = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (arg_position_details_ordering(argpos_details).isFixnum()) {
+                            ordered = cons(argpos_details, ordered);
+                        } else {
+                            unordered = cons(argpos_details, unordered);
+                        }
+                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                    }
+                } 
+                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                ordering = ftemplate_compute_ordering_of_argpos_details(ordered, unordered);
+                _csetf_formula_template_argpos_ordering(ftemplate, ordering);
+            }
+            return ftemplate;
+        }
     }
 
     public static SubLObject update_ftemplate_argpos_detail_ordering_information(final SubLObject ftemplate) {
@@ -4506,12 +7101,44 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject ftemplate_compute_ordering_of_argpos_details_alt(SubLObject ordered, SubLObject unordered) {
+        return cconcatenate(sort_argpos_details_by_ordering(ordered), Sort.sort(unordered, ORDERED_BY_ARGUMENT_POSITION, ARG_POSITION_DETAILS_ARGUMENT_POSITION));
+    }
+
     public static SubLObject ftemplate_compute_ordering_of_argpos_details(final SubLObject ordered, final SubLObject unordered) {
         return cconcatenate(sort_argpos_details_by_ordering(ordered), Sort.sort(unordered, ORDERED_BY_ARGUMENT_POSITION, ARG_POSITION_DETAILS_ARGUMENT_POSITION));
     }
 
+    public static final SubLObject sort_argpos_details_by_ordering_alt(SubLObject details) {
+        return Sort.sort(details, symbol_function($sym264$_), ARG_POSITION_DETAILS_ORDERING);
+    }
+
     public static SubLObject sort_argpos_details_by_ordering(final SubLObject details) {
         return Sort.sort(details, symbol_function($sym281$_), ARG_POSITION_DETAILS_ORDERING);
+    }
+
+    public static final SubLObject ordered_by_argument_position_alt(SubLObject argpos_a, SubLObject argpos_b) {
+        if (!argpos_a.isCons()) {
+            return T;
+        } else {
+            if (!argpos_b.isCons()) {
+                return NIL;
+            } else {
+                if (!argpos_a.first().isFixnum()) {
+                    return T;
+                } else {
+                    if (!argpos_b.first().isFixnum()) {
+                        return NIL;
+                    } else {
+                        if (argpos_a.first().numE(argpos_b.first())) {
+                            return ordered_by_argument_position(argpos_a.rest(), argpos_b.rest());
+                        } else {
+                            return numL(argpos_a.first(), argpos_b.first());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject ordered_by_argument_position(final SubLObject argpos_a, final SubLObject argpos_b) {
@@ -4533,9 +7160,29 @@ public final class formula_templates extends SubLTranslatedFile {
         return numL(argpos_a.first(), argpos_b.first());
     }
 
+    /**
+     * Given a template ID and an ELMT, load the bare minimum definitional information for the formula template.
+     */
+    @LispMethod(comment = "Given a template ID and an ELMT, load the bare minimum definitional information for the formula template.")
+    public static final SubLObject load_formula_template_skeleton_from_kb_alt(SubLObject el_template_id, SubLObject elmt) {
+        SubLTrampolineFile.checkType(el_template_id, POSSIBLY_FO_REPRESENTED_TERM_P);
+        SubLTrampolineFile.checkType(elmt, HLMT_P);
+        {
+            SubLObject template_id = czer_main.canonicalize_term(el_template_id, UNPROVIDED);
+            SubLObject ftemplate = new_formula_template(template_id, UNPROVIDED);
+            _csetf_formula_template_gloss(ftemplate, ftemplate_get_template_gloss(template_id, elmt));
+            _csetf_formula_template_elmt(ftemplate, elmt);
+            return ftemplate;
+        }
+    }
+
+    /**
+     * Given a template ID and an ELMT, load the bare minimum definitional information for the formula template.
+     */
+    @LispMethod(comment = "Given a template ID and an ELMT, load the bare minimum definitional information for the formula template.")
     public static SubLObject load_formula_template_skeleton_from_kb(final SubLObject el_template_id, final SubLObject elmt) {
-        assert NIL != possibly_fo_represented_term_p(el_template_id) : "el_utilities.possibly_fo_represented_term_p(el_template_id) " + "CommonSymbols.NIL != el_utilities.possibly_fo_represented_term_p(el_template_id) " + el_template_id;
-        assert NIL != hlmt.hlmt_p(elmt) : "hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) " + elmt;
+        assert NIL != possibly_fo_represented_term_p(el_template_id) : "! el_utilities.possibly_fo_represented_term_p(el_template_id) " + ("el_utilities.possibly_fo_represented_term_p(el_template_id) " + "CommonSymbols.NIL != el_utilities.possibly_fo_represented_term_p(el_template_id) ") + el_template_id;
+        assert NIL != hlmt.hlmt_p(elmt) : "! hlmt.hlmt_p(elmt) " + ("hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) ") + elmt;
         final SubLObject template_id = czer_main.canonicalize_term(el_template_id, UNPROVIDED);
         final SubLObject ftemplate = new_formula_template(template_id, UNPROVIDED);
         _csetf_formula_template_gloss(ftemplate, ftemplate_get_template_gloss(template_id, elmt));
@@ -4543,9 +7190,45 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    /**
+     * Given a template ID and an ELMT, load the formula template details for use in the situation where there is no topic association but simple query or assetion formula manipulation intended.
+     */
+    @LispMethod(comment = "Given a template ID and an ELMT, load the formula template details for use in the situation where there is no topic association but simple query or assetion formula manipulation intended.")
+    public static final SubLObject load_formula_template_details_from_kb_alt(SubLObject cycl_template_id, SubLObject elmt) {
+        SubLTrampolineFile.checkType(cycl_template_id, POSSIBLY_FO_REPRESENTED_TERM_P);
+        SubLTrampolineFile.checkType(elmt, HLMT_P);
+        {
+            SubLObject template_id = czer_main.canonicalize_term(cycl_template_id, UNPROVIDED);
+            SubLObject ftemplate = new_formula_template(template_id, UNPROVIDED);
+            SubLObject query_spec_id = ftemplate_get_query_specification(template_id, elmt);
+            if (NIL == query_spec_id) {
+                _csetf_formula_template_formula(ftemplate, ftemplate_get_template_formula(template_id, elmt));
+                _csetf_formula_template_elmt(ftemplate, ftemplate_get_template_elmt(template_id, elmt));
+            } else {
+                {
+                    SubLObject query_spec = new_cycl_query_specification.load_new_cycl_query_specification_from_kb(query_spec_id, elmt);
+                    _csetf_formula_template_query_specification(ftemplate, query_spec);
+                    if (NIL == new_cycl_query_specification.new_cycl_query_specification_mt(query_spec)) {
+                        Errors.warn($str_alt266$Dwimming_MT_for__A_to__A____your_, template_id, elmt);
+                        new_cycl_query_specification.reset_new_cycl_query_specification_mt(query_spec, elmt);
+                    }
+                    _csetf_formula_template_elmt(ftemplate, new_cycl_query_specification.new_cycl_query_specification_mt(query_spec));
+                }
+            }
+            _csetf_formula_template_follow_ups(ftemplate, ftemplate_get_template_follow_ups(template_id, elmt));
+            _csetf_formula_template_gloss(ftemplate, ftemplate_get_template_gloss(template_id, elmt));
+            ftemplate_load_argument_position_detail_information(ftemplate, elmt, UNPROVIDED);
+            return ftemplate;
+        }
+    }
+
+    /**
+     * Given a template ID and an ELMT, load the formula template details for use in the situation where there is no topic association but simple query or assetion formula manipulation intended.
+     */
+    @LispMethod(comment = "Given a template ID and an ELMT, load the formula template details for use in the situation where there is no topic association but simple query or assetion formula manipulation intended.")
     public static SubLObject load_formula_template_details_from_kb(final SubLObject cycl_template_id, final SubLObject elmt) {
-        assert NIL != possibly_fo_represented_term_p(cycl_template_id) : "el_utilities.possibly_fo_represented_term_p(cycl_template_id) " + "CommonSymbols.NIL != el_utilities.possibly_fo_represented_term_p(cycl_template_id) " + cycl_template_id;
-        assert NIL != hlmt.hlmt_p(elmt) : "hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) " + elmt;
+        assert NIL != possibly_fo_represented_term_p(cycl_template_id) : "! el_utilities.possibly_fo_represented_term_p(cycl_template_id) " + ("el_utilities.possibly_fo_represented_term_p(cycl_template_id) " + "CommonSymbols.NIL != el_utilities.possibly_fo_represented_term_p(cycl_template_id) ") + cycl_template_id;
+        assert NIL != hlmt.hlmt_p(elmt) : "! hlmt.hlmt_p(elmt) " + ("hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) ") + elmt;
         final SubLObject template_id = czer_main.canonicalize_term(cycl_template_id, UNPROVIDED);
         final SubLObject ftemplate = new_formula_template(template_id, UNPROVIDED);
         final SubLObject query_spec_id = ftemplate_get_query_specification(template_id, elmt);
@@ -4567,6 +7250,22 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject ftemplate_assign_formula_component_alt(SubLObject ftemplate, SubLObject elmt) {
+        {
+            SubLObject template_id = formula_template_id(ftemplate);
+            SubLObject query_spec_id = ftemplate_get_query_specification(template_id, elmt);
+            if (NIL == query_spec_id) {
+                _csetf_formula_template_formula(ftemplate, ftemplate_get_template_formula(template_id, elmt));
+                return ftemplate;
+            }
+            {
+                SubLObject query_spec = new_cycl_query_specification.load_new_cycl_query_specification_from_kb(query_spec_id, elmt);
+                _csetf_formula_template_query_specification(ftemplate, query_spec);
+            }
+        }
+        return ftemplate;
+    }
+
     public static SubLObject ftemplate_assign_formula_component(final SubLObject ftemplate, final SubLObject elmt) {
         final SubLObject template_id = formula_template_id(ftemplate);
         final SubLObject query_spec_id = ftemplate_get_query_specification(template_id, elmt);
@@ -4579,6 +7278,25 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    /**
+     * Return the first asserted PREDICATE value for TEMPLATE-ID visible from ELMT.
+     */
+    @LispMethod(comment = "Return the first asserted PREDICATE value for TEMPLATE-ID visible from ELMT.")
+    public static final SubLObject ftemplate_get_functional_slot_value_alt(SubLObject template_id, SubLObject predicate, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id = NIL;
+            SubLObject topic_id_argnum = NIL;
+            SubLObject allow_genl_topicsP = NIL;
+            SubLObject answer_argnums = $list_alt267;
+            return ftemplate_get_first_asserted_value(template_id, topic_id, predicate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
+        }
+    }
+
+    /**
+     * Return the first asserted PREDICATE value for TEMPLATE-ID visible from ELMT.
+     */
+    @LispMethod(comment = "Return the first asserted PREDICATE value for TEMPLATE-ID visible from ELMT.")
     public static SubLObject ftemplate_get_functional_slot_value(final SubLObject template_id, final SubLObject predicate, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id = NIL;
@@ -4588,8 +7306,19 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_first_asserted_value(template_id, topic_id, predicate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
     }
 
+    public static final SubLObject ftemplate_get_template_reformulation_specification_alt(SubLObject template_id, SubLObject elmt) {
+        return ftemplate_get_functional_slot_value(template_id, $const268$reformulateTemplateViaSpecificati, elmt);
+    }
+
     public static SubLObject ftemplate_get_template_reformulation_specification(final SubLObject template_id, final SubLObject elmt) {
         return ftemplate_get_functional_slot_value(template_id, $const285$reformulateTemplateViaSpecificati, elmt);
+    }
+
+    public static final SubLObject ftemplate_get_query_specification_alt(SubLObject template_id, SubLObject elmt) {
+        if ((NIL != nart_handles.nart_p(template_id)) && cycl_utilities.nat_functor(template_id).eql($$TemplateFromTestQueryFn)) {
+            return cycl_utilities.nat_arg1(template_id, UNPROVIDED);
+        }
+        return ftemplate_get_functional_slot_value(template_id, $const270$querySpecificationForFormulaTempl, elmt);
     }
 
     public static SubLObject ftemplate_get_query_specification(final SubLObject template_id, final SubLObject elmt) {
@@ -4599,8 +7328,34 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_functional_slot_value(template_id, $const287$querySpecificationForFormulaTempl, elmt);
     }
 
+    public static final SubLObject ftemplate_get_template_formula_alt(SubLObject template_id, SubLObject elmt) {
+        return ftemplate_get_functional_slot_value(template_id, $$formulaForFormulaTemplate, elmt);
+    }
+
     public static SubLObject ftemplate_get_template_formula(final SubLObject template_id, final SubLObject elmt) {
         return ftemplate_get_functional_slot_value(template_id, $$formulaForFormulaTemplate, elmt);
+    }
+
+    public static final SubLObject ftemplate_get_template_elmt_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template_id_argnum = ONE_INTEGER;
+                SubLObject topic_id_argnum = NIL;
+                SubLObject topic_id = NIL;
+                SubLObject answer_argnums = $list_alt267;
+                SubLObject allow_genl_topicsP = NIL;
+                SubLObject template_elmt = ftemplate_get_first_asserted_value(template_id, topic_id, $$assertMtForFormulaTemplate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
+                if (NIL == template_elmt) {
+                    if (NIL != cycl_utilities.fort_or_naut_p(formula_template_vars.$default_assertion_template_elmt$.getDynamicValue(thread))) {
+                        template_elmt = czer_main.canonicalize_term(formula_template_vars.$default_assertion_template_elmt$.getDynamicValue(thread), UNPROVIDED);
+                    } else {
+                        template_elmt = elmt;
+                    }
+                }
+                return template_elmt;
+            }
+        }
     }
 
     public static SubLObject ftemplate_get_template_elmt(final SubLObject template_id, final SubLObject elmt) {
@@ -4619,6 +7374,43 @@ public final class formula_templates extends SubLTranslatedFile {
             }
         }
         return template_elmt;
+    }
+
+    public static final SubLObject ftemplate_get_template_follow_ups_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject follow_up_argnum = TWO_INTEGER;
+            SubLObject connective_argnum = THREE_INTEGER;
+            SubLObject topic_id_argnum = NIL;
+            SubLObject topic_id = NIL;
+            SubLObject allow_genl_topicsP = NIL;
+            SubLObject straight = ftemplate_get_asserted_values(template_id, topic_id, $$formulaTemplateFollowUp, elmt, template_id_argnum, topic_id_argnum, list(follow_up_argnum, connective_argnum), allow_genl_topicsP, UNPROVIDED);
+            SubLObject commuted = list_utilities.remove_if_not($sym274$COMMUTATIVE_RELATION_, ftemplate_get_asserted_values(template_id, topic_id, $$formulaTemplateFollowUp, elmt, follow_up_argnum, topic_id_argnum, list(template_id_argnum, connective_argnum), allow_genl_topicsP, UNPROVIDED), symbol_function(SECOND), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject results = append(straight, commuted);
+            SubLObject final_results = NIL;
+            SubLObject cdolist_list_var = results;
+            SubLObject result = NIL;
+            for (result = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , result = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = result;
+                    SubLObject current = datum;
+                    SubLObject follow_up = NIL;
+                    SubLObject connective = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt276);
+                    follow_up = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt276);
+                    connective = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        final_results = cons(list(follow_up, connective, elmt), final_results);
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt276);
+                    }
+                }
+            }
+            return nreverse(final_results);
+        }
     }
 
     public static SubLObject ftemplate_get_template_follow_ups(final SubLObject template_id, final SubLObject elmt) {
@@ -4657,6 +7449,33 @@ public final class formula_templates extends SubLTranslatedFile {
         return nreverse(final_results);
     }
 
+    public static final SubLObject ftemplate_get_template_gloss_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_now = ftemplate_qualify_mt_to_now(elmt);
+                SubLObject gloss = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt_now);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        gloss = kb_mapping_utilities.fpred_value(template_id, $$formulaTemplateGloss, ONE_INTEGER, TWO_INTEGER, $TRUE);
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return gloss;
+            }
+        }
+    }
+
     public static SubLObject ftemplate_get_template_gloss(final SubLObject template_id, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject mt_now = ftemplate_qualify_mt_to_now(elmt);
@@ -4678,12 +7497,27 @@ public final class formula_templates extends SubLTranslatedFile {
         return gloss;
     }
 
+    public static final SubLObject ftemplate_qualify_mt_to_now_alt(SubLObject mt) {
+        return ftemplate_hlmt_change_time(mt, $list_alt279);
+    }
+
     public static SubLObject ftemplate_qualify_mt_to_now(final SubLObject mt) {
         return ftemplate_hlmt_change_time(mt, $list296);
     }
 
+    public static final SubLObject ftemplate_qualify_mt_to_anytime_alt(SubLObject mt) {
+        return ftemplate_hlmt_change_time(mt, $$AnytimePSC);
+    }
+
     public static SubLObject ftemplate_qualify_mt_to_anytime(final SubLObject mt) {
         return ftemplate_hlmt_change_time(mt, $$AnytimePSC);
+    }
+
+    public static final SubLObject ftemplate_hlmt_change_time_alt(SubLObject v_hlmt, SubLObject new_time_context) {
+        {
+            SubLObject monad_mt = hlmt.hlmt_monad_mt(v_hlmt);
+            return NIL != hlmt.hlmt_p(monad_mt) ? ((SubLObject) (hlmt.new_hlmt(list(monad_mt, new_time_context)))) : v_hlmt;
+        }
     }
 
     public static SubLObject ftemplate_hlmt_change_time(final SubLObject v_hlmt, final SubLObject new_time_context) {
@@ -4691,12 +7525,44 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL != hlmt.hlmt_p(monad_mt) ? hlmt.new_hlmt(list(monad_mt, new_time_context)) : v_hlmt;
     }
 
+    /**
+     *
+     *
+     * @unknown This wont give the most specific ones.
+     */
+    @LispMethod(comment = "@unknown This wont give the most specific ones.")
+    public static final SubLObject ftemplate_get_template_glosses_alt(SubLObject template_id, SubLObject topic_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = TWO_INTEGER;
+            SubLObject answer_argnums = $list_alt281;
+            SubLObject allow_genl_topicsP = templates_use_isaXgenlsP();
+            return ftemplate_get_asserted_values(template_id, topic_id, $$glossForFormulaTemplate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown This wont give the most specific ones.
+     */
+    @LispMethod(comment = "@unknown This wont give the most specific ones.")
     public static SubLObject ftemplate_get_template_glosses(final SubLObject template_id, final SubLObject topic_id, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id_argnum = TWO_INTEGER;
         final SubLObject answer_argnums = $list298;
         final SubLObject allow_genl_topicsP = templates_use_isaXgenlsP();
         return ftemplate_get_asserted_values(template_id, topic_id, $$glossForFormulaTemplate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+    }
+
+    public static final SubLObject ftemplate_get_template_explanations_alt(SubLObject template_id, SubLObject topic_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = TWO_INTEGER;
+            SubLObject answer_argnums = $list_alt283;
+            SubLObject allow_genl_topicsP = templates_use_isaXgenlsP();
+            return ftemplate_get_asserted_values(template_id, topic_id, $$formulaTemplateArgExplanation, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
     }
 
     public static SubLObject ftemplate_get_template_explanations(final SubLObject template_id, final SubLObject topic_id, final SubLObject elmt) {
@@ -4707,10 +7573,59 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_asserted_values(template_id, topic_id, $$formulaTemplateArgExplanation, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @unknown This wont give the most specific ones.
+     */
+    @LispMethod(comment = "@unknown This wont give the most specific ones.")
+    public static final SubLObject ftemplate_get_template_examples_alt(SubLObject template_id, SubLObject topic_id, SubLObject elmt) {
+        return ftemplate_get_asserted_values(template_id, topic_id, $$formulaTemplateExample, elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     *
+     *
+     * @unknown This wont give the most specific ones.
+     */
+    @LispMethod(comment = "@unknown This wont give the most specific ones.")
     public static SubLObject ftemplate_get_template_examples(final SubLObject template_id, final SubLObject topic_id, final SubLObject elmt) {
         return ftemplate_get_asserted_values(template_id, topic_id, $$formulaTemplateExample, elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return first asserted PREDICATE value for TEMPLATE-ID and TOPIC-ID visible from ELMT.
+     * @unknown - Returns NIL if no asserted value can be found.
+     */
+    @LispMethod(comment = "@return first asserted PREDICATE value for TEMPLATE-ID and TOPIC-ID visible from ELMT.\r\n@unknown - Returns NIL if no asserted value can be found.")
+    public static final SubLObject ftemplate_get_first_asserted_value_alt(SubLObject template_id, SubLObject topic_id, SubLObject predicate, SubLObject elmt, SubLObject template_id_argnum, SubLObject topic_id_argnum, SubLObject answer_argnums, SubLObject allow_genl_topicsP) {
+        if (template_id_argnum == UNPROVIDED) {
+            template_id_argnum = ONE_INTEGER;
+        }
+        if (topic_id_argnum == UNPROVIDED) {
+            topic_id_argnum = TWO_INTEGER;
+        }
+        if (answer_argnums == UNPROVIDED) {
+            answer_argnums = list(THREE_INTEGER);
+        }
+        if (allow_genl_topicsP == UNPROVIDED) {
+            allow_genl_topicsP = templates_use_isaXgenlsP();
+        }
+        {
+            SubLObject first_onlyP = T;
+            return ftemplate_get_asserted_values(template_id, topic_id, predicate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, first_onlyP).first();
+        }
+    }
+
+    /**
+     *
+     *
+     * @return first asserted PREDICATE value for TEMPLATE-ID and TOPIC-ID visible from ELMT.
+     * @unknown - Returns NIL if no asserted value can be found.
+     */
+    @LispMethod(comment = "@return first asserted PREDICATE value for TEMPLATE-ID and TOPIC-ID visible from ELMT.\r\n@unknown - Returns NIL if no asserted value can be found.")
     public static SubLObject ftemplate_get_first_asserted_value(final SubLObject template_id, final SubLObject topic_id, final SubLObject predicate, final SubLObject elmt, SubLObject template_id_argnum, SubLObject topic_id_argnum, SubLObject answer_argnums, SubLObject allow_genl_topicsP) {
         if (template_id_argnum == UNPROVIDED) {
             template_id_argnum = ONE_INTEGER;
@@ -4728,6 +7643,226 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_asserted_values(template_id, topic_id, predicate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, first_onlyP).first();
     }
 
+    /**
+     *
+     *
+     * @return LISTP of asserted PREDICATE values for TEMPLATE-ID and TOPIC-ID visible from ELMT.
+     */
+    @LispMethod(comment = "@return LISTP of asserted PREDICATE values for TEMPLATE-ID and TOPIC-ID visible from ELMT.")
+    public static final SubLObject ftemplate_get_asserted_values_alt(SubLObject template_id, SubLObject topic_id, SubLObject predicate, SubLObject elmt, SubLObject template_id_argnum, SubLObject topic_id_argnum, SubLObject answer_argnums, SubLObject allow_genl_topicsP, SubLObject first_onlyP) {
+        if (template_id_argnum == UNPROVIDED) {
+            template_id_argnum = ONE_INTEGER;
+        }
+        if (topic_id_argnum == UNPROVIDED) {
+            topic_id_argnum = TWO_INTEGER;
+        }
+        if (answer_argnums == UNPROVIDED) {
+            answer_argnums = list(THREE_INTEGER);
+        }
+        if (allow_genl_topicsP == UNPROVIDED) {
+            allow_genl_topicsP = templates_use_isaXgenlsP();
+        }
+        if (first_onlyP == UNPROVIDED) {
+            first_onlyP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject answer_vars = Mapping.mapcar(GET_VARIABLE, answer_argnums);
+                SubLObject v_arity = arity.min_arity(predicate);
+                SubLObject answer_lit = cons(predicate, Mapping.mapcar(GET_VARIABLE, list_utilities.num_list(v_arity, ONE_INTEGER)));
+                SubLObject pos_lits = NIL;
+                SubLObject neg_lits = NIL;
+                if (template_id_argnum.isInteger()) {
+                    answer_lit = list_utilities.nreplace_nth(template_id_argnum, template_id, answer_lit);
+                }
+                if (NIL != allow_genl_topicsP) {
+                    {
+                        SubLObject genl_topic_var = variables.get_variable(topic_id_argnum);
+                        pos_lits = cons(list($$genls, topic_id, genl_topic_var), pos_lits);
+                    }
+                } else {
+                    if (NIL != subl_promotions.positive_integer_p(topic_id_argnum)) {
+                        answer_lit = list_utilities.nreplace_nth(topic_id_argnum, topic_id, answer_lit);
+                    }
+                }
+                pos_lits = cons(list($$assertedSentence, answer_lit), pos_lits);
+                {
+                    SubLObject template = (NIL != list_utilities.singletonP(answer_vars)) ? ((SubLObject) (answer_vars.first())) : answer_vars;
+                    SubLObject v_properties = NIL;
+                    SubLObject ans = NIL;
+                    if (NIL != first_onlyP) {
+                        v_properties = putf(v_properties, $MAX_NUMBER, ONE_INTEGER);
+                    }
+                    if ((NIL != neg_lits) || (NIL != list_utilities.lengthG(pos_lits, ONE_INTEGER, UNPROVIDED))) {
+                        {
+                            SubLObject dnf = clauses.make_clause(neg_lits, pos_lits);
+                            v_properties = putf(v_properties, $kw289$TRANSFORMATION_ALLOWED_, NIL);
+                            v_properties = putf(v_properties, $PROBLEM_STORE, formula_template_vars.get_template_topic_problem_store());
+                            v_properties = putf(v_properties, $RETURN, list($TEMPLATE, template));
+                            v_properties = putf(v_properties, $ANSWER_LANGUAGE, $HL);
+                            ans = inference_kernel.new_cyc_query_from_dnf(dnf, elmt, NIL, v_properties);
+                            if ((NIL != api_widgets.everything_psc_dwimmed_awayP()) && (NIL == ans)) {
+                                ans = inference_kernel.new_cyc_query_from_dnf(dnf, $$EverythingPSC, NIL, v_properties);
+                            }
+                        }
+                    } else {
+                        {
+                            SubLObject assertions = NIL;
+                            if ((((NIL != topic_id) && (NIL != subl_promotions.positive_integer_p(topic_id_argnum))) && (NIL != template_id)) && (NIL != subl_promotions.positive_integer_p(template_id_argnum))) {
+                                {
+                                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                                    {
+                                        SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                        try {
+                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                            assertions = kb_mapping_utilities.pred_u_v_holds_gafs(predicate, template_id, topic_id, template_id_argnum, topic_id_argnum, $TRUE);
+                                        } finally {
+                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                }
+                                if ((NIL != api_widgets.everything_psc_dwimmed_awayP()) && (NIL == assertions)) {
+                                    assertions = kb_mapping_utilities.pred_u_v_holds_gafs_in_any_mt(predicate, template_id, topic_id, template_id_argnum, topic_id_argnum, $TRUE);
+                                }
+                            } else {
+                                if ((NIL != template_id) && (NIL != subl_promotions.positive_integer_p(template_id_argnum))) {
+                                    {
+                                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                                        {
+                                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                            try {
+                                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                                assertions = kb_mapping_utilities.pred_value_gafs(template_id, predicate, template_id_argnum, $TRUE);
+                                            } finally {
+                                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                            }
+                                        }
+                                    }
+                                    if ((NIL != api_widgets.everything_psc_dwimmed_awayP()) && (NIL == assertions)) {
+                                        {
+                                            SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                            SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                            try {
+                                                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                                assertions = kb_mapping_utilities.pred_value_gafs(template_id, predicate, template_id_argnum, $TRUE);
+                                            } finally {
+                                                mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if ((NIL != topic_id) && (NIL != subl_promotions.positive_integer_p(topic_id_argnum))) {
+                                        {
+                                            SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                                            {
+                                                SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                                try {
+                                                    mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                                    mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                                    mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                                    assertions = kb_mapping_utilities.pred_value_gafs(topic_id, predicate, topic_id_argnum, $TRUE);
+                                                } finally {
+                                                    mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                                    mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                                }
+                                            }
+                                        }
+                                        if ((NIL != api_widgets.everything_psc_dwimmed_awayP()) && (NIL == assertions)) {
+                                            {
+                                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                try {
+                                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                                    assertions = kb_mapping_utilities.pred_value_gafs(topic_id, predicate, topic_id_argnum, $TRUE);
+                                                } finally {
+                                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (NIL != assertions) {
+                                if (NIL != list_utilities.singletonP(answer_argnums)) {
+                                    {
+                                        SubLObject answer_argnum = answer_argnums.first();
+                                        if (NIL != first_onlyP) {
+                                            ans = cons(assertions_high.gaf_arg(assertions.first(), answer_argnum), ans);
+                                        } else {
+                                            {
+                                                SubLObject cdolist_list_var = assertions;
+                                                SubLObject assertion = NIL;
+                                                for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                                    ans = cons(assertions_high.gaf_arg(assertion, answer_argnum), ans);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (NIL != first_onlyP) {
+                                        {
+                                            SubLObject assertion = assertions.first();
+                                            SubLObject temp_result = NIL;
+                                            SubLObject cdolist_list_var = answer_argnums;
+                                            SubLObject answer_argnum = NIL;
+                                            for (answer_argnum = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , answer_argnum = cdolist_list_var.first()) {
+                                                temp_result = cons(assertions_high.gaf_arg(assertion, answer_argnum), temp_result);
+                                            }
+                                            ans = list(nreverse(temp_result));
+                                        }
+                                    } else {
+                                        {
+                                            SubLObject cdolist_list_var = assertions;
+                                            SubLObject assertion = NIL;
+                                            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject temp_result = NIL;
+                                                    SubLObject cdolist_list_var_93 = answer_argnums;
+                                                    SubLObject answer_argnum = NIL;
+                                                    for (answer_argnum = cdolist_list_var_93.first(); NIL != cdolist_list_var_93; cdolist_list_var_93 = cdolist_list_var_93.rest() , answer_argnum = cdolist_list_var_93.first()) {
+                                                        temp_result = cons(assertions_high.gaf_arg(assertion, answer_argnum), temp_result);
+                                                    }
+                                                    ans = cons(nreverse(temp_result), ans);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return ans;
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of asserted PREDICATE values for TEMPLATE-ID and TOPIC-ID visible from ELMT.
+     */
+    @LispMethod(comment = "@return LISTP of asserted PREDICATE values for TEMPLATE-ID and TOPIC-ID visible from ELMT.")
     public static SubLObject ftemplate_get_asserted_values(final SubLObject template_id, final SubLObject topic_id, final SubLObject predicate, final SubLObject elmt, SubLObject template_id_argnum, SubLObject topic_id_argnum, SubLObject answer_argnums, SubLObject allow_genl_topicsP, SubLObject first_onlyP) {
         if (template_id_argnum == UNPROVIDED) {
             template_id_argnum = ONE_INTEGER;
@@ -4910,6 +8045,16 @@ public final class formula_templates extends SubLTranslatedFile {
         return ans;
     }
 
+    public static final SubLObject ftemplate_get_template_focal_term_alt(SubLObject template_id, SubLObject topic_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = THREE_INTEGER;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = templates_use_isaXgenlsP();
+            return ftemplate_get_asserted_values(template_id, topic_id, $const297$focalTermPositionForFormulaTempla, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
+    }
+
     public static SubLObject ftemplate_get_template_focal_term(final SubLObject template_id, final SubLObject topic_id, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id_argnum = THREE_INTEGER;
@@ -4918,6 +8063,28 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_asserted_values(template_id, topic_id, $const314$focalTermPositionForFormulaTempla, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @unknown This wont give the most specific ones.
+     */
+    @LispMethod(comment = "@unknown This wont give the most specific ones.")
+    public static final SubLObject ftemplate_get_template_format_alt(SubLObject template_id, SubLObject topic_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = THREE_INTEGER;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = templates_use_isaXgenlsP();
+            return ftemplate_get_first_asserted_value(template_id, topic_id, $$assertionFormatForFormulaTemplate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown This wont give the most specific ones.
+     */
+    @LispMethod(comment = "@unknown This wont give the most specific ones.")
     public static SubLObject ftemplate_get_template_format(final SubLObject template_id, final SubLObject topic_id, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id_argnum = THREE_INTEGER;
@@ -4926,12 +8093,77 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_first_asserted_value(template_id, topic_id, $$assertionFormatForFormulaTemplate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
     }
 
+    public static final SubLObject ftemplate_get_template_invisible_replacement_positions_alt(SubLObject template_id, SubLObject topic_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = NIL;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = NIL;
+            return ftemplate_get_asserted_values(template_id, topic_id, $const299$templateReplacementsInvisibleForP, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
+    }
+
     public static SubLObject ftemplate_get_template_invisible_replacement_positions(final SubLObject template_id, final SubLObject topic_id, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id_argnum = NIL;
         final SubLObject answer_argnums = $list284;
         final SubLObject allow_genl_topicsP = NIL;
         return ftemplate_get_asserted_values(template_id, topic_id, $const316$templateReplacementsInvisibleForP, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+    }
+
+    public static final SubLObject ftemplate_get_template_replacement_constraints_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template_id_argnum = ONE_INTEGER;
+                SubLObject topic_id_argnum = NIL;
+                SubLObject topic_id = NIL;
+                SubLObject answer_argnums = $list_alt300;
+                SubLObject allow_genl_topicsP = NIL;
+                SubLObject repl_constraints = ftemplate_get_asserted_values(template_id, topic_id, $$constraintOnReplacement, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+                SubLObject constraints = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
+                SubLObject replacement_constraints = NIL;
+                SubLObject cdolist_list_var = repl_constraints;
+                SubLObject repl_constraint = NIL;
+                for (repl_constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , repl_constraint = cdolist_list_var.first()) {
+                    {
+                        SubLObject datum = repl_constraint;
+                        SubLObject current = datum;
+                        SubLObject position = NIL;
+                        SubLObject constraint = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt302);
+                        position = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt302);
+                        constraint = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            if (cycl_utilities.formula_arg0(constraint) != $$TheSet) {
+                                constraint = list($$TheSet, $sym304$_X, list($$isa, $sym304$_X, constraint));
+                            }
+                            dictionary_utilities.dictionary_push(constraints, position, constraint);
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt302);
+                        }
+                    }
+                }
+                {
+                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(constraints));
+                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject position = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                            SubLObject constraint_set = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            replacement_constraints = cons(list(position, constraint_set), replacement_constraints);
+                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                        }
+                    } 
+                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                }
+                return replacement_constraints;
+            }
+        }
     }
 
     public static SubLObject ftemplate_get_template_replacement_constraints(final SubLObject template_id, final SubLObject elmt) {
@@ -4981,6 +8213,18 @@ public final class formula_templates extends SubLTranslatedFile {
         return replacement_constraints;
     }
 
+    public static final SubLObject ftemplate_get_template_unknown_replacements_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = NIL;
+            SubLObject topic_id = NIL;
+            SubLObject answer_argnums = $list_alt300;
+            SubLObject allow_genl_topicsP = NIL;
+            SubLObject replacements = ftemplate_get_asserted_values(template_id, topic_id, $$unknownTermForTemplatePosition, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+            return replacements;
+        }
+    }
+
     public static SubLObject ftemplate_get_template_unknown_replacements(final SubLObject template_id, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id_argnum = NIL;
@@ -4989,6 +8233,58 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject allow_genl_topicsP = NIL;
         final SubLObject replacements = ftemplate_get_asserted_values(template_id, topic_id, $$unknownTermForTemplatePosition, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
         return replacements;
+    }
+
+    public static final SubLObject ftemplate_get_template_candidate_replacements_for_position_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template_id_argnum = ONE_INTEGER;
+                SubLObject topic_id_argnum = NIL;
+                SubLObject topic_id = NIL;
+                SubLObject answer_argnums = $list_alt300;
+                SubLObject allow_genl_topicsP = NIL;
+                SubLObject repl_candidates = ftemplate_get_asserted_values(template_id, topic_id, $$candidateReplacementForPosition, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+                SubLObject replacements = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
+                SubLObject replacement_candidates = NIL;
+                SubLObject cdolist_list_var = repl_candidates;
+                SubLObject repl_candidate = NIL;
+                for (repl_candidate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , repl_candidate = cdolist_list_var.first()) {
+                    {
+                        SubLObject datum = repl_candidate;
+                        SubLObject current = datum;
+                        SubLObject position = NIL;
+                        SubLObject candidate = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt307);
+                        position = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt307);
+                        candidate = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            dictionary_utilities.dictionary_push(replacements, position, candidate);
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt307);
+                        }
+                    }
+                }
+                {
+                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(replacements));
+                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject position = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                            SubLObject candidates = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            replacement_candidates = cons(list(position, candidates), replacement_candidates);
+                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                        }
+                    } 
+                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                }
+                return replacement_candidates;
+            }
+        }
     }
 
     public static SubLObject ftemplate_get_template_candidate_replacements_for_position(final SubLObject template_id, final SubLObject elmt) {
@@ -5035,6 +8331,31 @@ public final class formula_templates extends SubLTranslatedFile {
         return replacement_candidates;
     }
 
+    /**
+     *
+     *
+     * @unknown This is actually derivable from some of the other predicates, in some case,
+    so let the inference engine figure this out by herself.
+     */
+    @LispMethod(comment = "@unknown This is actually derivable from some of the other predicates, in some case,\r\nso let the inference engine figure this out by herself.")
+    public static final SubLObject ftemplate_get_template_replacable_positions_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = NIL;
+            SubLObject topic_id = NIL;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = NIL;
+            return ftemplate_get_asserted_values(template_id, topic_id, $const308$positionInFormulaTemplateIsReplac, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown This is actually derivable from some of the other predicates, in some case,
+    so let the inference engine figure this out by herself.
+     */
+    @LispMethod(comment = "@unknown This is actually derivable from some of the other predicates, in some case,\r\nso let the inference engine figure this out by herself.")
     public static SubLObject ftemplate_get_template_replacable_positions(final SubLObject template_id, final SubLObject elmt) {
         final SubLObject template_id_argnum = ONE_INTEGER;
         final SubLObject topic_id_argnum = NIL;
@@ -5042,6 +8363,17 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject answer_argnums = $list284;
         final SubLObject allow_genl_topicsP = NIL;
         return ftemplate_get_asserted_values(template_id, topic_id, $const325$positionInFormulaTemplateIsReplac, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+    }
+
+    public static final SubLObject ftemplate_get_template_validation_requirements_alt(SubLObject template_id, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = ONE_INTEGER;
+            SubLObject topic_id_argnum = NIL;
+            SubLObject topic_id = NIL;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = NIL;
+            return ftemplate_get_asserted_values(template_id, topic_id, $const309$validationRequiredOnTemplatePosit, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
     }
 
     public static SubLObject ftemplate_get_template_validation_requirements(final SubLObject template_id, final SubLObject elmt) {
@@ -5053,6 +8385,39 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_asserted_values(template_id, topic_id, $const326$validationRequiredOnTemplatePosit, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
     }
 
+    /**
+     * Given the topic, load the priority information on the subtopics that is available
+     * and construct a partial order from this information. There is no requirement
+     * that ALL templates have a higher priority tag on them, either.
+     *
+     * @return LISTP of FORTP the list of templates.
+     */
+    @LispMethod(comment = "Given the topic, load the priority information on the subtopics that is available\r\nand construct a partial order from this information. There is no requirement\r\nthat ALL templates have a higher priority tag on them, either.\r\n\r\n@return LISTP of FORTP the list of templates.\nGiven the topic, load the priority information on the subtopics that is available\nand construct a partial order from this information. There is no requirement\nthat ALL templates have a higher priority tag on them, either.")
+    public static final SubLObject formula_template_load_topic_subtopic_ordering_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != isa.isaP(topic, $$InducedFormulaTemplateTopicType, UNPROVIDED, UNPROVIDED)) {
+                return sort_formula_template_subtopics_by_template_count(asserted_formula_template_subtopics_for_type(topic, elmt), elmt);
+            } else {
+                thread.resetMultipleValues();
+                {
+                    SubLObject high_to_low = formula_template_load_prioritization_information_for_subtopics(topic, elmt);
+                    SubLObject low_to_high = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    return apply_prioritizing_ordering_to_kb_objects(high_to_low, low_to_high);
+                }
+            }
+        }
+    }
+
+    /**
+     * Given the topic, load the priority information on the subtopics that is available
+     * and construct a partial order from this information. There is no requirement
+     * that ALL templates have a higher priority tag on them, either.
+     *
+     * @return LISTP of FORTP the list of templates.
+     */
+    @LispMethod(comment = "Given the topic, load the priority information on the subtopics that is available\r\nand construct a partial order from this information. There is no requirement\r\nthat ALL templates have a higher priority tag on them, either.\r\n\r\n@return LISTP of FORTP the list of templates.\nGiven the topic, load the priority information on the subtopics that is available\nand construct a partial order from this information. There is no requirement\nthat ALL templates have a higher priority tag on them, either.")
     public static SubLObject formula_template_load_topic_subtopic_ordering(final SubLObject topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != isa.isaP(topic, $$InducedFormulaTemplateTopicType, UNPROVIDED, UNPROVIDED)) {
@@ -5065,6 +8430,39 @@ public final class formula_templates extends SubLTranslatedFile {
         return apply_prioritizing_ordering_to_kb_objects(high_to_low, low_to_high);
     }
 
+    /**
+     * Given the topic, load the priority information on the templates that is available
+     * and construct a partial order from this information. There is no requirement
+     * that ALL templates have a higher priority tag on them, either.
+     *
+     * @return LISTP of FORTP the list of templates.
+     */
+    @LispMethod(comment = "Given the topic, load the priority information on the templates that is available\r\nand construct a partial order from this information. There is no requirement\r\nthat ALL templates have a higher priority tag on them, either.\r\n\r\n@return LISTP of FORTP the list of templates.\nGiven the topic, load the priority information on the templates that is available\nand construct a partial order from this information. There is no requirement\nthat ALL templates have a higher priority tag on them, either.")
+    public static final SubLObject formula_template_load_topic_template_ordering_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ordered_template_forts = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject high_to_low = formula_template_load_prioritization_information_for_templates(topic, elmt);
+                    SubLObject low_to_high = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    ordered_template_forts = apply_prioritizing_ordering_to_kb_objects(high_to_low, low_to_high);
+                }
+                return ordered_template_forts;
+            }
+        }
+    }
+
+    /**
+     * Given the topic, load the priority information on the templates that is available
+     * and construct a partial order from this information. There is no requirement
+     * that ALL templates have a higher priority tag on them, either.
+     *
+     * @return LISTP of FORTP the list of templates.
+     */
+    @LispMethod(comment = "Given the topic, load the priority information on the templates that is available\r\nand construct a partial order from this information. There is no requirement\r\nthat ALL templates have a higher priority tag on them, either.\r\n\r\n@return LISTP of FORTP the list of templates.\nGiven the topic, load the priority information on the templates that is available\nand construct a partial order from this information. There is no requirement\nthat ALL templates have a higher priority tag on them, either.")
     public static SubLObject formula_template_load_topic_template_ordering(final SubLObject topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ordered_template_forts = NIL;
@@ -5076,8 +8474,41 @@ public final class formula_templates extends SubLTranslatedFile {
         return ordered_template_forts;
     }
 
+    /**
+     *
+     *
+     * @return SET-P of terms with lower priority than OBJ.
+     */
+    @LispMethod(comment = "@return SET-P of terms with lower priority than OBJ.")
+    public static final SubLObject lower_priority_terms_alt(SubLObject obj) {
+        return accumulate_lower_priority_terms(obj, set.new_set(symbol_function(EQUAL), UNPROVIDED));
+    }
+
+    /**
+     *
+     *
+     * @return SET-P of terms with lower priority than OBJ.
+     */
+    @LispMethod(comment = "@return SET-P of terms with lower priority than OBJ.")
     public static SubLObject lower_priority_terms(final SubLObject obj) {
         return accumulate_lower_priority_terms(obj, set.new_set(symbol_function(EQUAL), UNPROVIDED));
+    }
+
+    public static final SubLObject accumulate_lower_priority_terms_alt(SubLObject obj, SubLObject accumulator) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject cdolist_list_var = dictionary.dictionary_lookup($high_to_low_priorities$.getDynamicValue(thread), obj, UNPROVIDED);
+                SubLObject immediate = NIL;
+                for (immediate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , immediate = cdolist_list_var.first()) {
+                    if (NIL == set.set_memberP(immediate, accumulator)) {
+                        set.set_add(immediate, accumulator);
+                        accumulate_lower_priority_terms(immediate, accumulator);
+                    }
+                }
+            }
+            return accumulator;
+        }
     }
 
     public static SubLObject accumulate_lower_priority_terms(final SubLObject obj, final SubLObject accumulator) {
@@ -5096,12 +8527,74 @@ public final class formula_templates extends SubLTranslatedFile {
         return accumulator;
     }
 
+    /**
+     *
+     *
+     * @return BOOLEANP; Does OBJ1 have higher priority than OBJ2, wrt
+    HIGH-TO-LOW-PRIORITIES*?
+     */
+    @LispMethod(comment = "@return BOOLEANP; Does OBJ1 have higher priority than OBJ2, wrt\r\nHIGH-TO-LOW-PRIORITIES*?")
+    public static final SubLObject higher_priorityP_alt(SubLObject obj1, SubLObject obj2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType($high_to_low_priorities$.getDynamicValue(thread), DICTIONARY_P);
+            return set.set_memberP(obj2, lower_priority_terms(obj1));
+        }
+    }
+
+    /**
+     *
+     *
+     * @return BOOLEANP; Does OBJ1 have higher priority than OBJ2, wrt
+    HIGH-TO-LOW-PRIORITIES*?
+     */
+    @LispMethod(comment = "@return BOOLEANP; Does OBJ1 have higher priority than OBJ2, wrt\r\nHIGH-TO-LOW-PRIORITIES*?")
     public static SubLObject higher_priorityP(final SubLObject obj1, final SubLObject obj2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != dictionary.dictionary_p($high_to_low_priorities$.getDynamicValue(thread)) : "dictionary.dictionary_p(formula_templates.$high_to_low_priorities$.getDynamicValue(thread)) " + "CommonSymbols.NIL != dictionary.dictionary_p(formula_templates.$high_to_low_priorities$.getDynamicValue(thread)) " + $high_to_low_priorities$.getDynamicValue(thread);
+        assert NIL != dictionary.dictionary_p($high_to_low_priorities$.getDynamicValue(thread)) : "! dictionary.dictionary_p(formula_templates.$high_to_low_priorities$.getDynamicValue(thread)) " + ("dictionary.dictionary_p(formula_templates.$high_to_low_priorities$.getDynamicValue(thread)) " + "CommonSymbols.NIL != dictionary.dictionary_p(formula_templates.$high_to_low_priorities$.getDynamicValue(thread)) ") + $high_to_low_priorities$.getDynamicValue(thread);
         return set.set_memberP(obj2, lower_priority_terms(obj1));
     }
 
+    /**
+     * Apply the high-to-low and low-to-high values to the KB objects stored in
+     * the dictionaries
+     *
+     * @unknown construct and apply belong into some utility file
+     * @return LISTP of keys of HIGH-TO-LOW and LOW-TO-HIGH.
+     */
+    @LispMethod(comment = "Apply the high-to-low and low-to-high values to the KB objects stored in\r\nthe dictionaries\r\n\r\n@unknown construct and apply belong into some utility file\r\n@return LISTP of keys of HIGH-TO-LOW and LOW-TO-HIGH.\nApply the high-to-low and low-to-high values to the KB objects stored in\nthe dictionaries")
+    public static final SubLObject apply_prioritizing_ordering_to_kb_objects_alt(SubLObject high_to_low, SubLObject low_to_high) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ordered_keys = NIL;
+                SubLObject high_keys = dictionary.dictionary_keys(high_to_low);
+                SubLObject low_keys = dictionary.dictionary_keys(low_to_high);
+                {
+                    SubLObject _prev_bind_0 = $high_to_low_priorities$.currentBinding(thread);
+                    try {
+                        $high_to_low_priorities$.bind(high_to_low, thread);
+                        {
+                            SubLObject all_keys = union(high_keys, low_keys, dictionary.dictionary_test(high_to_low), UNPROVIDED);
+                            ordered_keys = Sort.sort(all_keys, $sym320$HIGHER_PRIORITY_, UNPROVIDED);
+                        }
+                    } finally {
+                        $high_to_low_priorities$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ordered_keys;
+            }
+        }
+    }
+
+    /**
+     * Apply the high-to-low and low-to-high values to the KB objects stored in
+     * the dictionaries
+     *
+     * @unknown construct and apply belong into some utility file
+     * @return LISTP of keys of HIGH-TO-LOW and LOW-TO-HIGH.
+     */
+    @LispMethod(comment = "Apply the high-to-low and low-to-high values to the KB objects stored in\r\nthe dictionaries\r\n\r\n@unknown construct and apply belong into some utility file\r\n@return LISTP of keys of HIGH-TO-LOW and LOW-TO-HIGH.\nApply the high-to-low and low-to-high values to the KB objects stored in\nthe dictionaries")
     public static SubLObject apply_prioritizing_ordering_to_kb_objects(final SubLObject high_to_low, final SubLObject low_to_high) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ordered_keys = NIL;
@@ -5118,6 +8611,65 @@ public final class formula_templates extends SubLTranslatedFile {
         return ordered_keys;
     }
 
+    /**
+     * Apply the high-to-low and low-to-high values to the KB objects stored in
+     * the dictionaryies
+     *
+     * @unknown construct and apply belong into some utility file
+     */
+    @LispMethod(comment = "Apply the high-to-low and low-to-high values to the KB objects stored in\r\nthe dictionaryies\r\n\r\n@unknown construct and apply belong into some utility file\nApply the high-to-low and low-to-high values to the KB objects stored in\nthe dictionaryies")
+    public static final SubLObject apply_prioritizing_ordering_to_kb_objects_rck_alt(SubLObject high_to_low, SubLObject low_to_high) {
+        {
+            SubLObject tuples = NIL;
+            SubLObject high_keys = dictionary.dictionary_keys(high_to_low);
+            SubLObject low_keys = dictionary.dictionary_keys(low_to_high);
+            SubLObject highest = set_difference(high_keys, low_keys, UNPROVIDED, UNPROVIDED);
+            if (NIL == highest) {
+                highest = high_keys;
+            }
+            {
+                SubLObject work_queue = queues.create_queue();
+                SubLObject result_queue = queues.create_queue();
+                {
+                    SubLObject cdolist_list_var = Sort.sort(highest, symbol_function(FORT_SORT_PRED), UNPROVIDED);
+                    SubLObject item = NIL;
+                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                        queues.enqueue(item, work_queue);
+                    }
+                }
+                while (NIL == queues.queue_empty_p(work_queue)) {
+                    {
+                        SubLObject current = queues.dequeue(work_queue);
+                        SubLObject children = dictionary.dictionary_lookup(high_to_low, current, NIL);
+                        if (NIL == queues.queue_find(current, result_queue, UNPROVIDED, UNPROVIDED)) {
+                            queues.enqueue(current, result_queue);
+                        }
+                        if (NIL != children) {
+                            {
+                                SubLObject cdolist_list_var = Sort.sort(children, symbol_function(FORT_SORT_PRED), UNPROVIDED);
+                                SubLObject item = NIL;
+                                for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                    if (NIL == queues.queue_find(item, result_queue, UNPROVIDED, UNPROVIDED)) {
+                                        queues.enqueue(item, work_queue);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } 
+                tuples = queues.queue_elements(result_queue);
+            }
+            return tuples;
+        }
+    }
+
+    /**
+     * Apply the high-to-low and low-to-high values to the KB objects stored in
+     * the dictionaryies
+     *
+     * @unknown construct and apply belong into some utility file
+     */
+    @LispMethod(comment = "Apply the high-to-low and low-to-high values to the KB objects stored in\r\nthe dictionaryies\r\n\r\n@unknown construct and apply belong into some utility file\nApply the high-to-low and low-to-high values to the KB objects stored in\nthe dictionaryies")
     public static SubLObject apply_prioritizing_ordering_to_kb_objects_rck(final SubLObject high_to_low, final SubLObject low_to_high) {
         SubLObject tuples = NIL;
         final SubLObject high_keys = dictionary.dictionary_keys(high_to_low);
@@ -5159,6 +8711,52 @@ public final class formula_templates extends SubLTranslatedFile {
         return tuples;
     }
 
+    /**
+     * Prepare a high-to-low and low-to-high ordering set that the prioritizing
+     * application method can use to order the KB objects appropriately.
+     *
+     * @unknown construct and apply belong into some utility code
+     */
+    @LispMethod(comment = "Prepare a high-to-low and low-to-high ordering set that the prioritizing\r\napplication method can use to order the KB objects appropriately.\r\n\r\n@unknown construct and apply belong into some utility code\nPrepare a high-to-low and low-to-high ordering set that the prioritizing\napplication method can use to order the KB objects appropriately.")
+    public static final SubLObject construct_highXlow_information_from_prioritizing_ordering_alt(SubLObject tuples) {
+        {
+            SubLObject high_to_low = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+            SubLObject low_to_high = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+            SubLObject cdolist_list_var = tuples;
+            SubLObject tuple = NIL;
+            for (tuple = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tuple = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = tuple;
+                    SubLObject current = datum;
+                    SubLObject higher = NIL;
+                    SubLObject lower = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt322);
+                    higher = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt322);
+                    lower = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        higher = czer_main.canonicalize_term(higher, UNPROVIDED);
+                        lower = czer_main.canonicalize_term(lower, UNPROVIDED);
+                        dictionary_utilities.dictionary_push(high_to_low, higher, lower);
+                        dictionary_utilities.dictionary_push(low_to_high, lower, higher);
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt322);
+                    }
+                }
+            }
+            return values(high_to_low, low_to_high);
+        }
+    }
+
+    /**
+     * Prepare a high-to-low and low-to-high ordering set that the prioritizing
+     * application method can use to order the KB objects appropriately.
+     *
+     * @unknown construct and apply belong into some utility code
+     */
+    @LispMethod(comment = "Prepare a high-to-low and low-to-high ordering set that the prioritizing\r\napplication method can use to order the KB objects appropriately.\r\n\r\n@unknown construct and apply belong into some utility code\nPrepare a high-to-low and low-to-high ordering set that the prioritizing\napplication method can use to order the KB objects appropriately.")
     public static SubLObject construct_highXlow_information_from_prioritizing_ordering(final SubLObject tuples) {
         final SubLObject high_to_low = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
         final SubLObject low_to_high = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
@@ -5190,6 +8788,23 @@ public final class formula_templates extends SubLTranslatedFile {
         return values(high_to_low, low_to_high);
     }
 
+    public static final SubLObject formula_template_load_prioritization_information_for_subtopics_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject new_pred = constants_high.find_constant($str_alt323$higherPriorityTemplateTypeForTopi);
+                SubLObject tuples = (NIL != valid_constantP(new_pred, UNPROVIDED)) ? ((SubLObject) (ftemplate_ask_template($list_alt324, list(new_pred, $sym312$_HIGHER, $sym313$_LOWER, topic), elmt, $list_alt325))) : ftemplate_ask_template($list_alt324, list($$and, $list_alt327, $list_alt328, list($$formulaTemplateTypeHasTopicType, $sym312$_HIGHER, topic), list($$formulaTemplateTypeHasTopicType, $sym313$_LOWER, topic)), elmt, $list_alt330);
+                thread.resetMultipleValues();
+                {
+                    SubLObject high_to_low = construct_highXlow_information_from_prioritizing_ordering(tuples);
+                    SubLObject low_to_high = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    return values(high_to_low, low_to_high);
+                }
+            }
+        }
+    }
+
     public static SubLObject formula_template_load_prioritization_information_for_subtopics(final SubLObject topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject new_pred = constants_high.find_constant($str332$higherPriorityTemplateTypeForTopi);
@@ -5199,6 +8814,22 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject low_to_high = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return values(high_to_low, low_to_high);
+    }
+
+    public static final SubLObject formula_template_load_prioritization_information_for_templates_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject tuples = ftemplate_ask_template($list_alt324, list($$higherPriorityTemplateForType, $sym312$_HIGHER, $sym313$_LOWER, topic), elmt, $list_alt325);
+                thread.resetMultipleValues();
+                {
+                    SubLObject high_to_low = construct_highXlow_information_from_prioritizing_ordering(tuples);
+                    SubLObject low_to_high = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    return values(high_to_low, low_to_high);
+                }
+            }
+        }
     }
 
     public static SubLObject formula_template_load_prioritization_information_for_templates(final SubLObject topic, final SubLObject elmt) {
@@ -5211,6 +8842,32 @@ public final class formula_templates extends SubLTranslatedFile {
         return values(high_to_low, low_to_high);
     }
 
+    /**
+     * Organize the templates by using the ordering -- all others go in the
+     * order of the GUIDs of their template terms, as this is stable.
+     */
+    @LispMethod(comment = "Organize the templates by using the ordering -- all others go in the\r\norder of the GUIDs of their template terms, as this is stable.\nOrganize the templates by using the ordering -- all others go in the\norder of the GUIDs of their template terms, as this is stable.")
+    public static final SubLObject formula_template_organize_templates_by_ordering_alt(SubLObject topic) {
+        {
+            SubLObject ordering = template_topic_ordering(topic);
+            SubLObject all_templates = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+            SubLObject ordered_templates = NIL;
+            SubLObject cdolist_list_var = template_topic_templates(topic);
+            SubLObject template = NIL;
+            for (template = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , template = cdolist_list_var.first()) {
+                dictionary.dictionary_enter(all_templates, formula_template_id(template), template);
+            }
+            ordered_templates = formula_template_organize_by_ordering(all_templates, ordering, STABLE_TEMPLATE_ID_COMPARE);
+            _csetf_template_topic_templates(topic, ordered_templates);
+            return ordered_templates;
+        }
+    }
+
+    /**
+     * Organize the templates by using the ordering -- all others go in the
+     * order of the GUIDs of their template terms, as this is stable.
+     */
+    @LispMethod(comment = "Organize the templates by using the ordering -- all others go in the\r\norder of the GUIDs of their template terms, as this is stable.\nOrganize the templates by using the ordering -- all others go in the\norder of the GUIDs of their template terms, as this is stable.")
     public static SubLObject formula_template_organize_templates_by_ordering(final SubLObject topic) {
         final SubLObject ordering = template_topic_ordering(topic);
         final SubLObject all_templates = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
@@ -5228,6 +8885,22 @@ public final class formula_templates extends SubLTranslatedFile {
         return ordered_templates;
     }
 
+    public static final SubLObject formula_template_organize_subtopics_by_ordering_alt(SubLObject topic) {
+        {
+            SubLObject ordering = template_topic_ordering(topic);
+            SubLObject all_subtopics = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+            SubLObject ordered_subtopics = NIL;
+            SubLObject cdolist_list_var = template_topic_subtopics(topic);
+            SubLObject subtopic = NIL;
+            for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                dictionary.dictionary_enter(all_subtopics, template_topic_topic(subtopic), subtopic);
+            }
+            ordered_subtopics = formula_template_organize_by_ordering(all_subtopics, ordering, STABLE_TEMPLATE_ID_COMPARE);
+            _csetf_template_topic_subtopics(topic, ordered_subtopics);
+            return ordered_subtopics;
+        }
+    }
+
     public static SubLObject formula_template_organize_subtopics_by_ordering(final SubLObject topic) {
         final SubLObject ordering = template_topic_ordering(topic);
         final SubLObject all_subtopics = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
@@ -5243,6 +8916,37 @@ public final class formula_templates extends SubLTranslatedFile {
         ordered_subtopics = formula_template_organize_by_ordering(all_subtopics, ordering, STABLE_TEMPLATE_ID_COMPARE);
         _csetf_template_topic_subtopics(topic, ordered_subtopics);
         return ordered_subtopics;
+    }
+
+    public static final SubLObject formula_template_organize_by_ordering_alt(SubLObject all_items, SubLObject ordering, SubLObject sortfn) {
+        {
+            SubLObject ordered_items = NIL;
+            {
+                SubLObject cdolist_list_var = ordering;
+                SubLObject id_in_order = NIL;
+                for (id_in_order = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , id_in_order = cdolist_list_var.first()) {
+                    {
+                        SubLObject item = dictionary.dictionary_lookup(all_items, id_in_order, UNPROVIDED);
+                        if (NIL != item) {
+                            ordered_items = cons(item, ordered_items);
+                            dictionary.dictionary_remove(all_items, id_in_order);
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject keys = dictionary.dictionary_keys(all_items);
+                SubLObject cdolist_list_var = Sort.sort(keys, sortfn, UNPROVIDED);
+                SubLObject key = NIL;
+                for (key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , key = cdolist_list_var.first()) {
+                    {
+                        SubLObject item = dictionary.dictionary_lookup(all_items, key, UNPROVIDED);
+                        ordered_items = cons(item, ordered_items);
+                    }
+                }
+            }
+            return nreverse(ordered_items);
+        }
     }
 
     public static SubLObject formula_template_organize_by_ordering(final SubLObject all_items, final SubLObject ordering, final SubLObject sortfn) {
@@ -5272,14 +8976,165 @@ public final class formula_templates extends SubLTranslatedFile {
         return nreverse(ordered_items);
     }
 
+    public static final SubLObject stable_template_id_compare_alt(SubLObject id_a, SubLObject id_b) {
+        return kb_utilities.term_L(id_a, id_b, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject stable_template_id_compare(final SubLObject id_a, final SubLObject id_b) {
         return kb_utilities.term_L(id_a, id_b, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     * Given the TOPIC and an ELMT, load the template graph which defines
+     * the template categories and the individual templates. Return
+     *
+     * @return TEMPLATE-TOPIC-P
+     */
+    @LispMethod(comment = "Given the TOPIC and an ELMT, load the template graph which defines\r\nthe template categories and the individual templates. Return\r\n\r\n@return TEMPLATE-TOPIC-P\nGiven the TOPIC and an ELMT, load the template graph which defines\nthe template categories and the individual templates. Return")
+    public static final SubLObject formula_template_load_template_graph_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(topic, FORT_P);
+            SubLTrampolineFile.checkType(elmt, HLMT_P);
+            {
+                SubLObject start_topic = new_template_topic(topic, UNPROVIDED);
+                SubLObject reuse_existingP = rkf_salient_descriptor.rkf_sd_problem_store_okP(rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread));
+                {
+                    SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_sd_problem_store$.currentBinding(thread);
+                    try {
+                        rkf_salient_descriptor.$rkf_sd_problem_store$.bind(rkf_salient_descriptor.rkf_sd_find_or_make_problem_store(), thread);
+                        {
+                            SubLObject store = rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread);
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_94 = formula_template_vars.$template_topic_problem_store$.currentBinding(thread);
+                                    try {
+                                        formula_template_vars.$template_topic_problem_store$.bind(formula_template_vars.find_or_create_template_topic_problem_store(), thread);
+                                        {
+                                            SubLObject reusedP = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            try {
+                                                {
+                                                    SubLObject seen = set.new_set(symbol_function(EQL), UNPROVIDED);
+                                                    SubLObject todo = queues.create_queue();
+                                                    queues.enqueue(start_topic, todo);
+                                                    set.set_add(start_topic, seen);
+                                                    while (NIL == queues.queue_empty_p(todo)) {
+                                                        {
+                                                            SubLObject current_topic = NIL;
+                                                            SubLObject children = NIL;
+                                                            current_topic = queues.dequeue(todo);
+                                                            {
+                                                                SubLObject current = template_topic_topic(current_topic);
+                                                                SubLObject candidates = formula_template_subtopics_for_type(current, elmt);
+                                                                formula_template_topic_load_topic_specifics(current_topic, elmt);
+                                                                if (NIL == candidates) {
+                                                                    {
+                                                                        SubLObject template_ids = asserted_formula_template_ids_for_type(current, elmt);
+                                                                        SubLObject cdolist_list_var = template_ids;
+                                                                        SubLObject template_id = NIL;
+                                                                        for (template_id = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , template_id = cdolist_list_var.first()) {
+                                                                            {
+                                                                                SubLObject ftemplate = new_formula_template(template_id, current_topic);
+                                                                                formula_template_load_topic_template_details(current, ftemplate, elmt);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    formula_template_organize_templates_by_ordering(current_topic);
+                                                                } else {
+                                                                    {
+                                                                        SubLObject subtopics = NIL;
+                                                                        SubLObject cdolist_list_var = candidates;
+                                                                        SubLObject candidate = NIL;
+                                                                        for (candidate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate = cdolist_list_var.first()) {
+                                                                            {
+                                                                                SubLObject candidate_has_subtopicsP = fet_topic_fort_has_subtopicsP(candidate, elmt);
+                                                                                SubLObject subtopic = new_template_topic(candidate, current_topic);
+                                                                                if ((((NIL == formula_template_utilities.$assume_induced_fet_templates_already_reifiedP$.getDynamicValue(thread)) && (NIL != formula_template_utilities.induction_topic_typeP(candidate))) && (NIL == candidate_has_subtopicsP)) && (NIL == fet_topic_fort_has_templatesP(candidate, elmt))) {
+                                                                                    {
+                                                                                        SubLObject focal_term_type = formula_template_utilities.focal_term_type_for_induced_template_type(candidate, elmt);
+                                                                                        SubLObject induction_mt = formula_template_induction_mt(focal_term_type, elmt);
+                                                                                        formula_template_utilities.induced_formula_template_forts_for_focal_term_type(focal_term_type, induction_mt, candidate);
+                                                                                    }
+                                                                                }
+                                                                                if ((NIL != candidate_has_subtopicsP) || (NIL != fet_topic_fort_has_templatesP(candidate, elmt))) {
+                                                                                    template_topic_add_subtopic(current_topic, subtopic);
+                                                                                    subtopics = cons(subtopic, subtopics);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        children = subtopics;
+                                                                    }
+                                                                    formula_template_organize_subtopics_by_ordering(current_topic);
+                                                                }
+                                                            }
+                                                            {
+                                                                SubLObject cdolist_list_var = children;
+                                                                SubLObject child = NIL;
+                                                                for (child = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , child = cdolist_list_var.first()) {
+                                                                    if (NIL == set.set_memberP(child, seen)) {
+                                                                        set.set_add(child, seen);
+                                                                        queues.enqueue(child, todo);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } 
+                                                }
+                                            } finally {
+                                                {
+                                                    SubLObject _prev_bind_0_95 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                    try {
+                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                        if (!((NIL != reusedP) || (NIL != formula_template_vars.template_topic_problem_store_has_browsable_inferenceP()))) {
+                                                            formula_template_vars.destroy_template_topic_problem_store(UNPROVIDED);
+                                                        }
+                                                    } finally {
+                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_95, thread);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } finally {
+                                        formula_template_vars.$template_topic_problem_store$.rebind(_prev_bind_0_94, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_96 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuse_existingP) {
+                                            rkf_salient_descriptor.rkf_sd_free_problem_store(store);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_96, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        rkf_salient_descriptor.$rkf_sd_problem_store$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                validate_template_topic_semantic_constraints(start_topic);
+                return start_topic;
+            }
+        }
+    }
+
+    /**
+     * Given the TOPIC and an ELMT, load the template graph which defines
+     * the template categories and the individual templates. Return
+     *
+     * @return TEMPLATE-TOPIC-P
+     */
+    @LispMethod(comment = "Given the TOPIC and an ELMT, load the template graph which defines\r\nthe template categories and the individual templates. Return\r\n\r\n@return TEMPLATE-TOPIC-P\nGiven the TOPIC and an ELMT, load the template graph which defines\nthe template categories and the individual templates. Return")
     public static SubLObject formula_template_load_template_graph(final SubLObject topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(topic) : "forts.fort_p(topic) " + "CommonSymbols.NIL != forts.fort_p(topic) " + topic;
-        assert NIL != hlmt.hlmt_p(elmt) : "hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) " + elmt;
+        assert NIL != forts.fort_p(topic) : "! forts.fort_p(topic) " + ("forts.fort_p(topic) " + "CommonSymbols.NIL != forts.fort_p(topic) ") + topic;
+        assert NIL != hlmt.hlmt_p(elmt) : "! hlmt.hlmt_p(elmt) " + ("hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) ") + elmt;
         final SubLObject start_topic = new_template_topic(topic, UNPROVIDED);
         final SubLObject reuse_existingP = rkf_salient_descriptor.rkf_sd_problem_store_okP(rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread));
         final SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_sd_problem_store$.currentBinding(thread);
@@ -5388,9 +9243,34 @@ public final class formula_templates extends SubLTranslatedFile {
         return start_topic;
     }
 
+    /**
+     * Collector functionality to checking things that cannot properly be verified during the loading process.
+     */
+    @LispMethod(comment = "Collector functionality to checking things that cannot properly be verified during the loading process.")
+    public static final SubLObject validate_template_topic_semantic_constraints_alt(SubLObject template_topic) {
+        template_topic_query_mt_can_see_all_assertion_mts(template_topic);
+        return template_topic;
+    }
+
+    /**
+     * Collector functionality to checking things that cannot properly be verified during the loading process.
+     */
+    @LispMethod(comment = "Collector functionality to checking things that cannot properly be verified during the loading process.")
     public static SubLObject validate_template_topic_semantic_constraints(final SubLObject template_topic) {
         template_topic_query_mt_can_see_all_assertion_mts(template_topic);
         return template_topic;
+    }
+
+    public static final SubLObject template_topic_query_mt_can_see_all_assertion_mts_alt(SubLObject template_topic) {
+        {
+            SubLObject query_mt = template_topic_query_mt(template_topic);
+            SubLObject cdolist_list_var = template_topic_subtopics(template_topic);
+            SubLObject subtopic = NIL;
+            for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                check_template_topic_query_mt_can_see_subtopics_assertion_mts(subtopic, query_mt);
+            }
+            return template_topic;
+        }
     }
 
     public static SubLObject template_topic_query_mt_can_see_all_assertion_mts(final SubLObject template_topic) {
@@ -5404,6 +9284,52 @@ public final class formula_templates extends SubLTranslatedFile {
             subtopic = cdolist_list_var.first();
         } 
         return template_topic;
+    }
+
+    public static final SubLObject check_template_topic_query_mt_can_see_subtopics_assertion_mts_alt(SubLObject subtopic, SubLObject query_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == template_topic_subtopics(subtopic)) {
+                {
+                    SubLObject cdolist_list_var = template_topic_templates(subtopic);
+                    SubLObject ftemplate = NIL;
+                    for (ftemplate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ftemplate = cdolist_list_var.first()) {
+                        {
+                            SubLObject elmt = formula_template_elmt(ftemplate);
+                            SubLObject visibleP = NIL;
+                            SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(query_mt);
+                            {
+                                SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                try {
+                                    mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                    visibleP = mt_relevance_macros.relevant_mtP(elmt);
+                                } finally {
+                                    mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                    mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                            if (NIL == visibleP) {
+                                funcall(NIL != $warn_on_template_topic_validation_only$.getGlobalValue() ? ((SubLObject) (WARN)) : ERROR, $str_alt334$Invalid_formula_template__A_in_to, formula_template_id(ftemplate), template_topic_topic(subtopic), query_mt, elmt);
+                            }
+                        }
+                    }
+                }
+            } else {
+                {
+                    SubLObject cdolist_list_var = template_topic_subtopics(subtopic);
+                    SubLObject subsubtopic = NIL;
+                    for (subsubtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subsubtopic = cdolist_list_var.first()) {
+                        check_template_topic_query_mt_can_see_subtopics_assertion_mts(subsubtopic, query_mt);
+                    }
+                }
+            }
+            return subtopic;
+        }
     }
 
     public static SubLObject check_template_topic_query_mt_can_see_subtopics_assertion_mts(final SubLObject subtopic, final SubLObject query_mt) {
@@ -5448,8 +9374,44 @@ public final class formula_templates extends SubLTranslatedFile {
         return subtopic;
     }
 
+    public static final SubLObject templates_use_isaXgenlsP_alt() {
+        return makeBoolean(!((NIL != constants_high.find_constant($$$FactivoreTab)) && (NIL != isa.isaP($$FormulaTemplateTopicType, $$FirstOrderCollection, UNPROVIDED, UNPROVIDED))));
+    }
+
     public static SubLObject templates_use_isaXgenlsP() {
         return makeBoolean((NIL == constants_high.find_constant($$$FactivoreTab)) || (NIL == isa.isaP($$FormulaTemplateTopicType, $$FirstOrderCollection, UNPROVIDED, UNPROVIDED)));
+    }
+
+    public static final SubLObject asserted_formula_template_ids_for_type_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (NIL != templates_use_isaXgenlsP()) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                ans = isa.instances(topic, elmt, UNPROVIDED);
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    ans = ftemplate_ask_variable($sym338$_TEMPLATE, list($$assertedSentence, list($$formulaTemplateHasType, $sym338$_TEMPLATE, topic)), elmt, UNPROVIDED);
+                }
+                return ans;
+            }
+        }
     }
 
     public static SubLObject asserted_formula_template_ids_for_type(final SubLObject topic, final SubLObject elmt) {
@@ -5476,6 +9438,25 @@ public final class formula_templates extends SubLTranslatedFile {
         return ans;
     }
 
+    public static final SubLObject sort_formula_template_subtopics_by_template_count_alt(SubLObject subtopics, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = $template_count_mt$.currentBinding(thread);
+                    try {
+                        $template_count_mt$.bind(elmt, thread);
+                        ans = Sort.sort(subtopics, symbol_function($sym341$_), COUNT_ASSERTED_FORMULA_TEMPLATE_IDS_FOR_TYPE);
+                    } finally {
+                        $template_count_mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ans;
+            }
+        }
+    }
+
     public static SubLObject sort_formula_template_subtopics_by_template_count(final SubLObject subtopics, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -5487,6 +9468,41 @@ public final class formula_templates extends SubLTranslatedFile {
             $template_count_mt$.rebind(_prev_bind_0, thread);
         }
         return ans;
+    }
+
+    public static final SubLObject count_asserted_formula_template_ids_for_type_internal_alt(SubLObject topic, SubLObject elmt) {
+        if (elmt == UNPROVIDED) {
+            elmt = $template_count_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (NIL != templates_use_isaXgenlsP()) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                ans = isa.count_all_instances(topic, elmt, UNPROVIDED);
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    ans = length(asserted_formula_template_ids_for_type(topic, elmt));
+                }
+                return ans;
+            }
+        }
     }
 
     public static SubLObject count_asserted_formula_template_ids_for_type_internal(final SubLObject topic, SubLObject elmt) {
@@ -5514,6 +9530,54 @@ public final class formula_templates extends SubLTranslatedFile {
             ans = length(asserted_formula_template_ids_for_type(topic, elmt));
         }
         return ans;
+    }
+
+    public static final SubLObject count_asserted_formula_template_ids_for_type_alt(SubLObject topic, SubLObject elmt) {
+        if (elmt == UNPROVIDED) {
+            elmt = $template_count_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return count_asserted_formula_template_ids_for_type_internal(topic, elmt);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, COUNT_ASSERTED_FORMULA_TEMPLATE_IDS_FOR_TYPE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), COUNT_ASSERTED_FORMULA_TEMPLATE_IDS_FOR_TYPE, TWO_INTEGER, NIL, EQL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, COUNT_ASSERTED_FORMULA_TEMPLATE_IDS_FOR_TYPE, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(topic, elmt);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw343$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (topic.eql(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && elmt.eql(cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(count_asserted_formula_template_ids_for_type_internal(topic, elmt)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(topic, elmt));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject count_asserted_formula_template_ids_for_type(final SubLObject topic, SubLObject elmt) {
@@ -5555,8 +9619,44 @@ public final class formula_templates extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject fet_topic_fort_has_subtopicsP_alt(SubLObject topic, SubLObject elmt) {
+        return list_utilities.sublisp_boolean(formula_template_subtopics_for_type(topic, elmt));
+    }
+
     public static SubLObject fet_topic_fort_has_subtopicsP(final SubLObject topic, final SubLObject elmt) {
         return list_utilities.sublisp_boolean(formula_template_subtopics_for_type(topic, elmt));
+    }
+
+    public static final SubLObject fet_topic_fort_has_templatesP_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (NIL != templates_use_isaXgenlsP()) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                ans = list_utilities.sublisp_boolean(isa.all_fort_instances(topic, UNPROVIDED, UNPROVIDED));
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    return list_utilities.sublisp_boolean(ftemplate_ask_variable($sym338$_TEMPLATE, list($$formulaTemplateHasType, $sym338$_TEMPLATE, topic), elmt, $list_alt344));
+                }
+                return ans;
+            }
+        }
     }
 
     public static SubLObject fet_topic_fort_has_templatesP(final SubLObject topic, final SubLObject elmt) {
@@ -5582,11 +9682,50 @@ public final class formula_templates extends SubLTranslatedFile {
         return list_utilities.sublisp_boolean(ftemplate_ask_variable($sym350$_TEMPLATE, list($$formulaTemplateHasType, $sym350$_TEMPLATE, topic), elmt, $list355));
     }
 
+    public static final SubLObject formula_template_subtopics_for_type_alt(SubLObject topic, SubLObject elmt) {
+        if ((NIL != formula_template_utilities.induction_topic_typeP(topic)) && (NIL == formula_template_asserted_subtopics_for_type(topic, elmt))) {
+            formula_template_utilities.induce_formula_template_subtopics_for_type(topic, elmt);
+        }
+        return formula_template_asserted_subtopics_for_type(topic, elmt);
+    }
+
     public static SubLObject formula_template_subtopics_for_type(final SubLObject topic, final SubLObject elmt) {
         if ((NIL != formula_template_utilities.induction_topic_typeP(topic)) && (NIL == formula_template_asserted_subtopics_for_type(topic, elmt))) {
             formula_template_utilities.induce_formula_template_subtopics_for_type(topic, elmt);
         }
         return formula_template_asserted_subtopics_for_type(topic, elmt);
+    }
+
+    public static final SubLObject formula_template_asserted_subtopics_for_type_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject subtopics = NIL;
+                if (NIL != templates_use_isaXgenlsP()) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                subtopics = genls.specs(topic, UNPROVIDED, UNPROVIDED);
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    subtopics = ftemplate_ask_variable($sym345$_SUBTOPIC, list($$formulaTemplateTypeHasTopicType, $sym345$_SUBTOPIC, topic), elmt, UNPROVIDED);
+                }
+                return subtopics;
+            }
+        }
     }
 
     public static SubLObject formula_template_asserted_subtopics_for_type(final SubLObject topic, final SubLObject elmt) {
@@ -5613,6 +9752,38 @@ public final class formula_templates extends SubLTranslatedFile {
         return subtopics;
     }
 
+    public static final SubLObject asserted_formula_template_subtopics_for_type_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject subtopics = NIL;
+                if (NIL != templates_use_isaXgenlsP()) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                subtopics = genls.specs(topic, UNPROVIDED, UNPROVIDED);
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    subtopics = ftemplate_ask_variable($sym345$_SUBTOPIC, list($$assertedSentence, list($$formulaTemplateTypeHasTopicType, $sym345$_SUBTOPIC, topic)), elmt, UNPROVIDED);
+                }
+                return subtopics;
+            }
+        }
+    }
+
     public static SubLObject asserted_formula_template_subtopics_for_type(final SubLObject topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject subtopics = NIL;
@@ -5637,8 +9808,45 @@ public final class formula_templates extends SubLTranslatedFile {
         return subtopics;
     }
 
+    public static final SubLObject formula_template_induction_mt_alt(SubLObject topic, SubLObject elmt) {
+        return $$InferencePSC;
+    }
+
     public static SubLObject formula_template_induction_mt(final SubLObject topic, final SubLObject elmt) {
         return $$InferencePSC;
+    }
+
+    public static final SubLObject formula_template_topic_load_topic_specifics_alt(SubLObject template_topic, SubLObject elmt) {
+        {
+            SubLObject current = template_topic_topic(template_topic);
+            SubLObject title = topictmplt_get_topic_template_title(current, elmt);
+            if (title.isString()) {
+                template_topic_add_title(template_topic, title);
+            }
+            {
+                SubLObject prefix = topictmplt_get_topic_template_term_prefix(current, elmt);
+                if (prefix.isString()) {
+                    template_topic_add_term_prefix(template_topic, prefix);
+                }
+            }
+            {
+                SubLObject introductory = topictmplt_get_topic_template_introductory_template(current, elmt);
+                if (NIL != fort_p(introductory)) {
+                    template_topic_set_introductory_template(template_topic, introductory);
+                }
+            }
+            {
+                SubLObject sources = topictmplt_get_topic_template_source_types(current, elmt);
+                if (NIL != list_utilities.list_of_type_p(symbol_function(FORT_OR_NAUT_P), sources)) {
+                    template_topic_set_source_types(template_topic, sources);
+                }
+            }
+            _csetf_template_topic_ordering(template_topic, NIL != template_topic_supertopic(template_topic) ? ((SubLObject) (formula_template_load_topic_template_ordering(current, elmt))) : formula_template_load_topic_subtopic_ordering(current, elmt));
+            _csetf_template_topic_query_mt(template_topic, topictmplt_get_topic_template_query_mt(current, elmt));
+            _csetf_template_topic_definitional_mt(template_topic, topictmplt_get_topic_template_definitional_mt(current, elmt));
+            _csetf_template_topic_source_mt(template_topic, elmt);
+            return template_topic;
+        }
     }
 
     public static SubLObject formula_template_topic_load_topic_specifics(final SubLObject template_topic, final SubLObject elmt) {
@@ -5666,6 +9874,18 @@ public final class formula_templates extends SubLTranslatedFile {
         return template_topic;
     }
 
+    public static final SubLObject topictmplt_get_topic_template_source_types_alt(SubLObject topic, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = NIL;
+            SubLObject template_id = NIL;
+            SubLObject topic_id_argnum = ONE_INTEGER;
+            SubLObject topic_id = topic;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = NIL;
+            return ftemplate_get_asserted_values(template_id, topic_id, $$sourcesForTopic, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
+        }
+    }
+
     public static SubLObject topictmplt_get_topic_template_source_types(final SubLObject topic, final SubLObject elmt) {
         final SubLObject template_id_argnum = NIL;
         final SubLObject template_id = NIL;
@@ -5675,6 +9895,25 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_asserted_values(template_id, topic, $$sourcesForTopic, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP, UNPROVIDED);
     }
 
+    /**
+     * Return the first asserted PREDICATE value for TOPIC-ID visible from ELMT.
+     */
+    @LispMethod(comment = "Return the first asserted PREDICATE value for TOPIC-ID visible from ELMT.")
+    public static final SubLObject ftemplate_topic_get_functional_slot_value_alt(SubLObject topic_id, SubLObject predicate, SubLObject elmt) {
+        {
+            SubLObject template_id_argnum = NIL;
+            SubLObject template_id = NIL;
+            SubLObject topic_id_argnum = ONE_INTEGER;
+            SubLObject answer_argnums = $list_alt267;
+            SubLObject allow_genl_topicsP = NIL;
+            return ftemplate_get_first_asserted_value(template_id, topic_id, predicate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
+        }
+    }
+
+    /**
+     * Return the first asserted PREDICATE value for TOPIC-ID visible from ELMT.
+     */
+    @LispMethod(comment = "Return the first asserted PREDICATE value for TOPIC-ID visible from ELMT.")
     public static SubLObject ftemplate_topic_get_functional_slot_value(final SubLObject topic_id, final SubLObject predicate, final SubLObject elmt) {
         final SubLObject template_id_argnum = NIL;
         final SubLObject template_id = NIL;
@@ -5684,24 +9923,54 @@ public final class formula_templates extends SubLTranslatedFile {
         return ftemplate_get_first_asserted_value(template_id, topic_id, predicate, elmt, template_id_argnum, topic_id_argnum, answer_argnums, allow_genl_topicsP);
     }
 
+    public static final SubLObject topictmplt_get_topic_template_introductory_template_alt(SubLObject topic, SubLObject elmt) {
+        return ftemplate_topic_get_functional_slot_value(topic, $$focalTermIntroduction, elmt);
+    }
+
     public static SubLObject topictmplt_get_topic_template_introductory_template(final SubLObject topic, final SubLObject elmt) {
         return ftemplate_topic_get_functional_slot_value(topic, $$focalTermIntroduction, elmt);
+    }
+
+    public static final SubLObject topictmplt_get_topic_template_title_alt(SubLObject topic, SubLObject elmt) {
+        return ftemplate_topic_get_functional_slot_value(topic, $const356$titleForFormulaTemplateType_Strin, elmt);
     }
 
     public static SubLObject topictmplt_get_topic_template_title(final SubLObject topic, final SubLObject elmt) {
         return ftemplate_topic_get_functional_slot_value(topic, $const367$titleForFormulaTemplateType_Strin, elmt);
     }
 
+    public static final SubLObject topictmplt_get_topic_template_term_prefix_alt(SubLObject topic, SubLObject elmt) {
+        return ftemplate_topic_get_functional_slot_value(topic, $$templateTopicPrefix, elmt);
+    }
+
     public static SubLObject topictmplt_get_topic_template_term_prefix(final SubLObject topic, final SubLObject elmt) {
         return ftemplate_topic_get_functional_slot_value(topic, $$templateTopicPrefix, elmt);
+    }
+
+    public static final SubLObject topictmplt_get_topic_template_query_mt_alt(SubLObject topic, SubLObject elmt) {
+        return ftemplate_topic_get_functional_slot_value(topic, $$queryMtForTopicAssertions, elmt);
     }
 
     public static SubLObject topictmplt_get_topic_template_query_mt(final SubLObject topic, final SubLObject elmt) {
         return ftemplate_topic_get_functional_slot_value(topic, $$queryMtForTopicAssertions, elmt);
     }
 
+    public static final SubLObject topictmplt_get_topic_template_definitional_mt_alt(SubLObject topic, SubLObject elmt) {
+        return ftemplate_topic_get_functional_slot_value(topic, $$definitionalMtForTopicAssertions, elmt);
+    }
+
     public static SubLObject topictmplt_get_topic_template_definitional_mt(final SubLObject topic, final SubLObject elmt) {
         return ftemplate_topic_get_functional_slot_value(topic, $$definitionalMtForTopicAssertions, elmt);
+    }
+
+    public static final SubLObject ftemplate_ask_variable_alt(SubLObject variable, SubLObject sentence, SubLObject mt, SubLObject v_properties) {
+        if (v_properties == UNPROVIDED) {
+            v_properties = NIL;
+        }
+        {
+            SubLObject all_properties = putf(v_properties, $PROBLEM_STORE, formula_template_vars.get_template_topic_problem_store());
+            return ask_utilities.query_variable(variable, sentence, mt, all_properties);
+        }
     }
 
     public static SubLObject ftemplate_ask_variable(final SubLObject variable, final SubLObject sentence, final SubLObject mt, SubLObject v_properties) {
@@ -5712,6 +9981,16 @@ public final class formula_templates extends SubLTranslatedFile {
         return ask_utilities.query_variable(variable, sentence, mt, all_properties);
     }
 
+    public static final SubLObject ftemplate_ask_template_alt(SubLObject template, SubLObject sentence, SubLObject mt, SubLObject v_properties) {
+        if (v_properties == UNPROVIDED) {
+            v_properties = NIL;
+        }
+        {
+            SubLObject all_properties = putf(v_properties, $PROBLEM_STORE, formula_template_vars.get_template_topic_problem_store());
+            return ask_utilities.query_template(template, sentence, mt, all_properties);
+        }
+    }
+
     public static SubLObject ftemplate_ask_template(final SubLObject template, final SubLObject sentence, final SubLObject mt, SubLObject v_properties) {
         if (v_properties == UNPROVIDED) {
             v_properties = NIL;
@@ -5720,6 +9999,77 @@ public final class formula_templates extends SubLTranslatedFile {
         return ask_utilities.query_template(template, sentence, mt, all_properties);
     }
 
+    /**
+     * Retrieve all assertions that match to the formula templates of the template topic,
+     * assuming that FOCAL-TERM is a template topic instance, and that the template is
+     * visible from ELMT.
+     *
+     * @return 0 LIST of (FORMULA-TEMPLATE-ID (LIST of ASSERTIONS)) tuples
+     * @return 1 non-editables assertion bundle (currently SET-P)
+     */
+    @LispMethod(comment = "Retrieve all assertions that match to the formula templates of the template topic,\r\nassuming that FOCAL-TERM is a template topic instance, and that the template is\r\nvisible from ELMT.\r\n\r\n@return 0 LIST of (FORMULA-TEMPLATE-ID (LIST of ASSERTIONS)) tuples\r\n@return 1 non-editables assertion bundle (currently SET-P)\nRetrieve all assertions that match to the formula templates of the template topic,\nassuming that FOCAL-TERM is a template topic instance, and that the template is\nvisible from ELMT.")
+    public static final SubLObject get_editable_and_non_editable_assertions_for_template_topic_instance_alt(SubLObject focal_term, SubLObject template_topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject results = NIL;
+                SubLObject non_editables = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = formula_template_vars.$template_topic_problem_store$.currentBinding(thread);
+                    try {
+                        formula_template_vars.$template_topic_problem_store$.bind(formula_template_vars.find_or_create_template_topic_problem_store(), thread);
+                        {
+                            SubLObject reusedP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                {
+                                    SubLObject query_mt = template_topic_query_mt(template_topic);
+                                    SubLObject non_editable = compute_non_editable_assertions_for_template_topic_instance(focal_term, template_topic_topic(template_topic), elmt, query_mt);
+                                    {
+                                        SubLObject _prev_bind_0_97 = $non_editable_assertions_for_template_topic_instance$.currentBinding(thread);
+                                        try {
+                                            $non_editable_assertions_for_template_topic_instance$.bind(non_editable, thread);
+                                            SubLTrampolineFile.checkType(non_editable, SET_P);
+                                            results = get_assertions_for_template_topic_instance_int(focal_term, template_topic, elmt, query_mt);
+                                            non_editables = get_non_editable_assertions_for_template_topic_instance();
+                                        } finally {
+                                            $non_editable_assertions_for_template_topic_instance$.rebind(_prev_bind_0_97, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_98 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (!((NIL != reusedP) || (NIL != formula_template_vars.template_topic_problem_store_has_browsable_inferenceP()))) {
+                                            formula_template_vars.destroy_template_topic_problem_store(UNPROVIDED);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_98, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        formula_template_vars.$template_topic_problem_store$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(results, non_editables);
+            }
+        }
+    }
+
+    /**
+     * Retrieve all assertions that match to the formula templates of the template topic,
+     * assuming that FOCAL-TERM is a template topic instance, and that the template is
+     * visible from ELMT.
+     *
+     * @return 0 LIST of (FORMULA-TEMPLATE-ID (LIST of ASSERTIONS)) tuples
+     * @return 1 non-editables assertion bundle (currently SET-P)
+     */
+    @LispMethod(comment = "Retrieve all assertions that match to the formula templates of the template topic,\r\nassuming that FOCAL-TERM is a template topic instance, and that the template is\r\nvisible from ELMT.\r\n\r\n@return 0 LIST of (FORMULA-TEMPLATE-ID (LIST of ASSERTIONS)) tuples\r\n@return 1 non-editables assertion bundle (currently SET-P)\nRetrieve all assertions that match to the formula templates of the template topic,\nassuming that FOCAL-TERM is a template topic instance, and that the template is\nvisible from ELMT.")
     public static SubLObject get_editable_and_non_editable_assertions_for_template_topic_instance(final SubLObject focal_term, final SubLObject template_topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject results = NIL;
@@ -5736,7 +10086,7 @@ public final class formula_templates extends SubLTranslatedFile {
                 final SubLObject _prev_bind_0_$281 = $non_editable_assertions_for_template_topic_instance$.currentBinding(thread);
                 try {
                     $non_editable_assertions_for_template_topic_instance$.bind(non_editable, thread);
-                    assert NIL != set.set_p(non_editable) : "set.set_p(non_editable) " + "CommonSymbols.NIL != set.set_p(non_editable) " + non_editable;
+                    assert NIL != set.set_p(non_editable) : "! set.set_p(non_editable) " + ("set.set_p(non_editable) " + "CommonSymbols.NIL != set.set_p(non_editable) ") + non_editable;
                     results = get_assertions_for_template_topic_instance_int(focal_term, template_topic, elmt, query_mt);
                     non_editables = get_non_editable_assertions_for_template_topic_instance();
                 } finally {
@@ -5761,6 +10111,29 @@ public final class formula_templates extends SubLTranslatedFile {
         return values(results, non_editables);
     }
 
+    /**
+     * Like GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE, except that
+     * it does not return the NON-EDITABLES.
+     */
+    @LispMethod(comment = "Like GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE, except that\r\nit does not return the NON-EDITABLES.\nLike GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE, except that\nit does not return the NON-EDITABLES.")
+    public static final SubLObject get_assertions_for_template_topic_instance_alt(SubLObject focal_term, SubLObject template_topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject results = get_editable_and_non_editable_assertions_for_template_topic_instance(focal_term, template_topic, elmt);
+                SubLObject non_editables = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                return results;
+            }
+        }
+    }
+
+    /**
+     * Like GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE, except that
+     * it does not return the NON-EDITABLES.
+     */
+    @LispMethod(comment = "Like GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE, except that\r\nit does not return the NON-EDITABLES.\nLike GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE, except that\nit does not return the NON-EDITABLES.")
     public static SubLObject get_assertions_for_template_topic_instance(final SubLObject focal_term, final SubLObject template_topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -5768,6 +10141,28 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject non_editables = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return results;
+    }
+
+    public static final SubLObject get_assertions_for_template_topic_instance_int_alt(SubLObject focal_term, SubLObject template_topic, SubLObject elmt, SubLObject query_mt) {
+        {
+            SubLObject results = NIL;
+            SubLObject cdolist_list_var = template_topic_subtopics(template_topic);
+            SubLObject subtopic = NIL;
+            for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                {
+                    SubLObject sub_results = NIL;
+                    if (NIL == template_topic_templates(subtopic)) {
+                        sub_results = get_assertions_for_template_topic_instance_int(focal_term, subtopic, elmt, query_mt);
+                    } else {
+                        sub_results = get_assertions_for_leaf_template_topic_instance(focal_term, subtopic, elmt, query_mt);
+                    }
+                    if (NIL != sub_results) {
+                        results = cons(list(template_topic_topic(subtopic), sub_results), results);
+                    }
+                }
+            }
+            return nreverse(results);
+        }
     }
 
     public static SubLObject get_assertions_for_template_topic_instance_int(final SubLObject focal_term, final SubLObject template_topic, final SubLObject elmt, final SubLObject query_mt) {
@@ -5791,8 +10186,208 @@ public final class formula_templates extends SubLTranslatedFile {
         return nreverse(results);
     }
 
+    public static final SubLObject xml_template_topic_assertions_current_revision_alt() {
+        return $xml_template_topic_assertions_revisions$.getGlobalValue().first().first();
+    }
+
     public static SubLObject xml_template_topic_assertions_current_revision() {
         return $xml_template_topic_assertions_revisions$.getGlobalValue().first().first();
+    }
+
+    public static final SubLObject xml_serialize_assertions_for_template_topic_instance_alt(SubLObject focal_term, SubLObject template_topic, SubLObject template_elmt, SubLObject assertions_elmt, SubLObject results, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_99 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$knownAssertionsForTemplateTopic, NIL, NIL);
+                            {
+                                SubLObject _prev_bind_0_100 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_101 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$templateTopic, NIL, NIL);
+                                    cycml.cycml_serialize_term(template_topic_topic(template_topic));
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_101, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_100, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$templateTopic);
+                            {
+                                SubLObject _prev_bind_0_102 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_103 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$queryELMt, NIL, NIL);
+                                    cycml.cycml_serialize_term(assertions_elmt);
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_103, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_102, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$queryELMt);
+                            {
+                                SubLObject _prev_bind_0_104 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_105 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$templateInstance, NIL, NIL);
+                                    cycml.cycml_serialize_term(focal_term);
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_105, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_104, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$templateInstance);
+                            if (NIL == $xml_suppress_future_template_extensions$.getDynamicValue(thread)) {
+                                {
+                                    SubLObject _prev_bind_0_106 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_107 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$templateTopicAssertionsRevision, NIL, NIL);
+                                        cycml.cycml_serialize_number(xml_template_topic_assertions_current_revision(), UNPROVIDED);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_107, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_106, thread);
+                                    }
+                                }
+                                xml_utilities.xml_terpri();
+                                xml_utilities.xml_end_tag_internal($$$templateTopicAssertionsRevision);
+                            }
+                            {
+                                SubLObject _prev_bind_0_108 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_109 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($str_alt366$knownAssertionsForTemplateSubTopi, NIL, NIL);
+                                    {
+                                        SubLObject cdolist_list_var = results;
+                                        SubLObject subtopic_results = NIL;
+                                        for (subtopic_results = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic_results = cdolist_list_var.first()) {
+                                            {
+                                                SubLObject datum = subtopic_results;
+                                                SubLObject current = datum;
+                                                SubLObject subtopic_id = NIL;
+                                                SubLObject template_result_sets = NIL;
+                                                destructuring_bind_must_consp(current, datum, $list_alt367);
+                                                subtopic_id = current.first();
+                                                current = current.rest();
+                                                destructuring_bind_must_consp(current, datum, $list_alt367);
+                                                template_result_sets = current.first();
+                                                current = current.rest();
+                                                if (NIL == current) {
+                                                    {
+                                                        SubLObject _prev_bind_0_110 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_111 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                        try {
+                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                            xml_utilities.xml_start_tag_internal($str_alt368$knownAssertionsForTemplateSubTopi, NIL, NIL);
+                                                            {
+                                                                SubLObject _prev_bind_0_112 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_113 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                try {
+                                                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                    xml_utilities.xml_start_tag_internal($$$subTopic, NIL, NIL);
+                                                                    cycml.cycml_serialize_term(subtopic_id);
+                                                                } finally {
+                                                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_113, thread);
+                                                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_112, thread);
+                                                                }
+                                                            }
+                                                            xml_utilities.xml_terpri();
+                                                            xml_utilities.xml_end_tag_internal($$$subTopic);
+                                                            {
+                                                                SubLObject _prev_bind_0_114 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_115 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                try {
+                                                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                    xml_utilities.xml_start_tag_internal($str_alt369$knownAssertionsForFormulaTemplate, NIL, NIL);
+                                                                    {
+                                                                        SubLObject cdolist_list_var_116 = template_result_sets;
+                                                                        SubLObject template_results = NIL;
+                                                                        for (template_results = cdolist_list_var_116.first(); NIL != cdolist_list_var_116; cdolist_list_var_116 = cdolist_list_var_116.rest() , template_results = cdolist_list_var_116.first()) {
+                                                                            {
+                                                                                SubLObject datum_117 = template_results;
+                                                                                SubLObject current_118 = datum_117;
+                                                                                SubLObject template_id = NIL;
+                                                                                SubLObject assertions = NIL;
+                                                                                destructuring_bind_must_consp(current_118, datum_117, $list_alt370);
+                                                                                template_id = current_118.first();
+                                                                                current_118 = current_118.rest();
+                                                                                destructuring_bind_must_consp(current_118, datum_117, $list_alt370);
+                                                                                assertions = current_118.first();
+                                                                                current_118 = current_118.rest();
+                                                                                if (NIL == current_118) {
+                                                                                    xml_serialize_assertions_for_formula_template_instance(focal_term, template_id, assertions, UNPROVIDED);
+                                                                                } else {
+                                                                                    cdestructuring_bind_error(datum_117, $list_alt370);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                } finally {
+                                                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_115, thread);
+                                                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_114, thread);
+                                                                }
+                                                            }
+                                                            xml_utilities.xml_terpri();
+                                                            xml_utilities.xml_end_tag_internal($str_alt369$knownAssertionsForFormulaTemplate);
+                                                        } finally {
+                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_111, thread);
+                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_110, thread);
+                                                        }
+                                                    }
+                                                    xml_utilities.xml_terpri();
+                                                    xml_utilities.xml_end_tag_internal($str_alt368$knownAssertionsForTemplateSubTopi);
+                                                } else {
+                                                    cdestructuring_bind_error(datum, $list_alt367);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_109, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_108, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($str_alt366$knownAssertionsForTemplateSubTopi);
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_99, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$knownAssertionsForTemplateTopic);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return template_topic;
+        }
     }
 
     public static SubLObject xml_serialize_assertions_for_template_topic_instance(final SubLObject focal_term, final SubLObject template_topic, final SubLObject template_elmt, final SubLObject assertions_elmt, final SubLObject results, SubLObject stream) {
@@ -6174,6 +10769,87 @@ public final class formula_templates extends SubLTranslatedFile {
         return template_topic;
     }
 
+    static private final SubLList $list_alt2 = list(new SubLObject[]{ makeSymbol("SUPERTOPIC"), makeSymbol("TOPIC"), makeSymbol("SUBTOPICS"), makeSymbol("TEMPLATES"), makeSymbol("ORDERING"), makeSymbol("TITLE"), makeSymbol("TERM-PREFIX"), makeSymbol("INTRO-TEMPLATE"), makeSymbol("SOURCE-TYPES"), makeSymbol("SOURCE-MT"), makeSymbol("QUERY-MT"), makeSymbol("DEFINITIONAL-MT") });
+
+    static private final SubLList $list_alt3 = list(new SubLObject[]{ makeKeyword("SUPERTOPIC"), makeKeyword("TOPIC"), makeKeyword("SUBTOPICS"), makeKeyword("TEMPLATES"), makeKeyword("ORDERING"), makeKeyword("TITLE"), makeKeyword("TERM-PREFIX"), makeKeyword("INTRO-TEMPLATE"), makeKeyword("SOURCE-TYPES"), makeKeyword("SOURCE-MT"), makeKeyword("QUERY-MT"), makeKeyword("DEFINITIONAL-MT") });
+
+    static private final SubLList $list_alt4 = list(new SubLObject[]{ makeSymbol("TEMPLATE-TOPIC-SUPERTOPIC"), makeSymbol("TEMPLATE-TOPIC-TOPIC"), makeSymbol("TEMPLATE-TOPIC-SUBTOPICS"), makeSymbol("TEMPLATE-TOPIC-TEMPLATES"), makeSymbol("TEMPLATE-TOPIC-ORDERING"), makeSymbol("TEMPLATE-TOPIC-TITLE"), makeSymbol("TEMPLATE-TOPIC-TERM-PREFIX"), makeSymbol("TEMPLATE-TOPIC-INTRO-TEMPLATE"), makeSymbol("TEMPLATE-TOPIC-SOURCE-TYPES"), makeSymbol("TEMPLATE-TOPIC-SOURCE-MT"), makeSymbol("TEMPLATE-TOPIC-QUERY-MT"), makeSymbol("TEMPLATE-TOPIC-DEFINITIONAL-MT") });
+
+    static private final SubLList $list_alt5 = list(new SubLObject[]{ makeSymbol("_CSETF-TEMPLATE-TOPIC-SUPERTOPIC"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TOPIC"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SUBTOPICS"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TEMPLATES"), makeSymbol("_CSETF-TEMPLATE-TOPIC-ORDERING"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TITLE"), makeSymbol("_CSETF-TEMPLATE-TOPIC-TERM-PREFIX"), makeSymbol("_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES"), makeSymbol("_CSETF-TEMPLATE-TOPIC-SOURCE-MT"), makeSymbol("_CSETF-TEMPLATE-TOPIC-QUERY-MT"), makeSymbol("_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT") });
+
+    public static final SubLObject xml_serialize_assertions_for_formula_template_instance_alt(SubLObject focal_term, SubLObject template_id, SubLObject assertions, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_119 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$knownAssertionsForFormulaTemplate, NIL, NIL);
+                            {
+                                SubLObject _prev_bind_0_120 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_121 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$assertionsMatchTemplate, NIL, NIL);
+                                    cycml.cycml_serialize_term(template_id);
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_121, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_120, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$assertionsMatchTemplate);
+                            {
+                                SubLObject _prev_bind_0_122 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1_123 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$knownAssertions, NIL, NIL);
+                                    {
+                                        SubLObject cdolist_list_var = assertions;
+                                        SubLObject assertion = NIL;
+                                        for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                            {
+                                                SubLObject error_message = xml_serialize_assertion_for_formula_template_instance(focal_term, assertion, stream);
+                                                if (error_message.isString()) {
+                                                    Errors.error(cconcatenate(cconcatenate($str_alt374$Problem_serializing_assertions_fo, format_nil.format_nil_a_no_copy(template_id)), error_message));
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_123, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_122, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$knownAssertions);
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_119, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$knownAssertionsForFormulaTemplate);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return template_id;
+        }
+    }
+
     public static SubLObject xml_serialize_assertions_for_formula_template_instance(final SubLObject focal_term, final SubLObject template_id, final SubLObject assertions, SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = xml_vars.$xml_stream$.getDynamicValue();
@@ -6305,6 +10981,44 @@ public final class formula_templates extends SubLTranslatedFile {
         return template_id;
     }
 
+    static private final SubLString $str_alt44$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLString $str_alt45$18287931_d871_11d9_8eef_0002b3891 = makeString("18287931-d871-11d9-8eef-0002b3891c5a");
+
+    static private final SubLList $list_alt49 = list(new SubLObject[]{ makeSymbol("ARGUMENT-POSITION"), makeSymbol("ORDERING"), makeSymbol("GLOSS"), makeSymbol("INVISIBLE-REPLACEMENT-POSITIONS"), makeSymbol("REPLACEMENT-CONSTRAINTS"), makeSymbol("CANDIDATE-REPLACEMENTS"), makeSymbol("IS-EDITABLE"), makeSymbol("EXPLANATION"), makeSymbol("REQUIRES-VALIDATION"), makeSymbol("UNKNOWN-REPLACEMENT") });
+
+    static private final SubLList $list_alt50 = list(new SubLObject[]{ makeKeyword("ARGUMENT-POSITION"), makeKeyword("ORDERING"), makeKeyword("GLOSS"), makeKeyword("INVISIBLE-REPLACEMENT-POSITIONS"), makeKeyword("REPLACEMENT-CONSTRAINTS"), makeKeyword("CANDIDATE-REPLACEMENTS"), makeKeyword("IS-EDITABLE"), makeKeyword("EXPLANATION"), makeKeyword("REQUIRES-VALIDATION"), makeKeyword("UNKNOWN-REPLACEMENT") });
+
+    static private final SubLList $list_alt51 = list(new SubLObject[]{ makeSymbol("ARG-POSITION-DETAILS-ARGUMENT-POSITION"), makeSymbol("ARG-POSITION-DETAILS-ORDERING"), makeSymbol("ARG-POSITION-DETAILS-GLOSS"), makeSymbol("ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS"), makeSymbol("ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS"), makeSymbol("ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS"), makeSymbol("ARG-POSITION-DETAILS-IS-EDITABLE"), makeSymbol("ARG-POSITION-DETAILS-EXPLANATION"), makeSymbol("ARG-POSITION-DETAILS-REQUIRES-VALIDATION"), makeSymbol("ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT") });
+
+    static private final SubLList $list_alt52 = list(new SubLObject[]{ makeSymbol("_CSETF-ARG-POSITION-DETAILS-ARGUMENT-POSITION"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-ORDERING"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-GLOSS"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-IS-EDITABLE"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-EXPLANATION"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-REQUIRES-VALIDATION"), makeSymbol("_CSETF-ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT") });
+
+    static private final SubLString $str_alt84$182a9c10_d871_11d9_8eef_0002b3891 = makeString("182a9c10-d871-11d9-8eef-0002b3891c5a");
+
+    static private final SubLList $list_alt88 = list(new SubLObject[]{ makeSymbol("TOPIC"), makeSymbol("ID"), makeSymbol("FORMULA"), makeSymbol("QUERY-SPECIFICATION"), makeSymbol("ELMT"), makeSymbol("FOCAL-TERM"), makeSymbol("ARGPOS-DETAILS"), makeSymbol("ARGPOS-ORDERING"), makeSymbol("EXAMPLES"), makeSymbol("ENTRY-FORMAT"), makeSymbol("FOLLOW-UPS"), makeSymbol("GLOSS"), makeSymbol("REFSPEC") });
+
+    static private final SubLList $list_alt89 = list(new SubLObject[]{ makeKeyword("TOPIC"), makeKeyword("ID"), makeKeyword("FORMULA"), makeKeyword("QUERY-SPECIFICATION"), $ELMT, makeKeyword("FOCAL-TERM"), makeKeyword("ARGPOS-DETAILS"), makeKeyword("ARGPOS-ORDERING"), makeKeyword("EXAMPLES"), makeKeyword("ENTRY-FORMAT"), makeKeyword("FOLLOW-UPS"), makeKeyword("GLOSS"), makeKeyword("REFSPEC") });
+
+    static private final SubLList $list_alt90 = list(new SubLObject[]{ makeSymbol("FORMULA-TEMPLATE-TOPIC"), makeSymbol("FORMULA-TEMPLATE-ID"), makeSymbol("FORMULA-TEMPLATE-FORMULA"), makeSymbol("FORMULA-TEMPLATE-QUERY-SPECIFICATION"), makeSymbol("FORMULA-TEMPLATE-ELMT"), makeSymbol("FORMULA-TEMPLATE-FOCAL-TERM"), makeSymbol("FORMULA-TEMPLATE-ARGPOS-DETAILS"), makeSymbol("FORMULA-TEMPLATE-ARGPOS-ORDERING"), makeSymbol("FORMULA-TEMPLATE-EXAMPLES"), makeSymbol("FORMULA-TEMPLATE-ENTRY-FORMAT"), makeSymbol("FORMULA-TEMPLATE-FOLLOW-UPS"), makeSymbol("FORMULA-TEMPLATE-GLOSS"), makeSymbol("FORMULA-TEMPLATE-REFSPEC") });
+
+    static private final SubLList $list_alt91 = list(new SubLObject[]{ makeSymbol("_CSETF-FORMULA-TEMPLATE-TOPIC"), makeSymbol("_CSETF-FORMULA-TEMPLATE-ID"), makeSymbol("_CSETF-FORMULA-TEMPLATE-FORMULA"), makeSymbol("_CSETF-FORMULA-TEMPLATE-QUERY-SPECIFICATION"), makeSymbol("_CSETF-FORMULA-TEMPLATE-ELMT"), makeSymbol("_CSETF-FORMULA-TEMPLATE-FOCAL-TERM"), makeSymbol("_CSETF-FORMULA-TEMPLATE-ARGPOS-DETAILS"), makeSymbol("_CSETF-FORMULA-TEMPLATE-ARGPOS-ORDERING"), makeSymbol("_CSETF-FORMULA-TEMPLATE-EXAMPLES"), makeSymbol("_CSETF-FORMULA-TEMPLATE-ENTRY-FORMAT"), makeSymbol("_CSETF-FORMULA-TEMPLATE-FOLLOW-UPS"), makeSymbol("_CSETF-FORMULA-TEMPLATE-GLOSS"), makeSymbol("_CSETF-FORMULA-TEMPLATE-REFSPEC") });
+
+    public static final SubLObject ftemplate_assertion_non_editableP_alt(SubLObject assertion, SubLObject focal_term) {
+        {
+            SubLObject non_editableP = NIL;
+            if (NIL != assertion_handles.assertion_p(assertion)) {
+                non_editableP = makeBoolean((NIL != assertions_high.deduced_assertionP(assertion)) || (NIL != is_non_editable_assertion_for_template_topic_instanceP(assertion)));
+            } else {
+                if (NIL != ftemplate_polycanonicalized_assertion_p(assertion)) {
+                    non_editableP = list_utilities.sublisp_boolean(list_utilities.find_if_not($sym375$ASSERTED_ASSERTION_, ftemplate_polycanonicalized_assertion_hl_assertions(assertion, focal_term), UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                } else {
+                    non_editableP = NIL;
+                }
+            }
+            return non_editableP;
+        }
+    }
+
     public static SubLObject ftemplate_assertion_non_editableP(final SubLObject assertion, final SubLObject focal_term) {
         SubLObject non_editableP = NIL;
         if (NIL != assertion_handles.assertion_p(assertion)) {
@@ -6317,6 +11031,60 @@ public final class formula_templates extends SubLTranslatedFile {
             }
 
         return non_editableP;
+    }
+
+    public static final SubLObject xml_serialize_assertion_for_formula_template_instance_alt(SubLObject focal_term, SubLObject assertion, SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject polycanonicalizedP = ftemplate_polycanonicalized_assertion_p(assertion);
+                SubLObject unknown_typeP = makeBoolean(!((NIL != polycanonicalizedP) || (NIL != assertion_handles.assertion_p(assertion))));
+                SubLObject error_message = (NIL != unknown_typeP) ? ((SubLObject) (cconcatenate($str_alt376$Invalid_return_object_, new SubLObject[]{ format_nil.format_nil_a_no_copy(assertion), $str_alt377$_in_assertion_list }))) : NIL;
+                SubLObject non_editableP = (NIL != error_message) ? ((SubLObject) (NIL)) : ftemplate_assertion_non_editableP(assertion, focal_term);
+                if (!error_message.isString()) {
+                    {
+                        SubLObject _prev_bind_0 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$knownAssertion, NIL, NIL);
+                            if (NIL != non_editableP) {
+                                {
+                                    SubLObject _prev_bind_0_124 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_125 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_utilities.xml_start_tag_internal($$$deducedAssertion, NIL, $ATOMIC);
+                                    } finally {
+                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_125, thread);
+                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_124, thread);
+                                    }
+                                }
+                                if (false) {
+                                    xml_utilities.xml_terpri();
+                                    xml_utilities.xml_end_tag_internal($$$deducedAssertion);
+                                }
+                            }
+                            xml_serialize_assertion_sentence_for_formula_template_instance(assertion, polycanonicalizedP, stream);
+                            xml_serialize_assertion_elmt_for_formula_template_instance(assertion, polycanonicalizedP, stream);
+                            if (NIL == $xml_suppress_future_template_extensions$.getDynamicValue(thread)) {
+                                xml_serialize_assertion_suids_for_formula_template_instance(focal_term, assertion, polycanonicalizedP, stream);
+                                xml_serialize_assertion_timestamp_for_formula_template_instance(focal_term, assertion, polycanonicalizedP, stream);
+                                xml_serialize_assertion_evaluation_data_for_formula_template_instance(focal_term, assertion, polycanonicalizedP, stream);
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$knownAssertion);
+                }
+                return error_message;
+            }
+        }
     }
 
     public static SubLObject xml_serialize_assertion_for_formula_template_instance(final SubLObject focal_term, final SubLObject assertion, final SubLObject stream) {
@@ -6407,6 +11175,102 @@ public final class formula_templates extends SubLTranslatedFile {
         return error_message;
     }
 
+    static private final SubLString $str_alt131$182b1140_d871_11d9_8eef_0002b3891 = makeString("182b1140-d871-11d9-8eef-0002b3891c5a");
+
+    static private final SubLList $list_alt134 = list(list(makeSymbol("*MAKE-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?*"), T));
+
+    static private final SubLList $list_alt138 = list(list(makeSymbol("NON-EDITABLES")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt141 = list(makeSymbol("SET-P"));
+
+    static private final SubLList $list_alt144 = list(list(makeSymbol("INSTANCE"), makeSymbol("TEMPLATE-ID"), makeSymbol("TEMPLATE-ELMT"), makeSymbol("QUERY-MT")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym145$NON_EDITABLE = makeUninternedSymbol("NON-EDITABLE");
+
+    static private final SubLString $str_alt148$_S_is_not_a_FORMULA_TEMPLATE_P_ = makeString("~S is not a FORMULA-TEMPLATE-P.");
+
+    static private final SubLString $str_alt149$_S_is_not_EL_FORMULA_P_ = makeString("~S is not EL-FORMULA-P.");
+
+    static private final SubLString $str_alt150$_S_is_not_POSSIBLY_MT_P_ = makeString("~S is not POSSIBLY-MT-P.");
+
+    static private final SubLString $str_alt151$bad_formula_template___S__ = makeString("bad formula template: ~S~%");
+
+    static private final SubLString $str_alt155$_TemplateTopic__ = makeString("<TemplateTopic: ");
+
+    static private final SubLString $str_alt156$Parent___S___Topic___S_ = makeString("Parent: ~S : Topic: ~S ");
+
+    static private final SubLString $str_alt157$_named_ = makeString(" named ");
+
+    static private final SubLString $str_alt158$_Term_Prefix__ = makeString(" Term Prefix: ");
+
+    static private final SubLString $str_alt159$___SubTopics__ = makeString(" : SubTopics: ");
+
+    static private final SubLString $str_alt160$___Sources__ = makeString(" : Sources: ");
+
+    static private final SubLString $str_alt161$___Template_Source_Mt__ = makeString(" : Template Source Mt: ");
+
+    static private final SubLString $str_alt162$___Template_Query_Mt__ = makeString(" : Template Query Mt: ");
+
+    static private final SubLString $str_alt163$___Template_Definitional_Mt__ = makeString(" : Template Definitional Mt: ");
+
+    static private final SubLString $str_alt164$___Templates_ = makeString(" : Templates:");
+
+    static private final SubLString $str_alt165$____introductory_template__ = makeString(" (= introductory template) ");
+
+    static private final SubLString $str_alt166$_ = makeString(">");
+
+    static private final SubLList $list_alt167 = list(list(ONE_INTEGER, makeString("Adds <templateTopicRevision> to <templateTopic>")), list(ZERO_INTEGER, makeString("Initial version")));
+
+    static private final SubLString $str_alt185$CFASL_INPUT_TEMPLATE_TOPIC_has_lo = makeString("CFASL-INPUT-TEMPLATE-TOPIC has loaded a subtopic for ~A which claims to belong to ~A");
+
+    static private final SubLString $str_alt188$_Formula_Template__ = makeString("<Formula Template: ");
+
+    static private final SubLString $str_alt189$_A_ = makeString("~A ");
+
+    static private final SubLString $str_alt190$of_topic__A__ = makeString("of topic ~A~%");
+
+    static private final SubLString $str_alt191$_formula__A_in__A__ = makeString(" formula ~A in ~A~%");
+
+    static private final SubLString $str_alt192$_query_spec__A_in__A__ = makeString(" query-spec ~A in ~A~%");
+
+    static private final SubLString $str_alt193$_focal_term__A___A___ = makeString(" focal term ~A (~A)~%");
+
+    static private final SubLString $str_alt194$_focal_term_occurrences__A___A___ = makeString(" focal term occurrences ~A (~A)~%");
+
+    static private final SubLString $str_alt195$_examples___A__ = makeString(" examples: ~A~%");
+
+    static private final SubLString $str_alt196$_follow_ups___A__ = makeString(" follow-ups: ~A~%");
+
+    static private final SubLString $str_alt197$_template_gloss___A__ = makeString(" template gloss: ~A~%");
+
+    static private final SubLString $str_alt198$_reformulation_specification___A_ = makeString(" reformulation specification: ~A~%");
+
+    static private final SubLString $str_alt199$_argpos_details__ = makeString(" argpos-details: ");
+
+    static private final SubLString $str_alt200$_ = makeString(" ");
+
+    static private final SubLSymbol $sym202$ISA_MT_ = makeSymbol("ISA-MT?");
+
+    public static final SubLObject xml_serialize_assertion_sentence_for_formula_template_instance_alt(SubLObject assertion, SubLObject polycanonicalizedP, SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    if (NIL != polycanonicalizedP) {
+                        cycml.cycml_serialize_sentence(ftemplate_polycanonicalized_assertion_sentence(assertion));
+                    } else {
+                        cycml.cycml_serialize_sentence(uncanonicalizer.assertion_el_formula(assertion));
+                    }
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return assertion;
+        }
+    }
+
     public static SubLObject xml_serialize_assertion_sentence_for_formula_template_instance(final SubLObject assertion, final SubLObject polycanonicalizedP, final SubLObject stream) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
@@ -6421,6 +11285,45 @@ public final class formula_templates extends SubLTranslatedFile {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return assertion;
+    }
+
+    public static final SubLObject xml_serialize_assertion_suids_for_formula_template_instance_alt(SubLObject focal_term, SubLObject assertion, SubLObject polycanonicalizedP, SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_126 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$knownAssertionSUIDs, NIL, NIL);
+                            {
+                                SubLObject suids = (NIL != polycanonicalizedP) ? ((SubLObject) (ftemplate_polycanonicalized_assertion_suids(focal_term, assertion))) : list(assertion_handles.assertion_id(assertion));
+                                SubLObject cdolist_list_var = suids;
+                                SubLObject suid = NIL;
+                                for (suid = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , suid = cdolist_list_var.first()) {
+                                    if (suid.isInteger()) {
+                                        cycml.cycml_serialize_assertion_id(suid, UNPROVIDED);
+                                    }
+                                }
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_126, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$knownAssertionSUIDs);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return assertion;
+        }
     }
 
     public static SubLObject xml_serialize_assertion_suids_for_formula_template_instance(final SubLObject focal_term, final SubLObject assertion, final SubLObject polycanonicalizedP, final SubLObject stream) {
@@ -6480,6 +11383,66 @@ public final class formula_templates extends SubLTranslatedFile {
         return assertion;
     }
 
+    static private final SubLList $list_alt219 = list(makeSymbol("TERM"), makeSymbol("CONNECTIVE"), makeSymbol("LOAD-MT"));
+
+    static private final SubLString $str_alt225$__xml_version__1_0__encoding__US_ = makeString("<?xml version=\"1.0\" encoding=\"US-ASCII\" standalone=\"no\"?>");
+
+    static private final SubLString $str_alt226$__DOCTYPE_formulaTemplate_SYSTEM_ = makeString("<!DOCTYPE formulaTemplate SYSTEM \"http://www.opencyc.org/xml/formulaTemplate.dtd\">");
+
+    static private final SubLString $str_alt228$__ArgPos_Details__ = makeString("#<ArgPos-Details: ");
+
+    static private final SubLString $str_alt229$_for_position__A_ = makeString(" for position ~A ");
+
+    static private final SubLString $str_alt230$__ordering_slot__D_ = makeString(" (ordering slot ~D)");
+
+    static private final SubLString $str_alt231$__no_ordering_info_ = makeString(" (no ordering info)");
+
+    static private final SubLString $str_alt232$_READ_ONLY = makeString(" READ-ONLY");
+
+    static private final SubLString $str_alt233$_gloss___A__ = makeString(" gloss: ~A~%");
+
+    static private final SubLString $str_alt234$_replacementInvisible___A__ = makeString(" replacementInvisible: ~A~%");
+
+    static private final SubLString $str_alt235$_candidate_replacements___A__ = makeString(" candidate replacements: ~A~%");
+
+    static private final SubLString $str_alt236$_constraints___A__ = makeString(" constraints: ~A~%");
+
+    static private final SubLString $str_alt237$__requires_validation____ = makeString(" [requires validation] ~%");
+
+    static private final SubLString $str_alt238$_explanation___A__ = makeString(" explanation: ~A~%");
+
+    static private final SubLString $str_alt239$_term_for_unknown___A__ = makeString(" term for unknown: ~A~%");
+
+    static private final SubLString $str_alt245$templateReplacementsInvisibleForP = makeString("templateReplacementsInvisibleForPosition");
+
+    static private final SubLString $str_alt256$Can_t_load_a_formula_template_wit = makeString("Can't load a formula template without a FORT id: ~S");
+
+    /**
+     *
+     *
+     * @return LISTP of the SUIDs of the HL assertions corresponding to the ftemplate
+    polycanonicalized assertion ASSERTION.
+     */
+    @LispMethod(comment = "@return LISTP of the SUIDs of the HL assertions corresponding to the ftemplate\r\npolycanonicalized assertion ASSERTION.")
+    public static final SubLObject ftemplate_polycanonicalized_assertion_suids_alt(SubLObject focal_term, SubLObject assertion) {
+        {
+            SubLObject suids = NIL;
+            SubLObject cdolist_list_var = ftemplate_polycanonicalized_assertion_hl_assertions(assertion, focal_term);
+            SubLObject hl_assertion = NIL;
+            for (hl_assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , hl_assertion = cdolist_list_var.first()) {
+                suids = cons(assertion_handles.assertion_id(hl_assertion), suids);
+            }
+            return suids;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of the SUIDs of the HL assertions corresponding to the ftemplate
+    polycanonicalized assertion ASSERTION.
+     */
+    @LispMethod(comment = "@return LISTP of the SUIDs of the HL assertions corresponding to the ftemplate\r\npolycanonicalized assertion ASSERTION.")
     public static SubLObject ftemplate_polycanonicalized_assertion_suids(final SubLObject focal_term, final SubLObject assertion) {
         SubLObject suids = NIL;
         SubLObject cdolist_list_var = ftemplate_polycanonicalized_assertion_hl_assertions(assertion, focal_term);
@@ -6491,6 +11454,120 @@ public final class formula_templates extends SubLTranslatedFile {
             hl_assertion = cdolist_list_var.first();
         } 
         return suids;
+    }
+
+    public static final SubLObject $const257$formulaTemplateHasArgumentPositio = reader_make_constant_shell("formulaTemplateHasArgumentPositionInformation");
+
+    static private final SubLList $list_alt258 = list(makeSymbol("GLOSS-TEXT"), makeSymbol("ARGPOS"), makeSymbol("ORDERING"));
+
+    static private final SubLList $list_alt259 = list(makeSymbol("EXPLANATION-TEXT"), makeSymbol("ARGPOS"));
+
+    static private final SubLList $list_alt260 = list(makeSymbol("ARGPOS"), makeSymbol("REPLACE-CONSTRAINTS"));
+
+    static private final SubLList $list_alt261 = list(makeSymbol("ARGPOS"), makeSymbol("CANDIDATES"));
+
+    public static final SubLObject xml_serialize_assertion_evaluation_data_for_formula_template_instance_alt(SubLObject focal_term, SubLObject assertion, SubLObject polycanonicalizedP, SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_127 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$knownAssertionEvaluations, NIL, NIL);
+                            {
+                                SubLObject cdolist_list_var = ftemplate_assertion_evaluations(focal_term, assertion, polycanonicalizedP);
+                                SubLObject evaluation_data = NIL;
+                                for (evaluation_data = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , evaluation_data = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject datum = evaluation_data;
+                                        SubLObject current = datum;
+                                        SubLObject evaluation = NIL;
+                                        SubLObject evaluator = NIL;
+                                        destructuring_bind_must_consp(current, datum, $list_alt382);
+                                        evaluation = current.first();
+                                        current = current.rest();
+                                        destructuring_bind_must_consp(current, datum, $list_alt382);
+                                        evaluator = current.first();
+                                        current = current.rest();
+                                        if (NIL == current) {
+                                            {
+                                                SubLObject judgment = ftemplate_evaluation_judgment(evaluation);
+                                                if ((NIL != evaluation) || (NIL != judgment)) {
+                                                    {
+                                                        SubLObject _prev_bind_0_128 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_129 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                        try {
+                                                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                            xml_utilities.xml_start_tag_internal($$$knownAssertionEvaluation, NIL, NIL);
+                                                            if (NIL != evaluator) {
+                                                                {
+                                                                    SubLObject _prev_bind_0_130 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_131 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                    try {
+                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                        xml_utilities.xml_start_tag_internal($$$evaluator, NIL, NIL);
+                                                                        cycml.cycml_serialize_term(evaluator);
+                                                                    } finally {
+                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_131, thread);
+                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_130, thread);
+                                                                    }
+                                                                }
+                                                                xml_utilities.xml_terpri();
+                                                                xml_utilities.xml_end_tag_internal($$$evaluator);
+                                                            }
+                                                            if (NIL != judgment) {
+                                                                {
+                                                                    SubLObject _prev_bind_0_132 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_133 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                    try {
+                                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                        xml_utilities.xml_start_tag_internal($$$judgment, NIL, NIL);
+                                                                        cycml.cycml_serialize_term(judgment);
+                                                                    } finally {
+                                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_133, thread);
+                                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_132, thread);
+                                                                    }
+                                                                }
+                                                                xml_utilities.xml_terpri();
+                                                                xml_utilities.xml_end_tag_internal($$$judgment);
+                                                            }
+                                                        } finally {
+                                                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_129, thread);
+                                                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_128, thread);
+                                                        }
+                                                    }
+                                                    xml_utilities.xml_terpri();
+                                                    xml_utilities.xml_end_tag_internal($$$knownAssertionEvaluation);
+                                                }
+                                            }
+                                        } else {
+                                            cdestructuring_bind_error(datum, $list_alt382);
+                                        }
+                                    }
+                                }
+                            }
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_127, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$knownAssertionEvaluations);
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return assertion;
+        }
     }
 
     public static SubLObject xml_serialize_assertion_evaluation_data_for_formula_template_instance(final SubLObject focal_term, final SubLObject assertion, final SubLObject polycanonicalizedP, final SubLObject stream) {
@@ -6679,6 +11756,158 @@ public final class formula_templates extends SubLTranslatedFile {
         return assertion;
     }
 
+    static private final SubLList $list_alt262 = list(makeSymbol("ARGPOS"), makeSymbol("THING"));
+
+    static private final SubLSymbol $sym264$_ = makeSymbol("<");
+
+    static private final SubLString $str_alt266$Dwimming_MT_for__A_to__A____your_ = makeString("Dwimming MT for ~A to ~A -- your own fault.");
+
+    static private final SubLList $list_alt267 = list(TWO_INTEGER);
+
+    public static final SubLObject $const268$reformulateTemplateViaSpecificati = reader_make_constant_shell("reformulateTemplateViaSpecification");
+
+    public static final SubLObject $const270$querySpecificationForFormulaTempl = reader_make_constant_shell("querySpecificationForFormulaTemplate");
+
+    static private final SubLSymbol $sym274$COMMUTATIVE_RELATION_ = makeSymbol("COMMUTATIVE-RELATION?");
+
+    static private final SubLList $list_alt276 = list(makeSymbol("FOLLOW-UP"), makeSymbol("CONNECTIVE"));
+
+    static private final SubLList $list_alt279 = list(reader_make_constant_shell("MtTimeWithGranularityDimFn"), reader_make_constant_shell("Now"), reader_make_constant_shell("CalendarSecond"));
+
+    static private final SubLList $list_alt281 = list(FOUR_INTEGER, THREE_INTEGER, FIVE_INTEGER);
+
+    static private final SubLList $list_alt283 = list(FOUR_INTEGER, THREE_INTEGER);
+
+    public static final SubLSymbol $kw289$TRANSFORMATION_ALLOWED_ = makeKeyword("TRANSFORMATION-ALLOWED?");
+
+    public static final SubLObject $const297$focalTermPositionForFormulaTempla = reader_make_constant_shell("focalTermPositionForFormulaTemplate");
+
+    public static final SubLObject $const299$templateReplacementsInvisibleForP = reader_make_constant_shell("templateReplacementsInvisibleForPosition");
+
+    static private final SubLList $list_alt300 = list(TWO_INTEGER, THREE_INTEGER);
+
+    static private final SubLList $list_alt302 = list(makeSymbol("POSITION"), makeSymbol("CONSTRAINT"));
+
+    static private final SubLSymbol $sym304$_X = makeSymbol("?X");
+
+    static private final SubLList $list_alt307 = list(makeSymbol("POSITION"), makeSymbol("CANDIDATE"));
+
+    public static final SubLObject $const308$positionInFormulaTemplateIsReplac = reader_make_constant_shell("positionInFormulaTemplateIsReplaceable");
+
+    public static final SubLObject $const309$validationRequiredOnTemplatePosit = reader_make_constant_shell("validationRequiredOnTemplatePosition");
+
+    static private final SubLSymbol $sym312$_HIGHER = makeSymbol("?HIGHER");
+
+    static private final SubLSymbol $sym313$_LOWER = makeSymbol("?LOWER");
+
+    static private final SubLList $list_alt314 = list(makeKeyword("ANSWER-LANGUAGE"), makeKeyword("HL"), makeKeyword("RETURN"), makeKeyword("BINDINGS-AND-SUPPORTS"));
+
+    static private final SubLList $list_alt315 = list(makeSymbol("BINDINGS"), makeSymbol("SUPPORTS"));
+
+    static private final SubLString $str_alt316$Couldn_t_find__S_in__S___for__S = makeString("Couldn't find ~S in ~S~% for ~S");
+
+    static private final SubLList $list_alt317 = list(makeSymbol("HIGHER"), makeSymbol("LOWER"), makeSymbol("SUPPORTS"));
+
+    static private final SubLString $str_alt318$_S_comes_before__S___in_ordering_ = makeString("~S comes before ~S~% in ordering for ~S in ~S:~% ~S~% Supports:~% ~S~%");
+
+    static private final SubLSymbol $sym320$HIGHER_PRIORITY_ = makeSymbol("HIGHER-PRIORITY?");
+
+    static private final SubLList $list_alt322 = list(makeSymbol("HIGHER"), makeSymbol("LOWER"));
+
+    static private final SubLString $str_alt323$higherPriorityTemplateTypeForTopi = makeString("higherPriorityTemplateTypeForTopicType");
+
+    static private final SubLList $list_alt324 = list(makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
+
+    static private final SubLList $list_alt325 = list(makeKeyword("MAX-TRANSFORMATION-DEPTH"), ZERO_INTEGER);
+
+    static private final SubLList $list_alt327 = list(reader_make_constant_shell("higherPriorityTemplateType"), makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
+
+    static private final SubLList $list_alt328 = list(reader_make_constant_shell("different"), makeSymbol("?HIGHER"), makeSymbol("?LOWER"));
+
+    static private final SubLList $list_alt330 = list(makeKeyword("MAX-TRANSFORMATION-DEPTH"), ONE_INTEGER);
+
+    static private final SubLString $str_alt334$Invalid_formula_template__A_in_to = makeString("Invalid formula template ~A in topic ~A: template topic query mt ~A cannot see formula template mt ~A");
+
+    static private final SubLSymbol $sym338$_TEMPLATE = makeSymbol("?TEMPLATE");
+
+    static private final SubLSymbol $sym341$_ = makeSymbol(">");
+
+    public static final SubLSymbol $kw343$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLList $list_alt344 = list(makeKeyword("MAX-NUMBER"), ONE_INTEGER);
+
+    static private final SubLSymbol $sym345$_SUBTOPIC = makeSymbol("?SUBTOPIC");
+
+    static private final SubLSymbol $sym348$_MT = makeSymbol("?MT");
+
+    static private final SubLList $list_alt350 = list(makeSymbol("?VOCABULARY-MT"));
+
+    static private final SubLList $list_alt351 = list(list(reader_make_constant_shell("genlMt-Vocabulary"), makeSymbol("?MT"), makeSymbol("?VOCABULARY-MT")));
+
+    public static final SubLObject $const356$titleForFormulaTemplateType_Strin = reader_make_constant_shell("titleForFormulaTemplateType-String");
+
+    static private final SubLList $list_alt361 = list(list(ONE_INTEGER, makeString("Adds <templateTopicAssertionsRevision> to <knownAssertionsForTemplateTopic>\n          Adds <knownAssertionSUIDs> to <knownAssertion>\n          Adds <assertion-id> to <knownAssertionSUIDs>\n          Adds <bookkeeping-info> to <knownAssertion>\n          Adds <date> to <bookkeeping-info>\n          Adds <time> to <bookkeeping-info>\n          Adds <knownAssertionEvaluations> to <knownAssertion>\n          Adds <knownAssertionEvaluation> to <knownAssertionEvaluations>\n          Adds <evaluator> to <knownAssertionEvaluation>\n          Adds <judgment> to <knownAssertionEvaluation>")), list(ZERO_INTEGER, makeString("Initial version")));
+
+    static private final SubLString $str_alt366$knownAssertionsForTemplateSubTopi = makeString("knownAssertionsForTemplateSubTopics");
+
+    static private final SubLList $list_alt367 = list(makeSymbol("SUBTOPIC-ID"), makeSymbol("TEMPLATE-RESULT-SETS"));
+
+    static private final SubLString $str_alt368$knownAssertionsForTemplateSubTopi = makeString("knownAssertionsForTemplateSubTopic");
+
+    static private final SubLString $str_alt369$knownAssertionsForFormulaTemplate = makeString("knownAssertionsForFormulaTemplates");
+
+    static private final SubLList $list_alt370 = list(makeSymbol("TEMPLATE-ID"), makeSymbol("ASSERTIONS"));
+
+    static private final SubLString $str_alt374$Problem_serializing_assertions_fo = makeString("Problem serializing assertions for ");
+
+    static private final SubLSymbol $sym375$ASSERTED_ASSERTION_ = makeSymbol("ASSERTED-ASSERTION?");
+
+    static private final SubLString $str_alt376$Invalid_return_object_ = makeString("Invalid return object ");
+
+    static private final SubLString $str_alt377$_in_assertion_list = makeString(" in assertion list");
+
+    static private final SubLList $list_alt382 = list(makeSymbol("EVALUATION"), makeSymbol("EVALUATOR"));
+
+    static private final SubLList $list_alt388 = list(makeSymbol("?EVAL"), makeSymbol("?BY"));
+
+    static private final SubLSymbol $sym389$_EVAL = makeSymbol("?EVAL");
+
+    static private final SubLList $list_alt390 = list(makeSymbol("?BY"), makeSymbol("??ON"));
+
+    static private final SubLList $list_alt391 = list(makeKeyword("ANSWER-LANGUAGE"), makeKeyword("HL"));
+
+    static private final SubLSymbol $sym392$_JUDGMENT = makeSymbol("?JUDGMENT");
+
+    static private final SubLList $list_alt394 = list(list(makeSymbol("?JUDGMENT"), makeSymbol("?SENTENCE")));
+
+    static private final SubLList $list_alt401 = list(new SubLObject[]{ makeSymbol("?A"), makeSymbol("?B"), makeSymbol("?C"), makeSymbol("?D"), makeSymbol("?E"), makeSymbol("?F"), makeSymbol("?G"), makeSymbol("?H"), makeSymbol("?J"), makeSymbol("?K"), makeSymbol("?L"), makeSymbol("?M"), makeSymbol("?N"), makeSymbol("?O"), makeSymbol("?P"), makeSymbol("?Q"), makeSymbol("?R"), makeSymbol("?S"), makeSymbol("?T"), makeSymbol("?U"), makeSymbol("?V"), makeSymbol("?W"), makeSymbol("?X"), makeSymbol("?Y"), makeSymbol("?Z") });
+
+    static private final SubLSymbol $sym402$_POLY_ELMT = makeSymbol("?POLY-ELMT");
+
+    static private final SubLSymbol $sym406$__REFSPEC = makeSymbol("??REFSPEC");
+
+    static private final SubLSymbol $sym407$__ASSERTION = makeSymbol("??ASSERTION");
+
+    public static final SubLSymbol $kw413$ALLOW_INDETERMINATE_RESULTS_ = makeKeyword("ALLOW-INDETERMINATE-RESULTS?");
+
+    static private final SubLList $list_alt415 = cons(makeSymbol("VARIABLE"), makeSymbol("TERM"));
+
+    static private final SubLSymbol $sym416$DEDUCED_ASSERTION_ = makeSymbol("DEDUCED-ASSERTION?");
+
+    public static final SubLObject quaternary_fet_evaluation_pred_alt() {
+        {
+            SubLObject pred = $quaternary_fet_evaluation_pred$.getGlobalValue();
+            if (NIL == pred) {
+                pred = constants_high.find_constant($$$evaluationOfAssertionByOn);
+                if (NIL == pred) {
+                    pred = constants_high.find_constant($$$evaluationOfAssertionOfByOn);
+                }
+                $quaternary_fet_evaluation_pred$.setGlobalValue(pred);
+            }
+            return pred;
+        }
+    }
+
     public static SubLObject quaternary_fet_evaluation_pred() {
         SubLObject pred = $quaternary_fet_evaluation_pred$.getGlobalValue();
         if (NIL == pred) {
@@ -6691,6 +11920,37 @@ public final class formula_templates extends SubLTranslatedFile {
         return pred;
     }
 
+    static private final SubLList $list_alt423 = list(makeSymbol("IST-PART"), makeSymbol("MT-PART"), makeSymbol("FORMULA-PART"));
+
+    /**
+     *
+     *
+     * @return LISTP of (#$Evaluating <EVALUATOR>) pairs in which ASSERTION is/was evaluated.
+     */
+    @LispMethod(comment = "@return LISTP of (#$Evaluating <EVALUATOR>) pairs in which ASSERTION is/was evaluated.")
+    public static final SubLObject ftemplate_assertion_evaluations_alt(SubLObject focal_term, SubLObject assertion, SubLObject polycanonicalizedP) {
+        {
+            SubLObject evaluations = NIL;
+            if (NIL != polycanonicalizedP) {
+                assertion = ftemplate_polycanonicalized_assertion_hl_assertions(assertion, focal_term).first();
+            }
+            if ((NIL != assertion) && (NIL != assertion_utilities.assertion_has_meta_assertionsP(assertion))) {
+                {
+                    SubLObject pred = quaternary_fet_evaluation_pred();
+                    SubLObject mt = $$InferencePSC;
+                    evaluations = ftemplate_ask_template($list_alt388, list($$assertedSentence, listS(pred, $sym389$_EVAL, assertion, $list_alt390)), mt, $list_alt391);
+                }
+            }
+            return evaluations;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of (#$Evaluating <EVALUATOR>) pairs in which ASSERTION is/was evaluated.
+     */
+    @LispMethod(comment = "@return LISTP of (#$Evaluating <EVALUATOR>) pairs in which ASSERTION is/was evaluated.")
     public static SubLObject ftemplate_assertion_evaluations(final SubLObject focal_term, SubLObject assertion, final SubLObject polycanonicalizedP) {
         SubLObject evaluations = NIL;
         if (NIL != polycanonicalizedP) {
@@ -6704,8 +11964,41 @@ public final class formula_templates extends SubLTranslatedFile {
         return evaluations;
     }
 
+    static private final SubLSymbol $sym424$_FET_ASSERTION_VAR_524 = makeSymbol("?FET-ASSERTION-VAR-524");
+
+    static private final SubLList $list_alt425 = list(makeSymbol("QUANTIFIER"), makeSymbol("VARIABLE"), makeSymbol("CLAUSES"));
+
+    static private final SubLList $list_alt429 = list(list(reader_make_constant_shell("SomeExampleFn"), reader_make_constant_shell("TimeInterval")));
+
+    public static final SubLObject ftemplate_evaluation_judgment_alt(SubLObject evaluation) {
+        return ftemplate_ask_variable($sym392$_JUDGMENT, list($$assertedSentence, listS($$evaluationOutputSentences, evaluation, $list_alt394)), $$InferencePSC, UNPROVIDED).first();
+    }
+
     public static SubLObject ftemplate_evaluation_judgment(final SubLObject evaluation) {
         return ftemplate_ask_variable($sym403$_JUDGMENT, list($$assertedSentence, listS($$evaluationOutputSentences, evaluation, $list405)), $$InferencePSC, UNPROVIDED).first();
+    }
+
+    public static final SubLObject xml_serialize_assertion_timestamp_for_formula_template_instance_alt(SubLObject focal_term, SubLObject assertion, SubLObject polycanonicalizedP, SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject date = (NIL != polycanonicalizedP) ? ((SubLObject) (ftemplate_polycanonicalized_assertion_date(focal_term, assertion))) : assertions_high.asserted_when(assertion);
+                SubLObject second = (NIL != polycanonicalizedP) ? ((SubLObject) (ftemplate_polycanonicalized_assertion_second(focal_term, assertion))) : assertions_high.asserted_second(assertion);
+                SubLObject cyclist = NIL;
+                SubLObject image_id = NIL;
+                SubLObject purpose = NIL;
+                {
+                    SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                    try {
+                        xml_vars.$xml_stream$.bind(stream, thread);
+                        cycml_generator.cycml_serialize_bookkeeping(cyclist, image_id, date, second, purpose);
+                    } finally {
+                        xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return assertion;
+        }
     }
 
     public static SubLObject xml_serialize_assertion_timestamp_for_formula_template_instance(final SubLObject focal_term, final SubLObject assertion, final SubLObject polycanonicalizedP, final SubLObject stream) {
@@ -6725,6 +12018,24 @@ public final class formula_templates extends SubLTranslatedFile {
         return assertion;
     }
 
+    static private final SubLList $list_alt436 = list(reader_make_constant_shell("isa"), makeKeyword("LEXICAL-MT"), reader_make_constant_shell("TemporaryLexicalMicrotheory"));
+
+    public static final SubLObject ftemplate_polycanonicalized_assertion_date_alt(SubLObject focal_term, SubLObject assertion) {
+        {
+            SubLObject date = NIL;
+            if (NIL == date) {
+                {
+                    SubLObject csome_list_var = ftemplate_polycanonicalized_assertion_hl_assertions(assertion, focal_term);
+                    SubLObject hl_assertion = NIL;
+                    for (hl_assertion = csome_list_var.first(); !((NIL != date) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , hl_assertion = csome_list_var.first()) {
+                        date = assertions_high.asserted_when(hl_assertion);
+                    }
+                }
+            }
+            return date;
+        }
+    }
+
     public static SubLObject ftemplate_polycanonicalized_assertion_date(final SubLObject focal_term, final SubLObject assertion) {
         SubLObject date = NIL;
         if (NIL == date) {
@@ -6736,6 +12047,22 @@ public final class formula_templates extends SubLTranslatedFile {
         return date;
     }
 
+    public static final SubLObject ftemplate_polycanonicalized_assertion_second_alt(SubLObject focal_term, SubLObject assertion) {
+        {
+            SubLObject date = NIL;
+            if (NIL == date) {
+                {
+                    SubLObject csome_list_var = ftemplate_polycanonicalized_assertion_hl_assertions(assertion, focal_term);
+                    SubLObject hl_assertion = NIL;
+                    for (hl_assertion = csome_list_var.first(); !((NIL != date) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , hl_assertion = csome_list_var.first()) {
+                        date = assertions_high.asserted_second(hl_assertion);
+                    }
+                }
+            }
+            return date;
+        }
+    }
+
     public static SubLObject ftemplate_polycanonicalized_assertion_second(final SubLObject focal_term, final SubLObject assertion) {
         SubLObject date = NIL;
         if (NIL == date) {
@@ -6745,6 +12072,26 @@ public final class formula_templates extends SubLTranslatedFile {
             }
         }
         return date;
+    }
+
+    public static final SubLObject xml_serialize_assertion_elmt_for_formula_template_instance_alt(SubLObject assertion, SubLObject polycanonicalizedP, SubLObject stream) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    if (NIL != polycanonicalizedP) {
+                        xml_serialize_elmt_information_for_assertion(ftemplate_polycanonicalized_assertion_mt(assertion), stream);
+                    } else {
+                        xml_serialize_elmt_information_for_assertion(uncanonicalizer.assertion_elmt(assertion), stream);
+                    }
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return assertion;
+        }
     }
 
     public static SubLObject xml_serialize_assertion_elmt_for_formula_template_instance(final SubLObject assertion, final SubLObject polycanonicalizedP, final SubLObject stream) {
@@ -6761,6 +12108,59 @@ public final class formula_templates extends SubLTranslatedFile {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return assertion;
+    }
+
+    public static final SubLObject xml_serialize_elmt_information_for_assertion_alt(SubLObject elmt, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = xml_vars.$xml_stream$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                try {
+                    xml_vars.$xml_stream$.bind(stream, thread);
+                    {
+                        SubLObject _prev_bind_0_134 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                        try {
+                            xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                            xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_utilities.xml_start_tag_internal($$$knownAssertionELMt, NIL, NIL);
+                            cycml.cycml_serialize_term(elmt);
+                        } finally {
+                            xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_134, thread);
+                        }
+                    }
+                    xml_utilities.xml_terpri();
+                    xml_utilities.xml_end_tag_internal($$$knownAssertionELMt);
+                    {
+                        SubLObject pcw = map_elmt_to_published_conceptual_work(elmt);
+                        if (NIL != pcw) {
+                            {
+                                SubLObject _prev_bind_0_135 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_utilities.xml_start_tag_internal($$$knownAssertionCW, NIL, NIL);
+                                    cycml.cycml_serialize_term(pcw);
+                                } finally {
+                                    xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                                    xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_135, thread);
+                                }
+                            }
+                            xml_utilities.xml_terpri();
+                            xml_utilities.xml_end_tag_internal($$$knownAssertionCW);
+                        }
+                    }
+                } finally {
+                    xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return elmt;
+        }
     }
 
     public static SubLObject xml_serialize_elmt_information_for_assertion(final SubLObject elmt, SubLObject stream) {
@@ -6852,6 +12252,16 @@ public final class formula_templates extends SubLTranslatedFile {
         return elmt;
     }
 
+    public static final SubLObject clear_map_elmt_to_published_conceptual_work_alt() {
+        {
+            SubLObject cs = $map_elmt_to_published_conceptual_work_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_map_elmt_to_published_conceptual_work() {
         final SubLObject cs = $map_elmt_to_published_conceptual_work_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -6860,8 +12270,21 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_map_elmt_to_published_conceptual_work_alt(SubLObject elmt) {
+        return memoization_state.caching_state_remove_function_results_with_args($map_elmt_to_published_conceptual_work_caching_state$.getGlobalValue(), list(elmt), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_map_elmt_to_published_conceptual_work(final SubLObject elmt) {
         return memoization_state.caching_state_remove_function_results_with_args($map_elmt_to_published_conceptual_work_caching_state$.getGlobalValue(), list(elmt), UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject map_elmt_to_published_conceptual_work_internal_alt(SubLObject elmt) {
+        {
+            SubLObject v_properties = list($MAX_NUMBER, ONE_INTEGER);
+            SubLObject v_hlmt = hlmt_czer.canonicalize_hlmt(elmt);
+            SubLObject monad_mt = hlmt.hlmt_monad_mt(v_hlmt);
+            return NIL != hlmt.hlmt_p(monad_mt) ? ((SubLObject) (ftemplate_ask_variable($PCW, list($$contextOfPCW, $PCW, monad_mt), $$InferencePSC, v_properties).first())) : NIL;
+        }
     }
 
     public static SubLObject map_elmt_to_published_conceptual_work_internal(final SubLObject elmt) {
@@ -6869,6 +12292,23 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject v_hlmt = hlmt_czer.canonicalize_hlmt(elmt);
         final SubLObject monad_mt = hlmt.hlmt_monad_mt(v_hlmt);
         return NIL != hlmt.hlmt_p(monad_mt) ? ftemplate_ask_variable($PCW, list($$contextOfPCW, $PCW, monad_mt), $$InferencePSC, v_properties).first() : NIL;
+    }
+
+    public static final SubLObject map_elmt_to_published_conceptual_work_alt(SubLObject elmt) {
+        {
+            SubLObject caching_state = $map_elmt_to_published_conceptual_work_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(MAP_ELMT_TO_PUBLISHED_CONCEPTUAL_WORK, $map_elmt_to_published_conceptual_work_caching_state$, NIL, EQUAL, ONE_INTEGER, ZERO_INTEGER);
+            }
+            {
+                SubLObject results = memoization_state.caching_state_lookup(caching_state, elmt, $kw343$_MEMOIZED_ITEM_NOT_FOUND_);
+                if (results == $kw343$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    results = arg2(resetMultipleValues(), multiple_value_list(map_elmt_to_published_conceptual_work_internal(elmt)));
+                    memoization_state.caching_state_put(caching_state, elmt, results, UNPROVIDED);
+                }
+                return memoization_state.caching_results(results);
+            }
+        }
     }
 
     public static SubLObject map_elmt_to_published_conceptual_work(final SubLObject elmt) {
@@ -6882,6 +12322,24 @@ public final class formula_templates extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, elmt, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject get_assertions_for_leaf_template_topic_instance_alt(SubLObject focal_term, SubLObject template_topic, SubLObject elmt, SubLObject query_mt) {
+        {
+            SubLObject results = NIL;
+            SubLObject cdolist_list_var = template_topic_templates(template_topic);
+            SubLObject ftemplate = NIL;
+            for (ftemplate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ftemplate = cdolist_list_var.first()) {
+                {
+                    SubLObject template_id = formula_template_id(ftemplate);
+                    SubLObject assertions = get_assertions_for_formula_template_instance(focal_term, ftemplate, elmt, query_mt);
+                    if (NIL != assertions) {
+                        results = cons(list(template_id, assertions), results);
+                    }
+                }
+            }
+            return nreverse(results);
+        }
     }
 
     public static SubLObject get_assertions_for_leaf_template_topic_instance(final SubLObject focal_term, final SubLObject template_topic, final SubLObject elmt, final SubLObject query_mt) {
@@ -6901,12 +12359,47 @@ public final class formula_templates extends SubLTranslatedFile {
         return nreverse(results);
     }
 
+    public static final SubLObject get_assertions_for_formula_template_instance_alt(SubLObject focal_term, SubLObject ftemplate, SubLObject elmt, SubLObject query_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(focal_term, FORT_P);
+            SubLTrampolineFile.checkType(ftemplate, FORMULA_TEMPLATE_P);
+            elmt = czer_main.canonicalize_term(elmt, elmt);
+            SubLTrampolineFile.checkType(elmt, HLMT_P);
+            {
+                SubLObject assertions = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject assertion_sentence = get_assertion_sentence_and_constraints_from_formula_template(ftemplate, focal_term, elmt);
+                    SubLObject constraint_clauses = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject query_sentence = get_assertion_finding_query_sentence(assertion_sentence, constraint_clauses);
+                        SubLObject original_query = thread.secondMultipleValue();
+                        SubLObject allow_skolemsP = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != query_sentence) {
+                            {
+                                SubLObject has_reformulation_specP = formula_template_has_reformulation_specificationP(ftemplate);
+                                SubLObject max_number = ((NIL == has_reformulation_specP) && (NIL != formula_template_is_single_entryP(ftemplate))) ? ((SubLObject) (ONE_INTEGER)) : NIL;
+                                SubLObject result = get_assertions_for_fet_sentence(query_sentence, focal_term, query_mt, max_number, original_query, constraint_clauses, T, has_reformulation_specP);
+                                assertions = kb_utilities.sort_terms(result, NIL, T, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+                return assertions;
+            }
+        }
+    }
+
     public static SubLObject get_assertions_for_formula_template_instance(final SubLObject focal_term, final SubLObject ftemplate, SubLObject elmt, final SubLObject query_mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(focal_term) : "forts.fort_p(focal_term) " + "CommonSymbols.NIL != forts.fort_p(focal_term) " + focal_term;
-        assert NIL != formula_template_p(ftemplate) : "formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) " + ftemplate;
+        assert NIL != forts.fort_p(focal_term) : "! forts.fort_p(focal_term) " + ("forts.fort_p(focal_term) " + "CommonSymbols.NIL != forts.fort_p(focal_term) ") + focal_term;
+        assert NIL != formula_template_p(ftemplate) : "! formula_templates.formula_template_p(ftemplate) " + ("formula_templates.formula_template_p(ftemplate) " + "CommonSymbols.NIL != formula_templates.formula_template_p(ftemplate) ") + ftemplate;
         elmt = czer_main.canonicalize_term(elmt, elmt);
-        assert NIL != hlmt.hlmt_p(elmt) : "hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) " + elmt;
+        assert NIL != hlmt.hlmt_p(elmt) : "! hlmt.hlmt_p(elmt) " + ("hlmt.hlmt_p(elmt) " + "CommonSymbols.NIL != hlmt.hlmt_p(elmt) ") + elmt;
         SubLObject assertions = NIL;
         thread.resetMultipleValues();
         final SubLObject assertion_sentence = get_assertion_sentence_and_constraints_from_formula_template(ftemplate, focal_term, elmt);
@@ -6924,6 +12417,61 @@ public final class formula_templates extends SubLTranslatedFile {
             assertions = kb_utilities.sort_terms(result, NIL, T, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return assertions;
+    }
+
+    public static final SubLObject get_assertions_for_fet_sentence_alt(SubLObject formula, SubLObject focal_term, SubLObject query_mt, SubLObject max_number, SubLObject original_query, SubLObject constraint_clauses, SubLObject reassemble_polycanonicalized_assertionsP, SubLObject check_reformulatedP) {
+        if (constraint_clauses == UNPROVIDED) {
+            constraint_clauses = NIL;
+        }
+        if (reassemble_polycanonicalized_assertionsP == UNPROVIDED) {
+            reassemble_polycanonicalized_assertionsP = T;
+        }
+        if (check_reformulatedP == UNPROVIDED) {
+            check_reformulatedP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result_set = NIL;
+                SubLObject default_assertions = NIL;
+                SubLObject reformulated_result_set = NIL;
+                SubLObject reformulated_assertions = NIL;
+                SubLObject assertion_varP = cycl_utilities.expression_find(fet_assertion_variable_for_formula(original_query), formula, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                if (NIL == cycl_utilities.expression_find($$ist_Intermediate, formula, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                    {
+                        SubLObject enhanced_query_mt = (NIL != hlmt.possibly_mt_p(formula_template_vars.$default_assertion_template_elmt$.getDynamicValue(thread))) ? ((SubLObject) (hlmt_czer.canonicalize_hlmt(list($$MtUnionFn, formula_template_vars.$default_assertion_template_elmt$.getDynamicValue(thread), query_mt)))) : query_mt;
+                        result_set = ftemplate_loading_supporting_ask(formula, enhanced_query_mt, max_number, T);
+                        default_assertions = get_assertions_from_formula_template_result_sets(original_query, result_set, focal_term, enhanced_query_mt, reassemble_polycanonicalized_assertionsP, assertion_varP);
+                    }
+                    if ((NIL == result_set) && (NIL != isa.isaP(query_mt, $$RKFInteractionContextMicrotheory, query_mt, UNPROVIDED))) {
+                        {
+                            SubLObject lexical_mt = get_lexical_mt_for_rkf_interaction_mt(query_mt);
+                            result_set = ftemplate_loading_supporting_ask(formula, lexical_mt, max_number, T);
+                            query_mt = lexical_mt;
+                        }
+                    }
+                    {
+                        SubLObject temp_assertions = get_assertions_from_formula_template_result_sets(original_query, result_set, focal_term, query_mt, reassemble_polycanonicalized_assertionsP, assertion_varP);
+                        if (NIL != temp_assertions) {
+                            default_assertions = append(temp_assertions, default_assertions);
+                        }
+                    }
+                }
+                if (NIL != check_reformulatedP) {
+                    {
+                        SubLObject refspec_var = $sym406$__REFSPEC;
+                        SubLObject query = constrain_query_with_accumulated_constraints(constrained_term_finder.generate_note_reformulation_formula($sym407$__ASSERTION, focal_term, original_query, refspec_var), constraint_clauses);
+                        reformulated_result_set = ftemplate_loading_supporting_ask(query, ftemplate_reformulated_query_mt(query_mt, original_query), max_number, T);
+                        if (((NIL == reformulated_result_set) && (NIL != hlmt.possibly_mt_p(formula_template_vars.$default_assertion_template_elmt$.getDynamicValue(thread)))) && (NIL != fet_fallback_to_default_mtP(original_query))) {
+                            reformulated_result_set = ftemplate_loading_supporting_ask(query, ftemplate_reformulated_query_mt(formula_template_vars.$default_assertion_template_elmt$.getDynamicValue(thread), original_query), max_number, T);
+                        }
+                        reformulated_result_set = ftemplate_filter_reformulated_result_set(reformulated_result_set, result_set);
+                        reformulated_assertions = unpack_note_reformulation_result_sets(original_query, reformulated_result_set, reassemble_polycanonicalized_assertionsP);
+                    }
+                }
+                return remove_duplicates(union(reformulated_assertions, default_assertions, UNPROVIDED, UNPROVIDED), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+        }
     }
 
     public static SubLObject get_assertions_for_fet_sentence(final SubLObject formula, final SubLObject focal_term, SubLObject query_mt, final SubLObject max_number, final SubLObject original_query, SubLObject constraint_clauses, SubLObject reassemble_polycanonicalized_assertionsP, SubLObject check_reformulatedP) {
@@ -6969,14 +12517,50 @@ public final class formula_templates extends SubLTranslatedFile {
         return remove_duplicates(union(reformulated_assertions, default_assertions, UNPROVIDED, UNPROVIDED), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject fet_fallback_to_default_mtP_alt(SubLObject original_query) {
+        return T;
+    }
+
     public static SubLObject fet_fallback_to_default_mtP(final SubLObject original_query) {
         return T;
+    }
+
+    public static final SubLObject ftemplate_reformulated_query_mt_alt(SubLObject query_mt, SubLObject original_query) {
+        return NIL != el_formula_with_operator_p(original_query, $$ist_Intermediate) ? ((SubLObject) (ftemplate_qualify_mt_to_anytime(query_mt))) : query_mt;
     }
 
     public static SubLObject ftemplate_reformulated_query_mt(final SubLObject query_mt, final SubLObject original_query) {
         return NIL != el_formula_with_operator_p(original_query, $$ist_Intermediate) ? ftemplate_qualify_mt_to_anytime(query_mt) : query_mt;
     }
 
+    /**
+     * Filter from REFORMULATED-RESULT-SET any that are reformulations of assertions
+     * already handled in ORIGINAL-RESULT-SET.
+     *
+     * @see bug 13145.
+     */
+    @LispMethod(comment = "Filter from REFORMULATED-RESULT-SET any that are reformulations of assertions\r\nalready handled in ORIGINAL-RESULT-SET.\r\n\r\n@see bug 13145.\nFilter from REFORMULATED-RESULT-SET any that are reformulations of assertions\nalready handled in ORIGINAL-RESULT-SET.")
+    public static final SubLObject ftemplate_filter_reformulated_result_set_alt(SubLObject reformulated_result_set, SubLObject original_result_set) {
+        {
+            SubLObject filtered = NIL;
+            SubLObject cdolist_list_var = reformulated_result_set;
+            SubLObject reformulated_result = NIL;
+            for (reformulated_result = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , reformulated_result = cdolist_list_var.first()) {
+                if (NIL == ftemplate_reformulated_result_duplicateP(reformulated_result, original_result_set)) {
+                    filtered = cons(reformulated_result, filtered);
+                }
+            }
+            return filtered;
+        }
+    }
+
+    /**
+     * Filter from REFORMULATED-RESULT-SET any that are reformulations of assertions
+     * already handled in ORIGINAL-RESULT-SET.
+     *
+     * @see bug 13145.
+     */
+    @LispMethod(comment = "Filter from REFORMULATED-RESULT-SET any that are reformulations of assertions\r\nalready handled in ORIGINAL-RESULT-SET.\r\n\r\n@see bug 13145.\nFilter from REFORMULATED-RESULT-SET any that are reformulations of assertions\nalready handled in ORIGINAL-RESULT-SET.")
     public static SubLObject ftemplate_filter_reformulated_result_set(final SubLObject reformulated_result_set, final SubLObject original_result_set) {
         SubLObject filtered = NIL;
         SubLObject cdolist_list_var = reformulated_result_set;
@@ -6990,6 +12574,36 @@ public final class formula_templates extends SubLTranslatedFile {
             reformulated_result = cdolist_list_var.first();
         } 
         return filtered;
+    }
+
+    public static final SubLObject ftemplate_reformulated_result_duplicateP_alt(SubLObject reformulated_result, SubLObject original_result_set) {
+        {
+            SubLObject v_bindings = reformulated_result.first();
+            SubLObject assertion = bindings.variable_lookup($sym407$__ASSERTION, v_bindings);
+            SubLObject duplicateP = NIL;
+            if (NIL != assertion_handles.assertion_p(assertion)) {
+                if (NIL == duplicateP) {
+                    {
+                        SubLObject csome_list_var = original_result_set;
+                        SubLObject original_result = NIL;
+                        for (original_result = csome_list_var.first(); !((NIL != duplicateP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , original_result = csome_list_var.first()) {
+                            if (NIL == duplicateP) {
+                                {
+                                    SubLObject csome_list_var_136 = second(original_result);
+                                    SubLObject support = NIL;
+                                    for (support = csome_list_var_136.first(); !((NIL != duplicateP) || (NIL == csome_list_var_136)); csome_list_var_136 = csome_list_var_136.rest() , support = csome_list_var_136.first()) {
+                                        if (support == assertion) {
+                                            duplicateP = T;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return duplicateP;
+        }
     }
 
     public static SubLObject ftemplate_reformulated_result_duplicateP(final SubLObject reformulated_result, final SubLObject original_result_set) {
@@ -7020,6 +12634,28 @@ public final class formula_templates extends SubLTranslatedFile {
         return duplicateP;
     }
 
+    public static final SubLObject unpack_note_reformulation_result_sets_alt(SubLObject original_query, SubLObject result_set, SubLObject reassemble_polycanonicalized_assertionsP) {
+        {
+            SubLObject assertions = NIL;
+            SubLObject cdolist_list_var = result_set;
+            SubLObject result = NIL;
+            for (result = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , result = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_137 = unpack_note_reformulation_result(original_query, result, reassemble_polycanonicalized_assertionsP);
+                    SubLObject assertion = NIL;
+                    for (assertion = cdolist_list_var_137.first(); NIL != cdolist_list_var_137; cdolist_list_var_137 = cdolist_list_var_137.rest() , assertion = cdolist_list_var_137.first()) {
+                        if (NIL != assertion_handles.assertion_p(assertion)) {
+                            assertions = cons(assertion, assertions);
+                        } else {
+                            assertions = add_one_polycanonicalized_result(assertion, assertions);
+                        }
+                    }
+                }
+            }
+            return nreverse(assertions);
+        }
+    }
+
     public static SubLObject unpack_note_reformulation_result_sets(final SubLObject original_query, final SubLObject result_set, final SubLObject reassemble_polycanonicalized_assertionsP) {
         SubLObject assertions = NIL;
         SubLObject cdolist_list_var = result_set;
@@ -7044,6 +12680,32 @@ public final class formula_templates extends SubLTranslatedFile {
         return nreverse(assertions);
     }
 
+    public static final SubLObject add_one_polycanonicalized_result_alt(SubLObject assertion, SubLObject assertions) {
+        {
+            SubLObject existing = NIL;
+            if (NIL == existing) {
+                {
+                    SubLObject csome_list_var = assertions;
+                    SubLObject other_assertion = NIL;
+                    for (other_assertion = csome_list_var.first(); !((NIL != existing) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , other_assertion = csome_list_var.first()) {
+                        if (((NIL != ftemplate_polycanonicalized_assertion_p(other_assertion)) && second(other_assertion).equal(second(assertion))) && third(other_assertion).equal(third(assertion))) {
+                            existing = other_assertion;
+                        }
+                    }
+                }
+            }
+            if (NIL == existing) {
+                assertions = cons(assertion, assertions);
+            } else {
+                if (existing.equal(assertion)) {
+                } else {
+                    set_nth(THREE_INTEGER, existing, delete_duplicates(nconc(nth(THREE_INTEGER, assertion), nth(THREE_INTEGER, existing)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                }
+            }
+        }
+        return assertions;
+    }
+
     public static SubLObject add_one_polycanonicalized_result(final SubLObject assertion, SubLObject assertions) {
         SubLObject existing = NIL;
         if (NIL == existing) {
@@ -7066,6 +12728,57 @@ public final class formula_templates extends SubLTranslatedFile {
             }
 
         return assertions;
+    }
+
+    public static final SubLObject unpack_note_reformulation_result_alt(SubLObject original_query, SubLObject result, SubLObject reassemble_polycanonicalized_assertionsP) {
+        {
+            SubLObject assertions = NIL;
+            SubLObject binding_set = result.first();
+            SubLObject supports = second(result);
+            SubLObject elmt = NIL;
+            if (NIL != reassemble_polycanonicalized_assertionsP) {
+                {
+                    SubLObject bound_formula = bindings.apply_bindings(binding_set, copy_formula(original_query));
+                    SubLObject hl_assertions = NIL;
+                    SubLObject cdolist_list_var = supports;
+                    SubLObject support = NIL;
+                    for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
+                        if ((NIL != assertion_handles.assertion_p(support)) && (NIL != constrained_term_finder.is_note_reformulation_assertionP(support))) {
+                            {
+                                SubLObject hl_assertion = assertions_high.gaf_arg1(support);
+                                if (NIL != assertion_handles.assertion_p(hl_assertion)) {
+                                    hl_assertions = cons(hl_assertion, hl_assertions);
+                                    if (NIL == elmt) {
+                                        elmt = uncanonicalizer.assertion_elmt(support);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (NIL != hl_assertions) {
+                        {
+                            SubLObject item_var = make_ftemplate_polycanonicalized_assertion(bound_formula, elmt, hl_assertions);
+                            if (NIL == member(item_var, assertions, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                assertions = cons(item_var, assertions);
+                            }
+                        }
+                    }
+                }
+            } else {
+                {
+                    SubLObject assertion = bindings.variable_lookup($sym407$__ASSERTION, binding_set);
+                    if (NIL != assertion_handles.assertion_p(assertion)) {
+                        {
+                            SubLObject item_var = assertion;
+                            if (NIL == member(item_var, assertions, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                assertions = cons(item_var, assertions);
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(assertions);
+        }
     }
 
     public static SubLObject unpack_note_reformulation_result(final SubLObject original_query, final SubLObject result, final SubLObject reassemble_polycanonicalized_assertionsP) {
@@ -7110,6 +12823,27 @@ public final class formula_templates extends SubLTranslatedFile {
         return nreverse(assertions);
     }
 
+    public static final SubLObject ftemplate_loading_supporting_ask_alt(SubLObject query, SubLObject elmt, SubLObject number, SubLObject indeterminateP) {
+        if (indeterminateP == UNPROVIDED) {
+            indeterminateP = NIL;
+        }
+        {
+            SubLObject query_properties = ask_utilities.query_properties_from_legacy_ask_parameters(ZERO_INTEGER, number, UNPROVIDED, UNPROVIDED);
+            SubLObject result_set = NIL;
+            query_properties = putf(query_properties, $RESULT_UNIQUENESS, $BINDINGS);
+            query_properties = putf(query_properties, $PROBABLY_APPROXIMATELY_DONE, $float$1_0);
+            query_properties = putf(query_properties, $RETURN, $BINDINGS_AND_SUPPORTS);
+            query_properties = putf(query_properties, $ANSWER_LANGUAGE, $HL);
+            query_properties = putf(query_properties, $kw413$ALLOW_INDETERMINATE_RESULTS_, indeterminateP);
+            query_properties = putf(query_properties, $PROBLEM_STORE, formula_template_vars.get_template_topic_problem_store());
+            if (NIL != is_ftemplate_loading_supporting_ask_browsableP()) {
+                query_properties = putf(query_properties, $BROWSABLE_, T);
+            }
+            result_set = inference_kernel.new_cyc_query(query, elmt, query_properties);
+            return result_set;
+        }
+    }
+
     public static SubLObject ftemplate_loading_supporting_ask(final SubLObject query, final SubLObject elmt, final SubLObject number, SubLObject indeterminateP) {
         if (indeterminateP == UNPROVIDED) {
             indeterminateP = NIL;
@@ -7129,6 +12863,67 @@ public final class formula_templates extends SubLTranslatedFile {
         return result_set;
     }
 
+    /**
+     *
+     *
+     * @unknown works for (at least) #$InferencePSC, #$MtUnionFn, and regular mts.
+     */
+    @LispMethod(comment = "@unknown works for (at least) #$InferencePSC, #$MtUnionFn, and regular mts.")
+    public static final SubLObject smarter_find_visible_assertions_cycl_alt(SubLObject formula, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject visible_assertions = NIL;
+                SubLObject all_assertions = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        all_assertions = czer_meta.find_visible_assertions_cycl(formula, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                {
+                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                            {
+                                SubLObject cdolist_list_var = all_assertions;
+                                SubLObject assertion = NIL;
+                                for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                    if (NIL != mt_relevance_macros.relevant_mtP(assertions_high.assertion_mt(assertion))) {
+                                        visible_assertions = cons(assertion, visible_assertions);
+                                    }
+                                }
+                            }
+                        } finally {
+                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return visible_assertions;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown works for (at least) #$InferencePSC, #$MtUnionFn, and regular mts.
+     */
+    @LispMethod(comment = "@unknown works for (at least) #$InferencePSC, #$MtUnionFn, and regular mts.")
     public static SubLObject smarter_find_visible_assertions_cycl(final SubLObject formula, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject visible_assertions = NIL;
@@ -7167,6 +12962,166 @@ public final class formula_templates extends SubLTranslatedFile {
             mt_relevance_macros.$mt$.rebind(_prev_bind_3, thread);
         }
         return visible_assertions;
+    }
+
+    public static final SubLObject get_assertions_from_formula_template_result_sets_alt(SubLObject formula, SubLObject result_set, SubLObject focal_term, SubLObject elmt, SubLObject reassemble_polycanonicalized_assertionsP, SubLObject assertion_varP) {
+        if (assertion_varP == UNPROVIDED) {
+            assertion_varP = NIL;
+        }
+        {
+            SubLObject assertions = NIL;
+            {
+                SubLObject cdolist_list_var = result_set;
+                SubLObject result = NIL;
+                for (result = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , result = cdolist_list_var.first()) {
+                    {
+                        SubLObject binding_set = result.first();
+                        SubLObject supports = second(result);
+                        SubLObject bound_formula = copy_formula(formula);
+                        SubLObject discardP = NIL;
+                        SubLObject contains_skolemsP = NIL;
+                        SubLObject v_skolems = NIL;
+                        if (NIL == discardP) {
+                            {
+                                SubLObject csome_list_var = binding_set;
+                                SubLObject binding = NIL;
+                                for (binding = csome_list_var.first(); !((NIL != discardP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , binding = csome_list_var.first()) {
+                                    {
+                                        SubLObject datum = binding;
+                                        SubLObject current = datum;
+                                        SubLObject variable = NIL;
+                                        SubLObject v_term = NIL;
+                                        destructuring_bind_must_consp(current, datum, $list_alt415);
+                                        variable = current.first();
+                                        current = current.rest();
+                                        v_term = current;
+                                        if (NIL != is_skolemish_termP(v_term)) {
+                                            v_skolems = cons(v_term, v_skolems);
+                                            contains_skolemsP = T;
+                                        } else {
+                                            bound_formula = list_utilities.tree_substitute(bound_formula, variable, v_term);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (NIL == discardP) {
+                            if ((NIL != reassemble_polycanonicalized_assertionsP) && (NIL != contains_skolemsP)) {
+                                {
+                                    SubLObject skolem_elmt = NIL;
+                                    SubLObject hl_assertions = NIL;
+                                    SubLObject cdolist_list_var_138 = supports;
+                                    SubLObject support = NIL;
+                                    for (support = cdolist_list_var_138.first(); NIL != cdolist_list_var_138; cdolist_list_var_138 = cdolist_list_var_138.rest() , support = cdolist_list_var_138.first()) {
+                                        if (NIL != assertion_handles.assertion_p(support)) {
+                                            hl_assertions = cons(support, hl_assertions);
+                                            if (NIL == skolem_elmt) {
+                                                {
+                                                    SubLObject cdolist_list_var_139 = v_skolems;
+                                                    SubLObject skolem = NIL;
+                                                    for (skolem = cdolist_list_var_139.first(); NIL != cdolist_list_var_139; cdolist_list_var_139 = cdolist_list_var_139.rest() , skolem = cdolist_list_var_139.first()) {
+                                                        if (NIL != cycl_utilities.expression_find(skolem, support, T, symbol_function(EQUAL), UNPROVIDED)) {
+                                                            skolem_elmt = uncanonicalizer.assertion_elmt(support);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (NIL == skolem_elmt) {
+                                        skolem_elmt = elmt;
+                                    }
+                                    if (NIL != hl_assertions) {
+                                        assertions = add_one_polycanonicalized_result(make_ftemplate_polycanonicalized_assertion(bound_formula, skolem_elmt, hl_assertions), assertions);
+                                    }
+                                }
+                            } else {
+                                if (NIL != contains_skolemsP) {
+                                    {
+                                        SubLObject cdolist_list_var_140 = supports;
+                                        SubLObject support = NIL;
+                                        for (support = cdolist_list_var_140.first(); NIL != cdolist_list_var_140; cdolist_list_var_140 = cdolist_list_var_140.rest() , support = cdolist_list_var_140.first()) {
+                                            if (NIL != assertion_handles.assertion_p(support)) {
+                                                assertions = cons(support, assertions);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (NIL != assertion_varP) {
+                                        {
+                                            SubLObject assertion = bindings.variable_lookup(fet_assertion_variable_for_formula(formula), binding_set);
+                                            if (NIL != assertion_handles.assertion_p(assertion)) {
+                                                assertions = cons(assertion, assertions);
+                                            }
+                                        }
+                                    } else {
+                                        {
+                                            SubLObject component_assertions = smarter_find_visible_assertions_cycl(bound_formula, elmt);
+                                            if (NIL == component_assertions) {
+                                            } else {
+                                                if (NIL != list_utilities.singletonP(component_assertions)) {
+                                                    {
+                                                        SubLObject item_var = component_assertions.first();
+                                                        if (NIL == member(item_var, assertions, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                            assertions = cons(item_var, assertions);
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (NIL != list_utilities.list_of_type_p(symbol_function($sym416$DEDUCED_ASSERTION_), component_assertions)) {
+                                                        {
+                                                            SubLObject item_var = component_assertions.first();
+                                                            if (NIL == member(item_var, assertions, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                                assertions = cons(item_var, assertions);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if ((NIL != reassemble_polycanonicalized_assertionsP) && ((NIL != el_conjunction_p(formula)) || (NIL != el_existential_p(formula)))) {
+                                                            {
+                                                                SubLObject elmt_141 = cycl_utilities.hl_to_el(bindings.variable_lookup($elmt_variable_for_formula_templates$.getGlobalValue(), binding_set));
+                                                                if (NIL == el_grammar.el_term_p(elmt_141)) {
+                                                                    uncanonicalizer.assertion_elmt(component_assertions.first());
+                                                                }
+                                                                {
+                                                                    SubLObject item_var = make_ftemplate_polycanonicalized_assertion(bound_formula, elmt_141, UNPROVIDED);
+                                                                    if (NIL == member(item_var, assertions, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                                        assertions = cons(item_var, assertions);
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {
+                                                            {
+                                                                SubLObject cdolist_list_var_142 = component_assertions;
+                                                                SubLObject component_assertion = NIL;
+                                                                for (component_assertion = cdolist_list_var_142.first(); NIL != cdolist_list_var_142; cdolist_list_var_142 = cdolist_list_var_142.rest() , component_assertion = cdolist_list_var_142.first()) {
+                                                                    if (NIL != assertion_handles.assertion_p(component_assertion)) {
+                                                                        assertions = cons(component_assertion, assertions);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject reversed = NIL;
+                SubLObject cdolist_list_var = assertions;
+                SubLObject assertion = NIL;
+                for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                    if (NIL == bad_assertion_for_formula_templatesP(assertion)) {
+                        reversed = cons(assertion, reversed);
+                    }
+                }
+                return reversed;
+            }
+        }
     }
 
     public static SubLObject get_assertions_from_formula_template_result_sets(final SubLObject formula, final SubLObject result_set, final SubLObject focal_term, final SubLObject elmt, final SubLObject reassemble_polycanonicalized_assertionsP, SubLObject assertion_varP) {
@@ -7316,34 +13271,74 @@ public final class formula_templates extends SubLTranslatedFile {
         return reversed;
     }
 
+    public static final SubLObject make_ftemplate_polycanonicalized_assertion_alt(SubLObject sentence, SubLObject mt, SubLObject hl_assertions) {
+        if (hl_assertions == UNPROVIDED) {
+            hl_assertions = NIL;
+        }
+        SubLTrampolineFile.checkType(sentence, EL_FORMULA_P);
+        SubLTrampolineFile.checkType(mt, EL_TERM_P);
+        {
+            SubLObject cdolist_list_var = hl_assertions;
+            SubLObject hl_assertion = NIL;
+            for (hl_assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , hl_assertion = cdolist_list_var.first()) {
+                SubLTrampolineFile.checkType(hl_assertion, ASSERTION_P);
+            }
+        }
+        return list($POLY_CANONICALIZED, sentence, mt, hl_assertions);
+    }
+
     public static SubLObject make_ftemplate_polycanonicalized_assertion(final SubLObject sentence, final SubLObject mt, SubLObject hl_assertions) {
         if (hl_assertions == UNPROVIDED) {
             hl_assertions = NIL;
         }
-        assert NIL != el_formula_p(sentence) : "el_utilities.el_formula_p(sentence) " + "CommonSymbols.NIL != el_utilities.el_formula_p(sentence) " + sentence;
-        assert NIL != el_grammar.el_term_p(mt) : "el_grammar.el_term_p(mt) " + "CommonSymbols.NIL != el_grammar.el_term_p(mt) " + mt;
+        assert NIL != el_formula_p(sentence) : "! el_utilities.el_formula_p(sentence) " + ("el_utilities.el_formula_p(sentence) " + "CommonSymbols.NIL != el_utilities.el_formula_p(sentence) ") + sentence;
+        assert NIL != el_grammar.el_term_p(mt) : "! el_grammar.el_term_p(mt) " + ("el_grammar.el_term_p(mt) " + "CommonSymbols.NIL != el_grammar.el_term_p(mt) ") + mt;
         SubLObject cdolist_list_var = hl_assertions;
         SubLObject hl_assertion = NIL;
         hl_assertion = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != assertion_handles.assertion_p(hl_assertion) : "assertion_handles.assertion_p(hl_assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(hl_assertion) " + hl_assertion;
+            assert NIL != assertion_handles.assertion_p(hl_assertion) : "! assertion_handles.assertion_p(hl_assertion) " + ("assertion_handles.assertion_p(hl_assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(hl_assertion) ") + hl_assertion;
             cdolist_list_var = cdolist_list_var.rest();
             hl_assertion = cdolist_list_var.first();
         } 
         return list($POLY_CANONICALIZED, sentence, mt, hl_assertions);
     }
 
+    public static final SubLObject ftemplate_polycanonicalized_assertion_p_alt(SubLObject v_object) {
+        return makeBoolean(((v_object.isList() && (NIL != list_utilities.lengthGE(v_object, THREE_INTEGER, UNPROVIDED))) && (NIL != list_utilities.lengthLE(v_object, FOUR_INTEGER, UNPROVIDED))) && (v_object.first() == $POLY_CANONICALIZED));
+    }
+
     public static SubLObject ftemplate_polycanonicalized_assertion_p(final SubLObject v_object) {
         return makeBoolean(((v_object.isList() && (NIL != list_utilities.lengthGE(v_object, THREE_INTEGER, UNPROVIDED))) && (NIL != list_utilities.lengthLE(v_object, FOUR_INTEGER, UNPROVIDED))) && (v_object.first() == $POLY_CANONICALIZED));
     }
 
-    public static SubLObject ftemplate_polycanonicalized_assertion_sentence(final SubLObject assertion) {
-        assert NIL != ftemplate_polycanonicalized_assertion_p(assertion) : "formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + "CommonSymbols.NIL != formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + assertion;
+    public static final SubLObject ftemplate_polycanonicalized_assertion_sentence_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, FTEMPLATE_POLYCANONICALIZED_ASSERTION_P);
         return second(assertion);
     }
 
+    public static SubLObject ftemplate_polycanonicalized_assertion_sentence(final SubLObject assertion) {
+        assert NIL != ftemplate_polycanonicalized_assertion_p(assertion) : "! formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + ("formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + "CommonSymbols.NIL != formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) ") + assertion;
+        return second(assertion);
+    }
+
+    public static final SubLObject ftemplate_polycanonicalized_assertion_hl_assertions_alt(SubLObject assertion, SubLObject primary_term) {
+        SubLTrampolineFile.checkType(assertion, FTEMPLATE_POLYCANONICALIZED_ASSERTION_P);
+        {
+            SubLObject already_known = fourth(assertion);
+            if (NIL != already_known) {
+                return already_known;
+            }
+        }
+        {
+            SubLObject newly_found = ftemplate_polycanonicalized_assertion_find_hl_assertions(assertion, primary_term);
+            set_nth(THREE_INTEGER, assertion, newly_found);
+            return newly_found;
+        }
+    }
+
     public static SubLObject ftemplate_polycanonicalized_assertion_hl_assertions(final SubLObject assertion, final SubLObject primary_term) {
-        assert NIL != ftemplate_polycanonicalized_assertion_p(assertion) : "formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + "CommonSymbols.NIL != formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + assertion;
+        assert NIL != ftemplate_polycanonicalized_assertion_p(assertion) : "! formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + ("formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + "CommonSymbols.NIL != formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) ") + assertion;
         final SubLObject already_known = fourth(assertion);
         if (NIL != already_known) {
             return already_known;
@@ -7351,6 +13346,18 @@ public final class formula_templates extends SubLTranslatedFile {
         final SubLObject newly_found = ftemplate_polycanonicalized_assertion_find_hl_assertions(assertion, primary_term);
         set_nth(THREE_INTEGER, assertion, newly_found);
         return newly_found;
+    }
+
+    public static final SubLObject ftemplate_polycanonicalized_assertion_find_hl_assertions_alt(SubLObject assertion, SubLObject primary_term) {
+        {
+            SubLObject psentence = ftemplate_polycanonicalized_assertion_sentence(assertion);
+            SubLObject elmt = hlmt_czer.canonicalize_hlmt(ftemplate_polycanonicalized_assertion_mt(assertion));
+            SubLObject query_sentence = get_assertion_finding_query_sentence(psentence, NIL);
+            SubLObject max_number = NIL;
+            SubLObject reassemble_polycanonicalized_assertionsP = NIL;
+            SubLObject check_reformulatedP = T;
+            return get_assertions_for_fet_sentence(query_sentence, primary_term, elmt, max_number, psentence, NIL, reassemble_polycanonicalized_assertionsP, check_reformulatedP);
+        }
     }
 
     public static SubLObject ftemplate_polycanonicalized_assertion_find_hl_assertions(final SubLObject assertion, final SubLObject primary_term) {
@@ -7363,9 +13370,26 @@ public final class formula_templates extends SubLTranslatedFile {
         return get_assertions_for_fet_sentence(query_sentence, primary_term, elmt, max_number, psentence, NIL, reassemble_polycanonicalized_assertionsP, check_reformulatedP);
     }
 
-    public static SubLObject ftemplate_polycanonicalized_assertion_mt(final SubLObject assertion) {
-        assert NIL != ftemplate_polycanonicalized_assertion_p(assertion) : "formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + "CommonSymbols.NIL != formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + assertion;
+    public static final SubLObject ftemplate_polycanonicalized_assertion_mt_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, FTEMPLATE_POLYCANONICALIZED_ASSERTION_P);
         return third(assertion);
+    }
+
+    public static SubLObject ftemplate_polycanonicalized_assertion_mt(final SubLObject assertion) {
+        assert NIL != ftemplate_polycanonicalized_assertion_p(assertion) : "! formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + ("formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) " + "CommonSymbols.NIL != formula_templates.ftemplate_polycanonicalized_assertion_p(assertion) ") + assertion;
+        return third(assertion);
+    }
+
+    public static final SubLObject ftemplate_assertion_mt_alt(SubLObject assertion) {
+        if (NIL != assertion_handles.assertion_p(assertion)) {
+            return assertions_high.assertion_mt(assertion);
+        } else {
+            if (NIL != ftemplate_polycanonicalized_assertion_p(assertion)) {
+                return ftemplate_polycanonicalized_assertion_mt(assertion);
+            } else {
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject ftemplate_assertion_mt(final SubLObject assertion) {
@@ -7378,6 +13402,18 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject bad_assertion_for_formula_templatesP_alt(SubLObject assertion) {
+        {
+            SubLObject badP = NIL;
+            if (NIL != assertion_handles.assertion_p(assertion)) {
+                if (NIL != wff_utilities.non_wff_cached_p(assertion)) {
+                    badP = T;
+                }
+            }
+            return badP;
+        }
+    }
+
     public static SubLObject bad_assertion_for_formula_templatesP(final SubLObject assertion) {
         final SubLObject badP = NIL;
         if (NIL != assertion_handles.assertion_p(assertion)) {
@@ -7385,12 +13421,78 @@ public final class formula_templates extends SubLTranslatedFile {
         return badP;
     }
 
+    public static final SubLObject uninteresting_indeterminate_termP_alt(SubLObject v_term) {
+        return makeBoolean((NIL != inference_trampolines.inference_indeterminate_termP(v_term)) && (NIL == is_skolemish_termP(v_term)));
+    }
+
     public static SubLObject uninteresting_indeterminate_termP(final SubLObject v_term) {
         return makeBoolean((NIL != inference_trampolines.inference_indeterminate_termP(v_term)) && (NIL == is_skolemish_termP(v_term)));
     }
 
+    public static final SubLObject is_skolemish_termP_alt(SubLObject v_term) {
+        return makeBoolean((NIL != skolem_function_p(v_term)) || (NIL != term.skolem_nartP(v_term)));
+    }
+
     public static SubLObject is_skolemish_termP(final SubLObject v_term) {
         return makeBoolean((NIL != fort_types_interface.skolem_function_p(v_term)) || (NIL != term.skolem_nartP(v_term)));
+    }
+
+    /**
+     *
+     */
+    public static final SubLObject get_assertion_sentence_and_constraints_from_formula_template_alt(SubLObject ftemplate, SubLObject focal_term, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject formula = formula_template_formula(ftemplate);
+                SubLObject focal_term_argpositions = formula_template_focal_term(ftemplate);
+                SubLObject v_clauses = NIL;
+                if (NIL != formula) {
+                    formula = copy_formula(formula);
+                    {
+                        SubLObject cdolist_list_var = focal_term_argpositions;
+                        SubLObject focal_term_argpos = NIL;
+                        for (focal_term_argpos = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , focal_term_argpos = cdolist_list_var.first()) {
+                            cycl_utilities.formula_arg_position_nsubst(focal_term, focal_term_argpos.rest(), formula);
+                        }
+                    }
+                    {
+                        SubLObject list_var = NIL;
+                        SubLObject argpos_detail = NIL;
+                        SubLObject var_index = NIL;
+                        for (list_var = formula_template_argpos_ordering(ftemplate), argpos_detail = list_var.first(), var_index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , argpos_detail = list_var.first() , var_index = add(ONE_INTEGER, var_index)) {
+                            {
+                                SubLObject variable = nth(var_index, $unique_variables_list_for_formula_templates$.getGlobalValue());
+                                SubLObject argpos = arg_position_details_argument_position(argpos_detail);
+                                SubLObject unknown_replacement = arg_position_details_unknown_replacement(argpos_detail);
+                                SubLObject constraint = NIL;
+                                if (NIL == subl_promotions.memberP(argpos, focal_term_argpositions, symbol_function(EQUAL), UNPROVIDED)) {
+                                    constraint = cycl_utilities.formula_arg_position(formula, argpos.rest(), UNPROVIDED);
+                                    cycl_utilities.formula_arg_position_nsubst(variable, argpos.rest(), formula);
+                                    thread.resetMultipleValues();
+                                    {
+                                        SubLObject collection = convert_ftemplate_input_constraint_to_collection(constraint, elmt);
+                                        SubLObject predicate = thread.secondMultipleValue();
+                                        thread.resetMultipleValues();
+                                        if (NIL != collection) {
+                                            {
+                                                SubLObject clause = make_binary_formula(predicate, variable, collection);
+                                                if (NIL != cycl_grammar.cycl_represented_term_p(unknown_replacement)) {
+                                                    clause = make_disjunction(list(clause, list($$equals, variable, unknown_replacement)));
+                                                }
+                                                v_clauses = cons(clause, v_clauses);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return values(formula, v_clauses);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject get_assertion_sentence_and_constraints_from_formula_template(final SubLObject ftemplate, final SubLObject focal_term, final SubLObject elmt) {
@@ -7439,6 +13541,22 @@ public final class formula_templates extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject get_assertion_finding_query_sentence_alt(SubLObject formula, SubLObject v_clauses) {
+        if (v_clauses == UNPROVIDED) {
+            v_clauses = NIL;
+        }
+        {
+            SubLObject allow_skolemP = NIL;
+            SubLObject unconstrained_query = copy_formula(formula);
+            if (NIL != el_existential_p(formula)) {
+                formula = cycl_utilities.formula_arg2(formula, UNPROVIDED);
+                allow_skolemP = T;
+            }
+            formula = constrain_query_with_accumulated_constraints(formula, v_clauses);
+            return values(formula, unconstrained_query, allow_skolemP);
+        }
+    }
+
     public static SubLObject get_assertion_finding_query_sentence(SubLObject formula, SubLObject v_clauses) {
         if (v_clauses == UNPROVIDED) {
             v_clauses = NIL;
@@ -7451,6 +13569,43 @@ public final class formula_templates extends SubLTranslatedFile {
         }
         formula = constrain_query_with_accumulated_constraints(formula, v_clauses);
         return values(formula, unconstrained_query, allow_skolemP);
+    }
+
+    public static final SubLObject constrain_query_with_accumulated_constraints_alt(SubLObject formula, SubLObject v_clauses) {
+        {
+            SubLObject new_query_formula = formula;
+            if (NIL == v_clauses) {
+                return ftemplate_assertion_constrained_query_formula(formula, UNPROVIDED);
+            }
+            if (cycl_utilities.formula_arg0(formula) == $$ist) {
+                {
+                    SubLObject datum = formula;
+                    SubLObject current = datum;
+                    SubLObject ist_part = NIL;
+                    SubLObject mt_part = NIL;
+                    SubLObject formula_part = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt423);
+                    ist_part = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt423);
+                    mt_part = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt423);
+                    formula_part = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        v_clauses = cons(ftemplate_assertion_constrained_query_formula(formula_part, UNPROVIDED), v_clauses);
+                        new_query_formula = make_binary_formula(ist_part, mt_part, simplifier.conjoin(v_clauses, UNPROVIDED));
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt423);
+                    }
+                }
+            } else {
+                v_clauses = cons(ftemplate_assertion_constrained_query_formula(formula, UNPROVIDED), v_clauses);
+                new_query_formula = simplifier.conjoin(v_clauses, UNPROVIDED);
+            }
+            return new_query_formula;
+        }
     }
 
     public static SubLObject constrain_query_with_accumulated_constraints(final SubLObject formula, SubLObject v_clauses) {
@@ -7484,8 +13639,77 @@ public final class formula_templates extends SubLTranslatedFile {
         return new_query_formula;
     }
 
+    public static final SubLObject fet_assertion_variable_for_formula_alt(SubLObject formula) {
+        return $sym424$_FET_ASSERTION_VAR_524;
+    }
+
     public static SubLObject fet_assertion_variable_for_formula(final SubLObject formula) {
         return $sym435$_FET_ASSERTION_VAR_524;
+    }
+
+    public static final SubLObject ftemplate_assertion_constrained_query_formula_alt(SubLObject formula, SubLObject use_ist_assertedP) {
+        if (use_ist_assertedP == UNPROVIDED) {
+            use_ist_assertedP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg0 = cycl_utilities.formula_arg0(formula);
+                if (NIL != el_existential_p(formula)) {
+                    {
+                        SubLObject datum = formula;
+                        SubLObject current = datum;
+                        SubLObject quantifier = NIL;
+                        SubLObject variable = NIL;
+                        SubLObject v_clauses = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt425);
+                        quantifier = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt425);
+                        variable = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt425);
+                        v_clauses = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            return make_binary_formula(quantifier, variable, ftemplate_assertion_constrained_query_formula(v_clauses, UNPROVIDED));
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt425);
+                        }
+                    }
+                } else {
+                    if (NIL != el_conjunction_p(formula)) {
+                        {
+                            SubLObject focused_clauses = NIL;
+                            {
+                                SubLObject _prev_bind_0 = $get_assertions_from_initial_askP$.currentBinding(thread);
+                                try {
+                                    $get_assertions_from_initial_askP$.bind(NIL, thread);
+                                    {
+                                        SubLObject cdolist_list_var = formula.rest();
+                                        SubLObject clause = NIL;
+                                        for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
+                                            focused_clauses = cons(ftemplate_assertion_constrained_query_formula(clause, T), focused_clauses);
+                                        }
+                                    }
+                                } finally {
+                                    $get_assertions_from_initial_askP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                            return simplifier.conjoin(focused_clauses, UNPROVIDED);
+                        }
+                    } else {
+                        if (NIL == logical_connective_p(arg0)) {
+                            {
+                                SubLObject assertion_var = fet_assertion_variable_for_formula(formula);
+                                return NIL != formula_ok_for_fet_assertion_varP(formula, assertion_var) ? ((SubLObject) (make_binary_formula($$assertionSentence, assertion_var, formula))) : NIL != el_formula_with_operator_p(formula, $$ist) ? ((SubLObject) (replace_formula_arg(ZERO_INTEGER, $$ist_Asserted, formula))) : NIL != use_ist_assertedP ? ((SubLObject) (make_binary_formula($$ist_Asserted, $elmt_variable_for_formula_templates$.getGlobalValue(), formula))) : make_unary_formula($$assertedSentence, formula);
+                            }
+                        }
+                    }
+                }
+            }
+            return formula;
+        }
     }
 
     public static SubLObject ftemplate_assertion_constrained_query_formula(final SubLObject formula, SubLObject use_ist_assertedP) {
@@ -7538,9 +13762,77 @@ public final class formula_templates extends SubLTranslatedFile {
         return formula;
     }
 
+    public static final SubLObject formula_ok_for_fet_assertion_varP_alt(SubLObject formula, SubLObject assertion_var) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean(((NIL != $get_assertions_from_initial_askP$.getDynamicValue(thread)) && (NIL == cycl_utilities.expression_find(assertion_var, formula, UNPROVIDED, UNPROVIDED, UNPROVIDED))) && (NIL == el_formula_with_operator_p(formula, $$assertionProducedByReformulation)));
+        }
+    }
+
     public static SubLObject formula_ok_for_fet_assertion_varP(final SubLObject formula, final SubLObject assertion_var) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean(((NIL != $get_assertions_from_initial_askP$.getDynamicValue(thread)) && (NIL == cycl_utilities.expression_find(assertion_var, formula, UNPROVIDED, UNPROVIDED, UNPROVIDED))) && (NIL == el_formula_with_operator_p(formula, $$assertionProducedByReformulation)));
+    }
+
+    public static final SubLObject convert_ftemplate_input_constraint_to_collection_alt(SubLObject constraint, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != narts_high.naut_p(constraint)) {
+                if (NIL == subl_promotions.memberP(constraint, $ftemplate_constraint_to_collection_skiplist$.getGlobalValue(), symbol_function(EQUAL), UNPROVIDED)) {
+                    {
+                        SubLObject collection = cycl_utilities.formula_arg1(constraint, UNPROVIDED);
+                        if (NIL != narts_high.naut_p(collection)) {
+                            {
+                                SubLObject pcase_var = cycl_utilities.formula_arg0(collection);
+                                if (pcase_var.eql($$SpecsFn)) {
+                                    return values(cycl_utilities.formula_arg1(collection, UNPROVIDED), $$genls);
+                                } else {
+                                    if (pcase_var.eql($$SomeExampleFn)) {
+                                        {
+                                            SubLObject spec_coll = cycl_utilities.formula_arg1(collection, UNPROVIDED);
+                                            if ((NIL != narts_high.naut_p(spec_coll)) && (cycl_utilities.formula_arg0(spec_coll) == $$SpecsFn)) {
+                                                spec_coll = cycl_utilities.formula_arg1(spec_coll, UNPROVIDED);
+                                            }
+                                            return values(spec_coll, $$isa);
+                                        }
+                                    } else {
+                                        if (pcase_var.eql($$SomeExampleSpecFn)) {
+                                            return values(cycl_utilities.formula_arg1(collection, UNPROVIDED), $$isa);
+                                        } else {
+                                            return values(collection, $$isa);
+                                        }
+                                    }
+                                }
+                            }
+                        } else {
+                            if (NIL != fort_p(collection)) {
+                                {
+                                    SubLObject usableP = NIL;
+                                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                                    {
+                                        SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                        try {
+                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                            usableP = makeBoolean((NIL == kb_mapping_utilities.some_pred_value(collection, $$defnIff, UNPROVIDED, UNPROVIDED)) && (NIL == kb_mapping_utilities.some_pred_value(collection, $$defnSufficient, UNPROVIDED, UNPROVIDED)));
+                                        } finally {
+                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                    return values(NIL != usableP ? ((SubLObject) (collection)) : NIL, $$isa);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return values(NIL, NIL);
+        }
     }
 
     public static SubLObject convert_ftemplate_input_constraint_to_collection(final SubLObject constraint, final SubLObject elmt) {
@@ -7587,290 +13879,911 @@ public final class formula_templates extends SubLTranslatedFile {
         return values(NIL, NIL);
     }
 
+    public static final SubLObject get_lexical_mt_for_rkf_interaction_mt_alt(SubLObject domain_mt) {
+        {
+            SubLObject v_properties = list($MAX_NUMBER, ONE_INTEGER);
+            SubLObject lexical_candidates = ftemplate_ask_variable($LEXICAL_MT, list($$and, $list_alt436, list($$genlMt, $LEXICAL_MT, domain_mt)), domain_mt, v_properties);
+            return lexical_candidates.first();
+        }
+    }
+
     public static SubLObject get_lexical_mt_for_rkf_interaction_mt(final SubLObject domain_mt) {
         final SubLObject v_properties = list($MAX_NUMBER, ONE_INTEGER);
         final SubLObject lexical_candidates = ftemplate_ask_variable($LEXICAL_MT, list($$and, $list447, list($$genlMt, $LEXICAL_MT, domain_mt)), domain_mt, v_properties);
         return lexical_candidates.first();
     }
 
+    public static final SubLObject declare_formula_templates_file_alt() {
+        declareFunction("template_topic_print_function_trampoline", "TEMPLATE-TOPIC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("template_topic_p", "TEMPLATE-TOPIC-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.formula_templates.$template_topic_p$UnaryFunction();
+        declareFunction("template_topic_supertopic", "TEMPLATE-TOPIC-SUPERTOPIC", 1, 0, false);
+        declareFunction("template_topic_topic", "TEMPLATE-TOPIC-TOPIC", 1, 0, false);
+        declareFunction("template_topic_subtopics", "TEMPLATE-TOPIC-SUBTOPICS", 1, 0, false);
+        declareFunction("template_topic_templates", "TEMPLATE-TOPIC-TEMPLATES", 1, 0, false);
+        declareFunction("template_topic_ordering", "TEMPLATE-TOPIC-ORDERING", 1, 0, false);
+        declareFunction("template_topic_title", "TEMPLATE-TOPIC-TITLE", 1, 0, false);
+        declareFunction("template_topic_term_prefix", "TEMPLATE-TOPIC-TERM-PREFIX", 1, 0, false);
+        declareFunction("template_topic_intro_template", "TEMPLATE-TOPIC-INTRO-TEMPLATE", 1, 0, false);
+        declareFunction("template_topic_source_types", "TEMPLATE-TOPIC-SOURCE-TYPES", 1, 0, false);
+        declareFunction("template_topic_source_mt", "TEMPLATE-TOPIC-SOURCE-MT", 1, 0, false);
+        declareFunction("template_topic_query_mt", "TEMPLATE-TOPIC-QUERY-MT", 1, 0, false);
+        declareFunction("template_topic_definitional_mt", "TEMPLATE-TOPIC-DEFINITIONAL-MT", 1, 0, false);
+        declareFunction("_csetf_template_topic_supertopic", "_CSETF-TEMPLATE-TOPIC-SUPERTOPIC", 2, 0, false);
+        declareFunction("_csetf_template_topic_topic", "_CSETF-TEMPLATE-TOPIC-TOPIC", 2, 0, false);
+        declareFunction("_csetf_template_topic_subtopics", "_CSETF-TEMPLATE-TOPIC-SUBTOPICS", 2, 0, false);
+        declareFunction("_csetf_template_topic_templates", "_CSETF-TEMPLATE-TOPIC-TEMPLATES", 2, 0, false);
+        declareFunction("_csetf_template_topic_ordering", "_CSETF-TEMPLATE-TOPIC-ORDERING", 2, 0, false);
+        declareFunction("_csetf_template_topic_title", "_CSETF-TEMPLATE-TOPIC-TITLE", 2, 0, false);
+        declareFunction("_csetf_template_topic_term_prefix", "_CSETF-TEMPLATE-TOPIC-TERM-PREFIX", 2, 0, false);
+        declareFunction("_csetf_template_topic_intro_template", "_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE", 2, 0, false);
+        declareFunction("_csetf_template_topic_source_types", "_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES", 2, 0, false);
+        declareFunction("_csetf_template_topic_source_mt", "_CSETF-TEMPLATE-TOPIC-SOURCE-MT", 2, 0, false);
+        declareFunction("_csetf_template_topic_query_mt", "_CSETF-TEMPLATE-TOPIC-QUERY-MT", 2, 0, false);
+        declareFunction("_csetf_template_topic_definitional_mt", "_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT", 2, 0, false);
+        declareFunction("make_template_topic", "MAKE-TEMPLATE-TOPIC", 0, 1, false);
+        declareFunction("arg_position_details_print_function_trampoline", "ARG-POSITION-DETAILS-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("arg_position_details_p", "ARG-POSITION-DETAILS-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.formula_templates.$arg_position_details_p$UnaryFunction();
+        declareFunction("arg_position_details_argument_position", "ARG-POSITION-DETAILS-ARGUMENT-POSITION", 1, 0, false);
+        declareFunction("arg_position_details_ordering", "ARG-POSITION-DETAILS-ORDERING", 1, 0, false);
+        declareFunction("arg_position_details_gloss", "ARG-POSITION-DETAILS-GLOSS", 1, 0, false);
+        declareFunction("arg_position_details_invisible_replacement_positions", "ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 1, 0, false);
+        declareFunction("arg_position_details_replacement_constraints", "ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 1, 0, false);
+        declareFunction("arg_position_details_candidate_replacements", "ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 1, 0, false);
+        declareFunction("arg_position_details_is_editable", "ARG-POSITION-DETAILS-IS-EDITABLE", 1, 0, false);
+        declareFunction("arg_position_details_explanation", "ARG-POSITION-DETAILS-EXPLANATION", 1, 0, false);
+        declareFunction("arg_position_details_requires_validation", "ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 1, 0, false);
+        declareFunction("arg_position_details_unknown_replacement", "ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 1, 0, false);
+        declareFunction("_csetf_arg_position_details_argument_position", "_CSETF-ARG-POSITION-DETAILS-ARGUMENT-POSITION", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_ordering", "_CSETF-ARG-POSITION-DETAILS-ORDERING", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_gloss", "_CSETF-ARG-POSITION-DETAILS-GLOSS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_invisible_replacement_positions", "_CSETF-ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_replacement_constraints", "_CSETF-ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_candidate_replacements", "_CSETF-ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_is_editable", "_CSETF-ARG-POSITION-DETAILS-IS-EDITABLE", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_explanation", "_CSETF-ARG-POSITION-DETAILS-EXPLANATION", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_requires_validation", "_CSETF-ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_unknown_replacement", "_CSETF-ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 2, 0, false);
+        declareFunction("make_arg_position_details", "MAKE-ARG-POSITION-DETAILS", 0, 1, false);
+        declareFunction("formula_template_print_function_trampoline", "FORMULA-TEMPLATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("formula_template_p", "FORMULA-TEMPLATE-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.formula_templates.$formula_template_p$UnaryFunction();
+        declareFunction("formula_template_topic", "FORMULA-TEMPLATE-TOPIC", 1, 0, false);
+        declareFunction("formula_template_id", "FORMULA-TEMPLATE-ID", 1, 0, false);
+        declareFunction("formula_template_formula", "FORMULA-TEMPLATE-FORMULA", 1, 0, false);
+        declareFunction("formula_template_query_specification", "FORMULA-TEMPLATE-QUERY-SPECIFICATION", 1, 0, false);
+        declareFunction("formula_template_elmt", "FORMULA-TEMPLATE-ELMT", 1, 0, false);
+        declareFunction("formula_template_focal_term", "FORMULA-TEMPLATE-FOCAL-TERM", 1, 0, false);
+        declareFunction("formula_template_argpos_details", "FORMULA-TEMPLATE-ARGPOS-DETAILS", 1, 0, false);
+        declareFunction("formula_template_argpos_ordering", "FORMULA-TEMPLATE-ARGPOS-ORDERING", 1, 0, false);
+        declareFunction("formula_template_examples", "FORMULA-TEMPLATE-EXAMPLES", 1, 0, false);
+        declareFunction("formula_template_entry_format", "FORMULA-TEMPLATE-ENTRY-FORMAT", 1, 0, false);
+        declareFunction("formula_template_follow_ups", "FORMULA-TEMPLATE-FOLLOW-UPS", 1, 0, false);
+        declareFunction("formula_template_gloss", "FORMULA-TEMPLATE-GLOSS", 1, 0, false);
+        declareFunction("formula_template_refspec", "FORMULA-TEMPLATE-REFSPEC", 1, 0, false);
+        declareFunction("_csetf_formula_template_topic", "_CSETF-FORMULA-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("_csetf_formula_template_id", "_CSETF-FORMULA-TEMPLATE-ID", 2, 0, false);
+        declareFunction("_csetf_formula_template_formula", "_CSETF-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
+        declareFunction("_csetf_formula_template_query_specification", "_CSETF-FORMULA-TEMPLATE-QUERY-SPECIFICATION", 2, 0, false);
+        declareFunction("_csetf_formula_template_elmt", "_CSETF-FORMULA-TEMPLATE-ELMT", 2, 0, false);
+        declareFunction("_csetf_formula_template_focal_term", "_CSETF-FORMULA-TEMPLATE-FOCAL-TERM", 2, 0, false);
+        declareFunction("_csetf_formula_template_argpos_details", "_CSETF-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
+        declareFunction("_csetf_formula_template_argpos_ordering", "_CSETF-FORMULA-TEMPLATE-ARGPOS-ORDERING", 2, 0, false);
+        declareFunction("_csetf_formula_template_examples", "_CSETF-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
+        declareFunction("_csetf_formula_template_entry_format", "_CSETF-FORMULA-TEMPLATE-ENTRY-FORMAT", 2, 0, false);
+        declareFunction("_csetf_formula_template_follow_ups", "_CSETF-FORMULA-TEMPLATE-FOLLOW-UPS", 2, 0, false);
+        declareFunction("_csetf_formula_template_gloss", "_CSETF-FORMULA-TEMPLATE-GLOSS", 2, 0, false);
+        declareFunction("_csetf_formula_template_refspec", "_CSETF-FORMULA-TEMPLATE-REFSPEC", 2, 0, false);
+        declareFunction("make_formula_template", "MAKE-FORMULA-TEMPLATE", 0, 1, false);
+        declareFunction("is_ftemplate_loading_supporting_ask_browsableP", "IS-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?", 0, 0, false);
+        declareMacro("with_browsable_ftemplate_loading_supporting_ask", "WITH-BROWSABLE-FTEMPLATE-LOADING-SUPPORTING-ASK");
+        declareMacro("reusing_rkf_sd_problem_store_if_available", "REUSING-RKF-SD-PROBLEM-STORE-IF-AVAILABLE");
+        declareFunction("get_non_editable_assertions_for_template_topic_instance", "GET-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 0, 0, false);
+        declareMacro("with_known_non_editable_assertions_for_template_topic_instance", "WITH-KNOWN-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
+        declareFunction("compute_non_editable_assertions_for_template_topic_instance", "COMPUTE-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
+        declareFunction("is_non_editable_assertion_for_template_topic_instanceP", "IS-NON-EDITABLE-ASSERTION-FOR-TEMPLATE-TOPIC-INSTANCE?", 1, 0, false);
+        declareMacro("with_non_editable_assertions_for_template_topic_instance", "WITH-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
+        declareFunction("valid_formula_template_p", "VALID-FORMULA-TEMPLATE-P", 1, 0, false);
+        declareFunction("new_template_topic", "NEW-TEMPLATE-TOPIC", 1, 1, false);
+        declareFunction("template_topic_add_subtopic", "TEMPLATE-TOPIC-ADD-SUBTOPIC", 2, 0, false);
+        declareFunction("template_topic_add_template", "TEMPLATE-TOPIC-ADD-TEMPLATE", 2, 0, false);
+        declareFunction("template_topic_add_title", "TEMPLATE-TOPIC-ADD-TITLE", 2, 0, false);
+        declareFunction("template_topic_add_term_prefix", "TEMPLATE-TOPIC-ADD-TERM-PREFIX", 2, 0, false);
+        declareFunction("template_topic_set_introductory_template", "TEMPLATE-TOPIC-SET-INTRODUCTORY-TEMPLATE", 2, 0, false);
+        declareFunction("template_topic_set_source_types", "TEMPLATE-TOPIC-SET-SOURCE-TYPES", 2, 0, false);
+        declareFunction("print_template_topic", "PRINT-TEMPLATE-TOPIC", 3, 0, false);
+        declareFunction("xml_template_topic_current_revision", "XML-TEMPLATE-TOPIC-CURRENT-REVISION", 0, 0, false);
+        declareFunction("xml_serialize_template_topic", "XML-SERIALIZE-TEMPLATE-TOPIC", 1, 1, false);
+        declareFunction("cfasl_output_object_template_topic_method", "CFASL-OUTPUT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_template_topic", "CFASL-OUTPUT-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("cfasl_input_template_topic", "CFASL-INPUT-TEMPLATE-TOPIC", 1, 0, false);
+        declareFunction("new_formula_template", "NEW-FORMULA-TEMPLATE", 1, 1, false);
+        declareFunction("formula_template_is_single_entryP", "FORMULA-TEMPLATE-IS-SINGLE-ENTRY?", 1, 0, false);
+        declareFunction("formula_template_is_multiple_entryP", "FORMULA-TEMPLATE-IS-MULTIPLE-ENTRY?", 1, 0, false);
+        declareFunction("formula_template_has_reformulation_specificationP", "FORMULA-TEMPLATE-HAS-REFORMULATION-SPECIFICATION?", 1, 0, false);
+        declareFunction("print_formula_template", "PRINT-FORMULA-TEMPLATE", 3, 0, false);
+        declareFunction("formula_template_set_formula", "FORMULA-TEMPLATE-SET-FORMULA", 2, 0, false);
+        declareFunction("formula_template_set_examples", "FORMULA-TEMPLATE-SET-EXAMPLES", 2, 0, false);
+        declareFunction("formula_template_set_focal_term", "FORMULA-TEMPLATE-SET-FOCAL-TERM", 2, 0, false);
+        declareFunction("formula_template_set_elmt", "FORMULA-TEMPLATE-SET-ELMT", 2, 0, false);
+        declareFunction("formula_template_set_entry_format", "FORMULA-TEMPLATE-SET-ENTRY-FORMAT", 2, 0, false);
+        declareFunction("formula_template_set_gloss", "FORMULA-TEMPLATE-SET-GLOSS", 2, 0, false);
+        declareFunction("formula_template_set_query_specification", "FORMULA-TEMPLATE-SET-QUERY-SPECIFICATION", 2, 0, false);
+        declareFunction("xml_serialize_formula_template", "XML-SERIALIZE-FORMULA-TEMPLATE", 1, 1, false);
+        declareFunction("xml_serialize_formula_template_as_document", "XML-SERIALIZE-FORMULA-TEMPLATE-AS-DOCUMENT", 1, 1, false);
+        declareFunction("xml_serialize_formula_template_header", "XML-SERIALIZE-FORMULA-TEMPLATE-HEADER", 0, 1, false);
+        declareFunction("cfasl_output_object_formula_template_method", "CFASL-OUTPUT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_formula_template", "CFASL-OUTPUT-FORMULA-TEMPLATE", 2, 0, false);
+        declareFunction("cfasl_input_formula_template", "CFASL-INPUT-FORMULA-TEMPLATE", 1, 0, false);
+        declareFunction("new_arg_position_details", "NEW-ARG-POSITION-DETAILS", 1, 0, false);
+        declareFunction("valid_arg_position_details_p", "VALID-ARG-POSITION-DETAILS-P", 1, 0, false);
+        declareFunction("print_arg_position_details", "PRINT-ARG-POSITION-DETAILS", 3, 0, false);
+        declareFunction("xml_serialize_arg_position_details", "XML-SERIALIZE-ARG-POSITION-DETAILS", 1, 1, false);
+        declareFunction("cfasl_output_object_arg_position_details_method", "CFASL-OUTPUT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_arg_position_details", "CFASL-OUTPUT-ARG-POSITION-DETAILS", 2, 0, false);
+        declareFunction("cfasl_input_arg_position_details", "CFASL-INPUT-ARG-POSITION-DETAILS", 1, 0, false);
+        declareFunction("xml_serialize_arg_position", "XML-SERIALIZE-ARG-POSITION", 1, 1, false);
+        declareFunction("formula_template_load_topic_template_details", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-DETAILS", 3, 0, false);
+        declareFunction("ftemplate_load_argument_position_detail_information", "FTEMPLATE-LOAD-ARGUMENT-POSITION-DETAIL-INFORMATION", 2, 1, false);
+        declareFunction("update_ftemplate_argpos_detail_glosses", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-GLOSSES", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_explanations", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-EXPLANATIONS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_invisible_replacement_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_replacable_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACABLE-POSITIONS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_replacement_constraints", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_candidate_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-CANDIDATE-REPLACEMENTS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_validation_required", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-VALIDATION-REQUIRED", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_unknown_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-UNKNOWN-REPLACEMENTS", 2, 0, false);
+        declareFunction("get_ftemplate_arg_position_details", "GET-FTEMPLATE-ARG-POSITION-DETAILS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_ordering_information", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-ORDERING-INFORMATION", 1, 0, false);
+        declareFunction("ftemplate_compute_ordering_of_argpos_details", "FTEMPLATE-COMPUTE-ORDERING-OF-ARGPOS-DETAILS", 2, 0, false);
+        declareFunction("sort_argpos_details_by_ordering", "SORT-ARGPOS-DETAILS-BY-ORDERING", 1, 0, false);
+        declareFunction("ordered_by_argument_position", "ORDERED-BY-ARGUMENT-POSITION", 2, 0, false);
+        declareFunction("load_formula_template_skeleton_from_kb", "LOAD-FORMULA-TEMPLATE-SKELETON-FROM-KB", 2, 0, false);
+        declareFunction("load_formula_template_details_from_kb", "LOAD-FORMULA-TEMPLATE-DETAILS-FROM-KB", 2, 0, false);
+        declareFunction("ftemplate_assign_formula_component", "FTEMPLATE-ASSIGN-FORMULA-COMPONENT", 2, 0, false);
+        declareFunction("ftemplate_get_functional_slot_value", "FTEMPLATE-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
+        declareFunction("ftemplate_get_template_reformulation_specification", "FTEMPLATE-GET-TEMPLATE-REFORMULATION-SPECIFICATION", 2, 0, false);
+        declareFunction("ftemplate_get_query_specification", "FTEMPLATE-GET-QUERY-SPECIFICATION", 2, 0, false);
+        declareFunction("ftemplate_get_template_formula", "FTEMPLATE-GET-TEMPLATE-FORMULA", 2, 0, false);
+        declareFunction("ftemplate_get_template_elmt", "FTEMPLATE-GET-TEMPLATE-ELMT", 2, 0, false);
+        declareFunction("ftemplate_get_template_follow_ups", "FTEMPLATE-GET-TEMPLATE-FOLLOW-UPS", 2, 0, false);
+        declareFunction("ftemplate_get_template_gloss", "FTEMPLATE-GET-TEMPLATE-GLOSS", 2, 0, false);
+        declareFunction("ftemplate_qualify_mt_to_now", "FTEMPLATE-QUALIFY-MT-TO-NOW", 1, 0, false);
+        declareFunction("ftemplate_qualify_mt_to_anytime", "FTEMPLATE-QUALIFY-MT-TO-ANYTIME", 1, 0, false);
+        declareFunction("ftemplate_hlmt_change_time", "FTEMPLATE-HLMT-CHANGE-TIME", 2, 0, false);
+        declareFunction("ftemplate_get_template_glosses", "FTEMPLATE-GET-TEMPLATE-GLOSSES", 3, 0, false);
+        declareFunction("ftemplate_get_template_explanations", "FTEMPLATE-GET-TEMPLATE-EXPLANATIONS", 3, 0, false);
+        declareFunction("ftemplate_get_template_examples", "FTEMPLATE-GET-TEMPLATE-EXAMPLES", 3, 0, false);
+        declareFunction("ftemplate_get_first_asserted_value", "FTEMPLATE-GET-FIRST-ASSERTED-VALUE", 4, 4, false);
+        declareFunction("ftemplate_get_asserted_values", "FTEMPLATE-GET-ASSERTED-VALUES", 4, 5, false);
+        declareFunction("ftemplate_get_template_focal_term", "FTEMPLATE-GET-TEMPLATE-FOCAL-TERM", 3, 0, false);
+        declareFunction("ftemplate_get_template_format", "FTEMPLATE-GET-TEMPLATE-FORMAT", 3, 0, false);
+        declareFunction("ftemplate_get_template_invisible_replacement_positions", "FTEMPLATE-GET-TEMPLATE-INVISIBLE-REPLACEMENT-POSITIONS", 3, 0, false);
+        declareFunction("ftemplate_get_template_replacement_constraints", "FTEMPLATE-GET-TEMPLATE-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+        declareFunction("ftemplate_get_template_unknown_replacements", "FTEMPLATE-GET-TEMPLATE-UNKNOWN-REPLACEMENTS", 2, 0, false);
+        declareFunction("ftemplate_get_template_candidate_replacements_for_position", "FTEMPLATE-GET-TEMPLATE-CANDIDATE-REPLACEMENTS-FOR-POSITION", 2, 0, false);
+        declareFunction("ftemplate_get_template_replacable_positions", "FTEMPLATE-GET-TEMPLATE-REPLACABLE-POSITIONS", 2, 0, false);
+        declareFunction("ftemplate_get_template_validation_requirements", "FTEMPLATE-GET-TEMPLATE-VALIDATION-REQUIREMENTS", 2, 0, false);
+        declareFunction("formula_template_load_topic_subtopic_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-SUBTOPIC-ORDERING", 2, 0, false);
+        declareFunction("formula_template_load_topic_template_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-ORDERING", 2, 0, false);
+        declareFunction("verify_template_ordering", "VERIFY-TEMPLATE-ORDERING", 2, 0, false);
+        declareFunction("lower_priority_terms", "LOWER-PRIORITY-TERMS", 1, 0, false);
+        declareFunction("accumulate_lower_priority_terms", "ACCUMULATE-LOWER-PRIORITY-TERMS", 2, 0, false);
+        declareFunction("higher_priorityP", "HIGHER-PRIORITY?", 2, 0, false);
+        declareFunction("apply_prioritizing_ordering_to_kb_objects", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS", 2, 0, false);
+        declareFunction("apply_prioritizing_ordering_to_kb_objects_rck", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS-RCK", 2, 0, false);
+        declareFunction("construct_highXlow_information_from_prioritizing_ordering", "CONSTRUCT-HIGH/LOW-INFORMATION-FROM-PRIORITIZING-ORDERING", 1, 0, false);
+        declareFunction("formula_template_load_prioritization_information_for_subtopics", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-SUBTOPICS", 2, 0, false);
+        declareFunction("formula_template_load_prioritization_information_for_templates", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-TEMPLATES", 2, 0, false);
+        declareFunction("formula_template_organize_templates_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-TEMPLATES-BY-ORDERING", 1, 0, false);
+        declareFunction("formula_template_organize_subtopics_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-SUBTOPICS-BY-ORDERING", 1, 0, false);
+        declareFunction("formula_template_organize_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-BY-ORDERING", 3, 0, false);
+        declareFunction("stable_template_id_compare", "STABLE-TEMPLATE-ID-COMPARE", 2, 0, false);
+        declareFunction("formula_template_load_template_graph", "FORMULA-TEMPLATE-LOAD-TEMPLATE-GRAPH", 2, 0, false);
+        declareFunction("validate_template_topic_semantic_constraints", "VALIDATE-TEMPLATE-TOPIC-SEMANTIC-CONSTRAINTS", 1, 0, false);
+        declareFunction("template_topic_query_mt_can_see_all_assertion_mts", "TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-ALL-ASSERTION-MTS", 1, 0, false);
+        declareFunction("check_template_topic_query_mt_can_see_subtopics_assertion_mts", "CHECK-TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-SUBTOPICS-ASSERTION-MTS", 2, 0, false);
+        declareFunction("templates_use_isaXgenlsP", "TEMPLATES-USE-ISA/GENLS?", 0, 0, false);
+        declareFunction("asserted_formula_template_ids_for_type", "ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 2, 0, false);
+        declareFunction("sort_formula_template_subtopics_by_template_count", "SORT-FORMULA-TEMPLATE-SUBTOPICS-BY-TEMPLATE-COUNT", 2, 0, false);
+        declareFunction("count_asserted_formula_template_ids_for_type_internal", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE-INTERNAL", 1, 1, false);
+        declareFunction("count_asserted_formula_template_ids_for_type", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 1, 1, false);
+        declareFunction("fet_topic_fort_has_subtopicsP", "FET-TOPIC-FORT-HAS-SUBTOPICS?", 2, 0, false);
+        declareFunction("fet_topic_fort_has_templatesP", "FET-TOPIC-FORT-HAS-TEMPLATES?", 2, 0, false);
+        declareFunction("formula_template_subtopics_for_type", "FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("formula_template_asserted_subtopics_for_type", "FORMULA-TEMPLATE-ASSERTED-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("asserted_formula_template_subtopics_for_type", "ASSERTED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("formula_template_induction_mt", "FORMULA-TEMPLATE-INDUCTION-MT", 2, 0, false);
+        declareFunction("formula_template_topic_load_topic_specifics", "FORMULA-TEMPLATE-TOPIC-LOAD-TOPIC-SPECIFICS", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_source_types", "TOPICTMPLT-GET-TOPIC-TEMPLATE-SOURCE-TYPES", 2, 0, false);
+        declareFunction("ftemplate_topic_get_functional_slot_value", "FTEMPLATE-TOPIC-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
+        declareFunction("topictmplt_get_topic_template_introductory_template", "TOPICTMPLT-GET-TOPIC-TEMPLATE-INTRODUCTORY-TEMPLATE", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_title", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TITLE", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_term_prefix", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TERM-PREFIX", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_query_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-QUERY-MT", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_definitional_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-DEFINITIONAL-MT", 2, 0, false);
+        declareFunction("ftemplate_ask_variable", "FTEMPLATE-ASK-VARIABLE", 3, 1, false);
+        declareFunction("ftemplate_ask_template", "FTEMPLATE-ASK-TEMPLATE", 3, 1, false);
+        declareFunction("get_editable_and_non_editable_assertions_for_template_topic_instance", "GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
+        declareFunction("get_assertions_for_template_topic_instance", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
+        declareFunction("get_assertions_for_template_topic_instance_int", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE-INT", 4, 0, false);
+        declareFunction("xml_template_topic_assertions_current_revision", "XML-TEMPLATE-TOPIC-ASSERTIONS-CURRENT-REVISION", 0, 0, false);
+        declareFunction("xml_serialize_assertions_for_template_topic_instance", "XML-SERIALIZE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 5, 1, false);
+        declareFunction("xml_serialize_assertions_for_formula_template_instance", "XML-SERIALIZE-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 1, false);
+        declareFunction("ftemplate_assertion_non_editableP", "FTEMPLATE-ASSERTION-NON-EDITABLE?", 2, 0, false);
+        declareFunction("xml_serialize_assertion_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+        declareFunction("xml_serialize_assertion_sentence_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SENTENCE-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+        declareFunction("xml_serialize_assertion_suids_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SUIDS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_suids", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SUIDS", 2, 0, false);
+        declareFunction("xml_serialize_assertion_evaluation_data_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-EVALUATION-DATA-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("quaternary_fet_evaluation_pred", "QUATERNARY-FET-EVALUATION-PRED", 0, 0, false);
+        declareFunction("ftemplate_assertion_evaluations", "FTEMPLATE-ASSERTION-EVALUATIONS", 3, 0, false);
+        declareFunction("ftemplate_evaluation_judgment", "FTEMPLATE-EVALUATION-JUDGMENT", 1, 0, false);
+        declareFunction("xml_serialize_assertion_timestamp_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-TIMESTAMP-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_date", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-DATE", 2, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_second", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SECOND", 2, 0, false);
+        declareFunction("xml_serialize_assertion_elmt_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-ELMT-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+        declareFunction("xml_serialize_elmt_information_for_assertion", "XML-SERIALIZE-ELMT-INFORMATION-FOR-ASSERTION", 1, 1, false);
+        declareFunction("clear_map_elmt_to_published_conceptual_work", "CLEAR-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 0, 0, false);
+        declareFunction("remove_map_elmt_to_published_conceptual_work", "REMOVE-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
+        declareFunction("map_elmt_to_published_conceptual_work_internal", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-INTERNAL", 1, 0, false);
+        declareFunction("map_elmt_to_published_conceptual_work", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
+        declareFunction("get_assertions_for_leaf_template_topic_instance", "GET-ASSERTIONS-FOR-LEAF-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
+        declareFunction("get_assertions_for_formula_template_instance", "GET-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("get_assertions_for_fet_sentence", "GET-ASSERTIONS-FOR-FET-SENTENCE", 5, 3, false);
+        declareFunction("fet_fallback_to_default_mtP", "FET-FALLBACK-TO-DEFAULT-MT?", 1, 0, false);
+        declareFunction("ftemplate_reformulated_query_mt", "FTEMPLATE-REFORMULATED-QUERY-MT", 2, 0, false);
+        declareFunction("ftemplate_filter_reformulated_result_set", "FTEMPLATE-FILTER-REFORMULATED-RESULT-SET", 2, 0, false);
+        declareFunction("ftemplate_reformulated_result_duplicateP", "FTEMPLATE-REFORMULATED-RESULT-DUPLICATE?", 2, 0, false);
+        declareFunction("unpack_note_reformulation_result_sets", "UNPACK-NOTE-REFORMULATION-RESULT-SETS", 3, 0, false);
+        declareFunction("add_one_polycanonicalized_result", "ADD-ONE-POLYCANONICALIZED-RESULT", 2, 0, false);
+        declareFunction("unpack_note_reformulation_result", "UNPACK-NOTE-REFORMULATION-RESULT", 3, 0, false);
+        declareFunction("ftemplate_loading_supporting_ask", "FTEMPLATE-LOADING-SUPPORTING-ASK", 3, 1, false);
+        declareFunction("smarter_find_visible_assertions_cycl", "SMARTER-FIND-VISIBLE-ASSERTIONS-CYCL", 2, 0, false);
+        declareFunction("get_assertions_from_formula_template_result_sets", "GET-ASSERTIONS-FROM-FORMULA-TEMPLATE-RESULT-SETS", 5, 1, false);
+        declareFunction("make_ftemplate_polycanonicalized_assertion", "MAKE-FTEMPLATE-POLYCANONICALIZED-ASSERTION", 2, 1, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_p", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-P", 1, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_sentence", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SENTENCE", 1, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-HL-ASSERTIONS", 2, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_find_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-FIND-HL-ASSERTIONS", 2, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_mt", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-MT", 1, 0, false);
+        declareFunction("ftemplate_assertion_mt", "FTEMPLATE-ASSERTION-MT", 1, 0, false);
+        declareFunction("bad_assertion_for_formula_templatesP", "BAD-ASSERTION-FOR-FORMULA-TEMPLATES?", 1, 0, false);
+        declareFunction("uninteresting_indeterminate_termP", "UNINTERESTING-INDETERMINATE-TERM?", 1, 0, false);
+        declareFunction("is_skolemish_termP", "IS-SKOLEMISH-TERM?", 1, 0, false);
+        declareFunction("get_assertion_sentence_and_constraints_from_formula_template", "GET-ASSERTION-SENTENCE-AND-CONSTRAINTS-FROM-FORMULA-TEMPLATE", 3, 0, false);
+        declareFunction("get_assertion_finding_query_sentence", "GET-ASSERTION-FINDING-QUERY-SENTENCE", 1, 1, false);
+        declareFunction("constrain_query_with_accumulated_constraints", "CONSTRAIN-QUERY-WITH-ACCUMULATED-CONSTRAINTS", 2, 0, false);
+        declareFunction("fet_assertion_variable_for_formula", "FET-ASSERTION-VARIABLE-FOR-FORMULA", 1, 0, false);
+        declareFunction("ftemplate_assertion_constrained_query_formula", "FTEMPLATE-ASSERTION-CONSTRAINED-QUERY-FORMULA", 1, 1, false);
+        declareFunction("formula_ok_for_fet_assertion_varP", "FORMULA-OK-FOR-FET-ASSERTION-VAR?", 2, 0, false);
+        declareFunction("convert_ftemplate_input_constraint_to_collection", "CONVERT-FTEMPLATE-INPUT-CONSTRAINT-TO-COLLECTION", 2, 0, false);
+        declareFunction("get_lexical_mt_for_rkf_interaction_mt", "GET-LEXICAL-MT-FOR-RKF-INTERACTION-MT", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_formula_templates_file() {
-        declareFunction(me, "template_topic_print_function_trampoline", "TEMPLATE-TOPIC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "template_topic_p", "TEMPLATE-TOPIC-P", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("template_topic_print_function_trampoline", "TEMPLATE-TOPIC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("template_topic_p", "TEMPLATE-TOPIC-P", 1, 0, false);
+            new formula_templates.$template_topic_p$UnaryFunction();
+            declareFunction("template_topic_supertopic", "TEMPLATE-TOPIC-SUPERTOPIC", 1, 0, false);
+            declareFunction("template_topic_topic", "TEMPLATE-TOPIC-TOPIC", 1, 0, false);
+            declareFunction("template_topic_subtopics", "TEMPLATE-TOPIC-SUBTOPICS", 1, 0, false);
+            declareFunction("template_topic_templates", "TEMPLATE-TOPIC-TEMPLATES", 1, 0, false);
+            declareFunction("template_topic_ordering", "TEMPLATE-TOPIC-ORDERING", 1, 0, false);
+            declareFunction("template_topic_title", "TEMPLATE-TOPIC-TITLE", 1, 0, false);
+            declareFunction("template_topic_term_prefix", "TEMPLATE-TOPIC-TERM-PREFIX", 1, 0, false);
+            declareFunction("template_topic_intro_template", "TEMPLATE-TOPIC-INTRO-TEMPLATE", 1, 0, false);
+            declareFunction("template_topic_source_types", "TEMPLATE-TOPIC-SOURCE-TYPES", 1, 0, false);
+            declareFunction("template_topic_source_mt", "TEMPLATE-TOPIC-SOURCE-MT", 1, 0, false);
+            declareFunction("template_topic_query_mt", "TEMPLATE-TOPIC-QUERY-MT", 1, 0, false);
+            declareFunction("template_topic_definitional_mt", "TEMPLATE-TOPIC-DEFINITIONAL-MT", 1, 0, false);
+            declareFunction("_csetf_template_topic_supertopic", "_CSETF-TEMPLATE-TOPIC-SUPERTOPIC", 2, 0, false);
+            declareFunction("_csetf_template_topic_topic", "_CSETF-TEMPLATE-TOPIC-TOPIC", 2, 0, false);
+            declareFunction("_csetf_template_topic_subtopics", "_CSETF-TEMPLATE-TOPIC-SUBTOPICS", 2, 0, false);
+            declareFunction("_csetf_template_topic_templates", "_CSETF-TEMPLATE-TOPIC-TEMPLATES", 2, 0, false);
+            declareFunction("_csetf_template_topic_ordering", "_CSETF-TEMPLATE-TOPIC-ORDERING", 2, 0, false);
+            declareFunction("_csetf_template_topic_title", "_CSETF-TEMPLATE-TOPIC-TITLE", 2, 0, false);
+            declareFunction("_csetf_template_topic_term_prefix", "_CSETF-TEMPLATE-TOPIC-TERM-PREFIX", 2, 0, false);
+            declareFunction("_csetf_template_topic_intro_template", "_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE", 2, 0, false);
+            declareFunction("_csetf_template_topic_source_types", "_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES", 2, 0, false);
+            declareFunction("_csetf_template_topic_source_mt", "_CSETF-TEMPLATE-TOPIC-SOURCE-MT", 2, 0, false);
+            declareFunction("_csetf_template_topic_query_mt", "_CSETF-TEMPLATE-TOPIC-QUERY-MT", 2, 0, false);
+            declareFunction("_csetf_template_topic_definitional_mt", "_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT", 2, 0, false);
+            declareFunction("make_template_topic", "MAKE-TEMPLATE-TOPIC", 0, 1, false);
+            declareFunction("visit_defstruct_template_topic", "VISIT-DEFSTRUCT-TEMPLATE-TOPIC", 2, 0, false);
+            declareFunction("visit_defstruct_object_template_topic_method", "VISIT-DEFSTRUCT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
+            declareFunction("arg_position_details_print_function_trampoline", "ARG-POSITION-DETAILS-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("arg_position_details_p", "ARG-POSITION-DETAILS-P", 1, 0, false);
+            new formula_templates.$arg_position_details_p$UnaryFunction();
+            declareFunction("arg_position_details_argument_position", "ARG-POSITION-DETAILS-ARGUMENT-POSITION", 1, 0, false);
+            declareFunction("arg_position_details_ordering", "ARG-POSITION-DETAILS-ORDERING", 1, 0, false);
+            declareFunction("arg_position_details_gloss", "ARG-POSITION-DETAILS-GLOSS", 1, 0, false);
+            declareFunction("arg_position_details_invisible_replacement_positions", "ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 1, 0, false);
+            declareFunction("arg_position_details_replacement_constraints", "ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 1, 0, false);
+            declareFunction("arg_position_details_candidate_replacements", "ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 1, 0, false);
+            declareFunction("arg_position_details_is_editable", "ARG-POSITION-DETAILS-IS-EDITABLE", 1, 0, false);
+            declareFunction("arg_position_details_explanation", "ARG-POSITION-DETAILS-EXPLANATION", 1, 0, false);
+            declareFunction("arg_position_details_requires_validation", "ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 1, 0, false);
+            declareFunction("arg_position_details_unknown_replacement", "ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 1, 0, false);
+            declareFunction("_csetf_arg_position_details_argument_position", "_CSETF-ARG-POSITION-DETAILS-ARGUMENT-POSITION", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_ordering", "_CSETF-ARG-POSITION-DETAILS-ORDERING", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_gloss", "_CSETF-ARG-POSITION-DETAILS-GLOSS", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_invisible_replacement_positions", "_CSETF-ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_replacement_constraints", "_CSETF-ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_candidate_replacements", "_CSETF-ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_is_editable", "_CSETF-ARG-POSITION-DETAILS-IS-EDITABLE", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_explanation", "_CSETF-ARG-POSITION-DETAILS-EXPLANATION", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_requires_validation", "_CSETF-ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 2, 0, false);
+            declareFunction("_csetf_arg_position_details_unknown_replacement", "_CSETF-ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 2, 0, false);
+            declareFunction("make_arg_position_details", "MAKE-ARG-POSITION-DETAILS", 0, 1, false);
+            declareFunction("visit_defstruct_arg_position_details", "VISIT-DEFSTRUCT-ARG-POSITION-DETAILS", 2, 0, false);
+            declareFunction("visit_defstruct_object_arg_position_details_method", "VISIT-DEFSTRUCT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
+            declareFunction("formula_template_print_function_trampoline", "FORMULA-TEMPLATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("formula_template_p", "FORMULA-TEMPLATE-P", 1, 0, false);
+            new formula_templates.$formula_template_p$UnaryFunction();
+            declareFunction("formula_template_topic", "FORMULA-TEMPLATE-TOPIC", 1, 0, false);
+            declareFunction("formula_template_id", "FORMULA-TEMPLATE-ID", 1, 0, false);
+            declareFunction("formula_template_formula", "FORMULA-TEMPLATE-FORMULA", 1, 0, false);
+            declareFunction("formula_template_query_specification", "FORMULA-TEMPLATE-QUERY-SPECIFICATION", 1, 0, false);
+            declareFunction("formula_template_elmt", "FORMULA-TEMPLATE-ELMT", 1, 0, false);
+            declareFunction("formula_template_focal_term", "FORMULA-TEMPLATE-FOCAL-TERM", 1, 0, false);
+            declareFunction("formula_template_argpos_details", "FORMULA-TEMPLATE-ARGPOS-DETAILS", 1, 0, false);
+            declareFunction("formula_template_argpos_ordering", "FORMULA-TEMPLATE-ARGPOS-ORDERING", 1, 0, false);
+            declareFunction("formula_template_examples", "FORMULA-TEMPLATE-EXAMPLES", 1, 0, false);
+            declareFunction("formula_template_entry_format", "FORMULA-TEMPLATE-ENTRY-FORMAT", 1, 0, false);
+            declareFunction("formula_template_follow_ups", "FORMULA-TEMPLATE-FOLLOW-UPS", 1, 0, false);
+            declareFunction("formula_template_gloss", "FORMULA-TEMPLATE-GLOSS", 1, 0, false);
+            declareFunction("formula_template_refspec", "FORMULA-TEMPLATE-REFSPEC", 1, 0, false);
+            declareFunction("_csetf_formula_template_topic", "_CSETF-FORMULA-TEMPLATE-TOPIC", 2, 0, false);
+            declareFunction("_csetf_formula_template_id", "_CSETF-FORMULA-TEMPLATE-ID", 2, 0, false);
+            declareFunction("_csetf_formula_template_formula", "_CSETF-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
+            declareFunction("_csetf_formula_template_query_specification", "_CSETF-FORMULA-TEMPLATE-QUERY-SPECIFICATION", 2, 0, false);
+            declareFunction("_csetf_formula_template_elmt", "_CSETF-FORMULA-TEMPLATE-ELMT", 2, 0, false);
+            declareFunction("_csetf_formula_template_focal_term", "_CSETF-FORMULA-TEMPLATE-FOCAL-TERM", 2, 0, false);
+            declareFunction("_csetf_formula_template_argpos_details", "_CSETF-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
+            declareFunction("_csetf_formula_template_argpos_ordering", "_CSETF-FORMULA-TEMPLATE-ARGPOS-ORDERING", 2, 0, false);
+            declareFunction("_csetf_formula_template_examples", "_CSETF-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
+            declareFunction("_csetf_formula_template_entry_format", "_CSETF-FORMULA-TEMPLATE-ENTRY-FORMAT", 2, 0, false);
+            declareFunction("_csetf_formula_template_follow_ups", "_CSETF-FORMULA-TEMPLATE-FOLLOW-UPS", 2, 0, false);
+            declareFunction("_csetf_formula_template_gloss", "_CSETF-FORMULA-TEMPLATE-GLOSS", 2, 0, false);
+            declareFunction("_csetf_formula_template_refspec", "_CSETF-FORMULA-TEMPLATE-REFSPEC", 2, 0, false);
+            declareFunction("make_formula_template", "MAKE-FORMULA-TEMPLATE", 0, 1, false);
+            declareFunction("visit_defstruct_formula_template", "VISIT-DEFSTRUCT-FORMULA-TEMPLATE", 2, 0, false);
+            declareFunction("visit_defstruct_object_formula_template_method", "VISIT-DEFSTRUCT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
+            declareFunction("is_ftemplate_loading_supporting_ask_browsableP", "IS-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?", 0, 0, false);
+            declareMacro("with_browsable_ftemplate_loading_supporting_ask", "WITH-BROWSABLE-FTEMPLATE-LOADING-SUPPORTING-ASK");
+            declareMacro("reusing_rkf_sd_problem_store_if_available", "REUSING-RKF-SD-PROBLEM-STORE-IF-AVAILABLE");
+            declareFunction("get_non_editable_assertions_for_template_topic_instance", "GET-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 0, 0, false);
+            declareMacro("with_known_non_editable_assertions_for_template_topic_instance", "WITH-KNOWN-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
+            declareFunction("compute_non_editable_assertions_for_template_topic_instance", "COMPUTE-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
+            declareFunction("is_non_editable_assertion_for_template_topic_instanceP", "IS-NON-EDITABLE-ASSERTION-FOR-TEMPLATE-TOPIC-INSTANCE?", 1, 0, false);
+            declareMacro("with_non_editable_assertions_for_template_topic_instance", "WITH-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
+            declareFunction("valid_formula_template_p", "VALID-FORMULA-TEMPLATE-P", 1, 0, false);
+            declareFunction("new_template_topic", "NEW-TEMPLATE-TOPIC", 1, 1, false);
+            declareFunction("template_topic_add_subtopic", "TEMPLATE-TOPIC-ADD-SUBTOPIC", 2, 0, false);
+            declareFunction("template_topic_add_template", "TEMPLATE-TOPIC-ADD-TEMPLATE", 2, 0, false);
+            declareFunction("template_topic_add_title", "TEMPLATE-TOPIC-ADD-TITLE", 2, 0, false);
+            declareFunction("template_topic_add_term_prefix", "TEMPLATE-TOPIC-ADD-TERM-PREFIX", 2, 0, false);
+            declareFunction("template_topic_set_introductory_template", "TEMPLATE-TOPIC-SET-INTRODUCTORY-TEMPLATE", 2, 0, false);
+            declareFunction("template_topic_set_source_types", "TEMPLATE-TOPIC-SET-SOURCE-TYPES", 2, 0, false);
+            declareFunction("print_template_topic", "PRINT-TEMPLATE-TOPIC", 3, 0, false);
+            declareMacro("formula_template_xml_tag", "FORMULA-TEMPLATE-XML-TAG");
+            declareFunction("xml_template_topic_current_revision", "XML-TEMPLATE-TOPIC-CURRENT-REVISION", 0, 0, false);
+            declareFunction("xml_serialize_template_topic", "XML-SERIALIZE-TEMPLATE-TOPIC", 1, 1, false);
+            declareFunction("cfasl_output_object_template_topic_method", "CFASL-OUTPUT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
+            declareFunction("cfasl_output_template_topic", "CFASL-OUTPUT-TEMPLATE-TOPIC", 2, 0, false);
+            declareFunction("cfasl_input_template_topic", "CFASL-INPUT-TEMPLATE-TOPIC", 1, 0, false);
+            declareFunction("new_formula_template", "NEW-FORMULA-TEMPLATE", 1, 1, false);
+            declareFunction("formula_template_is_single_entryP", "FORMULA-TEMPLATE-IS-SINGLE-ENTRY?", 1, 0, false);
+            declareFunction("formula_template_is_multiple_entryP", "FORMULA-TEMPLATE-IS-MULTIPLE-ENTRY?", 1, 0, false);
+            declareFunction("formula_template_has_reformulation_specificationP", "FORMULA-TEMPLATE-HAS-REFORMULATION-SPECIFICATION?", 1, 0, false);
+            declareFunction("print_formula_template", "PRINT-FORMULA-TEMPLATE", 3, 0, false);
+            declareFunction("formula_template_set_formula", "FORMULA-TEMPLATE-SET-FORMULA", 2, 0, false);
+            declareFunction("formula_template_set_examples", "FORMULA-TEMPLATE-SET-EXAMPLES", 2, 0, false);
+            declareFunction("formula_template_set_focal_term", "FORMULA-TEMPLATE-SET-FOCAL-TERM", 2, 0, false);
+            declareFunction("formula_template_set_elmt", "FORMULA-TEMPLATE-SET-ELMT", 2, 0, false);
+            declareFunction("formula_template_set_entry_format", "FORMULA-TEMPLATE-SET-ENTRY-FORMAT", 2, 0, false);
+            declareFunction("formula_template_set_gloss", "FORMULA-TEMPLATE-SET-GLOSS", 2, 0, false);
+            declareFunction("formula_template_set_query_specification", "FORMULA-TEMPLATE-SET-QUERY-SPECIFICATION", 2, 0, false);
+            declareFunction("xml_serialize_formula_template", "XML-SERIALIZE-FORMULA-TEMPLATE", 1, 1, false);
+            declareFunction("xml_serialize_formula_template_as_document", "XML-SERIALIZE-FORMULA-TEMPLATE-AS-DOCUMENT", 1, 1, false);
+            declareFunction("formula_template_dtd_uri", "FORMULA-TEMPLATE-DTD-URI", 0, 0, false);
+            declareFunction("xml_serialize_formula_template_header", "XML-SERIALIZE-FORMULA-TEMPLATE-HEADER", 0, 1, false);
+            declareFunction("cfasl_output_object_formula_template_method", "CFASL-OUTPUT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
+            declareFunction("cfasl_output_formula_template", "CFASL-OUTPUT-FORMULA-TEMPLATE", 2, 0, false);
+            declareFunction("cfasl_input_formula_template", "CFASL-INPUT-FORMULA-TEMPLATE", 1, 0, false);
+            declareFunction("new_arg_position_details", "NEW-ARG-POSITION-DETAILS", 1, 0, false);
+            declareFunction("valid_arg_position_details_p", "VALID-ARG-POSITION-DETAILS-P", 1, 0, false);
+            declareFunction("print_arg_position_details", "PRINT-ARG-POSITION-DETAILS", 3, 0, false);
+            declareFunction("xml_serialize_arg_position_details", "XML-SERIALIZE-ARG-POSITION-DETAILS", 1, 1, false);
+            declareFunction("cfasl_output_object_arg_position_details_method", "CFASL-OUTPUT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
+            declareFunction("cfasl_output_arg_position_details", "CFASL-OUTPUT-ARG-POSITION-DETAILS", 2, 0, false);
+            declareFunction("cfasl_input_arg_position_details", "CFASL-INPUT-ARG-POSITION-DETAILS", 1, 0, false);
+            declareFunction("xml_serialize_arg_position", "XML-SERIALIZE-ARG-POSITION", 1, 1, false);
+            declareFunction("formula_template_load_topic_template_details", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-DETAILS", 3, 0, false);
+            declareFunction("ftemplate_load_argument_position_detail_information", "FTEMPLATE-LOAD-ARGUMENT-POSITION-DETAIL-INFORMATION", 2, 1, false);
+            declareFunction("update_ftemplate_argpos_detail_glosses", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-GLOSSES", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_explanations", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-EXPLANATIONS", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_invisible_replacement_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_replacable_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACABLE-POSITIONS", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_replacement_constraints", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_candidate_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-CANDIDATE-REPLACEMENTS", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_validation_required", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-VALIDATION-REQUIRED", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_unknown_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-UNKNOWN-REPLACEMENTS", 2, 0, false);
+            declareFunction("get_ftemplate_arg_position_details", "GET-FTEMPLATE-ARG-POSITION-DETAILS", 2, 0, false);
+            declareFunction("update_ftemplate_argpos_detail_ordering_information", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-ORDERING-INFORMATION", 1, 0, false);
+            declareFunction("ftemplate_compute_ordering_of_argpos_details", "FTEMPLATE-COMPUTE-ORDERING-OF-ARGPOS-DETAILS", 2, 0, false);
+            declareFunction("sort_argpos_details_by_ordering", "SORT-ARGPOS-DETAILS-BY-ORDERING", 1, 0, false);
+            declareFunction("ordered_by_argument_position", "ORDERED-BY-ARGUMENT-POSITION", 2, 0, false);
+            declareFunction("load_formula_template_skeleton_from_kb", "LOAD-FORMULA-TEMPLATE-SKELETON-FROM-KB", 2, 0, false);
+            declareFunction("load_formula_template_details_from_kb", "LOAD-FORMULA-TEMPLATE-DETAILS-FROM-KB", 2, 0, false);
+            declareFunction("ftemplate_assign_formula_component", "FTEMPLATE-ASSIGN-FORMULA-COMPONENT", 2, 0, false);
+            declareFunction("ftemplate_get_functional_slot_value", "FTEMPLATE-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
+            declareFunction("ftemplate_get_template_reformulation_specification", "FTEMPLATE-GET-TEMPLATE-REFORMULATION-SPECIFICATION", 2, 0, false);
+            declareFunction("ftemplate_get_query_specification", "FTEMPLATE-GET-QUERY-SPECIFICATION", 2, 0, false);
+            declareFunction("ftemplate_get_template_formula", "FTEMPLATE-GET-TEMPLATE-FORMULA", 2, 0, false);
+            declareFunction("ftemplate_get_template_elmt", "FTEMPLATE-GET-TEMPLATE-ELMT", 2, 0, false);
+            declareFunction("ftemplate_get_template_follow_ups", "FTEMPLATE-GET-TEMPLATE-FOLLOW-UPS", 2, 0, false);
+            declareFunction("ftemplate_get_template_gloss", "FTEMPLATE-GET-TEMPLATE-GLOSS", 2, 0, false);
+            declareFunction("ftemplate_qualify_mt_to_now", "FTEMPLATE-QUALIFY-MT-TO-NOW", 1, 0, false);
+            declareFunction("ftemplate_qualify_mt_to_anytime", "FTEMPLATE-QUALIFY-MT-TO-ANYTIME", 1, 0, false);
+            declareFunction("ftemplate_hlmt_change_time", "FTEMPLATE-HLMT-CHANGE-TIME", 2, 0, false);
+            declareFunction("ftemplate_get_template_glosses", "FTEMPLATE-GET-TEMPLATE-GLOSSES", 3, 0, false);
+            declareFunction("ftemplate_get_template_explanations", "FTEMPLATE-GET-TEMPLATE-EXPLANATIONS", 3, 0, false);
+            declareFunction("ftemplate_get_template_examples", "FTEMPLATE-GET-TEMPLATE-EXAMPLES", 3, 0, false);
+            declareFunction("ftemplate_get_first_asserted_value", "FTEMPLATE-GET-FIRST-ASSERTED-VALUE", 4, 4, false);
+            declareFunction("ftemplate_get_asserted_values", "FTEMPLATE-GET-ASSERTED-VALUES", 4, 5, false);
+            declareFunction("ftemplate_get_template_focal_term", "FTEMPLATE-GET-TEMPLATE-FOCAL-TERM", 3, 0, false);
+            declareFunction("ftemplate_get_template_format", "FTEMPLATE-GET-TEMPLATE-FORMAT", 3, 0, false);
+            declareFunction("ftemplate_get_template_invisible_replacement_positions", "FTEMPLATE-GET-TEMPLATE-INVISIBLE-REPLACEMENT-POSITIONS", 3, 0, false);
+            declareFunction("ftemplate_get_template_replacement_constraints", "FTEMPLATE-GET-TEMPLATE-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+            declareFunction("ftemplate_get_template_unknown_replacements", "FTEMPLATE-GET-TEMPLATE-UNKNOWN-REPLACEMENTS", 2, 0, false);
+            declareFunction("ftemplate_get_template_candidate_replacements_for_position", "FTEMPLATE-GET-TEMPLATE-CANDIDATE-REPLACEMENTS-FOR-POSITION", 2, 0, false);
+            declareFunction("ftemplate_get_template_replacable_positions", "FTEMPLATE-GET-TEMPLATE-REPLACABLE-POSITIONS", 2, 0, false);
+            declareFunction("ftemplate_get_template_validation_requirements", "FTEMPLATE-GET-TEMPLATE-VALIDATION-REQUIREMENTS", 2, 0, false);
+            declareFunction("formula_template_load_topic_subtopic_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-SUBTOPIC-ORDERING", 2, 0, false);
+            declareFunction("formula_template_load_topic_template_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-ORDERING", 2, 0, false);
+            declareFunction("lower_priority_terms", "LOWER-PRIORITY-TERMS", 1, 0, false);
+            declareFunction("accumulate_lower_priority_terms", "ACCUMULATE-LOWER-PRIORITY-TERMS", 2, 0, false);
+            declareFunction("higher_priorityP", "HIGHER-PRIORITY?", 2, 0, false);
+            declareFunction("apply_prioritizing_ordering_to_kb_objects", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS", 2, 0, false);
+            declareFunction("apply_prioritizing_ordering_to_kb_objects_rck", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS-RCK", 2, 0, false);
+            declareFunction("construct_highXlow_information_from_prioritizing_ordering", "CONSTRUCT-HIGH/LOW-INFORMATION-FROM-PRIORITIZING-ORDERING", 1, 0, false);
+            declareFunction("formula_template_load_prioritization_information_for_subtopics", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-SUBTOPICS", 2, 0, false);
+            declareFunction("formula_template_load_prioritization_information_for_templates", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-TEMPLATES", 2, 0, false);
+            declareFunction("formula_template_organize_templates_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-TEMPLATES-BY-ORDERING", 1, 0, false);
+            declareFunction("formula_template_organize_subtopics_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-SUBTOPICS-BY-ORDERING", 1, 0, false);
+            declareFunction("formula_template_organize_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-BY-ORDERING", 3, 0, false);
+            declareFunction("stable_template_id_compare", "STABLE-TEMPLATE-ID-COMPARE", 2, 0, false);
+            declareFunction("formula_template_load_template_graph", "FORMULA-TEMPLATE-LOAD-TEMPLATE-GRAPH", 2, 0, false);
+            declareFunction("validate_template_topic_semantic_constraints", "VALIDATE-TEMPLATE-TOPIC-SEMANTIC-CONSTRAINTS", 1, 0, false);
+            declareFunction("template_topic_query_mt_can_see_all_assertion_mts", "TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-ALL-ASSERTION-MTS", 1, 0, false);
+            declareFunction("check_template_topic_query_mt_can_see_subtopics_assertion_mts", "CHECK-TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-SUBTOPICS-ASSERTION-MTS", 2, 0, false);
+            declareFunction("templates_use_isaXgenlsP", "TEMPLATES-USE-ISA/GENLS?", 0, 0, false);
+            declareFunction("asserted_formula_template_ids_for_type", "ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 2, 0, false);
+            declareFunction("sort_formula_template_subtopics_by_template_count", "SORT-FORMULA-TEMPLATE-SUBTOPICS-BY-TEMPLATE-COUNT", 2, 0, false);
+            declareFunction("count_asserted_formula_template_ids_for_type_internal", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE-INTERNAL", 1, 1, false);
+            declareFunction("count_asserted_formula_template_ids_for_type", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 1, 1, false);
+            declareFunction("fet_topic_fort_has_subtopicsP", "FET-TOPIC-FORT-HAS-SUBTOPICS?", 2, 0, false);
+            declareFunction("fet_topic_fort_has_templatesP", "FET-TOPIC-FORT-HAS-TEMPLATES?", 2, 0, false);
+            declareFunction("formula_template_subtopics_for_type", "FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+            declareFunction("formula_template_asserted_subtopics_for_type", "FORMULA-TEMPLATE-ASSERTED-SUBTOPICS-FOR-TYPE", 2, 0, false);
+            declareFunction("asserted_formula_template_subtopics_for_type", "ASSERTED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+            declareFunction("formula_template_induction_mt", "FORMULA-TEMPLATE-INDUCTION-MT", 2, 0, false);
+            declareFunction("formula_template_topic_load_topic_specifics", "FORMULA-TEMPLATE-TOPIC-LOAD-TOPIC-SPECIFICS", 2, 0, false);
+            declareFunction("topictmplt_get_topic_template_source_types", "TOPICTMPLT-GET-TOPIC-TEMPLATE-SOURCE-TYPES", 2, 0, false);
+            declareFunction("ftemplate_topic_get_functional_slot_value", "FTEMPLATE-TOPIC-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
+            declareFunction("topictmplt_get_topic_template_introductory_template", "TOPICTMPLT-GET-TOPIC-TEMPLATE-INTRODUCTORY-TEMPLATE", 2, 0, false);
+            declareFunction("topictmplt_get_topic_template_title", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TITLE", 2, 0, false);
+            declareFunction("topictmplt_get_topic_template_term_prefix", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TERM-PREFIX", 2, 0, false);
+            declareFunction("topictmplt_get_topic_template_query_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-QUERY-MT", 2, 0, false);
+            declareFunction("topictmplt_get_topic_template_definitional_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-DEFINITIONAL-MT", 2, 0, false);
+            declareFunction("ftemplate_ask_variable", "FTEMPLATE-ASK-VARIABLE", 3, 1, false);
+            declareFunction("ftemplate_ask_template", "FTEMPLATE-ASK-TEMPLATE", 3, 1, false);
+            declareFunction("get_editable_and_non_editable_assertions_for_template_topic_instance", "GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
+            declareFunction("get_assertions_for_template_topic_instance", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
+            declareFunction("get_assertions_for_template_topic_instance_int", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE-INT", 4, 0, false);
+            declareFunction("xml_template_topic_assertions_current_revision", "XML-TEMPLATE-TOPIC-ASSERTIONS-CURRENT-REVISION", 0, 0, false);
+            declareFunction("xml_serialize_assertions_for_template_topic_instance", "XML-SERIALIZE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 5, 1, false);
+            declareFunction("xml_serialize_assertions_for_formula_template_instance", "XML-SERIALIZE-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 1, false);
+            declareFunction("ftemplate_assertion_non_editableP", "FTEMPLATE-ASSERTION-NON-EDITABLE?", 2, 0, false);
+            declareFunction("xml_serialize_assertion_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+            declareFunction("xml_serialize_assertion_sentence_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SENTENCE-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+            declareFunction("xml_serialize_assertion_suids_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SUIDS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_suids", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SUIDS", 2, 0, false);
+            declareFunction("xml_serialize_assertion_evaluation_data_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-EVALUATION-DATA-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+            declareFunction("quaternary_fet_evaluation_pred", "QUATERNARY-FET-EVALUATION-PRED", 0, 0, false);
+            declareFunction("ftemplate_assertion_evaluations", "FTEMPLATE-ASSERTION-EVALUATIONS", 3, 0, false);
+            declareFunction("ftemplate_evaluation_judgment", "FTEMPLATE-EVALUATION-JUDGMENT", 1, 0, false);
+            declareFunction("xml_serialize_assertion_timestamp_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-TIMESTAMP-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_date", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-DATE", 2, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_second", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SECOND", 2, 0, false);
+            declareFunction("xml_serialize_assertion_elmt_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-ELMT-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+            declareFunction("xml_serialize_elmt_information_for_assertion", "XML-SERIALIZE-ELMT-INFORMATION-FOR-ASSERTION", 1, 1, false);
+            declareFunction("clear_map_elmt_to_published_conceptual_work", "CLEAR-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 0, 0, false);
+            declareFunction("remove_map_elmt_to_published_conceptual_work", "REMOVE-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
+            declareFunction("map_elmt_to_published_conceptual_work_internal", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-INTERNAL", 1, 0, false);
+            declareFunction("map_elmt_to_published_conceptual_work", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
+            declareFunction("get_assertions_for_leaf_template_topic_instance", "GET-ASSERTIONS-FOR-LEAF-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
+            declareFunction("get_assertions_for_formula_template_instance", "GET-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+            declareFunction("get_assertions_for_fet_sentence", "GET-ASSERTIONS-FOR-FET-SENTENCE", 5, 3, false);
+            declareFunction("fet_fallback_to_default_mtP", "FET-FALLBACK-TO-DEFAULT-MT?", 1, 0, false);
+            declareFunction("ftemplate_reformulated_query_mt", "FTEMPLATE-REFORMULATED-QUERY-MT", 2, 0, false);
+            declareFunction("ftemplate_filter_reformulated_result_set", "FTEMPLATE-FILTER-REFORMULATED-RESULT-SET", 2, 0, false);
+            declareFunction("ftemplate_reformulated_result_duplicateP", "FTEMPLATE-REFORMULATED-RESULT-DUPLICATE?", 2, 0, false);
+            declareFunction("unpack_note_reformulation_result_sets", "UNPACK-NOTE-REFORMULATION-RESULT-SETS", 3, 0, false);
+            declareFunction("add_one_polycanonicalized_result", "ADD-ONE-POLYCANONICALIZED-RESULT", 2, 0, false);
+            declareFunction("unpack_note_reformulation_result", "UNPACK-NOTE-REFORMULATION-RESULT", 3, 0, false);
+            declareFunction("ftemplate_loading_supporting_ask", "FTEMPLATE-LOADING-SUPPORTING-ASK", 3, 1, false);
+            declareFunction("smarter_find_visible_assertions_cycl", "SMARTER-FIND-VISIBLE-ASSERTIONS-CYCL", 2, 0, false);
+            declareFunction("get_assertions_from_formula_template_result_sets", "GET-ASSERTIONS-FROM-FORMULA-TEMPLATE-RESULT-SETS", 5, 1, false);
+            declareFunction("make_ftemplate_polycanonicalized_assertion", "MAKE-FTEMPLATE-POLYCANONICALIZED-ASSERTION", 2, 1, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_p", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-P", 1, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_sentence", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SENTENCE", 1, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-HL-ASSERTIONS", 2, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_find_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-FIND-HL-ASSERTIONS", 2, 0, false);
+            declareFunction("ftemplate_polycanonicalized_assertion_mt", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-MT", 1, 0, false);
+            declareFunction("ftemplate_assertion_mt", "FTEMPLATE-ASSERTION-MT", 1, 0, false);
+            declareFunction("bad_assertion_for_formula_templatesP", "BAD-ASSERTION-FOR-FORMULA-TEMPLATES?", 1, 0, false);
+            declareFunction("uninteresting_indeterminate_termP", "UNINTERESTING-INDETERMINATE-TERM?", 1, 0, false);
+            declareFunction("is_skolemish_termP", "IS-SKOLEMISH-TERM?", 1, 0, false);
+            declareFunction("get_assertion_sentence_and_constraints_from_formula_template", "GET-ASSERTION-SENTENCE-AND-CONSTRAINTS-FROM-FORMULA-TEMPLATE", 3, 0, false);
+            declareFunction("get_assertion_finding_query_sentence", "GET-ASSERTION-FINDING-QUERY-SENTENCE", 1, 1, false);
+            declareFunction("constrain_query_with_accumulated_constraints", "CONSTRAIN-QUERY-WITH-ACCUMULATED-CONSTRAINTS", 2, 0, false);
+            declareFunction("fet_assertion_variable_for_formula", "FET-ASSERTION-VARIABLE-FOR-FORMULA", 1, 0, false);
+            declareFunction("ftemplate_assertion_constrained_query_formula", "FTEMPLATE-ASSERTION-CONSTRAINED-QUERY-FORMULA", 1, 1, false);
+            declareFunction("formula_ok_for_fet_assertion_varP", "FORMULA-OK-FOR-FET-ASSERTION-VAR?", 2, 0, false);
+            declareFunction("convert_ftemplate_input_constraint_to_collection", "CONVERT-FTEMPLATE-INPUT-CONSTRAINT-TO-COLLECTION", 2, 0, false);
+            declareFunction("get_lexical_mt_for_rkf_interaction_mt", "GET-LEXICAL-MT-FOR-RKF-INTERACTION-MT", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("verify_template_ordering", "VERIFY-TEMPLATE-ORDERING", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_formula_templates_file_Previous() {
+        declareFunction("template_topic_print_function_trampoline", "TEMPLATE-TOPIC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("template_topic_p", "TEMPLATE-TOPIC-P", 1, 0, false);
         new formula_templates.$template_topic_p$UnaryFunction();
-        declareFunction(me, "template_topic_supertopic", "TEMPLATE-TOPIC-SUPERTOPIC", 1, 0, false);
-        declareFunction(me, "template_topic_topic", "TEMPLATE-TOPIC-TOPIC", 1, 0, false);
-        declareFunction(me, "template_topic_subtopics", "TEMPLATE-TOPIC-SUBTOPICS", 1, 0, false);
-        declareFunction(me, "template_topic_templates", "TEMPLATE-TOPIC-TEMPLATES", 1, 0, false);
-        declareFunction(me, "template_topic_ordering", "TEMPLATE-TOPIC-ORDERING", 1, 0, false);
-        declareFunction(me, "template_topic_title", "TEMPLATE-TOPIC-TITLE", 1, 0, false);
-        declareFunction(me, "template_topic_term_prefix", "TEMPLATE-TOPIC-TERM-PREFIX", 1, 0, false);
-        declareFunction(me, "template_topic_intro_template", "TEMPLATE-TOPIC-INTRO-TEMPLATE", 1, 0, false);
-        declareFunction(me, "template_topic_source_types", "TEMPLATE-TOPIC-SOURCE-TYPES", 1, 0, false);
-        declareFunction(me, "template_topic_source_mt", "TEMPLATE-TOPIC-SOURCE-MT", 1, 0, false);
-        declareFunction(me, "template_topic_query_mt", "TEMPLATE-TOPIC-QUERY-MT", 1, 0, false);
-        declareFunction(me, "template_topic_definitional_mt", "TEMPLATE-TOPIC-DEFINITIONAL-MT", 1, 0, false);
-        declareFunction(me, "_csetf_template_topic_supertopic", "_CSETF-TEMPLATE-TOPIC-SUPERTOPIC", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_topic", "_CSETF-TEMPLATE-TOPIC-TOPIC", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_subtopics", "_CSETF-TEMPLATE-TOPIC-SUBTOPICS", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_templates", "_CSETF-TEMPLATE-TOPIC-TEMPLATES", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_ordering", "_CSETF-TEMPLATE-TOPIC-ORDERING", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_title", "_CSETF-TEMPLATE-TOPIC-TITLE", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_term_prefix", "_CSETF-TEMPLATE-TOPIC-TERM-PREFIX", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_intro_template", "_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_source_types", "_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_source_mt", "_CSETF-TEMPLATE-TOPIC-SOURCE-MT", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_query_mt", "_CSETF-TEMPLATE-TOPIC-QUERY-MT", 2, 0, false);
-        declareFunction(me, "_csetf_template_topic_definitional_mt", "_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT", 2, 0, false);
-        declareFunction(me, "make_template_topic", "MAKE-TEMPLATE-TOPIC", 0, 1, false);
-        declareFunction(me, "visit_defstruct_template_topic", "VISIT-DEFSTRUCT-TEMPLATE-TOPIC", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_template_topic_method", "VISIT-DEFSTRUCT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
-        declareFunction(me, "arg_position_details_print_function_trampoline", "ARG-POSITION-DETAILS-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "arg_position_details_p", "ARG-POSITION-DETAILS-P", 1, 0, false);
+        declareFunction("template_topic_supertopic", "TEMPLATE-TOPIC-SUPERTOPIC", 1, 0, false);
+        declareFunction("template_topic_topic", "TEMPLATE-TOPIC-TOPIC", 1, 0, false);
+        declareFunction("template_topic_subtopics", "TEMPLATE-TOPIC-SUBTOPICS", 1, 0, false);
+        declareFunction("template_topic_templates", "TEMPLATE-TOPIC-TEMPLATES", 1, 0, false);
+        declareFunction("template_topic_ordering", "TEMPLATE-TOPIC-ORDERING", 1, 0, false);
+        declareFunction("template_topic_title", "TEMPLATE-TOPIC-TITLE", 1, 0, false);
+        declareFunction("template_topic_term_prefix", "TEMPLATE-TOPIC-TERM-PREFIX", 1, 0, false);
+        declareFunction("template_topic_intro_template", "TEMPLATE-TOPIC-INTRO-TEMPLATE", 1, 0, false);
+        declareFunction("template_topic_source_types", "TEMPLATE-TOPIC-SOURCE-TYPES", 1, 0, false);
+        declareFunction("template_topic_source_mt", "TEMPLATE-TOPIC-SOURCE-MT", 1, 0, false);
+        declareFunction("template_topic_query_mt", "TEMPLATE-TOPIC-QUERY-MT", 1, 0, false);
+        declareFunction("template_topic_definitional_mt", "TEMPLATE-TOPIC-DEFINITIONAL-MT", 1, 0, false);
+        declareFunction("_csetf_template_topic_supertopic", "_CSETF-TEMPLATE-TOPIC-SUPERTOPIC", 2, 0, false);
+        declareFunction("_csetf_template_topic_topic", "_CSETF-TEMPLATE-TOPIC-TOPIC", 2, 0, false);
+        declareFunction("_csetf_template_topic_subtopics", "_CSETF-TEMPLATE-TOPIC-SUBTOPICS", 2, 0, false);
+        declareFunction("_csetf_template_topic_templates", "_CSETF-TEMPLATE-TOPIC-TEMPLATES", 2, 0, false);
+        declareFunction("_csetf_template_topic_ordering", "_CSETF-TEMPLATE-TOPIC-ORDERING", 2, 0, false);
+        declareFunction("_csetf_template_topic_title", "_CSETF-TEMPLATE-TOPIC-TITLE", 2, 0, false);
+        declareFunction("_csetf_template_topic_term_prefix", "_CSETF-TEMPLATE-TOPIC-TERM-PREFIX", 2, 0, false);
+        declareFunction("_csetf_template_topic_intro_template", "_CSETF-TEMPLATE-TOPIC-INTRO-TEMPLATE", 2, 0, false);
+        declareFunction("_csetf_template_topic_source_types", "_CSETF-TEMPLATE-TOPIC-SOURCE-TYPES", 2, 0, false);
+        declareFunction("_csetf_template_topic_source_mt", "_CSETF-TEMPLATE-TOPIC-SOURCE-MT", 2, 0, false);
+        declareFunction("_csetf_template_topic_query_mt", "_CSETF-TEMPLATE-TOPIC-QUERY-MT", 2, 0, false);
+        declareFunction("_csetf_template_topic_definitional_mt", "_CSETF-TEMPLATE-TOPIC-DEFINITIONAL-MT", 2, 0, false);
+        declareFunction("make_template_topic", "MAKE-TEMPLATE-TOPIC", 0, 1, false);
+        declareFunction("visit_defstruct_template_topic", "VISIT-DEFSTRUCT-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("visit_defstruct_object_template_topic_method", "VISIT-DEFSTRUCT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
+        declareFunction("arg_position_details_print_function_trampoline", "ARG-POSITION-DETAILS-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("arg_position_details_p", "ARG-POSITION-DETAILS-P", 1, 0, false);
         new formula_templates.$arg_position_details_p$UnaryFunction();
-        declareFunction(me, "arg_position_details_argument_position", "ARG-POSITION-DETAILS-ARGUMENT-POSITION", 1, 0, false);
-        declareFunction(me, "arg_position_details_ordering", "ARG-POSITION-DETAILS-ORDERING", 1, 0, false);
-        declareFunction(me, "arg_position_details_gloss", "ARG-POSITION-DETAILS-GLOSS", 1, 0, false);
-        declareFunction(me, "arg_position_details_invisible_replacement_positions", "ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 1, 0, false);
-        declareFunction(me, "arg_position_details_replacement_constraints", "ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "arg_position_details_candidate_replacements", "ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 1, 0, false);
-        declareFunction(me, "arg_position_details_is_editable", "ARG-POSITION-DETAILS-IS-EDITABLE", 1, 0, false);
-        declareFunction(me, "arg_position_details_explanation", "ARG-POSITION-DETAILS-EXPLANATION", 1, 0, false);
-        declareFunction(me, "arg_position_details_requires_validation", "ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 1, 0, false);
-        declareFunction(me, "arg_position_details_unknown_replacement", "ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 1, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_argument_position", "_CSETF-ARG-POSITION-DETAILS-ARGUMENT-POSITION", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_ordering", "_CSETF-ARG-POSITION-DETAILS-ORDERING", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_gloss", "_CSETF-ARG-POSITION-DETAILS-GLOSS", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_invisible_replacement_positions", "_CSETF-ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_replacement_constraints", "_CSETF-ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_candidate_replacements", "_CSETF-ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_is_editable", "_CSETF-ARG-POSITION-DETAILS-IS-EDITABLE", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_explanation", "_CSETF-ARG-POSITION-DETAILS-EXPLANATION", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_requires_validation", "_CSETF-ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 2, 0, false);
-        declareFunction(me, "_csetf_arg_position_details_unknown_replacement", "_CSETF-ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 2, 0, false);
-        declareFunction(me, "make_arg_position_details", "MAKE-ARG-POSITION-DETAILS", 0, 1, false);
-        declareFunction(me, "visit_defstruct_arg_position_details", "VISIT-DEFSTRUCT-ARG-POSITION-DETAILS", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_arg_position_details_method", "VISIT-DEFSTRUCT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
-        declareFunction(me, "formula_template_print_function_trampoline", "FORMULA-TEMPLATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "formula_template_p", "FORMULA-TEMPLATE-P", 1, 0, false);
+        declareFunction("arg_position_details_argument_position", "ARG-POSITION-DETAILS-ARGUMENT-POSITION", 1, 0, false);
+        declareFunction("arg_position_details_ordering", "ARG-POSITION-DETAILS-ORDERING", 1, 0, false);
+        declareFunction("arg_position_details_gloss", "ARG-POSITION-DETAILS-GLOSS", 1, 0, false);
+        declareFunction("arg_position_details_invisible_replacement_positions", "ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 1, 0, false);
+        declareFunction("arg_position_details_replacement_constraints", "ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 1, 0, false);
+        declareFunction("arg_position_details_candidate_replacements", "ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 1, 0, false);
+        declareFunction("arg_position_details_is_editable", "ARG-POSITION-DETAILS-IS-EDITABLE", 1, 0, false);
+        declareFunction("arg_position_details_explanation", "ARG-POSITION-DETAILS-EXPLANATION", 1, 0, false);
+        declareFunction("arg_position_details_requires_validation", "ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 1, 0, false);
+        declareFunction("arg_position_details_unknown_replacement", "ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 1, 0, false);
+        declareFunction("_csetf_arg_position_details_argument_position", "_CSETF-ARG-POSITION-DETAILS-ARGUMENT-POSITION", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_ordering", "_CSETF-ARG-POSITION-DETAILS-ORDERING", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_gloss", "_CSETF-ARG-POSITION-DETAILS-GLOSS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_invisible_replacement_positions", "_CSETF-ARG-POSITION-DETAILS-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_replacement_constraints", "_CSETF-ARG-POSITION-DETAILS-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_candidate_replacements", "_CSETF-ARG-POSITION-DETAILS-CANDIDATE-REPLACEMENTS", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_is_editable", "_CSETF-ARG-POSITION-DETAILS-IS-EDITABLE", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_explanation", "_CSETF-ARG-POSITION-DETAILS-EXPLANATION", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_requires_validation", "_CSETF-ARG-POSITION-DETAILS-REQUIRES-VALIDATION", 2, 0, false);
+        declareFunction("_csetf_arg_position_details_unknown_replacement", "_CSETF-ARG-POSITION-DETAILS-UNKNOWN-REPLACEMENT", 2, 0, false);
+        declareFunction("make_arg_position_details", "MAKE-ARG-POSITION-DETAILS", 0, 1, false);
+        declareFunction("visit_defstruct_arg_position_details", "VISIT-DEFSTRUCT-ARG-POSITION-DETAILS", 2, 0, false);
+        declareFunction("visit_defstruct_object_arg_position_details_method", "VISIT-DEFSTRUCT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
+        declareFunction("formula_template_print_function_trampoline", "FORMULA-TEMPLATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("formula_template_p", "FORMULA-TEMPLATE-P", 1, 0, false);
         new formula_templates.$formula_template_p$UnaryFunction();
-        declareFunction(me, "formula_template_topic", "FORMULA-TEMPLATE-TOPIC", 1, 0, false);
-        declareFunction(me, "formula_template_id", "FORMULA-TEMPLATE-ID", 1, 0, false);
-        declareFunction(me, "formula_template_formula", "FORMULA-TEMPLATE-FORMULA", 1, 0, false);
-        declareFunction(me, "formula_template_query_specification", "FORMULA-TEMPLATE-QUERY-SPECIFICATION", 1, 0, false);
-        declareFunction(me, "formula_template_elmt", "FORMULA-TEMPLATE-ELMT", 1, 0, false);
-        declareFunction(me, "formula_template_focal_term", "FORMULA-TEMPLATE-FOCAL-TERM", 1, 0, false);
-        declareFunction(me, "formula_template_argpos_details", "FORMULA-TEMPLATE-ARGPOS-DETAILS", 1, 0, false);
-        declareFunction(me, "formula_template_argpos_ordering", "FORMULA-TEMPLATE-ARGPOS-ORDERING", 1, 0, false);
-        declareFunction(me, "formula_template_examples", "FORMULA-TEMPLATE-EXAMPLES", 1, 0, false);
-        declareFunction(me, "formula_template_entry_format", "FORMULA-TEMPLATE-ENTRY-FORMAT", 1, 0, false);
-        declareFunction(me, "formula_template_follow_ups", "FORMULA-TEMPLATE-FOLLOW-UPS", 1, 0, false);
-        declareFunction(me, "formula_template_gloss", "FORMULA-TEMPLATE-GLOSS", 1, 0, false);
-        declareFunction(me, "formula_template_refspec", "FORMULA-TEMPLATE-REFSPEC", 1, 0, false);
-        declareFunction(me, "_csetf_formula_template_topic", "_CSETF-FORMULA-TEMPLATE-TOPIC", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_id", "_CSETF-FORMULA-TEMPLATE-ID", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_formula", "_CSETF-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_query_specification", "_CSETF-FORMULA-TEMPLATE-QUERY-SPECIFICATION", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_elmt", "_CSETF-FORMULA-TEMPLATE-ELMT", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_focal_term", "_CSETF-FORMULA-TEMPLATE-FOCAL-TERM", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_argpos_details", "_CSETF-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_argpos_ordering", "_CSETF-FORMULA-TEMPLATE-ARGPOS-ORDERING", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_examples", "_CSETF-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_entry_format", "_CSETF-FORMULA-TEMPLATE-ENTRY-FORMAT", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_follow_ups", "_CSETF-FORMULA-TEMPLATE-FOLLOW-UPS", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_gloss", "_CSETF-FORMULA-TEMPLATE-GLOSS", 2, 0, false);
-        declareFunction(me, "_csetf_formula_template_refspec", "_CSETF-FORMULA-TEMPLATE-REFSPEC", 2, 0, false);
-        declareFunction(me, "make_formula_template", "MAKE-FORMULA-TEMPLATE", 0, 1, false);
-        declareFunction(me, "visit_defstruct_formula_template", "VISIT-DEFSTRUCT-FORMULA-TEMPLATE", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_formula_template_method", "VISIT-DEFSTRUCT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
-        declareFunction(me, "is_ftemplate_loading_supporting_ask_browsableP", "IS-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?", 0, 0, false);
-        declareMacro(me, "with_browsable_ftemplate_loading_supporting_ask", "WITH-BROWSABLE-FTEMPLATE-LOADING-SUPPORTING-ASK");
-        declareMacro(me, "reusing_rkf_sd_problem_store_if_available", "REUSING-RKF-SD-PROBLEM-STORE-IF-AVAILABLE");
-        declareFunction(me, "get_non_editable_assertions_for_template_topic_instance", "GET-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 0, 0, false);
-        declareMacro(me, "with_known_non_editable_assertions_for_template_topic_instance", "WITH-KNOWN-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
-        declareFunction(me, "compute_non_editable_assertions_for_template_topic_instance", "COMPUTE-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
-        declareFunction(me, "is_non_editable_assertion_for_template_topic_instanceP", "IS-NON-EDITABLE-ASSERTION-FOR-TEMPLATE-TOPIC-INSTANCE?", 1, 0, false);
-        declareMacro(me, "with_non_editable_assertions_for_template_topic_instance", "WITH-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
-        declareFunction(me, "valid_formula_template_p", "VALID-FORMULA-TEMPLATE-P", 1, 0, false);
-        declareFunction(me, "new_template_topic", "NEW-TEMPLATE-TOPIC", 1, 1, false);
-        declareFunction(me, "template_topic_add_subtopic", "TEMPLATE-TOPIC-ADD-SUBTOPIC", 2, 0, false);
-        declareFunction(me, "template_topic_add_template", "TEMPLATE-TOPIC-ADD-TEMPLATE", 2, 0, false);
-        declareFunction(me, "template_topic_add_title", "TEMPLATE-TOPIC-ADD-TITLE", 2, 0, false);
-        declareFunction(me, "template_topic_add_term_prefix", "TEMPLATE-TOPIC-ADD-TERM-PREFIX", 2, 0, false);
-        declareFunction(me, "template_topic_set_introductory_template", "TEMPLATE-TOPIC-SET-INTRODUCTORY-TEMPLATE", 2, 0, false);
-        declareFunction(me, "template_topic_set_source_types", "TEMPLATE-TOPIC-SET-SOURCE-TYPES", 2, 0, false);
-        declareFunction(me, "print_template_topic", "PRINT-TEMPLATE-TOPIC", 3, 0, false);
-        declareMacro(me, "formula_template_xml_tag", "FORMULA-TEMPLATE-XML-TAG");
-        declareFunction(me, "xml_template_topic_current_revision", "XML-TEMPLATE-TOPIC-CURRENT-REVISION", 0, 0, false);
-        declareFunction(me, "xml_serialize_template_topic", "XML-SERIALIZE-TEMPLATE-TOPIC", 1, 1, false);
-        declareFunction(me, "cfasl_output_object_template_topic_method", "CFASL-OUTPUT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
-        declareFunction(me, "cfasl_output_template_topic", "CFASL-OUTPUT-TEMPLATE-TOPIC", 2, 0, false);
-        declareFunction(me, "cfasl_input_template_topic", "CFASL-INPUT-TEMPLATE-TOPIC", 1, 0, false);
-        declareFunction(me, "new_formula_template", "NEW-FORMULA-TEMPLATE", 1, 1, false);
-        declareFunction(me, "formula_template_is_single_entryP", "FORMULA-TEMPLATE-IS-SINGLE-ENTRY?", 1, 0, false);
-        declareFunction(me, "formula_template_is_multiple_entryP", "FORMULA-TEMPLATE-IS-MULTIPLE-ENTRY?", 1, 0, false);
-        declareFunction(me, "formula_template_has_reformulation_specificationP", "FORMULA-TEMPLATE-HAS-REFORMULATION-SPECIFICATION?", 1, 0, false);
-        declareFunction(me, "print_formula_template", "PRINT-FORMULA-TEMPLATE", 3, 0, false);
-        declareFunction(me, "formula_template_set_formula", "FORMULA-TEMPLATE-SET-FORMULA", 2, 0, false);
-        declareFunction(me, "formula_template_set_examples", "FORMULA-TEMPLATE-SET-EXAMPLES", 2, 0, false);
-        declareFunction(me, "formula_template_set_focal_term", "FORMULA-TEMPLATE-SET-FOCAL-TERM", 2, 0, false);
-        declareFunction(me, "formula_template_set_elmt", "FORMULA-TEMPLATE-SET-ELMT", 2, 0, false);
-        declareFunction(me, "formula_template_set_entry_format", "FORMULA-TEMPLATE-SET-ENTRY-FORMAT", 2, 0, false);
-        declareFunction(me, "formula_template_set_gloss", "FORMULA-TEMPLATE-SET-GLOSS", 2, 0, false);
-        declareFunction(me, "formula_template_set_query_specification", "FORMULA-TEMPLATE-SET-QUERY-SPECIFICATION", 2, 0, false);
-        declareFunction(me, "xml_serialize_formula_template", "XML-SERIALIZE-FORMULA-TEMPLATE", 1, 1, false);
-        declareFunction(me, "xml_serialize_formula_template_as_document", "XML-SERIALIZE-FORMULA-TEMPLATE-AS-DOCUMENT", 1, 1, false);
-        declareFunction(me, "formula_template_dtd_uri", "FORMULA-TEMPLATE-DTD-URI", 0, 0, false);
-        declareFunction(me, "xml_serialize_formula_template_header", "XML-SERIALIZE-FORMULA-TEMPLATE-HEADER", 0, 1, false);
-        declareFunction(me, "cfasl_output_object_formula_template_method", "CFASL-OUTPUT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
-        declareFunction(me, "cfasl_output_formula_template", "CFASL-OUTPUT-FORMULA-TEMPLATE", 2, 0, false);
-        declareFunction(me, "cfasl_input_formula_template", "CFASL-INPUT-FORMULA-TEMPLATE", 1, 0, false);
-        declareFunction(me, "new_arg_position_details", "NEW-ARG-POSITION-DETAILS", 1, 0, false);
-        declareFunction(me, "valid_arg_position_details_p", "VALID-ARG-POSITION-DETAILS-P", 1, 0, false);
-        declareFunction(me, "print_arg_position_details", "PRINT-ARG-POSITION-DETAILS", 3, 0, false);
-        declareFunction(me, "xml_serialize_arg_position_details", "XML-SERIALIZE-ARG-POSITION-DETAILS", 1, 1, false);
-        declareFunction(me, "cfasl_output_object_arg_position_details_method", "CFASL-OUTPUT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
-        declareFunction(me, "cfasl_output_arg_position_details", "CFASL-OUTPUT-ARG-POSITION-DETAILS", 2, 0, false);
-        declareFunction(me, "cfasl_input_arg_position_details", "CFASL-INPUT-ARG-POSITION-DETAILS", 1, 0, false);
-        declareFunction(me, "xml_serialize_arg_position", "XML-SERIALIZE-ARG-POSITION", 1, 1, false);
-        declareFunction(me, "formula_template_load_topic_template_details", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-DETAILS", 3, 0, false);
-        declareFunction(me, "ftemplate_load_argument_position_detail_information", "FTEMPLATE-LOAD-ARGUMENT-POSITION-DETAIL-INFORMATION", 2, 1, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_glosses", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-GLOSSES", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_explanations", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-EXPLANATIONS", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_invisible_replacement_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_replacable_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACABLE-POSITIONS", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_replacement_constraints", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACEMENT-CONSTRAINTS", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_candidate_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-CANDIDATE-REPLACEMENTS", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_validation_required", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-VALIDATION-REQUIRED", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_unknown_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-UNKNOWN-REPLACEMENTS", 2, 0, false);
-        declareFunction(me, "get_ftemplate_arg_position_details", "GET-FTEMPLATE-ARG-POSITION-DETAILS", 2, 0, false);
-        declareFunction(me, "update_ftemplate_argpos_detail_ordering_information", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-ORDERING-INFORMATION", 1, 0, false);
-        declareFunction(me, "ftemplate_compute_ordering_of_argpos_details", "FTEMPLATE-COMPUTE-ORDERING-OF-ARGPOS-DETAILS", 2, 0, false);
-        declareFunction(me, "sort_argpos_details_by_ordering", "SORT-ARGPOS-DETAILS-BY-ORDERING", 1, 0, false);
-        declareFunction(me, "ordered_by_argument_position", "ORDERED-BY-ARGUMENT-POSITION", 2, 0, false);
-        declareFunction(me, "load_formula_template_skeleton_from_kb", "LOAD-FORMULA-TEMPLATE-SKELETON-FROM-KB", 2, 0, false);
-        declareFunction(me, "load_formula_template_details_from_kb", "LOAD-FORMULA-TEMPLATE-DETAILS-FROM-KB", 2, 0, false);
-        declareFunction(me, "ftemplate_assign_formula_component", "FTEMPLATE-ASSIGN-FORMULA-COMPONENT", 2, 0, false);
-        declareFunction(me, "ftemplate_get_functional_slot_value", "FTEMPLATE-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
-        declareFunction(me, "ftemplate_get_template_reformulation_specification", "FTEMPLATE-GET-TEMPLATE-REFORMULATION-SPECIFICATION", 2, 0, false);
-        declareFunction(me, "ftemplate_get_query_specification", "FTEMPLATE-GET-QUERY-SPECIFICATION", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_formula", "FTEMPLATE-GET-TEMPLATE-FORMULA", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_elmt", "FTEMPLATE-GET-TEMPLATE-ELMT", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_follow_ups", "FTEMPLATE-GET-TEMPLATE-FOLLOW-UPS", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_gloss", "FTEMPLATE-GET-TEMPLATE-GLOSS", 2, 0, false);
-        declareFunction(me, "ftemplate_qualify_mt_to_now", "FTEMPLATE-QUALIFY-MT-TO-NOW", 1, 0, false);
-        declareFunction(me, "ftemplate_qualify_mt_to_anytime", "FTEMPLATE-QUALIFY-MT-TO-ANYTIME", 1, 0, false);
-        declareFunction(me, "ftemplate_hlmt_change_time", "FTEMPLATE-HLMT-CHANGE-TIME", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_glosses", "FTEMPLATE-GET-TEMPLATE-GLOSSES", 3, 0, false);
-        declareFunction(me, "ftemplate_get_template_explanations", "FTEMPLATE-GET-TEMPLATE-EXPLANATIONS", 3, 0, false);
-        declareFunction(me, "ftemplate_get_template_examples", "FTEMPLATE-GET-TEMPLATE-EXAMPLES", 3, 0, false);
-        declareFunction(me, "ftemplate_get_first_asserted_value", "FTEMPLATE-GET-FIRST-ASSERTED-VALUE", 4, 4, false);
-        declareFunction(me, "ftemplate_get_asserted_values", "FTEMPLATE-GET-ASSERTED-VALUES", 4, 5, false);
-        declareFunction(me, "ftemplate_get_template_focal_term", "FTEMPLATE-GET-TEMPLATE-FOCAL-TERM", 3, 0, false);
-        declareFunction(me, "ftemplate_get_template_format", "FTEMPLATE-GET-TEMPLATE-FORMAT", 3, 0, false);
-        declareFunction(me, "ftemplate_get_template_invisible_replacement_positions", "FTEMPLATE-GET-TEMPLATE-INVISIBLE-REPLACEMENT-POSITIONS", 3, 0, false);
-        declareFunction(me, "ftemplate_get_template_replacement_constraints", "FTEMPLATE-GET-TEMPLATE-REPLACEMENT-CONSTRAINTS", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_unknown_replacements", "FTEMPLATE-GET-TEMPLATE-UNKNOWN-REPLACEMENTS", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_candidate_replacements_for_position", "FTEMPLATE-GET-TEMPLATE-CANDIDATE-REPLACEMENTS-FOR-POSITION", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_replacable_positions", "FTEMPLATE-GET-TEMPLATE-REPLACABLE-POSITIONS", 2, 0, false);
-        declareFunction(me, "ftemplate_get_template_validation_requirements", "FTEMPLATE-GET-TEMPLATE-VALIDATION-REQUIREMENTS", 2, 0, false);
-        declareFunction(me, "formula_template_load_topic_subtopic_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-SUBTOPIC-ORDERING", 2, 0, false);
-        declareFunction(me, "formula_template_load_topic_template_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-ORDERING", 2, 0, false);
-        declareFunction(me, "lower_priority_terms", "LOWER-PRIORITY-TERMS", 1, 0, false);
-        declareFunction(me, "accumulate_lower_priority_terms", "ACCUMULATE-LOWER-PRIORITY-TERMS", 2, 0, false);
-        declareFunction(me, "higher_priorityP", "HIGHER-PRIORITY?", 2, 0, false);
-        declareFunction(me, "apply_prioritizing_ordering_to_kb_objects", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS", 2, 0, false);
-        declareFunction(me, "apply_prioritizing_ordering_to_kb_objects_rck", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS-RCK", 2, 0, false);
-        declareFunction(me, "construct_highXlow_information_from_prioritizing_ordering", "CONSTRUCT-HIGH/LOW-INFORMATION-FROM-PRIORITIZING-ORDERING", 1, 0, false);
-        declareFunction(me, "formula_template_load_prioritization_information_for_subtopics", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-SUBTOPICS", 2, 0, false);
-        declareFunction(me, "formula_template_load_prioritization_information_for_templates", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-TEMPLATES", 2, 0, false);
-        declareFunction(me, "formula_template_organize_templates_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-TEMPLATES-BY-ORDERING", 1, 0, false);
-        declareFunction(me, "formula_template_organize_subtopics_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-SUBTOPICS-BY-ORDERING", 1, 0, false);
-        declareFunction(me, "formula_template_organize_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-BY-ORDERING", 3, 0, false);
-        declareFunction(me, "stable_template_id_compare", "STABLE-TEMPLATE-ID-COMPARE", 2, 0, false);
-        declareFunction(me, "formula_template_load_template_graph", "FORMULA-TEMPLATE-LOAD-TEMPLATE-GRAPH", 2, 0, false);
-        declareFunction(me, "validate_template_topic_semantic_constraints", "VALIDATE-TEMPLATE-TOPIC-SEMANTIC-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "template_topic_query_mt_can_see_all_assertion_mts", "TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-ALL-ASSERTION-MTS", 1, 0, false);
-        declareFunction(me, "check_template_topic_query_mt_can_see_subtopics_assertion_mts", "CHECK-TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-SUBTOPICS-ASSERTION-MTS", 2, 0, false);
-        declareFunction(me, "templates_use_isaXgenlsP", "TEMPLATES-USE-ISA/GENLS?", 0, 0, false);
-        declareFunction(me, "asserted_formula_template_ids_for_type", "ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "sort_formula_template_subtopics_by_template_count", "SORT-FORMULA-TEMPLATE-SUBTOPICS-BY-TEMPLATE-COUNT", 2, 0, false);
-        declareFunction(me, "count_asserted_formula_template_ids_for_type_internal", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE-INTERNAL", 1, 1, false);
-        declareFunction(me, "count_asserted_formula_template_ids_for_type", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 1, 1, false);
-        declareFunction(me, "fet_topic_fort_has_subtopicsP", "FET-TOPIC-FORT-HAS-SUBTOPICS?", 2, 0, false);
-        declareFunction(me, "fet_topic_fort_has_templatesP", "FET-TOPIC-FORT-HAS-TEMPLATES?", 2, 0, false);
-        declareFunction(me, "formula_template_subtopics_for_type", "FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "formula_template_asserted_subtopics_for_type", "FORMULA-TEMPLATE-ASSERTED-SUBTOPICS-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "asserted_formula_template_subtopics_for_type", "ASSERTED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "formula_template_induction_mt", "FORMULA-TEMPLATE-INDUCTION-MT", 2, 0, false);
-        declareFunction(me, "formula_template_topic_load_topic_specifics", "FORMULA-TEMPLATE-TOPIC-LOAD-TOPIC-SPECIFICS", 2, 0, false);
-        declareFunction(me, "topictmplt_get_topic_template_source_types", "TOPICTMPLT-GET-TOPIC-TEMPLATE-SOURCE-TYPES", 2, 0, false);
-        declareFunction(me, "ftemplate_topic_get_functional_slot_value", "FTEMPLATE-TOPIC-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
-        declareFunction(me, "topictmplt_get_topic_template_introductory_template", "TOPICTMPLT-GET-TOPIC-TEMPLATE-INTRODUCTORY-TEMPLATE", 2, 0, false);
-        declareFunction(me, "topictmplt_get_topic_template_title", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TITLE", 2, 0, false);
-        declareFunction(me, "topictmplt_get_topic_template_term_prefix", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TERM-PREFIX", 2, 0, false);
-        declareFunction(me, "topictmplt_get_topic_template_query_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-QUERY-MT", 2, 0, false);
-        declareFunction(me, "topictmplt_get_topic_template_definitional_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-DEFINITIONAL-MT", 2, 0, false);
-        declareFunction(me, "ftemplate_ask_variable", "FTEMPLATE-ASK-VARIABLE", 3, 1, false);
-        declareFunction(me, "ftemplate_ask_template", "FTEMPLATE-ASK-TEMPLATE", 3, 1, false);
-        declareFunction(me, "get_editable_and_non_editable_assertions_for_template_topic_instance", "GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
-        declareFunction(me, "get_assertions_for_template_topic_instance", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
-        declareFunction(me, "get_assertions_for_template_topic_instance_int", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE-INT", 4, 0, false);
-        declareFunction(me, "xml_template_topic_assertions_current_revision", "XML-TEMPLATE-TOPIC-ASSERTIONS-CURRENT-REVISION", 0, 0, false);
-        declareFunction(me, "xml_serialize_assertions_for_template_topic_instance", "XML-SERIALIZE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 5, 1, false);
-        declareFunction(me, "xml_serialize_assertions_for_formula_template_instance", "XML-SERIALIZE-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 1, false);
-        declareFunction(me, "ftemplate_assertion_non_editableP", "FTEMPLATE-ASSERTION-NON-EDITABLE?", 2, 0, false);
-        declareFunction(me, "xml_serialize_assertion_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
-        declareFunction(me, "xml_serialize_assertion_sentence_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SENTENCE-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
-        declareFunction(me, "xml_serialize_assertion_suids_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SUIDS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_suids", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SUIDS", 2, 0, false);
-        declareFunction(me, "xml_serialize_assertion_evaluation_data_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-EVALUATION-DATA-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
-        declareFunction(me, "quaternary_fet_evaluation_pred", "QUATERNARY-FET-EVALUATION-PRED", 0, 0, false);
-        declareFunction(me, "ftemplate_assertion_evaluations", "FTEMPLATE-ASSERTION-EVALUATIONS", 3, 0, false);
-        declareFunction(me, "ftemplate_evaluation_judgment", "FTEMPLATE-EVALUATION-JUDGMENT", 1, 0, false);
-        declareFunction(me, "xml_serialize_assertion_timestamp_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-TIMESTAMP-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_date", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-DATE", 2, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_second", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SECOND", 2, 0, false);
-        declareFunction(me, "xml_serialize_assertion_elmt_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-ELMT-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
-        declareFunction(me, "xml_serialize_elmt_information_for_assertion", "XML-SERIALIZE-ELMT-INFORMATION-FOR-ASSERTION", 1, 1, false);
-        declareFunction(me, "clear_map_elmt_to_published_conceptual_work", "CLEAR-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 0, 0, false);
-        declareFunction(me, "remove_map_elmt_to_published_conceptual_work", "REMOVE-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
-        declareFunction(me, "map_elmt_to_published_conceptual_work_internal", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-INTERNAL", 1, 0, false);
-        declareFunction(me, "map_elmt_to_published_conceptual_work", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
-        declareFunction(me, "get_assertions_for_leaf_template_topic_instance", "GET-ASSERTIONS-FOR-LEAF-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
-        declareFunction(me, "get_assertions_for_formula_template_instance", "GET-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
-        declareFunction(me, "get_assertions_for_fet_sentence", "GET-ASSERTIONS-FOR-FET-SENTENCE", 5, 3, false);
-        declareFunction(me, "fet_fallback_to_default_mtP", "FET-FALLBACK-TO-DEFAULT-MT?", 1, 0, false);
-        declareFunction(me, "ftemplate_reformulated_query_mt", "FTEMPLATE-REFORMULATED-QUERY-MT", 2, 0, false);
-        declareFunction(me, "ftemplate_filter_reformulated_result_set", "FTEMPLATE-FILTER-REFORMULATED-RESULT-SET", 2, 0, false);
-        declareFunction(me, "ftemplate_reformulated_result_duplicateP", "FTEMPLATE-REFORMULATED-RESULT-DUPLICATE?", 2, 0, false);
-        declareFunction(me, "unpack_note_reformulation_result_sets", "UNPACK-NOTE-REFORMULATION-RESULT-SETS", 3, 0, false);
-        declareFunction(me, "add_one_polycanonicalized_result", "ADD-ONE-POLYCANONICALIZED-RESULT", 2, 0, false);
-        declareFunction(me, "unpack_note_reformulation_result", "UNPACK-NOTE-REFORMULATION-RESULT", 3, 0, false);
-        declareFunction(me, "ftemplate_loading_supporting_ask", "FTEMPLATE-LOADING-SUPPORTING-ASK", 3, 1, false);
-        declareFunction(me, "smarter_find_visible_assertions_cycl", "SMARTER-FIND-VISIBLE-ASSERTIONS-CYCL", 2, 0, false);
-        declareFunction(me, "get_assertions_from_formula_template_result_sets", "GET-ASSERTIONS-FROM-FORMULA-TEMPLATE-RESULT-SETS", 5, 1, false);
-        declareFunction(me, "make_ftemplate_polycanonicalized_assertion", "MAKE-FTEMPLATE-POLYCANONICALIZED-ASSERTION", 2, 1, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_p", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-P", 1, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_sentence", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SENTENCE", 1, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-HL-ASSERTIONS", 2, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_find_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-FIND-HL-ASSERTIONS", 2, 0, false);
-        declareFunction(me, "ftemplate_polycanonicalized_assertion_mt", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-MT", 1, 0, false);
-        declareFunction(me, "ftemplate_assertion_mt", "FTEMPLATE-ASSERTION-MT", 1, 0, false);
-        declareFunction(me, "bad_assertion_for_formula_templatesP", "BAD-ASSERTION-FOR-FORMULA-TEMPLATES?", 1, 0, false);
-        declareFunction(me, "uninteresting_indeterminate_termP", "UNINTERESTING-INDETERMINATE-TERM?", 1, 0, false);
-        declareFunction(me, "is_skolemish_termP", "IS-SKOLEMISH-TERM?", 1, 0, false);
-        declareFunction(me, "get_assertion_sentence_and_constraints_from_formula_template", "GET-ASSERTION-SENTENCE-AND-CONSTRAINTS-FROM-FORMULA-TEMPLATE", 3, 0, false);
-        declareFunction(me, "get_assertion_finding_query_sentence", "GET-ASSERTION-FINDING-QUERY-SENTENCE", 1, 1, false);
-        declareFunction(me, "constrain_query_with_accumulated_constraints", "CONSTRAIN-QUERY-WITH-ACCUMULATED-CONSTRAINTS", 2, 0, false);
-        declareFunction(me, "fet_assertion_variable_for_formula", "FET-ASSERTION-VARIABLE-FOR-FORMULA", 1, 0, false);
-        declareFunction(me, "ftemplate_assertion_constrained_query_formula", "FTEMPLATE-ASSERTION-CONSTRAINED-QUERY-FORMULA", 1, 1, false);
-        declareFunction(me, "formula_ok_for_fet_assertion_varP", "FORMULA-OK-FOR-FET-ASSERTION-VAR?", 2, 0, false);
-        declareFunction(me, "convert_ftemplate_input_constraint_to_collection", "CONVERT-FTEMPLATE-INPUT-CONSTRAINT-TO-COLLECTION", 2, 0, false);
-        declareFunction(me, "get_lexical_mt_for_rkf_interaction_mt", "GET-LEXICAL-MT-FOR-RKF-INTERACTION-MT", 1, 0, false);
+        declareFunction("formula_template_topic", "FORMULA-TEMPLATE-TOPIC", 1, 0, false);
+        declareFunction("formula_template_id", "FORMULA-TEMPLATE-ID", 1, 0, false);
+        declareFunction("formula_template_formula", "FORMULA-TEMPLATE-FORMULA", 1, 0, false);
+        declareFunction("formula_template_query_specification", "FORMULA-TEMPLATE-QUERY-SPECIFICATION", 1, 0, false);
+        declareFunction("formula_template_elmt", "FORMULA-TEMPLATE-ELMT", 1, 0, false);
+        declareFunction("formula_template_focal_term", "FORMULA-TEMPLATE-FOCAL-TERM", 1, 0, false);
+        declareFunction("formula_template_argpos_details", "FORMULA-TEMPLATE-ARGPOS-DETAILS", 1, 0, false);
+        declareFunction("formula_template_argpos_ordering", "FORMULA-TEMPLATE-ARGPOS-ORDERING", 1, 0, false);
+        declareFunction("formula_template_examples", "FORMULA-TEMPLATE-EXAMPLES", 1, 0, false);
+        declareFunction("formula_template_entry_format", "FORMULA-TEMPLATE-ENTRY-FORMAT", 1, 0, false);
+        declareFunction("formula_template_follow_ups", "FORMULA-TEMPLATE-FOLLOW-UPS", 1, 0, false);
+        declareFunction("formula_template_gloss", "FORMULA-TEMPLATE-GLOSS", 1, 0, false);
+        declareFunction("formula_template_refspec", "FORMULA-TEMPLATE-REFSPEC", 1, 0, false);
+        declareFunction("_csetf_formula_template_topic", "_CSETF-FORMULA-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("_csetf_formula_template_id", "_CSETF-FORMULA-TEMPLATE-ID", 2, 0, false);
+        declareFunction("_csetf_formula_template_formula", "_CSETF-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
+        declareFunction("_csetf_formula_template_query_specification", "_CSETF-FORMULA-TEMPLATE-QUERY-SPECIFICATION", 2, 0, false);
+        declareFunction("_csetf_formula_template_elmt", "_CSETF-FORMULA-TEMPLATE-ELMT", 2, 0, false);
+        declareFunction("_csetf_formula_template_focal_term", "_CSETF-FORMULA-TEMPLATE-FOCAL-TERM", 2, 0, false);
+        declareFunction("_csetf_formula_template_argpos_details", "_CSETF-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
+        declareFunction("_csetf_formula_template_argpos_ordering", "_CSETF-FORMULA-TEMPLATE-ARGPOS-ORDERING", 2, 0, false);
+        declareFunction("_csetf_formula_template_examples", "_CSETF-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
+        declareFunction("_csetf_formula_template_entry_format", "_CSETF-FORMULA-TEMPLATE-ENTRY-FORMAT", 2, 0, false);
+        declareFunction("_csetf_formula_template_follow_ups", "_CSETF-FORMULA-TEMPLATE-FOLLOW-UPS", 2, 0, false);
+        declareFunction("_csetf_formula_template_gloss", "_CSETF-FORMULA-TEMPLATE-GLOSS", 2, 0, false);
+        declareFunction("_csetf_formula_template_refspec", "_CSETF-FORMULA-TEMPLATE-REFSPEC", 2, 0, false);
+        declareFunction("make_formula_template", "MAKE-FORMULA-TEMPLATE", 0, 1, false);
+        declareFunction("visit_defstruct_formula_template", "VISIT-DEFSTRUCT-FORMULA-TEMPLATE", 2, 0, false);
+        declareFunction("visit_defstruct_object_formula_template_method", "VISIT-DEFSTRUCT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
+        declareFunction("is_ftemplate_loading_supporting_ask_browsableP", "IS-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?", 0, 0, false);
+        declareMacro("with_browsable_ftemplate_loading_supporting_ask", "WITH-BROWSABLE-FTEMPLATE-LOADING-SUPPORTING-ASK");
+        declareMacro("reusing_rkf_sd_problem_store_if_available", "REUSING-RKF-SD-PROBLEM-STORE-IF-AVAILABLE");
+        declareFunction("get_non_editable_assertions_for_template_topic_instance", "GET-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 0, 0, false);
+        declareMacro("with_known_non_editable_assertions_for_template_topic_instance", "WITH-KNOWN-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
+        declareFunction("compute_non_editable_assertions_for_template_topic_instance", "COMPUTE-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
+        declareFunction("is_non_editable_assertion_for_template_topic_instanceP", "IS-NON-EDITABLE-ASSERTION-FOR-TEMPLATE-TOPIC-INSTANCE?", 1, 0, false);
+        declareMacro("with_non_editable_assertions_for_template_topic_instance", "WITH-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE");
+        declareFunction("valid_formula_template_p", "VALID-FORMULA-TEMPLATE-P", 1, 0, false);
+        declareFunction("new_template_topic", "NEW-TEMPLATE-TOPIC", 1, 1, false);
+        declareFunction("template_topic_add_subtopic", "TEMPLATE-TOPIC-ADD-SUBTOPIC", 2, 0, false);
+        declareFunction("template_topic_add_template", "TEMPLATE-TOPIC-ADD-TEMPLATE", 2, 0, false);
+        declareFunction("template_topic_add_title", "TEMPLATE-TOPIC-ADD-TITLE", 2, 0, false);
+        declareFunction("template_topic_add_term_prefix", "TEMPLATE-TOPIC-ADD-TERM-PREFIX", 2, 0, false);
+        declareFunction("template_topic_set_introductory_template", "TEMPLATE-TOPIC-SET-INTRODUCTORY-TEMPLATE", 2, 0, false);
+        declareFunction("template_topic_set_source_types", "TEMPLATE-TOPIC-SET-SOURCE-TYPES", 2, 0, false);
+        declareFunction("print_template_topic", "PRINT-TEMPLATE-TOPIC", 3, 0, false);
+        declareMacro("formula_template_xml_tag", "FORMULA-TEMPLATE-XML-TAG");
+        declareFunction("xml_template_topic_current_revision", "XML-TEMPLATE-TOPIC-CURRENT-REVISION", 0, 0, false);
+        declareFunction("xml_serialize_template_topic", "XML-SERIALIZE-TEMPLATE-TOPIC", 1, 1, false);
+        declareFunction("cfasl_output_object_template_topic_method", "CFASL-OUTPUT-OBJECT-TEMPLATE-TOPIC-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_template_topic", "CFASL-OUTPUT-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("cfasl_input_template_topic", "CFASL-INPUT-TEMPLATE-TOPIC", 1, 0, false);
+        declareFunction("new_formula_template", "NEW-FORMULA-TEMPLATE", 1, 1, false);
+        declareFunction("formula_template_is_single_entryP", "FORMULA-TEMPLATE-IS-SINGLE-ENTRY?", 1, 0, false);
+        declareFunction("formula_template_is_multiple_entryP", "FORMULA-TEMPLATE-IS-MULTIPLE-ENTRY?", 1, 0, false);
+        declareFunction("formula_template_has_reformulation_specificationP", "FORMULA-TEMPLATE-HAS-REFORMULATION-SPECIFICATION?", 1, 0, false);
+        declareFunction("print_formula_template", "PRINT-FORMULA-TEMPLATE", 3, 0, false);
+        declareFunction("formula_template_set_formula", "FORMULA-TEMPLATE-SET-FORMULA", 2, 0, false);
+        declareFunction("formula_template_set_examples", "FORMULA-TEMPLATE-SET-EXAMPLES", 2, 0, false);
+        declareFunction("formula_template_set_focal_term", "FORMULA-TEMPLATE-SET-FOCAL-TERM", 2, 0, false);
+        declareFunction("formula_template_set_elmt", "FORMULA-TEMPLATE-SET-ELMT", 2, 0, false);
+        declareFunction("formula_template_set_entry_format", "FORMULA-TEMPLATE-SET-ENTRY-FORMAT", 2, 0, false);
+        declareFunction("formula_template_set_gloss", "FORMULA-TEMPLATE-SET-GLOSS", 2, 0, false);
+        declareFunction("formula_template_set_query_specification", "FORMULA-TEMPLATE-SET-QUERY-SPECIFICATION", 2, 0, false);
+        declareFunction("xml_serialize_formula_template", "XML-SERIALIZE-FORMULA-TEMPLATE", 1, 1, false);
+        declareFunction("xml_serialize_formula_template_as_document", "XML-SERIALIZE-FORMULA-TEMPLATE-AS-DOCUMENT", 1, 1, false);
+        declareFunction("formula_template_dtd_uri", "FORMULA-TEMPLATE-DTD-URI", 0, 0, false);
+        declareFunction("xml_serialize_formula_template_header", "XML-SERIALIZE-FORMULA-TEMPLATE-HEADER", 0, 1, false);
+        declareFunction("cfasl_output_object_formula_template_method", "CFASL-OUTPUT-OBJECT-FORMULA-TEMPLATE-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_formula_template", "CFASL-OUTPUT-FORMULA-TEMPLATE", 2, 0, false);
+        declareFunction("cfasl_input_formula_template", "CFASL-INPUT-FORMULA-TEMPLATE", 1, 0, false);
+        declareFunction("new_arg_position_details", "NEW-ARG-POSITION-DETAILS", 1, 0, false);
+        declareFunction("valid_arg_position_details_p", "VALID-ARG-POSITION-DETAILS-P", 1, 0, false);
+        declareFunction("print_arg_position_details", "PRINT-ARG-POSITION-DETAILS", 3, 0, false);
+        declareFunction("xml_serialize_arg_position_details", "XML-SERIALIZE-ARG-POSITION-DETAILS", 1, 1, false);
+        declareFunction("cfasl_output_object_arg_position_details_method", "CFASL-OUTPUT-OBJECT-ARG-POSITION-DETAILS-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_arg_position_details", "CFASL-OUTPUT-ARG-POSITION-DETAILS", 2, 0, false);
+        declareFunction("cfasl_input_arg_position_details", "CFASL-INPUT-ARG-POSITION-DETAILS", 1, 0, false);
+        declareFunction("xml_serialize_arg_position", "XML-SERIALIZE-ARG-POSITION", 1, 1, false);
+        declareFunction("formula_template_load_topic_template_details", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-DETAILS", 3, 0, false);
+        declareFunction("ftemplate_load_argument_position_detail_information", "FTEMPLATE-LOAD-ARGUMENT-POSITION-DETAIL-INFORMATION", 2, 1, false);
+        declareFunction("update_ftemplate_argpos_detail_glosses", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-GLOSSES", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_explanations", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-EXPLANATIONS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_invisible_replacement_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-INVISIBLE-REPLACEMENT-POSITIONS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_replacable_positions", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACABLE-POSITIONS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_replacement_constraints", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_candidate_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-CANDIDATE-REPLACEMENTS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_validation_required", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-VALIDATION-REQUIRED", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_unknown_replacements", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-UNKNOWN-REPLACEMENTS", 2, 0, false);
+        declareFunction("get_ftemplate_arg_position_details", "GET-FTEMPLATE-ARG-POSITION-DETAILS", 2, 0, false);
+        declareFunction("update_ftemplate_argpos_detail_ordering_information", "UPDATE-FTEMPLATE-ARGPOS-DETAIL-ORDERING-INFORMATION", 1, 0, false);
+        declareFunction("ftemplate_compute_ordering_of_argpos_details", "FTEMPLATE-COMPUTE-ORDERING-OF-ARGPOS-DETAILS", 2, 0, false);
+        declareFunction("sort_argpos_details_by_ordering", "SORT-ARGPOS-DETAILS-BY-ORDERING", 1, 0, false);
+        declareFunction("ordered_by_argument_position", "ORDERED-BY-ARGUMENT-POSITION", 2, 0, false);
+        declareFunction("load_formula_template_skeleton_from_kb", "LOAD-FORMULA-TEMPLATE-SKELETON-FROM-KB", 2, 0, false);
+        declareFunction("load_formula_template_details_from_kb", "LOAD-FORMULA-TEMPLATE-DETAILS-FROM-KB", 2, 0, false);
+        declareFunction("ftemplate_assign_formula_component", "FTEMPLATE-ASSIGN-FORMULA-COMPONENT", 2, 0, false);
+        declareFunction("ftemplate_get_functional_slot_value", "FTEMPLATE-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
+        declareFunction("ftemplate_get_template_reformulation_specification", "FTEMPLATE-GET-TEMPLATE-REFORMULATION-SPECIFICATION", 2, 0, false);
+        declareFunction("ftemplate_get_query_specification", "FTEMPLATE-GET-QUERY-SPECIFICATION", 2, 0, false);
+        declareFunction("ftemplate_get_template_formula", "FTEMPLATE-GET-TEMPLATE-FORMULA", 2, 0, false);
+        declareFunction("ftemplate_get_template_elmt", "FTEMPLATE-GET-TEMPLATE-ELMT", 2, 0, false);
+        declareFunction("ftemplate_get_template_follow_ups", "FTEMPLATE-GET-TEMPLATE-FOLLOW-UPS", 2, 0, false);
+        declareFunction("ftemplate_get_template_gloss", "FTEMPLATE-GET-TEMPLATE-GLOSS", 2, 0, false);
+        declareFunction("ftemplate_qualify_mt_to_now", "FTEMPLATE-QUALIFY-MT-TO-NOW", 1, 0, false);
+        declareFunction("ftemplate_qualify_mt_to_anytime", "FTEMPLATE-QUALIFY-MT-TO-ANYTIME", 1, 0, false);
+        declareFunction("ftemplate_hlmt_change_time", "FTEMPLATE-HLMT-CHANGE-TIME", 2, 0, false);
+        declareFunction("ftemplate_get_template_glosses", "FTEMPLATE-GET-TEMPLATE-GLOSSES", 3, 0, false);
+        declareFunction("ftemplate_get_template_explanations", "FTEMPLATE-GET-TEMPLATE-EXPLANATIONS", 3, 0, false);
+        declareFunction("ftemplate_get_template_examples", "FTEMPLATE-GET-TEMPLATE-EXAMPLES", 3, 0, false);
+        declareFunction("ftemplate_get_first_asserted_value", "FTEMPLATE-GET-FIRST-ASSERTED-VALUE", 4, 4, false);
+        declareFunction("ftemplate_get_asserted_values", "FTEMPLATE-GET-ASSERTED-VALUES", 4, 5, false);
+        declareFunction("ftemplate_get_template_focal_term", "FTEMPLATE-GET-TEMPLATE-FOCAL-TERM", 3, 0, false);
+        declareFunction("ftemplate_get_template_format", "FTEMPLATE-GET-TEMPLATE-FORMAT", 3, 0, false);
+        declareFunction("ftemplate_get_template_invisible_replacement_positions", "FTEMPLATE-GET-TEMPLATE-INVISIBLE-REPLACEMENT-POSITIONS", 3, 0, false);
+        declareFunction("ftemplate_get_template_replacement_constraints", "FTEMPLATE-GET-TEMPLATE-REPLACEMENT-CONSTRAINTS", 2, 0, false);
+        declareFunction("ftemplate_get_template_unknown_replacements", "FTEMPLATE-GET-TEMPLATE-UNKNOWN-REPLACEMENTS", 2, 0, false);
+        declareFunction("ftemplate_get_template_candidate_replacements_for_position", "FTEMPLATE-GET-TEMPLATE-CANDIDATE-REPLACEMENTS-FOR-POSITION", 2, 0, false);
+        declareFunction("ftemplate_get_template_replacable_positions", "FTEMPLATE-GET-TEMPLATE-REPLACABLE-POSITIONS", 2, 0, false);
+        declareFunction("ftemplate_get_template_validation_requirements", "FTEMPLATE-GET-TEMPLATE-VALIDATION-REQUIREMENTS", 2, 0, false);
+        declareFunction("formula_template_load_topic_subtopic_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-SUBTOPIC-ORDERING", 2, 0, false);
+        declareFunction("formula_template_load_topic_template_ordering", "FORMULA-TEMPLATE-LOAD-TOPIC-TEMPLATE-ORDERING", 2, 0, false);
+        declareFunction("lower_priority_terms", "LOWER-PRIORITY-TERMS", 1, 0, false);
+        declareFunction("accumulate_lower_priority_terms", "ACCUMULATE-LOWER-PRIORITY-TERMS", 2, 0, false);
+        declareFunction("higher_priorityP", "HIGHER-PRIORITY?", 2, 0, false);
+        declareFunction("apply_prioritizing_ordering_to_kb_objects", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS", 2, 0, false);
+        declareFunction("apply_prioritizing_ordering_to_kb_objects_rck", "APPLY-PRIORITIZING-ORDERING-TO-KB-OBJECTS-RCK", 2, 0, false);
+        declareFunction("construct_highXlow_information_from_prioritizing_ordering", "CONSTRUCT-HIGH/LOW-INFORMATION-FROM-PRIORITIZING-ORDERING", 1, 0, false);
+        declareFunction("formula_template_load_prioritization_information_for_subtopics", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-SUBTOPICS", 2, 0, false);
+        declareFunction("formula_template_load_prioritization_information_for_templates", "FORMULA-TEMPLATE-LOAD-PRIORITIZATION-INFORMATION-FOR-TEMPLATES", 2, 0, false);
+        declareFunction("formula_template_organize_templates_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-TEMPLATES-BY-ORDERING", 1, 0, false);
+        declareFunction("formula_template_organize_subtopics_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-SUBTOPICS-BY-ORDERING", 1, 0, false);
+        declareFunction("formula_template_organize_by_ordering", "FORMULA-TEMPLATE-ORGANIZE-BY-ORDERING", 3, 0, false);
+        declareFunction("stable_template_id_compare", "STABLE-TEMPLATE-ID-COMPARE", 2, 0, false);
+        declareFunction("formula_template_load_template_graph", "FORMULA-TEMPLATE-LOAD-TEMPLATE-GRAPH", 2, 0, false);
+        declareFunction("validate_template_topic_semantic_constraints", "VALIDATE-TEMPLATE-TOPIC-SEMANTIC-CONSTRAINTS", 1, 0, false);
+        declareFunction("template_topic_query_mt_can_see_all_assertion_mts", "TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-ALL-ASSERTION-MTS", 1, 0, false);
+        declareFunction("check_template_topic_query_mt_can_see_subtopics_assertion_mts", "CHECK-TEMPLATE-TOPIC-QUERY-MT-CAN-SEE-SUBTOPICS-ASSERTION-MTS", 2, 0, false);
+        declareFunction("templates_use_isaXgenlsP", "TEMPLATES-USE-ISA/GENLS?", 0, 0, false);
+        declareFunction("asserted_formula_template_ids_for_type", "ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 2, 0, false);
+        declareFunction("sort_formula_template_subtopics_by_template_count", "SORT-FORMULA-TEMPLATE-SUBTOPICS-BY-TEMPLATE-COUNT", 2, 0, false);
+        declareFunction("count_asserted_formula_template_ids_for_type_internal", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE-INTERNAL", 1, 1, false);
+        declareFunction("count_asserted_formula_template_ids_for_type", "COUNT-ASSERTED-FORMULA-TEMPLATE-IDS-FOR-TYPE", 1, 1, false);
+        declareFunction("fet_topic_fort_has_subtopicsP", "FET-TOPIC-FORT-HAS-SUBTOPICS?", 2, 0, false);
+        declareFunction("fet_topic_fort_has_templatesP", "FET-TOPIC-FORT-HAS-TEMPLATES?", 2, 0, false);
+        declareFunction("formula_template_subtopics_for_type", "FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("formula_template_asserted_subtopics_for_type", "FORMULA-TEMPLATE-ASSERTED-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("asserted_formula_template_subtopics_for_type", "ASSERTED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("formula_template_induction_mt", "FORMULA-TEMPLATE-INDUCTION-MT", 2, 0, false);
+        declareFunction("formula_template_topic_load_topic_specifics", "FORMULA-TEMPLATE-TOPIC-LOAD-TOPIC-SPECIFICS", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_source_types", "TOPICTMPLT-GET-TOPIC-TEMPLATE-SOURCE-TYPES", 2, 0, false);
+        declareFunction("ftemplate_topic_get_functional_slot_value", "FTEMPLATE-TOPIC-GET-FUNCTIONAL-SLOT-VALUE", 3, 0, false);
+        declareFunction("topictmplt_get_topic_template_introductory_template", "TOPICTMPLT-GET-TOPIC-TEMPLATE-INTRODUCTORY-TEMPLATE", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_title", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TITLE", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_term_prefix", "TOPICTMPLT-GET-TOPIC-TEMPLATE-TERM-PREFIX", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_query_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-QUERY-MT", 2, 0, false);
+        declareFunction("topictmplt_get_topic_template_definitional_mt", "TOPICTMPLT-GET-TOPIC-TEMPLATE-DEFINITIONAL-MT", 2, 0, false);
+        declareFunction("ftemplate_ask_variable", "FTEMPLATE-ASK-VARIABLE", 3, 1, false);
+        declareFunction("ftemplate_ask_template", "FTEMPLATE-ASK-TEMPLATE", 3, 1, false);
+        declareFunction("get_editable_and_non_editable_assertions_for_template_topic_instance", "GET-EDITABLE-AND-NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
+        declareFunction("get_assertions_for_template_topic_instance", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 3, 0, false);
+        declareFunction("get_assertions_for_template_topic_instance_int", "GET-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE-INT", 4, 0, false);
+        declareFunction("xml_template_topic_assertions_current_revision", "XML-TEMPLATE-TOPIC-ASSERTIONS-CURRENT-REVISION", 0, 0, false);
+        declareFunction("xml_serialize_assertions_for_template_topic_instance", "XML-SERIALIZE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE", 5, 1, false);
+        declareFunction("xml_serialize_assertions_for_formula_template_instance", "XML-SERIALIZE-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 1, false);
+        declareFunction("ftemplate_assertion_non_editableP", "FTEMPLATE-ASSERTION-NON-EDITABLE?", 2, 0, false);
+        declareFunction("xml_serialize_assertion_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+        declareFunction("xml_serialize_assertion_sentence_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SENTENCE-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+        declareFunction("xml_serialize_assertion_suids_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-SUIDS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_suids", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SUIDS", 2, 0, false);
+        declareFunction("xml_serialize_assertion_evaluation_data_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-EVALUATION-DATA-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("quaternary_fet_evaluation_pred", "QUATERNARY-FET-EVALUATION-PRED", 0, 0, false);
+        declareFunction("ftemplate_assertion_evaluations", "FTEMPLATE-ASSERTION-EVALUATIONS", 3, 0, false);
+        declareFunction("ftemplate_evaluation_judgment", "FTEMPLATE-EVALUATION-JUDGMENT", 1, 0, false);
+        declareFunction("xml_serialize_assertion_timestamp_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-TIMESTAMP-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_date", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-DATE", 2, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_second", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SECOND", 2, 0, false);
+        declareFunction("xml_serialize_assertion_elmt_for_formula_template_instance", "XML-SERIALIZE-ASSERTION-ELMT-FOR-FORMULA-TEMPLATE-INSTANCE", 3, 0, false);
+        declareFunction("xml_serialize_elmt_information_for_assertion", "XML-SERIALIZE-ELMT-INFORMATION-FOR-ASSERTION", 1, 1, false);
+        declareFunction("clear_map_elmt_to_published_conceptual_work", "CLEAR-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 0, 0, false);
+        declareFunction("remove_map_elmt_to_published_conceptual_work", "REMOVE-MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
+        declareFunction("map_elmt_to_published_conceptual_work_internal", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-INTERNAL", 1, 0, false);
+        declareFunction("map_elmt_to_published_conceptual_work", "MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK", 1, 0, false);
+        declareFunction("get_assertions_for_leaf_template_topic_instance", "GET-ASSERTIONS-FOR-LEAF-TEMPLATE-TOPIC-INSTANCE", 4, 0, false);
+        declareFunction("get_assertions_for_formula_template_instance", "GET-ASSERTIONS-FOR-FORMULA-TEMPLATE-INSTANCE", 4, 0, false);
+        declareFunction("get_assertions_for_fet_sentence", "GET-ASSERTIONS-FOR-FET-SENTENCE", 5, 3, false);
+        declareFunction("fet_fallback_to_default_mtP", "FET-FALLBACK-TO-DEFAULT-MT?", 1, 0, false);
+        declareFunction("ftemplate_reformulated_query_mt", "FTEMPLATE-REFORMULATED-QUERY-MT", 2, 0, false);
+        declareFunction("ftemplate_filter_reformulated_result_set", "FTEMPLATE-FILTER-REFORMULATED-RESULT-SET", 2, 0, false);
+        declareFunction("ftemplate_reformulated_result_duplicateP", "FTEMPLATE-REFORMULATED-RESULT-DUPLICATE?", 2, 0, false);
+        declareFunction("unpack_note_reformulation_result_sets", "UNPACK-NOTE-REFORMULATION-RESULT-SETS", 3, 0, false);
+        declareFunction("add_one_polycanonicalized_result", "ADD-ONE-POLYCANONICALIZED-RESULT", 2, 0, false);
+        declareFunction("unpack_note_reformulation_result", "UNPACK-NOTE-REFORMULATION-RESULT", 3, 0, false);
+        declareFunction("ftemplate_loading_supporting_ask", "FTEMPLATE-LOADING-SUPPORTING-ASK", 3, 1, false);
+        declareFunction("smarter_find_visible_assertions_cycl", "SMARTER-FIND-VISIBLE-ASSERTIONS-CYCL", 2, 0, false);
+        declareFunction("get_assertions_from_formula_template_result_sets", "GET-ASSERTIONS-FROM-FORMULA-TEMPLATE-RESULT-SETS", 5, 1, false);
+        declareFunction("make_ftemplate_polycanonicalized_assertion", "MAKE-FTEMPLATE-POLYCANONICALIZED-ASSERTION", 2, 1, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_p", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-P", 1, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_sentence", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-SENTENCE", 1, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-HL-ASSERTIONS", 2, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_find_hl_assertions", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-FIND-HL-ASSERTIONS", 2, 0, false);
+        declareFunction("ftemplate_polycanonicalized_assertion_mt", "FTEMPLATE-POLYCANONICALIZED-ASSERTION-MT", 1, 0, false);
+        declareFunction("ftemplate_assertion_mt", "FTEMPLATE-ASSERTION-MT", 1, 0, false);
+        declareFunction("bad_assertion_for_formula_templatesP", "BAD-ASSERTION-FOR-FORMULA-TEMPLATES?", 1, 0, false);
+        declareFunction("uninteresting_indeterminate_termP", "UNINTERESTING-INDETERMINATE-TERM?", 1, 0, false);
+        declareFunction("is_skolemish_termP", "IS-SKOLEMISH-TERM?", 1, 0, false);
+        declareFunction("get_assertion_sentence_and_constraints_from_formula_template", "GET-ASSERTION-SENTENCE-AND-CONSTRAINTS-FROM-FORMULA-TEMPLATE", 3, 0, false);
+        declareFunction("get_assertion_finding_query_sentence", "GET-ASSERTION-FINDING-QUERY-SENTENCE", 1, 1, false);
+        declareFunction("constrain_query_with_accumulated_constraints", "CONSTRAIN-QUERY-WITH-ACCUMULATED-CONSTRAINTS", 2, 0, false);
+        declareFunction("fet_assertion_variable_for_formula", "FET-ASSERTION-VARIABLE-FOR-FORMULA", 1, 0, false);
+        declareFunction("ftemplate_assertion_constrained_query_formula", "FTEMPLATE-ASSERTION-CONSTRAINED-QUERY-FORMULA", 1, 1, false);
+        declareFunction("formula_ok_for_fet_assertion_varP", "FORMULA-OK-FOR-FET-ASSERTION-VAR?", 2, 0, false);
+        declareFunction("convert_ftemplate_input_constraint_to_collection", "CONVERT-FTEMPLATE-INPUT-CONSTRAINT-TO-COLLECTION", 2, 0, false);
+        declareFunction("get_lexical_mt_for_rkf_interaction_mt", "GET-LEXICAL-MT-FOR-RKF-INTERACTION-MT", 1, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_formula_templates_file_alt() {
+        defconstant("*DTP-TEMPLATE-TOPIC*", TEMPLATE_TOPIC);
+        deflexical("*CFASL-GUID-OPCODE-TEMPLATE-TOPIC*", Guids.string_to_guid($str_alt45$18287931_d871_11d9_8eef_0002b3891));
+        defconstant("*DTP-ARG-POSITION-DETAILS*", ARG_POSITION_DETAILS);
+        deflexical("*CFASL-GUID-OPCODE-ARG-POSITION-DETAILS*", Guids.string_to_guid($str_alt84$182a9c10_d871_11d9_8eef_0002b3891));
+        defconstant("*DTP-FORMULA-TEMPLATE*", FORMULA_TEMPLATE);
+        deflexical("*CFASL-GUID-OPCODE-FORMULA-TEMPLATE*", Guids.string_to_guid($str_alt131$182b1140_d871_11d9_8eef_0002b3891));
+        defparameter("*MAKE-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?*", NIL);
+        defparameter("*NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE*", NIL);
+        defparameter("*XML-SUPPRESS-FUTURE-TEMPLATE-EXTENSIONS*", T);
+        deflexical("*XML-TEMPLATE-TOPIC-REVISIONS*", $list_alt167);
+        defparameter("*HIGH-TO-LOW-PRIORITIES*", NIL);
+        deflexical("*WARN-ON-TEMPLATE-TOPIC-VALIDATION-ONLY*", T);
+        defparameter("*TEMPLATE-COUNT-MT*", $$InferencePSC);
+        deflexical("*XML-TEMPLATE-TOPIC-ASSERTIONS-REVISIONS*", $list_alt361);
+        deflexical("*QUATERNARY-FET-EVALUATION-PRED*", NIL);
+        deflexical("*MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-CACHING-STATE*", NIL);
+        deflexical("*UNIQUE-VARIABLES-LIST-FOR-FORMULA-TEMPLATES*", $list_alt401);
+        deflexical("*ELMT-VARIABLE-FOR-FORMULA-TEMPLATES*", $sym402$_POLY_ELMT);
+        defparameter("*GET-ASSERTIONS-FROM-INITIAL-ASK?*", T);
+        deflexical("*FTEMPLATE-CONSTRAINT-TO-COLLECTION-SKIPLIST*", $list_alt429);
         return NIL;
     }
 
     public static SubLObject init_formula_templates_file() {
+        if (SubLFiles.USE_V1) {
+            defconstant("*DTP-TEMPLATE-TOPIC*", TEMPLATE_TOPIC);
+            deflexical("*CFASL-GUID-OPCODE-TEMPLATE-TOPIC*", Guids.string_to_guid($str51$18287931_d871_11d9_8eef_0002b3891));
+            defconstant("*DTP-ARG-POSITION-DETAILS*", ARG_POSITION_DETAILS);
+            deflexical("*CFASL-GUID-OPCODE-ARG-POSITION-DETAILS*", Guids.string_to_guid($str93$182a9c10_d871_11d9_8eef_0002b3891));
+            defconstant("*DTP-FORMULA-TEMPLATE*", FORMULA_TEMPLATE);
+            deflexical("*CFASL-GUID-OPCODE-FORMULA-TEMPLATE*", Guids.string_to_guid($str143$182b1140_d871_11d9_8eef_0002b3891));
+            defparameter("*MAKE-FTEMPLATE-LOADING-SUPPORTING-ASK-BROWSABLE?*", NIL);
+            defparameter("*NON-EDITABLE-ASSERTIONS-FOR-TEMPLATE-TOPIC-INSTANCE*", NIL);
+            defparameter("*XML-SUPPRESS-FUTURE-TEMPLATE-EXTENSIONS*", T);
+            deflexical("*XML-TEMPLATE-TOPIC-REVISIONS*", $list183);
+            deflexical("*FORMULA-TEMPLATE-DTD-URI*", $str241$http___dev_cyc_com_dtd_formulatem);
+            defparameter("*HIGH-TO-LOW-PRIORITIES*", NIL);
+            deflexical("*WARN-ON-TEMPLATE-TOPIC-VALIDATION-ONLY*", T);
+            defparameter("*TEMPLATE-COUNT-MT*", $$InferencePSC);
+            deflexical("*XML-TEMPLATE-TOPIC-ASSERTIONS-REVISIONS*", $list372);
+            deflexical("*QUATERNARY-FET-EVALUATION-PRED*", NIL);
+            deflexical("*MAP-ELMT-TO-PUBLISHED-CONCEPTUAL-WORK-CACHING-STATE*", NIL);
+            deflexical("*UNIQUE-VARIABLES-LIST-FOR-FORMULA-TEMPLATES*", $list412);
+            deflexical("*ELMT-VARIABLE-FOR-FORMULA-TEMPLATES*", $sym413$_POLY_ELMT);
+            defparameter("*GET-ASSERTIONS-FROM-INITIAL-ASK?*", T);
+            deflexical("*FTEMPLATE-CONSTRAINT-TO-COLLECTION-SKIPLIST*", $list440);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*CFASL-GUID-OPCODE-TEMPLATE-TOPIC*", Guids.string_to_guid($str_alt45$18287931_d871_11d9_8eef_0002b3891));
+            deflexical("*CFASL-GUID-OPCODE-ARG-POSITION-DETAILS*", Guids.string_to_guid($str_alt84$182a9c10_d871_11d9_8eef_0002b3891));
+            deflexical("*CFASL-GUID-OPCODE-FORMULA-TEMPLATE*", Guids.string_to_guid($str_alt131$182b1140_d871_11d9_8eef_0002b3891));
+            deflexical("*XML-TEMPLATE-TOPIC-REVISIONS*", $list_alt167);
+            deflexical("*XML-TEMPLATE-TOPIC-ASSERTIONS-REVISIONS*", $list_alt361);
+            deflexical("*UNIQUE-VARIABLES-LIST-FOR-FORMULA-TEMPLATES*", $list_alt401);
+            deflexical("*ELMT-VARIABLE-FOR-FORMULA-TEMPLATES*", $sym402$_POLY_ELMT);
+            deflexical("*FTEMPLATE-CONSTRAINT-TO-COLLECTION-SKIPLIST*", $list_alt429);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_formula_templates_file_Previous() {
         defconstant("*DTP-TEMPLATE-TOPIC*", TEMPLATE_TOPIC);
         deflexical("*CFASL-GUID-OPCODE-TEMPLATE-TOPIC*", Guids.string_to_guid($str51$18287931_d871_11d9_8eef_0002b3891));
         defconstant("*DTP-ARG-POSITION-DETAILS*", ARG_POSITION_DETAILS);
@@ -7970,477 +14883,6 @@ public final class formula_templates extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $template_topic_native extends SubLStructNative {
@@ -8471,18 +14913,18 @@ public final class formula_templates extends SubLTranslatedFile {
         private static final SubLStructDeclNative structDecl;
 
         public $template_topic_native() {
-            this.$supertopic = Lisp.NIL;
-            this.$topic = Lisp.NIL;
-            this.$subtopics = Lisp.NIL;
-            this.$templates = Lisp.NIL;
-            this.$ordering = Lisp.NIL;
-            this.$title = Lisp.NIL;
-            this.$term_prefix = Lisp.NIL;
-            this.$intro_template = Lisp.NIL;
-            this.$source_types = Lisp.NIL;
-            this.$source_mt = Lisp.NIL;
-            this.$query_mt = Lisp.NIL;
-            this.$definitional_mt = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$supertopic = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$topic = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$subtopics = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$templates = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$ordering = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$title = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$term_prefix = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$intro_template = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$source_types = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$source_mt = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$query_mt = Lisp.NIL;
+            formula_templates.$template_topic_native.this.$definitional_mt = Lisp.NIL;
         }
 
         @Override
@@ -8492,126 +14934,126 @@ public final class formula_templates extends SubLTranslatedFile {
 
         @Override
         public SubLObject getField2() {
-            return this.$supertopic;
+            return formula_templates.$template_topic_native.this.$supertopic;
         }
 
         @Override
         public SubLObject getField3() {
-            return this.$topic;
+            return formula_templates.$template_topic_native.this.$topic;
         }
 
         @Override
         public SubLObject getField4() {
-            return this.$subtopics;
+            return formula_templates.$template_topic_native.this.$subtopics;
         }
 
         @Override
         public SubLObject getField5() {
-            return this.$templates;
+            return formula_templates.$template_topic_native.this.$templates;
         }
 
         @Override
         public SubLObject getField6() {
-            return this.$ordering;
+            return formula_templates.$template_topic_native.this.$ordering;
         }
 
         @Override
         public SubLObject getField7() {
-            return this.$title;
+            return formula_templates.$template_topic_native.this.$title;
         }
 
         @Override
         public SubLObject getField8() {
-            return this.$term_prefix;
+            return formula_templates.$template_topic_native.this.$term_prefix;
         }
 
         @Override
         public SubLObject getField9() {
-            return this.$intro_template;
+            return formula_templates.$template_topic_native.this.$intro_template;
         }
 
         @Override
         public SubLObject getField10() {
-            return this.$source_types;
+            return formula_templates.$template_topic_native.this.$source_types;
         }
 
         @Override
         public SubLObject getField11() {
-            return this.$source_mt;
+            return formula_templates.$template_topic_native.this.$source_mt;
         }
 
         @Override
         public SubLObject getField12() {
-            return this.$query_mt;
+            return formula_templates.$template_topic_native.this.$query_mt;
         }
 
         @Override
         public SubLObject getField13() {
-            return this.$definitional_mt;
+            return formula_templates.$template_topic_native.this.$definitional_mt;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return this.$supertopic = value;
+            return formula_templates.$template_topic_native.this.$supertopic = value;
         }
 
         @Override
         public SubLObject setField3(final SubLObject value) {
-            return this.$topic = value;
+            return formula_templates.$template_topic_native.this.$topic = value;
         }
 
         @Override
         public SubLObject setField4(final SubLObject value) {
-            return this.$subtopics = value;
+            return formula_templates.$template_topic_native.this.$subtopics = value;
         }
 
         @Override
         public SubLObject setField5(final SubLObject value) {
-            return this.$templates = value;
+            return formula_templates.$template_topic_native.this.$templates = value;
         }
 
         @Override
         public SubLObject setField6(final SubLObject value) {
-            return this.$ordering = value;
+            return formula_templates.$template_topic_native.this.$ordering = value;
         }
 
         @Override
         public SubLObject setField7(final SubLObject value) {
-            return this.$title = value;
+            return formula_templates.$template_topic_native.this.$title = value;
         }
 
         @Override
         public SubLObject setField8(final SubLObject value) {
-            return this.$term_prefix = value;
+            return formula_templates.$template_topic_native.this.$term_prefix = value;
         }
 
         @Override
         public SubLObject setField9(final SubLObject value) {
-            return this.$intro_template = value;
+            return formula_templates.$template_topic_native.this.$intro_template = value;
         }
 
         @Override
         public SubLObject setField10(final SubLObject value) {
-            return this.$source_types = value;
+            return formula_templates.$template_topic_native.this.$source_types = value;
         }
 
         @Override
         public SubLObject setField11(final SubLObject value) {
-            return this.$source_mt = value;
+            return formula_templates.$template_topic_native.this.$source_mt = value;
         }
 
         @Override
         public SubLObject setField12(final SubLObject value) {
-            return this.$query_mt = value;
+            return formula_templates.$template_topic_native.this.$query_mt = value;
         }
 
         @Override
         public SubLObject setField13(final SubLObject value) {
-            return this.$definitional_mt = value;
+            return formula_templates.$template_topic_native.this.$definitional_mt = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(formula_templates.$template_topic_native.class, TEMPLATE_TOPIC, TEMPLATE_TOPIC_P, $list2, $list3, new String[]{ "$supertopic", "$topic", "$subtopics", "$templates", "$ordering", "$title", "$term_prefix", "$intro_template", "$source_types", "$source_mt", "$query_mt", "$definitional_mt" }, $list4, $list5, PRINT_TEMPLATE_TOPIC);
+            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.formula_templates.$template_topic_native.class, TEMPLATE_TOPIC, TEMPLATE_TOPIC_P, $list2, $list3, new String[]{ "$supertopic", "$topic", "$subtopics", "$templates", "$ordering", "$title", "$term_prefix", "$intro_template", "$source_types", "$source_mt", "$query_mt", "$definitional_mt" }, $list4, $list5, PRINT_TEMPLATE_TOPIC);
         }
     }
 
@@ -8623,152 +15065,6 @@ public final class formula_templates extends SubLTranslatedFile {
         @Override
         public SubLObject processItem(final SubLObject arg1) {
             return template_topic_p(arg1);
-        }
-    }
-
-    public static final class $arg_position_details_native extends SubLStructNative {
-        public SubLObject $argument_position;
-
-        public SubLObject $ordering;
-
-        public SubLObject $gloss;
-
-        public SubLObject $invisible_replacement_positions;
-
-        public SubLObject $replacement_constraints;
-
-        public SubLObject $candidate_replacements;
-
-        public SubLObject $is_editable;
-
-        public SubLObject $explanation;
-
-        public SubLObject $requires_validation;
-
-        public SubLObject $unknown_replacement;
-
-        private static final SubLStructDeclNative structDecl;
-
-        public $arg_position_details_native() {
-            this.$argument_position = Lisp.NIL;
-            this.$ordering = Lisp.NIL;
-            this.$gloss = Lisp.NIL;
-            this.$invisible_replacement_positions = Lisp.NIL;
-            this.$replacement_constraints = Lisp.NIL;
-            this.$candidate_replacements = Lisp.NIL;
-            this.$is_editable = Lisp.NIL;
-            this.$explanation = Lisp.NIL;
-            this.$requires_validation = Lisp.NIL;
-            this.$unknown_replacement = Lisp.NIL;
-        }
-
-        @Override
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        @Override
-        public SubLObject getField2() {
-            return this.$argument_position;
-        }
-
-        @Override
-        public SubLObject getField3() {
-            return this.$ordering;
-        }
-
-        @Override
-        public SubLObject getField4() {
-            return this.$gloss;
-        }
-
-        @Override
-        public SubLObject getField5() {
-            return this.$invisible_replacement_positions;
-        }
-
-        @Override
-        public SubLObject getField6() {
-            return this.$replacement_constraints;
-        }
-
-        @Override
-        public SubLObject getField7() {
-            return this.$candidate_replacements;
-        }
-
-        @Override
-        public SubLObject getField8() {
-            return this.$is_editable;
-        }
-
-        @Override
-        public SubLObject getField9() {
-            return this.$explanation;
-        }
-
-        @Override
-        public SubLObject getField10() {
-            return this.$requires_validation;
-        }
-
-        @Override
-        public SubLObject getField11() {
-            return this.$unknown_replacement;
-        }
-
-        @Override
-        public SubLObject setField2(final SubLObject value) {
-            return this.$argument_position = value;
-        }
-
-        @Override
-        public SubLObject setField3(final SubLObject value) {
-            return this.$ordering = value;
-        }
-
-        @Override
-        public SubLObject setField4(final SubLObject value) {
-            return this.$gloss = value;
-        }
-
-        @Override
-        public SubLObject setField5(final SubLObject value) {
-            return this.$invisible_replacement_positions = value;
-        }
-
-        @Override
-        public SubLObject setField6(final SubLObject value) {
-            return this.$replacement_constraints = value;
-        }
-
-        @Override
-        public SubLObject setField7(final SubLObject value) {
-            return this.$candidate_replacements = value;
-        }
-
-        @Override
-        public SubLObject setField8(final SubLObject value) {
-            return this.$is_editable = value;
-        }
-
-        @Override
-        public SubLObject setField9(final SubLObject value) {
-            return this.$explanation = value;
-        }
-
-        @Override
-        public SubLObject setField10(final SubLObject value) {
-            return this.$requires_validation = value;
-        }
-
-        @Override
-        public SubLObject setField11(final SubLObject value) {
-            return this.$unknown_replacement = value;
-        }
-
-        static {
-            structDecl = makeStructDeclNative(formula_templates.$arg_position_details_native.class, ARG_POSITION_DETAILS, ARG_POSITION_DETAILS_P, $list55, $list56, new String[]{ "$argument_position", "$ordering", "$gloss", "$invisible_replacement_positions", "$replacement_constraints", "$candidate_replacements", "$is_editable", "$explanation", "$requires_validation", "$unknown_replacement" }, $list57, $list58, PRINT_ARG_POSITION_DETAILS);
         }
     }
 
@@ -8813,19 +15109,19 @@ public final class formula_templates extends SubLTranslatedFile {
         private static final SubLStructDeclNative structDecl;
 
         public $formula_template_native() {
-            this.$topic = Lisp.NIL;
-            this.$id = Lisp.NIL;
-            this.$formula = Lisp.NIL;
-            this.$query_specification = Lisp.NIL;
-            this.$elmt = Lisp.NIL;
-            this.$focal_term = Lisp.NIL;
-            this.$argpos_details = Lisp.NIL;
-            this.$argpos_ordering = Lisp.NIL;
-            this.$examples = Lisp.NIL;
-            this.$entry_format = Lisp.NIL;
-            this.$follow_ups = Lisp.NIL;
-            this.$gloss = Lisp.NIL;
-            this.$refspec = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$topic = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$id = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$formula = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$query_specification = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$elmt = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$focal_term = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$argpos_details = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$argpos_ordering = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$examples = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$entry_format = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$follow_ups = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$gloss = Lisp.NIL;
+            formula_templates.$formula_template_native.this.$refspec = Lisp.NIL;
         }
 
         @Override
@@ -8835,136 +15131,136 @@ public final class formula_templates extends SubLTranslatedFile {
 
         @Override
         public SubLObject getField2() {
-            return this.$topic;
+            return formula_templates.$formula_template_native.this.$topic;
         }
 
         @Override
         public SubLObject getField3() {
-            return this.$id;
+            return formula_templates.$formula_template_native.this.$id;
         }
 
         @Override
         public SubLObject getField4() {
-            return this.$formula;
+            return formula_templates.$formula_template_native.this.$formula;
         }
 
         @Override
         public SubLObject getField5() {
-            return this.$query_specification;
+            return formula_templates.$formula_template_native.this.$query_specification;
         }
 
         @Override
         public SubLObject getField6() {
-            return this.$elmt;
+            return formula_templates.$formula_template_native.this.$elmt;
         }
 
         @Override
         public SubLObject getField7() {
-            return this.$focal_term;
+            return formula_templates.$formula_template_native.this.$focal_term;
         }
 
         @Override
         public SubLObject getField8() {
-            return this.$argpos_details;
+            return formula_templates.$formula_template_native.this.$argpos_details;
         }
 
         @Override
         public SubLObject getField9() {
-            return this.$argpos_ordering;
+            return formula_templates.$formula_template_native.this.$argpos_ordering;
         }
 
         @Override
         public SubLObject getField10() {
-            return this.$examples;
+            return formula_templates.$formula_template_native.this.$examples;
         }
 
         @Override
         public SubLObject getField11() {
-            return this.$entry_format;
+            return formula_templates.$formula_template_native.this.$entry_format;
         }
 
         @Override
         public SubLObject getField12() {
-            return this.$follow_ups;
+            return formula_templates.$formula_template_native.this.$follow_ups;
         }
 
         @Override
         public SubLObject getField13() {
-            return this.$gloss;
+            return formula_templates.$formula_template_native.this.$gloss;
         }
 
         @Override
         public SubLObject getField14() {
-            return this.$refspec;
+            return formula_templates.$formula_template_native.this.$refspec;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return this.$topic = value;
+            return formula_templates.$formula_template_native.this.$topic = value;
         }
 
         @Override
         public SubLObject setField3(final SubLObject value) {
-            return this.$id = value;
+            return formula_templates.$formula_template_native.this.$id = value;
         }
 
         @Override
         public SubLObject setField4(final SubLObject value) {
-            return this.$formula = value;
+            return formula_templates.$formula_template_native.this.$formula = value;
         }
 
         @Override
         public SubLObject setField5(final SubLObject value) {
-            return this.$query_specification = value;
+            return formula_templates.$formula_template_native.this.$query_specification = value;
         }
 
         @Override
         public SubLObject setField6(final SubLObject value) {
-            return this.$elmt = value;
+            return formula_templates.$formula_template_native.this.$elmt = value;
         }
 
         @Override
         public SubLObject setField7(final SubLObject value) {
-            return this.$focal_term = value;
+            return formula_templates.$formula_template_native.this.$focal_term = value;
         }
 
         @Override
         public SubLObject setField8(final SubLObject value) {
-            return this.$argpos_details = value;
+            return formula_templates.$formula_template_native.this.$argpos_details = value;
         }
 
         @Override
         public SubLObject setField9(final SubLObject value) {
-            return this.$argpos_ordering = value;
+            return formula_templates.$formula_template_native.this.$argpos_ordering = value;
         }
 
         @Override
         public SubLObject setField10(final SubLObject value) {
-            return this.$examples = value;
+            return formula_templates.$formula_template_native.this.$examples = value;
         }
 
         @Override
         public SubLObject setField11(final SubLObject value) {
-            return this.$entry_format = value;
+            return formula_templates.$formula_template_native.this.$entry_format = value;
         }
 
         @Override
         public SubLObject setField12(final SubLObject value) {
-            return this.$follow_ups = value;
+            return formula_templates.$formula_template_native.this.$follow_ups = value;
         }
 
         @Override
         public SubLObject setField13(final SubLObject value) {
-            return this.$gloss = value;
+            return formula_templates.$formula_template_native.this.$gloss = value;
         }
 
         @Override
         public SubLObject setField14(final SubLObject value) {
-            return this.$refspec = value;
+            return formula_templates.$formula_template_native.this.$refspec = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(formula_templates.$formula_template_native.class, FORMULA_TEMPLATE, FORMULA_TEMPLATE_P, $list97, $list98, new String[]{ "$topic", "$id", "$formula", "$query_specification", "$elmt", "$focal_term", "$argpos_details", "$argpos_ordering", "$examples", "$entry_format", "$follow_ups", "$gloss", "$refspec" }, $list99, $list100, PRINT_FORMULA_TEMPLATE);
+            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.formula_templates.$formula_template_native.class, FORMULA_TEMPLATE, FORMULA_TEMPLATE_P, $list97, $list98, new String[]{ "$topic", "$id", "$formula", "$query_specification", "$elmt", "$focal_term", "$argpos_details", "$argpos_ordering", "$examples", "$entry_format", "$follow_ups", "$gloss", "$refspec" }, $list99, $list100, PRINT_FORMULA_TEMPLATE);
         }
     }
 

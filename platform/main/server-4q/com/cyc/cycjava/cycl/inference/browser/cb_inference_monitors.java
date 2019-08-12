@@ -1,66 +1,12 @@
 package com.cyc.cycjava.cycl.inference.browser;
 
 
-import com.cyc.cycjava.cycl.cb_tools;
-import com.cyc.cycjava.cycl.cyc_file_dependencies;
-import com.cyc.cycjava.cycl.cyc_navigator_internals;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_string;
-import com.cyc.cycjava.cycl.file_utilities;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.html_macros;
-import com.cyc.cycjava.cycl.html_script_utilities;
-import com.cyc.cycjava.cycl.inference.browser.cb_inference_monitors;
-import com.cyc.cycjava.cycl.inference.harness.forward;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.pph_macros;
-import com.cyc.cycjava.cycl.pph_main;
-import com.cyc.cycjava.cycl.pph_vars;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.subl_macros;
-import com.cyc.cycjava.cycl.uncanonicalizer;
-import com.cyc.cycjava.cycl.web_services;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
 import static com.cyc.cycjava.cycl.cb_parameters.*;
 import static com.cyc.cycjava.cycl.cb_utilities.*;
 import static com.cyc.cycjava.cycl.html_utilities.*;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.inference.browser.cb_inference_monitors.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
@@ -68,7 +14,6 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
@@ -79,15 +24,32 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.forward;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
+import com.cyc.cycjava.cycl.inference.harness.inference_metrics;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class cb_inference_monitors extends SubLTranslatedFile {
+public final class cb_inference_monitors extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_inference_monitors();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_inference_monitors";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.browser.cb_inference_monitors";
 
-    public static final String myFingerPrint = "f255ee92e65aeb74cccab2deb9c5c1a2a5c1f0ac5d25bd43b2e751e5664138bf";
 
     // deflexical
     private static final SubLSymbol $cb_inference_monitor_style$ = makeSymbol("*CB-INFERENCE-MONITOR-STYLE*");
@@ -214,7 +176,7 @@ public final class cb_inference_monitors extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list47 = list(makeKeyword("INFO"), makeKeyword("WARN"));
+    private static final SubLList $list47 = list($INFO, $WARN);
 
     private static final SubLString $str48$CB_INFERENCE_MONITOR_FRAME_args__ = makeString("CB-INFERENCE-MONITOR-FRAME args: ~S");
 
@@ -1372,40 +1334,40 @@ public final class cb_inference_monitors extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_inference_monitors_file() {
-        declareFunction(me, "cb_monitor_inference", "CB-MONITOR-INFERENCE", 1, 0, false);
-        declareFunction(me, "cb_monitor_problem_store", "CB-MONITOR-PROBLEM-STORE", 1, 0, false);
-        declareFunction(me, "cb_monitor_all_inferences", "CB-MONITOR-ALL-INFERENCES", 1, 0, false);
-        declareFunction(me, "cb_link_monitor_inference", "CB-LINK-MONITOR-INFERENCE", 1, 1, false);
-        declareFunction(me, "inference_monitorableP", "INFERENCE-MONITORABLE?", 1, 0, false);
-        declareFunction(me, "inference_monitor_head_script", "INFERENCE-MONITOR-HEAD-SCRIPT", 0, 0, false);
-        declareFunction(me, "inference_monitor_tail_script", "INFERENCE-MONITOR-TAIL-SCRIPT", 0, 0, false);
-        declareFunction(me, "inference_monitor_tree_script", "INFERENCE-MONITOR-TREE-SCRIPT", 0, 0, false);
-        declareFunction(me, "inference_monitor_user_table_script", "INFERENCE-MONITOR-USER-TABLE-SCRIPT", 0, 0, false);
-        declareFunction(me, "cb_monitor_inference_guts", "CB-MONITOR-INFERENCE-GUTS", 2, 0, false);
-        declareFunction(me, "inference_monitor_info", "INFERENCE-MONITOR-INFO", 1, 4, false);
-        declareFunction(me, "inference_monitor_warn", "INFERENCE-MONITOR-WARN", 1, 4, false);
-        declareFunction(me, "cb_inference_monitor_frame", "CB-INFERENCE-MONITOR-FRAME", 1, 0, false);
-        declareFunction(me, "html_output_inference_monitor_focal_object", "HTML-OUTPUT-INFERENCE-MONITOR-FOCAL-OBJECT", 2, 0, false);
-        declareFunction(me, "clear_inference_monitor_focal_object_html", "CLEAR-INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 0, 0, false);
-        declareFunction(me, "remove_inference_monitor_focal_object_html", "REMOVE-INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0, false);
-        declareFunction(me, "inference_monitor_focal_object_html_internal", "INFERENCE-MONITOR-FOCAL-OBJECT-HTML-INTERNAL", 2, 0, false);
-        declareFunction(me, "inference_monitor_focal_object_html", "INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0, false);
-        declareFunction(me, "html_output_inference_monitor_focal_object_internal", "HTML-OUTPUT-INFERENCE-MONITOR-FOCAL-OBJECT-INTERNAL", 2, 0, false);
-        declareFunction(me, "show_inference_monitor_focal_object_paraphrase", "SHOW-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
-        declareFunction(me, "clear_inference_monitor_focal_object_paraphrase", "CLEAR-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 0, 0, false);
-        declareFunction(me, "remove_inference_monitor_focal_object_paraphrase", "REMOVE-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
-        declareFunction(me, "inference_monitor_focal_object_paraphrase_internal", "INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE-INTERNAL", 2, 0, false);
-        declareFunction(me, "inference_monitor_focal_object_paraphrase", "INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
-        declareFunction(me, "construct_cb_monitor_refresh_template", "CONSTRUCT-CB-MONITOR-REFRESH-TEMPLATE", 2, 0, false);
-        declareFunction(me, "update_cb_monitor_latest_frame", "UPDATE-CB-MONITOR-LATEST-FRAME", 2, 0, false);
-        declareFunction(me, "cb_inference_monitor_refresh_frame", "CB-INFERENCE-MONITOR-REFRESH-FRAME", 1, 0, false);
-        declareMacro(me, "do_problem_stores_descending", "DO-PROBLEM-STORES-DESCENDING");
-        declareFunction(me, "latest_monitorable_problem_store", "LATEST-MONITORABLE-PROBLEM-STORE", 0, 0, false);
-        declareFunction(me, "problem_store_monitorableP", "PROBLEM-STORE-MONITORABLE?", 1, 0, false);
-        declareFunction(me, "latest_monitorable_inference", "LATEST-MONITORABLE-INFERENCE", 0, 0, false);
-        declareFunction(me, "write_inference_monitor_args", "WRITE-INFERENCE-MONITOR-ARGS", 2, 0, false);
-        declareFunction(me, "problem_store_tick_count_total", "PROBLEM-STORE-TICK-COUNT-TOTAL", 1, 0, false);
-        declareFunction(me, "get_inference_monitor_html", "GET-INFERENCE-MONITOR-HTML", 0, 0, false);
+        declareFunction("cb_monitor_inference", "CB-MONITOR-INFERENCE", 1, 0, false);
+        declareFunction("cb_monitor_problem_store", "CB-MONITOR-PROBLEM-STORE", 1, 0, false);
+        declareFunction("cb_monitor_all_inferences", "CB-MONITOR-ALL-INFERENCES", 1, 0, false);
+        declareFunction("cb_link_monitor_inference", "CB-LINK-MONITOR-INFERENCE", 1, 1, false);
+        declareFunction("inference_monitorableP", "INFERENCE-MONITORABLE?", 1, 0, false);
+        declareFunction("inference_monitor_head_script", "INFERENCE-MONITOR-HEAD-SCRIPT", 0, 0, false);
+        declareFunction("inference_monitor_tail_script", "INFERENCE-MONITOR-TAIL-SCRIPT", 0, 0, false);
+        declareFunction("inference_monitor_tree_script", "INFERENCE-MONITOR-TREE-SCRIPT", 0, 0, false);
+        declareFunction("inference_monitor_user_table_script", "INFERENCE-MONITOR-USER-TABLE-SCRIPT", 0, 0, false);
+        declareFunction("cb_monitor_inference_guts", "CB-MONITOR-INFERENCE-GUTS", 2, 0, false);
+        declareFunction("inference_monitor_info", "INFERENCE-MONITOR-INFO", 1, 4, false);
+        declareFunction("inference_monitor_warn", "INFERENCE-MONITOR-WARN", 1, 4, false);
+        declareFunction("cb_inference_monitor_frame", "CB-INFERENCE-MONITOR-FRAME", 1, 0, false);
+        declareFunction("html_output_inference_monitor_focal_object", "HTML-OUTPUT-INFERENCE-MONITOR-FOCAL-OBJECT", 2, 0, false);
+        declareFunction("clear_inference_monitor_focal_object_html", "CLEAR-INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 0, 0, false);
+        declareFunction("remove_inference_monitor_focal_object_html", "REMOVE-INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0, false);
+        declareFunction("inference_monitor_focal_object_html_internal", "INFERENCE-MONITOR-FOCAL-OBJECT-HTML-INTERNAL", 2, 0, false);
+        declareFunction("inference_monitor_focal_object_html", "INFERENCE-MONITOR-FOCAL-OBJECT-HTML", 2, 0, false);
+        declareFunction("html_output_inference_monitor_focal_object_internal", "HTML-OUTPUT-INFERENCE-MONITOR-FOCAL-OBJECT-INTERNAL", 2, 0, false);
+        declareFunction("show_inference_monitor_focal_object_paraphrase", "SHOW-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
+        declareFunction("clear_inference_monitor_focal_object_paraphrase", "CLEAR-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 0, 0, false);
+        declareFunction("remove_inference_monitor_focal_object_paraphrase", "REMOVE-INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
+        declareFunction("inference_monitor_focal_object_paraphrase_internal", "INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE-INTERNAL", 2, 0, false);
+        declareFunction("inference_monitor_focal_object_paraphrase", "INFERENCE-MONITOR-FOCAL-OBJECT-PARAPHRASE", 2, 0, false);
+        declareFunction("construct_cb_monitor_refresh_template", "CONSTRUCT-CB-MONITOR-REFRESH-TEMPLATE", 2, 0, false);
+        declareFunction("update_cb_monitor_latest_frame", "UPDATE-CB-MONITOR-LATEST-FRAME", 2, 0, false);
+        declareFunction("cb_inference_monitor_refresh_frame", "CB-INFERENCE-MONITOR-REFRESH-FRAME", 1, 0, false);
+        declareMacro("do_problem_stores_descending", "DO-PROBLEM-STORES-DESCENDING");
+        declareFunction("latest_monitorable_problem_store", "LATEST-MONITORABLE-PROBLEM-STORE", 0, 0, false);
+        declareFunction("problem_store_monitorableP", "PROBLEM-STORE-MONITORABLE?", 1, 0, false);
+        declareFunction("latest_monitorable_inference", "LATEST-MONITORABLE-INFERENCE", 0, 0, false);
+        declareFunction("write_inference_monitor_args", "WRITE-INFERENCE-MONITOR-ARGS", 2, 0, false);
+        declareFunction("problem_store_tick_count_total", "PROBLEM-STORE-TICK-COUNT-TOTAL", 1, 0, false);
+        declareFunction("get_inference_monitor_html", "GET-INFERENCE-MONITOR-HTML", 0, 0, false);
         return NIL;
     }
 

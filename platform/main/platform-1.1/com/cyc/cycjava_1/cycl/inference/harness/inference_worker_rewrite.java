@@ -222,8 +222,7 @@ public  final class inference_worker_rewrite extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_inference_worker_rewrite_file() {
-    // CVS_ID("Id: inference-worker-rewrite.lisp 128648 2009-08-27 17:23:55Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_rewrite_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$REWRITE_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_rewrite_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$REWRITE_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$RW_LINK_DATA_HL_MODULE, $sym9$_CSETF_RW_LINK_DATA_HL_MODULE);
     Structures.def_csetf($sym10$RW_LINK_DATA_BINDINGS, $sym11$_CSETF_RW_LINK_DATA_BINDINGS);
     Structures.def_csetf($sym12$RW_LINK_DATA_SUPPORTS, $sym13$_CSETF_RW_LINK_DATA_SUPPORTS);

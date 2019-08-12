@@ -411,8 +411,7 @@ public  final class genl_mts extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_genl_mts_file() {
-    // CVS_ID("Id: genl-mts.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym6$ANY_GENL_MT_, $list7, $str8$_any_genl_mt__spec_genls__is_t_if, $list9, $list10);
+        utilities_macros.register_cyc_api_function($sym6$ANY_GENL_MT_, $list7, $str8$_any_genl_mt__spec_genls__is_t_if, $list9, $list10);
     memoization_state.note_globally_cached_function($sym11$ALL_BASE_MTS);
     memoization_state.note_memoized_function($sym19$MAX_FLOOR_MONAD_MTS);
     memoization_state.note_globally_cached_function($sym22$CACHED_MAX_FLOOR_MTS_FROM_MT_SETS);

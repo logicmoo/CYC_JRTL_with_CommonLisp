@@ -1586,8 +1586,7 @@ public  final class kb_hl_supports extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_hl_supports_file() {
-    // CVS_ID("Id: kb-hl-supports.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym8$DO_KB_HL_SUPPORT_DEPENDENTS_HELPER, $sym9$DO_KB_HL_SUPPORT_DEPENDENTS);
+        access_macros.register_macro_helper($sym8$DO_KB_HL_SUPPORT_DEPENDENTS_HELPER, $sym9$DO_KB_HL_SUPPORT_DEPENDENTS);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_kb_hl_support$.getGlobalValue(), Symbols.symbol_function($sym19$KB_HL_SUPPORT_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym20$KB_HLS_ID, $sym21$_CSETF_KB_HLS_ID);
     Equality.identity($sym12$KB_HL_SUPPORT);

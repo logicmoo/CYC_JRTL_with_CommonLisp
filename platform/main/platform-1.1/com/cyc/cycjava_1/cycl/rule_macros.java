@@ -127,8 +127,7 @@ public  final class rule_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_rule_macros_file() {
-    // CVS_ID("Id: rule-macros.lisp 128423 2009-07-28 19:02:50Z goolsbey ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

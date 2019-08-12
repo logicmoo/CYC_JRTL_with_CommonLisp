@@ -31,7 +31,7 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class environment extends SubLTranslatedFile {
     public static SubLObject declare_environment_file() {
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.environment", "my_getf", "MY-GETF", 2, 1, false);
+        declareFunction("my_getf", "MY-GETF", 2, 1, false);
         return SubLNil.NIL;
     }
 

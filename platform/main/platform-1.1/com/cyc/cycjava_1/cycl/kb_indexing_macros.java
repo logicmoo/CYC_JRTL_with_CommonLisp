@@ -146,8 +146,7 @@ public  final class kb_indexing_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_indexing_macros_file() {
-    // CVS_ID("Id: kb-indexing-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym15$SET_RELEVANT_SIMPLE_INDEX_COUNT, $sym16$SET_RELEVANT_NUM_ARBITRARY_INDEX);
+        access_macros.register_macro_helper($sym15$SET_RELEVANT_SIMPLE_INDEX_COUNT, $sym16$SET_RELEVANT_NUM_ARBITRARY_INDEX);
     access_macros.register_macro_helper($sym20$SET_RELEVANT_COMPLEX_INDEX_COUNT, $sym16$SET_RELEVANT_NUM_ARBITRARY_INDEX);
     access_macros.register_macro_helper($sym43$SET_RELEVANT_SIMPLE_INDEX_COUNT_WITH_CUTOFF, $sym16$SET_RELEVANT_NUM_ARBITRARY_INDEX);
     access_macros.register_macro_helper($sym47$SET_RELEVANT_COMPLEX_INDEX_COUNT_WITH_CUTOFF, $sym16$SET_RELEVANT_NUM_ARBITRARY_INDEX);

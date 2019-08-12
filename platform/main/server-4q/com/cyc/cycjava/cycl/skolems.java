@@ -1,55 +1,13 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.inference.harness.hl_prototypes;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava.cycl.skolems;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.skolems.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
@@ -59,7 +17,6 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
@@ -70,144 +27,616 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.inference.harness.hl_prototypes;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class skolems extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      SKOLEMS
+ * source file: /cyc/top/cycl/skolems.lisp
+ * created:     2019/07/03 17:37:32
+ */
+public final class skolems extends SubLTranslatedFile implements V12 {
+    public static final SubLObject skolems_vars_ordered() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = defn;
+                                                    SubLObject current = datum;
+                                                    SubLObject constant = NIL;
+                                                    SubLObject data = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt89);
+                                                    constant = current.first();
+                                                    current = current.rest();
+                                                    data = current;
+                                                    if (NIL != forts.fort_p(constant)) {
+                                                        {
+                                                            SubLObject vars = com.cyc.cycjava.cycl.skolems.skolem_defn_vars(constant);
+                                                            if ((NIL != vars) && vars.equal(clausifier.sort_vars(vars))) {
+                                                                result = cons(constant, result);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    public static final SubLObject skolems_vars_misordered() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = defn;
+                                                    SubLObject current = datum;
+                                                    SubLObject constant = NIL;
+                                                    SubLObject data = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt89);
+                                                    constant = current.first();
+                                                    current = current.rest();
+                                                    data = current;
+                                                    if (NIL != forts.fort_p(constant)) {
+                                                        {
+                                                            SubLObject vars = com.cyc.cycjava.cycl.skolems.skolem_defn_vars(constant);
+                                                            if (!vars.equal(clausifier.sort_vars(vars))) {
+                                                                result = cons(constant, result);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    public static final SubLObject skolems_defn_not_wff_via(SubLObject malady) {
+        if (malady == UNPROVIDED) {
+            malady = $SKOLEM_DEFN_OBSOLETE_NUMBER;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject table_var = czer_vars.$skolem_axiom_table$.getGlobalValue();
+                $progress_note$.setDynamicValue($str_alt86$mapping__skolem_axiom_table_, thread);
+                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
+                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(table_var);
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                if (NIL == com.cyc.cycjava.cycl.skolems.skolem_defn_wffP(defn)) {
+                                                    if (NIL != assoc(malady, com.cyc.cycjava.cycl.skolems.why_skolem_defn_not_wff(defn), UNPROVIDED, UNPROVIDED)) {
+                                                        result = cons(com.cyc.cycjava.cycl.skolems.skolem_of_defn(defn), result);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(result);
+            }
+        }
+    }
+
+    public static final SubLObject skolem_defns_not_wff_via(SubLObject malady) {
+        if (malady == UNPROVIDED) {
+            malady = $SKOLEM_DEFN_OBSOLETE_NUMBER;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject table_var = czer_vars.$skolem_axiom_table$.getGlobalValue();
+                $progress_note$.setDynamicValue($str_alt86$mapping__skolem_axiom_table_, thread);
+                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
+                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(table_var);
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                if (NIL == com.cyc.cycjava.cycl.skolems.skolem_defn_wffP(defn)) {
+                                                    if (NIL != assoc(malady, com.cyc.cycjava.cycl.skolems.why_skolem_defn_not_wff(defn), UNPROVIDED, UNPROVIDED)) {
+                                                    }
+                                                    result = cons(defn, result);
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(result);
+            }
+        }
+    }
+
+    public static final SubLObject skolem_defns_not_wff() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject table_var = czer_vars.$skolem_axiom_table$.getGlobalValue();
+                $progress_note$.setDynamicValue($str_alt86$mapping__skolem_axiom_table_, thread);
+                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
+                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(table_var);
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                if (NIL == com.cyc.cycjava.cycl.skolems.skolem_defn_wffP(defn)) {
+                                                    result = cons(defn, result);
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(result);
+            }
+        }
+    }
+
+    public static final SubLObject skolem_defn_vars(SubLObject skolem) {
+        {
+            SubLObject unreified_skolem_term = com.cyc.cycjava.cycl.skolems.unreified_sk_term(skolem);
+            if (NIL != com.cyc.cycjava.cycl.skolems.skolem_number(unreified_skolem_term)) {
+                return butlast(com.cyc.cycjava.cycl.skolems.skolem_defn_args(skolem), UNPROVIDED);
+            } else {
+                return com.cyc.cycjava.cycl.skolems.skolem_defn_args(skolem);
+            }
+        }
+    }
+
+    public static final SubLObject skolem_defn_maladies() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject table_var = czer_vars.$skolem_axiom_table$.getGlobalValue();
+                $progress_note$.setDynamicValue($str_alt86$mapping__skolem_axiom_table_, thread);
+                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
+                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(table_var);
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject cdolist_list_var_13 = com.cyc.cycjava.cycl.skolems.why_skolem_defn_not_wff(defn);
+                                                    SubLObject malady = NIL;
+                                                    for (malady = cdolist_list_var_13.first(); NIL != cdolist_list_var_13; cdolist_list_var_13 = cdolist_list_var_13.rest() , malady = cdolist_list_var_13.first()) {
+                                                        {
+                                                            SubLObject mal_type = malady.first();
+                                                            SubLObject mal_type_rec = assoc(mal_type, result, UNPROVIDED, UNPROVIDED);
+                                                            if (NIL != mal_type_rec) {
+                                                                rplacd(mal_type_rec, add(mal_type_rec.rest(), ONE_INTEGER));
+                                                            } else {
+                                                                result = cons(cons(mal_type, ONE_INTEGER), result);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return Sort.sort(result, symbol_function($sym87$_), symbol_function(CDR));
+            }
+        }
+    }
+
+    public static final SubLObject oldest_newest_forts(SubLObject v_forts) {
+        {
+            SubLObject oldest = NIL;
+            SubLObject newest = NIL;
+            SubLObject old = NIL;
+            SubLObject v_new = NIL;
+            SubLObject cdolist_list_var = v_forts;
+            SubLObject fort = NIL;
+            for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                {
+                    SubLObject time = bookkeeping_store.creation_time(fort, UNPROVIDED);
+                    if (time.isInteger()) {
+                        if ((NIL == oldest) || oldest.numG(time)) {
+                            oldest = time;
+                            old = fort;
+                        }
+                        if ((NIL == newest) || newest.numL(time)) {
+                            newest = time;
+                            v_new = fort;
+                        }
+                    }
+                }
+            }
+            return list(oldest, old, newest, v_new);
+        }
+    }
+
+    // Internal Constant Initializer Methods
+    @LispMethod(comment = "Internal Constant Initializer Methods")
+    private static final SubLObject _constant_109_initializer() {
+        return list(new SubLObject[]{ reader_make_constant_shell("SKF-16971619"), reader_make_constant_shell("SKF-9662286"), reader_make_constant_shell("SKF-45878693"), reader_make_constant_shell("SKF-27834981"), reader_make_constant_shell("SKF-12369461"), reader_make_constant_shell("SKF-10688698"), reader_make_constant_shell("SKF-45547787"), reader_make_constant_shell("SKF-31789746"), reader_make_constant_shell("SKF-26692934"), reader_make_constant_shell("SKF-48466118"), reader_make_constant_shell("SKF-60531811"), reader_make_constant_shell("SKF-29624762"), reader_make_constant_shell("SKF-22643466"), reader_make_constant_shell("SKF-29472649"), reader_make_constant_shell("SKF-6535610808"), reader_make_constant_shell("SKF-6391880459"), reader_make_constant_shell("SKF-6069753105"), reader_make_constant_shell("SKF-1836062444"), reader_make_constant_shell("SKF-1140288587"), reader_make_constant_shell("SKF-0975510193"), reader_make_constant_shell("SKF-0417114039"), reader_make_constant_shell("SKF-2399775374"), reader_make_constant_shell("SKF-9741300383"), reader_make_constant_shell("SKF-0828551493"), reader_make_constant_shell("SKF-2588418129"), reader_make_constant_shell("SKF-1857929740"), reader_make_constant_shell("SKF-9771221235"), reader_make_constant_shell("SKF-5248881133"), reader_make_constant_shell("SKF-30037247"), reader_make_constant_shell("SKF-60060919"), reader_make_constant_shell("SKF-10786079"), reader_make_constant_shell("SKF-14077376"), reader_make_constant_shell("SKF-55914574"), reader_make_constant_shell("SKF-16648407"), reader_make_constant_shell("SKF-44601733"), reader_make_constant_shell("SKF-7913899905"), reader_make_constant_shell("SKF-4396958760"), reader_make_constant_shell("SKF-8020199718"), reader_make_constant_shell("SKF-20333"), reader_make_constant_shell("SKF-3701677947"), reader_make_constant_shell("SKF-2758282998"), reader_make_constant_shell("SKF-32592026"), reader_make_constant_shell("SKF-15476867"), reader_make_constant_shell("SKF-11623545"), reader_make_constant_shell("SKF-39071040"), reader_make_constant_shell("SKF-22133371"), reader_make_constant_shell("SKF-49114437"), reader_make_constant_shell("SKF-6397777"), reader_make_constant_shell("SKF-27545347"), reader_make_constant_shell("SKF-44682034"), reader_make_constant_shell("SKF-55141454"), reader_make_constant_shell("SKF-29896988"), reader_make_constant_shell("SKF-42443574"), reader_make_constant_shell("SKF-13447977"), reader_make_constant_shell("SKF-30519480"), reader_make_constant_shell("SKF-62227276"), reader_make_constant_shell("SKF-17408839"), reader_make_constant_shell("SKF-58430677"), reader_make_constant_shell("SKF-59662976"), reader_make_constant_shell("SKF-12620975"), reader_make_constant_shell("SKF-9433064"), reader_make_constant_shell("SKF-9205245"), reader_make_constant_shell("SKF-DepictedGroupMember"), reader_make_constant_shell("SKF-19625320"), reader_make_constant_shell("SKF-3784346661"), reader_make_constant_shell("SKF-6544284149"), reader_make_constant_shell("SKF-0614825063"), reader_make_constant_shell("SKF-0016213450"), reader_make_constant_shell("SKF-22649603"), reader_make_constant_shell("SKF-4118636"), reader_make_constant_shell("SKF-19878232"), reader_make_constant_shell("SKF-15013378"), reader_make_constant_shell("SKF-65815517"), reader_make_constant_shell("SKF-56452378"), reader_make_constant_shell("SKF-49139121"), reader_make_constant_shell("SKF-12749049"), reader_make_constant_shell("SKF-2910558946"), reader_make_constant_shell("SKF-2910558946"), reader_make_constant_shell("SKF-8609688279"), reader_make_constant_shell("SKF-3254220233"), reader_make_constant_shell("SKF-4116454483"), reader_make_constant_shell("SKF-9882206036"), reader_make_constant_shell("SKF-7876960574"), reader_make_constant_shell("SKF-7849157406"), reader_make_constant_shell("SKF-0013694801"), reader_make_constant_shell("SKF-3786700124"), reader_make_constant_shell("SKF-1714230847"), reader_make_constant_shell("SKF-7566265665"), reader_make_constant_shell("SKF-8055872557"), reader_make_constant_shell("SKF-6624619390"), reader_make_constant_shell("SKF-4749393956"), reader_make_constant_shell("SKF-9902000475"), reader_make_constant_shell("SKF-2176445673"), reader_make_constant_shell("SKF-9582976901"), reader_make_constant_shell("SKF-62641426"), reader_make_constant_shell("SKF-37581079"), reader_make_constant_shell("SKF-9780389"), reader_make_constant_shell("SKF-51938893"), reader_make_constant_shell("SKF-33012437"), reader_make_constant_shell("SKF-9412760"), reader_make_constant_shell("SKF-22314298"), reader_make_constant_shell("SKF-52903378"), reader_make_constant_shell("SKF-59517423"), reader_make_constant_shell("SKF-24705784"), reader_make_constant_shell("SKF-22566254"), reader_make_constant_shell("SKF-35236481"), reader_make_constant_shell("SKF-26725746"), reader_make_constant_shell("SKF-55356852"), reader_make_constant_shell("SKF-3634339"), reader_make_constant_shell("SKF-65815517"), reader_make_constant_shell("SKF-56452378"), reader_make_constant_shell("SKF-49139121"), reader_make_constant_shell("SKF-12749049"), reader_make_constant_shell("SKF-4408119749"), reader_make_constant_shell("SKF-3789312666"), reader_make_constant_shell("SKF-0283155048"), reader_make_constant_shell("SKF-9294061441"), reader_make_constant_shell("SKF-4876245588"), reader_make_constant_shell("SKF-2809645919"), reader_make_constant_shell("SKF-1124554131"), reader_make_constant_shell("SKF-0220610914"), reader_make_constant_shell("SKF-4790221775"), reader_make_constant_shell("SKF-1168015263"), reader_make_constant_shell("SKF-4318796173"), reader_make_constant_shell("SKF-1828131226"), reader_make_constant_shell("SKF-2199671088"), reader_make_constant_shell("SKF-9895165404"), reader_make_constant_shell("SKF-6604522774"), reader_make_constant_shell("SKF-6086634185"), reader_make_constant_shell("SKF-0428133650"), reader_make_constant_shell("SKF-7899934995"), reader_make_constant_shell("SKF-0860923384"), reader_make_constant_shell("SKF-4146570201"), reader_make_constant_shell("SKF-0406242321"), reader_make_constant_shell("SKF-4468030352"), reader_make_constant_shell("SKF-8519691249"), reader_make_constant_shell("SKF-6471415053"), reader_make_constant_shell("SKF-6816884555"), reader_make_constant_shell("SKF-2207590761"), reader_make_constant_shell("SKF-4785728462"), reader_make_constant_shell("SKF-6959780810"), reader_make_constant_shell("SKF-2698165023"), reader_make_constant_shell("SKF-1592332182"), reader_make_constant_shell("SKF-9127604959"), reader_make_constant_shell("SKF-3352641286"), reader_make_constant_shell("SKF-9726105841"), reader_make_constant_shell("SKF-0624682876"), reader_make_constant_shell("SKF-9673514545"), reader_make_constant_shell("SKF-1902545429"), reader_make_constant_shell("SKF-6876074534"), reader_make_constant_shell("SKF-8288491486"), reader_make_constant_shell("SKF-4637358284"), reader_make_constant_shell("SKF-0635199939"), reader_make_constant_shell("SKF-4292973565"), reader_make_constant_shell("SKF-7798353664"), reader_make_constant_shell("SKF-34523039"), reader_make_constant_shell("SKF-33538847"), reader_make_constant_shell("SKF-58036047"), reader_make_constant_shell("SKF-9708075"), reader_make_constant_shell("SKF-13094314"), reader_make_constant_shell("SKF-27004431"), reader_make_constant_shell("SKF-47290403"), reader_make_constant_shell("SKF-49713991"), reader_make_constant_shell("SKF-40178904"), reader_make_constant_shell("SKF-62659908"), reader_make_constant_shell("SKF-61484227"), reader_make_constant_shell("SKF-35458681"), reader_make_constant_shell("SKF-17599345"), reader_make_constant_shell("SKF-53668837"), reader_make_constant_shell("SKF-24102297"), reader_make_constant_shell("SKF-32709431"), reader_make_constant_shell("SKF-51752162"), reader_make_constant_shell("SKF-35359227"), reader_make_constant_shell("SKF-20847759"), reader_make_constant_shell("SKF-51781280"), reader_make_constant_shell("SKF-51473172"), reader_make_constant_shell("SKF-36777684"), reader_make_constant_shell("SKF-27183984"), reader_make_constant_shell("SKF-24538299"), reader_make_constant_shell("SKF-51270566"), reader_make_constant_shell("SKF-6498804"), reader_make_constant_shell("SKF-52375281"), reader_make_constant_shell("SKF-59156909"), reader_make_constant_shell("SKF-59507392"), reader_make_constant_shell("SKF-21555986"), reader_make_constant_shell("SKF-0925186357"), reader_make_constant_shell("SKF-6223276020"), reader_make_constant_shell("SKF-5400448981"), reader_make_constant_shell("SKF-0033649819"), reader_make_constant_shell("SKF-8779626658"), reader_make_constant_shell("SKF-2650598318"), reader_make_constant_shell("SKF-1317366451"), reader_make_constant_shell("SKF-5713244721"), reader_make_constant_shell("SKF-5494021688"), reader_make_constant_shell("SKF-50021281"), reader_make_constant_shell("SKF-52700384"), reader_make_constant_shell("SKF-27017330"), reader_make_constant_shell("SKF-6926447"), reader_make_constant_shell("SKF-57742011"), reader_make_constant_shell("SKF-32797409"), reader_make_constant_shell("SKF-36775099"), reader_make_constant_shell("SKF-8803460"), reader_make_constant_shell("SKF-11685259"), reader_make_constant_shell("SKF-49596986"), reader_make_constant_shell("SKF-1515868"), reader_make_constant_shell("SKF-12425256"), reader_make_constant_shell("SKF-26526786"), reader_make_constant_shell("SKF-757265"), reader_make_constant_shell("SKF-66361621"), reader_make_constant_shell("SKF-50135687"), reader_make_constant_shell("SKF-28256974"), reader_make_constant_shell("SKF-52059331"), reader_make_constant_shell("SKF-60879947"), reader_make_constant_shell("SKF-10095100"), reader_make_constant_shell("SKF-20576203"), reader_make_constant_shell("SKF-49828332"), reader_make_constant_shell("SKF-44916076"), reader_make_constant_shell("SKF-63714570"), reader_make_constant_shell("SKF-3886762"), reader_make_constant_shell("SKF-14991605"), reader_make_constant_shell("SKF-35022890"), reader_make_constant_shell("SKF-9692584"), reader_make_constant_shell("SKF-56789029"), reader_make_constant_shell("SKF-63331999"), reader_make_constant_shell("SKF-60839916"), reader_make_constant_shell("SKF-11805601"), reader_make_constant_shell("MarriedCoupleFn"), reader_make_constant_shell("SKF-54717125"), reader_make_constant_shell("SKF-47103024"), reader_make_constant_shell("SKF-32504795"), reader_make_constant_shell("SKF-50991035"), reader_make_constant_shell("SKF-54893967"), reader_make_constant_shell("SKF-4588740"), reader_make_constant_shell("SKF-34044423"), reader_make_constant_shell("SKF-23158350"), reader_make_constant_shell("SKF-26216492"), reader_make_constant_shell("SKF-23792367"), reader_make_constant_shell("SKF-26655735"), reader_make_constant_shell("SKF-36384184"), reader_make_constant_shell("SKF-28223401"), reader_make_constant_shell("SKF-30705866"), reader_make_constant_shell("SKF-31089449"), reader_make_constant_shell("SKF-43795517"), reader_make_constant_shell("SKF-54692934"), reader_make_constant_shell("SKF-62874373"), reader_make_constant_shell("SKF-13198899"), reader_make_constant_shell("SKF-6598020"), reader_make_constant_shell("SKF-66712623"), reader_make_constant_shell("SKF-61590093"), reader_make_constant_shell("SKF-4298210"), reader_make_constant_shell("SKF-13358052"), reader_make_constant_shell("SKF-1077450"), reader_make_constant_shell("SKF-27216176"), reader_make_constant_shell("SKF-28083191"), reader_make_constant_shell("SKF-539243"), reader_make_constant_shell("SKF-14104209"), reader_make_constant_shell("SKF-6066610"), reader_make_constant_shell("SKF-14779626"), reader_make_constant_shell("SKF-1007216"), reader_make_constant_shell("SKF-49463821"), reader_make_constant_shell("SKF-764714"), reader_make_constant_shell("SKF-59277817"), reader_make_constant_shell("SKF-24473185"), reader_make_constant_shell("SKF-22799176"), reader_make_constant_shell("SKF-13378825"), reader_make_constant_shell("SKF-8692086"), reader_make_constant_shell("SKF-59150515"), reader_make_constant_shell("SKF-6649426"), reader_make_constant_shell("SKF-18423567"), reader_make_constant_shell("SKF-61014428"), reader_make_constant_shell("SKF-612301"), reader_make_constant_shell("SKF-390407"), reader_make_constant_shell("SKF-469762"), reader_make_constant_shell("SKF-57350382"), reader_make_constant_shell("SKF-550621"), reader_make_constant_shell("SKF-41449368"), reader_make_constant_shell("SKF-20918103"), reader_make_constant_shell("SKF-447007"), reader_make_constant_shell("SKF-1383963"), reader_make_constant_shell("SKF-348190"), reader_make_constant_shell("SKF-693803"), reader_make_constant_shell("SKF-133452"), reader_make_constant_shell("SKF-2813385"), reader_make_constant_shell("SKF-31097107"), reader_make_constant_shell("SKF-57888"), reader_make_constant_shell("SKF-10895131"), reader_make_constant_shell("SKF-13225721"), reader_make_constant_shell("SKF-43450038"), reader_make_constant_shell("SKF-21119958"), reader_make_constant_shell("SKF-47744038"), reader_make_constant_shell("SKF-466900"), reader_make_constant_shell("SKF-46555292"), reader_make_constant_shell("SKF-23253528"), reader_make_constant_shell("SKF-924570"), reader_make_constant_shell("SKF-BandMemPlaying"), reader_make_constant_shell("SKF-48376054"), reader_make_constant_shell("SKF-121716"), reader_make_constant_shell("SKF-7364934"), reader_make_constant_shell("SKF-14760742"), reader_make_constant_shell("SKF-17172575"), reader_make_constant_shell("SKF-23584353"), reader_make_constant_shell("SKF-53200158"), reader_make_constant_shell("SKF-48653451"), reader_make_constant_shell("SKF-55897365"), reader_make_constant_shell("SKF-52891476"), reader_make_constant_shell("SKF-33105457"), reader_make_constant_shell("SKF-10518089"), reader_make_constant_shell("SKF-33158362"), reader_make_constant_shell("SKF-66304485"), reader_make_constant_shell("SKF-810295"), reader_make_constant_shell("SKF-968219"), reader_make_constant_shell("SKF-9855449"), reader_make_constant_shell("SKF-51029398"), reader_make_constant_shell("SKF-9874778"), reader_make_constant_shell("SKF-14008069"), reader_make_constant_shell("SKF-197207"), reader_make_constant_shell("SKF-9176578"), reader_make_constant_shell("SKF-62825"), reader_make_constant_shell("SKF-476059"), reader_make_constant_shell("SKF-366078"), reader_make_constant_shell("SKF-17345463"), reader_make_constant_shell("SKF-51339287"), reader_make_constant_shell("SKF-1046930"), reader_make_constant_shell("SKF-828757"), reader_make_constant_shell("SKF-51633710"), reader_make_constant_shell("SKF-19769806"), reader_make_constant_shell("SKF-46906520"), reader_make_constant_shell("SKF-20309046"), reader_make_constant_shell("SKF-7477821"), reader_make_constant_shell("SKF-21294579"), reader_make_constant_shell("SKF-17746"), reader_make_constant_shell("SKF-42407080"), reader_make_constant_shell("SKF-32539269"), reader_make_constant_shell("SKF-17651656"), reader_make_constant_shell("SKF-49636199"), reader_make_constant_shell("SKF-63665039"), reader_make_constant_shell("SKF-923916"), reader_make_constant_shell("SKF-41511095"), reader_make_constant_shell("SKF-402998"), reader_make_constant_shell("SKF-1827166"), reader_make_constant_shell("SKF-25558723"), reader_make_constant_shell("SKF-92235"), reader_make_constant_shell("SKF-24405989"), reader_make_constant_shell("SKF-37741853"), reader_make_constant_shell("SKF-681210"), reader_make_constant_shell("SKF-16612795"), reader_make_constant_shell("SKF-55392675"), reader_make_constant_shell("SKF-41395088"), reader_make_constant_shell("SKF-427687"), reader_make_constant_shell("SKF-46187940"), reader_make_constant_shell("SKF-18860364"), reader_make_constant_shell("SKF-846216"), reader_make_constant_shell("SKF-5393361"), reader_make_constant_shell("SKF-12316220"), reader_make_constant_shell("SKF-54217404"), reader_make_constant_shell("SKF-5169399"), reader_make_constant_shell("SKF-920133"), reader_make_constant_shell("SKF-3247485"), reader_make_constant_shell("SKF-2269494"), reader_make_constant_shell("SKF-13038949"), reader_make_constant_shell("SKF-28759634"), reader_make_constant_shell("SKF-17122972"), reader_make_constant_shell("SKF-953550"), reader_make_constant_shell("SKF-906137"), reader_make_constant_shell("SKF-14962533"), reader_make_constant_shell("SKF-8254998"), reader_make_constant_shell("SKF-46599863"), reader_make_constant_shell("SKF-36778441"), reader_make_constant_shell("SKF-45777401"), reader_make_constant_shell("SKF-45356858"), reader_make_constant_shell("SKF-28542904"), reader_make_constant_shell("SKF-33462840"), reader_make_constant_shell("SKF-18834377"), reader_make_constant_shell("SKF-23165858"), reader_make_constant_shell("SKF-171447"), reader_make_constant_shell("SKF-38743072"), reader_make_constant_shell("SKF-62752838"), reader_make_constant_shell("SKF-46799967"), reader_make_constant_shell("SKF-38741805"), reader_make_constant_shell("SKF-22034341"), reader_make_constant_shell("SKF-49949893"), reader_make_constant_shell("SKF-750835"), reader_make_constant_shell("SKF-27330810"), reader_make_constant_shell("SKF-61593935"), reader_make_constant_shell("SKF-29534329"), reader_make_constant_shell("SKF-8780298"), reader_make_constant_shell("SKF-10230735"), reader_make_constant_shell("SKF-28051850"), reader_make_constant_shell("SKF-15346572"), reader_make_constant_shell("SKF-38351646"), reader_make_constant_shell("SKF-54477051"), reader_make_constant_shell("SKF-58577410"), reader_make_constant_shell("SKF-41179398"), reader_make_constant_shell("SKF-9098087"), reader_make_constant_shell("SKF-464896"), reader_make_constant_shell("SKF-13765056"), reader_make_constant_shell("SKF-54796118"), reader_make_constant_shell("SKF-892012"), reader_make_constant_shell("SKF-5733810632"), reader_make_constant_shell("SKF-9732365118"), reader_make_constant_shell("SKF-8062776921"), reader_make_constant_shell("SKF-9356282252"), reader_make_constant_shell("SKF-7770326773"), reader_make_constant_shell("SKF-9303451156"), reader_make_constant_shell("SKF-7682359700"), reader_make_constant_shell("SKF-0472592080"), reader_make_constant_shell("SKF-5868767078"), reader_make_constant_shell("SKF-6969827182"), reader_make_constant_shell("SKF-8235654414"), reader_make_constant_shell("SKF-9268693067"), reader_make_constant_shell("SKF-4188164665"), reader_make_constant_shell("SKF-3268848892"), reader_make_constant_shell("SKF-3954038304"), reader_make_constant_shell("SKF-8411301306"), reader_make_constant_shell("SKF-6870027660"), reader_make_constant_shell("SKF-2200319382"), reader_make_constant_shell("SKF-8663443543"), reader_make_constant_shell("SKF-6270260084"), reader_make_constant_shell("SKF-7428624994"), reader_make_constant_shell("SKF-6367907452"), reader_make_constant_shell("SKF-7752915649"), reader_make_constant_shell("SKF-4786775108"), reader_make_constant_shell("SKF-5640043419"), reader_make_constant_shell("SKF-6071218505"), reader_make_constant_shell("SKF-3183844767"), reader_make_constant_shell("SKF-7356970316"), reader_make_constant_shell("SKF-4272845489"), reader_make_constant_shell("SKF-5224425512"), reader_make_constant_shell("SKF-3795912959"), reader_make_constant_shell("SKF-7714022869"), reader_make_constant_shell("SKF-8565886278"), reader_make_constant_shell("SKF-0519624184"), reader_make_constant_shell("SKF-4286299680"), reader_make_constant_shell("SKF-3516286017"), reader_make_constant_shell("SKF-8782865500"), reader_make_constant_shell("SKF-4515155650"), reader_make_constant_shell("SKF-5391096127"), reader_make_constant_shell("SKF-8826617065"), reader_make_constant_shell("SKF-6950497514"), reader_make_constant_shell("SKF-4751258604"), reader_make_constant_shell("SKF-3616130689"), reader_make_constant_shell("SKF-7131788917"), reader_make_constant_shell("SKF-4848573733"), reader_make_constant_shell("SKF-2401054776"), reader_make_constant_shell("SKF-0985467323") });
+    }
+
+    static private final SubLString $str_alt135$ = makeString("");
+
     public static final SubLFile me = new skolems();
 
-    public static final String myName = "com.cyc.cycjava.cycl.skolems";
+ public static final String myName = "com.cyc.cycjava.cycl.skolems";
 
-    public static final String myFingerPrint = "2a6baf66be2821603583f01291d4d7a4df28438c4c2482b0d8630acfe0079b85";
 
     // defparameter
     // variable mapping for current skolem defn
+    /**
+     * variable mapping for current skolem defn
+     */
+    @LispMethod(comment = "variable mapping for current skolem defn\ndefparameter")
     private static final SubLSymbol $skolem_arg_sort$ = makeSymbol("*SKOLEM-ARG-SORT*");
-
-
 
     // defparameter
     // Bound while recomputing skolem defns
+    /**
+     * Bound while recomputing skolem defns
+     */
+    @LispMethod(comment = "Bound while recomputing skolem defns\ndefparameter")
     private static final SubLSymbol $recompute_skolem_defn_info$ = makeSymbol("*RECOMPUTE-SKOLEM-DEFN-INFO*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $skolems_with_known_issues$ = makeSymbol("*SKOLEMS-WITH-KNOWN-ISSUES*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $skolems_safe_to_recanonicalize_at_el$ = makeSymbol("*SKOLEMS-SAFE-TO-RECANONICALIZE-AT-EL*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $target_consequent_literal_count$ = makeSymbol("*TARGET-CONSEQUENT-LITERAL-COUNT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $skolems_known_to_be_unfindable_via_el$ = makeSymbol("*SKOLEMS-KNOWN-TO-BE-UNFINDABLE-VIA-EL*");
 
     // Internal Constants
-    public static final SubLList $list0 = list(makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("SKOLEM-TERM"));
-
-    private static final SubLObject $$termOfUnit = reader_make_constant_shell(makeString("termOfUnit"));
-
-    public static final SubLList $list2 = list(makeSymbol("NEG-LITS"), makeSymbol("POS-LITS"));
-
-    private static final SubLObject $$SkolemFunctionFn = reader_make_constant_shell(makeString("SkolemFunctionFn"));
-
-    private static final SubLObject $$SkolemFunction = reader_make_constant_shell(makeString("SkolemFunction"));
-
-    private static final SubLObject $$SkolemFuncN = reader_make_constant_shell(makeString("SkolemFuncN"));
-
-    private static final SubLObject $$SkolemFuncNFn = reader_make_constant_shell(makeString("SkolemFuncNFn"));
-
-    public static final SubLString $str7$unreified_skolem_term_references_ = makeString("unreified-skolem-term references unknown skolem type: ~s");
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("SKOLEM-TERM"));
 
 
 
-    public static final SubLSymbol $sym9$_ = makeSymbol("<");
+    static private final SubLList $list2 = list(makeSymbol("NEG-LITS"), makeSymbol("POS-LITS"));
 
 
 
-    public static final SubLString $str11$skolem_args____s_vs__s = makeString("skolem-args : ~s vs ~s");
 
-    public static final SubLSymbol CLAUSE_FREE_SEQUENCE_VARIABLES = makeSymbol("CLAUSE-FREE-SEQUENCE-VARIABLES");
 
-    public static final SubLSymbol CLAUSE_FREE_TERM_VARIABLES = makeSymbol("CLAUSE-FREE-TERM-VARIABLES");
+
+
+
+
+    static private final SubLString $str7$unreified_skolem_term_references_ = makeString("unreified-skolem-term references unknown skolem type: ~s");
+
+    static private final SubLSymbol $sym9$_ = makeSymbol("<");
+
+    static private final SubLString $str11$skolem_args____s_vs__s = makeString("skolem-args : ~s vs ~s");
+
+    private static final SubLSymbol CLAUSE_FREE_SEQUENCE_VARIABLES = makeSymbol("CLAUSE-FREE-SEQUENCE-VARIABLES");
+
+    private static final SubLSymbol CLAUSE_FREE_TERM_VARIABLES = makeSymbol("CLAUSE-FREE-TERM-VARIABLES");
 
     private static final SubLSymbol $TOO_MANY_SEQUENCE_VARS_IN_SKOLEM_SCOPE = makeKeyword("TOO-MANY-SEQUENCE-VARS-IN-SKOLEM-SCOPE");
 
-    public static final SubLSymbol $sym15$EL_VAR_ = makeSymbol("EL-VAR?");
+    static private final SubLSymbol $sym15$EL_VAR_ = makeSymbol("EL-VAR?");
 
-    public static final SubLSymbol $sym16$UNREIFIED_SKOLEM_TERM_ = makeSymbol("UNREIFIED-SKOLEM-TERM?");
+    static private final SubLSymbol $sym16$UNREIFIED_SKOLEM_TERM_ = makeSymbol("UNREIFIED-SKOLEM-TERM?");
 
-    public static final SubLSymbol SKOLEM_FUNCTION_VAR = makeSymbol("SKOLEM-FUNCTION-VAR");
+    private static final SubLSymbol SKOLEM_FUNCTION_VAR = makeSymbol("SKOLEM-FUNCTION-VAR");
 
-    public static final SubLList $list18 = list(makeSymbol("OLD-SK-CONSTANT"), makeSymbol("OLD-UNREIFIED-SK-TERM"), makeSymbol("SK-MT"), makeSymbol("OLD-DEFN"));
-
-    private static final SubLObject $$VariableAritySkolemFuncN = reader_make_constant_shell(makeString("VariableAritySkolemFuncN"));
-
-    private static final SubLObject $$FixedAritySkolemFuncN = reader_make_constant_shell(makeString("FixedAritySkolemFuncN"));
-
-    private static final SubLObject $$VariableAritySkolemFunction = reader_make_constant_shell(makeString("VariableAritySkolemFunction"));
-
-    private static final SubLObject $$FixedAritySkolemFunction = reader_make_constant_shell(makeString("FixedAritySkolemFunction"));
-
-    public static final SubLSymbol $sym23$STRING_ = makeSymbol("STRING<");
-
-    public static final SubLSymbol FORMULA_CONSTANT_STR = makeSymbol("FORMULA-CONSTANT-STR");
+    static private final SubLList $list18 = list(makeSymbol("OLD-SK-CONSTANT"), makeSymbol("OLD-UNREIFIED-SK-TERM"), makeSymbol("SK-MT"), makeSymbol("OLD-DEFN"));
 
 
 
-    public static final SubLSymbol $sym26$CYC_VAR_EXCEPT_FOR_X_0_ = makeSymbol("CYC-VAR-EXCEPT-FOR-X-0?");
+
+
+
+
+
+
+    static private final SubLSymbol $sym23$STRING_ = makeSymbol("STRING<");
+
+    private static final SubLSymbol FORMULA_CONSTANT_STR = makeSymbol("FORMULA-CONSTANT-STR");
+
+    static private final SubLSymbol $sym26$CYC_VAR_EXCEPT_FOR_X_0_ = makeSymbol("CYC-VAR-EXCEPT-FOR-X-0?");
 
     public static final SubLSymbol $formula_constant_str_caching_state$ = makeSymbol("*FORMULA-CONSTANT-STR-CACHING-STATE*");
 
+    static private final SubLSymbol $sym30$_X_0 = makeSymbol("?X-0");
 
+    static private final SubLList $list32 = list(makeSymbol("SKOLEM-TYPE"), makeSymbol("VARS"), makeSymbol("SK-VAR"), makeSymbol("SEQVAR-OR-NUMBER"), makeSymbol("&OPTIONAL"), makeSymbol("NUMBER"));
 
+    static private final SubLString $str33$Multiple_skolem_sequence_variable = makeString("Multiple skolem sequence variables: ~a ~a ~a");
 
+    static private final SubLString $str34$SkolemFuncN_appears_as_SkolemFunc = makeString("SkolemFuncN appears as SkolemFunction: ~a");
 
-    public static final SubLSymbol $sym30$_X_0 = makeSymbol("?X-0");
+    static private final SubLSymbol $sym35$_X = makeSymbol("?X");
 
-
-
-    public static final SubLList $list32 = list(makeSymbol("SKOLEM-TYPE"), makeSymbol("VARS"), makeSymbol("SK-VAR"), makeSymbol("SEQVAR-OR-NUMBER"), makeSymbol("&OPTIONAL"), makeSymbol("NUMBER"));
-
-    public static final SubLString $str33$Multiple_skolem_sequence_variable = makeString("Multiple skolem sequence variables: ~a ~a ~a");
-
-    public static final SubLString $str34$SkolemFuncN_appears_as_SkolemFunc = makeString("SkolemFuncN appears as SkolemFunction: ~a");
-
-    public static final SubLSymbol $sym35$_X = makeSymbol("?X");
-
-    public static final SubLList $list36 = list(makeSymbol("SK-CONSTANT"), makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("MT"), makeSymbol("CNFS"));
-
-
+    static private final SubLList $list36 = list(makeSymbol("SK-CONSTANT"), makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("MT"), makeSymbol("CNFS"));
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
-    public static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
+    private static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
-    private static final SubLObject $$skolem = reader_make_constant_shell(makeString("skolem"));
-
-    public static final SubLSymbol ASSERTION_IST_FORMULA = makeSymbol("ASSERTION-IST-FORMULA");
-
-    public static final SubLSymbol SKOLEM_FUNCTION_P = makeSymbol("SKOLEM-FUNCTION-P");
 
 
+    private static final SubLSymbol ASSERTION_IST_FORMULA = makeSymbol("ASSERTION-IST-FORMULA");
 
-    public static final SubLSymbol $sym46$OPAQUE_ARG_WRT_EL_TEMPLATE_ = makeSymbol("OPAQUE-ARG-WRT-EL-TEMPLATE?");
+    private static final SubLSymbol SKOLEM_FUNCTION_P = makeSymbol("SKOLEM-FUNCTION-P");
 
-    public static final SubLString $str47$_in_gaf_has_corresponding_cnf_in_ = makeString("[in gaf-has-corresponding-cnf-in-skolem-defn?] skolem ~s is not a skolem constant");
+    static private final SubLSymbol $sym46$OPAQUE_ARG_WRT_EL_TEMPLATE_ = makeSymbol("OPAQUE-ARG-WRT-EL-TEMPLATE?");
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+    static private final SubLString $str47$_in_gaf_has_corresponding_cnf_in_ = makeString("[in gaf-has-corresponding-cnf-in-skolem-defn?] skolem ~s is not a skolem constant");
+
+
 
     private static final SubLSymbol $sym49$REIFIED_SKOLEM_FN_ = makeSymbol("REIFIED-SKOLEM-FN?");
 
     private static final SubLSymbol SENTENCE_ARG0 = makeSymbol("SENTENCE-ARG0");
 
     private static final SubLSymbol DEDUCTION_ASSERTION = makeSymbol("DEDUCTION-ASSERTION");
-
-
 
     private static final SubLSymbol $sym53$REIFIED_SKOLEM_FN_IN_ANY_MT_ = makeSymbol("REIFIED-SKOLEM-FN-IN-ANY-MT?");
 
@@ -227,8 +656,6 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLString $str61$set_recomputing_skolem_defn_blist = makeString("set-recomputing-skolem-defn-blist called when not recomputing a skolem defn");
 
-
-
     private static final SubLString $str63$note_skolem_binding_called_when_n = makeString("note-skolem-binding called when not recomputing a skolem defn");
 
     private static final SubLString $str64$Total_KB_Skolems___a = makeString("Total KB Skolems: ~a");
@@ -237,13 +664,9 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
-    private static final SubLSymbol $sym67$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
+    private static final SubLSymbol $append_stack_traces_to_error_messagesP$ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
 
     private static final SubLList $list68 = list(makeSymbol("CSETQ"), makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*"), NIL);
-
-
-
-
 
     private static final SubLString $str71$_A = makeString("~A");
 
@@ -251,11 +674,11 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLString $str73$No_skolem_defn_assertions_for___S = makeString("No skolem defn assertions for: ~S");
 
-    private static final SubLObject $$IntervalMinFn = reader_make_constant_shell(makeString("IntervalMinFn"));
 
-    private static final SubLObject $$IntervalMaxFn = reader_make_constant_shell(makeString("IntervalMaxFn"));
 
-    private static final SubLObject $$ScalarInterval = reader_make_constant_shell(makeString("ScalarInterval"));
+
+
+
 
     private static final SubLSymbol $UNNAMED_SKOLEM_FN = makeKeyword("UNNAMED-SKOLEM-FN");
 
@@ -269,9 +692,9 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLString $str82$__tacit_result_genl___s____s = makeString("~%tacit result genl: ~s : ~s");
 
-    private static final SubLObject $$CycLReifiableDenotationalTerm = reader_make_constant_shell(makeString("CycLReifiableDenotationalTerm"));
 
-    public static final SubLList $list84 = list(reader_make_constant_shell(makeString("NonNegativeScalarInterval")));
+
+    static private final SubLList $list84 = list(reader_make_constant_shell("NonNegativeScalarInterval"));
 
     private static final SubLString $$$mapping_skolem_defn_table = makeString("mapping skolem defn table");
 
@@ -317,7 +740,7 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLSymbol $kw106$SKOLEM_DEFN_ARGS_SK_TYPE_NUMBER_MISMATCH = makeKeyword("SKOLEM-DEFN-ARGS-SK-TYPE/NUMBER-MISMATCH");
 
-    private static final SubLObject $$Unity = reader_make_constant_shell(makeString("Unity"));
+
 
     private static final SubLSymbol $SKOLEM_DEFN_OBSOLETE_NUMBER = makeKeyword("SKOLEM-DEFN-OBSOLETE-NUMBER");
 
@@ -325,7 +748,7 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLList $list110 = list(makeKeyword("SKOLEM-DEFN-W/O-CLAUSES"));
 
-    private static final SubLList $list111 = list(new SubLObject[]{ reader_make_constant_shell(makeString("ThePrototypicalFixedAritySkolemFunction")), reader_make_constant_shell(makeString("SKF-4855075916")), reader_make_constant_shell(makeString("SKF-9401565")), reader_make_constant_shell(makeString("SKF-30608153")), reader_make_constant_shell(makeString("SKF-358427")), reader_make_constant_shell(makeString("SKF-981029")), reader_make_constant_shell(makeString("SKF-378457")), reader_make_constant_shell(makeString("SKF-7897525238")), reader_make_constant_shell(makeString("SKF-23426283")), reader_make_constant_shell(makeString("SKF-4978723980")), reader_make_constant_shell(makeString("SKF-8095780367")), reader_make_constant_shell(makeString("SKF-2283707389")), reader_make_constant_shell(makeString("SKF-3819196850")), reader_make_constant_shell(makeString("SKF-2177078880")), reader_make_constant_shell(makeString("SKF-9178370244")), reader_make_constant_shell(makeString("SKF-2313708415")), reader_make_constant_shell(makeString("SKF-54808499")), reader_make_constant_shell(makeString("SKF-2396342019")), reader_make_constant_shell(makeString("SKF-0540013113")), reader_make_constant_shell(makeString("SKF-7329112212")), reader_make_constant_shell(makeString("SKF-2463549462")), reader_make_constant_shell(makeString("SKF-7267986583")), reader_make_constant_shell(makeString("SKF-2341431804")), reader_make_constant_shell(makeString("SKF-5635570701")), reader_make_constant_shell(makeString("SKF-8712676684")), reader_make_constant_shell(makeString("SKF-6439069748")), reader_make_constant_shell(makeString("SKF-3035846539")), reader_make_constant_shell(makeString("SKF-9609006789")), reader_make_constant_shell(makeString("SKF-2094656502")), reader_make_constant_shell(makeString("SKF-1622895730")), reader_make_constant_shell(makeString("SKF-6034791567")), reader_make_constant_shell(makeString("SKF-8429706273")), reader_make_constant_shell(makeString("SKF-5002539315")), reader_make_constant_shell(makeString("SKF-7731242586")), reader_make_constant_shell(makeString("SKF-1935351914")), reader_make_constant_shell(makeString("SKF-5819554541")), reader_make_constant_shell(makeString("SKF-7665225690")), reader_make_constant_shell(makeString("SKF-5742181768")), reader_make_constant_shell(makeString("SKF-7774820049")), reader_make_constant_shell(makeString("SKF-9832002172")), reader_make_constant_shell(makeString("SKF-9099460346")), reader_make_constant_shell(makeString("SKF-6802057837")), reader_make_constant_shell(makeString("SKF-0233545031")), reader_make_constant_shell(makeString("SKF-7143243607")), reader_make_constant_shell(makeString("SKF-5547792583")), reader_make_constant_shell(makeString("SKF-1970550724")), reader_make_constant_shell(makeString("SKF-2043784885")), reader_make_constant_shell(makeString("SKF-1714183462")), reader_make_constant_shell(makeString("SKF-6071957396")), reader_make_constant_shell(makeString("SKF-7004599156")), reader_make_constant_shell(makeString("SKF-0633671947")), reader_make_constant_shell(makeString("SKF-4928965872")), reader_make_constant_shell(makeString("SKF-4365040835")), reader_make_constant_shell(makeString("SKF-9778251013")), reader_make_constant_shell(makeString("SKF-8146092452")), reader_make_constant_shell(makeString("SKF-0882987459")), reader_make_constant_shell(makeString("SKF-6693421741")), reader_make_constant_shell(makeString("SKF-1800635573")), reader_make_constant_shell(makeString("SKF-5174206356")), reader_make_constant_shell(makeString("SKF-8137704160")), reader_make_constant_shell(makeString("SKF-6138620537")), reader_make_constant_shell(makeString("SKF-6954747722")), reader_make_constant_shell(makeString("SKF-8822929547")), reader_make_constant_shell(makeString("SKF-6574888924")), reader_make_constant_shell(makeString("SKF-4648710733")), reader_make_constant_shell(makeString("SKF-3574121958")), reader_make_constant_shell(makeString("SKF-7111033530")), reader_make_constant_shell(makeString("SKF-1259710929")), reader_make_constant_shell(makeString("SKF-9511328868")), reader_make_constant_shell(makeString("SKF-7988430072")), reader_make_constant_shell(makeString("SKF-9334424285")), reader_make_constant_shell(makeString("SKF-0241028856")), reader_make_constant_shell(makeString("SKF-8824048486")), reader_make_constant_shell(makeString("SKF-4709173148")), reader_make_constant_shell(makeString("SKF-9085853324")), reader_make_constant_shell(makeString("SKF-5615627058")), reader_make_constant_shell(makeString("SKF-6491665291")), reader_make_constant_shell(makeString("SKF-0256832978")), reader_make_constant_shell(makeString("SKF-1494753028")), reader_make_constant_shell(makeString("SKF-3439360561")), reader_make_constant_shell(makeString("SKF-4359556905")), reader_make_constant_shell(makeString("SKF-1746016905")), reader_make_constant_shell(makeString("SKF-4430979996")), reader_make_constant_shell(makeString("SKF-5792768502")), reader_make_constant_shell(makeString("SKF-5965884944")), reader_make_constant_shell(makeString("SKF-4975731367")), reader_make_constant_shell(makeString("SKF-2918153882")), reader_make_constant_shell(makeString("SKF-0992686716")), reader_make_constant_shell(makeString("SKF-8537516687")), reader_make_constant_shell(makeString("SKF-7685719048")), reader_make_constant_shell(makeString("SKF-1488659619")), reader_make_constant_shell(makeString("SKF-9837174340")), reader_make_constant_shell(makeString("SKF-0372211184")), reader_make_constant_shell(makeString("SKF-6796242698")), reader_make_constant_shell(makeString("SKF-4631282123")), reader_make_constant_shell(makeString("SKF-8747036173")), reader_make_constant_shell(makeString("SKF-9214557550")), reader_make_constant_shell(makeString("SKF-2969771224")), reader_make_constant_shell(makeString("SKF-3201009743")), reader_make_constant_shell(makeString("SKF-8199787846")), reader_make_constant_shell(makeString("SKF-1857924337")), reader_make_constant_shell(makeString("SKF-2577476768")), reader_make_constant_shell(makeString("SKF-9606922473")), reader_make_constant_shell(makeString("SKF-3890236588")), reader_make_constant_shell(makeString("SKF-2976547342")), reader_make_constant_shell(makeString("SKF-2734536924")), reader_make_constant_shell(makeString("SKF-4107434815")), reader_make_constant_shell(makeString("SKF-8121330546")), reader_make_constant_shell(makeString("SKF-0714339318")), reader_make_constant_shell(makeString("SKF-3616130689")), reader_make_constant_shell(makeString("SKF-4918966")), reader_make_constant_shell(makeString("SKF-12370394")), reader_make_constant_shell(makeString("SKF-58467056")), reader_make_constant_shell(makeString("SKF-61049284")), reader_make_constant_shell(makeString("SKF-14302329")), reader_make_constant_shell(makeString("SKF-4779393528")), reader_make_constant_shell(makeString("SKF-1305979122")), reader_make_constant_shell(makeString("SKF-3277105")), reader_make_constant_shell(makeString("SKF-23116387")), reader_make_constant_shell(makeString("SKF-55356852")), reader_make_constant_shell(makeString("SKF-4332265")), reader_make_constant_shell(makeString("SKF-DepictedFamilyMem2")), reader_make_constant_shell(makeString("SKF-38156889")), reader_make_constant_shell(makeString("SKF-DepictedFamilyMem1")), reader_make_constant_shell(makeString("SKF-0858093676")), reader_make_constant_shell(makeString("SKF-7924901403")), reader_make_constant_shell(makeString("SKF-7033956451")), reader_make_constant_shell(makeString("SKF-4442841559")) });
+    private static final SubLList $list111 = list(new SubLObject[]{ reader_make_constant_shell("ThePrototypicalFixedAritySkolemFunction"), reader_make_constant_shell("SKF-4855075916"), reader_make_constant_shell("SKF-9401565"), reader_make_constant_shell("SKF-30608153"), reader_make_constant_shell("SKF-358427"), reader_make_constant_shell("SKF-981029"), reader_make_constant_shell("SKF-378457"), reader_make_constant_shell("SKF-7897525238"), reader_make_constant_shell("SKF-23426283"), reader_make_constant_shell("SKF-4978723980"), reader_make_constant_shell("SKF-8095780367"), reader_make_constant_shell("SKF-2283707389"), reader_make_constant_shell("SKF-3819196850"), reader_make_constant_shell("SKF-2177078880"), reader_make_constant_shell("SKF-9178370244"), reader_make_constant_shell("SKF-2313708415"), reader_make_constant_shell("SKF-54808499"), reader_make_constant_shell("SKF-2396342019"), reader_make_constant_shell("SKF-0540013113"), reader_make_constant_shell("SKF-7329112212"), reader_make_constant_shell("SKF-2463549462"), reader_make_constant_shell("SKF-7267986583"), reader_make_constant_shell("SKF-2341431804"), reader_make_constant_shell("SKF-5635570701"), reader_make_constant_shell("SKF-8712676684"), reader_make_constant_shell("SKF-6439069748"), reader_make_constant_shell("SKF-3035846539"), reader_make_constant_shell("SKF-9609006789"), reader_make_constant_shell("SKF-2094656502"), reader_make_constant_shell("SKF-1622895730"), reader_make_constant_shell("SKF-6034791567"), reader_make_constant_shell("SKF-8429706273"), reader_make_constant_shell("SKF-5002539315"), reader_make_constant_shell("SKF-7731242586"), reader_make_constant_shell("SKF-1935351914"), reader_make_constant_shell("SKF-5819554541"), reader_make_constant_shell("SKF-7665225690"), reader_make_constant_shell("SKF-5742181768"), reader_make_constant_shell("SKF-7774820049"), reader_make_constant_shell("SKF-9832002172"), reader_make_constant_shell("SKF-9099460346"), reader_make_constant_shell("SKF-6802057837"), reader_make_constant_shell("SKF-0233545031"), reader_make_constant_shell("SKF-7143243607"), reader_make_constant_shell("SKF-5547792583"), reader_make_constant_shell("SKF-1970550724"), reader_make_constant_shell("SKF-2043784885"), reader_make_constant_shell("SKF-1714183462"), reader_make_constant_shell("SKF-6071957396"), reader_make_constant_shell("SKF-7004599156"), reader_make_constant_shell("SKF-0633671947"), reader_make_constant_shell("SKF-4928965872"), reader_make_constant_shell("SKF-4365040835"), reader_make_constant_shell("SKF-9778251013"), reader_make_constant_shell("SKF-8146092452"), reader_make_constant_shell("SKF-0882987459"), reader_make_constant_shell("SKF-6693421741"), reader_make_constant_shell("SKF-1800635573"), reader_make_constant_shell("SKF-5174206356"), reader_make_constant_shell("SKF-8137704160"), reader_make_constant_shell("SKF-6138620537"), reader_make_constant_shell("SKF-6954747722"), reader_make_constant_shell("SKF-8822929547"), reader_make_constant_shell("SKF-6574888924"), reader_make_constant_shell("SKF-4648710733"), reader_make_constant_shell("SKF-3574121958"), reader_make_constant_shell("SKF-7111033530"), reader_make_constant_shell("SKF-1259710929"), reader_make_constant_shell("SKF-9511328868"), reader_make_constant_shell("SKF-7988430072"), reader_make_constant_shell("SKF-9334424285"), reader_make_constant_shell("SKF-0241028856"), reader_make_constant_shell("SKF-8824048486"), reader_make_constant_shell("SKF-4709173148"), reader_make_constant_shell("SKF-9085853324"), reader_make_constant_shell("SKF-5615627058"), reader_make_constant_shell("SKF-6491665291"), reader_make_constant_shell("SKF-0256832978"), reader_make_constant_shell("SKF-1494753028"), reader_make_constant_shell("SKF-3439360561"), reader_make_constant_shell("SKF-4359556905"), reader_make_constant_shell("SKF-1746016905"), reader_make_constant_shell("SKF-4430979996"), reader_make_constant_shell("SKF-5792768502"), reader_make_constant_shell("SKF-5965884944"), reader_make_constant_shell("SKF-4975731367"), reader_make_constant_shell("SKF-2918153882"), reader_make_constant_shell("SKF-0992686716"), reader_make_constant_shell("SKF-8537516687"), reader_make_constant_shell("SKF-7685719048"), reader_make_constant_shell("SKF-1488659619"), reader_make_constant_shell("SKF-9837174340"), reader_make_constant_shell("SKF-0372211184"), reader_make_constant_shell("SKF-6796242698"), reader_make_constant_shell("SKF-4631282123"), reader_make_constant_shell("SKF-8747036173"), reader_make_constant_shell("SKF-9214557550"), reader_make_constant_shell("SKF-2969771224"), reader_make_constant_shell("SKF-3201009743"), reader_make_constant_shell("SKF-8199787846"), reader_make_constant_shell("SKF-1857924337"), reader_make_constant_shell("SKF-2577476768"), reader_make_constant_shell("SKF-9606922473"), reader_make_constant_shell("SKF-3890236588"), reader_make_constant_shell("SKF-2976547342"), reader_make_constant_shell("SKF-2734536924"), reader_make_constant_shell("SKF-4107434815"), reader_make_constant_shell("SKF-8121330546"), reader_make_constant_shell("SKF-0714339318"), reader_make_constant_shell("SKF-3616130689"), reader_make_constant_shell("SKF-4918966"), reader_make_constant_shell("SKF-12370394"), reader_make_constant_shell("SKF-58467056"), reader_make_constant_shell("SKF-61049284"), reader_make_constant_shell("SKF-14302329"), reader_make_constant_shell("SKF-4779393528"), reader_make_constant_shell("SKF-1305979122"), reader_make_constant_shell("SKF-3277105"), reader_make_constant_shell("SKF-23116387"), reader_make_constant_shell("SKF-55356852"), reader_make_constant_shell("SKF-4332265"), reader_make_constant_shell("SKF-DepictedFamilyMem2"), reader_make_constant_shell("SKF-38156889"), reader_make_constant_shell("SKF-DepictedFamilyMem1"), reader_make_constant_shell("SKF-0858093676"), reader_make_constant_shell("SKF-7924901403"), reader_make_constant_shell("SKF-7033956451"), reader_make_constant_shell("SKF-4442841559") });
 
     private static final SubLObject $list112 = _constant_112_initializer();
 
@@ -333,45 +756,27 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLSymbol DIAGNOSE_JUST_THIS_SKOLEM = makeSymbol("DIAGNOSE-JUST-THIS-SKOLEM");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLList $list122 = list(makeKeyword("RAW-SKOLEM"), makeKeyword("UNREIFIED-SKOLEM"), makeKeyword("FREE-VARIABLE"));
-
-
 
     private static final SubLString $str124$different_el_formulas_for__a____s = makeString("different el formulas for ~a:~%~s~%~s");
 
-    public static final SubLList $list125 = list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?")));
+    static private final SubLList $list125 = list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?")));
 
-    public static final SubLList $list126 = list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?"))));
+    static private final SubLList $list126 = list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))));
 
-    public static final SubLList $list127 = list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?")))));
+    static private final SubLList $list127 = list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?")))));
 
-    public static final SubLList $list128 = list(reader_make_constant_shell(makeString("implies")), makeKeyword("ANYTHING"), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?"))));
+    static private final SubLList $list128 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))));
 
-    public static final SubLList $list129 = list(reader_make_constant_shell(makeString("implies")), makeKeyword("ANYTHING"), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?")))));
+    static private final SubLList $list129 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?")))));
 
-    public static final SubLList $list130 = list(reader_make_constant_shell(makeString("implies")), makeKeyword("ANYTHING"), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?"))))));
+    static private final SubLList $list130 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))))));
 
-    public static final SubLList $list131 = list(reader_make_constant_shell(makeString("implies")), makeKeyword("ANYTHING"), list(list(makeKeyword("TEST"), makeSymbol("CYC-CONST-BOUNDED-EXISTENTIAL-OPERATOR-P")), list(makeKeyword("TEST"), makeSymbol("GROUND?")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(makeKeyword("TEST"), makeSymbol("CONJUNCTION-OF-LITERALS?"))));
+    static private final SubLList $list131 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(list($TEST, makeSymbol("CYC-CONST-BOUNDED-EXISTENTIAL-OPERATOR-P")), list($TEST, makeSymbol("GROUND?")), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))));
 
-    private static final SubLList $list132 = list(reader_make_constant_shell(makeString("and")), list(makeKeyword("TEST"), makeSymbol("EL-LITERAL-P")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("temporalMicrotheoriesIntersect")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"))));
+    private static final SubLList $list132 = list(reader_make_constant_shell("and"), list($TEST, makeSymbol("EL-LITERAL-P")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("temporalMicrotheoriesIntersect"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"))));
 
-    public static final SubLList $list133 = list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("thereExists")), list(makeKeyword("TEST"), makeSymbol("EL-VAR?")), list(reader_make_constant_shell(makeString("temporalMicrotheoriesIntersect")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"))), list(makeKeyword("TEST"), makeSymbol("EL-LITERAL-P")));
-
-
+    static private final SubLList $list133 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("temporalMicrotheoriesIntersect"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"))), list($TEST, makeSymbol("EL-LITERAL-P")));
 
     private static final SubLList $list135 = list(makeSymbol("SKOLEM-TYPE"), makeSymbol("VARS"), makeSymbol("SK-VAR"), makeSymbol("&OPTIONAL"), makeSymbol("NUMBER"));
 
@@ -383,61 +788,45 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLString $str139$___amismatch_for__a___a___a__ = makeString("~%~amismatch for ~a~%~a~%~a~%");
 
-    public static final SubLList $list140 = list(makeSymbol("SK-FN"), makeSymbol("VARS"), makeSymbol("VAR"), makeSymbol("SEQVAR"));
+    static private final SubLList $list140 = list(makeSymbol("SK-FN"), makeSymbol("VARS"), makeSymbol("VAR"), makeSymbol("SEQVAR"));
 
     private static final SubLString $$$Error = makeString("Error");
 
-    public static final SubLList $list142 = list(makeSymbol("SK-FN"), makeSymbol("VARS"), makeSymbol("VAR"), makeSymbol("SEQVAR"), makeSymbol("&OPTIONAL"), makeSymbol("EXISTING-NUMBER"));
+    static private final SubLList $list142 = list(makeSymbol("SK-FN"), makeSymbol("VARS"), makeSymbol("VAR"), makeSymbol("SEQVAR"), makeSymbol("&OPTIONAL"), makeSymbol("EXISTING-NUMBER"));
 
     private static final SubLSymbol $sym143$SKOLEM_SCALAR_TERM_ = makeSymbol("SKOLEM-SCALAR-TERM?");
 
-    public static final SubLList $list144 = list(makeSymbol("ASS1"), makeSymbol("ASS2"));
+    static private final SubLList $list144 = list(makeSymbol("ASS1"), makeSymbol("ASS2"));
 
-    private static final SubLObject $$temporalMicrotheoriesIntersect = reader_make_constant_shell(makeString("temporalMicrotheoriesIntersect"));
+
 
     private static final SubLList $list146 = list(makeSymbol("CONTENT-ASS"), makeSymbol("TMI-ASS"));
 
-    private static final SubLObject $$thereExists = reader_make_constant_shell(makeString("thereExists"));
+
 
     private static final SubLSymbol $sym148$_TIME = makeSymbol("?TIME");
 
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
 
-    private static final SubLObject $$MtSpace = reader_make_constant_shell(makeString("MtSpace"));
 
-    public static final SubLList $list151 = list(list(reader_make_constant_shell(makeString("MtTimeDimFn")), makeSymbol("?TIME")));
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
-    public static final SubLList $list153 = list(list(reader_make_constant_shell(makeString("temporalMicrotheoriesIntersect")), list(reader_make_constant_shell(makeString("MtTimeDimFn")), makeSymbol("?TIME")), list(reader_make_constant_shell(makeString("MtTimeWithGranularityDimFn")), list(reader_make_constant_shell(makeString("IntervalEndedByFn")), reader_make_constant_shell(makeString("Now-Indexical"))), reader_make_constant_shell(makeString("TimePoint")))));
+    static private final SubLList $list151 = list(list(reader_make_constant_shell("MtTimeDimFn"), makeSymbol("?TIME")));
 
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
-    private static final SubLList $list155 = list(new SubLObject[]{ reader_make_constant_shell(makeString("SKF-2172650888")), reader_make_constant_shell(makeString("SKF-6548862369")), reader_make_constant_shell(makeString("SKF-8409811003")), reader_make_constant_shell(makeString("SKF-7363528201")), reader_make_constant_shell(makeString("SKF-1358114357")), reader_make_constant_shell(makeString("SKF-4072021064")), reader_make_constant_shell(makeString("SKF-1681761679")), reader_make_constant_shell(makeString("SKF-2548755082")), reader_make_constant_shell(makeString("SKF-6067931751")), reader_make_constant_shell(makeString("SKF-5709128133")), reader_make_constant_shell(makeString("SKF-1590734700")), reader_make_constant_shell(makeString("SKF-5134195828")), reader_make_constant_shell(makeString("SKF-3907269039")), reader_make_constant_shell(makeString("SKF-6454474627")), reader_make_constant_shell(makeString("SKF-9567857250")), reader_make_constant_shell(makeString("SKF-5128698501")), reader_make_constant_shell(makeString("SKF-0849952130")), reader_make_constant_shell(makeString("SKF-5716409094")), reader_make_constant_shell(makeString("SKF-9715593487")), reader_make_constant_shell(makeString("SKF-4012481774")), reader_make_constant_shell(makeString("SKF-9973400181")), reader_make_constant_shell(makeString("SKF-4749210628")), reader_make_constant_shell(makeString("SKF-7688139609")), reader_make_constant_shell(makeString("SKF-7103881989")), reader_make_constant_shell(makeString("SKF-5296958920")), reader_make_constant_shell(makeString("SKF-9684239747")), reader_make_constant_shell(makeString("SKF-9283857452")), reader_make_constant_shell(makeString("SKF-8076090600")), reader_make_constant_shell(makeString("SKF-8853185369")), reader_make_constant_shell(makeString("SKF-2870709283")), reader_make_constant_shell(makeString("SKF-4865105368")), reader_make_constant_shell(makeString("SKF-6632523431")), reader_make_constant_shell(makeString("SKF-8236383708")), reader_make_constant_shell(makeString("SKF-0341790583")), reader_make_constant_shell(makeString("SKF-5342612010")) });
+
+    static private final SubLList $list153 = list(list(reader_make_constant_shell("temporalMicrotheoriesIntersect"), list(reader_make_constant_shell("MtTimeDimFn"), makeSymbol("?TIME")), list(reader_make_constant_shell("MtTimeWithGranularityDimFn"), list(reader_make_constant_shell("IntervalEndedByFn"), reader_make_constant_shell("Now-Indexical")), reader_make_constant_shell("TimePoint"))));
+
+
+
+    private static final SubLList $list155 = list(new SubLObject[]{ reader_make_constant_shell("SKF-2172650888"), reader_make_constant_shell("SKF-6548862369"), reader_make_constant_shell("SKF-8409811003"), reader_make_constant_shell("SKF-7363528201"), reader_make_constant_shell("SKF-1358114357"), reader_make_constant_shell("SKF-4072021064"), reader_make_constant_shell("SKF-1681761679"), reader_make_constant_shell("SKF-2548755082"), reader_make_constant_shell("SKF-6067931751"), reader_make_constant_shell("SKF-5709128133"), reader_make_constant_shell("SKF-1590734700"), reader_make_constant_shell("SKF-5134195828"), reader_make_constant_shell("SKF-3907269039"), reader_make_constant_shell("SKF-6454474627"), reader_make_constant_shell("SKF-9567857250"), reader_make_constant_shell("SKF-5128698501"), reader_make_constant_shell("SKF-0849952130"), reader_make_constant_shell("SKF-5716409094"), reader_make_constant_shell("SKF-9715593487"), reader_make_constant_shell("SKF-4012481774"), reader_make_constant_shell("SKF-9973400181"), reader_make_constant_shell("SKF-4749210628"), reader_make_constant_shell("SKF-7688139609"), reader_make_constant_shell("SKF-7103881989"), reader_make_constant_shell("SKF-5296958920"), reader_make_constant_shell("SKF-9684239747"), reader_make_constant_shell("SKF-9283857452"), reader_make_constant_shell("SKF-8076090600"), reader_make_constant_shell("SKF-8853185369"), reader_make_constant_shell("SKF-2870709283"), reader_make_constant_shell("SKF-4865105368"), reader_make_constant_shell("SKF-6632523431"), reader_make_constant_shell("SKF-8236383708"), reader_make_constant_shell("SKF-0341790583"), reader_make_constant_shell("SKF-5342612010") });
 
     private static final SubLString $$$recanonicalizing_skolems = makeString("recanonicalizing skolems");
 
-    private static final SubLList $list157 = list(new SubLObject[]{ reader_make_constant_shell(makeString("ThePrototypicalFixedAritySkolemFunction")), reader_make_constant_shell(makeString("SKF-4855075916")), reader_make_constant_shell(makeString("SKF-9401565")), reader_make_constant_shell(makeString("SKF-30608153")), reader_make_constant_shell(makeString("SKF-358427")), reader_make_constant_shell(makeString("SKF-981029")), reader_make_constant_shell(makeString("SKF-378457")), reader_make_constant_shell(makeString("SKF-7897525238")), reader_make_constant_shell(makeString("SKF-23426283")), reader_make_constant_shell(makeString("SKF-4978723980")), reader_make_constant_shell(makeString("SKF-8095780367")), reader_make_constant_shell(makeString("SKF-2283707389")), reader_make_constant_shell(makeString("SKF-3819196850")), reader_make_constant_shell(makeString("SKF-2177078880")), reader_make_constant_shell(makeString("SKF-9178370244")), reader_make_constant_shell(makeString("SKF-2313708415")), reader_make_constant_shell(makeString("SKF-54808499")), reader_make_constant_shell(makeString("SKF-2396342019")), reader_make_constant_shell(makeString("SKF-0540013113")), reader_make_constant_shell(makeString("SKF-7329112212")), reader_make_constant_shell(makeString("SKF-2463549462")), reader_make_constant_shell(makeString("SKF-7267986583")), reader_make_constant_shell(makeString("SKF-2341431804")), reader_make_constant_shell(makeString("SKF-5635570701")), reader_make_constant_shell(makeString("SKF-8712676684")), reader_make_constant_shell(makeString("SKF-6439069748")), reader_make_constant_shell(makeString("SKF-3035846539")), reader_make_constant_shell(makeString("SKF-9609006789")), reader_make_constant_shell(makeString("SKF-2094656502")), reader_make_constant_shell(makeString("SKF-1622895730")), reader_make_constant_shell(makeString("SKF-6034791567")), reader_make_constant_shell(makeString("SKF-8429706273")), reader_make_constant_shell(makeString("SKF-5002539315")), reader_make_constant_shell(makeString("SKF-7731242586")), reader_make_constant_shell(makeString("SKF-1935351914")), reader_make_constant_shell(makeString("SKF-5819554541")), reader_make_constant_shell(makeString("SKF-7665225690")), reader_make_constant_shell(makeString("SKF-5742181768")), reader_make_constant_shell(makeString("SKF-7774820049")), reader_make_constant_shell(makeString("SKF-9832002172")), reader_make_constant_shell(makeString("SKF-9099460346")), reader_make_constant_shell(makeString("SKF-6802057837")), reader_make_constant_shell(makeString("SKF-0233545031")), reader_make_constant_shell(makeString("SKF-7143243607")), reader_make_constant_shell(makeString("SKF-5547792583")), reader_make_constant_shell(makeString("SKF-1970550724")), reader_make_constant_shell(makeString("SKF-2043784885")), reader_make_constant_shell(makeString("SKF-1714183462")), reader_make_constant_shell(makeString("SKF-6071957396")), reader_make_constant_shell(makeString("SKF-7004599156")), reader_make_constant_shell(makeString("SKF-0633671947")), reader_make_constant_shell(makeString("SKF-4928965872")), reader_make_constant_shell(makeString("SKF-4365040835")), reader_make_constant_shell(makeString("SKF-9778251013")), reader_make_constant_shell(makeString("SKF-8146092452")), reader_make_constant_shell(makeString("SKF-0882987459")), reader_make_constant_shell(makeString("SKF-6693421741")), reader_make_constant_shell(makeString("SKF-1800635573")), reader_make_constant_shell(makeString("SKF-5174206356")), reader_make_constant_shell(makeString("SKF-8137704160")), reader_make_constant_shell(makeString("SKF-6138620537")), reader_make_constant_shell(makeString("SKF-6954747722")), reader_make_constant_shell(makeString("SKF-8822929547")), reader_make_constant_shell(makeString("SKF-6574888924")), reader_make_constant_shell(makeString("SKF-4648710733")), reader_make_constant_shell(makeString("SKF-3574121958")), reader_make_constant_shell(makeString("SKF-7111033530")), reader_make_constant_shell(makeString("SKF-1259710929")), reader_make_constant_shell(makeString("SKF-9511328868")), reader_make_constant_shell(makeString("SKF-7988430072")), reader_make_constant_shell(makeString("SKF-9334424285")), reader_make_constant_shell(makeString("SKF-0241028856")), reader_make_constant_shell(makeString("SKF-8824048486")), reader_make_constant_shell(makeString("SKF-4709173148")), reader_make_constant_shell(makeString("SKF-9085853324")), reader_make_constant_shell(makeString("SKF-5615627058")), reader_make_constant_shell(makeString("SKF-6491665291")), reader_make_constant_shell(makeString("SKF-0256832978")), reader_make_constant_shell(makeString("SKF-1494753028")), reader_make_constant_shell(makeString("SKF-3439360561")), reader_make_constant_shell(makeString("SKF-4359556905")), reader_make_constant_shell(makeString("SKF-1746016905")), reader_make_constant_shell(makeString("SKF-4430979996")), reader_make_constant_shell(makeString("SKF-5792768502")), reader_make_constant_shell(makeString("SKF-5965884944")), reader_make_constant_shell(makeString("SKF-4975731367")), reader_make_constant_shell(makeString("SKF-2918153882")), reader_make_constant_shell(makeString("SKF-0992686716")), reader_make_constant_shell(makeString("SKF-8537516687")), reader_make_constant_shell(makeString("SKF-7685719048")), reader_make_constant_shell(makeString("SKF-1488659619")), reader_make_constant_shell(makeString("SKF-9837174340")), reader_make_constant_shell(makeString("SKF-0372211184")), reader_make_constant_shell(makeString("SKF-6796242698")), reader_make_constant_shell(makeString("SKF-4631282123")), reader_make_constant_shell(makeString("SKF-8747036173")), reader_make_constant_shell(makeString("SKF-9214557550")), reader_make_constant_shell(makeString("SKF-2969771224")), reader_make_constant_shell(makeString("SKF-3201009743")), reader_make_constant_shell(makeString("SKF-8199787846")), reader_make_constant_shell(makeString("SKF-1857924337")), reader_make_constant_shell(makeString("SKF-2577476768")), reader_make_constant_shell(makeString("SKF-9606922473")), reader_make_constant_shell(makeString("SKF-3890236588")), reader_make_constant_shell(makeString("SKF-2976547342")), reader_make_constant_shell(makeString("SKF-2734536924")), reader_make_constant_shell(makeString("SKF-4107434815")), reader_make_constant_shell(makeString("SKF-8121330546")), reader_make_constant_shell(makeString("SKF-0714339318")), reader_make_constant_shell(makeString("SKF-3616130689")), reader_make_constant_shell(makeString("SKF-4918966")), reader_make_constant_shell(makeString("SKF-12370394")), reader_make_constant_shell(makeString("SKF-58467056")), reader_make_constant_shell(makeString("SKF-61049284")), reader_make_constant_shell(makeString("SKF-14302329")), reader_make_constant_shell(makeString("SKF-4779393528")), reader_make_constant_shell(makeString("SKF-1305979122")), reader_make_constant_shell(makeString("SKF-0519624184")), reader_make_constant_shell(makeString("SKF-8565886278")), reader_make_constant_shell(makeString("SKF-5224425512")), reader_make_constant_shell(makeString("SKF-4272845489")), reader_make_constant_shell(makeString("SKF-8653559423")), reader_make_constant_shell(makeString("SKF-6875965541")), reader_make_constant_shell(makeString("SKF-3326030935")), reader_make_constant_shell(makeString("SKF-5171360072")), reader_make_constant_shell(makeString("SKF-1849376525")), reader_make_constant_shell(makeString("SKF-9027182255")), reader_make_constant_shell(makeString("SKF-9111966754")), reader_make_constant_shell(makeString("SKF-3322944904")), reader_make_constant_shell(makeString("SKF-6974073305")), reader_make_constant_shell(makeString("SKF-9804613947")), reader_make_constant_shell(makeString("SKF-4372359165")), reader_make_constant_shell(makeString("SKF-59006438")), reader_make_constant_shell(makeString("SKF-7033956451")), reader_make_constant_shell(makeString("SKF-4442841559")) });
-
-
-
-
-
-
-
-
-
-
+    private static final SubLList $list157 = list(new SubLObject[]{ reader_make_constant_shell("ThePrototypicalFixedAritySkolemFunction"), reader_make_constant_shell("SKF-4855075916"), reader_make_constant_shell("SKF-9401565"), reader_make_constant_shell("SKF-30608153"), reader_make_constant_shell("SKF-358427"), reader_make_constant_shell("SKF-981029"), reader_make_constant_shell("SKF-378457"), reader_make_constant_shell("SKF-7897525238"), reader_make_constant_shell("SKF-23426283"), reader_make_constant_shell("SKF-4978723980"), reader_make_constant_shell("SKF-8095780367"), reader_make_constant_shell("SKF-2283707389"), reader_make_constant_shell("SKF-3819196850"), reader_make_constant_shell("SKF-2177078880"), reader_make_constant_shell("SKF-9178370244"), reader_make_constant_shell("SKF-2313708415"), reader_make_constant_shell("SKF-54808499"), reader_make_constant_shell("SKF-2396342019"), reader_make_constant_shell("SKF-0540013113"), reader_make_constant_shell("SKF-7329112212"), reader_make_constant_shell("SKF-2463549462"), reader_make_constant_shell("SKF-7267986583"), reader_make_constant_shell("SKF-2341431804"), reader_make_constant_shell("SKF-5635570701"), reader_make_constant_shell("SKF-8712676684"), reader_make_constant_shell("SKF-6439069748"), reader_make_constant_shell("SKF-3035846539"), reader_make_constant_shell("SKF-9609006789"), reader_make_constant_shell("SKF-2094656502"), reader_make_constant_shell("SKF-1622895730"), reader_make_constant_shell("SKF-6034791567"), reader_make_constant_shell("SKF-8429706273"), reader_make_constant_shell("SKF-5002539315"), reader_make_constant_shell("SKF-7731242586"), reader_make_constant_shell("SKF-1935351914"), reader_make_constant_shell("SKF-5819554541"), reader_make_constant_shell("SKF-7665225690"), reader_make_constant_shell("SKF-5742181768"), reader_make_constant_shell("SKF-7774820049"), reader_make_constant_shell("SKF-9832002172"), reader_make_constant_shell("SKF-9099460346"), reader_make_constant_shell("SKF-6802057837"), reader_make_constant_shell("SKF-0233545031"), reader_make_constant_shell("SKF-7143243607"), reader_make_constant_shell("SKF-5547792583"), reader_make_constant_shell("SKF-1970550724"), reader_make_constant_shell("SKF-2043784885"), reader_make_constant_shell("SKF-1714183462"), reader_make_constant_shell("SKF-6071957396"), reader_make_constant_shell("SKF-7004599156"), reader_make_constant_shell("SKF-0633671947"), reader_make_constant_shell("SKF-4928965872"), reader_make_constant_shell("SKF-4365040835"), reader_make_constant_shell("SKF-9778251013"), reader_make_constant_shell("SKF-8146092452"), reader_make_constant_shell("SKF-0882987459"), reader_make_constant_shell("SKF-6693421741"), reader_make_constant_shell("SKF-1800635573"), reader_make_constant_shell("SKF-5174206356"), reader_make_constant_shell("SKF-8137704160"), reader_make_constant_shell("SKF-6138620537"), reader_make_constant_shell("SKF-6954747722"), reader_make_constant_shell("SKF-8822929547"), reader_make_constant_shell("SKF-6574888924"), reader_make_constant_shell("SKF-4648710733"), reader_make_constant_shell("SKF-3574121958"), reader_make_constant_shell("SKF-7111033530"), reader_make_constant_shell("SKF-1259710929"), reader_make_constant_shell("SKF-9511328868"), reader_make_constant_shell("SKF-7988430072"), reader_make_constant_shell("SKF-9334424285"), reader_make_constant_shell("SKF-0241028856"), reader_make_constant_shell("SKF-8824048486"), reader_make_constant_shell("SKF-4709173148"), reader_make_constant_shell("SKF-9085853324"), reader_make_constant_shell("SKF-5615627058"), reader_make_constant_shell("SKF-6491665291"), reader_make_constant_shell("SKF-0256832978"), reader_make_constant_shell("SKF-1494753028"), reader_make_constant_shell("SKF-3439360561"), reader_make_constant_shell("SKF-4359556905"), reader_make_constant_shell("SKF-1746016905"), reader_make_constant_shell("SKF-4430979996"), reader_make_constant_shell("SKF-5792768502"), reader_make_constant_shell("SKF-5965884944"), reader_make_constant_shell("SKF-4975731367"), reader_make_constant_shell("SKF-2918153882"), reader_make_constant_shell("SKF-0992686716"), reader_make_constant_shell("SKF-8537516687"), reader_make_constant_shell("SKF-7685719048"), reader_make_constant_shell("SKF-1488659619"), reader_make_constant_shell("SKF-9837174340"), reader_make_constant_shell("SKF-0372211184"), reader_make_constant_shell("SKF-6796242698"), reader_make_constant_shell("SKF-4631282123"), reader_make_constant_shell("SKF-8747036173"), reader_make_constant_shell("SKF-9214557550"), reader_make_constant_shell("SKF-2969771224"), reader_make_constant_shell("SKF-3201009743"), reader_make_constant_shell("SKF-8199787846"), reader_make_constant_shell("SKF-1857924337"), reader_make_constant_shell("SKF-2577476768"), reader_make_constant_shell("SKF-9606922473"), reader_make_constant_shell("SKF-3890236588"), reader_make_constant_shell("SKF-2976547342"), reader_make_constant_shell("SKF-2734536924"), reader_make_constant_shell("SKF-4107434815"), reader_make_constant_shell("SKF-8121330546"), reader_make_constant_shell("SKF-0714339318"), reader_make_constant_shell("SKF-3616130689"), reader_make_constant_shell("SKF-4918966"), reader_make_constant_shell("SKF-12370394"), reader_make_constant_shell("SKF-58467056"), reader_make_constant_shell("SKF-61049284"), reader_make_constant_shell("SKF-14302329"), reader_make_constant_shell("SKF-4779393528"), reader_make_constant_shell("SKF-1305979122"), reader_make_constant_shell("SKF-0519624184"), reader_make_constant_shell("SKF-8565886278"), reader_make_constant_shell("SKF-5224425512"), reader_make_constant_shell("SKF-4272845489"), reader_make_constant_shell("SKF-8653559423"), reader_make_constant_shell("SKF-6875965541"), reader_make_constant_shell("SKF-3326030935"), reader_make_constant_shell("SKF-5171360072"), reader_make_constant_shell("SKF-1849376525"), reader_make_constant_shell("SKF-9027182255"), reader_make_constant_shell("SKF-9111966754"), reader_make_constant_shell("SKF-3322944904"), reader_make_constant_shell("SKF-6974073305"), reader_make_constant_shell("SKF-9804613947"), reader_make_constant_shell("SKF-4372359165"), reader_make_constant_shell("SKF-59006438"), reader_make_constant_shell("SKF-7033956451"), reader_make_constant_shell("SKF-4442841559") });
 
     private static final SubLString $str163$_A_is_not_a__A = makeString("~A is not a ~A");
 
-
-
-
-
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
-
-
 
     private static final SubLString $str168$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
@@ -451,6 +840,82 @@ public final class skolems extends SubLTranslatedFile {
 
     private static final SubLString $str173$Bad_skolem_function___A__ = makeString("Bad skolem function: ~A~%");
 
+    // Definitions
+    /**
+     * each element of UNREIFIED-SK-TERMS is a skolem nat whose function has not yet been reified;
+     * e.g., (#$SkolemFunctionFn (?X) ?Y212).  CLAUSES is a set of cnfs or cnfs that reference elements
+     * of UNREIFIED-SK-TERMS.  Returned are the elements of CLAUSES with skolem nats that include
+     * either reified functions, e.g., (#$SKF-748758 ?X), when reification is appropriate, or the
+     * the unreified functions, when reification is not appropriate.  Reification is appropriate
+     * either when the formula being canonicalized is being asserted (e.g., *within-assert* is non-nil)
+     * or when a reified term already exists for this skolem (e.g., the same formula has already been
+     * asserted).
+     */
+    @LispMethod(comment = "each element of UNREIFIED-SK-TERMS is a skolem nat whose function has not yet been reified;\r\ne.g., (#$SkolemFunctionFn (?X) ?Y212).  CLAUSES is a set of cnfs or cnfs that reference elements\r\nof UNREIFIED-SK-TERMS.  Returned are the elements of CLAUSES with skolem nats that include\r\neither reified functions, e.g., (#$SKF-748758 ?X), when reification is appropriate, or the\r\nthe unreified functions, when reification is not appropriate.  Reification is appropriate\r\neither when the formula being canonicalized is being asserted (e.g., *within-assert* is non-nil)\r\nor when a reified term already exists for this skolem (e.g., the same formula has already been\r\nasserted).\neach element of UNREIFIED-SK-TERMS is a skolem nat whose function has not yet been reified;\ne.g., (#$SkolemFunctionFn (?X) ?Y212).  CLAUSES is a set of cnfs or cnfs that reference elements\nof UNREIFIED-SK-TERMS.  Returned are the elements of CLAUSES with skolem nats that include\neither reified functions, e.g., (#$SKF-748758 ?X), when reification is appropriate, or the\nthe unreified functions, when reification is not appropriate.  Reification is appropriate\neither when the formula being canonicalized is being asserted (e.g., *within-assert* is non-nil)\nor when a reified term already exists for this skolem (e.g., the same formula has already been\nasserted).")
+    public static final SubLObject reify_skolems_in_alt(SubLObject unreified_sk_terms, SubLObject v_clauses, SubLObject mt, SubLObject createP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject pairs = NIL;
+                {
+                    SubLObject cdolist_list_var = unreified_sk_terms;
+                    SubLObject unreified_sk_term = NIL;
+                    for (unreified_sk_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , unreified_sk_term = cdolist_list_var.first()) {
+                        unreified_sk_term = com.cyc.cycjava.cycl.skolems.canonicalize_fns_in_sk_term(unreified_sk_term);
+                        {
+                            SubLObject sk_clauses = clause_utilities.term_clauses_including_refd_vars(unreified_sk_term, v_clauses, symbol_function(EQUAL));
+                            SubLObject skolem_term = com.cyc.cycjava.cycl.skolems.canonicalize_skolem_term(unreified_sk_term, sk_clauses, mt, createP);
+                            if (NIL != misc_utilities.initialized_p(czer_main.$tou_skolem_blist$.getDynamicValue(thread))) {
+                                {
+                                    SubLObject orig_var = com.cyc.cycjava.cycl.skolems.skolem_function_var(unreified_sk_term);
+                                    SubLObject sk_functor = cycl_utilities.nat_functor(skolem_term);
+                                    czer_main.$tou_skolem_blist$.setDynamicValue(cons(cons(sk_functor, orig_var), czer_main.$tou_skolem_blist$.getDynamicValue(thread)), thread);
+                                }
+                            }
+                            pairs = cons(list(unreified_sk_term, skolem_term), pairs);
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = pairs;
+                    SubLObject pair = NIL;
+                    for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
+                        {
+                            SubLObject datum = pair;
+                            SubLObject current = datum;
+                            SubLObject unreified_sk_term = NIL;
+                            SubLObject skolem_term = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt0);
+                            unreified_sk_term = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt0);
+                            skolem_term = current.first();
+                            current = current.rest();
+                            if (NIL == current) {
+                                v_clauses = com.cyc.cycjava.cycl.skolems.subst_skolem_in(unreified_sk_term, skolem_term, v_clauses);
+                            } else {
+                                cdestructuring_bind_error(datum, $list_alt0);
+                            }
+                        }
+                    }
+                }
+                return v_clauses;
+            }
+        }
+    }
+
+    // Definitions
+    /**
+     * each element of UNREIFIED-SK-TERMS is a skolem nat whose function has not yet been reified;
+     * e.g., (#$SkolemFunctionFn (?X) ?Y212).  CLAUSES is a set of cnfs or cnfs that reference elements
+     * of UNREIFIED-SK-TERMS.  Returned are the elements of CLAUSES with skolem nats that include
+     * either reified functions, e.g., (#$SKF-748758 ?X), when reification is appropriate, or the
+     * the unreified functions, when reification is not appropriate.  Reification is appropriate
+     * either when the formula being canonicalized is being asserted (e.g., *within-assert* is non-nil)
+     * or when a reified term already exists for this skolem (e.g., the same formula has already been
+     * asserted).
+     */
+    @LispMethod(comment = "each element of UNREIFIED-SK-TERMS is a skolem nat whose function has not yet been reified;\r\ne.g., (#$SkolemFunctionFn (?X) ?Y212).  CLAUSES is a set of cnfs or cnfs that reference elements\r\nof UNREIFIED-SK-TERMS.  Returned are the elements of CLAUSES with skolem nats that include\r\neither reified functions, e.g., (#$SKF-748758 ?X), when reification is appropriate, or the\r\nthe unreified functions, when reification is not appropriate.  Reification is appropriate\r\neither when the formula being canonicalized is being asserted (e.g., *within-assert* is non-nil)\r\nor when a reified term already exists for this skolem (e.g., the same formula has already been\r\nasserted).\neach element of UNREIFIED-SK-TERMS is a skolem nat whose function has not yet been reified;\ne.g., (#$SkolemFunctionFn (?X) ?Y212).  CLAUSES is a set of cnfs or cnfs that reference elements\nof UNREIFIED-SK-TERMS.  Returned are the elements of CLAUSES with skolem nats that include\neither reified functions, e.g., (#$SKF-748758 ?X), when reification is appropriate, or the\nthe unreified functions, when reification is not appropriate.  Reification is appropriate\neither when the formula being canonicalized is being asserted (e.g., *within-assert* is non-nil)\nor when a reified term already exists for this skolem (e.g., the same formula has already been\nasserted).")
     public static SubLObject reify_skolems_in(final SubLObject unreified_sk_terms, SubLObject v_clauses, final SubLObject mt, final SubLObject createP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject pairs = NIL;
@@ -495,6 +960,22 @@ public final class skolems extends SubLTranslatedFile {
         return v_clauses;
     }
 
+    public static final SubLObject canonicalize_fns_in_sk_term_alt(SubLObject sk_term) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = sk_term;
+            SubLObject v_term = NIL;
+            for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                if (NIL != term.function_termP(v_term)) {
+                    result = cons(czer_main.canonicalize_fn_term_if_reified(v_term), result);
+                } else {
+                    result = cons(v_term, result);
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject canonicalize_fns_in_sk_term(final SubLObject sk_term) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = sk_term;
@@ -510,6 +991,52 @@ public final class skolems extends SubLTranslatedFile {
             v_term = cdolist_list_var.first();
         } 
         return nreverse(result);
+    }
+
+    public static final SubLObject subst_skolem_in_alt(SubLObject unreified_sk_term, SubLObject skolem_term, SubLObject v_clauses) {
+        if (NIL != term.reified_skolem_constant_termP(skolem_term)) {
+            return czer_main.reify_function_in(skolem_term, subst(skolem_term, unreified_sk_term, v_clauses, symbol_function(EQUAL), UNPROVIDED));
+        } else {
+            if (NIL != term.reified_skolem_function_termP(skolem_term)) {
+                {
+                    SubLObject sk_var = com.cyc.cycjava.cycl.skolems.skolem_function_var(unreified_sk_term);
+                    SubLObject tou_lit = list($$termOfUnit, sk_var, skolem_term);
+                    SubLObject result = NIL;
+                    SubLObject cdolist_list_var = subst(sk_var, unreified_sk_term, v_clauses, symbol_function(EQUAL), UNPROVIDED);
+                    SubLObject clause = NIL;
+                    for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
+                        if (NIL != list_utilities.cons_tree_find(sk_var, clause, UNPROVIDED, UNPROVIDED)) {
+                            {
+                                SubLObject datum = clause;
+                                SubLObject current = datum;
+                                SubLObject neg_lits = NIL;
+                                SubLObject pos_lits = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt2);
+                                neg_lits = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt2);
+                                pos_lits = current.first();
+                                current = current.rest();
+                                if (NIL == current) {
+                                    result = cons(list(list_utilities.nadd_to_end(tou_lit, neg_lits), pos_lits), result);
+                                } else {
+                                    cdestructuring_bind_error(datum, $list_alt2);
+                                }
+                            }
+                        } else {
+                            result = cons(clause, result);
+                        }
+                    }
+                    return nreverse(result);
+                }
+            } else {
+                if (NIL != skolem_term) {
+                    return subst(skolem_term, unreified_sk_term, v_clauses, symbol_function(EQUAL), UNPROVIDED);
+                } else {
+                    return v_clauses;
+                }
+            }
+        }
     }
 
     public static SubLObject subst_skolem_in(final SubLObject unreified_sk_term, final SubLObject skolem_term, final SubLObject v_clauses) {
@@ -554,6 +1081,17 @@ public final class skolems extends SubLTranslatedFile {
         return v_clauses;
     }
 
+    public static final SubLObject skolem_function_dependent_vars_alt(SubLObject unreified_skolem_term) {
+        {
+            SubLObject result = cycl_utilities.nat_arg1(unreified_skolem_term, UNPROVIDED);
+            SubLObject sequence_var = cycl_utilities.nat_arg3(unreified_skolem_term, UNPROVIDED);
+            if (NIL != sequence_var) {
+                result = cons(sequence_var, result);
+            }
+            return result;
+        }
+    }
+
     public static SubLObject skolem_function_dependent_vars(final SubLObject unreified_skolem_term) {
         SubLObject result = cycl_utilities.nat_arg1(unreified_skolem_term, UNPROVIDED);
         final SubLObject sequence_var = cycl_utilities.nat_arg3(unreified_skolem_term, UNPROVIDED);
@@ -561,6 +1099,30 @@ public final class skolems extends SubLTranslatedFile {
             result = cons(sequence_var, result);
         }
         return result;
+    }
+
+    public static final SubLObject skolem_function_var_alt(SubLObject unreified_skolem_term) {
+        {
+            SubLObject pcase_var = cycl_utilities.nat_functor(unreified_skolem_term);
+            if (pcase_var.eql($$SkolemFunctionFn)) {
+                return cycl_utilities.nat_arg2(unreified_skolem_term, UNPROVIDED);
+            } else {
+                if (pcase_var.eql($$SkolemFunction)) {
+                    return list_utilities.last_one(unreified_skolem_term);
+                } else {
+                    if (pcase_var.eql($$SkolemFuncN)) {
+                        return list_utilities.penultimate_one(unreified_skolem_term);
+                    } else {
+                        if (pcase_var.eql($$SkolemFuncNFn)) {
+                            return cycl_utilities.nat_arg2(unreified_skolem_term, UNPROVIDED);
+                        } else {
+                            el_error(FIVE_INTEGER, $str_alt7$unreified_skolem_term_references_, unreified_skolem_term, UNPROVIDED, UNPROVIDED);
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject skolem_function_var(final SubLObject unreified_skolem_term) {
@@ -579,6 +1141,57 @@ public final class skolems extends SubLTranslatedFile {
         }
         el_error(FIVE_INTEGER, $str7$unreified_skolem_term_references_, unreified_skolem_term, UNPROVIDED, UNPROVIDED);
         return NIL;
+    }
+
+    public static final SubLObject skolem_args_alt(SubLObject unreified_skolem_term, SubLObject v_clauses, SubLObject arg_sort) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sk_number = com.cyc.cycjava.cycl.skolems.skolem_number(unreified_skolem_term);
+                SubLObject args = NIL;
+                {
+                    SubLObject cdolist_list_var = Mapping.mapcar(symbol_function(CAR), Sort.sort(copy_list(arg_sort), symbol_function($sym9$_), symbol_function(CDR)));
+                    SubLObject arg = NIL;
+                    for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                        if (NIL != subl_promotions.memberP(arg, second(unreified_skolem_term), UNPROVIDED, UNPROVIDED)) {
+                            args = cons(arg, args);
+                        }
+                    }
+                }
+                args = nreverse(args);
+                if (czer_vars.$el_trace_level$.getDynamicValue(thread).numGE(ONE_INTEGER)) {
+                    if ((NIL != set_difference(second(unreified_skolem_term), args, UNPROVIDED, UNPROVIDED)) || (NIL != set_difference(args, second(unreified_skolem_term), UNPROVIDED, UNPROVIDED))) {
+                        el_error(THREE_INTEGER, $str_alt11$skolem_args____s_vs__s, second(unreified_skolem_term), args, UNPROVIDED);
+                    }
+                }
+                {
+                    SubLObject sequence_vars = list_utilities.mapunion(symbol_function(CLAUSE_FREE_SEQUENCE_VARIABLES), v_clauses, UNPROVIDED);
+                    SubLObject term_vars = list_utilities.mapunion(symbol_function(CLAUSE_FREE_TERM_VARIABLES), v_clauses, UNPROVIDED);
+                    SubLObject ans = NIL;
+                    if (length(sequence_vars).numG(ONE_INTEGER)) {
+                        sublisp_throw($TOO_MANY_SEQUENCE_VARS_IN_SKOLEM_SCOPE, list($TOO_MANY_SEQUENCE_VARS_IN_SKOLEM_SCOPE, com.cyc.cycjava.cycl.skolems.skolem_seqvar(unreified_skolem_term), sequence_vars));
+                    }
+                    if (NIL != czer_vars.$minimal_skolem_arityP$.getDynamicValue(thread)) {
+                        if (NIL != sk_number) {
+                            return list_utilities.nadd_to_end(sk_number, args);
+                        } else {
+                            return args;
+                        }
+                    } else {
+                        {
+                            SubLObject cdolist_list_var = args;
+                            SubLObject arg = NIL;
+                            for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                                if (NIL != subl_promotions.memberP(arg, term_vars, UNPROVIDED, UNPROVIDED)) {
+                                    ans = cons(arg, ans);
+                                }
+                            }
+                            return nreverse(list_utilities.cons_if(sk_number, ans));
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject skolem_args(final SubLObject unreified_skolem_term, final SubLObject v_clauses, final SubLObject arg_sort) {
@@ -624,6 +1237,68 @@ public final class skolems extends SubLTranslatedFile {
         return args;
     }
 
+    /**
+     * if some skolem fn equivalent to UNREIFIED-SK-TERM has already been reified,
+     * then return a new skolem nat referencing the reified skolem fn,
+     * else, when CREATE? is non-nil, reify a new skolem fn
+     */
+    @LispMethod(comment = "if some skolem fn equivalent to UNREIFIED-SK-TERM has already been reified,\r\nthen return a new skolem nat referencing the reified skolem fn,\r\nelse, when CREATE? is non-nil, reify a new skolem fn\nif some skolem fn equivalent to UNREIFIED-SK-TERM has already been reified,\nthen return a new skolem nat referencing the reified skolem fn,\nelse, when CREATE? is non-nil, reify a new skolem fn")
+    public static final SubLObject canonicalize_skolem_term_alt(SubLObject unreified_sk_term, SubLObject skolem_clauses, SubLObject mt, SubLObject createP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject defn = NIL;
+                SubLObject arg_sort = NIL;
+                SubLObject sortable_skolem_clauses = com.cyc.cycjava.cycl.skolems.replace_unreified_skolem_terms_with_variables(skolem_clauses);
+                {
+                    SubLObject _prev_bind_0 = $skolem_arg_sort$.currentBinding(thread);
+                    try {
+                        $skolem_arg_sort$.bind(NIL, thread);
+                        defn = com.cyc.cycjava.cycl.skolems.sk_defn_from_clauses(com.cyc.cycjava.cycl.skolems.skolem_function_var(unreified_sk_term), sortable_skolem_clauses, symbol_function($sym15$EL_VAR_));
+                        arg_sort = $skolem_arg_sort$.getDynamicValue(thread);
+                    } finally {
+                        $skolem_arg_sort$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                {
+                    SubLObject term_args = com.cyc.cycjava.cycl.skolems.skolem_args(unreified_sk_term, skolem_clauses, arg_sort);
+                    SubLObject seqvar = com.cyc.cycjava.cycl.skolems.skolem_seqvar(unreified_sk_term);
+                    SubLObject possibly_dotted_args = (NIL != seqvar) ? ((SubLObject) (NIL != term_args ? ((SubLObject) (add_sequence_var_to_end(seqvar, term_args))) : seqvar)) : term_args;
+                    SubLObject arity_min = length(term_args);
+                    if (NIL != com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_ofP(unreified_sk_term)) {
+                        com.cyc.cycjava.cycl.skolems.recompute_skolem_defn(unreified_sk_term, term_args, skolem_clauses, mt, defn, arity_min);
+                    }
+                    {
+                        SubLObject sk_defns = com.cyc.cycjava.cycl.skolems.skolem_defns_from_key_specification(arity_min, defn);
+                        SubLObject sk_constant = com.cyc.cycjava.cycl.skolems.lookup_sk_constant_from_defns(defn, mt, sk_defns);
+                        if (NIL != sk_constant) {
+                            return cons(sk_constant, possibly_dotted_args);
+                        } else {
+                            if (NIL != createP) {
+                                {
+                                    SubLObject arg_isas = com.cyc.cycjava.cycl.skolems.skolem_arg_isa_constraints(unreified_sk_term, skolem_clauses, UNPROVIDED);
+                                    SubLObject defn_unreified_sk_term = com.cyc.cycjava.cycl.skolems.defn_unreified_sk_term(unreified_sk_term, term_args, skolem_clauses);
+                                    return com.cyc.cycjava.cycl.skolems.create_skolem(defn_unreified_sk_term, possibly_dotted_args, mt, defn, arg_isas);
+                                }
+                            } else {
+                                if (NIL != list_utilities.not_equal(term_args, second(unreified_sk_term))) {
+                                    return cons(unreified_sk_term.first(), cons(term_args, cddr(unreified_sk_term)));
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * if some skolem fn equivalent to UNREIFIED-SK-TERM has already been reified,
+     * then return a new skolem nat referencing the reified skolem fn,
+     * else, when CREATE? is non-nil, reify a new skolem fn
+     */
+    @LispMethod(comment = "if some skolem fn equivalent to UNREIFIED-SK-TERM has already been reified,\r\nthen return a new skolem nat referencing the reified skolem fn,\r\nelse, when CREATE? is non-nil, reify a new skolem fn\nif some skolem fn equivalent to UNREIFIED-SK-TERM has already been reified,\nthen return a new skolem nat referencing the reified skolem fn,\nelse, when CREATE? is non-nil, reify a new skolem fn")
     public static SubLObject canonicalize_skolem_term(final SubLObject unreified_sk_term, final SubLObject skolem_clauses, final SubLObject mt, final SubLObject createP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject defn = NIL;
@@ -660,8 +1335,54 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject replace_unreified_skolem_terms_with_variables_alt(SubLObject v_clauses) {
+        return transform_list_utilities.transform(v_clauses, $sym16$UNREIFIED_SKOLEM_TERM_, SKOLEM_FUNCTION_VAR, UNPROVIDED);
+    }
+
     public static SubLObject replace_unreified_skolem_terms_with_variables(final SubLObject v_clauses) {
         return transform_list_utilities.transform(v_clauses, $sym16$UNREIFIED_SKOLEM_TERM_, SKOLEM_FUNCTION_VAR, UNPROVIDED);
+    }
+
+    public static final SubLObject lookup_sk_constant_from_defns_alt(SubLObject defn, SubLObject mt, SubLObject sk_defns) {
+        {
+            SubLObject sk_constant = NIL;
+            if (NIL == sk_constant) {
+                {
+                    SubLObject csome_list_var = sk_defns;
+                    SubLObject sk_defn = NIL;
+                    for (sk_defn = csome_list_var.first(); !((NIL != sk_constant) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , sk_defn = csome_list_var.first()) {
+                        {
+                            SubLObject datum = sk_defn;
+                            SubLObject current = datum;
+                            SubLObject old_sk_constant = NIL;
+                            SubLObject old_unreified_sk_term = NIL;
+                            SubLObject sk_mt = NIL;
+                            SubLObject old_defn = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt18);
+                            old_sk_constant = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt18);
+                            old_unreified_sk_term = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt18);
+                            sk_mt = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt18);
+                            old_defn = current.first();
+                            current = current.rest();
+                            if (NIL == current) {
+                                if (defn.equal(old_defn) && (NIL != hlmt.hlmt_equalP(mt, sk_mt))) {
+                                    sk_constant = old_sk_constant;
+                                }
+                            } else {
+                                cdestructuring_bind_error(datum, $list_alt18);
+                            }
+                        }
+                    }
+                }
+            }
+            return sk_constant;
+        }
     }
 
     public static SubLObject lookup_sk_constant_from_defns(final SubLObject defn, final SubLObject mt, final SubLObject sk_defns) {
@@ -703,12 +1424,58 @@ public final class skolems extends SubLTranslatedFile {
         return sk_constant;
     }
 
+    public static final SubLObject defn_unreified_sk_term_alt(SubLObject unreified_sk_term, SubLObject args, SubLObject skolem_clauses) {
+        return list_utilities.replace_nth(ONE_INTEGER, args, czer_main.el_nununiquify_vars_wrt(unreified_sk_term, skolem_clauses));
+    }
+
     public static SubLObject defn_unreified_sk_term(final SubLObject unreified_sk_term, final SubLObject args, final SubLObject skolem_clauses) {
         return list_utilities.replace_nth(ONE_INTEGER, args, czer_main.el_nununiquify_vars_wrt(unreified_sk_term, skolem_clauses));
     }
 
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
+    public static final SubLObject skolem_collection_alt(SubLObject unreified_sk_term) {
+        return NIL != com.cyc.cycjava.cycl.skolems.skolem_number(unreified_sk_term) ? ((SubLObject) (NIL != com.cyc.cycjava.cycl.skolems.skolem_seqvar(unreified_sk_term) ? ((SubLObject) (NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? ((SubLObject) ($$VariableAritySkolemFuncN)) : $$SkolemFuncN)) : NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? ((SubLObject) ($$FixedAritySkolemFuncN)) : $$SkolemFuncN)) : NIL != com.cyc.cycjava.cycl.skolems.skolem_seqvar(unreified_sk_term) ? ((SubLObject) (NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? ((SubLObject) ($$VariableAritySkolemFunction)) : $$SkolemFunction)) : NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? ((SubLObject) ($$FixedAritySkolemFunction)) : $$SkolemFunction;
+    }
+
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
     public static SubLObject skolem_collection(final SubLObject unreified_sk_term) {
         return NIL != skolem_number(unreified_sk_term) ? NIL != skolem_seqvar(unreified_sk_term) ? NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? $$VariableAritySkolemFuncN : $$SkolemFuncN : NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? $$FixedAritySkolemFuncN : $$SkolemFuncN : NIL != skolem_seqvar(unreified_sk_term) ? NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? $$VariableAritySkolemFunction : $$SkolemFunction : NIL != czer_vars.$el_supports_variable_arity_skolemsP$.getGlobalValue() ? $$FixedAritySkolemFunction : $$SkolemFunction;
+    }
+
+    public static final SubLObject create_skolem_alt(SubLObject unreified_sk_term, SubLObject args, SubLObject mt, SubLObject cnfs, SubLObject arg_types) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject skolem = NIL;
+                {
+                    SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+                    try {
+                        api_control_vars.$use_local_queueP$.bind(NIL, thread);
+                        {
+                            SubLObject tl_cnfs = canon_tl.convert_assertions_to_tl_ist_formulas(cnfs);
+                            skolem = fi.fi_create_skolem(constants_high.make_skolem_id(), unreified_sk_term, mt, tl_cnfs, arg_types);
+                            czer_vars.$subordinate_fi_opsP$.setDynamicValue(T, thread);
+                            if (NIL != skolem) {
+                                fi.fi_timestamp_constant(operation_communication.the_cyclist(), numeric_date_utilities.get_universal_date(UNPROVIDED, UNPROVIDED), fi.ke_purpose(), numeric_date_utilities.get_universal_second(UNPROVIDED));
+                            }
+                        }
+                    } finally {
+                        api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return cons(skolem, args);
+            }
+        }
     }
 
     public static SubLObject create_skolem(final SubLObject unreified_sk_term, final SubLObject args, final SubLObject mt, final SubLObject cnfs, final SubLObject arg_types) {
@@ -727,6 +1494,38 @@ public final class skolems extends SubLTranslatedFile {
             api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
         }
         return cons(skolem, args);
+    }
+
+    public static final SubLObject sk_defn_from_clauses_alt(SubLObject unreified_sk_term, SubLObject v_clauses, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym15$EL_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject sorted_clauses = NIL;
+                {
+                    SubLObject cdolist_list_var = v_clauses;
+                    SubLObject clause = NIL;
+                    for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
+                        sorted_clauses = cons(czer_main.canonicalize_skolem_clause(clause, UNPROVIDED), sorted_clauses);
+                    }
+                }
+                if (NIL == czer_vars.$control_2$.getDynamicValue(thread)) {
+                    sorted_clauses = subst(com.cyc.cycjava.cycl.skolems.sk_defn_var(), unreified_sk_term, sorted_clauses, symbol_function(EQUAL), UNPROVIDED);
+                }
+                sorted_clauses = com.cyc.cycjava.cycl.skolems.alpha_sort_clauses(nreverse(sorted_clauses));
+                {
+                    SubLObject cdolist_list_var = sorted_clauses;
+                    SubLObject clause = NIL;
+                    for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
+                        result = cons(com.cyc.cycjava.cycl.skolems.rename_skolem_clause_vars(unreified_sk_term, clause, varP), result);
+                    }
+                }
+                return nreverse(result);
+            }
+        }
     }
 
     public static SubLObject sk_defn_from_clauses(final SubLObject unreified_sk_term, final SubLObject v_clauses, SubLObject varP) {
@@ -758,11 +1557,46 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject alpha_sort_clauses_alt(SubLObject v_clauses) {
+        if (NIL != list_utilities.singletonP(v_clauses)) {
+            return v_clauses;
+        } else {
+            return Sort.stable_sort(copy_list(v_clauses), symbol_function($sym23$STRING_), symbol_function(FORMULA_CONSTANT_STR));
+        }
+    }
+
     public static SubLObject alpha_sort_clauses(final SubLObject v_clauses) {
         if (NIL != list_utilities.singletonP(v_clauses)) {
             return v_clauses;
         }
         return Sort.stable_sort(copy_list(v_clauses), symbol_function($sym23$STRING_), symbol_function(FORMULA_CONSTANT_STR));
+    }
+
+    public static final SubLObject rename_skolem_clause_vars_alt(SubLObject unreified_sk_term, SubLObject clause, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym15$EL_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_new = com.cyc.cycjava.cycl.skolems.sk_defn_var();
+                SubLObject blist = list(cons(unreified_sk_term, v_new));
+                SubLObject count = ONE_INTEGER;
+                SubLObject cdolist_list_var = clausifier.sort_vars(clause_utilities.clause_variables(clause, varP));
+                SubLObject var = NIL;
+                for (var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , var = cdolist_list_var.first()) {
+                    if (!(var.equal(unreified_sk_term) || var.equal(com.cyc.cycjava.cycl.skolems.sk_defn_var()))) {
+                        if (NIL == assoc(var, $skolem_arg_sort$.getDynamicValue(thread), symbol_function(EQUAL), UNPROVIDED)) {
+                            $skolem_arg_sort$.setDynamicValue(cons(cons(var, count), $skolem_arg_sort$.getDynamicValue(thread)), thread);
+                        }
+                        v_new = czer_utilities.get_nth_canonical_variable(count, $EL_VAR);
+                        count = add(count, ONE_INTEGER);
+                        blist = cons(cons(var, v_new), blist);
+                    }
+                }
+                return sublis(blist, clause, symbol_function(EQUAL), UNPROVIDED);
+            }
+        }
     }
 
     public static SubLObject rename_skolem_clause_vars(final SubLObject unreified_sk_term, final SubLObject clause, SubLObject varP) {
@@ -791,8 +1625,22 @@ public final class skolems extends SubLTranslatedFile {
         return sublis(blist, clause, symbol_function(EQUAL), UNPROVIDED);
     }
 
+    public static final SubLObject sk_defn_var_alt() {
+        return czer_utilities.get_nth_canonical_variable(ZERO_INTEGER, $EL_VAR);
+    }
+
     public static SubLObject sk_defn_var() {
         return czer_utilities.get_nth_canonical_variable(ZERO_INTEGER, $EL_VAR);
+    }
+
+    public static final SubLObject clear_formula_constant_str_alt() {
+        {
+            SubLObject cs = $formula_constant_str_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject clear_formula_constant_str() {
@@ -803,12 +1651,37 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_formula_constant_str_alt(SubLObject formula) {
+        return memoization_state.caching_state_remove_function_results_with_args($formula_constant_str_caching_state$.getGlobalValue(), list(formula), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_formula_constant_str(final SubLObject formula) {
         return memoization_state.caching_state_remove_function_results_with_args($formula_constant_str_caching_state$.getGlobalValue(), list(formula), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject formula_constant_str_internal_alt(SubLObject formula) {
+        return string_utilities.str(formula_non_var_symbols(formula, symbol_function($sym26$CYC_VAR_EXCEPT_FOR_X_0_)));
+    }
+
     public static SubLObject formula_constant_str_internal(final SubLObject formula) {
         return string_utilities.str(formula_non_var_symbols(formula, symbol_function($sym26$CYC_VAR_EXCEPT_FOR_X_0_)));
+    }
+
+    public static final SubLObject formula_constant_str_alt(SubLObject formula) {
+        {
+            SubLObject caching_state = $formula_constant_str_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(FORMULA_CONSTANT_STR, $formula_constant_str_caching_state$, NIL, EQUAL, ONE_INTEGER, $int$64);
+            }
+            {
+                SubLObject results = memoization_state.caching_state_lookup(caching_state, formula, $kw29$_MEMOIZED_ITEM_NOT_FOUND_);
+                if (results == $kw29$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.skolems.formula_constant_str_internal(formula)));
+                    memoization_state.caching_state_put(caching_state, formula, results, UNPROVIDED);
+                }
+                return memoization_state.caching_results(results);
+            }
+        }
     }
 
     public static SubLObject formula_constant_str(final SubLObject formula) {
@@ -824,6 +1697,22 @@ public final class skolems extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    /**
+     * We pinned the position of ?X-0 down by the unreified-sk-term, so we can treat it as a non-var.
+     */
+    @LispMethod(comment = "We pinned the position of ?X-0 down by the unreified-sk-term, so we can treat it as a non-var.")
+    public static final SubLObject cyc_var_except_for_x_0P_alt(SubLObject v_object) {
+        if ($sym30$_X_0.eql(v_object)) {
+            return NIL;
+        } else {
+            return cycl_variables.cyc_varP(v_object);
+        }
+    }
+
+    /**
+     * We pinned the position of ?X-0 down by the unreified-sk-term, so we can treat it as a non-var.
+     */
+    @LispMethod(comment = "We pinned the position of ?X-0 down by the unreified-sk-term, so we can treat it as a non-var.")
     public static SubLObject cyc_var_except_for_x_0P(final SubLObject v_object) {
         if ($sym30$_X_0.eql(v_object)) {
             return NIL;
@@ -831,8 +1720,23 @@ public final class skolems extends SubLTranslatedFile {
         return cycl_variables.cyc_varP(v_object);
     }
 
+    public static final SubLObject make_sk_defn_alt(SubLObject sk_constant, SubLObject unreified_sk_term, SubLObject mt, SubLObject cnfs) {
+        return list(sk_constant, unreified_sk_term, mt, cnfs);
+    }
+
     public static SubLObject make_sk_defn(final SubLObject sk_constant, final SubLObject unreified_sk_term, final SubLObject mt, final SubLObject cnfs) {
         return list(sk_constant, unreified_sk_term, mt, cnfs);
+    }
+
+    public static final SubLObject sk_arity_alt(SubLObject sk_args, SubLObject sk_number) {
+        if (sk_number == UNPROVIDED) {
+            sk_number = NIL;
+        }
+        if (NIL != sk_number) {
+            return add(ONE_INTEGER, length(sk_args));
+        } else {
+            return length(sk_args);
+        }
     }
 
     public static SubLObject sk_arity(final SubLObject sk_args, SubLObject sk_number) {
@@ -845,11 +1749,57 @@ public final class skolems extends SubLTranslatedFile {
         return length(sk_args);
     }
 
+    public static final SubLObject make_unreified_sk_nat_alt(SubLObject sk_args, SubLObject sk_var, SubLObject sk_seqvar, SubLObject sk_number) {
+        if (NIL != sk_number) {
+            return list($$SkolemFuncNFn, sk_args, sk_var, sk_seqvar, sk_number);
+        } else {
+            return list($$SkolemFunctionFn, sk_args, sk_var, sk_seqvar);
+        }
+    }
+
     public static SubLObject make_unreified_sk_nat(final SubLObject sk_args, final SubLObject sk_var, final SubLObject sk_seqvar, final SubLObject sk_number) {
         if (NIL != sk_number) {
             return list($$SkolemFuncNFn, sk_args, sk_var, sk_seqvar, sk_number);
         }
         return list($$SkolemFunctionFn, sk_args, sk_var, sk_seqvar);
+    }
+
+    public static final SubLObject skolem_defn_alt(SubLObject skolem) {
+        {
+            SubLObject v_answer = NIL;
+            SubLObject catch_var = NIL;
+            try {
+                {
+                    SubLObject key = NIL;
+                    SubLObject v_defns = NIL;
+                    {
+                        final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                        try {
+                            while (iteratorHasNext(cdohash_iterator)) {
+                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                key = getEntryKey(cdohash_entry);
+                                v_defns = getEntryValue(cdohash_entry);
+                                {
+                                    SubLObject cdolist_list_var = v_defns;
+                                    SubLObject defn = NIL;
+                                    for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                        if (defn.first() == skolem) {
+                                            v_answer = defn;
+                                            mapping_finished();
+                                        }
+                                    }
+                                }
+                            } 
+                        } finally {
+                            releaseEntrySetIterator(cdohash_iterator);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var = Errors.handleThrowable(ccatch_env_var, $MAPPING_DONE);
+            }
+            return v_answer;
+        }
     }
 
     public static SubLObject skolem_defn(final SubLObject skolem) {
@@ -889,6 +1839,44 @@ public final class skolems extends SubLTranslatedFile {
         return v_answer;
     }
 
+    public static final SubLObject skolem_defnXkey_alt(SubLObject skolem) {
+        {
+            SubLObject v_answer = NIL;
+            SubLObject catch_var = NIL;
+            try {
+                {
+                    SubLObject key = NIL;
+                    SubLObject v_defns = NIL;
+                    {
+                        final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                        try {
+                            while (iteratorHasNext(cdohash_iterator)) {
+                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                key = getEntryKey(cdohash_entry);
+                                v_defns = getEntryValue(cdohash_entry);
+                                {
+                                    SubLObject cdolist_list_var = v_defns;
+                                    SubLObject defn = NIL;
+                                    for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                        if (defn.first() == skolem) {
+                                            v_answer = list(defn, key);
+                                            mapping_finished();
+                                        }
+                                    }
+                                }
+                            } 
+                        } finally {
+                            releaseEntrySetIterator(cdohash_iterator);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var = Errors.handleThrowable(ccatch_env_var, $MAPPING_DONE);
+            }
+            return v_answer;
+        }
+    }
+
     public static SubLObject skolem_defnXkey(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject v_answer = NIL;
@@ -924,6 +1912,44 @@ public final class skolems extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return v_answer;
+    }
+
+    public static final SubLObject skolem_defn_key_alt(SubLObject skolem) {
+        {
+            SubLObject v_answer = NIL;
+            SubLObject catch_var = NIL;
+            try {
+                {
+                    SubLObject key = NIL;
+                    SubLObject v_defns = NIL;
+                    {
+                        final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                        try {
+                            while (iteratorHasNext(cdohash_iterator)) {
+                                final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                key = getEntryKey(cdohash_entry);
+                                v_defns = getEntryValue(cdohash_entry);
+                                {
+                                    SubLObject cdolist_list_var = v_defns;
+                                    SubLObject defn = NIL;
+                                    for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                        if (defn.first() == skolem) {
+                                            v_answer = key;
+                                            mapping_finished();
+                                        }
+                                    }
+                                }
+                            } 
+                        } finally {
+                            releaseEntrySetIterator(cdohash_iterator);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var = Errors.handleThrowable(ccatch_env_var, $MAPPING_DONE);
+            }
+            return v_answer;
+        }
     }
 
     public static SubLObject skolem_defn_key(final SubLObject skolem) {
@@ -963,18 +1989,50 @@ public final class skolems extends SubLTranslatedFile {
         return v_answer;
     }
 
+    public static final SubLObject skolem_of_defn_alt(SubLObject skolem_defn) {
+        return skolem_defn.first();
+    }
+
     public static SubLObject skolem_of_defn(final SubLObject skolem_defn) {
         return skolem_defn.first();
+    }
+
+    public static final SubLObject unreified_sk_term_alt(SubLObject skolem) {
+        return second(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem));
     }
 
     public static SubLObject unreified_sk_term(final SubLObject skolem) {
         return second(skolem_defn(skolem));
     }
 
+    public static final SubLObject skolem_defn_mt_alt(SubLObject constant) {
+        return third(com.cyc.cycjava.cycl.skolems.skolem_defn(constant));
+    }
+
     public static SubLObject skolem_defn_mt(final SubLObject constant) {
         return third(skolem_defn(constant));
     }
 
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
+    public static final SubLObject skolem_seqvar_alt(SubLObject unreified_skolem_term) {
+        if (NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(unreified_skolem_term)) {
+            return NIL;
+        } else {
+            return cycl_utilities.nat_arg3(unreified_skolem_term, UNPROVIDED);
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
     public static SubLObject skolem_seqvar(final SubLObject unreified_skolem_term) {
         if (NIL != old_format_skolemP(unreified_skolem_term)) {
             return NIL;
@@ -982,10 +2040,51 @@ public final class skolems extends SubLTranslatedFile {
         return cycl_utilities.nat_arg3(unreified_skolem_term, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
+    public static final SubLObject skolem_defn_seqvar_alt(SubLObject skolem) {
+        return com.cyc.cycjava.cycl.skolems.skolem_seqvar(com.cyc.cycjava.cycl.skolems.unreified_sk_term(skolem));
+    }
+
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
     public static SubLObject skolem_defn_seqvar(final SubLObject skolem) {
         return skolem_seqvar(unreified_sk_term(skolem));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff UNREIFIED-SKOLEM-TERM is a legacy skolem of the shorter format before sequence variables were introduced (2/00).
+     * @unknown pace
+     */
+    @LispMethod(comment = "@return boolean; t iff UNREIFIED-SKOLEM-TERM is a legacy skolem of the shorter format before sequence variables were introduced (2/00).\r\n@unknown pace")
+    public static final SubLObject old_format_skolemP_alt(SubLObject unreified_skolem_term) {
+        if ($$SkolemFunctionFn == cycl_utilities.nat_functor(unreified_skolem_term)) {
+            return formula_arityE(unreified_skolem_term, TWO_INTEGER, UNPROVIDED);
+        } else {
+            if ($$SkolemFuncNFn == cycl_utilities.nat_functor(unreified_skolem_term)) {
+                return formula_arityE(unreified_skolem_term, THREE_INTEGER, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff UNREIFIED-SKOLEM-TERM is a legacy skolem of the shorter format before sequence variables were introduced (2/00).
+     * @unknown pace
+     */
+    @LispMethod(comment = "@return boolean; t iff UNREIFIED-SKOLEM-TERM is a legacy skolem of the shorter format before sequence variables were introduced (2/00).\r\n@unknown pace")
     public static SubLObject old_format_skolemP(final SubLObject unreified_skolem_term) {
         if ($$SkolemFunctionFn.eql(cycl_utilities.nat_functor(unreified_skolem_term))) {
             return formula_arityE(unreified_skolem_term, TWO_INTEGER, UNPROVIDED);
@@ -996,6 +2095,26 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
+    public static final SubLObject skolem_number_alt(SubLObject unreified_skolem_term) {
+        if (NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(unreified_skolem_term)) {
+            return cycl_utilities.nat_arg3(unreified_skolem_term, UNPROVIDED);
+        } else {
+            return cycl_utilities.nat_arg4(unreified_skolem_term, UNPROVIDED);
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "@unknown pace")
     public static SubLObject skolem_number(final SubLObject unreified_skolem_term) {
         if (NIL != old_format_skolemP(unreified_skolem_term)) {
             return cycl_utilities.nat_arg3(unreified_skolem_term, UNPROVIDED);
@@ -1003,18 +2122,84 @@ public final class skolems extends SubLTranslatedFile {
         return cycl_utilities.nat_arg4(unreified_skolem_term, UNPROVIDED);
     }
 
+    public static final SubLObject skolem_defn_number_alt(SubLObject skolem) {
+        return com.cyc.cycjava.cycl.skolems.skolem_number(com.cyc.cycjava.cycl.skolems.unreified_sk_term(skolem));
+    }
+
     public static SubLObject skolem_defn_number(final SubLObject skolem) {
         return skolem_number(unreified_sk_term(skolem));
+    }
+
+    public static final SubLObject skolem_defn_args_alt(SubLObject skolem) {
+        return second(com.cyc.cycjava.cycl.skolems.unreified_sk_term(skolem));
     }
 
     public static SubLObject skolem_defn_args(final SubLObject skolem) {
         return second(unreified_sk_term(skolem));
     }
 
+    public static final SubLObject skolem_var_alt(SubLObject skolem) {
+        return com.cyc.cycjava.cycl.skolems.skolem_function_var(com.cyc.cycjava.cycl.skolems.unreified_sk_term(skolem));
+    }
+
     public static SubLObject skolem_var(final SubLObject skolem) {
         return skolem_function_var(unreified_sk_term(skolem));
     }
 
+    /**
+     * Note: this updates old format skolems into new format skolems automatically.
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "Note: this updates old format skolems into new format skolems automatically.\r\n\r\n@unknown pace")
+    public static final SubLObject el_unreified_sk_term_alt(SubLObject constant) {
+        {
+            SubLObject unreified_sk_term = com.cyc.cycjava.cycl.skolems.compute_unreified_sk_term_via_hl(constant);
+            SubLObject skolem_number = com.cyc.cycjava.cycl.skolems.skolem_number(unreified_sk_term);
+            if (NIL != skolem_number) {
+                {
+                    SubLObject datum = unreified_sk_term;
+                    SubLObject current = datum;
+                    SubLObject skolem_type = NIL;
+                    SubLObject vars = NIL;
+                    SubLObject sk_var = NIL;
+                    SubLObject seqvar_or_number = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt32);
+                    skolem_type = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt32);
+                    vars = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt32);
+                    sk_var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt32);
+                    seqvar_or_number = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject number = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
+                        destructuring_bind_must_listp(current, datum, $list_alt32);
+                        current = current.rest();
+                        if (NIL == current) {
+                            return NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(unreified_sk_term) ? ((SubLObject) (make_el_formula(skolem_type, list(butlast(vars, UNPROVIDED), sk_var, NIL, seqvar_or_number), UNPROVIDED))) : make_el_formula(skolem_type, list(butlast(vars, UNPROVIDED), sk_var, seqvar_or_number, number), UNPROVIDED);
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt32);
+                        }
+                    }
+                }
+            } else {
+                return NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(unreified_sk_term) ? ((SubLObject) (list_utilities.nadd_to_end(NIL, unreified_sk_term))) : unreified_sk_term;
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Note: this updates old format skolems into new format skolems automatically.
+     *
+     * @unknown pace
+     */
+    @LispMethod(comment = "Note: this updates old format skolems into new format skolems automatically.\r\n\r\n@unknown pace")
     public static SubLObject el_unreified_sk_term(final SubLObject constant) {
         final SubLObject unreified_sk_term = compute_unreified_sk_term_via_hl(constant);
         final SubLObject skolem_number = skolem_number(unreified_sk_term);
@@ -1049,6 +2234,29 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject compute_unreified_sk_term_via_hl_alt(SubLObject skolem) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject sk_args = com.cyc.cycjava.cycl.skolems.compute_skolem_info_from_assertions(skolem, com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED));
+                SubLObject sk_var = thread.secondMultipleValue();
+                SubLObject sk_seqvar = thread.thirdMultipleValue();
+                SubLObject sk_number = thread.fourthMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL != sk_var) {
+                    {
+                        SubLObject args = clausifier.sort_vars(sk_args);
+                        SubLObject sk_defn_args = (NIL != sk_number) ? ((SubLObject) (nreverse(cons(sk_number, nreverse(args))))) : args;
+                        SubLObject unreified_sk_term = com.cyc.cycjava.cycl.skolems.make_unreified_sk_nat(sk_defn_args, sk_var, sk_seqvar, sk_number);
+                        return unreified_sk_term;
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject compute_unreified_sk_term_via_hl(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1064,6 +2272,105 @@ public final class skolems extends SubLTranslatedFile {
             return unreified_sk_term;
         }
         return NIL;
+    }
+
+    public static final SubLObject compute_skolem_info_from_assertions_alt(SubLObject skolem, SubLObject assertions) {
+        {
+            SubLObject cnfs = NIL;
+            SubLObject args = NIL;
+            SubLObject sk_args = NIL;
+            SubLObject sk_var = NIL;
+            SubLObject sk_seqvar = NIL;
+            SubLObject sk_number = NIL;
+            SubLObject generate_sk_varP = NIL;
+            SubLObject cdolist_list_var = assertions;
+            SubLObject assertion = NIL;
+            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                {
+                    SubLObject cnf = fi.assertion_cnf_with_el_vars(assertion);
+                    SubLObject tou_lits = uncanonicalizer.tou_lits_to_remove(cnf);
+                    SubLObject pos_lits = NIL;
+                    SubLObject neg_lits = NIL;
+                    SubLObject sk_cnf = NIL;
+                    if ((NIL == tou_lits) && (arity.arity(skolem) == ZERO_INTEGER)) {
+                        cnfs = cons(cnf, cnfs);
+                        generate_sk_varP = T;
+                    } else {
+                        pos_lits = set_difference(clauses.pos_lits(cnf), tou_lits, symbol_function(EQUAL), UNPROVIDED);
+                        neg_lits = set_difference(clauses.neg_lits(cnf), tou_lits, symbol_function(EQUAL), UNPROVIDED);
+                        sk_cnf = clauses.make_cnf(neg_lits, pos_lits);
+                        {
+                            SubLObject cdolist_list_var_1 = tou_lits;
+                            SubLObject lit = NIL;
+                            for (lit = cdolist_list_var_1.first(); NIL != cdolist_list_var_1; cdolist_list_var_1 = cdolist_list_var_1.rest() , lit = cdolist_list_var_1.first()) {
+                                if (NIL == term.reified_skolem_termP(literal_arg2(lit, UNPROVIDED))) {
+                                    sk_cnf = subst(literal_arg2(lit, UNPROVIDED), literal_arg1(lit, UNPROVIDED), sk_cnf, symbol_function(EQUAL), UNPROVIDED);
+                                }
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var_2 = tou_lits;
+                            SubLObject lit = NIL;
+                            for (lit = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , lit = cdolist_list_var_2.first()) {
+                                if (skolem == cycl_utilities.nat_functor(literal_arg2(lit, UNPROVIDED))) {
+                                    if (NIL == sk_var) {
+                                        sk_var = literal_arg1(lit, UNPROVIDED);
+                                        if (NIL == args) {
+                                            args = cycl_utilities.nat_args(literal_arg2(lit, UNPROVIDED), UNPROVIDED);
+                                            {
+                                                SubLObject seqvar = sequence_var(literal_arg2(lit, UNPROVIDED), UNPROVIDED);
+                                                if (NIL != seqvar) {
+                                                    if ((NIL != sk_seqvar) && (!seqvar.eql(sk_seqvar))) {
+                                                        Errors.warn($str_alt33$Multiple_skolem_sequence_variable, skolem, sk_seqvar, seqvar);
+                                                    } else {
+                                                        sk_seqvar = seqvar;
+                                                    }
+                                                }
+                                            }
+                                            {
+                                                SubLObject cdolist_list_var_3 = args;
+                                                SubLObject arg = NIL;
+                                                for (arg = cdolist_list_var_3.first(); NIL != cdolist_list_var_3; cdolist_list_var_3 = cdolist_list_var_3.rest() , arg = cdolist_list_var_3.first()) {
+                                                    if (NIL != collection_defns.el_variableP(arg)) {
+                                                        sk_args = cons(arg, sk_args);
+                                                    } else {
+                                                        if ((NIL != com.cyc.cycjava.cycl.skolems.skolem_scalar_termP(arg, assertions_high.assertion_mt(assertion))) && arg.equal(list_utilities.last_one(args))) {
+                                                            if (NIL == sk_number) {
+                                                                sk_number = arg;
+                                                            }
+                                                        } else {
+                                                            Errors.warn($str_alt34$SkolemFuncN_appears_as_SkolemFunc, skolem);
+                                                            sk_args = cons(arg, sk_args);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            sk_args = nreverse(sk_args);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        cnfs = cons(sk_cnf, cnfs);
+                    }
+                }
+            }
+            cnfs = nreverse(cnfs);
+            if (NIL != generate_sk_varP) {
+                if (NIL == sk_var) {
+                    {
+                        SubLObject skolem_nart = narts_high.find_nart(list(skolem));
+                        if (NIL != skolem_nart) {
+                            sk_var = czer_utilities.unique_el_var_wrt_expression(cnfs, UNPROVIDED);
+                            if (!$sym35$_X.eql(sk_var)) {
+                                print(sk_var, UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+            }
+            return values(sk_args, sk_var, sk_seqvar, sk_number);
+        }
     }
 
     public static SubLObject compute_skolem_info_from_assertions(final SubLObject skolem, final SubLObject assertions) {
@@ -1159,6 +2466,40 @@ public final class skolems extends SubLTranslatedFile {
         return values(sk_args, sk_var, sk_seqvar, sk_number);
     }
 
+    public static final SubLObject skolem_table_key_from_defn_alt(SubLObject defn) {
+        if (NIL != defn) {
+            {
+                SubLObject datum = defn;
+                SubLObject current = datum;
+                SubLObject sk_constant = NIL;
+                SubLObject unreified_sk_term = NIL;
+                SubLObject mt = NIL;
+                SubLObject cnfs = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt36);
+                sk_constant = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt36);
+                unreified_sk_term = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt36);
+                mt = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt36);
+                cnfs = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    {
+                        SubLObject sk_args = second(unreified_sk_term);
+                        return com.cyc.cycjava.cycl.skolems.skolem_hash_key(length(sk_args), cnfs);
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt36);
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject skolem_table_key_from_defn(final SubLObject defn) {
         if (NIL != defn) {
             SubLObject sk_constant = NIL;
@@ -1186,16 +2527,42 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject skolem_table_key_from_constant_alt(SubLObject skolem) {
+        return com.cyc.cycjava.cycl.skolems.skolem_table_key_from_defn(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem));
+    }
+
     public static SubLObject skolem_table_key_from_constant(final SubLObject skolem) {
         return skolem_table_key_from_defn(skolem_defn(skolem));
+    }
+
+    public static final SubLObject skolem_hash_key_alt(SubLObject v_arity, SubLObject skolem_clauses) {
+        return cons(v_arity, czer_main.fort_sort_by_type_and_id(cycl_utilities.formula_forts(com.cyc.cycjava.cycl.skolems.opaquify_unreified_skolem_terms(skolem_clauses), UNPROVIDED, UNPROVIDED, UNPROVIDED)));
     }
 
     public static SubLObject skolem_hash_key(final SubLObject v_arity, final SubLObject skolem_clauses) {
         return cons(v_arity, czer_main.fort_sort_by_type_and_id(cycl_utilities.formula_forts(opaquify_unreified_skolem_terms(skolem_clauses), UNPROVIDED, UNPROVIDED, UNPROVIDED)));
     }
 
+    public static final SubLObject opaquify_unreified_skolem_terms_alt(SubLObject v_clauses) {
+        return transform_list_utilities.transform(v_clauses, $sym16$UNREIFIED_SKOLEM_TERM_, FALSE, UNPROVIDED);
+    }
+
     public static SubLObject opaquify_unreified_skolem_terms(final SubLObject v_clauses) {
         return transform_list_utilities.transform(v_clauses, $sym16$UNREIFIED_SKOLEM_TERM_, FALSE, UNPROVIDED);
+    }
+
+    public static final SubLObject skolem_defns_from_key_specification_alt(SubLObject v_arity, SubLObject skolem_clauses) {
+        {
+            SubLObject key = com.cyc.cycjava.cycl.skolems.skolem_hash_key(v_arity, skolem_clauses);
+            SubLObject v_defns = gethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), UNPROVIDED);
+            SubLObject ort_key = cons(v_arity, czer_main.fort_sort_by_type_and_id(cycl_utilities.formula_constants(skolem_clauses, UNPROVIDED)));
+            SubLObject ort_defns = gethash(ort_key, czer_vars.$skolem_axiom_table$.getGlobalValue(), UNPROVIDED);
+            if (NIL != ort_defns) {
+                return append(v_defns, ort_defns);
+            } else {
+                return v_defns;
+            }
+        }
     }
 
     public static SubLObject skolem_defns_from_key_specification(final SubLObject v_arity, final SubLObject skolem_clauses) {
@@ -1207,6 +2574,35 @@ public final class skolems extends SubLTranslatedFile {
             return append(v_defns, ort_defns);
         }
         return v_defns;
+    }
+
+    public static final SubLObject cnfs_of_skolem_defn_alt(SubLObject skolem_defn) {
+        {
+            SubLObject datum = skolem_defn;
+            SubLObject current = datum;
+            SubLObject sk_constant = NIL;
+            SubLObject unreified_sk_term = NIL;
+            SubLObject mt = NIL;
+            SubLObject cnfs = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            sk_constant = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            unreified_sk_term = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            mt = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            cnfs = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                return cnfs;
+            } else {
+                cdestructuring_bind_error(datum, $list_alt36);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject cnfs_of_skolem_defn(final SubLObject skolem_defn) {
@@ -1230,6 +2626,35 @@ public final class skolems extends SubLTranslatedFile {
             return cnfs;
         }
         cdestructuring_bind_error(skolem_defn, $list36);
+        return NIL;
+    }
+
+    public static final SubLObject mt_of_skolem_defn_alt(SubLObject skolem_defn) {
+        {
+            SubLObject datum = skolem_defn;
+            SubLObject current = datum;
+            SubLObject sk_constant = NIL;
+            SubLObject unreified_sk_term = NIL;
+            SubLObject mt = NIL;
+            SubLObject cnfs = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            sk_constant = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            unreified_sk_term = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            mt = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            cnfs = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                return mt;
+            } else {
+                cdestructuring_bind_error(datum, $list_alt36);
+            }
+        }
         return NIL;
     }
 
@@ -1257,6 +2682,23 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject skolem_defn_cnfs_alt(SubLObject skolem) {
+        {
+            SubLObject cnfs = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+            SubLObject assertion = NIL;
+            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                {
+                    SubLObject item_var = assertions_high.assertion_cnf(assertion);
+                    if (NIL == member(item_var, cnfs, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                        cnfs = cons(item_var, cnfs);
+                    }
+                }
+            }
+            return nreverse(cnfs);
+        }
+    }
+
     public static SubLObject skolem_defn_cnfs(final SubLObject skolem) {
         SubLObject cnfs = NIL;
         SubLObject cdolist_list_var = skolem_defn_assertions(skolem, UNPROVIDED);
@@ -1273,6 +2715,63 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(cnfs);
     }
 
+    /**
+     * A version of @xref skolem-defn-assertions that ignores errors, and
+     * if the skolem defn assertions are NIL, returns all rules on the skolem.
+     * That's not correct, especially not for zero-arity skolems, but it's strictly better than NIL.
+     */
+    @LispMethod(comment = "A version of @xref skolem-defn-assertions that ignores errors, and\r\nif the skolem defn assertions are NIL, returns all rules on the skolem.\r\nThat\'s not correct, especially not for zero-arity skolems, but it\'s strictly better than NIL.\nA version of @xref skolem-defn-assertions that ignores errors, and\nif the skolem defn assertions are NIL, returns all rules on the skolem.\nThat\'s not correct, especially not for zero-arity skolems, but it\'s strictly better than NIL.")
+    public static final SubLObject skolem_defn_assertions_robust_alt(SubLObject skolem, SubLObject printP) {
+        if (printP == UNPROVIDED) {
+            printP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject ignore_errors_tag = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
+                        try {
+                            Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                            try {
+                                result = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, printP);
+                            } catch (Throwable catch_var) {
+                                Errors.handleThrowable(catch_var, NIL);
+                            }
+                        } finally {
+                            Errors.$error_handler$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                }
+                if (NIL == result) {
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                            result = kb_mapping.gather_function_rule_index(skolem, UNPROVIDED, UNPROVIDED);
+                        } finally {
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * A version of @xref skolem-defn-assertions that ignores errors, and
+     * if the skolem defn assertions are NIL, returns all rules on the skolem.
+     * That's not correct, especially not for zero-arity skolems, but it's strictly better than NIL.
+     */
+    @LispMethod(comment = "A version of @xref skolem-defn-assertions that ignores errors, and\r\nif the skolem defn assertions are NIL, returns all rules on the skolem.\r\nThat\'s not correct, especially not for zero-arity skolems, but it\'s strictly better than NIL.\nA version of @xref skolem-defn-assertions that ignores errors, and\nif the skolem defn assertions are NIL, returns all rules on the skolem.\nThat\'s not correct, especially not for zero-arity skolems, but it\'s strictly better than NIL.")
     public static SubLObject skolem_defn_assertions_robust(final SubLObject skolem, SubLObject printP) {
         if (printP == UNPROVIDED) {
             printP = NIL;
@@ -1313,16 +2812,46 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject skolem_function_has_no_defn_assertions_robustP_alt(SubLObject skolem_function) {
+        return sublisp_null(com.cyc.cycjava.cycl.skolems.skolem_defn_assertions_robust(skolem_function, UNPROVIDED));
+    }
+
     public static SubLObject skolem_function_has_no_defn_assertions_robustP(final SubLObject skolem_function) {
         return sublisp_null(skolem_defn_assertions_robust(skolem_function, UNPROVIDED));
+    }
+
+    public static final SubLObject skolem_function_has_no_defn_assertionsP_alt(SubLObject skolem_function) {
+        return sublisp_null(com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem_function, UNPROVIDED));
     }
 
     public static SubLObject skolem_function_has_no_defn_assertionsP(final SubLObject skolem_function) {
         return sublisp_null(skolem_defn_assertions(skolem_function, UNPROVIDED));
     }
 
+    public static final SubLObject skolem_defining_bookkeeping_assertion_alt(SubLObject skolem) {
+        return kb_mapping_utilities.fpred_value_gaf(skolem, $$skolem, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject skolem_defining_bookkeeping_assertion(final SubLObject skolem) {
         return kb_mapping_utilities.fpred_value_gaf_in_any_mt(skolem, $$skolem, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject skolem_defn_assertions_alt(SubLObject skolem, SubLObject printP) {
+        if (printP == UNPROVIDED) {
+            printP = NIL;
+        }
+        {
+            SubLObject defining_bookeeping_assertion = com.cyc.cycjava.cycl.skolems.skolem_defining_bookkeeping_assertion(skolem);
+            if (NIL != defining_bookeeping_assertion) {
+                {
+                    SubLObject deduction = assertions_high.assertion_arguments(defining_bookeeping_assertion).first();
+                    if (NIL != deduction_handles.deduction_p(deduction)) {
+                        return deductions_high.deduction_supports(deduction);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject skolem_defn_assertions(final SubLObject skolem, SubLObject printP) {
@@ -1337,6 +2866,43 @@ public final class skolems extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject skolems_defn_assertions_alt(SubLObject v_skolems) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = v_skolems;
+            SubLObject skolem = NIL;
+            for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                {
+                    SubLObject items_var = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                    if (items_var.isVector()) {
+                        {
+                            SubLObject vector_var = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                            SubLObject backwardP_var = NIL;
+                            SubLObject length = length(vector_var);
+                            SubLObject v_iteration = NIL;
+                            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                                {
+                                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                                    SubLObject item = aref(vector_var, element_num);
+                                    result = cons(item, result);
+                                }
+                            }
+                        }
+                    } else {
+                        {
+                            SubLObject cdolist_list_var_4 = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                            SubLObject item = NIL;
+                            for (item = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , item = cdolist_list_var_4.first()) {
+                                result = cons(item, result);
+                            }
+                        }
+                    }
+                }
+            }
+            return delete_duplicates(nreverse(result), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
     }
 
     public static SubLObject skolems_defn_assertions(final SubLObject v_skolems) {
@@ -1374,6 +2940,37 @@ public final class skolems extends SubLTranslatedFile {
         return delete_duplicates(nreverse(result), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return list of skolem-function-p; all skolems (including SKOLEM itself) that occur in SKOLEM's defining assertions
+     */
+    @LispMethod(comment = "@return list of skolem-function-p; all skolems (including SKOLEM itself) that occur in SKOLEM\'s defining assertions")
+    public static final SubLObject skolem_defn_siblings_alt(SubLObject skolem) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = czer_vars.$assertion_key$.currentBinding(thread);
+                    try {
+                        czer_vars.$assertion_key$.bind(ASSERTION_IST_FORMULA, thread);
+                        result = cycl_utilities.expression_gather(com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, NIL), SKOLEM_FUNCTION_P, T, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        czer_vars.$assertion_key$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return list of skolem-function-p; all skolems (including SKOLEM itself) that occur in SKOLEM's defining assertions
+     */
+    @LispMethod(comment = "@return list of skolem-function-p; all skolems (including SKOLEM itself) that occur in SKOLEM\'s defining assertions")
     public static SubLObject skolem_defn_siblings(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1387,18 +2984,96 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     *
+     *
+     * @return list of skolem-function-p; other skolems that occur in SKOLEM's defining assertions
+     */
+    @LispMethod(comment = "@return list of skolem-function-p; other skolems that occur in SKOLEM\'s defining assertions")
+    public static final SubLObject skolem_defn_proper_siblings_alt(SubLObject skolem) {
+        return remove(skolem, com.cyc.cycjava.cycl.skolems.skolem_defn_siblings(skolem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     *
+     *
+     * @return list of skolem-function-p; other skolems that occur in SKOLEM's defining assertions
+     */
+    @LispMethod(comment = "@return list of skolem-function-p; other skolems that occur in SKOLEM\'s defining assertions")
     public static SubLObject skolem_defn_proper_siblings(final SubLObject skolem) {
         return remove(skolem, skolem_defn_siblings(skolem), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @unknown this uses internal ids so may not be stable across images
+     */
+    @LispMethod(comment = "@unknown this uses internal ids so may not be stable across images")
+    public static final SubLObject skolem_canonical_sibling_alt(SubLObject skolem) {
+        return kb_utilities.sort_forts(copy_list(com.cyc.cycjava.cycl.skolems.skolem_defn_siblings(skolem))).first();
+    }
+
+    /**
+     *
+     *
+     * @unknown this uses internal ids so may not be stable across images
+     */
+    @LispMethod(comment = "@unknown this uses internal ids so may not be stable across images")
     public static SubLObject skolem_canonical_sibling(final SubLObject skolem) {
         return kb_utilities.sort_forts(copy_list(skolem_defn_siblings(skolem))).first();
+    }
+
+    public static final SubLObject skolems_min_mt_alt(SubLObject v_skolems) {
+        return assertion_utilities.assertions_min_mt(com.cyc.cycjava.cycl.skolems.skolems_defn_assertions(v_skolems));
     }
 
     public static SubLObject skolems_min_mt(final SubLObject v_skolems) {
         return assertion_utilities.assertions_min_mt(skolems_defn_assertions(v_skolems));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff ASSERTION only mentions reified SKOLEM function within
+    arguments constrained to be EL templates (or doesn't mention it at all).
+     */
+    @LispMethod(comment = "@return boolean; t iff ASSERTION only mentions reified SKOLEM function within\r\narguments constrained to be EL templates (or doesn\'t mention it at all).")
+    public static final SubLObject skolem_only_mentioned_in_el_templatesP_alt(SubLObject skolem, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != assertions_high.gaf_assertionP(assertion)) {
+                {
+                    SubLObject found_outside_of_templateP = NIL;
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = cycl_utilities.$opaque_arg_function$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
+                            mt_relevance_macros.$mt$.bind(assertions_high.assertion_mt(assertion), thread);
+                            cycl_utilities.$opaque_arg_function$.bind($sym46$OPAQUE_ARG_WRT_EL_TEMPLATE_, thread);
+                            found_outside_of_templateP = cycl_utilities.assertion_find(skolem, assertion, NIL, UNPROVIDED, UNPROVIDED);
+                        } finally {
+                            cycl_utilities.$opaque_arg_function$.rebind(_prev_bind_2, thread);
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    return makeBoolean(NIL == found_outside_of_templateP);
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff ASSERTION only mentions reified SKOLEM function within
+    arguments constrained to be EL templates (or doesn't mention it at all).
+     */
+    @LispMethod(comment = "@return boolean; t iff ASSERTION only mentions reified SKOLEM function within\r\narguments constrained to be EL templates (or doesn\'t mention it at all).")
     public static SubLObject skolem_only_mentioned_in_el_templatesP(final SubLObject skolem, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
@@ -1421,6 +3096,13 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject skolem_defn_assertionP_alt(SubLObject skolem, SubLObject assertion, SubLObject printP) {
+        if (printP == UNPROVIDED) {
+            printP = NIL;
+        }
+        return subl_promotions.memberP(assertion, com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, printP), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject skolem_defn_assertionP(final SubLObject skolem, final SubLObject assertion, SubLObject printP) {
         if (printP == UNPROVIDED) {
             printP = NIL;
@@ -1428,6 +3110,53 @@ public final class skolems extends SubLTranslatedFile {
         return subl_promotions.memberP(assertion, skolem_defn_assertions(skolem, printP), UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff GAF-ASSERTION corresponds to a cnf in the skolem-defn of SKOLEM
+     */
+    @LispMethod(comment = "@return boolean; t iff GAF-ASSERTION corresponds to a cnf in the skolem-defn of SKOLEM")
+    public static final SubLObject gaf_has_corresponding_cnf_in_skolem_defnP_alt(SubLObject skolem, SubLObject gaf_assertion, SubLObject gaf_skolem) {
+        if (gaf_skolem == UNPROVIDED) {
+            gaf_skolem = NIL;
+        }
+        {
+            SubLObject skolem_defn = com.cyc.cycjava.cycl.skolems.skolem_defn(skolem);
+            SubLObject mt = assertions_high.assertion_mt(gaf_assertion);
+            if (NIL != skolem_defn) {
+                if (NIL != hlmt.hlmt_equalP(mt, com.cyc.cycjava.cycl.skolems.mt_of_skolem_defn(skolem_defn))) {
+                    {
+                        SubLObject cnfs = com.cyc.cycjava.cycl.skolems.cnfs_of_skolem_defn(skolem_defn);
+                        SubLObject cnf_skolem = (NIL != gaf_skolem) ? ((SubLObject) (gaf_skolem)) : skolem;
+                        SubLObject cnf = subst(com.cyc.cycjava.cycl.skolems.sk_defn_var(), cnf_skolem, assertions_high.assertion_cnf(gaf_assertion), UNPROVIDED, UNPROVIDED);
+                        if (NIL != el_tracing_p(TWO_INTEGER)) {
+                            if (NIL != list_utilities.tree_find(cnf_skolem, assertions_high.assertion_cnf(gaf_assertion), UNPROVIDED, UNPROVIDED)) {
+                                if (NIL == com.cyc.cycjava.cycl.skolems.constant_denoting_reified_skolem_fnP(skolem)) {
+                                    el_warn(TWO_INTEGER, $str_alt47$_in_gaf_has_corresponding_cnf_in_, skolem, UNPROVIDED, UNPROVIDED);
+                                }
+                            }
+                        }
+                        return subl_promotions.memberP(cnf, cnfs, symbol_function(EQUAL), UNPROVIDED);
+                    }
+                }
+            } else {
+                if (NIL != term.skolem_constantP(skolem)) {
+                    {
+                        SubLObject skolem_to_use = cycl_utilities.nat_arg0(skolem);
+                        return com.cyc.cycjava.cycl.skolems.gaf_has_corresponding_cnf_in_skolem_defnP(skolem_to_use, gaf_assertion, skolem);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff GAF-ASSERTION corresponds to a cnf in the skolem-defn of SKOLEM
+     */
+    @LispMethod(comment = "@return boolean; t iff GAF-ASSERTION corresponds to a cnf in the skolem-defn of SKOLEM")
     public static SubLObject gaf_has_corresponding_cnf_in_skolem_defnP(final SubLObject skolem, final SubLObject gaf_assertion, SubLObject gaf_skolem) {
         if (gaf_skolem == UNPROVIDED) {
             gaf_skolem = NIL;
@@ -1453,8 +3182,19 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject constant_denoting_reified_skolem_fnP_alt(SubLObject functor) {
+        return makeBoolean((NIL != term.reified_skolem_fnP(functor)) && ZERO_INTEGER.eql(arity.arity(functor)));
+    }
+
     public static SubLObject constant_denoting_reified_skolem_fnP(final SubLObject functor) {
         return makeBoolean((NIL != term.reified_skolem_fnP(functor)) && ZERO_INTEGER.eql(arity.arity(functor)));
+    }
+
+    public static final SubLObject computed_skolem_assertionP_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean((NIL == assertions_high.asserted_assertionP(assertion)) || (((NIL != assertions_high.gaf_assertionP(assertion)) && (NIL != subl_promotions.memberP(assertions_high.gaf_arg0(assertion), czer_vars.$preds_of_computed_skolem_gafs$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED))) && ((!assertions_high.gaf_arg0(assertion).eql($$isa)) || ((NIL != term.reified_skolem_fnP(assertions_high.gaf_arg1(assertion))) && (NIL != genls.genlP(assertions_high.gaf_arg2(assertion), $$SkolemFunction, assertions_high.assertion_mt(assertion), UNPROVIDED))))));
+        }
     }
 
     public static SubLObject computed_skolem_assertionP(final SubLObject assertion) {
@@ -1462,6 +3202,18 @@ public final class skolems extends SubLTranslatedFile {
         return makeBoolean((NIL == assertions_high.asserted_assertionP(assertion)) || (((NIL != assertions_high.gaf_assertionP(assertion)) && (NIL != subl_promotions.memberP(assertions_high.gaf_arg0(assertion), czer_vars.$preds_of_computed_skolem_gafs$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED))) && ((!assertions_high.gaf_arg0(assertion).eql($$isa)) || ((NIL != term.reified_skolem_fnP(assertions_high.gaf_arg1(assertion))) && (NIL != genls.genlP(assertions_high.gaf_arg2(assertion), $$SkolemFunction, assertions_high.assertion_mt(assertion), UNPROVIDED))))));
     }
 
+    /**
+     * Return T iff there is some skolem defined by ASSERTION.
+     */
+    @LispMethod(comment = "Return T iff there is some skolem defined by ASSERTION.")
+    public static final SubLObject skolem_defining_assertionP_alt(SubLObject assertion) {
+        return subl_promotions.memberP($$skolem, Mapping.mapcar(SENTENCE_ARG0, Mapping.mapcar(DEDUCTION_ASSERTION, assertions_high.assertion_dependents(assertion))), UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     * Return T iff there is some skolem defined by ASSERTION.
+     */
+    @LispMethod(comment = "Return T iff there is some skolem defined by ASSERTION.")
     public static SubLObject skolem_defining_assertionP(final SubLObject assertion) {
         if ((NIL != cycl_utilities.expression_find_if($sym49$REIFIED_SKOLEM_FN_, assertions_high.assertion_cons(assertion), T, UNPROVIDED)) || (NIL != cycl_utilities.expression_find_if($sym49$REIFIED_SKOLEM_FN_, assertions_high.assertion_mt(assertion), T, UNPROVIDED))) {
             final SubLObject dependents = assertions_high.assertion_dependent_list(assertion);
@@ -1470,8 +3222,31 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject defn_assertion_of_skolemP_alt(SubLObject skolem, SubLObject assertion) {
+        return makeBoolean((NIL != cycl_utilities.expression_find(skolem, assertion, T, UNPROVIDED, UNPROVIDED)) && (NIL != com.cyc.cycjava.cycl.skolems.skolem_defn_assertionP(skolem, assertion, UNPROVIDED)));
+    }
+
     public static SubLObject defn_assertion_of_skolemP(final SubLObject skolem, final SubLObject assertion) {
         return makeBoolean((NIL != cycl_utilities.expression_find(skolem, assertion, T, UNPROVIDED, UNPROVIDED)) && (NIL != skolem_defn_assertionP(skolem, assertion, UNPROVIDED)));
+    }
+
+    public static final SubLObject assertion_skolems_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = czer_vars.$assertion_key$.currentBinding(thread);
+                    try {
+                        czer_vars.$assertion_key$.bind(ASSERTION_FORMULA, thread);
+                        result = cycl_utilities.expression_gather(assertion, symbol_function($sym52$REIFIED_SKOLEM_FN_IN_ANY_MT_), NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        czer_vars.$assertion_key$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject assertion_skolems(final SubLObject assertion) {
@@ -1487,6 +3262,20 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject defn_assertion_skolems_alt(SubLObject assertion) {
+        {
+            SubLObject v_skolems = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.assertion_skolems(assertion);
+            SubLObject skolem = NIL;
+            for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.skolems.defn_assertion_of_skolemP(skolem, assertion)) {
+                    v_skolems = cons(skolem, v_skolems);
+                }
+            }
+            return nreverse(v_skolems);
+        }
+    }
+
     public static SubLObject defn_assertion_skolems(final SubLObject assertion) {
         SubLObject v_skolems = NIL;
         SubLObject cdolist_list_var = assertion_skolems(assertion);
@@ -1500,6 +3289,39 @@ public final class skolems extends SubLTranslatedFile {
             skolem = cdolist_list_var.first();
         } 
         return nreverse(v_skolems);
+    }
+
+    public static final SubLObject all_skolem_mt_defn_assertions_alt(SubLObject skolem, SubLObject mt, SubLObject printP) {
+        if (printP == UNPROVIDED) {
+            printP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, printP);
+                            SubLObject assertion = NIL;
+                            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                                {
+                                    SubLObject item_var = assertion;
+                                    if (NIL == member(item_var, result, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                        result = cons(item_var, result);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject all_skolem_mt_defn_assertions(final SubLObject skolem, final SubLObject mt, SubLObject printP) {
@@ -1528,6 +3350,26 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * Bound by reset-defn-of-skolem to the #$SkolemFunction whose defn is being reset
+     */
+    @LispMethod(comment = "Bound by reset-defn-of-skolem to the #$SkolemFunction whose defn is being reset")
+    public static final SubLObject recomputing_skolem_defn_info_constant_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt53$recomputing_skolem_defn_info_cons);
+                }
+            }
+            return $recompute_skolem_defn_info$.getDynamicValue(thread).first();
+        }
+    }
+
+    /**
+     * Bound by reset-defn-of-skolem to the #$SkolemFunction whose defn is being reset
+     */
+    @LispMethod(comment = "Bound by reset-defn-of-skolem to the #$SkolemFunction whose defn is being reset")
     public static SubLObject recomputing_skolem_defn_info_constant() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
@@ -1536,6 +3378,26 @@ public final class skolems extends SubLTranslatedFile {
         return $recompute_skolem_defn_info$.getDynamicValue(thread).first();
     }
 
+    /**
+     * Bound by reset-defn-of-skolem to the variable of the skolem whose defn is being reset
+     */
+    @LispMethod(comment = "Bound by reset-defn-of-skolem to the variable of the skolem whose defn is being reset")
+    public static final SubLObject recomputing_skolem_defn_info_var_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt54$recomputing_skolem_defn_info_var_);
+                }
+            }
+            return second($recompute_skolem_defn_info$.getDynamicValue(thread));
+        }
+    }
+
+    /**
+     * Bound by reset-defn-of-skolem to the variable of the skolem whose defn is being reset
+     */
+    @LispMethod(comment = "Bound by reset-defn-of-skolem to the variable of the skolem whose defn is being reset")
     public static SubLObject recomputing_skolem_defn_info_var() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
@@ -1544,6 +3406,26 @@ public final class skolems extends SubLTranslatedFile {
         return second($recompute_skolem_defn_info$.getDynamicValue(thread));
     }
 
+    /**
+     * Boolean bound by reset-defn-of-skolem, whether to actually do it
+     */
+    @LispMethod(comment = "Boolean bound by reset-defn-of-skolem, whether to actually do it")
+    public static final SubLObject really_recomputing_skolem_defnP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt55$really_recomputing_skolem_defn__c);
+                }
+            }
+            return third($recompute_skolem_defn_info$.getDynamicValue(thread));
+        }
+    }
+
+    /**
+     * Boolean bound by reset-defn-of-skolem, whether to actually do it
+     */
+    @LispMethod(comment = "Boolean bound by reset-defn-of-skolem, whether to actually do it")
     public static SubLObject really_recomputing_skolem_defnP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
@@ -1552,6 +3434,26 @@ public final class skolems extends SubLTranslatedFile {
         return third($recompute_skolem_defn_info$.getDynamicValue(thread));
     }
 
+    /**
+     * Set to the result (the defn), for use by reset-defn-of-skolem
+     */
+    @LispMethod(comment = "Set to the result (the defn), for use by reset-defn-of-skolem")
+    public static final SubLObject recomputing_skolem_defn_info_defn_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt56$recomputing_skolem_defn_info_defn);
+                }
+            }
+            return fourth($recompute_skolem_defn_info$.getDynamicValue(thread));
+        }
+    }
+
+    /**
+     * Set to the result (the defn), for use by reset-defn-of-skolem
+     */
+    @LispMethod(comment = "Set to the result (the defn), for use by reset-defn-of-skolem")
     public static SubLObject recomputing_skolem_defn_info_defn() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
@@ -1560,6 +3462,26 @@ public final class skolems extends SubLTranslatedFile {
         return fourth($recompute_skolem_defn_info$.getDynamicValue(thread));
     }
 
+    /**
+     * Set to the result (the key), for use by reset-defn-of-skolem
+     */
+    @LispMethod(comment = "Set to the result (the key), for use by reset-defn-of-skolem")
+    public static final SubLObject recomputing_skolem_defn_info_key_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt57$recomputing_skolem_defn_info_key_);
+                }
+            }
+            return fifth($recompute_skolem_defn_info$.getDynamicValue(thread));
+        }
+    }
+
+    /**
+     * Set to the result (the key), for use by reset-defn-of-skolem
+     */
+    @LispMethod(comment = "Set to the result (the key), for use by reset-defn-of-skolem")
     public static SubLObject recomputing_skolem_defn_info_key() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
@@ -1568,12 +3490,46 @@ public final class skolems extends SubLTranslatedFile {
         return fifth($recompute_skolem_defn_info$.getDynamicValue(thread));
     }
 
+    /**
+     * Set to the EL variable binding list created by the uncanonicalizer, so we don't spuriously uniquify variables in defns.
+     */
+    @LispMethod(comment = "Set to the EL variable binding list created by the uncanonicalizer, so we don\'t spuriously uniquify variables in defns.")
+    public static final SubLObject recomputing_skolem_defn_info_blist_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt58$recomputing_skolem_defn_info_blis);
+                }
+            }
+            return sixth($recompute_skolem_defn_info$.getDynamicValue(thread));
+        }
+    }
+
+    /**
+     * Set to the EL variable binding list created by the uncanonicalizer, so we don't spuriously uniquify variables in defns.
+     */
+    @LispMethod(comment = "Set to the EL variable binding list created by the uncanonicalizer, so we don\'t spuriously uniquify variables in defns.")
     public static SubLObject recomputing_skolem_defn_info_blist() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
             Errors.error($str59$recomputing_skolem_defn_info_blis);
         }
         return sixth($recompute_skolem_defn_info$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject set_recomputing_skolem_defn_result_alt(SubLObject defn, SubLObject key) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt59$set_recomputing_skolem_defn_resul);
+                }
+            }
+            list_utilities.nreplace_nth(THREE_INTEGER, defn, $recompute_skolem_defn_info$.getDynamicValue(thread));
+            list_utilities.nreplace_nth(FOUR_INTEGER, key, $recompute_skolem_defn_info$.getDynamicValue(thread));
+            return NIL;
+        }
     }
 
     public static SubLObject set_recomputing_skolem_defn_result(final SubLObject defn, final SubLObject key) {
@@ -1586,6 +3542,19 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject set_recomputing_skolem_defn_blist_alt(SubLObject blist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt60$set_recomputing_skolem_defn_blist);
+                }
+            }
+            list_utilities.nreplace_nth(FIVE_INTEGER, blist, $recompute_skolem_defn_info$.getDynamicValue(thread));
+            return NIL;
+        }
+    }
+
     public static SubLObject set_recomputing_skolem_defn_blist(final SubLObject blist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == recomputing_skolem_defnP())) {
@@ -1595,17 +3564,50 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject recomputing_skolem_defnP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return list_utilities.sublisp_boolean($recompute_skolem_defn_info$.getDynamicValue(thread));
+        }
+    }
+
     public static SubLObject recomputing_skolem_defnP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return list_utilities.sublisp_boolean($recompute_skolem_defn_info$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject recomputing_defn_of_skolemP_alt(SubLObject skolem) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) && (skolem == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_constant()));
     }
 
     public static SubLObject recomputing_defn_of_skolemP(final SubLObject skolem) {
         return makeBoolean((NIL != recomputing_skolem_defnP()) && skolem.eql(recomputing_skolem_defn_info_constant()));
     }
 
+    public static final SubLObject recomputing_skolem_defn_ofP_alt(SubLObject unreified_sk_term) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) && ((($GAF == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_var()) && (NIL != cycl_utilities.expression_find(bindings.variable_binding_variable(com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_blist().first()), unreified_sk_term, UNPROVIDED, UNPROVIDED, UNPROVIDED))) || (com.cyc.cycjava.cycl.skolems.skolem_function_var(unreified_sk_term) == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_var())));
+    }
+
     public static SubLObject recomputing_skolem_defn_ofP(final SubLObject unreified_sk_term) {
         return makeBoolean((NIL != recomputing_skolem_defnP()) && ((($GAF == recomputing_skolem_defn_info_var()) && (NIL != cycl_utilities.expression_find(bindings.variable_binding_variable(recomputing_skolem_defn_info_blist().first()), unreified_sk_term, UNPROVIDED, UNPROVIDED, UNPROVIDED))) || skolem_function_var(unreified_sk_term).eql(recomputing_skolem_defn_info_var())));
+    }
+
+    public static final SubLObject note_skolem_binding_alt(SubLObject uniq_var, SubLObject orig_var) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == com.cyc.cycjava.cycl.skolems.recomputing_skolem_defnP()) {
+                    Errors.error($str_alt62$note_skolem_binding_called_when_n);
+                }
+            }
+            {
+                SubLObject new_binding = cons(uniq_var, orig_var);
+                if (NIL == list_utilities.member_equalP(new_binding, com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_blist())) {
+                    com.cyc.cycjava.cycl.skolems.set_recomputing_skolem_defn_blist(cons(new_binding, com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_blist()));
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject note_skolem_binding(final SubLObject uniq_var, final SubLObject orig_var) {
@@ -1620,6 +3622,20 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject recompute_skolem_defn_alt(SubLObject unreified_sk_term, SubLObject term_args, SubLObject skolem_clauses, SubLObject mt, SubLObject defn, SubLObject arity_min) {
+        {
+            SubLObject ununiquified_unreified_sk_term = cycl_utilities.expression_sublis(com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_blist(), unreified_sk_term, UNPROVIDED, UNPROVIDED);
+            SubLObject defn_unreified_sk_term = com.cyc.cycjava.cycl.skolems.defn_unreified_sk_term(ununiquified_unreified_sk_term, term_args, skolem_clauses);
+            SubLObject key = com.cyc.cycjava.cycl.skolems.skolem_hash_key(arity_min, defn);
+            SubLObject sk_defn = com.cyc.cycjava.cycl.skolems.make_sk_defn(com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_constant(), defn_unreified_sk_term, mt, defn);
+            com.cyc.cycjava.cycl.skolems.set_recomputing_skolem_defn_result(sk_defn, key);
+            if (NIL != com.cyc.cycjava.cycl.skolems.really_recomputing_skolem_defnP()) {
+                com.cyc.cycjava.cycl.skolems.add_skolem_defn(sk_defn, key);
+            }
+            return values(sk_defn, key);
+        }
+    }
+
     public static SubLObject recompute_skolem_defn(final SubLObject unreified_sk_term, final SubLObject term_args, final SubLObject skolem_clauses, final SubLObject mt, final SubLObject defn, final SubLObject arity_min) {
         final SubLObject ununiquified_unreified_sk_term = cycl_utilities.expression_sublis(recomputing_skolem_defn_info_blist(), unreified_sk_term, UNPROVIDED, UNPROVIDED);
         final SubLObject defn_unreified_sk_term = defn_unreified_sk_term(ununiquified_unreified_sk_term, term_args, skolem_clauses);
@@ -1630,6 +3646,24 @@ public final class skolems extends SubLTranslatedFile {
             add_skolem_defn(sk_defn, key);
         }
         return values(sk_defn, key);
+    }
+
+    public static final SubLObject remove_defn_of_skolem_alt(SubLObject skolem, SubLObject key) {
+        if (key == UNPROVIDED) {
+            key = com.cyc.cycjava.cycl.skolems.skolem_defn_key(skolem);
+        }
+        {
+            SubLObject new_table_value = NIL;
+            SubLObject cdolist_list_var = gethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), UNPROVIDED);
+            SubLObject defn = NIL;
+            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                if (!skolem.eql(defn.first())) {
+                    new_table_value = cons(defn, new_table_value);
+                }
+            }
+            sethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), nreverse(new_table_value));
+        }
+        return NIL;
     }
 
     public static SubLObject remove_defn_of_skolem(final SubLObject skolem, SubLObject key) {
@@ -1651,6 +3685,14 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_skolem_defn_alt(SubLObject defn, SubLObject key) {
+        if (key == UNPROVIDED) {
+            key = com.cyc.cycjava.cycl.skolems.skolem_table_key_from_defn(defn);
+        }
+        sethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), cons(defn, gethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), UNPROVIDED)));
+        return NIL;
+    }
+
     public static SubLObject add_skolem_defn(final SubLObject defn, SubLObject key) {
         if (key == UNPROVIDED) {
             key = skolem_table_key_from_defn(defn);
@@ -1660,8 +3702,44 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject kb_skolems_alt() {
+        return fort_types_interface.all_forts_of_type($$SkolemFunction);
+    }
+
     public static SubLObject kb_skolems() {
         return fort_types_interface.all_forts_of_type($$SkolemFunction);
+    }
+
+    public static final SubLObject skolem_table_contains_old_format_skolemsP_alt() {
+        {
+            SubLObject key = NIL;
+            SubLObject v_defns = NIL;
+            {
+                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                try {
+                    while (iteratorHasNext(cdohash_iterator)) {
+                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                        key = getEntryKey(cdohash_entry);
+                        v_defns = getEntryValue(cdohash_entry);
+                        {
+                            SubLObject cdolist_list_var = v_defns;
+                            SubLObject defn = NIL;
+                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                {
+                                    SubLObject unreified_sk_term = second(defn);
+                                    if (NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(unreified_sk_term)) {
+                                        return T;
+                                    }
+                                }
+                            }
+                        }
+                    } 
+                } finally {
+                    releaseEntrySetIterator(cdohash_iterator);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject skolem_table_contains_old_format_skolemsP() {
@@ -1689,6 +3767,87 @@ public final class skolems extends SubLTranslatedFile {
             releaseEntrySetIterator(cdohash_iterator);
         }
         return NIL;
+    }
+
+    public static final SubLObject reset_skolem_defn_table_alt(SubLObject do_itP, SubLObject printP) {
+        if (do_itP == UNPROVIDED) {
+            do_itP = NIL;
+        }
+        if (printP == UNPROVIDED) {
+            printP = T;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            clrhash(czer_vars.$skolem_axiom_table$.getGlobalValue());
+            czer_vars.$empty_skolems$.setDynamicValue(NIL, thread);
+            czer_vars.$mal_skolems$.setDynamicValue(NIL, thread);
+            {
+                SubLObject v_skolems = com.cyc.cycjava.cycl.skolems.kb_skolems();
+                if (NIL != printP) {
+                    format(T, $str_alt63$Total_KB_Skolems___a, length(v_skolems));
+                }
+                {
+                    SubLObject list_var = v_skolems;
+                    $progress_note$.setDynamicValue($$$building_skolem_defn_table, thread);
+                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                    $progress_total$.setDynamicValue(length(list_var), thread);
+                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                    {
+                        SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                        try {
+                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                            $last_percent_progress_prediction$.bind(NIL, thread);
+                            $within_noting_percent_progress$.bind(T, thread);
+                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                            {
+                                SubLObject csome_list_var = list_var;
+                                SubLObject skolem = NIL;
+                                for (skolem = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , skolem = csome_list_var.first()) {
+                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                    if (NIL == hl_prototypes.hl_prototypical_instanceP(skolem)) {
+                                        {
+                                            SubLObject message_var = NIL;
+                                            try {
+                                                {
+                                                    SubLObject _prev_bind_0_5 = Errors.$error_handler$.currentBinding(thread);
+                                                    try {
+                                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                                        try {
+                                                            com.cyc.cycjava.cycl.skolems.reset_defn_of_skolem(skolem, do_itP);
+                                                        } catch (Throwable catch_var) {
+                                                            Errors.handleThrowable(catch_var, NIL);
+                                                        }
+                                                    } finally {
+                                                        Errors.$error_handler$.rebind(_prev_bind_0_5, thread);
+                                                    }
+                                                }
+                                            } catch (Throwable ccatch_env_var) {
+                                                message_var = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                                            }
+                                            if (message_var.isString()) {
+                                                Errors.warn($str_alt66$_A, message_var);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            noting_percent_progress_postamble();
+                        } finally {
+                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                            $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject reset_skolem_defn_table(SubLObject do_itP, SubLObject printP) {
@@ -1732,7 +3891,7 @@ public final class skolems extends SubLTranslatedFile {
                 while (NIL != csome_list_var) {
                     if (NIL == hl_prototypes.hl_prototypical_instanceP(skolem)) {
                         SubLObject message_var = NIL;
-                        final SubLObject was_appendingP = eval($sym67$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
+                        final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
                         eval($list68);
                         try {
                             try {
@@ -1758,7 +3917,7 @@ public final class skolems extends SubLTranslatedFile {
                             try {
                                 $is_thread_performing_cleanupP$.bind(T, thread);
                                 final SubLObject _values = getValuesAsVector();
-                                eval(list(CSETQ, $sym67$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
+                                eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
                                 restoreValuesFromVector(_values);
                             } finally {
                                 $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$6, thread);
@@ -1797,6 +3956,13 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject reset_defn_of_skolem_alt(SubLObject skolem, SubLObject do_itP) {
+        if (do_itP == UNPROVIDED) {
+            do_itP = NIL;
+        }
+        return com.cyc.cycjava.cycl.skolems.reset_skolem_defn_from_assertions(skolem, com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED), do_itP);
+    }
+
     public static SubLObject reset_defn_of_skolem(final SubLObject skolem, SubLObject do_itP) {
         if (do_itP == UNPROVIDED) {
             do_itP = NIL;
@@ -1804,11 +3970,58 @@ public final class skolems extends SubLTranslatedFile {
         return reset_skolem_defn_from_assertions(skolem, skolem_defn_assertions(skolem, UNPROVIDED), do_itP);
     }
 
+    public static final SubLObject skolem_defn_from_assertions_alt(SubLObject skolem, SubLObject assertions) {
+        if (assertions == UNPROVIDED) {
+            assertions = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+        }
+        return com.cyc.cycjava.cycl.skolems.reset_skolem_defn_from_assertions(skolem, assertions, NIL);
+    }
+
     public static SubLObject skolem_defn_from_assertions(final SubLObject skolem, SubLObject assertions) {
         if (assertions == UNPROVIDED) {
             assertions = skolem_defn_assertions(skolem, UNPROVIDED);
         }
         return reset_skolem_defn_from_assertions(skolem, assertions, NIL);
+    }
+
+    public static final SubLObject reset_skolem_defn_from_assertions_alt(SubLObject skolem, SubLObject assertions, SubLObject do_itP) {
+        if (assertions == UNPROVIDED) {
+            assertions = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+        }
+        if (do_itP == UNPROVIDED) {
+            do_itP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result_defn = NIL;
+                SubLObject result_key = NIL;
+                if (NIL == isa.isaP(skolem, $$SkolemFunction, UNPROVIDED, UNPROVIDED)) {
+                    Errors.warn($str_alt67$____reified_skolem__a_not_known_t, skolem);
+                }
+                {
+                    SubLObject _prev_bind_0 = $recompute_skolem_defn_info$.currentBinding(thread);
+                    try {
+                        $recompute_skolem_defn_info$.bind(list(skolem, com.cyc.cycjava.cycl.skolems.skolem_variable_from_assertions(skolem, assertions), do_itP, NIL, NIL, NIL), thread);
+                        {
+                            SubLObject ass = assertions.first();
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject el_formula = uncanonicalizer.assertion_el_formula(ass);
+                                SubLObject el_mt = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                czer_main.canonicalize_wf_cycl(el_formula, el_mt);
+                            }
+                            result_defn = com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_defn();
+                            result_key = com.cyc.cycjava.cycl.skolems.recomputing_skolem_defn_info_key();
+                        }
+                    } finally {
+                        $recompute_skolem_defn_info$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(result_defn, result_key);
+            }
+        }
     }
 
     public static SubLObject reset_skolem_defn_from_assertions(final SubLObject skolem, SubLObject assertions, SubLObject do_itP) {
@@ -1846,6 +4059,31 @@ public final class skolems extends SubLTranslatedFile {
         return values(result_defn, result_key);
     }
 
+    public static final SubLObject skolem_variable_from_assertions_alt(SubLObject skolem, SubLObject assertions) {
+        {
+            SubLObject cdolist_list_var = assertions;
+            SubLObject ass = NIL;
+            for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
+                if (NIL != assertions_high.gaf_assertionP(ass)) {
+                    return $GAF;
+                } else {
+                    {
+                        SubLObject cdolist_list_var_6 = clauses.neg_lits(fi.assertion_cnf_with_el_vars(ass));
+                        SubLObject lit = NIL;
+                        for (lit = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , lit = cdolist_list_var_6.first()) {
+                            if (NIL != tou_litP(lit)) {
+                                if (skolem == cycl_utilities.nat_functor(literal_arg2(lit, UNPROVIDED))) {
+                                    return literal_arg1(lit, UNPROVIDED);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject skolem_variable_from_assertions(final SubLObject skolem, final SubLObject assertions) {
         SubLObject cdolist_list_var = assertions;
         SubLObject ass = NIL;
@@ -1870,11 +4108,28 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject skolem_scalar_termP_alt(SubLObject v_object, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return makeBoolean((((NIL != el_formula_with_operator_p(v_object, $$IntervalMinFn)) || (NIL != el_formula_with_operator_p(v_object, $$IntervalMaxFn))) || (NIL != term.scalar_termP(v_object, mt))) || ((NIL != possibly_naut_p(v_object)) && (NIL != genls.any_specP($$ScalarInterval, kb_accessors.result_isa(cycl_utilities.nat_functor(v_object), mt), UNPROVIDED, UNPROVIDED))));
+    }
+
     public static SubLObject skolem_scalar_termP(final SubLObject v_object, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         return makeBoolean((((NIL != el_formula_with_operator_p(v_object, $$IntervalMinFn)) || (NIL != el_formula_with_operator_p(v_object, $$IntervalMaxFn))) || (NIL != term.scalar_termP(v_object, mt))) || ((NIL != possibly_naut_p(v_object)) && (NIL != genls.any_specP($$ScalarInterval, kb_accessors.result_isa(cycl_utilities.nat_functor(v_object), mt), UNPROVIDED, UNPROVIDED))));
+    }
+
+    public static final SubLObject skolem_result_types_from_cnfs_alt(SubLObject sk_term, SubLObject cnfs, SubLObject mt, SubLObject traceP) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        if (traceP == UNPROVIDED) {
+            traceP = NIL;
+        }
+        return com.cyc.cycjava.cycl.skolems.guess_skolem_result_types_from_cnfs($UNNAMED_SKOLEM_FN, sk_term, cnfs, mt, traceP);
     }
 
     public static SubLObject skolem_result_types_from_cnfs(final SubLObject sk_term, final SubLObject cnfs, SubLObject mt, SubLObject traceP) {
@@ -1885,6 +4140,85 @@ public final class skolems extends SubLTranslatedFile {
             traceP = NIL;
         }
         return guess_skolem_result_types_from_cnfs($UNNAMED_SKOLEM_FN, sk_term, cnfs, mt, traceP);
+    }
+
+    public static final SubLObject guess_skolem_result_types_from_cnfs_alt(SubLObject skolem, SubLObject sk_term, SubLObject cnfs, SubLObject mt, SubLObject traceP) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        if (traceP == UNPROVIDED) {
+            traceP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject result_isas = com.cyc.cycjava.cycl.skolems.skolem_cnfs_pos_lit_types(sk_term, cnfs, mt);
+                SubLObject result_isa_args = thread.secondMultipleValue();
+                SubLObject result_genls = thread.thirdMultipleValue();
+                SubLObject result_genl_args = thread.fourthMultipleValue();
+                thread.resetMultipleValues();
+                result_isas = genls.min_cols(result_isas, mt, UNPROVIDED);
+                if (NIL != result_isas) {
+                    if (NIL != disjoint_with.any_disjoint_collection_pair(result_isas, mt)) {
+                        if (NIL != traceP) {
+                            format(T, $str_alt72$__disjoint_result_types___s____s, skolem, result_isas);
+                        }
+                    } else {
+                        if (NIL != traceP) {
+                            format(T, $str_alt73$__explicit_result_types___s____s, skolem, result_isas);
+                        }
+                    }
+                } else {
+                    {
+                        SubLObject cols = com.cyc.cycjava.cycl.skolems.skolem_var_isa_constraints_wrt_cnfs(sk_term, cnfs, mt);
+                        if (NIL != cols) {
+                            if (NIL == disjoint_with.any_disjoint_collection_pair(cols, mt)) {
+                                result_isas = cols;
+                                if (NIL != traceP) {
+                                    format(T, $str_alt74$__tacit_result_isa___s____s, skolem, result_isas);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (NIL == result_isas) {
+                    if (NIL != traceP) {
+                        format(T, $str_alt75$__no_result_types___s, skolem);
+                    }
+                }
+                result_genls = genls.min_cols(result_genls, mt, UNPROVIDED);
+                if (NIL != result_genls) {
+                    if (NIL != disjoint_with.any_disjoint_collection_pair(result_genls, mt)) {
+                        if (NIL != traceP) {
+                            format(T, $str_alt72$__disjoint_result_types___s____s, skolem, result_genls);
+                        }
+                    } else {
+                        if (NIL != traceP) {
+                            format(T, $str_alt73$__explicit_result_types___s____s, skolem, result_genls);
+                        }
+                    }
+                } else {
+                    {
+                        SubLObject cols = com.cyc.cycjava.cycl.skolems.skolem_var_genl_constraints_wrt_cnfs(sk_term, cnfs, mt);
+                        if (NIL != cols) {
+                            if (NIL == disjoint_with.any_disjoint_collection_pair(cols, mt)) {
+                                result_genls = cols;
+                                if (NIL != traceP) {
+                                    format(T, $str_alt76$__tacit_result_genl___s____s, skolem, result_genls);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (NIL == result_genls) {
+                    if (NIL != traceP) {
+                        format(T, $str_alt75$__no_result_types___s, skolem);
+                    }
+                }
+                return values(result_isas, result_isa_args, result_genls, result_genl_args);
+            }
+        }
     }
 
     public static SubLObject guess_skolem_result_types_from_cnfs(final SubLObject skolem, final SubLObject sk_term, final SubLObject cnfs, SubLObject mt, SubLObject traceP) {
@@ -1948,6 +4282,98 @@ public final class skolems extends SubLTranslatedFile {
             format(T, $str81$__no_result_types___s, skolem);
         }
         return values(result_isas, result_isa_args, result_genls, result_genl_args);
+    }
+
+    public static final SubLObject skolem_cnfs_pos_lit_types_alt(SubLObject v_term, SubLObject cnfs, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject isas = NIL;
+                SubLObject isa_args = NIL;
+                SubLObject v_genls = NIL;
+                SubLObject genl_args = NIL;
+                SubLObject cdolist_list_var = cnfs;
+                SubLObject cnf = NIL;
+                for (cnf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cnf = cdolist_list_var.first()) {
+                    {
+                        SubLObject pos_lits = clauses.pos_lits(cnf);
+                        SubLObject cdolist_list_var_7 = pos_lits;
+                        SubLObject pos_lit = NIL;
+                        for (pos_lit = cdolist_list_var_7.first(); NIL != cdolist_list_var_7; cdolist_list_var_7 = cdolist_list_var_7.rest() , pos_lit = cdolist_list_var_7.first()) {
+                            {
+                                SubLObject second_term = literal_arg1(pos_lit, UNPROVIDED);
+                                SubLObject third_term = literal_arg2(pos_lit, UNPROVIDED);
+                                if ((NIL != isa_litP(pos_lit)) && second_term.equal(v_term)) {
+                                    if (NIL != fort_types_interface.collectionP(third_term)) {
+                                        {
+                                            SubLObject item_var = third_term;
+                                            if (NIL == member(item_var, isas, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                isas = cons(item_var, isas);
+                                            }
+                                        }
+                                    } else {
+                                        if (NIL != cycl_variables.cyc_varP(third_term)) {
+                                            {
+                                                SubLObject item_var = czer_utilities.canonical_variable_number(third_term);
+                                                if (NIL == member(item_var, isa_args, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                    isa_args = cons(item_var, isa_args);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if ((NIL != genls_litP(pos_lit)) && second_term.equal(v_term)) {
+                                        if (NIL != fort_types_interface.collectionP(third_term)) {
+                                            {
+                                                SubLObject item_var = third_term;
+                                                if (NIL == member(item_var, v_genls, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                    v_genls = cons(item_var, v_genls);
+                                                }
+                                            }
+                                        } else {
+                                            if (NIL != cycl_variables.cyc_varP(third_term)) {
+                                                {
+                                                    SubLObject item_var = czer_utilities.canonical_variable_number(third_term);
+                                                    if (NIL == member(item_var, genl_args, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                        genl_args = cons(item_var, genl_args);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                if (NIL == list_utilities.singletonP(isas)) {
+                    {
+                        SubLObject _prev_bind_0 = czer_vars.$interpolate_singleton_arg_isaP$.currentBinding(thread);
+                        try {
+                            czer_vars.$interpolate_singleton_arg_isaP$.bind(T, thread);
+                            isas = com.cyc.cycjava.cycl.skolems.interpolate_arg_type(isas, mt);
+                        } finally {
+                            czer_vars.$interpolate_singleton_arg_isaP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                if (NIL == list_utilities.singletonP(v_genls)) {
+                    {
+                        SubLObject _prev_bind_0 = czer_vars.$interpolate_singleton_arg_isaP$.currentBinding(thread);
+                        try {
+                            czer_vars.$interpolate_singleton_arg_isaP$.bind(T, thread);
+                            v_genls = com.cyc.cycjava.cycl.skolems.interpolate_arg_type(v_genls, mt);
+                        } finally {
+                            czer_vars.$interpolate_singleton_arg_isaP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return values(isas, isa_args, v_genls, genl_args);
+            }
+        }
     }
 
     public static SubLObject skolem_cnfs_pos_lit_types(final SubLObject v_term, final SubLObject cnfs, SubLObject mt) {
@@ -2028,6 +4454,19 @@ public final class skolems extends SubLTranslatedFile {
         return values(isas, isa_args, v_genls, genl_args);
     }
 
+    public static final SubLObject skolem_var_isa_constraints_wrt_cnfs_alt(SubLObject sk_var, SubLObject cnfs, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != czer_vars.$infer_skolem_result_isa_via_arg_constraintsP$.getDynamicValue(thread)) {
+                return genls.min_cols(remove($$CycLReifiableDenotationalTerm, at_var_types.var_isa_constraints_wrt_cnfs(sk_var, cnfs, mt, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), mt, UNPROVIDED);
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject skolem_var_isa_constraints_wrt_cnfs(final SubLObject sk_var, final SubLObject cnfs, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2039,6 +4478,19 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject skolem_var_genl_constraints_wrt_cnfs_alt(SubLObject sk_var, SubLObject cnfs, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != czer_vars.$infer_skolem_result_isa_via_arg_constraintsP$.getDynamicValue(thread)) {
+                return genls.min_cols(at_var_types.var_genl_constraints_wrt_cnfs(sk_var, cnfs, mt, UNPROVIDED), mt, UNPROVIDED);
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject skolem_var_genl_constraints_wrt_cnfs(final SubLObject sk_var, final SubLObject cnfs, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2048,6 +4500,27 @@ public final class skolems extends SubLTranslatedFile {
             return genls.min_cols(at_var_types.var_genl_constraints_wrt_cnfs(sk_var, cnfs, mt, UNPROVIDED), mt, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject skolem_arg_isa_constraints_alt(SubLObject unreified_sk_term, SubLObject cnfs, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        {
+            SubLObject args = second(unreified_sk_term);
+            SubLObject sk_number = com.cyc.cycjava.cycl.skolems.skolem_number(unreified_sk_term);
+            SubLObject sk_position = (NIL != sk_number) ? ((SubLObject) (add(ONE_INTEGER, length(args)))) : NIL;
+            SubLObject argXtypes = NIL;
+            SubLObject cdolist_list_var = args;
+            SubLObject arg = NIL;
+            for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                argXtypes = cons(cons(arg, com.cyc.cycjava.cycl.skolems.interpolate_arg_type(at_var_types.cnfs_variable_isa_constraints(arg, cnfs, mt), mt)), argXtypes);
+            }
+            if (NIL != subl_promotions.memberP(sk_position, czer_vars.$arg_positions$.getGlobalValue(), UNPROVIDED, UNPROVIDED)) {
+                argXtypes = cons(cons(sk_number, $list_alt78), argXtypes);
+            }
+            return nreverse(argXtypes);
+        }
     }
 
     public static SubLObject skolem_arg_isa_constraints(final SubLObject unreified_sk_term, final SubLObject cnfs, SubLObject mt) {
@@ -2070,6 +4543,148 @@ public final class skolems extends SubLTranslatedFile {
             argXtypes = cons(cons(sk_number, $list84), argXtypes);
         }
         return nreverse(argXtypes);
+    }
+
+    public static final SubLObject install_skolem_arg_types_alt(SubLObject do_itP, SubLObject traceP) {
+        if (do_itP == UNPROVIDED) {
+            do_itP = NIL;
+        }
+        if (traceP == UNPROVIDED) {
+            traceP = T;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_defn_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = defn;
+                                                    SubLObject current = datum;
+                                                    SubLObject skolem = NIL;
+                                                    SubLObject unreified_sk_term = NIL;
+                                                    SubLObject mt = NIL;
+                                                    SubLObject cnfs = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt80);
+                                                    skolem = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt80);
+                                                    unreified_sk_term = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt80);
+                                                    mt = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt80);
+                                                    cnfs = current.first();
+                                                    current = current.rest();
+                                                    if (NIL == current) {
+                                                        {
+                                                            SubLObject sk_args = second(unreified_sk_term);
+                                                            SubLObject cnfs_8 = com.cyc.cycjava.cycl.skolems.skolem_defn_cnfs(skolem);
+                                                            SubLObject cdotimes_end_var = length(sk_args);
+                                                            SubLObject n_9 = NIL;
+                                                            for (n_9 = ZERO_INTEGER; n_9.numL(cdotimes_end_var); n_9 = add(n_9, ONE_INTEGER)) {
+                                                                {
+                                                                    SubLObject types = NIL;
+                                                                    SubLObject arg_types = NIL;
+                                                                    SubLObject arg_psn = add(ONE_INTEGER, n_9);
+                                                                    if (NIL == kb_accessors.argn_isa(skolem, arg_psn, mt)) {
+                                                                        {
+                                                                            SubLObject cdolist_list_var_10 = cnfs_8;
+                                                                            SubLObject cnf = NIL;
+                                                                            for (cnf = cdolist_list_var_10.first(); NIL != cdolist_list_var_10; cdolist_list_var_10 = cdolist_list_var_10.rest() , cnf = cdolist_list_var_10.first()) {
+                                                                                types = nunion(types, com.cyc.cycjava.cycl.skolems.cnf_fn_argn_isa(skolem, arg_psn, cnf, mt), UNPROVIDED, UNPROVIDED);
+                                                                            }
+                                                                        }
+                                                                        arg_types = com.cyc.cycjava.cycl.skolems.interpolate_arg_type(types, mt);
+                                                                        if (NIL != arg_types) {
+                                                                            if (NIL != traceP) {
+                                                                                format(T, $str_alt81$__tacit_arg__s_type___s____s, new SubLObject[]{ arg_psn, skolem, arg_types });
+                                                                            }
+                                                                            if (NIL != do_itP) {
+                                                                                if (NIL == kb_accessors.argn_isa(skolem, arg_psn, mt)) {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_11 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            api_control_vars.$use_local_queueP$.bind(NIL, thread);
+                                                                                            if (NIL != valid_argnum_p(arg_psn)) {
+                                                                                                {
+                                                                                                    SubLObject arg_isa_pred = kb_accessors.arg_isa_pred(arg_psn, UNPROVIDED, UNPROVIDED);
+                                                                                                    if (NIL != forts.fort_p(arg_isa_pred)) {
+                                                                                                        {
+                                                                                                            SubLObject cdolist_list_var_12 = arg_types;
+                                                                                                            SubLObject v_arg_type = NIL;
+                                                                                                            for (v_arg_type = cdolist_list_var_12.first(); NIL != cdolist_list_var_12; cdolist_list_var_12 = cdolist_list_var_12.rest() , v_arg_type = cdolist_list_var_12.first()) {
+                                                                                                                ke.ke_assert(list(arg_isa_pred, skolem, v_arg_type), mt, UNPROVIDED, UNPROVIDED);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            api_control_vars.$use_local_queueP$.rebind(_prev_bind_0_11, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            if (NIL != traceP) {
+                                                                                format(T, $str_alt82$__no_arg__s_type___s____s, new SubLObject[]{ arg_psn, skolem, arg_types });
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {
+                                                        cdestructuring_bind_error(datum, $list_alt80);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject install_skolem_arg_types(SubLObject do_itP, SubLObject traceP) {
@@ -2215,6 +4830,19 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cnf_fn_argn_isa_alt(SubLObject fn, SubLObject arg_psn, SubLObject cnf, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        {
+            SubLObject var = com.cyc.cycjava.cycl.skolems.cnf_fn_argn_var(fn, arg_psn, cnf);
+            if (NIL != var) {
+                return at_var_types.cnf_variable_isa_constraints(var, cnf, mt);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject cnf_fn_argn_isa(final SubLObject fn, final SubLObject arg_psn, final SubLObject cnf, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -2222,6 +4850,19 @@ public final class skolems extends SubLTranslatedFile {
         final SubLObject var = cnf_fn_argn_var(fn, arg_psn, cnf);
         if (NIL != var) {
             return at_var_types.cnf_variable_isa_constraints(var, cnf, mt);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject cnf_fn_argn_var_alt(SubLObject fn, SubLObject arg_psn, SubLObject cnf) {
+        {
+            SubLObject cdolist_list_var = tou_lits(clauses.neg_lits(cnf));
+            SubLObject tou_lit = NIL;
+            for (tou_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tou_lit = cdolist_list_var.first()) {
+                if (fn.eql(cycl_utilities.nat_functor(third(tou_lit)))) {
+                    return nth(arg_psn, third(tou_lit));
+                }
+            }
         }
         return NIL;
     }
@@ -2238,6 +4879,55 @@ public final class skolems extends SubLTranslatedFile {
             tou_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject interpolate_arg_type_alt(SubLObject types, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != types) {
+                types = genls.min_cols(remove_duplicates(types, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), mt, UNPROVIDED);
+                if (NIL != second(types)) {
+                    types = remove($$CycLReifiableDenotationalTerm, types, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                }
+                if (NIL == disjoint_with.any_disjoint_collection_pair(types, mt)) {
+                    if (NIL != czer_vars.$interpolate_singleton_arg_isaP$.getDynamicValue(thread)) {
+                        if (NIL != list_utilities.singletonP(types)) {
+                            return types;
+                        } else {
+                            {
+                                SubLObject floors = genls.max_floor_cols(types, NIL, mt, UNPROVIDED);
+                                if (NIL != list_utilities.singletonP(floors)) {
+                                    return floors;
+                                } else {
+                                    {
+                                        SubLObject ceilings = genls.min_ceiling_cols(types, NIL, mt, UNPROVIDED);
+                                        if (NIL != list_utilities.singletonP(ceilings)) {
+                                            return ceilings;
+                                        } else {
+                                            if (NIL != floors) {
+                                                return list(floors.first());
+                                            } else {
+                                                if (NIL != ceilings) {
+                                                    return list(ceilings.first());
+                                                } else {
+                                                    return NIL;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        return types;
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject interpolate_arg_type(SubLObject types, SubLObject mt) {
@@ -2275,6 +4965,88 @@ public final class skolems extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject max_skolem_arity_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject max = ZERO_INTEGER;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = defn;
+                                                    SubLObject current = datum;
+                                                    SubLObject constant = NIL;
+                                                    SubLObject lispy = NIL;
+                                                    SubLObject mt = NIL;
+                                                    SubLObject cnfs = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    constant = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    lispy = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    mt = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    cnfs = current.first();
+                                                    current = current.rest();
+                                                    if (NIL == current) {
+                                                        if (max.numL(length(second(lispy)))) {
+                                                            max = length(second(lispy));
+                                                        }
+                                                    } else {
+                                                        cdestructuring_bind_error(datum, $list_alt84);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return max;
+            }
+        }
     }
 
     public static SubLObject max_skolem_arity() {
@@ -2357,6 +5129,91 @@ public final class skolems extends SubLTranslatedFile {
             $last_percent_progress_index$.rebind(_prev_bind_0, thread);
         }
         return max;
+    }
+
+    public static final SubLObject skolems_of_arity_alt(SubLObject v_arity) {
+        if (v_arity == UNPROVIDED) {
+            v_arity = com.cyc.cycjava.cycl.skolems.max_skolem_arity();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = defn;
+                                                    SubLObject current = datum;
+                                                    SubLObject constant = NIL;
+                                                    SubLObject lispy = NIL;
+                                                    SubLObject mt = NIL;
+                                                    SubLObject cnfs = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    constant = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    lispy = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    mt = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    cnfs = current.first();
+                                                    current = current.rest();
+                                                    if (NIL == current) {
+                                                        if (v_arity.numE(length(second(lispy)))) {
+                                                            result = cons(constant, result);
+                                                        }
+                                                    } else {
+                                                        cdestructuring_bind_error(datum, $list_alt84);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject skolems_of_arity(SubLObject v_arity) {
@@ -2444,6 +5301,22 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject skolem_hosedP_alt(SubLObject skf) {
+        if (NIL != com.cyc.cycjava.cycl.skolems.skolem_ill_formedP(skf)) {
+            return T;
+        }
+        {
+            SubLObject cdolist_list_var = assertion_utilities.rules_mentioning(skf);
+            SubLObject rule = NIL;
+            for (rule = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , rule = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.skolems.skolem_rule_hosedP(rule, skf)) {
+                    return T;
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject skolem_hosedP(final SubLObject skf) {
         if (NIL != skolem_ill_formedP(skf)) {
             return T;
@@ -2461,11 +5334,49 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject skolem_ill_formedP_alt(SubLObject skf) {
+        {
+            SubLObject defining_bookkeeping_assertion = com.cyc.cycjava.cycl.skolems.skolem_defining_bookkeeping_assertion(skf);
+            return makeBoolean((NIL == defining_bookkeeping_assertion) || (NIL == assertions_high.deduced_assertionP(defining_bookkeeping_assertion)));
+        }
+    }
+
     public static SubLObject skolem_ill_formedP(final SubLObject skf) {
         final SubLObject defining_bookkeeping_assertion = skolem_defining_bookkeeping_assertion(skf);
         return makeBoolean((NIL == defining_bookkeeping_assertion) || (NIL == assertions_high.deduced_assertionP(defining_bookkeeping_assertion)));
     }
 
+    /**
+     *
+     *
+     * @return booleanp; whether RULE is hosed wrt SKF.
+    Necessary criteria include:
+    - RULE's EL sentence should not mention SKF.
+    - RULE's EL sentence should mention an existential.
+     */
+    @LispMethod(comment = "@return booleanp; whether RULE is hosed wrt SKF.\r\nNecessary criteria include:\r\n- RULE\'s EL sentence should not mention SKF.\r\n- RULE\'s EL sentence should mention an existential.")
+    public static final SubLObject skolem_rule_hosedP_alt(SubLObject rule, SubLObject skf) {
+        {
+            SubLObject el_sentence = uncanonicalizer.assertion_el_formula(rule);
+            if (NIL == cycl_utilities.expression_find_if(CYC_CONST_GENERAL_EXISTENTIAL_OPERATOR_P, el_sentence, UNPROVIDED, UNPROVIDED)) {
+                return T;
+            }
+            if (NIL != cycl_utilities.expression_find(skf, el_sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                return T;
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; whether RULE is hosed wrt SKF.
+    Necessary criteria include:
+    - RULE's EL sentence should not mention SKF.
+    - RULE's EL sentence should mention an existential.
+     */
+    @LispMethod(comment = "@return booleanp; whether RULE is hosed wrt SKF.\r\nNecessary criteria include:\r\n- RULE\'s EL sentence should not mention SKF.\r\n- RULE\'s EL sentence should mention an existential.")
     public static SubLObject skolem_rule_hosedP(final SubLObject rule, final SubLObject skf) {
         final SubLObject el_sentence = uncanonicalizer.assertion_el_formula(rule);
         if (NIL == cycl_utilities.expression_find_if(CYC_CONST_GENERAL_EXISTENTIAL_OPERATOR_P, el_sentence, UNPROVIDED, UNPROVIDED)) {
@@ -2475,6 +5386,20 @@ public final class skolems extends SubLTranslatedFile {
             return T;
         }
         return NIL;
+    }
+
+    public static final SubLObject all_hosed_skolems_alt() {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.kb_skolems();
+            SubLObject skf = NIL;
+            for (skf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skf = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.skolems.skolem_hosedP(skf)) {
+                    result = cons(skf, result);
+                }
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject all_hosed_skolems() {
@@ -2490,6 +5415,102 @@ public final class skolems extends SubLTranslatedFile {
             skf = cdolist_list_var.first();
         } 
         return nreverse(result);
+    }
+
+    public static final SubLObject multi_skolem_skolems_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = defn;
+                                                    SubLObject current = datum;
+                                                    SubLObject constant = NIL;
+                                                    SubLObject lispy = NIL;
+                                                    SubLObject mt = NIL;
+                                                    SubLObject cnfs = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    constant = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    lispy = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    mt = current.first();
+                                                    current = current.rest();
+                                                    destructuring_bind_must_consp(current, datum, $list_alt84);
+                                                    cnfs = current.first();
+                                                    current = current.rest();
+                                                    if (NIL == current) {
+                                                        {
+                                                            SubLObject v_2nd_skolem = NIL;
+                                                            if (NIL == v_2nd_skolem) {
+                                                                {
+                                                                    SubLObject csome_list_var = remove(constant, remove_duplicates(list_utilities.flatten(cnfs), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                    SubLObject v_term = NIL;
+                                                                    for (v_term = csome_list_var.first(); !((NIL != v_2nd_skolem) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , v_term = csome_list_var.first()) {
+                                                                        if (NIL != isa.isaP(v_term, $$SkolemFunction, mt, UNPROVIDED)) {
+                                                                            v_2nd_skolem = v_term;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (NIL != v_2nd_skolem) {
+                                                                result = cons(constant, result);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        cdestructuring_bind_error(datum, $list_alt84);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject multi_skolem_skolems() {
@@ -2587,6 +5608,75 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject misindexed_skolem_keys_alt(SubLObject fixP) {
+        if (fixP == UNPROVIDED) {
+            fixP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject constant = defn.first();
+                                                    if (NIL != forts.fort_p(constant)) {
+                                                        if (!key.equal(com.cyc.cycjava.cycl.skolems.skolem_table_key_from_constant(constant))) {
+                                                            result = cons(constant, result);
+                                                            if (NIL != fixP) {
+                                                                com.cyc.cycjava.cycl.skolems.reset_defn_of_skolem(constant, T);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
     public static SubLObject misindexed_skolem_keys(SubLObject fixP) {
         if (fixP == UNPROVIDED) {
             fixP = NIL;
@@ -2652,6 +5742,80 @@ public final class skolems extends SubLTranslatedFile {
             $last_percent_progress_index$.rebind(_prev_bind_0, thread);
         }
         return result;
+    }
+
+    public static final SubLObject sk_defns_wXo_sk_constants_alt(SubLObject removeP) {
+        if (removeP == UNPROVIDED) {
+            removeP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject constant = defn.first();
+                                                    if (NIL == forts.fort_p(constant)) {
+                                                        result = cons(list(key, defn), result);
+                                                        if (NIL != removeP) {
+                                                            {
+                                                                SubLObject new_defns = remove(defn, v_defns, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                if (NIL != new_defns) {
+                                                                    sethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), new_defns);
+                                                                } else {
+                                                                    remhash(key, czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject sk_defns_wXo_sk_constants(SubLObject removeP) {
@@ -2726,6 +5890,64 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject sk_keys_wXo_sk_defns_alt(SubLObject removeP) {
+        if (removeP == UNPROVIDED) {
+            removeP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        if (NIL == v_defns) {
+                                            result = cons(key, result);
+                                            if (NIL != removeP) {
+                                                remhash(key, czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
     public static SubLObject sk_keys_wXo_sk_defns(SubLObject removeP) {
         if (removeP == UNPROVIDED) {
             removeP = NIL;
@@ -2784,6 +6006,72 @@ public final class skolems extends SubLTranslatedFile {
             $last_percent_progress_index$.rebind(_prev_bind_0, thread);
         }
         return result;
+    }
+
+    public static final SubLObject install_skolemfunction_fn_in_skolem_defns_alt(SubLObject printP, SubLObject removeP) {
+        if (printP == UNPROVIDED) {
+            printP = NIL;
+        }
+        if (removeP == UNPROVIDED) {
+            removeP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = hash_table_count(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                SubLObject n = ZERO_INTEGER;
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_skolem_axiom_table);
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        n = add(n, ONE_INTEGER);
+                                        note_percent_progress(n, total);
+                                        {
+                                            SubLObject new_defns = subst($$SkolemFuncNFn, $$SkolemFuncN, subst($$SkolemFunctionFn, $$SkolemFunction, v_defns, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                                            if (NIL != new_defns) {
+                                                if (NIL != printP) {
+                                                    print(new_defns, UNPROVIDED);
+                                                }
+                                                if (NIL != removeP) {
+                                                    sethash(key, czer_vars.$skolem_axiom_table$.getGlobalValue(), new_defns);
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject install_skolemfunction_fn_in_skolem_defns(SubLObject printP, SubLObject removeP) {
@@ -2850,6 +6138,111 @@ public final class skolems extends SubLTranslatedFile {
             $last_percent_progress_index$.rebind(_prev_bind_0, thread);
         }
         return result;
+    }
+
+    public static final SubLObject sk_defns_wXo_mts_alt(SubLObject fixP) {
+        if (fixP == UNPROVIDED) {
+            fixP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject table_var = czer_vars.$skolem_axiom_table$.getGlobalValue();
+                $progress_note$.setDynamicValue($$$mapping_skolem_axiom_table, thread);
+                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                $progress_total$.setDynamicValue(hash_table_count(table_var), thread);
+                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                        {
+                            SubLObject key = NIL;
+                            SubLObject v_defns = NIL;
+                            {
+                                final Iterator cdohash_iterator = getEntrySetIterator(table_var);
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator)) {
+                                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                        key = getEntryKey(cdohash_entry);
+                                        v_defns = getEntryValue(cdohash_entry);
+                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                        {
+                                            SubLObject cdolist_list_var = v_defns;
+                                            SubLObject defn = NIL;
+                                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject constant = defn.first();
+                                                    SubLObject mt = third(defn);
+                                                    if (NIL == mt) {
+                                                        result = cons(constant, result);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator);
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != fixP) {
+                    {
+                        SubLObject list_var = result;
+                        $progress_note$.setDynamicValue($str_alt90$fixing_skolems_w_o_mts, thread);
+                        $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                        $progress_total$.setDynamicValue(length(list_var), thread);
+                        $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                        {
+                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                            try {
+                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                $last_percent_progress_prediction$.bind(NIL, thread);
+                                $within_noting_percent_progress$.bind(T, thread);
+                                $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                {
+                                    SubLObject csome_list_var = list_var;
+                                    SubLObject constant = NIL;
+                                    for (constant = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , constant = csome_list_var.first()) {
+                                        note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                        $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                        com.cyc.cycjava.cycl.skolems.reset_defn_of_skolem(constant, T);
+                                    }
+                                }
+                                noting_percent_progress_postamble();
+                            } finally {
+                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject sk_defns_wXo_mts(SubLObject fixP) {
@@ -2981,24 +6374,199 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject skolem_wffP_alt(SubLObject skolem) {
+        return makeBoolean(NIL == com.cyc.cycjava.cycl.skolems.skolem_defn_not_wffP(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem)));
+    }
+
     public static SubLObject skolem_wffP(final SubLObject skolem) {
         return makeBoolean(NIL == skolem_defn_not_wffP(skolem_defn(skolem)));
+    }
+
+    public static final SubLObject skolem_not_wffP_alt(SubLObject skolem) {
+        return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.skolems.skolem_defn_not_wffP(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem)));
     }
 
     public static SubLObject skolem_not_wffP(final SubLObject skolem) {
         return list_utilities.sublisp_boolean(skolem_defn_not_wffP(skolem_defn(skolem)));
     }
 
+    public static final SubLObject why_skolem_not_wff_alt(SubLObject skolem) {
+        return com.cyc.cycjava.cycl.skolems.why_skolem_defn_not_wff(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem));
+    }
+
     public static SubLObject why_skolem_not_wff(final SubLObject skolem) {
         return why_skolem_defn_not_wff(skolem_defn(skolem));
+    }
+
+    public static final SubLObject skolem_defn_wffP_alt(SubLObject skolem_defn) {
+        return makeBoolean(NIL == com.cyc.cycjava.cycl.skolems.why_skolem_defn_not_wff(skolem_defn));
     }
 
     public static SubLObject skolem_defn_wffP(final SubLObject skolem_defn) {
         return makeBoolean(NIL == why_skolem_defn_not_wff(skolem_defn));
     }
 
+    public static final SubLObject skolem_defn_not_wffP_alt(SubLObject skolem_defn) {
+        return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.skolems.why_skolem_defn_not_wff(skolem_defn));
+    }
+
     public static SubLObject skolem_defn_not_wffP(final SubLObject skolem_defn) {
         return list_utilities.sublisp_boolean(why_skolem_defn_not_wff(skolem_defn));
+    }
+
+    public static final SubLObject why_skolem_defn_not_wff_alt(SubLObject skolem_defn) {
+        {
+            SubLObject result = NIL;
+            if (NIL == skolem_defn) {
+                result = cons($list_alt91, result);
+            } else {
+                if (skolem_defn.isAtom()) {
+                    result = cons(list($SKOLEM_DEFN_NOT_LIST, skolem_defn), result);
+                }
+            }
+            if (NIL != result) {
+                return result;
+            }
+            if (!FOUR_INTEGER.numE(length(skolem_defn))) {
+                result = cons(list($SKOLEM_DEFN_MAL_LENGTH, skolem_defn), result);
+                if (NIL != result) {
+                    nreverse(result);
+                }
+            }
+            {
+                SubLObject datum = skolem_defn;
+                SubLObject current = datum;
+                SubLObject first = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt94);
+                first = current.first();
+                current = current.rest();
+                {
+                    SubLObject second = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
+                    destructuring_bind_must_listp(current, datum, $list_alt94);
+                    current = current.rest();
+                    {
+                        SubLObject third = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
+                        destructuring_bind_must_listp(current, datum, $list_alt94);
+                        current = current.rest();
+                        {
+                            SubLObject fourth = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
+                            destructuring_bind_must_listp(current, datum, $list_alt94);
+                            current = current.rest();
+                            {
+                                SubLObject orts = current;
+                                if (NIL != orts) {
+                                    result = cons(list($SKOLEM_DEFN_ORTS, orts), result);
+                                    if (NIL != result) {
+                                        return nreverse(result);
+                                    }
+                                }
+                                if (NIL == term.reified_skolem_fnP(first)) {
+                                    result = cons(list($SKOLEM_DEFN_MAL_SKOLEM_FORT, first), result);
+                                    if (NIL != result) {
+                                        return nreverse(result);
+                                    }
+                                }
+                                if (NIL != second) {
+                                    if (!(second.isCons() && ((THREE_INTEGER.numE(length(second)) || FOUR_INTEGER.numE(length(second))) || FIVE_INTEGER.numE(length(second))))) {
+                                        result = cons(list($SKOLEM_DEFN_MAL_UNREIFIED_FN_LENGTH, second), result);
+                                    } else {
+                                        {
+                                            SubLObject datum_14 = second;
+                                            SubLObject current_15 = datum_14;
+                                            SubLObject skolem_fn_function = NIL;
+                                            SubLObject args = NIL;
+                                            SubLObject var = NIL;
+                                            SubLObject seqvar_or_number = NIL;
+                                            destructuring_bind_must_consp(current_15, datum_14, $list_alt98);
+                                            skolem_fn_function = current_15.first();
+                                            current_15 = current_15.rest();
+                                            destructuring_bind_must_consp(current_15, datum_14, $list_alt98);
+                                            args = current_15.first();
+                                            current_15 = current_15.rest();
+                                            destructuring_bind_must_consp(current_15, datum_14, $list_alt98);
+                                            var = current_15.first();
+                                            current_15 = current_15.rest();
+                                            destructuring_bind_must_consp(current_15, datum_14, $list_alt98);
+                                            seqvar_or_number = current_15.first();
+                                            current_15 = current_15.rest();
+                                            {
+                                                SubLObject number = (current_15.isCons()) ? ((SubLObject) (current_15.first())) : NIL;
+                                                destructuring_bind_must_listp(current_15, datum_14, $list_alt98);
+                                                current_15 = current_15.rest();
+                                                if (NIL == current_15) {
+                                                    if (NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(second)) {
+                                                        number = seqvar_or_number;
+                                                    }
+                                                    if (NIL == term.skolem_fn_functionP(skolem_fn_function)) {
+                                                        result = cons(list($SKOLEM_DEFN_MAL_SKOLEM_FN_TYPE, skolem_fn_function), result);
+                                                        if (NIL != result) {
+                                                            return nreverse(result);
+                                                        }
+                                                    }
+                                                    if (!((NIL == args) || args.isList())) {
+                                                        result = cons(list($SKOLEM_DEFN_MAL_SKOLEM_FN_ARGS, args), result);
+                                                        if (NIL != result) {
+                                                            return nreverse(result);
+                                                        }
+                                                    }
+                                                    if (!((NIL == number) || (NIL != subl_promotions.memberP(number, args, symbol_function(EQUAL), UNPROVIDED)))) {
+                                                        result = cons(list($kw101$SKOLEM_DEFN_ARGS_W_O_NUMBER, args, number), result);
+                                                        if (NIL != result) {
+                                                            return nreverse(result);
+                                                        }
+                                                    }
+                                                    if (NIL == el_var_listP(remove(number, args, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
+                                                        result = cons(list($SKOLEM_DEFN_NON_VAR_ARGS, args), result);
+                                                        if (NIL != result) {
+                                                            return nreverse(result);
+                                                        }
+                                                    }
+                                                    if (!((NIL != var) && (NIL != cycl_variables.el_varP(var)))) {
+                                                        result = cons(list($SKOLEM_DEFN_MAL_SK_VAR, var), result);
+                                                        if (NIL != result) {
+                                                            return nreverse(result);
+                                                        }
+                                                    }
+                                                    if (((NIL != number) && (skolem_fn_function != $$SkolemFuncNFn)) || ((skolem_fn_function == $$SkolemFuncNFn) && (NIL == number))) {
+                                                        result = cons(list($kw104$SKOLEM_DEFN_ARGS_SK_TYPE_NUMBER_MISMATCH, skolem_fn_function, number), result);
+                                                        if (NIL != result) {
+                                                            return nreverse(result);
+                                                        }
+                                                    }
+                                                    if (((NIL != number) && number.isList()) && (number.first() == $$Unity)) {
+                                                        result = cons(list($SKOLEM_DEFN_OBSOLETE_NUMBER, number), result);
+                                                    }
+                                                } else {
+                                                    cdestructuring_bind_error(datum_14, $list_alt98);
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (NIL != result) {
+                                        return nreverse(result);
+                                    }
+                                }
+                                if (NIL != third) {
+                                    if (NIL == hlmt.hlmtP(third)) {
+                                        result = cons(list($SKOLEM_DEFN_MAL_MT, third), result);
+                                        if (NIL != result) {
+                                            return nreverse(result);
+                                        }
+                                    }
+                                }
+                                if (NIL == fourth) {
+                                    result = cons($list_alt107, result);
+                                    if (NIL != result) {
+                                        return nreverse(result);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject why_skolem_defn_not_wff(final SubLObject skolem_defn) {
@@ -3136,8 +6704,87 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject skolem_all_goodP_alt(SubLObject skf) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.skolems.skolem_function_skolem_assertion_goodP(skf)) && (NIL == com.cyc.cycjava.cycl.skolems.skolem_hosedP(skf)));
+    }
+
     public static SubLObject skolem_all_goodP(final SubLObject skf) {
         return makeBoolean((NIL != skolem_function_skolem_assertion_goodP(skf)) && (NIL == skolem_hosedP(skf)));
+    }
+
+    public static final SubLObject skolem_function_skolem_assertion_goodP_alt(SubLObject skf) {
+        {
+            SubLObject skolem_assertion_count = ZERO_INTEGER;
+            SubLObject bad_assertionP = NIL;
+            SubLObject pred_var = $$skolem;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(skf, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(skf, ONE_INTEGER, pred_var);
+                    SubLObject done_var = bad_assertionP;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                        {
+                                            SubLObject done_var_16 = bad_assertionP;
+                                            SubLObject token_var_17 = NIL;
+                                            while (NIL == done_var_16) {
+                                                {
+                                                    SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_17);
+                                                    SubLObject valid_18 = makeBoolean(token_var_17 != ass);
+                                                    if (NIL != valid_18) {
+                                                        skolem_assertion_count = add(skolem_assertion_count, ONE_INTEGER);
+                                                        {
+                                                            SubLObject v_arguments = assertions_high.assertion_arguments(ass);
+                                                            if (NIL == list_utilities.singletonP(v_arguments)) {
+                                                                bad_assertionP = ass;
+                                                                {
+                                                                    SubLObject argument = v_arguments.first();
+                                                                    if (NIL == deduction_handles.deduction_p(argument)) {
+                                                                        bad_assertionP = ass;
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var_16 = makeBoolean((NIL == valid_18) || (NIL != bad_assertionP));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != bad_assertionP));
+                        }
+                    } 
+                }
+            }
+            if (NIL != bad_assertionP) {
+                return NIL;
+            }
+            if (!ONE_INTEGER.numE(skolem_assertion_count)) {
+                return NIL;
+            }
+        }
+        return T;
     }
 
     public static SubLObject skolem_function_skolem_assertion_goodP(final SubLObject skf) {
@@ -3199,6 +6846,22 @@ public final class skolems extends SubLTranslatedFile {
         return T;
     }
 
+    public static final SubLObject skolem_functions_with_bad_skolem_assertions_alt() {
+        {
+            SubLObject bad_skfs = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.kb_skolems();
+            SubLObject skf = NIL;
+            for (skf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skf = cdolist_list_var.first()) {
+                if (NIL == hl_prototypes.hl_prototypical_instanceP(skf)) {
+                    if (NIL == com.cyc.cycjava.cycl.skolems.skolem_function_skolem_assertion_goodP(skf)) {
+                        bad_skfs = cons(skf, bad_skfs);
+                    }
+                }
+            }
+            return nreverse(bad_skfs);
+        }
+    }
+
     public static SubLObject skolem_functions_with_bad_skolem_assertions() {
         SubLObject bad_skfs = NIL;
         SubLObject cdolist_list_var = kb_skolems();
@@ -3214,8 +6877,80 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(bad_skfs);
     }
 
+    public static final SubLObject diagnose_all_skolems_alt() {
+        return com.cyc.cycjava.cycl.skolems.diagnose_skolems(com.cyc.cycjava.cycl.skolems.kb_skolems(), UNPROVIDED);
+    }
+
     public static SubLObject diagnose_all_skolems() {
         return diagnose_skolems(kb_skolems(), UNPROVIDED);
+    }
+
+    public static final SubLObject diagnose_skolems_alt(SubLObject v_skolems, SubLObject print_allP) {
+        if (print_allP == UNPROVIDED) {
+            print_allP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject count = ZERO_INTEGER;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt110$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject cdolist_list_var = v_skolems;
+                                    SubLObject skolem = NIL;
+                                    for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject maladies = com.cyc.cycjava.cycl.skolems.diagnose_skolem(skolem);
+                                            if (NIL != maladies) {
+                                                count = add(count, ONE_INTEGER);
+                                            }
+                                            if ((NIL != maladies) || (NIL != print_allP)) {
+                                                format_nil.force_format(T, $str_alt111$_a__a__s__, isa.isa(skolem, UNPROVIDED, UNPROVIDED).first(), skolem, maladies, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_19 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_19, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return count;
+            }
+        }
     }
 
     public static SubLObject diagnose_skolems(final SubLObject v_skolems, SubLObject print_allP) {
@@ -3262,6 +6997,52 @@ public final class skolems extends SubLTranslatedFile {
         return count;
     }
 
+    public static final SubLObject diagnose_skolem_alt(SubLObject skolem) {
+        {
+            SubLObject maladies = com.cyc.cycjava.cycl.skolems.diagnose_just_this_skolem(skolem);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.skolem_defn_proper_siblings(skolem);
+            SubLObject sibling = NIL;
+            for (sibling = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sibling = cdolist_list_var.first()) {
+                {
+                    SubLObject sibling_maladies = com.cyc.cycjava.cycl.skolems.diagnose_just_this_skolem(sibling);
+                    SubLObject items_var = sibling_maladies;
+                    if (items_var.isVector()) {
+                        {
+                            SubLObject vector_var = sibling_maladies;
+                            SubLObject backwardP_var = NIL;
+                            SubLObject length = length(vector_var);
+                            SubLObject v_iteration = NIL;
+                            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                                {
+                                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                                    SubLObject item = aref(vector_var, element_num);
+                                    SubLObject item_var = item;
+                                    if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                        maladies = cons(item_var, maladies);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        {
+                            SubLObject cdolist_list_var_20 = sibling_maladies;
+                            SubLObject item = NIL;
+                            for (item = cdolist_list_var_20.first(); NIL != cdolist_list_var_20; cdolist_list_var_20 = cdolist_list_var_20.rest() , item = cdolist_list_var_20.first()) {
+                                {
+                                    SubLObject item_var = item;
+                                    if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                        maladies = cons(item_var, maladies);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return maladies;
+        }
+    }
+
     public static SubLObject diagnose_skolem(final SubLObject skolem) {
         SubLObject maladies = diagnose_just_this_skolem(skolem);
         SubLObject cdolist_list_var = skolem_defn_proper_siblings(skolem);
@@ -3302,6 +7083,136 @@ public final class skolems extends SubLTranslatedFile {
             sibling = cdolist_list_var.first();
         } 
         return maladies;
+    }
+
+    public static final SubLObject diagnose_just_this_skolem_internal_alt(SubLObject skolem) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject maladies = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject assertions = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                            if (NIL != assertions) {
+                                {
+                                    SubLObject previous_mt = NIL;
+                                    SubLObject cdolist_list_var = assertions;
+                                    SubLObject ass = NIL;
+                                    for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
+                                        thread.resetMultipleValues();
+                                        {
+                                            SubLObject formula = uncanonicalizer.assertion_el_formula(ass);
+                                            SubLObject mt = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject ist_sentence = make_ist_sentence(mt, formula);
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject assertions_21 = czer_meta.find_assertions_cycl(formula, mt);
+                                                    SubLObject not_foundP = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if (NIL != not_foundP) {
+                                                        if (NIL != assertions_21) {
+                                                            {
+                                                                SubLObject item_var = $PARTIALLY_UNFINDABLE;
+                                                                if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                                    maladies = cons(item_var, maladies);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            {
+                                                                SubLObject item_var = $UNFINDABLE;
+                                                                if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                                    maladies = cons(item_var, maladies);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                if ((NIL != assertions_high.rule_assertionP(ass)) && (NIL != assertion_utilities.rule_has_unlabelled_dont_care_variableP(ass))) {
+                                                    {
+                                                        SubLObject item_var = $FREE_VARIABLE;
+                                                        if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                            maladies = cons(item_var, maladies);
+                                                        }
+                                                    }
+                                                }
+                                                if ((NIL != previous_mt) && (NIL == hlmt.hlmt_equalP(mt, previous_mt))) {
+                                                    {
+                                                        SubLObject item_var = $MULTIPLE_MTS;
+                                                        if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                            maladies = cons(item_var, maladies);
+                                                        }
+                                                    }
+                                                }
+                                                previous_mt = mt;
+                                                if (NIL != list_utilities.simple_tree_findP(skolem, ist_sentence)) {
+                                                    {
+                                                        SubLObject item_var = $RAW_SKOLEM;
+                                                        if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                            maladies = cons(item_var, maladies);
+                                                        }
+                                                    }
+                                                }
+                                                if (NIL != list_utilities.simple_tree_findP($$SkolemFunctionFn, ist_sentence)) {
+                                                    {
+                                                        SubLObject item_var = $UNREIFIED_SKOLEM;
+                                                        if (NIL == member(item_var, maladies, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                            maladies = cons(item_var, maladies);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            if (NIL != subl_promotions.memberP(skolem, $skolems_with_known_issues$.getGlobalValue(), UNPROVIDED, UNPROVIDED)) {
+                                maladies = cons($KNOWN_ISSUE, maladies);
+                            }
+                            {
+                                SubLObject items_var = com.cyc.cycjava.cycl.skolems.why_skolem_not_wff(skolem);
+                                if (items_var.isVector()) {
+                                    {
+                                        SubLObject vector_var = com.cyc.cycjava.cycl.skolems.why_skolem_not_wff(skolem);
+                                        SubLObject backwardP_var = NIL;
+                                        SubLObject length = length(vector_var);
+                                        SubLObject v_iteration = NIL;
+                                        for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                                            {
+                                                SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                                                SubLObject item = aref(vector_var, element_num);
+                                                maladies = cons(item, maladies);
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    {
+                                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.why_skolem_not_wff(skolem);
+                                        SubLObject item = NIL;
+                                        for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                            maladies = cons(item, maladies);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (((NIL != maladies) && (NIL == intersection(maladies, $list_alt120, UNPROVIDED, UNPROVIDED))) && (NIL != com.cyc.cycjava.cycl.skolems.skolem_safe_to_recanonicalize_at_elP(skolem))) {
+                    maladies = NIL;
+                }
+                return nreverse(maladies);
+            }
+        }
     }
 
     public static SubLObject diagnose_just_this_skolem_internal(final SubLObject skolem) {
@@ -3406,6 +7317,32 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(maladies);
     }
 
+    public static final SubLObject diagnose_just_this_skolem_alt(SubLObject skolem) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.skolems.diagnose_just_this_skolem_internal(skolem);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, DIAGNOSE_JUST_THIS_SKOLEM, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), DIAGNOSE_JUST_THIS_SKOLEM, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, DIAGNOSE_JUST_THIS_SKOLEM, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, skolem, $kw29$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw29$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.skolems.diagnose_just_this_skolem_internal(skolem)));
+                        memoization_state.caching_state_put(caching_state, skolem, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
+    }
+
     public static SubLObject diagnose_just_this_skolem(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
@@ -3426,13 +7363,46 @@ public final class skolems extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject recanonicalize_skolem_defn_assertions_alt(SubLObject skolem) {
+        {
+            SubLObject result = NIL;
+            SubLObject ass = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED).first();
+            if (NIL != assertion_handles.valid_assertionP(ass, UNPROVIDED)) {
+                {
+                    SubLObject message_var = NIL;
+                    try {
+                        {
+                            SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
+                            try {
+                                bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
+                                try {
+                                    result = cons(ke.ke_recanonicalize_assertion_now(ass, assertion_utilities.meta_assertion_list_for_editing(ass)), result);
+                                } catch (Throwable catch_var) {
+                                    Errors.handleThrowable(catch_var, NIL);
+                                }
+                            } finally {
+                                rebind(Errors.$error_handler$, _prev_bind_0);
+                            }
+                        }
+                    } catch (Throwable ccatch_env_var) {
+                        message_var = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                    }
+                    if (message_var.isString()) {
+                        Errors.warn($str_alt66$_A, message_var);
+                    }
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject recanonicalize_skolem_defn_assertions(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
         final SubLObject ass = skolem_defn_assertions(skolem, UNPROVIDED).first();
         if (NIL != assertion_handles.valid_assertionP(ass, UNPROVIDED)) {
             SubLObject message_var = NIL;
-            final SubLObject was_appendingP = eval($sym67$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
+            final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
             eval($list68);
             try {
                 try {
@@ -3458,7 +7428,7 @@ public final class skolems extends SubLTranslatedFile {
                 try {
                     $is_thread_performing_cleanupP$.bind(T, thread);
                     final SubLObject _values = getValuesAsVector();
-                    eval(list(CSETQ, $sym67$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
+                    eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
                     restoreValuesFromVector(_values);
                 } finally {
                     $is_thread_performing_cleanupP$.rebind(_prev_bind_2, thread);
@@ -3469,6 +7439,53 @@ public final class skolems extends SubLTranslatedFile {
             }
         }
         return nreverse(result);
+    }
+
+    public static final SubLObject skolem_safe_to_recanonicalize_at_elP_alt(SubLObject skolem) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != subl_promotions.memberP(skolem, $skolems_safe_to_recanonicalize_at_el$.getGlobalValue(), UNPROVIDED, UNPROVIDED)) {
+                return T;
+            }
+            {
+                SubLObject el_formula = NIL;
+                SubLObject el_mt = NIL;
+                SubLObject opaque_el_formula = NIL;
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                SubLObject ass = NIL;
+                for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject this_el_formula = uncanonicalizer.assertion_el_formula(ass);
+                        SubLObject this_el_mt = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject this_opaque_el_formula = cycl_utilities.expression_transform(this_el_formula, $sym15$EL_VAR_, FALSE, UNPROVIDED, UNPROVIDED);
+                            if ((NIL != el_formula) && (NIL != list_utilities.not_equal(opaque_el_formula, this_opaque_el_formula))) {
+                                Errors.warn($str_alt122$different_el_formulas_for__a____s, skolem, el_formula, this_el_formula);
+                                return NIL;
+                            }
+                            el_formula = this_el_formula;
+                            el_mt = this_el_mt;
+                            opaque_el_formula = this_opaque_el_formula;
+                        }
+                    }
+                }
+                {
+                    SubLObject result = NIL;
+                    {
+                        SubLObject _prev_bind_0 = $target_consequent_literal_count$.currentBinding(thread);
+                        try {
+                            $target_consequent_literal_count$.bind(com.cyc.cycjava.cycl.skolems.compute_target_consequent_literal_count(skolem), thread);
+                            result = makeBoolean(((((((((NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt123)) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt124))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt125))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt126))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt127))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt128))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt129))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt130))) || (NIL != formula_pattern_match.formula_matches_pattern(el_formula, $list_alt131)));
+                        } finally {
+                            $target_consequent_literal_count$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    return result;
+                }
+            }
+        }
     }
 
     public static SubLObject skolem_safe_to_recanonicalize_at_elP(final SubLObject skolem) {
@@ -3509,6 +7526,24 @@ public final class skolems extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * The number of unique CNFs for SKOLEM's defn assertions.
+     * Basically the # of defn assertions, but doesn't double count mt duplication.
+     */
+    @LispMethod(comment = "The number of unique CNFs for SKOLEM\'s defn assertions.\r\nBasically the # of defn assertions, but doesn\'t double count mt duplication.\nThe number of unique CNFs for SKOLEM\'s defn assertions.\nBasically the # of defn assertions, but doesn\'t double count mt duplication.")
+    public static final SubLObject compute_target_consequent_literal_count_alt(SubLObject skolem) {
+        {
+            SubLObject v_set = set.new_set(symbol_function(EQUAL), UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+            SubLObject ass = NIL;
+            for (ass = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ass = cdolist_list_var.first()) {
+                set.set_add(assertions_high.assertion_cnf(ass), v_set);
+            }
+            return set.set_size(v_set);
+        }
+    }
+
+    @LispMethod(comment = "The number of unique CNFs for SKOLEM\'s defn assertions.\r\nBasically the # of defn assertions, but doesn\'t double count mt duplication.\nThe number of unique CNFs for SKOLEM\'s defn assertions.\nBasically the # of defn assertions, but doesn\'t double count mt duplication.")
     public static SubLObject compute_target_consequent_literal_count(final SubLObject skolem) {
         final SubLObject v_set = set.new_set(symbol_function(EQUAL), UNPROVIDED);
         SubLObject cdolist_list_var = skolem_defn_assertions(skolem, UNPROVIDED);
@@ -3520,6 +7555,36 @@ public final class skolems extends SubLTranslatedFile {
             ass = cdolist_list_var.first();
         } 
         return set.set_size(v_set);
+    }/**
+     * The number of unique CNFs for SKOLEM's defn assertions.
+     * Basically the # of defn assertions, but doesn't double count mt duplication.
+     */
+
+
+    public static final SubLObject conjunction_of_literalsP_alt(SubLObject v_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != el_conjunction_p(v_object)) {
+                if (NIL != formula_arityE(v_object, $target_consequent_literal_count$.getDynamicValue(thread), UNPROVIDED)) {
+                    {
+                        SubLObject args = cycl_utilities.formula_args(v_object, $IGNORE);
+                        SubLObject cdolist_list_var = args;
+                        SubLObject lit = NIL;
+                        for (lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lit = cdolist_list_var.first()) {
+                            if (NIL == el_grammar.el_literal_p(lit)) {
+                                return NIL;
+                            }
+                        }
+                    }
+                }
+                return T;
+            } else {
+                if (NIL != el_grammar.el_literal_p(v_object)) {
+                    return number_utilities.onep($target_consequent_literal_count$.getDynamicValue(thread));
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject conjunction_of_literalsP(final SubLObject v_object) {
@@ -3542,6 +7607,37 @@ public final class skolems extends SubLTranslatedFile {
         }
         if (NIL != el_grammar.el_literal_p(v_object)) {
             return number_utilities.onep($target_consequent_literal_count$.getDynamicValue(thread));
+        }
+        return NIL;
+    }
+
+    public static final SubLObject modernize_skolem_axiom_table_alt() {
+        {
+            SubLObject key = NIL;
+            SubLObject v_defns = NIL;
+            {
+                final Iterator cdohash_iterator = getEntrySetIterator(czer_vars.$skolem_axiom_table$.getGlobalValue());
+                try {
+                    while (iteratorHasNext(cdohash_iterator)) {
+                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                        key = getEntryKey(cdohash_entry);
+                        v_defns = getEntryValue(cdohash_entry);
+                        {
+                            SubLObject cdolist_list_var = v_defns;
+                            SubLObject defn = NIL;
+                            for (defn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defn = cdolist_list_var.first()) {
+                                {
+                                    SubLObject unreified_sk_term = second(defn);
+                                    SubLObject modern_unreified_sk_term = com.cyc.cycjava.cycl.skolems.possibly_modernize_unreified_sk_term(unreified_sk_term);
+                                    list_utilities.nreplace_nth(ONE_INTEGER, modern_unreified_sk_term, defn);
+                                }
+                            }
+                        }
+                    } 
+                } finally {
+                    releaseEntrySetIterator(cdohash_iterator);
+                }
+            }
         }
         return NIL;
     }
@@ -3570,6 +7666,49 @@ public final class skolems extends SubLTranslatedFile {
             releaseEntrySetIterator(cdohash_iterator);
         }
         return NIL;
+    }
+
+    public static final SubLObject possibly_modernize_unreified_sk_term_alt(SubLObject unreified_sk_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != com.cyc.cycjava.cycl.skolems.old_format_skolemP(unreified_sk_term)) {
+                {
+                    SubLObject datum = unreified_sk_term;
+                    SubLObject current = datum;
+                    SubLObject skolem_type = NIL;
+                    SubLObject vars = NIL;
+                    SubLObject sk_var = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt133);
+                    skolem_type = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt133);
+                    vars = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt133);
+                    sk_var = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject number = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
+                        destructuring_bind_must_listp(current, datum, $list_alt133);
+                        current = current.rest();
+                        if (NIL == current) {
+                            {
+                                SubLObject result = com.cyc.cycjava.cycl.skolems.make_unreified_sk_nat(vars, sk_var, NIL, number);
+                                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                                    if (skolem_type != cycl_utilities.nat_functor(result)) {
+                                        Errors.error($str_alt134$Skolem_type_mismatch___a__a__a, unreified_sk_term, skolem_type, result);
+                                    }
+                                }
+                                return result;
+                            }
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt133);
+                        }
+                    }
+                }
+            }
+            return unreified_sk_term;
+        }
     }
 
     public static SubLObject possibly_modernize_unreified_sk_term(final SubLObject unreified_sk_term) {
@@ -3602,6 +7741,23 @@ public final class skolems extends SubLTranslatedFile {
         return unreified_sk_term;
     }
 
+    public static final SubLObject skolems_with_mismatched_unreified_sk_terms_alt() {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.skolems.kb_skolems();
+            SubLObject skolem = NIL;
+            for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                {
+                    SubLObject matchP = com.cyc.cycjava.cycl.skolems.skolem_unreified_sk_terms_matchP(skolem);
+                    if (NIL == matchP) {
+                        result = cons(skolem, result);
+                    }
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject skolems_with_mismatched_unreified_sk_terms() {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = kb_skolems();
@@ -3616,6 +7772,29 @@ public final class skolems extends SubLTranslatedFile {
             skolem = cdolist_list_var.first();
         } 
         return nreverse(result);
+    }
+
+    public static final SubLObject skolem_unreified_sk_terms_matchP_alt(SubLObject skolem) {
+        {
+            SubLObject mismatchP = NIL;
+            if (!((NIL != list_utilities.member_eqP(skolem, $skolems_with_known_issues$.getGlobalValue())) || (NIL != list_utilities.member_eqP(skolem, $skolems_safe_to_recanonicalize_at_el$.getGlobalValue())))) {
+                {
+                    SubLObject fresh_unreified_sk_term = second(com.cyc.cycjava.cycl.skolems.skolem_defn_from_assertions(skolem, UNPROVIDED));
+                    SubLObject hl_unreified_sk_term = com.cyc.cycjava.cycl.skolems.compute_unreified_sk_term_via_hl(skolem);
+                    if (!fresh_unreified_sk_term.equal(hl_unreified_sk_term)) {
+                        mismatchP = T;
+                        {
+                            SubLObject reason_string = $str_alt135$;
+                            if (NIL != com.cyc.cycjava.cycl.skolems.tmi_skolemP(skolem)) {
+                                reason_string = $str_alt136$temporalMicrotheoriesIntersect_;
+                            }
+                            format_nil.force_format(T, $str_alt137$___amismatch_for__a___a___a__, reason_string, skolem, fresh_unreified_sk_term, hl_unreified_sk_term, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        }
+                    }
+                }
+            }
+            return makeBoolean(NIL == mismatchP);
+        }
     }
 
     public static SubLObject skolem_unreified_sk_terms_matchP(final SubLObject skolem) {
@@ -3635,6 +7814,20 @@ public final class skolems extends SubLTranslatedFile {
         return makeBoolean(NIL == mismatchP);
     }
 
+    public static final SubLObject possibly_nrepair_skolems_with_duplicate_vars_alt(SubLObject v_skolems) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = v_skolems;
+            SubLObject skolem = NIL;
+            for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.skolems.possibly_nrepair_skolem_with_duplicate_vars(skolem)) {
+                    result = cons(skolem, result);
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject possibly_nrepair_skolems_with_duplicate_vars(final SubLObject v_skolems) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = v_skolems;
@@ -3650,11 +7843,62 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject possibly_nrepair_skolem_with_duplicate_vars_alt(SubLObject skolem) {
+        if (NIL != list_utilities.duplicatesP(second(second(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem))), UNPROVIDED, UNPROVIDED)) {
+            return com.cyc.cycjava.cycl.skolems.nrepair_skolem_with_duplicate_vars(skolem);
+        }
+        return NIL;
+    }
+
     public static SubLObject possibly_nrepair_skolem_with_duplicate_vars(final SubLObject skolem) {
         if (NIL != list_utilities.duplicatesP(second(second(skolem_defn(skolem))), UNPROVIDED, UNPROVIDED)) {
             return nrepair_skolem_with_duplicate_vars(skolem);
         }
         return NIL;
+    }
+
+    public static final SubLObject nrepair_skolem_with_duplicate_vars_alt(SubLObject skolem) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject defn = com.cyc.cycjava.cycl.skolems.skolem_defn(skolem);
+                SubLObject unreified_sk_term = com.cyc.cycjava.cycl.skolems.possibly_modernize_unreified_sk_term(second(defn));
+                SubLObject datum = unreified_sk_term;
+                SubLObject current = datum;
+                SubLObject sk_fn = NIL;
+                SubLObject vars = NIL;
+                SubLObject var = NIL;
+                SubLObject seqvar = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt138);
+                sk_fn = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt138);
+                vars = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt138);
+                var = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt138);
+                seqvar = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                        if (sk_fn != $$SkolemFunctionFn) {
+                            Errors.error($$$Error);
+                        }
+                    }
+                    {
+                        SubLObject dupe_var = list_utilities.only_one(list_utilities.duplicates(vars, UNPROVIDED, UNPROVIDED));
+                        SubLObject new_vars = list_utilities.remove_first(dupe_var, vars, UNPROVIDED);
+                        SubLObject new_unreified_sk_term = com.cyc.cycjava.cycl.skolems.make_unreified_sk_nat(new_vars, var, seqvar, dupe_var);
+                        list_utilities.nreplace_nth(ONE_INTEGER, new_unreified_sk_term, defn);
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt138);
+                }
+                return defn;
+            }
+        }
     }
 
     public static SubLObject nrepair_skolem_with_duplicate_vars(final SubLObject skolem) {
@@ -3693,6 +7937,20 @@ public final class skolems extends SubLTranslatedFile {
         return defn;
     }
 
+    public static final SubLObject possibly_nrepair_skolems_with_malformed_numbers_alt(SubLObject v_skolems) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = v_skolems;
+            SubLObject skolem = NIL;
+            for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.skolems.possibly_nrepair_skolem_with_malformed_numbers(skolem)) {
+                    result = cons(skolem, result);
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject possibly_nrepair_skolems_with_malformed_numbers(final SubLObject v_skolems) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = v_skolems;
@@ -3708,6 +7966,19 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject possibly_nrepair_skolem_with_malformed_numbers_alt(SubLObject skolem) {
+        {
+            SubLObject cdolist_list_var = second(second(com.cyc.cycjava.cycl.skolems.skolem_defn(skolem)));
+            SubLObject var = NIL;
+            for (var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , var = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.skolems.skolem_scalar_termP(var, UNPROVIDED)) {
+                    return com.cyc.cycjava.cycl.skolems.nrepair_skolem_with_malformed_numbers(skolem);
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject possibly_nrepair_skolem_with_malformed_numbers(final SubLObject skolem) {
         SubLObject cdolist_list_var = second(second(skolem_defn(skolem)));
         SubLObject var = NIL;
@@ -3720,6 +7991,49 @@ public final class skolems extends SubLTranslatedFile {
             var = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject nrepair_skolem_with_malformed_numbers_alt(SubLObject skolem) {
+        {
+            SubLObject defn = com.cyc.cycjava.cycl.skolems.skolem_defn(skolem);
+            SubLObject unreified_sk_term = com.cyc.cycjava.cycl.skolems.possibly_modernize_unreified_sk_term(second(defn));
+            SubLObject datum = unreified_sk_term;
+            SubLObject current = datum;
+            SubLObject sk_fn = NIL;
+            SubLObject vars = NIL;
+            SubLObject var = NIL;
+            SubLObject seqvar = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt140);
+            sk_fn = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt140);
+            vars = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt140);
+            var = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt140);
+            seqvar = current.first();
+            current = current.rest();
+            {
+                SubLObject existing_number = (current.isCons()) ? ((SubLObject) (current.first())) : NIL;
+                destructuring_bind_must_listp(current, datum, $list_alt140);
+                current = current.rest();
+                if (NIL == current) {
+                    if ($$SkolemFunctionFn == sk_fn) {
+                        {
+                            SubLObject sk_number = list_utilities.only_one(list_utilities.remove_if_not($sym141$SKOLEM_SCALAR_TERM_, vars, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                            SubLObject new_vars = remove_if($sym141$SKOLEM_SCALAR_TERM_, vars, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            SubLObject new_unreified_sk_term = com.cyc.cycjava.cycl.skolems.make_unreified_sk_nat(new_vars, var, seqvar, sk_number);
+                            list_utilities.nreplace_nth(ONE_INTEGER, new_unreified_sk_term, defn);
+                        }
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt140);
+                }
+            }
+            return defn;
+        }
     }
 
     public static SubLObject nrepair_skolem_with_malformed_numbers(final SubLObject skolem) {
@@ -3759,6 +8073,36 @@ public final class skolems extends SubLTranslatedFile {
         return defn;
     }
 
+    public static final SubLObject tmi_skolemP_alt(SubLObject skolem) {
+        if (NIL != valid_constantP(skolem, UNPROVIDED)) {
+            {
+                SubLObject assertions = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                if (NIL != list_utilities.lengthE(assertions, TWO_INTEGER, UNPROVIDED)) {
+                    {
+                        SubLObject datum = assertions;
+                        SubLObject current = datum;
+                        SubLObject ass1 = NIL;
+                        SubLObject ass2 = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt142);
+                        ass1 = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt142);
+                        ass2 = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            if (((((NIL != assertions_high.gaf_assertionP(ass1)) && (NIL != assertions_high.gaf_assertionP(ass2))) && (NIL != el_formula_with_operator_p(assertions_high.gaf_formula(ass2), $$temporalMicrotheoriesIntersect))) && (NIL != list_utilities.tree_find($$SkolemFunctionFn, assertions_high.assertion_mt(ass1), UNPROVIDED, UNPROVIDED))) && (NIL != list_utilities.tree_find($$SkolemFunctionFn, assertions_high.assertion_mt(ass2), UNPROVIDED, UNPROVIDED))) {
+                                return T;
+                            }
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt142);
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject tmi_skolemP(final SubLObject skolem) {
         if (NIL != valid_constantP(skolem, UNPROVIDED)) {
             final SubLObject assertions = skolem_defn_assertions(skolem, UNPROVIDED);
@@ -3785,6 +8129,17 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject recanonicalize_tmi_skolems_alt(SubLObject v_skolems) {
+        {
+            SubLObject cdolist_list_var = v_skolems;
+            SubLObject skolem = NIL;
+            for (skolem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , skolem = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.skolems.recanonicalize_tmi_skolem(skolem);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject recanonicalize_tmi_skolems(final SubLObject v_skolems) {
         SubLObject cdolist_list_var = v_skolems;
         SubLObject skolem = NIL;
@@ -3797,6 +8152,40 @@ public final class skolems extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Recanonicalizes one of a set of broken #$temporalMicrotheoriesIntersect skolems
+     */
+    @LispMethod(comment = "Recanonicalizes one of a set of broken #$temporalMicrotheoriesIntersect skolems")
+    public static final SubLObject recanonicalize_tmi_skolem_alt(SubLObject skolem) {
+        if (NIL != com.cyc.cycjava.cycl.skolems.tmi_skolemP(skolem)) {
+            {
+                SubLObject datum = com.cyc.cycjava.cycl.skolems.skolem_defn_assertions(skolem, UNPROVIDED);
+                SubLObject current = datum;
+                SubLObject content_ass = NIL;
+                SubLObject tmi_ass = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt144);
+                content_ass = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt144);
+                tmi_ass = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    {
+                        SubLObject sentence = assertions_high.gaf_formula(content_ass);
+                        SubLObject monad = hlmt.hlmt_monad_mt(assertions_high.assertion_mt(content_ass));
+                        cyc_kernel.cyc_assert_wff(list($$thereExists, $sym146$_TIME, list($$ist, listS($$MtSpace, monad, $list_alt149), listS($$and, sentence, $list_alt151))), $$BaseKB, UNPROVIDED);
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt144);
+                }
+            }
+            cyc_kernel.cyc_kill(skolem);
+            return T;
+        }
+        return NIL;
+    }
+
+    @LispMethod(comment = "Recanonicalizes one of a set of broken #$temporalMicrotheoriesIntersect skolems")
     public static SubLObject recanonicalize_tmi_skolem(final SubLObject skolem) {
         if (NIL != tmi_skolemP(skolem)) {
             SubLObject current;
@@ -3820,6 +8209,60 @@ public final class skolems extends SubLTranslatedFile {
             return T;
         }
         return NIL;
+    }/**
+     * Recanonicalizes one of a set of broken #$temporalMicrotheoriesIntersect skolems
+     */
+
+
+    public static final SubLObject possibly_rehabilitate_skolem_defn_table_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != com.cyc.cycjava.cycl.skolems.skolem_table_contains_old_format_skolemsP()) {
+                com.cyc.cycjava.cycl.skolems.modernize_skolem_axiom_table();
+                com.cyc.cycjava.cycl.skolems.possibly_nrepair_skolems_with_duplicate_vars(fort_types_interface.all_forts_of_type($$SkolemFunction));
+                com.cyc.cycjava.cycl.skolems.possibly_nrepair_skolems_with_malformed_numbers(fort_types_interface.all_forts_of_type($$SkolemFunction));
+                com.cyc.cycjava.cycl.skolems.recanonicalize_tmi_skolems($list_alt153);
+                {
+                    SubLObject list_var = $skolems_safe_to_recanonicalize_at_el$.getGlobalValue();
+                    $progress_note$.setDynamicValue($$$recanonicalizing_skolems, thread);
+                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                    $progress_total$.setDynamicValue(length(list_var), thread);
+                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                    {
+                        SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                        try {
+                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                            $last_percent_progress_prediction$.bind(NIL, thread);
+                            $within_noting_percent_progress$.bind(T, thread);
+                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                            {
+                                SubLObject csome_list_var = list_var;
+                                SubLObject skolem = NIL;
+                                for (skolem = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , skolem = csome_list_var.first()) {
+                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                    if (NIL != valid_constantP(skolem, UNPROVIDED)) {
+                                        com.cyc.cycjava.cycl.skolems.recanonicalize_skolem_defn_assertions(skolem);
+                                    }
+                                }
+                            }
+                            noting_percent_progress_postamble();
+                        } finally {
+                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                            $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return T;
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject possibly_rehabilitate_skolem_defn_table() {
@@ -4364,6 +8807,26 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("SKOLEM-TERM"));
+
+    static private final SubLList $list_alt2 = list(makeSymbol("NEG-LITS"), makeSymbol("POS-LITS"));
+
+    static private final SubLString $str_alt7$unreified_skolem_term_references_ = makeString("unreified-skolem-term references unknown skolem type: ~s");
+
+    static private final SubLString $str_alt11$skolem_args____s_vs__s = makeString("skolem-args : ~s vs ~s");
+
+    static private final SubLList $list_alt18 = list(makeSymbol("OLD-SK-CONSTANT"), makeSymbol("OLD-UNREIFIED-SK-TERM"), makeSymbol("SK-MT"), makeSymbol("OLD-DEFN"));
+
+    public static final SubLSymbol $kw29$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLList $list_alt32 = list(makeSymbol("SKOLEM-TYPE"), makeSymbol("VARS"), makeSymbol("SK-VAR"), makeSymbol("SEQVAR-OR-NUMBER"), makeSymbol("&OPTIONAL"), makeSymbol("NUMBER"));
+
+    static private final SubLString $str_alt33$Multiple_skolem_sequence_variable = makeString("Multiple skolem sequence variables: ~a ~a ~a");
+
+    static private final SubLString $str_alt34$SkolemFuncN_appears_as_SkolemFunc = makeString("SkolemFuncN appears as SkolemFunction: ~a");
+
     public static SubLObject skolem_unfindable_via_elP(final SubLObject skolem) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject cdolist_list_var = skolem_defn_assertions(skolem, UNPROVIDED);
@@ -4386,6 +8849,10 @@ public final class skolems extends SubLTranslatedFile {
         } 
         return NIL;
     }
+
+    static private final SubLList $list_alt36 = list(makeSymbol("SK-CONSTANT"), makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("MT"), makeSymbol("CNFS"));
+
+    static private final SubLString $str_alt47$_in_gaf_has_corresponding_cnf_in_ = makeString("[in gaf-has-corresponding-cnf-in-skolem-defn?] skolem ~s is not a skolem constant");
 
     public static SubLObject bad_skolem_assertions(SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
@@ -4894,159 +9361,629 @@ public final class skolems extends SubLTranslatedFile {
         return nreverse(bad_skfs);
     }
 
+    static private final SubLSymbol $sym52$REIFIED_SKOLEM_FN_IN_ANY_MT_ = makeSymbol("REIFIED-SKOLEM-FN-IN-ANY-MT?");
+
+    static private final SubLString $str_alt53$recomputing_skolem_defn_info_cons = makeString("recomputing-skolem-defn-info-constant called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt54$recomputing_skolem_defn_info_var_ = makeString("recomputing-skolem-defn-info-var called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt55$really_recomputing_skolem_defn__c = makeString("really-recomputing-skolem-defn? called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt56$recomputing_skolem_defn_info_defn = makeString("recomputing-skolem-defn-info-defn called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt57$recomputing_skolem_defn_info_key_ = makeString("recomputing-skolem-defn-info-key called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt58$recomputing_skolem_defn_info_blis = makeString("recomputing-skolem-defn-info-blist called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt59$set_recomputing_skolem_defn_resul = makeString("set-recomputing-skolem-defn-result called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt60$set_recomputing_skolem_defn_blist = makeString("set-recomputing-skolem-defn-blist called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt62$note_skolem_binding_called_when_n = makeString("note-skolem-binding called when not recomputing a skolem defn");
+
+    static private final SubLString $str_alt63$Total_KB_Skolems___a = makeString("Total KB Skolems: ~a");
+
+    static private final SubLString $str_alt66$_A = makeString("~A");
+
+    static private final SubLString $str_alt67$____reified_skolem__a_not_known_t = makeString("~%~%reified skolem ~a not known to be an instance of #$SkolemFunction");
+
+    static private final SubLString $str_alt72$__disjoint_result_types___s____s = makeString("~%disjoint result types: ~s : ~s");
+
+    static private final SubLString $str_alt73$__explicit_result_types___s____s = makeString("~%explicit result types: ~s : ~s");
+
+    static private final SubLString $str_alt74$__tacit_result_isa___s____s = makeString("~%tacit result isa: ~s : ~s");
+
+    static private final SubLString $str_alt75$__no_result_types___s = makeString("~%no result types: ~s");
+
+    static private final SubLString $str_alt76$__tacit_result_genl___s____s = makeString("~%tacit result genl: ~s : ~s");
+
+    static private final SubLList $list_alt78 = list(reader_make_constant_shell("NonNegativeScalarInterval"));
+
+    static private final SubLList $list_alt80 = list(makeSymbol("SKOLEM"), makeSymbol("UNREIFIED-SK-TERM"), makeSymbol("MT"), makeSymbol("CNFS"));
+
+    static private final SubLString $str_alt81$__tacit_arg__s_type___s____s = makeString("~%tacit arg ~s type: ~s : ~s");
+
+    static private final SubLString $str_alt82$__no_arg__s_type___s____s = makeString("~%no arg ~s type: ~s : ~s");
+
+    static private final SubLList $list_alt84 = list(makeSymbol("CONSTANT"), makeSymbol("LISPY"), makeSymbol("MT"), makeSymbol("CNFS"));
+
+    static private final SubLString $str_alt86$mapping__skolem_axiom_table_ = makeString("mapping *skolem-axiom-table*");
+
+    static private final SubLSymbol $sym87$_ = makeSymbol(">");
+
+    static private final SubLList $list_alt89 = cons(makeSymbol("CONSTANT"), makeSymbol("DATA"));
+
+    static private final SubLString $str_alt90$fixing_skolems_w_o_mts = makeString("fixing skolems w/o mts");
+
+    static private final SubLList $list_alt91 = list(makeKeyword("SKOLEM-DEFN-MISSING"));
+
+    static private final SubLList $list_alt94 = listS(makeSymbol("FIRST"), makeSymbol("&OPTIONAL"), makeSymbol("SECOND"), makeSymbol("THIRD"), makeSymbol("FOURTH"), makeSymbol("ORTS"));
+
+    static private final SubLList $list_alt98 = list(makeSymbol("SKOLEM-FN-FUNCTION"), makeSymbol("ARGS"), makeSymbol("VAR"), makeSymbol("SEQVAR-OR-NUMBER"), makeSymbol("&OPTIONAL"), makeSymbol("NUMBER"));
+
+    public static final SubLSymbol $kw101$SKOLEM_DEFN_ARGS_W_O_NUMBER = makeKeyword("SKOLEM-DEFN-ARGS-W/O-NUMBER");
+
+    public static final SubLSymbol $kw104$SKOLEM_DEFN_ARGS_SK_TYPE_NUMBER_MISMATCH = makeKeyword("SKOLEM-DEFN-ARGS-SK-TYPE/NUMBER-MISMATCH");
+
+    static private final SubLList $list_alt107 = list(makeKeyword("SKOLEM-DEFN-W/O-CLAUSES"));
+
+    static private final SubLList $list_alt108 = list(new SubLObject[]{ reader_make_constant_shell("ThePrototypicalFixedAritySkolemFunction"), reader_make_constant_shell("SKF-4855075916"), reader_make_constant_shell("SKF-9401565"), reader_make_constant_shell("SKF-30608153"), reader_make_constant_shell("SKF-358427"), reader_make_constant_shell("SKF-981029"), reader_make_constant_shell("SKF-378457"), reader_make_constant_shell("SKF-7897525238"), reader_make_constant_shell("SKF-23426283"), reader_make_constant_shell("SKF-4978723980"), reader_make_constant_shell("SKF-8095780367"), reader_make_constant_shell("SKF-2283707389"), reader_make_constant_shell("SKF-3819196850"), reader_make_constant_shell("SKF-2177078880"), reader_make_constant_shell("SKF-9178370244"), reader_make_constant_shell("SKF-2313708415"), reader_make_constant_shell("SKF-54808499"), reader_make_constant_shell("SKF-2396342019"), reader_make_constant_shell("SKF-0540013113"), reader_make_constant_shell("SKF-7329112212"), reader_make_constant_shell("SKF-2463549462"), reader_make_constant_shell("SKF-7267986583"), reader_make_constant_shell("SKF-2341431804"), reader_make_constant_shell("SKF-5635570701"), reader_make_constant_shell("SKF-8712676684"), reader_make_constant_shell("SKF-6439069748"), reader_make_constant_shell("SKF-3035846539"), reader_make_constant_shell("SKF-9609006789"), reader_make_constant_shell("SKF-2094656502"), reader_make_constant_shell("SKF-1622895730"), reader_make_constant_shell("SKF-6034791567"), reader_make_constant_shell("SKF-8429706273"), reader_make_constant_shell("SKF-5002539315"), reader_make_constant_shell("SKF-7731242586"), reader_make_constant_shell("SKF-1935351914"), reader_make_constant_shell("SKF-5819554541"), reader_make_constant_shell("SKF-7665225690"), reader_make_constant_shell("SKF-5742181768"), reader_make_constant_shell("SKF-7774820049"), reader_make_constant_shell("SKF-9832002172"), reader_make_constant_shell("SKF-9099460346"), reader_make_constant_shell("SKF-6802057837"), reader_make_constant_shell("SKF-0233545031"), reader_make_constant_shell("SKF-7143243607"), reader_make_constant_shell("SKF-5547792583"), reader_make_constant_shell("SKF-1970550724"), reader_make_constant_shell("SKF-2043784885"), reader_make_constant_shell("SKF-1714183462"), reader_make_constant_shell("SKF-6071957396"), reader_make_constant_shell("SKF-7004599156"), reader_make_constant_shell("SKF-0633671947"), reader_make_constant_shell("SKF-4928965872"), reader_make_constant_shell("SKF-4365040835"), reader_make_constant_shell("SKF-9778251013"), reader_make_constant_shell("SKF-8146092452"), reader_make_constant_shell("SKF-0882987459"), reader_make_constant_shell("SKF-6693421741"), reader_make_constant_shell("SKF-1800635573"), reader_make_constant_shell("SKF-5174206356"), reader_make_constant_shell("SKF-8137704160"), reader_make_constant_shell("SKF-6138620537"), reader_make_constant_shell("SKF-6954747722"), reader_make_constant_shell("SKF-8822929547"), reader_make_constant_shell("SKF-6574888924"), reader_make_constant_shell("SKF-4648710733"), reader_make_constant_shell("SKF-3574121958"), reader_make_constant_shell("SKF-7111033530"), reader_make_constant_shell("SKF-1259710929"), reader_make_constant_shell("SKF-9511328868"), reader_make_constant_shell("SKF-7988430072"), reader_make_constant_shell("SKF-9334424285"), reader_make_constant_shell("SKF-0241028856"), reader_make_constant_shell("SKF-8824048486"), reader_make_constant_shell("SKF-4709173148"), reader_make_constant_shell("SKF-9085853324"), reader_make_constant_shell("SKF-5615627058"), reader_make_constant_shell("SKF-6491665291"), reader_make_constant_shell("SKF-0256832978"), reader_make_constant_shell("SKF-1494753028"), reader_make_constant_shell("SKF-3439360561"), reader_make_constant_shell("SKF-4359556905"), reader_make_constant_shell("SKF-1746016905"), reader_make_constant_shell("SKF-4430979996"), reader_make_constant_shell("SKF-5792768502"), reader_make_constant_shell("SKF-5965884944"), reader_make_constant_shell("SKF-4975731367"), reader_make_constant_shell("SKF-2918153882"), reader_make_constant_shell("SKF-0992686716"), reader_make_constant_shell("SKF-8537516687"), reader_make_constant_shell("SKF-7685719048"), reader_make_constant_shell("SKF-1488659619"), reader_make_constant_shell("SKF-9837174340"), reader_make_constant_shell("SKF-0372211184"), reader_make_constant_shell("SKF-6796242698"), reader_make_constant_shell("SKF-4631282123"), reader_make_constant_shell("SKF-8747036173"), reader_make_constant_shell("SKF-9214557550"), reader_make_constant_shell("SKF-2969771224"), reader_make_constant_shell("SKF-3201009743"), reader_make_constant_shell("SKF-8199787846"), reader_make_constant_shell("SKF-1857924337"), reader_make_constant_shell("SKF-2577476768"), reader_make_constant_shell("SKF-9606922473"), reader_make_constant_shell("SKF-3890236588"), reader_make_constant_shell("SKF-2976547342"), reader_make_constant_shell("SKF-2734536924"), reader_make_constant_shell("SKF-4107434815"), reader_make_constant_shell("SKF-8121330546"), reader_make_constant_shell("SKF-0714339318"), reader_make_constant_shell("SKF-3616130689"), reader_make_constant_shell("SKF-4918966"), reader_make_constant_shell("SKF-12370394"), reader_make_constant_shell("SKF-58467056"), reader_make_constant_shell("SKF-61049284"), reader_make_constant_shell("SKF-14302329"), reader_make_constant_shell("SKF-4779393528"), reader_make_constant_shell("SKF-1305979122"), reader_make_constant_shell("SKF-7033956451"), reader_make_constant_shell("SKF-4442841559") });
+
+    public static final SubLObject $list_alt109 = com.cyc.cycjava.cycl.skolems._constant_109_initializer();
+
+    static private final SubLString $str_alt110$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+
+    static private final SubLString $str_alt111$_a__a__s__ = makeString("~a ~a ~s~%");
+
+    static private final SubLList $list_alt120 = list(makeKeyword("RAW-SKOLEM"), makeKeyword("UNREIFIED-SKOLEM"), makeKeyword("FREE-VARIABLE"));
+
+    static private final SubLString $str_alt122$different_el_formulas_for__a____s = makeString("different el formulas for ~a:~%~s~%~s");
+
+    static private final SubLList $list_alt123 = list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?")));
+
+    static private final SubLList $list_alt124 = list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))));
+
+    static private final SubLList $list_alt125 = list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?")))));
+
+    static private final SubLList $list_alt126 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))));
+
+    static private final SubLList $list_alt127 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?")))));
+
+    static private final SubLList $list_alt128 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))))));
+
+    static private final SubLList $list_alt129 = list(reader_make_constant_shell("implies"), makeKeyword("ANYTHING"), list(list($TEST, makeSymbol("CYC-CONST-BOUNDED-EXISTENTIAL-OPERATOR-P")), list($TEST, makeSymbol("GROUND?")), list($TEST, makeSymbol("EL-VAR?")), list($TEST, makeSymbol("CONJUNCTION-OF-LITERALS?"))));
+
+    static private final SubLList $list_alt130 = list(reader_make_constant_shell("and"), list($TEST, makeSymbol("EL-LITERAL-P")), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("temporalMicrotheoriesIntersect"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"))));
+
+    static private final SubLList $list_alt131 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("thereExists"), list($TEST, makeSymbol("EL-VAR?")), list(reader_make_constant_shell("temporalMicrotheoriesIntersect"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"))), list($TEST, makeSymbol("EL-LITERAL-P")));
+
+    static private final SubLList $list_alt133 = list(makeSymbol("SKOLEM-TYPE"), makeSymbol("VARS"), makeSymbol("SK-VAR"), makeSymbol("&OPTIONAL"), makeSymbol("NUMBER"));
+
+    static private final SubLString $str_alt134$Skolem_type_mismatch___a__a__a = makeString("Skolem type mismatch: ~a ~a ~a");
+
+    static private final SubLString $str_alt136$temporalMicrotheoriesIntersect_ = makeString("temporalMicrotheoriesIntersect ");
+
+    static private final SubLString $str_alt137$___amismatch_for__a___a___a__ = makeString("~%~amismatch for ~a~%~a~%~a~%");
+
+    static private final SubLList $list_alt138 = list(makeSymbol("SK-FN"), makeSymbol("VARS"), makeSymbol("VAR"), makeSymbol("SEQVAR"));
+
+    static private final SubLList $list_alt140 = list(makeSymbol("SK-FN"), makeSymbol("VARS"), makeSymbol("VAR"), makeSymbol("SEQVAR"), makeSymbol("&OPTIONAL"), makeSymbol("EXISTING-NUMBER"));
+
+    static private final SubLSymbol $sym141$SKOLEM_SCALAR_TERM_ = makeSymbol("SKOLEM-SCALAR-TERM?");
+
+    static private final SubLList $list_alt142 = list(makeSymbol("ASS1"), makeSymbol("ASS2"));
+
+    static private final SubLList $list_alt144 = list(makeSymbol("CONTENT-ASS"), makeSymbol("TMI-ASS"));
+
+    static private final SubLSymbol $sym146$_TIME = makeSymbol("?TIME");
+
+    static private final SubLList $list_alt149 = list(list(reader_make_constant_shell("MtTimeDimFn"), makeSymbol("?TIME")));
+
+    static private final SubLList $list_alt151 = list(list(reader_make_constant_shell("temporalMicrotheoriesIntersect"), list(reader_make_constant_shell("MtTimeDimFn"), makeSymbol("?TIME")), list(reader_make_constant_shell("MtTimeWithGranularityDimFn"), list(reader_make_constant_shell("IntervalEndedByFn"), reader_make_constant_shell("Now-Indexical")), reader_make_constant_shell("TimePoint"))));
+
+    static private final SubLList $list_alt153 = list(new SubLObject[]{ reader_make_constant_shell("SKF-2172650888"), reader_make_constant_shell("SKF-6548862369"), reader_make_constant_shell("SKF-8409811003"), reader_make_constant_shell("SKF-7363528201"), reader_make_constant_shell("SKF-1358114357"), reader_make_constant_shell("SKF-4072021064"), reader_make_constant_shell("SKF-1681761679"), reader_make_constant_shell("SKF-2548755082"), reader_make_constant_shell("SKF-6067931751"), reader_make_constant_shell("SKF-5709128133"), reader_make_constant_shell("SKF-1590734700"), reader_make_constant_shell("SKF-5134195828"), reader_make_constant_shell("SKF-3907269039"), reader_make_constant_shell("SKF-6454474627"), reader_make_constant_shell("SKF-9567857250"), reader_make_constant_shell("SKF-5128698501"), reader_make_constant_shell("SKF-0849952130"), reader_make_constant_shell("SKF-5716409094"), reader_make_constant_shell("SKF-9715593487"), reader_make_constant_shell("SKF-4012481774"), reader_make_constant_shell("SKF-9973400181"), reader_make_constant_shell("SKF-4749210628"), reader_make_constant_shell("SKF-7688139609"), reader_make_constant_shell("SKF-7103881989"), reader_make_constant_shell("SKF-5296958920"), reader_make_constant_shell("SKF-9684239747"), reader_make_constant_shell("SKF-9283857452"), reader_make_constant_shell("SKF-8076090600"), reader_make_constant_shell("SKF-8853185369"), reader_make_constant_shell("SKF-2870709283"), reader_make_constant_shell("SKF-4865105368"), reader_make_constant_shell("SKF-6632523431"), reader_make_constant_shell("SKF-8236383708"), reader_make_constant_shell("SKF-0341790583"), reader_make_constant_shell("SKF-5342612010") });
+
+    public static final SubLObject declare_skolems_file_alt() {
+        declareFunction("reify_skolems_in", "REIFY-SKOLEMS-IN", 4, 0, false);
+        declareFunction("canonicalize_fns_in_sk_term", "CANONICALIZE-FNS-IN-SK-TERM", 1, 0, false);
+        declareFunction("subst_skolem_in", "SUBST-SKOLEM-IN", 3, 0, false);
+        declareFunction("skolem_function_dependent_vars", "SKOLEM-FUNCTION-DEPENDENT-VARS", 1, 0, false);
+        declareFunction("skolem_function_var", "SKOLEM-FUNCTION-VAR", 1, 0, false);
+        declareFunction("skolem_args", "SKOLEM-ARGS", 3, 0, false);
+        declareFunction("canonicalize_skolem_term", "CANONICALIZE-SKOLEM-TERM", 4, 0, false);
+        declareFunction("replace_unreified_skolem_terms_with_variables", "REPLACE-UNREIFIED-SKOLEM-TERMS-WITH-VARIABLES", 1, 0, false);
+        declareFunction("lookup_sk_constant_from_defns", "LOOKUP-SK-CONSTANT-FROM-DEFNS", 3, 0, false);
+        declareFunction("defn_unreified_sk_term", "DEFN-UNREIFIED-SK-TERM", 3, 0, false);
+        declareFunction("skolem_collection", "SKOLEM-COLLECTION", 1, 0, false);
+        declareFunction("create_skolem", "CREATE-SKOLEM", 5, 0, false);
+        declareFunction("sk_defn_from_clauses", "SK-DEFN-FROM-CLAUSES", 2, 1, false);
+        declareFunction("alpha_sort_clauses", "ALPHA-SORT-CLAUSES", 1, 0, false);
+        declareFunction("rename_skolem_clause_vars", "RENAME-SKOLEM-CLAUSE-VARS", 2, 1, false);
+        declareFunction("sk_defn_var", "SK-DEFN-VAR", 0, 0, false);
+        declareFunction("clear_formula_constant_str", "CLEAR-FORMULA-CONSTANT-STR", 0, 0, false);
+        declareFunction("remove_formula_constant_str", "REMOVE-FORMULA-CONSTANT-STR", 1, 0, false);
+        declareFunction("formula_constant_str_internal", "FORMULA-CONSTANT-STR-INTERNAL", 1, 0, false);
+        declareFunction("formula_constant_str", "FORMULA-CONSTANT-STR", 1, 0, false);
+        declareFunction("cyc_var_except_for_x_0P", "CYC-VAR-EXCEPT-FOR-X-0?", 1, 0, false);
+        declareFunction("make_sk_defn", "MAKE-SK-DEFN", 4, 0, false);
+        declareFunction("sk_arity", "SK-ARITY", 1, 1, false);
+        declareFunction("make_unreified_sk_nat", "MAKE-UNREIFIED-SK-NAT", 4, 0, false);
+        declareFunction("skolem_defn", "SKOLEM-DEFN", 1, 0, false);
+        declareFunction("skolem_defnXkey", "SKOLEM-DEFN&KEY", 1, 0, false);
+        declareFunction("skolem_defn_key", "SKOLEM-DEFN-KEY", 1, 0, false);
+        declareFunction("skolem_of_defn", "SKOLEM-OF-DEFN", 1, 0, false);
+        declareFunction("unreified_sk_term", "UNREIFIED-SK-TERM", 1, 0, false);
+        declareFunction("skolem_defn_mt", "SKOLEM-DEFN-MT", 1, 0, false);
+        declareFunction("skolem_seqvar", "SKOLEM-SEQVAR", 1, 0, false);
+        declareFunction("skolem_defn_seqvar", "SKOLEM-DEFN-SEQVAR", 1, 0, false);
+        declareFunction("old_format_skolemP", "OLD-FORMAT-SKOLEM?", 1, 0, false);
+        declareFunction("skolem_number", "SKOLEM-NUMBER", 1, 0, false);
+        declareFunction("skolem_defn_number", "SKOLEM-DEFN-NUMBER", 1, 0, false);
+        declareFunction("skolem_defn_args", "SKOLEM-DEFN-ARGS", 1, 0, false);
+        declareFunction("skolem_var", "SKOLEM-VAR", 1, 0, false);
+        declareFunction("el_unreified_sk_term", "EL-UNREIFIED-SK-TERM", 1, 0, false);
+        declareFunction("compute_unreified_sk_term_via_hl", "COMPUTE-UNREIFIED-SK-TERM-VIA-HL", 1, 0, false);
+        declareFunction("compute_skolem_info_from_assertions", "COMPUTE-SKOLEM-INFO-FROM-ASSERTIONS", 2, 0, false);
+        declareFunction("skolem_table_key_from_defn", "SKOLEM-TABLE-KEY-FROM-DEFN", 1, 0, false);
+        declareFunction("skolem_table_key_from_constant", "SKOLEM-TABLE-KEY-FROM-CONSTANT", 1, 0, false);
+        declareFunction("skolem_hash_key", "SKOLEM-HASH-KEY", 2, 0, false);
+        declareFunction("opaquify_unreified_skolem_terms", "OPAQUIFY-UNREIFIED-SKOLEM-TERMS", 1, 0, false);
+        declareFunction("skolem_defns_from_key_specification", "SKOLEM-DEFNS-FROM-KEY-SPECIFICATION", 2, 0, false);
+        declareFunction("cnfs_of_skolem_defn", "CNFS-OF-SKOLEM-DEFN", 1, 0, false);
+        declareFunction("mt_of_skolem_defn", "MT-OF-SKOLEM-DEFN", 1, 0, false);
+        declareFunction("skolem_defn_cnfs", "SKOLEM-DEFN-CNFS", 1, 0, false);
+        declareFunction("skolem_defn_assertions_robust", "SKOLEM-DEFN-ASSERTIONS-ROBUST", 1, 1, false);
+        declareFunction("skolem_function_has_no_defn_assertions_robustP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS-ROBUST?", 1, 0, false);
+        declareFunction("skolem_function_has_no_defn_assertionsP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS?", 1, 0, false);
+        declareFunction("skolem_defining_bookkeeping_assertion", "SKOLEM-DEFINING-BOOKKEEPING-ASSERTION", 1, 0, false);
+        declareFunction("skolem_defn_assertions", "SKOLEM-DEFN-ASSERTIONS", 1, 1, false);
+        declareFunction("skolems_defn_assertions", "SKOLEMS-DEFN-ASSERTIONS", 1, 0, false);
+        declareFunction("skolem_defn_siblings", "SKOLEM-DEFN-SIBLINGS", 1, 0, false);
+        declareFunction("skolem_defn_proper_siblings", "SKOLEM-DEFN-PROPER-SIBLINGS", 1, 0, false);
+        declareFunction("skolem_canonical_sibling", "SKOLEM-CANONICAL-SIBLING", 1, 0, false);
+        declareFunction("skolems_min_mt", "SKOLEMS-MIN-MT", 1, 0, false);
+        declareFunction("skolem_only_mentioned_in_el_templatesP", "SKOLEM-ONLY-MENTIONED-IN-EL-TEMPLATES?", 2, 0, false);
+        declareFunction("skolem_defn_assertionP", "SKOLEM-DEFN-ASSERTION?", 2, 1, false);
+        declareFunction("gaf_has_corresponding_cnf_in_skolem_defnP", "GAF-HAS-CORRESPONDING-CNF-IN-SKOLEM-DEFN?", 2, 1, false);
+        declareFunction("constant_denoting_reified_skolem_fnP", "CONSTANT-DENOTING-REIFIED-SKOLEM-FN?", 1, 0, false);
+        declareFunction("computed_skolem_assertionP", "COMPUTED-SKOLEM-ASSERTION?", 1, 0, false);
+        declareFunction("skolem_defining_assertionP", "SKOLEM-DEFINING-ASSERTION?", 1, 0, false);
+        declareFunction("defn_assertion_of_skolemP", "DEFN-ASSERTION-OF-SKOLEM?", 2, 0, false);
+        declareFunction("assertion_skolems", "ASSERTION-SKOLEMS", 1, 0, false);
+        declareFunction("defn_assertion_skolems", "DEFN-ASSERTION-SKOLEMS", 1, 0, false);
+        declareFunction("all_skolem_mt_defn_assertions", "ALL-SKOLEM-MT-DEFN-ASSERTIONS", 2, 1, false);
+        declareFunction("recomputing_skolem_defn_info_constant", "RECOMPUTING-SKOLEM-DEFN-INFO-CONSTANT", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_var", "RECOMPUTING-SKOLEM-DEFN-INFO-VAR", 0, 0, false);
+        declareFunction("really_recomputing_skolem_defnP", "REALLY-RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_defn", "RECOMPUTING-SKOLEM-DEFN-INFO-DEFN", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_key", "RECOMPUTING-SKOLEM-DEFN-INFO-KEY", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_blist", "RECOMPUTING-SKOLEM-DEFN-INFO-BLIST", 0, 0, false);
+        declareFunction("set_recomputing_skolem_defn_result", "SET-RECOMPUTING-SKOLEM-DEFN-RESULT", 2, 0, false);
+        declareFunction("set_recomputing_skolem_defn_blist", "SET-RECOMPUTING-SKOLEM-DEFN-BLIST", 1, 0, false);
+        declareFunction("recomputing_skolem_defnP", "RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
+        declareFunction("recomputing_defn_of_skolemP", "RECOMPUTING-DEFN-OF-SKOLEM?", 1, 0, false);
+        declareFunction("recomputing_skolem_defn_ofP", "RECOMPUTING-SKOLEM-DEFN-OF?", 1, 0, false);
+        declareFunction("note_skolem_binding", "NOTE-SKOLEM-BINDING", 2, 0, false);
+        declareFunction("recompute_skolem_defn", "RECOMPUTE-SKOLEM-DEFN", 6, 0, false);
+        declareFunction("remove_defn_of_skolem", "REMOVE-DEFN-OF-SKOLEM", 1, 1, false);
+        declareFunction("add_skolem_defn", "ADD-SKOLEM-DEFN", 1, 1, false);
+        declareFunction("kb_skolems", "KB-SKOLEMS", 0, 0, false);
+        declareFunction("skolem_table_contains_old_format_skolemsP", "SKOLEM-TABLE-CONTAINS-OLD-FORMAT-SKOLEMS?", 0, 0, false);
+        declareFunction("reset_skolem_defn_table", "RESET-SKOLEM-DEFN-TABLE", 0, 2, false);
+        declareFunction("reset_defn_of_skolem", "RESET-DEFN-OF-SKOLEM", 1, 1, false);
+        declareFunction("skolem_defn_from_assertions", "SKOLEM-DEFN-FROM-ASSERTIONS", 1, 1, false);
+        declareFunction("reset_skolem_defn_from_assertions", "RESET-SKOLEM-DEFN-FROM-ASSERTIONS", 1, 2, false);
+        declareFunction("skolem_variable_from_assertions", "SKOLEM-VARIABLE-FROM-ASSERTIONS", 2, 0, false);
+        declareFunction("skolem_scalar_termP", "SKOLEM-SCALAR-TERM?", 1, 1, false);
+        declareFunction("skolem_result_types_from_cnfs", "SKOLEM-RESULT-TYPES-FROM-CNFS", 2, 2, false);
+        declareFunction("guess_skolem_result_types_from_cnfs", "GUESS-SKOLEM-RESULT-TYPES-FROM-CNFS", 3, 2, false);
+        declareFunction("skolem_cnfs_pos_lit_types", "SKOLEM-CNFS-POS-LIT-TYPES", 2, 1, false);
+        declareFunction("skolem_var_isa_constraints_wrt_cnfs", "SKOLEM-VAR-ISA-CONSTRAINTS-WRT-CNFS", 2, 1, false);
+        declareFunction("skolem_var_genl_constraints_wrt_cnfs", "SKOLEM-VAR-GENL-CONSTRAINTS-WRT-CNFS", 2, 1, false);
+        declareFunction("skolem_arg_isa_constraints", "SKOLEM-ARG-ISA-CONSTRAINTS", 2, 1, false);
+        declareFunction("install_skolem_arg_types", "INSTALL-SKOLEM-ARG-TYPES", 0, 2, false);
+        declareFunction("cnf_fn_argn_isa", "CNF-FN-ARGN-ISA", 3, 1, false);
+        declareFunction("cnf_fn_argn_var", "CNF-FN-ARGN-VAR", 3, 0, false);
+        declareFunction("interpolate_arg_type", "INTERPOLATE-ARG-TYPE", 1, 1, false);
+        declareFunction("max_skolem_arity", "MAX-SKOLEM-ARITY", 0, 0, false);
+        declareFunction("skolems_of_arity", "SKOLEMS-OF-ARITY", 0, 1, false);
+        declareFunction("skolem_hosedP", "SKOLEM-HOSED?", 1, 0, false);
+        declareFunction("skolem_ill_formedP", "SKOLEM-ILL-FORMED?", 1, 0, false);
+        declareFunction("skolem_rule_hosedP", "SKOLEM-RULE-HOSED?", 2, 0, false);
+        declareFunction("all_hosed_skolems", "ALL-HOSED-SKOLEMS", 0, 0, false);
+        declareFunction("skolem_defns_not_wff", "SKOLEM-DEFNS-NOT-WFF", 0, 0, false);
+        declareFunction("skolem_defn_maladies", "SKOLEM-DEFN-MALADIES", 0, 0, false);
+        declareFunction("skolem_defns_not_wff_via", "SKOLEM-DEFNS-NOT-WFF-VIA", 0, 1, false);
+        declareFunction("skolems_defn_not_wff_via", "SKOLEMS-DEFN-NOT-WFF-VIA", 0, 1, false);
+        declareFunction("skolem_defn_vars", "SKOLEM-DEFN-VARS", 1, 0, false);
+        declareFunction("skolems_vars_misordered", "SKOLEMS-VARS-MISORDERED", 0, 0, false);
+        declareFunction("skolems_vars_ordered", "SKOLEMS-VARS-ORDERED", 0, 0, false);
+        declareFunction("oldest_newest_forts", "OLDEST-NEWEST-FORTS", 1, 0, false);
+        declareFunction("multi_skolem_skolems", "MULTI-SKOLEM-SKOLEMS", 0, 0, false);
+        declareFunction("misindexed_skolem_keys", "MISINDEXED-SKOLEM-KEYS", 0, 1, false);
+        declareFunction("sk_defns_wXo_sk_constants", "SK-DEFNS-W/O-SK-CONSTANTS", 0, 1, false);
+        declareFunction("sk_keys_wXo_sk_defns", "SK-KEYS-W/O-SK-DEFNS", 0, 1, false);
+        declareFunction("install_skolemfunction_fn_in_skolem_defns", "INSTALL-SKOLEMFUNCTION-FN-IN-SKOLEM-DEFNS", 0, 2, false);
+        declareFunction("sk_defns_wXo_mts", "SK-DEFNS-W/O-MTS", 0, 1, false);
+        declareFunction("skolem_wffP", "SKOLEM-WFF?", 1, 0, false);
+        declareFunction("skolem_not_wffP", "SKOLEM-NOT-WFF?", 1, 0, false);
+        declareFunction("why_skolem_not_wff", "WHY-SKOLEM-NOT-WFF", 1, 0, false);
+        declareFunction("skolem_defn_wffP", "SKOLEM-DEFN-WFF?", 1, 0, false);
+        declareFunction("skolem_defn_not_wffP", "SKOLEM-DEFN-NOT-WFF?", 1, 0, false);
+        declareFunction("why_skolem_defn_not_wff", "WHY-SKOLEM-DEFN-NOT-WFF", 1, 0, false);
+        declareFunction("skolem_all_goodP", "SKOLEM-ALL-GOOD?", 1, 0, false);
+        declareFunction("skolem_function_skolem_assertion_goodP", "SKOLEM-FUNCTION-SKOLEM-ASSERTION-GOOD?", 1, 0, false);
+        declareFunction("skolem_functions_with_bad_skolem_assertions", "SKOLEM-FUNCTIONS-WITH-BAD-SKOLEM-ASSERTIONS", 0, 0, false);
+        declareFunction("diagnose_all_skolems", "DIAGNOSE-ALL-SKOLEMS", 0, 0, false);
+        declareFunction("diagnose_skolems", "DIAGNOSE-SKOLEMS", 1, 1, false);
+        declareFunction("diagnose_skolem", "DIAGNOSE-SKOLEM", 1, 0, false);
+        declareFunction("diagnose_just_this_skolem_internal", "DIAGNOSE-JUST-THIS-SKOLEM-INTERNAL", 1, 0, false);
+        declareFunction("diagnose_just_this_skolem", "DIAGNOSE-JUST-THIS-SKOLEM", 1, 0, false);
+        declareFunction("recanonicalize_skolem_defn_assertions", "RECANONICALIZE-SKOLEM-DEFN-ASSERTIONS", 1, 0, false);
+        declareFunction("skolem_safe_to_recanonicalize_at_elP", "SKOLEM-SAFE-TO-RECANONICALIZE-AT-EL?", 1, 0, false);
+        declareFunction("compute_target_consequent_literal_count", "COMPUTE-TARGET-CONSEQUENT-LITERAL-COUNT", 1, 0, false);
+        declareFunction("conjunction_of_literalsP", "CONJUNCTION-OF-LITERALS?", 1, 0, false);
+        declareFunction("modernize_skolem_axiom_table", "MODERNIZE-SKOLEM-AXIOM-TABLE", 0, 0, false);
+        declareFunction("possibly_modernize_unreified_sk_term", "POSSIBLY-MODERNIZE-UNREIFIED-SK-TERM", 1, 0, false);
+        declareFunction("skolems_with_mismatched_unreified_sk_terms", "SKOLEMS-WITH-MISMATCHED-UNREIFIED-SK-TERMS", 0, 0, false);
+        declareFunction("skolem_unreified_sk_terms_matchP", "SKOLEM-UNREIFIED-SK-TERMS-MATCH?", 1, 0, false);
+        declareFunction("possibly_nrepair_skolems_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEMS-WITH-DUPLICATE-VARS", 1, 0, false);
+        declareFunction("possibly_nrepair_skolem_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
+        declareFunction("nrepair_skolem_with_duplicate_vars", "NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
+        declareFunction("possibly_nrepair_skolems_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEMS-WITH-MALFORMED-NUMBERS", 1, 0, false);
+        declareFunction("possibly_nrepair_skolem_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
+        declareFunction("nrepair_skolem_with_malformed_numbers", "NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
+        declareFunction("tmi_skolemP", "TMI-SKOLEM?", 1, 0, false);
+        declareFunction("recanonicalize_tmi_skolems", "RECANONICALIZE-TMI-SKOLEMS", 1, 0, false);
+        declareFunction("recanonicalize_tmi_skolem", "RECANONICALIZE-TMI-SKOLEM", 1, 0, false);
+        declareFunction("possibly_rehabilitate_skolem_defn_table", "POSSIBLY-REHABILITATE-SKOLEM-DEFN-TABLE", 0, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_skolems_file() {
-        declareFunction(me, "reify_skolems_in", "REIFY-SKOLEMS-IN", 4, 0, false);
-        declareFunction(me, "canonicalize_fns_in_sk_term", "CANONICALIZE-FNS-IN-SK-TERM", 1, 0, false);
-        declareFunction(me, "subst_skolem_in", "SUBST-SKOLEM-IN", 3, 0, false);
-        declareFunction(me, "skolem_function_dependent_vars", "SKOLEM-FUNCTION-DEPENDENT-VARS", 1, 0, false);
-        declareFunction(me, "skolem_function_var", "SKOLEM-FUNCTION-VAR", 1, 0, false);
-        declareFunction(me, "skolem_args", "SKOLEM-ARGS", 3, 0, false);
-        declareFunction(me, "canonicalize_skolem_term", "CANONICALIZE-SKOLEM-TERM", 4, 0, false);
-        declareFunction(me, "replace_unreified_skolem_terms_with_variables", "REPLACE-UNREIFIED-SKOLEM-TERMS-WITH-VARIABLES", 1, 0, false);
-        declareFunction(me, "lookup_sk_constant_from_defns", "LOOKUP-SK-CONSTANT-FROM-DEFNS", 3, 0, false);
-        declareFunction(me, "defn_unreified_sk_term", "DEFN-UNREIFIED-SK-TERM", 3, 0, false);
-        declareFunction(me, "skolem_collection", "SKOLEM-COLLECTION", 1, 0, false);
-        declareFunction(me, "create_skolem", "CREATE-SKOLEM", 5, 0, false);
-        declareFunction(me, "sk_defn_from_clauses", "SK-DEFN-FROM-CLAUSES", 2, 1, false);
-        declareFunction(me, "alpha_sort_clauses", "ALPHA-SORT-CLAUSES", 1, 0, false);
-        declareFunction(me, "rename_skolem_clause_vars", "RENAME-SKOLEM-CLAUSE-VARS", 2, 1, false);
-        declareFunction(me, "sk_defn_var", "SK-DEFN-VAR", 0, 0, false);
-        declareFunction(me, "clear_formula_constant_str", "CLEAR-FORMULA-CONSTANT-STR", 0, 0, false);
-        declareFunction(me, "remove_formula_constant_str", "REMOVE-FORMULA-CONSTANT-STR", 1, 0, false);
-        declareFunction(me, "formula_constant_str_internal", "FORMULA-CONSTANT-STR-INTERNAL", 1, 0, false);
-        declareFunction(me, "formula_constant_str", "FORMULA-CONSTANT-STR", 1, 0, false);
-        declareFunction(me, "cyc_var_except_for_x_0P", "CYC-VAR-EXCEPT-FOR-X-0?", 1, 0, false);
-        declareFunction(me, "make_sk_defn", "MAKE-SK-DEFN", 4, 0, false);
-        declareFunction(me, "sk_arity", "SK-ARITY", 1, 1, false);
-        declareFunction(me, "make_unreified_sk_nat", "MAKE-UNREIFIED-SK-NAT", 4, 0, false);
-        declareFunction(me, "skolem_defn", "SKOLEM-DEFN", 1, 0, false);
-        declareFunction(me, "skolem_defnXkey", "SKOLEM-DEFN&KEY", 1, 0, false);
-        declareFunction(me, "skolem_defn_key", "SKOLEM-DEFN-KEY", 1, 0, false);
-        declareFunction(me, "skolem_of_defn", "SKOLEM-OF-DEFN", 1, 0, false);
-        declareFunction(me, "unreified_sk_term", "UNREIFIED-SK-TERM", 1, 0, false);
-        declareFunction(me, "skolem_defn_mt", "SKOLEM-DEFN-MT", 1, 0, false);
-        declareFunction(me, "skolem_seqvar", "SKOLEM-SEQVAR", 1, 0, false);
-        declareFunction(me, "skolem_defn_seqvar", "SKOLEM-DEFN-SEQVAR", 1, 0, false);
-        declareFunction(me, "old_format_skolemP", "OLD-FORMAT-SKOLEM?", 1, 0, false);
-        declareFunction(me, "skolem_number", "SKOLEM-NUMBER", 1, 0, false);
-        declareFunction(me, "skolem_defn_number", "SKOLEM-DEFN-NUMBER", 1, 0, false);
-        declareFunction(me, "skolem_defn_args", "SKOLEM-DEFN-ARGS", 1, 0, false);
-        declareFunction(me, "skolem_var", "SKOLEM-VAR", 1, 0, false);
-        declareFunction(me, "el_unreified_sk_term", "EL-UNREIFIED-SK-TERM", 1, 0, false);
-        declareFunction(me, "compute_unreified_sk_term_via_hl", "COMPUTE-UNREIFIED-SK-TERM-VIA-HL", 1, 0, false);
-        declareFunction(me, "compute_skolem_info_from_assertions", "COMPUTE-SKOLEM-INFO-FROM-ASSERTIONS", 2, 0, false);
-        declareFunction(me, "skolem_table_key_from_defn", "SKOLEM-TABLE-KEY-FROM-DEFN", 1, 0, false);
-        declareFunction(me, "skolem_table_key_from_constant", "SKOLEM-TABLE-KEY-FROM-CONSTANT", 1, 0, false);
-        declareFunction(me, "skolem_hash_key", "SKOLEM-HASH-KEY", 2, 0, false);
-        declareFunction(me, "opaquify_unreified_skolem_terms", "OPAQUIFY-UNREIFIED-SKOLEM-TERMS", 1, 0, false);
-        declareFunction(me, "skolem_defns_from_key_specification", "SKOLEM-DEFNS-FROM-KEY-SPECIFICATION", 2, 0, false);
-        declareFunction(me, "cnfs_of_skolem_defn", "CNFS-OF-SKOLEM-DEFN", 1, 0, false);
-        declareFunction(me, "mt_of_skolem_defn", "MT-OF-SKOLEM-DEFN", 1, 0, false);
-        declareFunction(me, "skolem_defn_cnfs", "SKOLEM-DEFN-CNFS", 1, 0, false);
-        declareFunction(me, "skolem_defn_assertions_robust", "SKOLEM-DEFN-ASSERTIONS-ROBUST", 1, 1, false);
-        declareFunction(me, "skolem_function_has_no_defn_assertions_robustP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS-ROBUST?", 1, 0, false);
-        declareFunction(me, "skolem_function_has_no_defn_assertionsP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS?", 1, 0, false);
-        declareFunction(me, "skolem_defining_bookkeeping_assertion", "SKOLEM-DEFINING-BOOKKEEPING-ASSERTION", 1, 0, false);
-        declareFunction(me, "skolem_defn_assertions", "SKOLEM-DEFN-ASSERTIONS", 1, 1, false);
-        declareFunction(me, "skolems_defn_assertions", "SKOLEMS-DEFN-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "skolem_defn_siblings", "SKOLEM-DEFN-SIBLINGS", 1, 0, false);
-        declareFunction(me, "skolem_defn_proper_siblings", "SKOLEM-DEFN-PROPER-SIBLINGS", 1, 0, false);
-        declareFunction(me, "skolem_canonical_sibling", "SKOLEM-CANONICAL-SIBLING", 1, 0, false);
-        declareFunction(me, "skolems_min_mt", "SKOLEMS-MIN-MT", 1, 0, false);
-        declareFunction(me, "skolem_only_mentioned_in_el_templatesP", "SKOLEM-ONLY-MENTIONED-IN-EL-TEMPLATES?", 2, 0, false);
-        declareFunction(me, "skolem_defn_assertionP", "SKOLEM-DEFN-ASSERTION?", 2, 1, false);
-        declareFunction(me, "gaf_has_corresponding_cnf_in_skolem_defnP", "GAF-HAS-CORRESPONDING-CNF-IN-SKOLEM-DEFN?", 2, 1, false);
-        declareFunction(me, "constant_denoting_reified_skolem_fnP", "CONSTANT-DENOTING-REIFIED-SKOLEM-FN?", 1, 0, false);
-        declareFunction(me, "computed_skolem_assertionP", "COMPUTED-SKOLEM-ASSERTION?", 1, 0, false);
-        declareFunction(me, "skolem_defining_assertionP", "SKOLEM-DEFINING-ASSERTION?", 1, 0, false);
-        declareFunction(me, "defn_assertion_of_skolemP", "DEFN-ASSERTION-OF-SKOLEM?", 2, 0, false);
-        declareFunction(me, "assertion_skolems", "ASSERTION-SKOLEMS", 1, 0, false);
-        declareFunction(me, "defn_assertion_skolems", "DEFN-ASSERTION-SKOLEMS", 1, 0, false);
-        declareFunction(me, "all_skolem_mt_defn_assertions", "ALL-SKOLEM-MT-DEFN-ASSERTIONS", 2, 1, false);
-        declareFunction(me, "recomputing_skolem_defn_info_constant", "RECOMPUTING-SKOLEM-DEFN-INFO-CONSTANT", 0, 0, false);
-        declareFunction(me, "recomputing_skolem_defn_info_var", "RECOMPUTING-SKOLEM-DEFN-INFO-VAR", 0, 0, false);
-        declareFunction(me, "really_recomputing_skolem_defnP", "REALLY-RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
-        declareFunction(me, "recomputing_skolem_defn_info_defn", "RECOMPUTING-SKOLEM-DEFN-INFO-DEFN", 0, 0, false);
-        declareFunction(me, "recomputing_skolem_defn_info_key", "RECOMPUTING-SKOLEM-DEFN-INFO-KEY", 0, 0, false);
-        declareFunction(me, "recomputing_skolem_defn_info_blist", "RECOMPUTING-SKOLEM-DEFN-INFO-BLIST", 0, 0, false);
-        declareFunction(me, "set_recomputing_skolem_defn_result", "SET-RECOMPUTING-SKOLEM-DEFN-RESULT", 2, 0, false);
-        declareFunction(me, "set_recomputing_skolem_defn_blist", "SET-RECOMPUTING-SKOLEM-DEFN-BLIST", 1, 0, false);
-        declareFunction(me, "recomputing_skolem_defnP", "RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
-        declareFunction(me, "recomputing_defn_of_skolemP", "RECOMPUTING-DEFN-OF-SKOLEM?", 1, 0, false);
-        declareFunction(me, "recomputing_skolem_defn_ofP", "RECOMPUTING-SKOLEM-DEFN-OF?", 1, 0, false);
-        declareFunction(me, "note_skolem_binding", "NOTE-SKOLEM-BINDING", 2, 0, false);
-        declareFunction(me, "recompute_skolem_defn", "RECOMPUTE-SKOLEM-DEFN", 6, 0, false);
-        declareFunction(me, "remove_defn_of_skolem", "REMOVE-DEFN-OF-SKOLEM", 1, 1, false);
-        declareFunction(me, "add_skolem_defn", "ADD-SKOLEM-DEFN", 1, 1, false);
-        declareFunction(me, "kb_skolems", "KB-SKOLEMS", 0, 0, false);
-        declareFunction(me, "skolem_table_contains_old_format_skolemsP", "SKOLEM-TABLE-CONTAINS-OLD-FORMAT-SKOLEMS?", 0, 0, false);
-        declareFunction(me, "reset_skolem_defn_table", "RESET-SKOLEM-DEFN-TABLE", 0, 2, false);
-        declareFunction(me, "reset_defn_of_skolem", "RESET-DEFN-OF-SKOLEM", 1, 1, false);
-        declareFunction(me, "skolem_defn_from_assertions", "SKOLEM-DEFN-FROM-ASSERTIONS", 1, 1, false);
-        declareFunction(me, "reset_skolem_defn_from_assertions", "RESET-SKOLEM-DEFN-FROM-ASSERTIONS", 1, 2, false);
-        declareFunction(me, "skolem_variable_from_assertions", "SKOLEM-VARIABLE-FROM-ASSERTIONS", 2, 0, false);
-        declareFunction(me, "skolem_scalar_termP", "SKOLEM-SCALAR-TERM?", 1, 1, false);
-        declareFunction(me, "skolem_result_types_from_cnfs", "SKOLEM-RESULT-TYPES-FROM-CNFS", 2, 2, false);
-        declareFunction(me, "guess_skolem_result_types_from_cnfs", "GUESS-SKOLEM-RESULT-TYPES-FROM-CNFS", 3, 2, false);
-        declareFunction(me, "skolem_cnfs_pos_lit_types", "SKOLEM-CNFS-POS-LIT-TYPES", 2, 1, false);
-        declareFunction(me, "skolem_var_isa_constraints_wrt_cnfs", "SKOLEM-VAR-ISA-CONSTRAINTS-WRT-CNFS", 2, 1, false);
-        declareFunction(me, "skolem_var_genl_constraints_wrt_cnfs", "SKOLEM-VAR-GENL-CONSTRAINTS-WRT-CNFS", 2, 1, false);
-        declareFunction(me, "skolem_arg_isa_constraints", "SKOLEM-ARG-ISA-CONSTRAINTS", 2, 1, false);
-        declareFunction(me, "install_skolem_arg_types", "INSTALL-SKOLEM-ARG-TYPES", 0, 2, false);
-        declareFunction(me, "cnf_fn_argn_isa", "CNF-FN-ARGN-ISA", 3, 1, false);
-        declareFunction(me, "cnf_fn_argn_var", "CNF-FN-ARGN-VAR", 3, 0, false);
-        declareFunction(me, "interpolate_arg_type", "INTERPOLATE-ARG-TYPE", 1, 1, false);
-        declareFunction(me, "max_skolem_arity", "MAX-SKOLEM-ARITY", 0, 0, false);
-        declareFunction(me, "skolems_of_arity", "SKOLEMS-OF-ARITY", 0, 1, false);
-        declareFunction(me, "skolem_hosedP", "SKOLEM-HOSED?", 1, 0, false);
-        declareFunction(me, "skolem_ill_formedP", "SKOLEM-ILL-FORMED?", 1, 0, false);
-        declareFunction(me, "skolem_rule_hosedP", "SKOLEM-RULE-HOSED?", 2, 0, false);
-        declareFunction(me, "all_hosed_skolems", "ALL-HOSED-SKOLEMS", 0, 0, false);
-        declareFunction(me, "multi_skolem_skolems", "MULTI-SKOLEM-SKOLEMS", 0, 0, false);
-        declareFunction(me, "misindexed_skolem_keys", "MISINDEXED-SKOLEM-KEYS", 0, 1, false);
-        declareFunction(me, "sk_defns_wXo_sk_constants", "SK-DEFNS-W/O-SK-CONSTANTS", 0, 1, false);
-        declareFunction(me, "sk_keys_wXo_sk_defns", "SK-KEYS-W/O-SK-DEFNS", 0, 1, false);
-        declareFunction(me, "install_skolemfunction_fn_in_skolem_defns", "INSTALL-SKOLEMFUNCTION-FN-IN-SKOLEM-DEFNS", 0, 2, false);
-        declareFunction(me, "sk_defns_wXo_mts", "SK-DEFNS-W/O-MTS", 0, 1, false);
-        declareFunction(me, "skolem_wffP", "SKOLEM-WFF?", 1, 0, false);
-        declareFunction(me, "skolem_not_wffP", "SKOLEM-NOT-WFF?", 1, 0, false);
-        declareFunction(me, "why_skolem_not_wff", "WHY-SKOLEM-NOT-WFF", 1, 0, false);
-        declareFunction(me, "skolem_defn_wffP", "SKOLEM-DEFN-WFF?", 1, 0, false);
-        declareFunction(me, "skolem_defn_not_wffP", "SKOLEM-DEFN-NOT-WFF?", 1, 0, false);
-        declareFunction(me, "why_skolem_defn_not_wff", "WHY-SKOLEM-DEFN-NOT-WFF", 1, 0, false);
-        declareFunction(me, "skolem_all_goodP", "SKOLEM-ALL-GOOD?", 1, 0, false);
-        declareFunction(me, "skolem_function_skolem_assertion_goodP", "SKOLEM-FUNCTION-SKOLEM-ASSERTION-GOOD?", 1, 0, false);
-        declareFunction(me, "skolem_functions_with_bad_skolem_assertions", "SKOLEM-FUNCTIONS-WITH-BAD-SKOLEM-ASSERTIONS", 0, 0, false);
-        declareFunction(me, "diagnose_all_skolems", "DIAGNOSE-ALL-SKOLEMS", 0, 0, false);
-        declareFunction(me, "diagnose_skolems", "DIAGNOSE-SKOLEMS", 1, 1, false);
-        declareFunction(me, "diagnose_skolem", "DIAGNOSE-SKOLEM", 1, 0, false);
-        declareFunction(me, "diagnose_just_this_skolem_internal", "DIAGNOSE-JUST-THIS-SKOLEM-INTERNAL", 1, 0, false);
-        declareFunction(me, "diagnose_just_this_skolem", "DIAGNOSE-JUST-THIS-SKOLEM", 1, 0, false);
-        declareFunction(me, "recanonicalize_skolem_defn_assertions", "RECANONICALIZE-SKOLEM-DEFN-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "skolem_safe_to_recanonicalize_at_elP", "SKOLEM-SAFE-TO-RECANONICALIZE-AT-EL?", 1, 0, false);
-        declareFunction(me, "compute_target_consequent_literal_count", "COMPUTE-TARGET-CONSEQUENT-LITERAL-COUNT", 1, 0, false);
-        declareFunction(me, "conjunction_of_literalsP", "CONJUNCTION-OF-LITERALS?", 1, 0, false);
-        declareFunction(me, "modernize_skolem_axiom_table", "MODERNIZE-SKOLEM-AXIOM-TABLE", 0, 0, false);
-        declareFunction(me, "possibly_modernize_unreified_sk_term", "POSSIBLY-MODERNIZE-UNREIFIED-SK-TERM", 1, 0, false);
-        declareFunction(me, "skolems_with_mismatched_unreified_sk_terms", "SKOLEMS-WITH-MISMATCHED-UNREIFIED-SK-TERMS", 0, 0, false);
-        declareFunction(me, "skolem_unreified_sk_terms_matchP", "SKOLEM-UNREIFIED-SK-TERMS-MATCH?", 1, 0, false);
-        declareFunction(me, "possibly_nrepair_skolems_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEMS-WITH-DUPLICATE-VARS", 1, 0, false);
-        declareFunction(me, "possibly_nrepair_skolem_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
-        declareFunction(me, "nrepair_skolem_with_duplicate_vars", "NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
-        declareFunction(me, "possibly_nrepair_skolems_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEMS-WITH-MALFORMED-NUMBERS", 1, 0, false);
-        declareFunction(me, "possibly_nrepair_skolem_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
-        declareFunction(me, "nrepair_skolem_with_malformed_numbers", "NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
-        declareFunction(me, "tmi_skolemP", "TMI-SKOLEM?", 1, 0, false);
-        declareFunction(me, "recanonicalize_tmi_skolems", "RECANONICALIZE-TMI-SKOLEMS", 1, 0, false);
-        declareFunction(me, "recanonicalize_tmi_skolem", "RECANONICALIZE-TMI-SKOLEM", 1, 0, false);
-        declareFunction(me, "possibly_rehabilitate_skolem_defn_table", "POSSIBLY-REHABILITATE-SKOLEM-DEFN-TABLE", 0, 0, false);
-        declareFunction(me, "skolems_that_are_unfindable_via_el", "SKOLEMS-THAT-ARE-UNFINDABLE-VIA-EL", 0, 0, false);
-        declareFunction(me, "skolem_unfindable_via_elP", "SKOLEM-UNFINDABLE-VIA-EL?", 1, 0, false);
-        declareFunction(me, "bad_skolem_assertions", "BAD-SKOLEM-ASSERTIONS", 0, 1, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("reify_skolems_in", "REIFY-SKOLEMS-IN", 4, 0, false);
+            declareFunction("canonicalize_fns_in_sk_term", "CANONICALIZE-FNS-IN-SK-TERM", 1, 0, false);
+            declareFunction("subst_skolem_in", "SUBST-SKOLEM-IN", 3, 0, false);
+            declareFunction("skolem_function_dependent_vars", "SKOLEM-FUNCTION-DEPENDENT-VARS", 1, 0, false);
+            declareFunction("skolem_function_var", "SKOLEM-FUNCTION-VAR", 1, 0, false);
+            declareFunction("skolem_args", "SKOLEM-ARGS", 3, 0, false);
+            declareFunction("canonicalize_skolem_term", "CANONICALIZE-SKOLEM-TERM", 4, 0, false);
+            declareFunction("replace_unreified_skolem_terms_with_variables", "REPLACE-UNREIFIED-SKOLEM-TERMS-WITH-VARIABLES", 1, 0, false);
+            declareFunction("lookup_sk_constant_from_defns", "LOOKUP-SK-CONSTANT-FROM-DEFNS", 3, 0, false);
+            declareFunction("defn_unreified_sk_term", "DEFN-UNREIFIED-SK-TERM", 3, 0, false);
+            declareFunction("skolem_collection", "SKOLEM-COLLECTION", 1, 0, false);
+            declareFunction("create_skolem", "CREATE-SKOLEM", 5, 0, false);
+            declareFunction("sk_defn_from_clauses", "SK-DEFN-FROM-CLAUSES", 2, 1, false);
+            declareFunction("alpha_sort_clauses", "ALPHA-SORT-CLAUSES", 1, 0, false);
+            declareFunction("rename_skolem_clause_vars", "RENAME-SKOLEM-CLAUSE-VARS", 2, 1, false);
+            declareFunction("sk_defn_var", "SK-DEFN-VAR", 0, 0, false);
+            declareFunction("clear_formula_constant_str", "CLEAR-FORMULA-CONSTANT-STR", 0, 0, false);
+            declareFunction("remove_formula_constant_str", "REMOVE-FORMULA-CONSTANT-STR", 1, 0, false);
+            declareFunction("formula_constant_str_internal", "FORMULA-CONSTANT-STR-INTERNAL", 1, 0, false);
+            declareFunction("formula_constant_str", "FORMULA-CONSTANT-STR", 1, 0, false);
+            declareFunction("cyc_var_except_for_x_0P", "CYC-VAR-EXCEPT-FOR-X-0?", 1, 0, false);
+            declareFunction("make_sk_defn", "MAKE-SK-DEFN", 4, 0, false);
+            declareFunction("sk_arity", "SK-ARITY", 1, 1, false);
+            declareFunction("make_unreified_sk_nat", "MAKE-UNREIFIED-SK-NAT", 4, 0, false);
+            declareFunction("skolem_defn", "SKOLEM-DEFN", 1, 0, false);
+            declareFunction("skolem_defnXkey", "SKOLEM-DEFN&KEY", 1, 0, false);
+            declareFunction("skolem_defn_key", "SKOLEM-DEFN-KEY", 1, 0, false);
+            declareFunction("skolem_of_defn", "SKOLEM-OF-DEFN", 1, 0, false);
+            declareFunction("unreified_sk_term", "UNREIFIED-SK-TERM", 1, 0, false);
+            declareFunction("skolem_defn_mt", "SKOLEM-DEFN-MT", 1, 0, false);
+            declareFunction("skolem_seqvar", "SKOLEM-SEQVAR", 1, 0, false);
+            declareFunction("skolem_defn_seqvar", "SKOLEM-DEFN-SEQVAR", 1, 0, false);
+            declareFunction("old_format_skolemP", "OLD-FORMAT-SKOLEM?", 1, 0, false);
+            declareFunction("skolem_number", "SKOLEM-NUMBER", 1, 0, false);
+            declareFunction("skolem_defn_number", "SKOLEM-DEFN-NUMBER", 1, 0, false);
+            declareFunction("skolem_defn_args", "SKOLEM-DEFN-ARGS", 1, 0, false);
+            declareFunction("skolem_var", "SKOLEM-VAR", 1, 0, false);
+            declareFunction("el_unreified_sk_term", "EL-UNREIFIED-SK-TERM", 1, 0, false);
+            declareFunction("compute_unreified_sk_term_via_hl", "COMPUTE-UNREIFIED-SK-TERM-VIA-HL", 1, 0, false);
+            declareFunction("compute_skolem_info_from_assertions", "COMPUTE-SKOLEM-INFO-FROM-ASSERTIONS", 2, 0, false);
+            declareFunction("skolem_table_key_from_defn", "SKOLEM-TABLE-KEY-FROM-DEFN", 1, 0, false);
+            declareFunction("skolem_table_key_from_constant", "SKOLEM-TABLE-KEY-FROM-CONSTANT", 1, 0, false);
+            declareFunction("skolem_hash_key", "SKOLEM-HASH-KEY", 2, 0, false);
+            declareFunction("opaquify_unreified_skolem_terms", "OPAQUIFY-UNREIFIED-SKOLEM-TERMS", 1, 0, false);
+            declareFunction("skolem_defns_from_key_specification", "SKOLEM-DEFNS-FROM-KEY-SPECIFICATION", 2, 0, false);
+            declareFunction("cnfs_of_skolem_defn", "CNFS-OF-SKOLEM-DEFN", 1, 0, false);
+            declareFunction("mt_of_skolem_defn", "MT-OF-SKOLEM-DEFN", 1, 0, false);
+            declareFunction("skolem_defn_cnfs", "SKOLEM-DEFN-CNFS", 1, 0, false);
+            declareFunction("skolem_defn_assertions_robust", "SKOLEM-DEFN-ASSERTIONS-ROBUST", 1, 1, false);
+            declareFunction("skolem_function_has_no_defn_assertions_robustP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS-ROBUST?", 1, 0, false);
+            declareFunction("skolem_function_has_no_defn_assertionsP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS?", 1, 0, false);
+            declareFunction("skolem_defining_bookkeeping_assertion", "SKOLEM-DEFINING-BOOKKEEPING-ASSERTION", 1, 0, false);
+            declareFunction("skolem_defn_assertions", "SKOLEM-DEFN-ASSERTIONS", 1, 1, false);
+            declareFunction("skolems_defn_assertions", "SKOLEMS-DEFN-ASSERTIONS", 1, 0, false);
+            declareFunction("skolem_defn_siblings", "SKOLEM-DEFN-SIBLINGS", 1, 0, false);
+            declareFunction("skolem_defn_proper_siblings", "SKOLEM-DEFN-PROPER-SIBLINGS", 1, 0, false);
+            declareFunction("skolem_canonical_sibling", "SKOLEM-CANONICAL-SIBLING", 1, 0, false);
+            declareFunction("skolems_min_mt", "SKOLEMS-MIN-MT", 1, 0, false);
+            declareFunction("skolem_only_mentioned_in_el_templatesP", "SKOLEM-ONLY-MENTIONED-IN-EL-TEMPLATES?", 2, 0, false);
+            declareFunction("skolem_defn_assertionP", "SKOLEM-DEFN-ASSERTION?", 2, 1, false);
+            declareFunction("gaf_has_corresponding_cnf_in_skolem_defnP", "GAF-HAS-CORRESPONDING-CNF-IN-SKOLEM-DEFN?", 2, 1, false);
+            declareFunction("constant_denoting_reified_skolem_fnP", "CONSTANT-DENOTING-REIFIED-SKOLEM-FN?", 1, 0, false);
+            declareFunction("computed_skolem_assertionP", "COMPUTED-SKOLEM-ASSERTION?", 1, 0, false);
+            declareFunction("skolem_defining_assertionP", "SKOLEM-DEFINING-ASSERTION?", 1, 0, false);
+            declareFunction("defn_assertion_of_skolemP", "DEFN-ASSERTION-OF-SKOLEM?", 2, 0, false);
+            declareFunction("assertion_skolems", "ASSERTION-SKOLEMS", 1, 0, false);
+            declareFunction("defn_assertion_skolems", "DEFN-ASSERTION-SKOLEMS", 1, 0, false);
+            declareFunction("all_skolem_mt_defn_assertions", "ALL-SKOLEM-MT-DEFN-ASSERTIONS", 2, 1, false);
+            declareFunction("recomputing_skolem_defn_info_constant", "RECOMPUTING-SKOLEM-DEFN-INFO-CONSTANT", 0, 0, false);
+            declareFunction("recomputing_skolem_defn_info_var", "RECOMPUTING-SKOLEM-DEFN-INFO-VAR", 0, 0, false);
+            declareFunction("really_recomputing_skolem_defnP", "REALLY-RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
+            declareFunction("recomputing_skolem_defn_info_defn", "RECOMPUTING-SKOLEM-DEFN-INFO-DEFN", 0, 0, false);
+            declareFunction("recomputing_skolem_defn_info_key", "RECOMPUTING-SKOLEM-DEFN-INFO-KEY", 0, 0, false);
+            declareFunction("recomputing_skolem_defn_info_blist", "RECOMPUTING-SKOLEM-DEFN-INFO-BLIST", 0, 0, false);
+            declareFunction("set_recomputing_skolem_defn_result", "SET-RECOMPUTING-SKOLEM-DEFN-RESULT", 2, 0, false);
+            declareFunction("set_recomputing_skolem_defn_blist", "SET-RECOMPUTING-SKOLEM-DEFN-BLIST", 1, 0, false);
+            declareFunction("recomputing_skolem_defnP", "RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
+            declareFunction("recomputing_defn_of_skolemP", "RECOMPUTING-DEFN-OF-SKOLEM?", 1, 0, false);
+            declareFunction("recomputing_skolem_defn_ofP", "RECOMPUTING-SKOLEM-DEFN-OF?", 1, 0, false);
+            declareFunction("note_skolem_binding", "NOTE-SKOLEM-BINDING", 2, 0, false);
+            declareFunction("recompute_skolem_defn", "RECOMPUTE-SKOLEM-DEFN", 6, 0, false);
+            declareFunction("remove_defn_of_skolem", "REMOVE-DEFN-OF-SKOLEM", 1, 1, false);
+            declareFunction("add_skolem_defn", "ADD-SKOLEM-DEFN", 1, 1, false);
+            declareFunction("kb_skolems", "KB-SKOLEMS", 0, 0, false);
+            declareFunction("skolem_table_contains_old_format_skolemsP", "SKOLEM-TABLE-CONTAINS-OLD-FORMAT-SKOLEMS?", 0, 0, false);
+            declareFunction("reset_skolem_defn_table", "RESET-SKOLEM-DEFN-TABLE", 0, 2, false);
+            declareFunction("reset_defn_of_skolem", "RESET-DEFN-OF-SKOLEM", 1, 1, false);
+            declareFunction("skolem_defn_from_assertions", "SKOLEM-DEFN-FROM-ASSERTIONS", 1, 1, false);
+            declareFunction("reset_skolem_defn_from_assertions", "RESET-SKOLEM-DEFN-FROM-ASSERTIONS", 1, 2, false);
+            declareFunction("skolem_variable_from_assertions", "SKOLEM-VARIABLE-FROM-ASSERTIONS", 2, 0, false);
+            declareFunction("skolem_scalar_termP", "SKOLEM-SCALAR-TERM?", 1, 1, false);
+            declareFunction("skolem_result_types_from_cnfs", "SKOLEM-RESULT-TYPES-FROM-CNFS", 2, 2, false);
+            declareFunction("guess_skolem_result_types_from_cnfs", "GUESS-SKOLEM-RESULT-TYPES-FROM-CNFS", 3, 2, false);
+            declareFunction("skolem_cnfs_pos_lit_types", "SKOLEM-CNFS-POS-LIT-TYPES", 2, 1, false);
+            declareFunction("skolem_var_isa_constraints_wrt_cnfs", "SKOLEM-VAR-ISA-CONSTRAINTS-WRT-CNFS", 2, 1, false);
+            declareFunction("skolem_var_genl_constraints_wrt_cnfs", "SKOLEM-VAR-GENL-CONSTRAINTS-WRT-CNFS", 2, 1, false);
+            declareFunction("skolem_arg_isa_constraints", "SKOLEM-ARG-ISA-CONSTRAINTS", 2, 1, false);
+            declareFunction("install_skolem_arg_types", "INSTALL-SKOLEM-ARG-TYPES", 0, 2, false);
+            declareFunction("cnf_fn_argn_isa", "CNF-FN-ARGN-ISA", 3, 1, false);
+            declareFunction("cnf_fn_argn_var", "CNF-FN-ARGN-VAR", 3, 0, false);
+            declareFunction("interpolate_arg_type", "INTERPOLATE-ARG-TYPE", 1, 1, false);
+            declareFunction("max_skolem_arity", "MAX-SKOLEM-ARITY", 0, 0, false);
+            declareFunction("skolems_of_arity", "SKOLEMS-OF-ARITY", 0, 1, false);
+            declareFunction("skolem_hosedP", "SKOLEM-HOSED?", 1, 0, false);
+            declareFunction("skolem_ill_formedP", "SKOLEM-ILL-FORMED?", 1, 0, false);
+            declareFunction("skolem_rule_hosedP", "SKOLEM-RULE-HOSED?", 2, 0, false);
+            declareFunction("all_hosed_skolems", "ALL-HOSED-SKOLEMS", 0, 0, false);
+            declareFunction("multi_skolem_skolems", "MULTI-SKOLEM-SKOLEMS", 0, 0, false);
+            declareFunction("misindexed_skolem_keys", "MISINDEXED-SKOLEM-KEYS", 0, 1, false);
+            declareFunction("sk_defns_wXo_sk_constants", "SK-DEFNS-W/O-SK-CONSTANTS", 0, 1, false);
+            declareFunction("sk_keys_wXo_sk_defns", "SK-KEYS-W/O-SK-DEFNS", 0, 1, false);
+            declareFunction("install_skolemfunction_fn_in_skolem_defns", "INSTALL-SKOLEMFUNCTION-FN-IN-SKOLEM-DEFNS", 0, 2, false);
+            declareFunction("sk_defns_wXo_mts", "SK-DEFNS-W/O-MTS", 0, 1, false);
+            declareFunction("skolem_wffP", "SKOLEM-WFF?", 1, 0, false);
+            declareFunction("skolem_not_wffP", "SKOLEM-NOT-WFF?", 1, 0, false);
+            declareFunction("why_skolem_not_wff", "WHY-SKOLEM-NOT-WFF", 1, 0, false);
+            declareFunction("skolem_defn_wffP", "SKOLEM-DEFN-WFF?", 1, 0, false);
+            declareFunction("skolem_defn_not_wffP", "SKOLEM-DEFN-NOT-WFF?", 1, 0, false);
+            declareFunction("why_skolem_defn_not_wff", "WHY-SKOLEM-DEFN-NOT-WFF", 1, 0, false);
+            declareFunction("skolem_all_goodP", "SKOLEM-ALL-GOOD?", 1, 0, false);
+            declareFunction("skolem_function_skolem_assertion_goodP", "SKOLEM-FUNCTION-SKOLEM-ASSERTION-GOOD?", 1, 0, false);
+            declareFunction("skolem_functions_with_bad_skolem_assertions", "SKOLEM-FUNCTIONS-WITH-BAD-SKOLEM-ASSERTIONS", 0, 0, false);
+            declareFunction("diagnose_all_skolems", "DIAGNOSE-ALL-SKOLEMS", 0, 0, false);
+            declareFunction("diagnose_skolems", "DIAGNOSE-SKOLEMS", 1, 1, false);
+            declareFunction("diagnose_skolem", "DIAGNOSE-SKOLEM", 1, 0, false);
+            declareFunction("diagnose_just_this_skolem_internal", "DIAGNOSE-JUST-THIS-SKOLEM-INTERNAL", 1, 0, false);
+            declareFunction("diagnose_just_this_skolem", "DIAGNOSE-JUST-THIS-SKOLEM", 1, 0, false);
+            declareFunction("recanonicalize_skolem_defn_assertions", "RECANONICALIZE-SKOLEM-DEFN-ASSERTIONS", 1, 0, false);
+            declareFunction("skolem_safe_to_recanonicalize_at_elP", "SKOLEM-SAFE-TO-RECANONICALIZE-AT-EL?", 1, 0, false);
+            declareFunction("compute_target_consequent_literal_count", "COMPUTE-TARGET-CONSEQUENT-LITERAL-COUNT", 1, 0, false);
+            declareFunction("conjunction_of_literalsP", "CONJUNCTION-OF-LITERALS?", 1, 0, false);
+            declareFunction("modernize_skolem_axiom_table", "MODERNIZE-SKOLEM-AXIOM-TABLE", 0, 0, false);
+            declareFunction("possibly_modernize_unreified_sk_term", "POSSIBLY-MODERNIZE-UNREIFIED-SK-TERM", 1, 0, false);
+            declareFunction("skolems_with_mismatched_unreified_sk_terms", "SKOLEMS-WITH-MISMATCHED-UNREIFIED-SK-TERMS", 0, 0, false);
+            declareFunction("skolem_unreified_sk_terms_matchP", "SKOLEM-UNREIFIED-SK-TERMS-MATCH?", 1, 0, false);
+            declareFunction("possibly_nrepair_skolems_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEMS-WITH-DUPLICATE-VARS", 1, 0, false);
+            declareFunction("possibly_nrepair_skolem_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
+            declareFunction("nrepair_skolem_with_duplicate_vars", "NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
+            declareFunction("possibly_nrepair_skolems_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEMS-WITH-MALFORMED-NUMBERS", 1, 0, false);
+            declareFunction("possibly_nrepair_skolem_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
+            declareFunction("nrepair_skolem_with_malformed_numbers", "NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
+            declareFunction("tmi_skolemP", "TMI-SKOLEM?", 1, 0, false);
+            declareFunction("recanonicalize_tmi_skolems", "RECANONICALIZE-TMI-SKOLEMS", 1, 0, false);
+            declareFunction("recanonicalize_tmi_skolem", "RECANONICALIZE-TMI-SKOLEM", 1, 0, false);
+            declareFunction("possibly_rehabilitate_skolem_defn_table", "POSSIBLY-REHABILITATE-SKOLEM-DEFN-TABLE", 0, 0, false);
+            declareFunction("skolems_that_are_unfindable_via_el", "SKOLEMS-THAT-ARE-UNFINDABLE-VIA-EL", 0, 0, false);
+            declareFunction("skolem_unfindable_via_elP", "SKOLEM-UNFINDABLE-VIA-EL?", 1, 0, false);
+            declareFunction("bad_skolem_assertions", "BAD-SKOLEM-ASSERTIONS", 0, 1, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("skolem_defns_not_wff", "SKOLEM-DEFNS-NOT-WFF", 0, 0, false);
+            declareFunction("skolem_defn_maladies", "SKOLEM-DEFN-MALADIES", 0, 0, false);
+            declareFunction("skolem_defns_not_wff_via", "SKOLEM-DEFNS-NOT-WFF-VIA", 0, 1, false);
+            declareFunction("skolems_defn_not_wff_via", "SKOLEMS-DEFN-NOT-WFF-VIA", 0, 1, false);
+            declareFunction("skolem_defn_vars", "SKOLEM-DEFN-VARS", 1, 0, false);
+            declareFunction("skolems_vars_misordered", "SKOLEMS-VARS-MISORDERED", 0, 0, false);
+            declareFunction("skolems_vars_ordered", "SKOLEMS-VARS-ORDERED", 0, 0, false);
+            declareFunction("oldest_newest_forts", "OLDEST-NEWEST-FORTS", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_skolems_file_Previous() {
+        declareFunction("reify_skolems_in", "REIFY-SKOLEMS-IN", 4, 0, false);
+        declareFunction("canonicalize_fns_in_sk_term", "CANONICALIZE-FNS-IN-SK-TERM", 1, 0, false);
+        declareFunction("subst_skolem_in", "SUBST-SKOLEM-IN", 3, 0, false);
+        declareFunction("skolem_function_dependent_vars", "SKOLEM-FUNCTION-DEPENDENT-VARS", 1, 0, false);
+        declareFunction("skolem_function_var", "SKOLEM-FUNCTION-VAR", 1, 0, false);
+        declareFunction("skolem_args", "SKOLEM-ARGS", 3, 0, false);
+        declareFunction("canonicalize_skolem_term", "CANONICALIZE-SKOLEM-TERM", 4, 0, false);
+        declareFunction("replace_unreified_skolem_terms_with_variables", "REPLACE-UNREIFIED-SKOLEM-TERMS-WITH-VARIABLES", 1, 0, false);
+        declareFunction("lookup_sk_constant_from_defns", "LOOKUP-SK-CONSTANT-FROM-DEFNS", 3, 0, false);
+        declareFunction("defn_unreified_sk_term", "DEFN-UNREIFIED-SK-TERM", 3, 0, false);
+        declareFunction("skolem_collection", "SKOLEM-COLLECTION", 1, 0, false);
+        declareFunction("create_skolem", "CREATE-SKOLEM", 5, 0, false);
+        declareFunction("sk_defn_from_clauses", "SK-DEFN-FROM-CLAUSES", 2, 1, false);
+        declareFunction("alpha_sort_clauses", "ALPHA-SORT-CLAUSES", 1, 0, false);
+        declareFunction("rename_skolem_clause_vars", "RENAME-SKOLEM-CLAUSE-VARS", 2, 1, false);
+        declareFunction("sk_defn_var", "SK-DEFN-VAR", 0, 0, false);
+        declareFunction("clear_formula_constant_str", "CLEAR-FORMULA-CONSTANT-STR", 0, 0, false);
+        declareFunction("remove_formula_constant_str", "REMOVE-FORMULA-CONSTANT-STR", 1, 0, false);
+        declareFunction("formula_constant_str_internal", "FORMULA-CONSTANT-STR-INTERNAL", 1, 0, false);
+        declareFunction("formula_constant_str", "FORMULA-CONSTANT-STR", 1, 0, false);
+        declareFunction("cyc_var_except_for_x_0P", "CYC-VAR-EXCEPT-FOR-X-0?", 1, 0, false);
+        declareFunction("make_sk_defn", "MAKE-SK-DEFN", 4, 0, false);
+        declareFunction("sk_arity", "SK-ARITY", 1, 1, false);
+        declareFunction("make_unreified_sk_nat", "MAKE-UNREIFIED-SK-NAT", 4, 0, false);
+        declareFunction("skolem_defn", "SKOLEM-DEFN", 1, 0, false);
+        declareFunction("skolem_defnXkey", "SKOLEM-DEFN&KEY", 1, 0, false);
+        declareFunction("skolem_defn_key", "SKOLEM-DEFN-KEY", 1, 0, false);
+        declareFunction("skolem_of_defn", "SKOLEM-OF-DEFN", 1, 0, false);
+        declareFunction("unreified_sk_term", "UNREIFIED-SK-TERM", 1, 0, false);
+        declareFunction("skolem_defn_mt", "SKOLEM-DEFN-MT", 1, 0, false);
+        declareFunction("skolem_seqvar", "SKOLEM-SEQVAR", 1, 0, false);
+        declareFunction("skolem_defn_seqvar", "SKOLEM-DEFN-SEQVAR", 1, 0, false);
+        declareFunction("old_format_skolemP", "OLD-FORMAT-SKOLEM?", 1, 0, false);
+        declareFunction("skolem_number", "SKOLEM-NUMBER", 1, 0, false);
+        declareFunction("skolem_defn_number", "SKOLEM-DEFN-NUMBER", 1, 0, false);
+        declareFunction("skolem_defn_args", "SKOLEM-DEFN-ARGS", 1, 0, false);
+        declareFunction("skolem_var", "SKOLEM-VAR", 1, 0, false);
+        declareFunction("el_unreified_sk_term", "EL-UNREIFIED-SK-TERM", 1, 0, false);
+        declareFunction("compute_unreified_sk_term_via_hl", "COMPUTE-UNREIFIED-SK-TERM-VIA-HL", 1, 0, false);
+        declareFunction("compute_skolem_info_from_assertions", "COMPUTE-SKOLEM-INFO-FROM-ASSERTIONS", 2, 0, false);
+        declareFunction("skolem_table_key_from_defn", "SKOLEM-TABLE-KEY-FROM-DEFN", 1, 0, false);
+        declareFunction("skolem_table_key_from_constant", "SKOLEM-TABLE-KEY-FROM-CONSTANT", 1, 0, false);
+        declareFunction("skolem_hash_key", "SKOLEM-HASH-KEY", 2, 0, false);
+        declareFunction("opaquify_unreified_skolem_terms", "OPAQUIFY-UNREIFIED-SKOLEM-TERMS", 1, 0, false);
+        declareFunction("skolem_defns_from_key_specification", "SKOLEM-DEFNS-FROM-KEY-SPECIFICATION", 2, 0, false);
+        declareFunction("cnfs_of_skolem_defn", "CNFS-OF-SKOLEM-DEFN", 1, 0, false);
+        declareFunction("mt_of_skolem_defn", "MT-OF-SKOLEM-DEFN", 1, 0, false);
+        declareFunction("skolem_defn_cnfs", "SKOLEM-DEFN-CNFS", 1, 0, false);
+        declareFunction("skolem_defn_assertions_robust", "SKOLEM-DEFN-ASSERTIONS-ROBUST", 1, 1, false);
+        declareFunction("skolem_function_has_no_defn_assertions_robustP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS-ROBUST?", 1, 0, false);
+        declareFunction("skolem_function_has_no_defn_assertionsP", "SKOLEM-FUNCTION-HAS-NO-DEFN-ASSERTIONS?", 1, 0, false);
+        declareFunction("skolem_defining_bookkeeping_assertion", "SKOLEM-DEFINING-BOOKKEEPING-ASSERTION", 1, 0, false);
+        declareFunction("skolem_defn_assertions", "SKOLEM-DEFN-ASSERTIONS", 1, 1, false);
+        declareFunction("skolems_defn_assertions", "SKOLEMS-DEFN-ASSERTIONS", 1, 0, false);
+        declareFunction("skolem_defn_siblings", "SKOLEM-DEFN-SIBLINGS", 1, 0, false);
+        declareFunction("skolem_defn_proper_siblings", "SKOLEM-DEFN-PROPER-SIBLINGS", 1, 0, false);
+        declareFunction("skolem_canonical_sibling", "SKOLEM-CANONICAL-SIBLING", 1, 0, false);
+        declareFunction("skolems_min_mt", "SKOLEMS-MIN-MT", 1, 0, false);
+        declareFunction("skolem_only_mentioned_in_el_templatesP", "SKOLEM-ONLY-MENTIONED-IN-EL-TEMPLATES?", 2, 0, false);
+        declareFunction("skolem_defn_assertionP", "SKOLEM-DEFN-ASSERTION?", 2, 1, false);
+        declareFunction("gaf_has_corresponding_cnf_in_skolem_defnP", "GAF-HAS-CORRESPONDING-CNF-IN-SKOLEM-DEFN?", 2, 1, false);
+        declareFunction("constant_denoting_reified_skolem_fnP", "CONSTANT-DENOTING-REIFIED-SKOLEM-FN?", 1, 0, false);
+        declareFunction("computed_skolem_assertionP", "COMPUTED-SKOLEM-ASSERTION?", 1, 0, false);
+        declareFunction("skolem_defining_assertionP", "SKOLEM-DEFINING-ASSERTION?", 1, 0, false);
+        declareFunction("defn_assertion_of_skolemP", "DEFN-ASSERTION-OF-SKOLEM?", 2, 0, false);
+        declareFunction("assertion_skolems", "ASSERTION-SKOLEMS", 1, 0, false);
+        declareFunction("defn_assertion_skolems", "DEFN-ASSERTION-SKOLEMS", 1, 0, false);
+        declareFunction("all_skolem_mt_defn_assertions", "ALL-SKOLEM-MT-DEFN-ASSERTIONS", 2, 1, false);
+        declareFunction("recomputing_skolem_defn_info_constant", "RECOMPUTING-SKOLEM-DEFN-INFO-CONSTANT", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_var", "RECOMPUTING-SKOLEM-DEFN-INFO-VAR", 0, 0, false);
+        declareFunction("really_recomputing_skolem_defnP", "REALLY-RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_defn", "RECOMPUTING-SKOLEM-DEFN-INFO-DEFN", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_key", "RECOMPUTING-SKOLEM-DEFN-INFO-KEY", 0, 0, false);
+        declareFunction("recomputing_skolem_defn_info_blist", "RECOMPUTING-SKOLEM-DEFN-INFO-BLIST", 0, 0, false);
+        declareFunction("set_recomputing_skolem_defn_result", "SET-RECOMPUTING-SKOLEM-DEFN-RESULT", 2, 0, false);
+        declareFunction("set_recomputing_skolem_defn_blist", "SET-RECOMPUTING-SKOLEM-DEFN-BLIST", 1, 0, false);
+        declareFunction("recomputing_skolem_defnP", "RECOMPUTING-SKOLEM-DEFN?", 0, 0, false);
+        declareFunction("recomputing_defn_of_skolemP", "RECOMPUTING-DEFN-OF-SKOLEM?", 1, 0, false);
+        declareFunction("recomputing_skolem_defn_ofP", "RECOMPUTING-SKOLEM-DEFN-OF?", 1, 0, false);
+        declareFunction("note_skolem_binding", "NOTE-SKOLEM-BINDING", 2, 0, false);
+        declareFunction("recompute_skolem_defn", "RECOMPUTE-SKOLEM-DEFN", 6, 0, false);
+        declareFunction("remove_defn_of_skolem", "REMOVE-DEFN-OF-SKOLEM", 1, 1, false);
+        declareFunction("add_skolem_defn", "ADD-SKOLEM-DEFN", 1, 1, false);
+        declareFunction("kb_skolems", "KB-SKOLEMS", 0, 0, false);
+        declareFunction("skolem_table_contains_old_format_skolemsP", "SKOLEM-TABLE-CONTAINS-OLD-FORMAT-SKOLEMS?", 0, 0, false);
+        declareFunction("reset_skolem_defn_table", "RESET-SKOLEM-DEFN-TABLE", 0, 2, false);
+        declareFunction("reset_defn_of_skolem", "RESET-DEFN-OF-SKOLEM", 1, 1, false);
+        declareFunction("skolem_defn_from_assertions", "SKOLEM-DEFN-FROM-ASSERTIONS", 1, 1, false);
+        declareFunction("reset_skolem_defn_from_assertions", "RESET-SKOLEM-DEFN-FROM-ASSERTIONS", 1, 2, false);
+        declareFunction("skolem_variable_from_assertions", "SKOLEM-VARIABLE-FROM-ASSERTIONS", 2, 0, false);
+        declareFunction("skolem_scalar_termP", "SKOLEM-SCALAR-TERM?", 1, 1, false);
+        declareFunction("skolem_result_types_from_cnfs", "SKOLEM-RESULT-TYPES-FROM-CNFS", 2, 2, false);
+        declareFunction("guess_skolem_result_types_from_cnfs", "GUESS-SKOLEM-RESULT-TYPES-FROM-CNFS", 3, 2, false);
+        declareFunction("skolem_cnfs_pos_lit_types", "SKOLEM-CNFS-POS-LIT-TYPES", 2, 1, false);
+        declareFunction("skolem_var_isa_constraints_wrt_cnfs", "SKOLEM-VAR-ISA-CONSTRAINTS-WRT-CNFS", 2, 1, false);
+        declareFunction("skolem_var_genl_constraints_wrt_cnfs", "SKOLEM-VAR-GENL-CONSTRAINTS-WRT-CNFS", 2, 1, false);
+        declareFunction("skolem_arg_isa_constraints", "SKOLEM-ARG-ISA-CONSTRAINTS", 2, 1, false);
+        declareFunction("install_skolem_arg_types", "INSTALL-SKOLEM-ARG-TYPES", 0, 2, false);
+        declareFunction("cnf_fn_argn_isa", "CNF-FN-ARGN-ISA", 3, 1, false);
+        declareFunction("cnf_fn_argn_var", "CNF-FN-ARGN-VAR", 3, 0, false);
+        declareFunction("interpolate_arg_type", "INTERPOLATE-ARG-TYPE", 1, 1, false);
+        declareFunction("max_skolem_arity", "MAX-SKOLEM-ARITY", 0, 0, false);
+        declareFunction("skolems_of_arity", "SKOLEMS-OF-ARITY", 0, 1, false);
+        declareFunction("skolem_hosedP", "SKOLEM-HOSED?", 1, 0, false);
+        declareFunction("skolem_ill_formedP", "SKOLEM-ILL-FORMED?", 1, 0, false);
+        declareFunction("skolem_rule_hosedP", "SKOLEM-RULE-HOSED?", 2, 0, false);
+        declareFunction("all_hosed_skolems", "ALL-HOSED-SKOLEMS", 0, 0, false);
+        declareFunction("multi_skolem_skolems", "MULTI-SKOLEM-SKOLEMS", 0, 0, false);
+        declareFunction("misindexed_skolem_keys", "MISINDEXED-SKOLEM-KEYS", 0, 1, false);
+        declareFunction("sk_defns_wXo_sk_constants", "SK-DEFNS-W/O-SK-CONSTANTS", 0, 1, false);
+        declareFunction("sk_keys_wXo_sk_defns", "SK-KEYS-W/O-SK-DEFNS", 0, 1, false);
+        declareFunction("install_skolemfunction_fn_in_skolem_defns", "INSTALL-SKOLEMFUNCTION-FN-IN-SKOLEM-DEFNS", 0, 2, false);
+        declareFunction("sk_defns_wXo_mts", "SK-DEFNS-W/O-MTS", 0, 1, false);
+        declareFunction("skolem_wffP", "SKOLEM-WFF?", 1, 0, false);
+        declareFunction("skolem_not_wffP", "SKOLEM-NOT-WFF?", 1, 0, false);
+        declareFunction("why_skolem_not_wff", "WHY-SKOLEM-NOT-WFF", 1, 0, false);
+        declareFunction("skolem_defn_wffP", "SKOLEM-DEFN-WFF?", 1, 0, false);
+        declareFunction("skolem_defn_not_wffP", "SKOLEM-DEFN-NOT-WFF?", 1, 0, false);
+        declareFunction("why_skolem_defn_not_wff", "WHY-SKOLEM-DEFN-NOT-WFF", 1, 0, false);
+        declareFunction("skolem_all_goodP", "SKOLEM-ALL-GOOD?", 1, 0, false);
+        declareFunction("skolem_function_skolem_assertion_goodP", "SKOLEM-FUNCTION-SKOLEM-ASSERTION-GOOD?", 1, 0, false);
+        declareFunction("skolem_functions_with_bad_skolem_assertions", "SKOLEM-FUNCTIONS-WITH-BAD-SKOLEM-ASSERTIONS", 0, 0, false);
+        declareFunction("diagnose_all_skolems", "DIAGNOSE-ALL-SKOLEMS", 0, 0, false);
+        declareFunction("diagnose_skolems", "DIAGNOSE-SKOLEMS", 1, 1, false);
+        declareFunction("diagnose_skolem", "DIAGNOSE-SKOLEM", 1, 0, false);
+        declareFunction("diagnose_just_this_skolem_internal", "DIAGNOSE-JUST-THIS-SKOLEM-INTERNAL", 1, 0, false);
+        declareFunction("diagnose_just_this_skolem", "DIAGNOSE-JUST-THIS-SKOLEM", 1, 0, false);
+        declareFunction("recanonicalize_skolem_defn_assertions", "RECANONICALIZE-SKOLEM-DEFN-ASSERTIONS", 1, 0, false);
+        declareFunction("skolem_safe_to_recanonicalize_at_elP", "SKOLEM-SAFE-TO-RECANONICALIZE-AT-EL?", 1, 0, false);
+        declareFunction("compute_target_consequent_literal_count", "COMPUTE-TARGET-CONSEQUENT-LITERAL-COUNT", 1, 0, false);
+        declareFunction("conjunction_of_literalsP", "CONJUNCTION-OF-LITERALS?", 1, 0, false);
+        declareFunction("modernize_skolem_axiom_table", "MODERNIZE-SKOLEM-AXIOM-TABLE", 0, 0, false);
+        declareFunction("possibly_modernize_unreified_sk_term", "POSSIBLY-MODERNIZE-UNREIFIED-SK-TERM", 1, 0, false);
+        declareFunction("skolems_with_mismatched_unreified_sk_terms", "SKOLEMS-WITH-MISMATCHED-UNREIFIED-SK-TERMS", 0, 0, false);
+        declareFunction("skolem_unreified_sk_terms_matchP", "SKOLEM-UNREIFIED-SK-TERMS-MATCH?", 1, 0, false);
+        declareFunction("possibly_nrepair_skolems_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEMS-WITH-DUPLICATE-VARS", 1, 0, false);
+        declareFunction("possibly_nrepair_skolem_with_duplicate_vars", "POSSIBLY-NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
+        declareFunction("nrepair_skolem_with_duplicate_vars", "NREPAIR-SKOLEM-WITH-DUPLICATE-VARS", 1, 0, false);
+        declareFunction("possibly_nrepair_skolems_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEMS-WITH-MALFORMED-NUMBERS", 1, 0, false);
+        declareFunction("possibly_nrepair_skolem_with_malformed_numbers", "POSSIBLY-NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
+        declareFunction("nrepair_skolem_with_malformed_numbers", "NREPAIR-SKOLEM-WITH-MALFORMED-NUMBERS", 1, 0, false);
+        declareFunction("tmi_skolemP", "TMI-SKOLEM?", 1, 0, false);
+        declareFunction("recanonicalize_tmi_skolems", "RECANONICALIZE-TMI-SKOLEMS", 1, 0, false);
+        declareFunction("recanonicalize_tmi_skolem", "RECANONICALIZE-TMI-SKOLEM", 1, 0, false);
+        declareFunction("possibly_rehabilitate_skolem_defn_table", "POSSIBLY-REHABILITATE-SKOLEM-DEFN-TABLE", 0, 0, false);
+        declareFunction("skolems_that_are_unfindable_via_el", "SKOLEMS-THAT-ARE-UNFINDABLE-VIA-EL", 0, 0, false);
+        declareFunction("skolem_unfindable_via_elP", "SKOLEM-UNFINDABLE-VIA-EL?", 1, 0, false);
+        declareFunction("bad_skolem_assertions", "BAD-SKOLEM-ASSERTIONS", 0, 1, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_skolems_file_alt() {
+        defparameter("*SKOLEM-ARG-SORT*", NIL);
+        deflexical("*FORMULA-CONSTANT-STR-CACHING-STATE*", NIL);
+        defparameter("*RECOMPUTE-SKOLEM-DEFN-INFO*", NIL);
+        deflexical("*SKOLEMS-WITH-KNOWN-ISSUES*", $list_alt108);
+        deflexical("*SKOLEMS-SAFE-TO-RECANONICALIZE-AT-EL*", $list_alt109);
+        defparameter("*TARGET-CONSEQUENT-LITERAL-COUNT*", $UNINITIALIZED);
         return NIL;
     }
 
     public static SubLObject init_skolems_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*SKOLEM-ARG-SORT*", NIL);
+            deflexical("*FORMULA-CONSTANT-STR-CACHING-STATE*", NIL);
+            defparameter("*RECOMPUTE-SKOLEM-DEFN-INFO*", NIL);
+            deflexical("*SKOLEMS-WITH-KNOWN-ISSUES*", $list111);
+            deflexical("*SKOLEMS-SAFE-TO-RECANONICALIZE-AT-EL*", $list112);
+            defparameter("*TARGET-CONSEQUENT-LITERAL-COUNT*", $UNINITIALIZED);
+            deflexical("*SKOLEMS-KNOWN-TO-BE-UNFINDABLE-VIA-EL*", $list157);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*SKOLEMS-WITH-KNOWN-ISSUES*", $list_alt108);
+            deflexical("*SKOLEMS-SAFE-TO-RECANONICALIZE-AT-EL*", $list_alt109);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_skolems_file_Previous() {
         defparameter("*SKOLEM-ARG-SORT*", NIL);
         deflexical("*FORMULA-CONSTANT-STR-CACHING-STATE*", NIL);
         defparameter("*RECOMPUTE-SKOLEM-DEFN-INFO*", NIL);
@@ -5064,7 +10001,7 @@ public final class skolems extends SubLTranslatedFile {
     }
 
     private static SubLObject _constant_112_initializer() {
-        return list(new SubLObject[]{ reader_make_constant_shell(makeString("SKF-16971619")), reader_make_constant_shell(makeString("SKF-9662286")), reader_make_constant_shell(makeString("SKF-45878693")), reader_make_constant_shell(makeString("SKF-27834981")), reader_make_constant_shell(makeString("SKF-12369461")), reader_make_constant_shell(makeString("SKF-10688698")), reader_make_constant_shell(makeString("SKF-45547787")), reader_make_constant_shell(makeString("SKF-31789746")), reader_make_constant_shell(makeString("SKF-26692934")), reader_make_constant_shell(makeString("SKF-48466118")), reader_make_constant_shell(makeString("SKF-60531811")), reader_make_constant_shell(makeString("SKF-29624762")), reader_make_constant_shell(makeString("SKF-22643466")), reader_make_constant_shell(makeString("SKF-29472649")), reader_make_constant_shell(makeString("SKF-6535610808")), reader_make_constant_shell(makeString("SKF-6391880459")), reader_make_constant_shell(makeString("SKF-6069753105")), reader_make_constant_shell(makeString("SKF-1836062444")), reader_make_constant_shell(makeString("SKF-1140288587")), reader_make_constant_shell(makeString("SKF-0975510193")), reader_make_constant_shell(makeString("SKF-0417114039")), reader_make_constant_shell(makeString("SKF-2399775374")), reader_make_constant_shell(makeString("SKF-9741300383")), reader_make_constant_shell(makeString("SKF-0828551493")), reader_make_constant_shell(makeString("SKF-2588418129")), reader_make_constant_shell(makeString("SKF-1857929740")), reader_make_constant_shell(makeString("SKF-9771221235")), reader_make_constant_shell(makeString("SKF-5248881133")), reader_make_constant_shell(makeString("SKF-30037247")), reader_make_constant_shell(makeString("SKF-60060919")), reader_make_constant_shell(makeString("SKF-10786079")), reader_make_constant_shell(makeString("SKF-14077376")), reader_make_constant_shell(makeString("SKF-55914574")), reader_make_constant_shell(makeString("SKF-16648407")), reader_make_constant_shell(makeString("SKF-44601733")), reader_make_constant_shell(makeString("SKF-7913899905")), reader_make_constant_shell(makeString("SKF-4396958760")), reader_make_constant_shell(makeString("SKF-8020199718")), reader_make_constant_shell(makeString("SKF-20333")), reader_make_constant_shell(makeString("SKF-3701677947")), reader_make_constant_shell(makeString("SKF-2758282998")), reader_make_constant_shell(makeString("SKF-32592026")), reader_make_constant_shell(makeString("SKF-15476867")), reader_make_constant_shell(makeString("SKF-11623545")), reader_make_constant_shell(makeString("SKF-39071040")), reader_make_constant_shell(makeString("SKF-22133371")), reader_make_constant_shell(makeString("SKF-49114437")), reader_make_constant_shell(makeString("SKF-6397777")), reader_make_constant_shell(makeString("SKF-27545347")), reader_make_constant_shell(makeString("SKF-44682034")), reader_make_constant_shell(makeString("SKF-55141454")), reader_make_constant_shell(makeString("SKF-29896988")), reader_make_constant_shell(makeString("SKF-42443574")), reader_make_constant_shell(makeString("SKF-13447977")), reader_make_constant_shell(makeString("SKF-30519480")), reader_make_constant_shell(makeString("SKF-62227276")), reader_make_constant_shell(makeString("SKF-17408839")), reader_make_constant_shell(makeString("SKF-58430677")), reader_make_constant_shell(makeString("SKF-59662976")), reader_make_constant_shell(makeString("SKF-12620975")), reader_make_constant_shell(makeString("SKF-9433064")), reader_make_constant_shell(makeString("SKF-9205245")), reader_make_constant_shell(makeString("SKF-DepictedGroupMember")), reader_make_constant_shell(makeString("SKF-19625320")), reader_make_constant_shell(makeString("SKF-3784346661")), reader_make_constant_shell(makeString("SKF-6544284149")), reader_make_constant_shell(makeString("SKF-0614825063")), reader_make_constant_shell(makeString("SKF-0016213450")), reader_make_constant_shell(makeString("SKF-22649603")), reader_make_constant_shell(makeString("SKF-4118636")), reader_make_constant_shell(makeString("SKF-19878232")), reader_make_constant_shell(makeString("SKF-15013378")), reader_make_constant_shell(makeString("SKF-65815517")), reader_make_constant_shell(makeString("SKF-56452378")), reader_make_constant_shell(makeString("SKF-49139121")), reader_make_constant_shell(makeString("SKF-12749049")), reader_make_constant_shell(makeString("SKF-2910558946")), reader_make_constant_shell(makeString("SKF-2910558946")), reader_make_constant_shell(makeString("SKF-8609688279")), reader_make_constant_shell(makeString("SKF-3254220233")), reader_make_constant_shell(makeString("SKF-4116454483")), reader_make_constant_shell(makeString("SKF-9882206036")), reader_make_constant_shell(makeString("SKF-7876960574")), reader_make_constant_shell(makeString("SKF-7849157406")), reader_make_constant_shell(makeString("SKF-0013694801")), reader_make_constant_shell(makeString("SKF-3786700124")), reader_make_constant_shell(makeString("SKF-1714230847")), reader_make_constant_shell(makeString("SKF-7566265665")), reader_make_constant_shell(makeString("SKF-8055872557")), reader_make_constant_shell(makeString("SKF-6624619390")), reader_make_constant_shell(makeString("SKF-4749393956")), reader_make_constant_shell(makeString("SKF-9902000475")), reader_make_constant_shell(makeString("SKF-2176445673")), reader_make_constant_shell(makeString("SKF-9582976901")), reader_make_constant_shell(makeString("SKF-62641426")), reader_make_constant_shell(makeString("SKF-37581079")), reader_make_constant_shell(makeString("SKF-9780389")), reader_make_constant_shell(makeString("SKF-51938893")), reader_make_constant_shell(makeString("SKF-33012437")), reader_make_constant_shell(makeString("SKF-9412760")), reader_make_constant_shell(makeString("SKF-22314298")), reader_make_constant_shell(makeString("SKF-52903378")), reader_make_constant_shell(makeString("SKF-59517423")), reader_make_constant_shell(makeString("SKF-24705784")), reader_make_constant_shell(makeString("SKF-22566254")), reader_make_constant_shell(makeString("SKF-35236481")), reader_make_constant_shell(makeString("SKF-26725746")), reader_make_constant_shell(makeString("SKF-55356852")), reader_make_constant_shell(makeString("SKF-3634339")), reader_make_constant_shell(makeString("SKF-65815517")), reader_make_constant_shell(makeString("SKF-56452378")), reader_make_constant_shell(makeString("SKF-49139121")), reader_make_constant_shell(makeString("SKF-12749049")), reader_make_constant_shell(makeString("SKF-4408119749")), reader_make_constant_shell(makeString("SKF-3789312666")), reader_make_constant_shell(makeString("SKF-0283155048")), reader_make_constant_shell(makeString("SKF-9294061441")), reader_make_constant_shell(makeString("SKF-4876245588")), reader_make_constant_shell(makeString("SKF-2809645919")), reader_make_constant_shell(makeString("SKF-1124554131")), reader_make_constant_shell(makeString("SKF-0220610914")), reader_make_constant_shell(makeString("SKF-4790221775")), reader_make_constant_shell(makeString("SKF-1168015263")), reader_make_constant_shell(makeString("SKF-4318796173")), reader_make_constant_shell(makeString("SKF-1828131226")), reader_make_constant_shell(makeString("SKF-2199671088")), reader_make_constant_shell(makeString("SKF-9895165404")), reader_make_constant_shell(makeString("SKF-6604522774")), reader_make_constant_shell(makeString("SKF-6086634185")), reader_make_constant_shell(makeString("SKF-0428133650")), reader_make_constant_shell(makeString("SKF-7899934995")), reader_make_constant_shell(makeString("SKF-0860923384")), reader_make_constant_shell(makeString("SKF-4146570201")), reader_make_constant_shell(makeString("SKF-0406242321")), reader_make_constant_shell(makeString("SKF-4468030352")), reader_make_constant_shell(makeString("SKF-8519691249")), reader_make_constant_shell(makeString("SKF-6471415053")), reader_make_constant_shell(makeString("SKF-6816884555")), reader_make_constant_shell(makeString("SKF-2207590761")), reader_make_constant_shell(makeString("SKF-4785728462")), reader_make_constant_shell(makeString("SKF-6959780810")), reader_make_constant_shell(makeString("SKF-2698165023")), reader_make_constant_shell(makeString("SKF-1592332182")), reader_make_constant_shell(makeString("SKF-9127604959")), reader_make_constant_shell(makeString("SKF-3352641286")), reader_make_constant_shell(makeString("SKF-9726105841")), reader_make_constant_shell(makeString("SKF-0624682876")), reader_make_constant_shell(makeString("SKF-9673514545")), reader_make_constant_shell(makeString("SKF-1902545429")), reader_make_constant_shell(makeString("SKF-6876074534")), reader_make_constant_shell(makeString("SKF-8288491486")), reader_make_constant_shell(makeString("SKF-4637358284")), reader_make_constant_shell(makeString("SKF-0635199939")), reader_make_constant_shell(makeString("SKF-4292973565")), reader_make_constant_shell(makeString("SKF-7798353664")), reader_make_constant_shell(makeString("SKF-34523039")), reader_make_constant_shell(makeString("SKF-33538847")), reader_make_constant_shell(makeString("SKF-58036047")), reader_make_constant_shell(makeString("SKF-9708075")), reader_make_constant_shell(makeString("SKF-13094314")), reader_make_constant_shell(makeString("SKF-27004431")), reader_make_constant_shell(makeString("SKF-47290403")), reader_make_constant_shell(makeString("SKF-49713991")), reader_make_constant_shell(makeString("SKF-40178904")), reader_make_constant_shell(makeString("SKF-62659908")), reader_make_constant_shell(makeString("SKF-61484227")), reader_make_constant_shell(makeString("SKF-35458681")), reader_make_constant_shell(makeString("SKF-17599345")), reader_make_constant_shell(makeString("SKF-53668837")), reader_make_constant_shell(makeString("SKF-24102297")), reader_make_constant_shell(makeString("SKF-32709431")), reader_make_constant_shell(makeString("SKF-51752162")), reader_make_constant_shell(makeString("SKF-35359227")), reader_make_constant_shell(makeString("SKF-20847759")), reader_make_constant_shell(makeString("SKF-51781280")), reader_make_constant_shell(makeString("SKF-51473172")), reader_make_constant_shell(makeString("SKF-36777684")), reader_make_constant_shell(makeString("SKF-27183984")), reader_make_constant_shell(makeString("SKF-24538299")), reader_make_constant_shell(makeString("SKF-51270566")), reader_make_constant_shell(makeString("SKF-6498804")), reader_make_constant_shell(makeString("SKF-52375281")), reader_make_constant_shell(makeString("SKF-59156909")), reader_make_constant_shell(makeString("SKF-59507392")), reader_make_constant_shell(makeString("SKF-21555986")), reader_make_constant_shell(makeString("SKF-0925186357")), reader_make_constant_shell(makeString("SKF-6223276020")), reader_make_constant_shell(makeString("SKF-5400448981")), reader_make_constant_shell(makeString("SKF-0033649819")), reader_make_constant_shell(makeString("SKF-8779626658")), reader_make_constant_shell(makeString("SKF-2650598318")), reader_make_constant_shell(makeString("SKF-1317366451")), reader_make_constant_shell(makeString("SKF-5713244721")), reader_make_constant_shell(makeString("SKF-5494021688")), reader_make_constant_shell(makeString("SKF-50021281")), reader_make_constant_shell(makeString("SKF-52700384")), reader_make_constant_shell(makeString("SKF-27017330")), reader_make_constant_shell(makeString("SKF-6926447")), reader_make_constant_shell(makeString("SKF-57742011")), reader_make_constant_shell(makeString("SKF-32797409")), reader_make_constant_shell(makeString("SKF-36775099")), reader_make_constant_shell(makeString("SKF-8803460")), reader_make_constant_shell(makeString("SKF-11685259")), reader_make_constant_shell(makeString("SKF-49596986")), reader_make_constant_shell(makeString("SKF-1515868")), reader_make_constant_shell(makeString("SKF-12425256")), reader_make_constant_shell(makeString("SKF-26526786")), reader_make_constant_shell(makeString("SKF-757265")), reader_make_constant_shell(makeString("SKF-66361621")), reader_make_constant_shell(makeString("SKF-50135687")), reader_make_constant_shell(makeString("SKF-28256974")), reader_make_constant_shell(makeString("SKF-52059331")), reader_make_constant_shell(makeString("SKF-60879947")), reader_make_constant_shell(makeString("SKF-10095100")), reader_make_constant_shell(makeString("SKF-20576203")), reader_make_constant_shell(makeString("SKF-49828332")), reader_make_constant_shell(makeString("SKF-44916076")), reader_make_constant_shell(makeString("SKF-63714570")), reader_make_constant_shell(makeString("SKF-3886762")), reader_make_constant_shell(makeString("SKF-14991605")), reader_make_constant_shell(makeString("SKF-35022890")), reader_make_constant_shell(makeString("SKF-9692584")), reader_make_constant_shell(makeString("SKF-56789029")), reader_make_constant_shell(makeString("SKF-63331999")), reader_make_constant_shell(makeString("SKF-60839916")), reader_make_constant_shell(makeString("SKF-11805601")), reader_make_constant_shell(makeString("MarriedCoupleFn")), reader_make_constant_shell(makeString("SKF-54717125")), reader_make_constant_shell(makeString("SKF-47103024")), reader_make_constant_shell(makeString("SKF-32504795")), reader_make_constant_shell(makeString("SKF-50991035")), reader_make_constant_shell(makeString("SKF-54893967")), reader_make_constant_shell(makeString("SKF-4588740")), reader_make_constant_shell(makeString("SKF-34044423")), reader_make_constant_shell(makeString("SKF-23158350")), reader_make_constant_shell(makeString("SKF-26216492")), reader_make_constant_shell(makeString("SKF-23792367")), reader_make_constant_shell(makeString("SKF-26655735")), reader_make_constant_shell(makeString("SKF-36384184")), reader_make_constant_shell(makeString("SKF-28223401")), reader_make_constant_shell(makeString("SKF-30705866")), reader_make_constant_shell(makeString("SKF-31089449")), reader_make_constant_shell(makeString("SKF-43795517")), reader_make_constant_shell(makeString("SKF-54692934")), reader_make_constant_shell(makeString("SKF-62874373")), reader_make_constant_shell(makeString("SKF-13198899")), reader_make_constant_shell(makeString("SKF-6598020")), reader_make_constant_shell(makeString("SKF-66712623")), reader_make_constant_shell(makeString("SKF-61590093")), reader_make_constant_shell(makeString("SKF-4298210")), reader_make_constant_shell(makeString("SKF-13358052")), reader_make_constant_shell(makeString("SKF-1077450")), reader_make_constant_shell(makeString("SKF-27216176")), reader_make_constant_shell(makeString("SKF-28083191")), reader_make_constant_shell(makeString("SKF-539243")), reader_make_constant_shell(makeString("SKF-14104209")), reader_make_constant_shell(makeString("SKF-6066610")), reader_make_constant_shell(makeString("SKF-14779626")), reader_make_constant_shell(makeString("SKF-1007216")), reader_make_constant_shell(makeString("SKF-49463821")), reader_make_constant_shell(makeString("SKF-764714")), reader_make_constant_shell(makeString("SKF-59277817")), reader_make_constant_shell(makeString("SKF-24473185")), reader_make_constant_shell(makeString("SKF-22799176")), reader_make_constant_shell(makeString("SKF-13378825")), reader_make_constant_shell(makeString("SKF-8692086")), reader_make_constant_shell(makeString("SKF-59150515")), reader_make_constant_shell(makeString("SKF-6649426")), reader_make_constant_shell(makeString("SKF-18423567")), reader_make_constant_shell(makeString("SKF-61014428")), reader_make_constant_shell(makeString("SKF-612301")), reader_make_constant_shell(makeString("SKF-390407")), reader_make_constant_shell(makeString("SKF-469762")), reader_make_constant_shell(makeString("SKF-57350382")), reader_make_constant_shell(makeString("SKF-550621")), reader_make_constant_shell(makeString("SKF-41449368")), reader_make_constant_shell(makeString("SKF-20918103")), reader_make_constant_shell(makeString("SKF-447007")), reader_make_constant_shell(makeString("SKF-1383963")), reader_make_constant_shell(makeString("SKF-348190")), reader_make_constant_shell(makeString("SKF-693803")), reader_make_constant_shell(makeString("SKF-133452")), reader_make_constant_shell(makeString("SKF-2813385")), reader_make_constant_shell(makeString("SKF-31097107")), reader_make_constant_shell(makeString("SKF-57888")), reader_make_constant_shell(makeString("SKF-10895131")), reader_make_constant_shell(makeString("SKF-13225721")), reader_make_constant_shell(makeString("SKF-43450038")), reader_make_constant_shell(makeString("SKF-21119958")), reader_make_constant_shell(makeString("SKF-47744038")), reader_make_constant_shell(makeString("SKF-466900")), reader_make_constant_shell(makeString("SKF-46555292")), reader_make_constant_shell(makeString("SKF-23253528")), reader_make_constant_shell(makeString("SKF-924570")), reader_make_constant_shell(makeString("SKF-BandMemPlaying")), reader_make_constant_shell(makeString("SKF-48376054")), reader_make_constant_shell(makeString("SKF-121716")), reader_make_constant_shell(makeString("SKF-7364934")), reader_make_constant_shell(makeString("SKF-14760742")), reader_make_constant_shell(makeString("SKF-17172575")), reader_make_constant_shell(makeString("SKF-23584353")), reader_make_constant_shell(makeString("SKF-53200158")), reader_make_constant_shell(makeString("SKF-48653451")), reader_make_constant_shell(makeString("SKF-55897365")), reader_make_constant_shell(makeString("SKF-52891476")), reader_make_constant_shell(makeString("SKF-33105457")), reader_make_constant_shell(makeString("SKF-10518089")), reader_make_constant_shell(makeString("SKF-33158362")), reader_make_constant_shell(makeString("SKF-66304485")), reader_make_constant_shell(makeString("SKF-810295")), reader_make_constant_shell(makeString("SKF-968219")), reader_make_constant_shell(makeString("SKF-9855449")), reader_make_constant_shell(makeString("SKF-51029398")), reader_make_constant_shell(makeString("SKF-9874778")), reader_make_constant_shell(makeString("SKF-14008069")), reader_make_constant_shell(makeString("SKF-197207")), reader_make_constant_shell(makeString("SKF-9176578")), reader_make_constant_shell(makeString("SKF-62825")), reader_make_constant_shell(makeString("SKF-476059")), reader_make_constant_shell(makeString("SKF-366078")), reader_make_constant_shell(makeString("SKF-17345463")), reader_make_constant_shell(makeString("SKF-51339287")), reader_make_constant_shell(makeString("SKF-1046930")), reader_make_constant_shell(makeString("SKF-828757")), reader_make_constant_shell(makeString("SKF-51633710")), reader_make_constant_shell(makeString("SKF-19769806")), reader_make_constant_shell(makeString("SKF-46906520")), reader_make_constant_shell(makeString("SKF-20309046")), reader_make_constant_shell(makeString("SKF-7477821")), reader_make_constant_shell(makeString("SKF-21294579")), reader_make_constant_shell(makeString("SKF-17746")), reader_make_constant_shell(makeString("SKF-42407080")), reader_make_constant_shell(makeString("SKF-32539269")), reader_make_constant_shell(makeString("SKF-17651656")), reader_make_constant_shell(makeString("SKF-49636199")), reader_make_constant_shell(makeString("SKF-63665039")), reader_make_constant_shell(makeString("SKF-923916")), reader_make_constant_shell(makeString("SKF-41511095")), reader_make_constant_shell(makeString("SKF-402998")), reader_make_constant_shell(makeString("SKF-1827166")), reader_make_constant_shell(makeString("SKF-25558723")), reader_make_constant_shell(makeString("SKF-92235")), reader_make_constant_shell(makeString("SKF-24405989")), reader_make_constant_shell(makeString("SKF-37741853")), reader_make_constant_shell(makeString("SKF-681210")), reader_make_constant_shell(makeString("SKF-16612795")), reader_make_constant_shell(makeString("SKF-55392675")), reader_make_constant_shell(makeString("SKF-41395088")), reader_make_constant_shell(makeString("SKF-427687")), reader_make_constant_shell(makeString("SKF-46187940")), reader_make_constant_shell(makeString("SKF-18860364")), reader_make_constant_shell(makeString("SKF-846216")), reader_make_constant_shell(makeString("SKF-5393361")), reader_make_constant_shell(makeString("SKF-12316220")), reader_make_constant_shell(makeString("SKF-54217404")), reader_make_constant_shell(makeString("SKF-5169399")), reader_make_constant_shell(makeString("SKF-920133")), reader_make_constant_shell(makeString("SKF-3247485")), reader_make_constant_shell(makeString("SKF-2269494")), reader_make_constant_shell(makeString("SKF-13038949")), reader_make_constant_shell(makeString("SKF-28759634")), reader_make_constant_shell(makeString("SKF-17122972")), reader_make_constant_shell(makeString("SKF-953550")), reader_make_constant_shell(makeString("SKF-906137")), reader_make_constant_shell(makeString("SKF-14962533")), reader_make_constant_shell(makeString("SKF-8254998")), reader_make_constant_shell(makeString("SKF-46599863")), reader_make_constant_shell(makeString("SKF-36778441")), reader_make_constant_shell(makeString("SKF-45777401")), reader_make_constant_shell(makeString("SKF-45356858")), reader_make_constant_shell(makeString("SKF-28542904")), reader_make_constant_shell(makeString("SKF-33462840")), reader_make_constant_shell(makeString("SKF-18834377")), reader_make_constant_shell(makeString("SKF-23165858")), reader_make_constant_shell(makeString("SKF-171447")), reader_make_constant_shell(makeString("SKF-38743072")), reader_make_constant_shell(makeString("SKF-62752838")), reader_make_constant_shell(makeString("SKF-46799967")), reader_make_constant_shell(makeString("SKF-38741805")), reader_make_constant_shell(makeString("SKF-22034341")), reader_make_constant_shell(makeString("SKF-49949893")), reader_make_constant_shell(makeString("SKF-750835")), reader_make_constant_shell(makeString("SKF-27330810")), reader_make_constant_shell(makeString("SKF-61593935")), reader_make_constant_shell(makeString("SKF-29534329")), reader_make_constant_shell(makeString("SKF-8780298")), reader_make_constant_shell(makeString("SKF-10230735")), reader_make_constant_shell(makeString("SKF-28051850")), reader_make_constant_shell(makeString("SKF-15346572")), reader_make_constant_shell(makeString("SKF-38351646")), reader_make_constant_shell(makeString("SKF-54477051")), reader_make_constant_shell(makeString("SKF-58577410")), reader_make_constant_shell(makeString("SKF-41179398")), reader_make_constant_shell(makeString("SKF-9098087")), reader_make_constant_shell(makeString("SKF-464896")), reader_make_constant_shell(makeString("SKF-13765056")), reader_make_constant_shell(makeString("SKF-54796118")), reader_make_constant_shell(makeString("SKF-892012")), reader_make_constant_shell(makeString("SKF-5733810632")), reader_make_constant_shell(makeString("SKF-9732365118")), reader_make_constant_shell(makeString("SKF-8062776921")), reader_make_constant_shell(makeString("SKF-9356282252")), reader_make_constant_shell(makeString("SKF-7770326773")), reader_make_constant_shell(makeString("SKF-9303451156")), reader_make_constant_shell(makeString("SKF-7682359700")), reader_make_constant_shell(makeString("SKF-0472592080")), reader_make_constant_shell(makeString("SKF-5868767078")), reader_make_constant_shell(makeString("SKF-6969827182")), reader_make_constant_shell(makeString("SKF-8235654414")), reader_make_constant_shell(makeString("SKF-9268693067")), reader_make_constant_shell(makeString("SKF-4188164665")), reader_make_constant_shell(makeString("SKF-3268848892")), reader_make_constant_shell(makeString("SKF-3954038304")), reader_make_constant_shell(makeString("SKF-8411301306")), reader_make_constant_shell(makeString("SKF-6870027660")), reader_make_constant_shell(makeString("SKF-2200319382")), reader_make_constant_shell(makeString("SKF-8663443543")), reader_make_constant_shell(makeString("SKF-6270260084")), reader_make_constant_shell(makeString("SKF-7428624994")), reader_make_constant_shell(makeString("SKF-6367907452")), reader_make_constant_shell(makeString("SKF-7752915649")), reader_make_constant_shell(makeString("SKF-4786775108")), reader_make_constant_shell(makeString("SKF-5640043419")), reader_make_constant_shell(makeString("SKF-6071218505")), reader_make_constant_shell(makeString("SKF-3183844767")), reader_make_constant_shell(makeString("SKF-7356970316")), reader_make_constant_shell(makeString("SKF-4272845489")), reader_make_constant_shell(makeString("SKF-5224425512")), reader_make_constant_shell(makeString("SKF-3795912959")), reader_make_constant_shell(makeString("SKF-7714022869")), reader_make_constant_shell(makeString("SKF-8565886278")), reader_make_constant_shell(makeString("SKF-0519624184")), reader_make_constant_shell(makeString("SKF-4286299680")), reader_make_constant_shell(makeString("SKF-3516286017")), reader_make_constant_shell(makeString("SKF-8782865500")), reader_make_constant_shell(makeString("SKF-4515155650")), reader_make_constant_shell(makeString("SKF-5391096127")), reader_make_constant_shell(makeString("SKF-8826617065")), reader_make_constant_shell(makeString("SKF-6950497514")), reader_make_constant_shell(makeString("SKF-4751258604")), reader_make_constant_shell(makeString("SKF-3616130689")), reader_make_constant_shell(makeString("SKF-7131788917")), reader_make_constant_shell(makeString("SKF-4848573733")), reader_make_constant_shell(makeString("SKF-2401054776")), reader_make_constant_shell(makeString("SKF-0985467323")) });
+        return list(new SubLObject[]{ reader_make_constant_shell("SKF-16971619"), reader_make_constant_shell("SKF-9662286"), reader_make_constant_shell("SKF-45878693"), reader_make_constant_shell("SKF-27834981"), reader_make_constant_shell("SKF-12369461"), reader_make_constant_shell("SKF-10688698"), reader_make_constant_shell("SKF-45547787"), reader_make_constant_shell("SKF-31789746"), reader_make_constant_shell("SKF-26692934"), reader_make_constant_shell("SKF-48466118"), reader_make_constant_shell("SKF-60531811"), reader_make_constant_shell("SKF-29624762"), reader_make_constant_shell("SKF-22643466"), reader_make_constant_shell("SKF-29472649"), reader_make_constant_shell("SKF-6535610808"), reader_make_constant_shell("SKF-6391880459"), reader_make_constant_shell("SKF-6069753105"), reader_make_constant_shell("SKF-1836062444"), reader_make_constant_shell("SKF-1140288587"), reader_make_constant_shell("SKF-0975510193"), reader_make_constant_shell("SKF-0417114039"), reader_make_constant_shell("SKF-2399775374"), reader_make_constant_shell("SKF-9741300383"), reader_make_constant_shell("SKF-0828551493"), reader_make_constant_shell("SKF-2588418129"), reader_make_constant_shell("SKF-1857929740"), reader_make_constant_shell("SKF-9771221235"), reader_make_constant_shell("SKF-5248881133"), reader_make_constant_shell("SKF-30037247"), reader_make_constant_shell("SKF-60060919"), reader_make_constant_shell("SKF-10786079"), reader_make_constant_shell("SKF-14077376"), reader_make_constant_shell("SKF-55914574"), reader_make_constant_shell("SKF-16648407"), reader_make_constant_shell("SKF-44601733"), reader_make_constant_shell("SKF-7913899905"), reader_make_constant_shell("SKF-4396958760"), reader_make_constant_shell("SKF-8020199718"), reader_make_constant_shell("SKF-20333"), reader_make_constant_shell("SKF-3701677947"), reader_make_constant_shell("SKF-2758282998"), reader_make_constant_shell("SKF-32592026"), reader_make_constant_shell("SKF-15476867"), reader_make_constant_shell("SKF-11623545"), reader_make_constant_shell("SKF-39071040"), reader_make_constant_shell("SKF-22133371"), reader_make_constant_shell("SKF-49114437"), reader_make_constant_shell("SKF-6397777"), reader_make_constant_shell("SKF-27545347"), reader_make_constant_shell("SKF-44682034"), reader_make_constant_shell("SKF-55141454"), reader_make_constant_shell("SKF-29896988"), reader_make_constant_shell("SKF-42443574"), reader_make_constant_shell("SKF-13447977"), reader_make_constant_shell("SKF-30519480"), reader_make_constant_shell("SKF-62227276"), reader_make_constant_shell("SKF-17408839"), reader_make_constant_shell("SKF-58430677"), reader_make_constant_shell("SKF-59662976"), reader_make_constant_shell("SKF-12620975"), reader_make_constant_shell("SKF-9433064"), reader_make_constant_shell("SKF-9205245"), reader_make_constant_shell("SKF-DepictedGroupMember"), reader_make_constant_shell("SKF-19625320"), reader_make_constant_shell("SKF-3784346661"), reader_make_constant_shell("SKF-6544284149"), reader_make_constant_shell("SKF-0614825063"), reader_make_constant_shell("SKF-0016213450"), reader_make_constant_shell("SKF-22649603"), reader_make_constant_shell("SKF-4118636"), reader_make_constant_shell("SKF-19878232"), reader_make_constant_shell("SKF-15013378"), reader_make_constant_shell("SKF-65815517"), reader_make_constant_shell("SKF-56452378"), reader_make_constant_shell("SKF-49139121"), reader_make_constant_shell("SKF-12749049"), reader_make_constant_shell("SKF-2910558946"), reader_make_constant_shell("SKF-2910558946"), reader_make_constant_shell("SKF-8609688279"), reader_make_constant_shell("SKF-3254220233"), reader_make_constant_shell("SKF-4116454483"), reader_make_constant_shell("SKF-9882206036"), reader_make_constant_shell("SKF-7876960574"), reader_make_constant_shell("SKF-7849157406"), reader_make_constant_shell("SKF-0013694801"), reader_make_constant_shell("SKF-3786700124"), reader_make_constant_shell("SKF-1714230847"), reader_make_constant_shell("SKF-7566265665"), reader_make_constant_shell("SKF-8055872557"), reader_make_constant_shell("SKF-6624619390"), reader_make_constant_shell("SKF-4749393956"), reader_make_constant_shell("SKF-9902000475"), reader_make_constant_shell("SKF-2176445673"), reader_make_constant_shell("SKF-9582976901"), reader_make_constant_shell("SKF-62641426"), reader_make_constant_shell("SKF-37581079"), reader_make_constant_shell("SKF-9780389"), reader_make_constant_shell("SKF-51938893"), reader_make_constant_shell("SKF-33012437"), reader_make_constant_shell("SKF-9412760"), reader_make_constant_shell("SKF-22314298"), reader_make_constant_shell("SKF-52903378"), reader_make_constant_shell("SKF-59517423"), reader_make_constant_shell("SKF-24705784"), reader_make_constant_shell("SKF-22566254"), reader_make_constant_shell("SKF-35236481"), reader_make_constant_shell("SKF-26725746"), reader_make_constant_shell("SKF-55356852"), reader_make_constant_shell("SKF-3634339"), reader_make_constant_shell("SKF-65815517"), reader_make_constant_shell("SKF-56452378"), reader_make_constant_shell("SKF-49139121"), reader_make_constant_shell("SKF-12749049"), reader_make_constant_shell("SKF-4408119749"), reader_make_constant_shell("SKF-3789312666"), reader_make_constant_shell("SKF-0283155048"), reader_make_constant_shell("SKF-9294061441"), reader_make_constant_shell("SKF-4876245588"), reader_make_constant_shell("SKF-2809645919"), reader_make_constant_shell("SKF-1124554131"), reader_make_constant_shell("SKF-0220610914"), reader_make_constant_shell("SKF-4790221775"), reader_make_constant_shell("SKF-1168015263"), reader_make_constant_shell("SKF-4318796173"), reader_make_constant_shell("SKF-1828131226"), reader_make_constant_shell("SKF-2199671088"), reader_make_constant_shell("SKF-9895165404"), reader_make_constant_shell("SKF-6604522774"), reader_make_constant_shell("SKF-6086634185"), reader_make_constant_shell("SKF-0428133650"), reader_make_constant_shell("SKF-7899934995"), reader_make_constant_shell("SKF-0860923384"), reader_make_constant_shell("SKF-4146570201"), reader_make_constant_shell("SKF-0406242321"), reader_make_constant_shell("SKF-4468030352"), reader_make_constant_shell("SKF-8519691249"), reader_make_constant_shell("SKF-6471415053"), reader_make_constant_shell("SKF-6816884555"), reader_make_constant_shell("SKF-2207590761"), reader_make_constant_shell("SKF-4785728462"), reader_make_constant_shell("SKF-6959780810"), reader_make_constant_shell("SKF-2698165023"), reader_make_constant_shell("SKF-1592332182"), reader_make_constant_shell("SKF-9127604959"), reader_make_constant_shell("SKF-3352641286"), reader_make_constant_shell("SKF-9726105841"), reader_make_constant_shell("SKF-0624682876"), reader_make_constant_shell("SKF-9673514545"), reader_make_constant_shell("SKF-1902545429"), reader_make_constant_shell("SKF-6876074534"), reader_make_constant_shell("SKF-8288491486"), reader_make_constant_shell("SKF-4637358284"), reader_make_constant_shell("SKF-0635199939"), reader_make_constant_shell("SKF-4292973565"), reader_make_constant_shell("SKF-7798353664"), reader_make_constant_shell("SKF-34523039"), reader_make_constant_shell("SKF-33538847"), reader_make_constant_shell("SKF-58036047"), reader_make_constant_shell("SKF-9708075"), reader_make_constant_shell("SKF-13094314"), reader_make_constant_shell("SKF-27004431"), reader_make_constant_shell("SKF-47290403"), reader_make_constant_shell("SKF-49713991"), reader_make_constant_shell("SKF-40178904"), reader_make_constant_shell("SKF-62659908"), reader_make_constant_shell("SKF-61484227"), reader_make_constant_shell("SKF-35458681"), reader_make_constant_shell("SKF-17599345"), reader_make_constant_shell("SKF-53668837"), reader_make_constant_shell("SKF-24102297"), reader_make_constant_shell("SKF-32709431"), reader_make_constant_shell("SKF-51752162"), reader_make_constant_shell("SKF-35359227"), reader_make_constant_shell("SKF-20847759"), reader_make_constant_shell("SKF-51781280"), reader_make_constant_shell("SKF-51473172"), reader_make_constant_shell("SKF-36777684"), reader_make_constant_shell("SKF-27183984"), reader_make_constant_shell("SKF-24538299"), reader_make_constant_shell("SKF-51270566"), reader_make_constant_shell("SKF-6498804"), reader_make_constant_shell("SKF-52375281"), reader_make_constant_shell("SKF-59156909"), reader_make_constant_shell("SKF-59507392"), reader_make_constant_shell("SKF-21555986"), reader_make_constant_shell("SKF-0925186357"), reader_make_constant_shell("SKF-6223276020"), reader_make_constant_shell("SKF-5400448981"), reader_make_constant_shell("SKF-0033649819"), reader_make_constant_shell("SKF-8779626658"), reader_make_constant_shell("SKF-2650598318"), reader_make_constant_shell("SKF-1317366451"), reader_make_constant_shell("SKF-5713244721"), reader_make_constant_shell("SKF-5494021688"), reader_make_constant_shell("SKF-50021281"), reader_make_constant_shell("SKF-52700384"), reader_make_constant_shell("SKF-27017330"), reader_make_constant_shell("SKF-6926447"), reader_make_constant_shell("SKF-57742011"), reader_make_constant_shell("SKF-32797409"), reader_make_constant_shell("SKF-36775099"), reader_make_constant_shell("SKF-8803460"), reader_make_constant_shell("SKF-11685259"), reader_make_constant_shell("SKF-49596986"), reader_make_constant_shell("SKF-1515868"), reader_make_constant_shell("SKF-12425256"), reader_make_constant_shell("SKF-26526786"), reader_make_constant_shell("SKF-757265"), reader_make_constant_shell("SKF-66361621"), reader_make_constant_shell("SKF-50135687"), reader_make_constant_shell("SKF-28256974"), reader_make_constant_shell("SKF-52059331"), reader_make_constant_shell("SKF-60879947"), reader_make_constant_shell("SKF-10095100"), reader_make_constant_shell("SKF-20576203"), reader_make_constant_shell("SKF-49828332"), reader_make_constant_shell("SKF-44916076"), reader_make_constant_shell("SKF-63714570"), reader_make_constant_shell("SKF-3886762"), reader_make_constant_shell("SKF-14991605"), reader_make_constant_shell("SKF-35022890"), reader_make_constant_shell("SKF-9692584"), reader_make_constant_shell("SKF-56789029"), reader_make_constant_shell("SKF-63331999"), reader_make_constant_shell("SKF-60839916"), reader_make_constant_shell("SKF-11805601"), reader_make_constant_shell("MarriedCoupleFn"), reader_make_constant_shell("SKF-54717125"), reader_make_constant_shell("SKF-47103024"), reader_make_constant_shell("SKF-32504795"), reader_make_constant_shell("SKF-50991035"), reader_make_constant_shell("SKF-54893967"), reader_make_constant_shell("SKF-4588740"), reader_make_constant_shell("SKF-34044423"), reader_make_constant_shell("SKF-23158350"), reader_make_constant_shell("SKF-26216492"), reader_make_constant_shell("SKF-23792367"), reader_make_constant_shell("SKF-26655735"), reader_make_constant_shell("SKF-36384184"), reader_make_constant_shell("SKF-28223401"), reader_make_constant_shell("SKF-30705866"), reader_make_constant_shell("SKF-31089449"), reader_make_constant_shell("SKF-43795517"), reader_make_constant_shell("SKF-54692934"), reader_make_constant_shell("SKF-62874373"), reader_make_constant_shell("SKF-13198899"), reader_make_constant_shell("SKF-6598020"), reader_make_constant_shell("SKF-66712623"), reader_make_constant_shell("SKF-61590093"), reader_make_constant_shell("SKF-4298210"), reader_make_constant_shell("SKF-13358052"), reader_make_constant_shell("SKF-1077450"), reader_make_constant_shell("SKF-27216176"), reader_make_constant_shell("SKF-28083191"), reader_make_constant_shell("SKF-539243"), reader_make_constant_shell("SKF-14104209"), reader_make_constant_shell("SKF-6066610"), reader_make_constant_shell("SKF-14779626"), reader_make_constant_shell("SKF-1007216"), reader_make_constant_shell("SKF-49463821"), reader_make_constant_shell("SKF-764714"), reader_make_constant_shell("SKF-59277817"), reader_make_constant_shell("SKF-24473185"), reader_make_constant_shell("SKF-22799176"), reader_make_constant_shell("SKF-13378825"), reader_make_constant_shell("SKF-8692086"), reader_make_constant_shell("SKF-59150515"), reader_make_constant_shell("SKF-6649426"), reader_make_constant_shell("SKF-18423567"), reader_make_constant_shell("SKF-61014428"), reader_make_constant_shell("SKF-612301"), reader_make_constant_shell("SKF-390407"), reader_make_constant_shell("SKF-469762"), reader_make_constant_shell("SKF-57350382"), reader_make_constant_shell("SKF-550621"), reader_make_constant_shell("SKF-41449368"), reader_make_constant_shell("SKF-20918103"), reader_make_constant_shell("SKF-447007"), reader_make_constant_shell("SKF-1383963"), reader_make_constant_shell("SKF-348190"), reader_make_constant_shell("SKF-693803"), reader_make_constant_shell("SKF-133452"), reader_make_constant_shell("SKF-2813385"), reader_make_constant_shell("SKF-31097107"), reader_make_constant_shell("SKF-57888"), reader_make_constant_shell("SKF-10895131"), reader_make_constant_shell("SKF-13225721"), reader_make_constant_shell("SKF-43450038"), reader_make_constant_shell("SKF-21119958"), reader_make_constant_shell("SKF-47744038"), reader_make_constant_shell("SKF-466900"), reader_make_constant_shell("SKF-46555292"), reader_make_constant_shell("SKF-23253528"), reader_make_constant_shell("SKF-924570"), reader_make_constant_shell("SKF-BandMemPlaying"), reader_make_constant_shell("SKF-48376054"), reader_make_constant_shell("SKF-121716"), reader_make_constant_shell("SKF-7364934"), reader_make_constant_shell("SKF-14760742"), reader_make_constant_shell("SKF-17172575"), reader_make_constant_shell("SKF-23584353"), reader_make_constant_shell("SKF-53200158"), reader_make_constant_shell("SKF-48653451"), reader_make_constant_shell("SKF-55897365"), reader_make_constant_shell("SKF-52891476"), reader_make_constant_shell("SKF-33105457"), reader_make_constant_shell("SKF-10518089"), reader_make_constant_shell("SKF-33158362"), reader_make_constant_shell("SKF-66304485"), reader_make_constant_shell("SKF-810295"), reader_make_constant_shell("SKF-968219"), reader_make_constant_shell("SKF-9855449"), reader_make_constant_shell("SKF-51029398"), reader_make_constant_shell("SKF-9874778"), reader_make_constant_shell("SKF-14008069"), reader_make_constant_shell("SKF-197207"), reader_make_constant_shell("SKF-9176578"), reader_make_constant_shell("SKF-62825"), reader_make_constant_shell("SKF-476059"), reader_make_constant_shell("SKF-366078"), reader_make_constant_shell("SKF-17345463"), reader_make_constant_shell("SKF-51339287"), reader_make_constant_shell("SKF-1046930"), reader_make_constant_shell("SKF-828757"), reader_make_constant_shell("SKF-51633710"), reader_make_constant_shell("SKF-19769806"), reader_make_constant_shell("SKF-46906520"), reader_make_constant_shell("SKF-20309046"), reader_make_constant_shell("SKF-7477821"), reader_make_constant_shell("SKF-21294579"), reader_make_constant_shell("SKF-17746"), reader_make_constant_shell("SKF-42407080"), reader_make_constant_shell("SKF-32539269"), reader_make_constant_shell("SKF-17651656"), reader_make_constant_shell("SKF-49636199"), reader_make_constant_shell("SKF-63665039"), reader_make_constant_shell("SKF-923916"), reader_make_constant_shell("SKF-41511095"), reader_make_constant_shell("SKF-402998"), reader_make_constant_shell("SKF-1827166"), reader_make_constant_shell("SKF-25558723"), reader_make_constant_shell("SKF-92235"), reader_make_constant_shell("SKF-24405989"), reader_make_constant_shell("SKF-37741853"), reader_make_constant_shell("SKF-681210"), reader_make_constant_shell("SKF-16612795"), reader_make_constant_shell("SKF-55392675"), reader_make_constant_shell("SKF-41395088"), reader_make_constant_shell("SKF-427687"), reader_make_constant_shell("SKF-46187940"), reader_make_constant_shell("SKF-18860364"), reader_make_constant_shell("SKF-846216"), reader_make_constant_shell("SKF-5393361"), reader_make_constant_shell("SKF-12316220"), reader_make_constant_shell("SKF-54217404"), reader_make_constant_shell("SKF-5169399"), reader_make_constant_shell("SKF-920133"), reader_make_constant_shell("SKF-3247485"), reader_make_constant_shell("SKF-2269494"), reader_make_constant_shell("SKF-13038949"), reader_make_constant_shell("SKF-28759634"), reader_make_constant_shell("SKF-17122972"), reader_make_constant_shell("SKF-953550"), reader_make_constant_shell("SKF-906137"), reader_make_constant_shell("SKF-14962533"), reader_make_constant_shell("SKF-8254998"), reader_make_constant_shell("SKF-46599863"), reader_make_constant_shell("SKF-36778441"), reader_make_constant_shell("SKF-45777401"), reader_make_constant_shell("SKF-45356858"), reader_make_constant_shell("SKF-28542904"), reader_make_constant_shell("SKF-33462840"), reader_make_constant_shell("SKF-18834377"), reader_make_constant_shell("SKF-23165858"), reader_make_constant_shell("SKF-171447"), reader_make_constant_shell("SKF-38743072"), reader_make_constant_shell("SKF-62752838"), reader_make_constant_shell("SKF-46799967"), reader_make_constant_shell("SKF-38741805"), reader_make_constant_shell("SKF-22034341"), reader_make_constant_shell("SKF-49949893"), reader_make_constant_shell("SKF-750835"), reader_make_constant_shell("SKF-27330810"), reader_make_constant_shell("SKF-61593935"), reader_make_constant_shell("SKF-29534329"), reader_make_constant_shell("SKF-8780298"), reader_make_constant_shell("SKF-10230735"), reader_make_constant_shell("SKF-28051850"), reader_make_constant_shell("SKF-15346572"), reader_make_constant_shell("SKF-38351646"), reader_make_constant_shell("SKF-54477051"), reader_make_constant_shell("SKF-58577410"), reader_make_constant_shell("SKF-41179398"), reader_make_constant_shell("SKF-9098087"), reader_make_constant_shell("SKF-464896"), reader_make_constant_shell("SKF-13765056"), reader_make_constant_shell("SKF-54796118"), reader_make_constant_shell("SKF-892012"), reader_make_constant_shell("SKF-5733810632"), reader_make_constant_shell("SKF-9732365118"), reader_make_constant_shell("SKF-8062776921"), reader_make_constant_shell("SKF-9356282252"), reader_make_constant_shell("SKF-7770326773"), reader_make_constant_shell("SKF-9303451156"), reader_make_constant_shell("SKF-7682359700"), reader_make_constant_shell("SKF-0472592080"), reader_make_constant_shell("SKF-5868767078"), reader_make_constant_shell("SKF-6969827182"), reader_make_constant_shell("SKF-8235654414"), reader_make_constant_shell("SKF-9268693067"), reader_make_constant_shell("SKF-4188164665"), reader_make_constant_shell("SKF-3268848892"), reader_make_constant_shell("SKF-3954038304"), reader_make_constant_shell("SKF-8411301306"), reader_make_constant_shell("SKF-6870027660"), reader_make_constant_shell("SKF-2200319382"), reader_make_constant_shell("SKF-8663443543"), reader_make_constant_shell("SKF-6270260084"), reader_make_constant_shell("SKF-7428624994"), reader_make_constant_shell("SKF-6367907452"), reader_make_constant_shell("SKF-7752915649"), reader_make_constant_shell("SKF-4786775108"), reader_make_constant_shell("SKF-5640043419"), reader_make_constant_shell("SKF-6071218505"), reader_make_constant_shell("SKF-3183844767"), reader_make_constant_shell("SKF-7356970316"), reader_make_constant_shell("SKF-4272845489"), reader_make_constant_shell("SKF-5224425512"), reader_make_constant_shell("SKF-3795912959"), reader_make_constant_shell("SKF-7714022869"), reader_make_constant_shell("SKF-8565886278"), reader_make_constant_shell("SKF-0519624184"), reader_make_constant_shell("SKF-4286299680"), reader_make_constant_shell("SKF-3516286017"), reader_make_constant_shell("SKF-8782865500"), reader_make_constant_shell("SKF-4515155650"), reader_make_constant_shell("SKF-5391096127"), reader_make_constant_shell("SKF-8826617065"), reader_make_constant_shell("SKF-6950497514"), reader_make_constant_shell("SKF-4751258604"), reader_make_constant_shell("SKF-3616130689"), reader_make_constant_shell("SKF-7131788917"), reader_make_constant_shell("SKF-4848573733"), reader_make_constant_shell("SKF-2401054776"), reader_make_constant_shell("SKF-0985467323") });
     }
 
     @Override
@@ -5083,188 +10020,6 @@ public final class skolems extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

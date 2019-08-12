@@ -135,8 +135,7 @@ public  final class arete extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_arete_file() {
-    // CVS_ID("Id: arete.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym8$_KBQ_CONTROL_QUERY_SET_RUN_);
+        subl_macro_promotions.declare_defglobal($sym8$_KBQ_CONTROL_QUERY_SET_RUN_);
     access_macros.define_obsolete_register($sym69$ARETE_GENERATE_PROPERTY_CORRELATION_PLOT, $list70);
     access_macros.define_obsolete_register($sym71$ARETE_GENERATE_SORTED_PROPERTY_COMPARISON, $list72);
     access_macros.define_obsolete_register($sym74$ARETE_GENERATE_SORTED_PROPERTIES_COMPARISON, $list75);

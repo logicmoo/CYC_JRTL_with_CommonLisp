@@ -1,8 +1,33 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.xml_parsing_utilities;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -20,72 +45,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
+import com.cyc.tool.subl.util.SubLTranslatedFile; 
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.cycjava.cycl.xml_parsing_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_ampersand;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_equal;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbracket;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_newline;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_null;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quote;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbracket;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_return;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class xml_parsing_utilities extends SubLTranslatedFile {
+public class xml_parsing_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new xml_parsing_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.xml_parsing_utilities";
+    public static final String myName = "com.cyc.cycjava_2.cycl.xml_parsing_utilities";
 
-    public static final String myFingerPrint = "2c2af299dd294bce3a358005e330a7011ee5c699671007ee10f3003243fc71fc";
 
     // defparameter
     public static final SubLSymbol $require_valid_xmlP$ = makeSymbol("*REQUIRE-VALID-XML?*");
@@ -404,96 +370,96 @@ public final class xml_parsing_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject xml_token_iterator_state_p(final SubLObject v_object) {
-        return v_object.getClass() == xml_parsing_utilities.$xml_token_iterator_state_native.class ? T : NIL;
+        return v_object.getClass() == $xml_token_iterator_state_native.class ? T : NIL;
     }
 
     public static SubLObject xml_it_state_in_stream(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject xml_it_state_scratch_stream(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject xml_it_state_token_output_stream(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject xml_it_state_entity_map(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject xml_it_state_namespace_stack(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject xml_it_state_validateP(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField7();
     }
 
     public static SubLObject xml_it_state_resolve_entity_referencesP(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField8();
     }
 
     public static SubLObject xml_it_state_resolve_namespacesP(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField9();
     }
 
     public static SubLObject xml_it_state_on_deck_queue(final SubLObject v_object) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.getField10();
     }
 
     public static SubLObject _csetf_xml_it_state_in_stream(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_xml_it_state_scratch_stream(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_xml_it_state_token_output_stream(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_xml_it_state_entity_map(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_xml_it_state_namespace_stack(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_xml_it_state_validateP(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField7(value);
     }
 
     public static SubLObject _csetf_xml_it_state_resolve_entity_referencesP(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField8(value);
     }
 
     public static SubLObject _csetf_xml_it_state_resolve_namespacesP(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField9(value);
     }
 
     public static SubLObject _csetf_xml_it_state_on_deck_queue(final SubLObject v_object, final SubLObject value) {
-        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + "CommonSymbols.NIL != xml_parsing_utilities.xml_token_iterator_state_p(v_object) " + v_object;
+        assert NIL != xml_token_iterator_state_p(v_object) : "xml_parsing_utilities.xml_token_iterator_state_p error :" + v_object;
         return v_object.setField10(value);
     }
 
@@ -501,7 +467,7 @@ public final class xml_parsing_utilities extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new xml_parsing_utilities.$xml_token_iterator_state_native();
+        final SubLObject v_new = new $xml_token_iterator_state_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1883,125 +1849,125 @@ public final class xml_parsing_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_xml_parsing_utilities_file() {
-        declareFunction(me, "xml_tokenize", "XML-TOKENIZE", 1, 3, false);
-        declareFunction(me, "new_xml_token_iterator", "NEW-XML-TOKEN-ITERATOR", 1, 3, false);
-        declareFunction(me, "xml_token_iterator_state_print_function_trampoline", "XML-TOKEN-ITERATOR-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "xml_token_iterator_state_p", "XML-TOKEN-ITERATOR-STATE-P", 1, 0, false);
+        declareFunction("xml_tokenize", "XML-TOKENIZE", 1, 3, false);
+        declareFunction("new_xml_token_iterator", "NEW-XML-TOKEN-ITERATOR", 1, 3, false);
+        declareFunction("xml_token_iterator_state_print_function_trampoline", "XML-TOKEN-ITERATOR-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("xml_token_iterator_state_p", "XML-TOKEN-ITERATOR-STATE-P", 1, 0, false);
         new xml_parsing_utilities.$xml_token_iterator_state_p$UnaryFunction();
-        declareFunction(me, "xml_it_state_in_stream", "XML-IT-STATE-IN-STREAM", 1, 0, false);
-        declareFunction(me, "xml_it_state_scratch_stream", "XML-IT-STATE-SCRATCH-STREAM", 1, 0, false);
-        declareFunction(me, "xml_it_state_token_output_stream", "XML-IT-STATE-TOKEN-OUTPUT-STREAM", 1, 0, false);
-        declareFunction(me, "xml_it_state_entity_map", "XML-IT-STATE-ENTITY-MAP", 1, 0, false);
-        declareFunction(me, "xml_it_state_namespace_stack", "XML-IT-STATE-NAMESPACE-STACK", 1, 0, false);
-        declareFunction(me, "xml_it_state_validateP", "XML-IT-STATE-VALIDATE?", 1, 0, false);
-        declareFunction(me, "xml_it_state_resolve_entity_referencesP", "XML-IT-STATE-RESOLVE-ENTITY-REFERENCES?", 1, 0, false);
-        declareFunction(me, "xml_it_state_resolve_namespacesP", "XML-IT-STATE-RESOLVE-NAMESPACES?", 1, 0, false);
-        declareFunction(me, "xml_it_state_on_deck_queue", "XML-IT-STATE-ON-DECK-QUEUE", 1, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_in_stream", "_CSETF-XML-IT-STATE-IN-STREAM", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_scratch_stream", "_CSETF-XML-IT-STATE-SCRATCH-STREAM", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_token_output_stream", "_CSETF-XML-IT-STATE-TOKEN-OUTPUT-STREAM", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_entity_map", "_CSETF-XML-IT-STATE-ENTITY-MAP", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_namespace_stack", "_CSETF-XML-IT-STATE-NAMESPACE-STACK", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_validateP", "_CSETF-XML-IT-STATE-VALIDATE?", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_resolve_entity_referencesP", "_CSETF-XML-IT-STATE-RESOLVE-ENTITY-REFERENCES?", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_resolve_namespacesP", "_CSETF-XML-IT-STATE-RESOLVE-NAMESPACES?", 2, 0, false);
-        declareFunction(me, "_csetf_xml_it_state_on_deck_queue", "_CSETF-XML-IT-STATE-ON-DECK-QUEUE", 2, 0, false);
-        declareFunction(me, "make_xml_token_iterator_state", "MAKE-XML-TOKEN-ITERATOR-STATE", 0, 1, false);
-        declareFunction(me, "visit_defstruct_xml_token_iterator_state", "VISIT-DEFSTRUCT-XML-TOKEN-ITERATOR-STATE", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_xml_token_iterator_state_method", "VISIT-DEFSTRUCT-OBJECT-XML-TOKEN-ITERATOR-STATE-METHOD", 2, 0, false);
-        declareFunction(me, "print_xml_token_iterator_state", "PRINT-XML-TOKEN-ITERATOR-STATE", 3, 0, false);
-        declareFunction(me, "new_xml_token_iterator_state", "NEW-XML-TOKEN-ITERATOR-STATE", 9, 0, false);
-        declareFunction(me, "xml_token_iterator_state_in_stream", "XML-TOKEN-ITERATOR-STATE-IN-STREAM", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_scratch_stream", "XML-TOKEN-ITERATOR-STATE-SCRATCH-STREAM", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_token_output_stream", "XML-TOKEN-ITERATOR-STATE-TOKEN-OUTPUT-STREAM", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_entity_map", "XML-TOKEN-ITERATOR-STATE-ENTITY-MAP", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_namespace_stack", "XML-TOKEN-ITERATOR-STATE-NAMESPACE-STACK", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_validateP", "XML-TOKEN-ITERATOR-STATE-VALIDATE?", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_resolve_entity_referencesP", "XML-TOKEN-ITERATOR-STATE-RESOLVE-ENTITY-REFERENCES?", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_resolve_namespacesP", "XML-TOKEN-ITERATOR-STATE-RESOLVE-NAMESPACES?", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_on_deck_queue", "XML-TOKEN-ITERATOR-STATE-ON-DECK-QUEUE", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_state_peek", "XML-TOKEN-ITERATOR-STATE-PEEK", 1, 0, false);
-        declareFunction(me, "advance_xml_token_iterator_to_next_element", "ADVANCE-XML-TOKEN-ITERATOR-TO-NEXT-ELEMENT", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_progress", "XML-TOKEN-ITERATOR-PROGRESS", 1, 0, false);
-        declareFunction(me, "make_iterator_xml_token_state", "MAKE-ITERATOR-XML-TOKEN-STATE", 4, 0, false);
-        declareFunction(me, "iterate_xml_token_done", "ITERATE-XML-TOKEN-DONE", 1, 0, false);
-        declareFunction(me, "iterate_xml_token_next", "ITERATE-XML-TOKEN-NEXT", 1, 0, false);
-        declareFunction(me, "ensure_xml_token_on_deck_queue_populated", "ENSURE-XML-TOKEN-ON-DECK-QUEUE-POPULATED", 1, 0, false);
-        declareFunction(me, "xml_iterator_state_handle_namespaces_and_entities", "XML-ITERATOR-STATE-HANDLE-NAMESPACES-AND-ENTITIES", 2, 0, false);
-        declareFunction(me, "handle_xml_namespaces", "HANDLE-XML-NAMESPACES", 3, 0, false);
-        declareFunction(me, "xml_namespace_mapping_p", "XML-NAMESPACE-MAPPING-P", 1, 0, false);
-        declareFunction(me, "validate_xml_namespaces", "VALIDATE-XML-NAMESPACES", 2, 0, false);
-        declareFunction(me, "maybe_validate_xml_namespace", "MAYBE-VALIDATE-XML-NAMESPACE", 3, 0, false);
-        declareFunction(me, "validate_xml_namespace", "VALIDATE-XML-NAMESPACE", 3, 0, false);
-        declareFunction(me, "xml_prefixed_name_p", "XML-PREFIXED-NAME-P", 1, 0, false);
-        declareFunction(me, "xml_prefixed_name_namespace", "XML-PREFIXED-NAME-NAMESPACE", 1, 0, false);
-        declareFunction(me, "xml_prefixed_name_local_name", "XML-PREFIXED-NAME-LOCAL-NAME", 1, 0, false);
-        declareFunction(me, "xml_string_tokenize", "XML-STRING-TOKENIZE", 1, 3, false);
-        declareFunction(me, "xml_tokenized_http_request", "XML-TOKENIZED-HTTP-REQUEST", 2, 9, false);
-        declareFunction(me, "xml_tokenized_http_request_internal", "XML-TOKENIZED-HTTP-REQUEST-INTERNAL", 9, 0, false);
-        declareMacro(me, "html_tokenize", "HTML-TOKENIZE");
-        declareFunction(me, "xml_token_matches_exactly", "XML-TOKEN-MATCHES-EXACTLY", 2, 0, false);
-        declareFunction(me, "xml_token_matches", "XML-TOKEN-MATCHES", 2, 0, false);
-        declareFunction(me, "xml_token_starts_with", "XML-TOKEN-STARTS-WITH", 2, 0, false);
-        declareFunction(me, "xml_token_mentions", "XML-TOKEN-MENTIONS", 2, 0, false);
+        declareFunction("xml_it_state_in_stream", "XML-IT-STATE-IN-STREAM", 1, 0, false);
+        declareFunction("xml_it_state_scratch_stream", "XML-IT-STATE-SCRATCH-STREAM", 1, 0, false);
+        declareFunction("xml_it_state_token_output_stream", "XML-IT-STATE-TOKEN-OUTPUT-STREAM", 1, 0, false);
+        declareFunction("xml_it_state_entity_map", "XML-IT-STATE-ENTITY-MAP", 1, 0, false);
+        declareFunction("xml_it_state_namespace_stack", "XML-IT-STATE-NAMESPACE-STACK", 1, 0, false);
+        declareFunction("xml_it_state_validateP", "XML-IT-STATE-VALIDATE?", 1, 0, false);
+        declareFunction("xml_it_state_resolve_entity_referencesP", "XML-IT-STATE-RESOLVE-ENTITY-REFERENCES?", 1, 0, false);
+        declareFunction("xml_it_state_resolve_namespacesP", "XML-IT-STATE-RESOLVE-NAMESPACES?", 1, 0, false);
+        declareFunction("xml_it_state_on_deck_queue", "XML-IT-STATE-ON-DECK-QUEUE", 1, 0, false);
+        declareFunction("_csetf_xml_it_state_in_stream", "_CSETF-XML-IT-STATE-IN-STREAM", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_scratch_stream", "_CSETF-XML-IT-STATE-SCRATCH-STREAM", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_token_output_stream", "_CSETF-XML-IT-STATE-TOKEN-OUTPUT-STREAM", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_entity_map", "_CSETF-XML-IT-STATE-ENTITY-MAP", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_namespace_stack", "_CSETF-XML-IT-STATE-NAMESPACE-STACK", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_validateP", "_CSETF-XML-IT-STATE-VALIDATE?", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_resolve_entity_referencesP", "_CSETF-XML-IT-STATE-RESOLVE-ENTITY-REFERENCES?", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_resolve_namespacesP", "_CSETF-XML-IT-STATE-RESOLVE-NAMESPACES?", 2, 0, false);
+        declareFunction("_csetf_xml_it_state_on_deck_queue", "_CSETF-XML-IT-STATE-ON-DECK-QUEUE", 2, 0, false);
+        declareFunction("make_xml_token_iterator_state", "MAKE-XML-TOKEN-ITERATOR-STATE", 0, 1, false);
+        declareFunction("visit_defstruct_xml_token_iterator_state", "VISIT-DEFSTRUCT-XML-TOKEN-ITERATOR-STATE", 2, 0, false);
+        declareFunction("visit_defstruct_object_xml_token_iterator_state_method", "VISIT-DEFSTRUCT-OBJECT-XML-TOKEN-ITERATOR-STATE-METHOD", 2, 0, false);
+        declareFunction("print_xml_token_iterator_state", "PRINT-XML-TOKEN-ITERATOR-STATE", 3, 0, false);
+        declareFunction("new_xml_token_iterator_state", "NEW-XML-TOKEN-ITERATOR-STATE", 9, 0, false);
+        declareFunction("xml_token_iterator_state_in_stream", "XML-TOKEN-ITERATOR-STATE-IN-STREAM", 1, 0, false);
+        declareFunction("xml_token_iterator_state_scratch_stream", "XML-TOKEN-ITERATOR-STATE-SCRATCH-STREAM", 1, 0, false);
+        declareFunction("xml_token_iterator_state_token_output_stream", "XML-TOKEN-ITERATOR-STATE-TOKEN-OUTPUT-STREAM", 1, 0, false);
+        declareFunction("xml_token_iterator_state_entity_map", "XML-TOKEN-ITERATOR-STATE-ENTITY-MAP", 1, 0, false);
+        declareFunction("xml_token_iterator_state_namespace_stack", "XML-TOKEN-ITERATOR-STATE-NAMESPACE-STACK", 1, 0, false);
+        declareFunction("xml_token_iterator_state_validateP", "XML-TOKEN-ITERATOR-STATE-VALIDATE?", 1, 0, false);
+        declareFunction("xml_token_iterator_state_resolve_entity_referencesP", "XML-TOKEN-ITERATOR-STATE-RESOLVE-ENTITY-REFERENCES?", 1, 0, false);
+        declareFunction("xml_token_iterator_state_resolve_namespacesP", "XML-TOKEN-ITERATOR-STATE-RESOLVE-NAMESPACES?", 1, 0, false);
+        declareFunction("xml_token_iterator_state_on_deck_queue", "XML-TOKEN-ITERATOR-STATE-ON-DECK-QUEUE", 1, 0, false);
+        declareFunction("xml_token_iterator_state_peek", "XML-TOKEN-ITERATOR-STATE-PEEK", 1, 0, false);
+        declareFunction("advance_xml_token_iterator_to_next_element", "ADVANCE-XML-TOKEN-ITERATOR-TO-NEXT-ELEMENT", 1, 0, false);
+        declareFunction("xml_token_iterator_progress", "XML-TOKEN-ITERATOR-PROGRESS", 1, 0, false);
+        declareFunction("make_iterator_xml_token_state", "MAKE-ITERATOR-XML-TOKEN-STATE", 4, 0, false);
+        declareFunction("iterate_xml_token_done", "ITERATE-XML-TOKEN-DONE", 1, 0, false);
+        declareFunction("iterate_xml_token_next", "ITERATE-XML-TOKEN-NEXT", 1, 0, false);
+        declareFunction("ensure_xml_token_on_deck_queue_populated", "ENSURE-XML-TOKEN-ON-DECK-QUEUE-POPULATED", 1, 0, false);
+        declareFunction("xml_iterator_state_handle_namespaces_and_entities", "XML-ITERATOR-STATE-HANDLE-NAMESPACES-AND-ENTITIES", 2, 0, false);
+        declareFunction("handle_xml_namespaces", "HANDLE-XML-NAMESPACES", 3, 0, false);
+        declareFunction("xml_namespace_mapping_p", "XML-NAMESPACE-MAPPING-P", 1, 0, false);
+        declareFunction("validate_xml_namespaces", "VALIDATE-XML-NAMESPACES", 2, 0, false);
+        declareFunction("maybe_validate_xml_namespace", "MAYBE-VALIDATE-XML-NAMESPACE", 3, 0, false);
+        declareFunction("validate_xml_namespace", "VALIDATE-XML-NAMESPACE", 3, 0, false);
+        declareFunction("xml_prefixed_name_p", "XML-PREFIXED-NAME-P", 1, 0, false);
+        declareFunction("xml_prefixed_name_namespace", "XML-PREFIXED-NAME-NAMESPACE", 1, 0, false);
+        declareFunction("xml_prefixed_name_local_name", "XML-PREFIXED-NAME-LOCAL-NAME", 1, 0, false);
+        declareFunction("xml_string_tokenize", "XML-STRING-TOKENIZE", 1, 3, false);
+        declareFunction("xml_tokenized_http_request", "XML-TOKENIZED-HTTP-REQUEST", 2, 9, false);
+        declareFunction("xml_tokenized_http_request_internal", "XML-TOKENIZED-HTTP-REQUEST-INTERNAL", 9, 0, false);
+        declareMacro("html_tokenize", "HTML-TOKENIZE");
+        declareFunction("xml_token_matches_exactly", "XML-TOKEN-MATCHES-EXACTLY", 2, 0, false);
+        declareFunction("xml_token_matches", "XML-TOKEN-MATCHES", 2, 0, false);
+        declareFunction("xml_token_starts_with", "XML-TOKEN-STARTS-WITH", 2, 0, false);
+        declareFunction("xml_token_mentions", "XML-TOKEN-MENTIONS", 2, 0, false);
         new xml_parsing_utilities.$xml_token_mentions$BinaryFunction();
-        declareFunction(me, "next_xml_token_position", "NEXT-XML-TOKEN-POSITION", 2, 1, false);
-        declareFunction(me, "next_xml_token_position_if", "NEXT-XML-TOKEN-POSITION-IF", 2, 0, false);
-        declareFunction(me, "next_xml_token_position_if_not", "NEXT-XML-TOKEN-POSITION-IF-NOT", 2, 0, false);
-        declareFunction(me, "advance_xml_tokens", "ADVANCE-XML-TOKENS", 1, 1, false);
-        declareFunction(me, "advance_xml_tokens_to", "ADVANCE-XML-TOKENS-TO", 2, 1, false);
-        declareFunction(me, "xml_extract_token_sequence", "XML-EXTRACT-TOKEN-SEQUENCE", 2, 0, false);
-        declareFunction(me, "accumulate_xml_token", "ACCUMULATE-XML-TOKEN", 1, 0, false);
-        declareFunction(me, "accumulate_xml_tokens", "ACCUMULATE-XML-TOKENS", 2, 0, false);
-        declareFunction(me, "accumulated_xml_tokens", "ACCUMULATED-XML-TOKENS", 0, 0, false);
-        declareFunction(me, "xml_tokens_for_next_element", "XML-TOKENS-FOR-NEXT-ELEMENT", 1, 0, false);
-        declareFunction(me, "advance_xml_tokens_to_end_of_element", "ADVANCE-XML-TOKENS-TO-END-OF-ELEMENT", 1, 0, false);
-        declareFunction(me, "advance_xml_tokens_to_end_of_element_int", "ADVANCE-XML-TOKENS-TO-END-OF-ELEMENT-INT", 2, 0, false);
-        declareFunction(me, "xml_declaration_p", "XML-DECLARATION-P", 1, 0, false);
-        declareFunction(me, "xml_comment_p", "XML-COMMENT-P", 1, 0, false);
-        declareFunction(me, "xml_closing_tag_p", "XML-CLOSING-TAG-P", 1, 0, false);
-        declareFunction(me, "xml_opening_tag_p", "XML-OPENING-TAG-P", 1, 0, false);
-        declareFunction(me, "advance_xml_tokens_without_crossing", "ADVANCE-XML-TOKENS-WITHOUT-CROSSING", 3, 1, false);
-        declareFunction(me, "advance_xml_tokens_without_crossing_or_quit", "ADVANCE-XML-TOKENS-WITHOUT-CROSSING-OR-QUIT", 3, 1, false);
-        declareFunction(me, "xml_read", "XML-READ", 1, 2, false);
-        declareFunction(me, "xml_doctype_tag_p", "XML-DOCTYPE-TAG-P", 1, 0, false);
-        declareFunction(me, "html_doctype_tag_p", "HTML-DOCTYPE-TAG-P", 1, 0, false);
-        declareFunction(me, "xml_processing_instruction_p", "XML-PROCESSING-INSTRUCTION-P", 1, 0, false);
-        declareFunction(me, "entity_map_from_doctype_tag", "ENTITY-MAP-FROM-DOCTYPE-TAG", 1, 0, false);
-        declareFunction(me, "resolve_entity_references", "RESOLVE-ENTITY-REFERENCES", 2, 0, false);
-        declareFunction(me, "resolve_predefined_xml_entities", "RESOLVE-PREDEFINED-XML-ENTITIES", 1, 0, false);
-        declareFunction(me, "remove_xml_comments", "REMOVE-XML-COMMENTS", 1, 0, false);
-        declareFunction(me, "parse_xml_token", "PARSE-XML-TOKEN", 1, 0, false);
-        declareFunction(me, "parse_html_token", "PARSE-HTML-TOKEN", 1, 0, false);
-        declareFunction(me, "parse_xml_token_int_internal", "PARSE-XML-TOKEN-INT-INTERNAL", 1, 1, false);
-        declareFunction(me, "parse_xml_token_int", "PARSE-XML-TOKEN-INT", 1, 1, false);
-        declareFunction(me, "xml_attribute_value_pair_from_token", "XML-ATTRIBUTE-VALUE-PAIR-FROM-TOKEN", 5, 0, false);
-        declareFunction(me, "xml_tagP", "XML-TAG?", 1, 0, false);
-        declareFunction(me, "regular_xml_tagP", "REGULAR-XML-TAG?", 1, 0, false);
-        declareFunction(me, "xml_empty_tagP", "XML-EMPTY-TAG?", 1, 0, false);
-        declareFunction(me, "xml_cdata_tagP", "XML-CDATA-TAG?", 1, 0, false);
-        declareFunction(me, "xml_cdata_tag_text", "XML-CDATA-TAG-TEXT", 1, 0, false);
-        declareFunction(me, "xml_closing_tokenP", "XML-CLOSING-TOKEN?", 2, 0, false);
-        declareFunction(me, "xml_opening_tokenP", "XML-OPENING-TOKEN?", 2, 0, false);
-        declareFunction(me, "xml_token_element_nameP", "XML-TOKEN-ELEMENT-NAME?", 2, 0, false);
-        declareFunction(me, "xml_token_element_name", "XML-TOKEN-ELEMENT-NAME", 1, 0, false);
-        declareFunction(me, "xml_token_element_name_start_and_end", "XML-TOKEN-ELEMENT-NAME-START-AND-END", 1, 0, false);
-        declareFunction(me, "xml_tokens_to_sexpr", "XML-TOKENS-TO-SEXPR", 1, 0, false);
-        declareFunction(me, "xml_token_iterator_to_sexpr", "XML-TOKEN-ITERATOR-TO-SEXPR", 1, 1, false);
-        declareFunction(me, "xml_token_iterator_to_sexpr_internal", "XML-TOKEN-ITERATOR-TO-SEXPR-INTERNAL", 2, 0, false);
-        declareFunction(me, "xml_tag_attribute_value", "XML-TAG-ATTRIBUTE-VALUE", 2, 1, false);
-        declareFunction(me, "non_content_xml_token_p", "NON-CONTENT-XML-TOKEN-P", 1, 0, false);
-        declareFunction(me, "get_field_value_from_xml_sexpr", "GET-FIELD-VALUE-FROM-XML-SEXPR", 2, 0, false);
-        declareFunction(me, "xml_sexpr_tag", "XML-SEXPR-TAG", 1, 0, false);
-        declareFunction(me, "xml_sexpr_type", "XML-SEXPR-TYPE", 1, 0, false);
-        declareFunction(me, "xml_sexpr_daughter", "XML-SEXPR-DAUGHTER", 2, 0, false);
-        declareFunction(me, "xml_sexpr_daughters", "XML-SEXPR-DAUGHTERS", 1, 1, false);
-        declareFunction(me, "xml_sexpr_attributes", "XML-SEXPR-ATTRIBUTES", 1, 0, false);
-        declareFunction(me, "xml_sexpr_attribute_value", "XML-SEXPR-ATTRIBUTE-VALUE", 2, 0, false);
-        declareFunction(me, "xml_sexpr_set_attribute", "XML-SEXPR-SET-ATTRIBUTE", 3, 0, false);
-        declareFunction(me, "xml_sexpr_atomic_p", "XML-SEXPR-ATOMIC-P", 1, 0, false);
-        declareFunction(me, "xml_sexpr_wXsingle_valueP", "XML-SEXPR-W/SINGLE-VALUE?", 1, 0, false);
-        declareFunction(me, "xml_sexpr_value", "XML-SEXPR-VALUE", 1, 0, false);
+        declareFunction("next_xml_token_position", "NEXT-XML-TOKEN-POSITION", 2, 1, false);
+        declareFunction("next_xml_token_position_if", "NEXT-XML-TOKEN-POSITION-IF", 2, 0, false);
+        declareFunction("next_xml_token_position_if_not", "NEXT-XML-TOKEN-POSITION-IF-NOT", 2, 0, false);
+        declareFunction("advance_xml_tokens", "ADVANCE-XML-TOKENS", 1, 1, false);
+        declareFunction("advance_xml_tokens_to", "ADVANCE-XML-TOKENS-TO", 2, 1, false);
+        declareFunction("xml_extract_token_sequence", "XML-EXTRACT-TOKEN-SEQUENCE", 2, 0, false);
+        declareFunction("accumulate_xml_token", "ACCUMULATE-XML-TOKEN", 1, 0, false);
+        declareFunction("accumulate_xml_tokens", "ACCUMULATE-XML-TOKENS", 2, 0, false);
+        declareFunction("accumulated_xml_tokens", "ACCUMULATED-XML-TOKENS", 0, 0, false);
+        declareFunction("xml_tokens_for_next_element", "XML-TOKENS-FOR-NEXT-ELEMENT", 1, 0, false);
+        declareFunction("advance_xml_tokens_to_end_of_element", "ADVANCE-XML-TOKENS-TO-END-OF-ELEMENT", 1, 0, false);
+        declareFunction("advance_xml_tokens_to_end_of_element_int", "ADVANCE-XML-TOKENS-TO-END-OF-ELEMENT-INT", 2, 0, false);
+        declareFunction("xml_declaration_p", "XML-DECLARATION-P", 1, 0, false);
+        declareFunction("xml_comment_p", "XML-COMMENT-P", 1, 0, false);
+        declareFunction("xml_closing_tag_p", "XML-CLOSING-TAG-P", 1, 0, false);
+        declareFunction("xml_opening_tag_p", "XML-OPENING-TAG-P", 1, 0, false);
+        declareFunction("advance_xml_tokens_without_crossing", "ADVANCE-XML-TOKENS-WITHOUT-CROSSING", 3, 1, false);
+        declareFunction("advance_xml_tokens_without_crossing_or_quit", "ADVANCE-XML-TOKENS-WITHOUT-CROSSING-OR-QUIT", 3, 1, false);
+        declareFunction("xml_read", "XML-READ", 1, 2, false);
+        declareFunction("xml_doctype_tag_p", "XML-DOCTYPE-TAG-P", 1, 0, false);
+        declareFunction("html_doctype_tag_p", "HTML-DOCTYPE-TAG-P", 1, 0, false);
+        declareFunction("xml_processing_instruction_p", "XML-PROCESSING-INSTRUCTION-P", 1, 0, false);
+        declareFunction("entity_map_from_doctype_tag", "ENTITY-MAP-FROM-DOCTYPE-TAG", 1, 0, false);
+        declareFunction("resolve_entity_references", "RESOLVE-ENTITY-REFERENCES", 2, 0, false);
+        declareFunction("resolve_predefined_xml_entities", "RESOLVE-PREDEFINED-XML-ENTITIES", 1, 0, false);
+        declareFunction("remove_xml_comments", "REMOVE-XML-COMMENTS", 1, 0, false);
+        declareFunction("parse_xml_token", "PARSE-XML-TOKEN", 1, 0, false);
+        declareFunction("parse_html_token", "PARSE-HTML-TOKEN", 1, 0, false);
+        declareFunction("parse_xml_token_int_internal", "PARSE-XML-TOKEN-INT-INTERNAL", 1, 1, false);
+        declareFunction("parse_xml_token_int", "PARSE-XML-TOKEN-INT", 1, 1, false);
+        declareFunction("xml_attribute_value_pair_from_token", "XML-ATTRIBUTE-VALUE-PAIR-FROM-TOKEN", 5, 0, false);
+        declareFunction("xml_tagP", "XML-TAG?", 1, 0, false);
+        declareFunction("regular_xml_tagP", "REGULAR-XML-TAG?", 1, 0, false);
+        declareFunction("xml_empty_tagP", "XML-EMPTY-TAG?", 1, 0, false);
+        declareFunction("xml_cdata_tagP", "XML-CDATA-TAG?", 1, 0, false);
+        declareFunction("xml_cdata_tag_text", "XML-CDATA-TAG-TEXT", 1, 0, false);
+        declareFunction("xml_closing_tokenP", "XML-CLOSING-TOKEN?", 2, 0, false);
+        declareFunction("xml_opening_tokenP", "XML-OPENING-TOKEN?", 2, 0, false);
+        declareFunction("xml_token_element_nameP", "XML-TOKEN-ELEMENT-NAME?", 2, 0, false);
+        declareFunction("xml_token_element_name", "XML-TOKEN-ELEMENT-NAME", 1, 0, false);
+        declareFunction("xml_token_element_name_start_and_end", "XML-TOKEN-ELEMENT-NAME-START-AND-END", 1, 0, false);
+        declareFunction("xml_tokens_to_sexpr", "XML-TOKENS-TO-SEXPR", 1, 0, false);
+        declareFunction("xml_token_iterator_to_sexpr", "XML-TOKEN-ITERATOR-TO-SEXPR", 1, 1, false);
+        declareFunction("xml_token_iterator_to_sexpr_internal", "XML-TOKEN-ITERATOR-TO-SEXPR-INTERNAL", 2, 0, false);
+        declareFunction("xml_tag_attribute_value", "XML-TAG-ATTRIBUTE-VALUE", 2, 1, false);
+        declareFunction("non_content_xml_token_p", "NON-CONTENT-XML-TOKEN-P", 1, 0, false);
+        declareFunction("get_field_value_from_xml_sexpr", "GET-FIELD-VALUE-FROM-XML-SEXPR", 2, 0, false);
+        declareFunction("xml_sexpr_tag", "XML-SEXPR-TAG", 1, 0, false);
+        declareFunction("xml_sexpr_type", "XML-SEXPR-TYPE", 1, 0, false);
+        declareFunction("xml_sexpr_daughter", "XML-SEXPR-DAUGHTER", 2, 0, false);
+        declareFunction("xml_sexpr_daughters", "XML-SEXPR-DAUGHTERS", 1, 1, false);
+        declareFunction("xml_sexpr_attributes", "XML-SEXPR-ATTRIBUTES", 1, 0, false);
+        declareFunction("xml_sexpr_attribute_value", "XML-SEXPR-ATTRIBUTE-VALUE", 2, 0, false);
+        declareFunction("xml_sexpr_set_attribute", "XML-SEXPR-SET-ATTRIBUTE", 3, 0, false);
+        declareFunction("xml_sexpr_atomic_p", "XML-SEXPR-ATOMIC-P", 1, 0, false);
+        declareFunction("xml_sexpr_wXsingle_valueP", "XML-SEXPR-W/SINGLE-VALUE?", 1, 0, false);
+        declareFunction("xml_sexpr_value", "XML-SEXPR-VALUE", 1, 0, false);
         return NIL;
     }
 
@@ -2218,7 +2184,7 @@ public final class xml_parsing_utilities extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $xml_token_iterator_state_native() {
+        private $xml_token_iterator_state_native() {
             this.$in_stream = Lisp.NIL;
             this.$scratch_stream = Lisp.NIL;
             this.$token_output_stream = Lisp.NIL;
@@ -2326,7 +2292,7 @@ public final class xml_parsing_utilities extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(xml_parsing_utilities.$xml_token_iterator_state_native.class, XML_TOKEN_ITERATOR_STATE, XML_TOKEN_ITERATOR_STATE_P, $list5, $list6, new String[]{ "$in_stream", "$scratch_stream", "$token_output_stream", "$entity_map", "$namespace_stack", "$validateP", "$resolve_entity_referencesP", "$resolve_namespacesP", "$on_deck_queue" }, $list7, $list8, PRINT_XML_TOKEN_ITERATOR_STATE);
+            structDecl = makeStructDeclNative($xml_token_iterator_state_native.class, XML_TOKEN_ITERATOR_STATE, XML_TOKEN_ITERATOR_STATE_P, $list5, $list6, new String[]{ "$in_stream", "$scratch_stream", "$token_output_stream", "$entity_map", "$namespace_stack", "$validateP", "$resolve_entity_referencesP", "$resolve_namespacesP", "$on_deck_queue" }, $list7, $list8, PRINT_XML_TOKEN_ITERATOR_STATE);
         }
     }
 

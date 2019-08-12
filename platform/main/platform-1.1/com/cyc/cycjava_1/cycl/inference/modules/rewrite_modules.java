@@ -123,8 +123,7 @@ public  final class rewrite_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_rewrite_modules_file() {
-    // CVS_ID("Id: rewrite-modules.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_kb_variable_initialization($sym1$_RAL_SUB_SITUATIONS_FROM_SUB_SITUATION_TYPES_RULE_, $sym2$_RAL_SUB_SITUATIONS_FROM_SUB_SITUATION_TYPES_RULE__INITIALIZER);
+        utilities_macros.register_kb_variable_initialization($sym1$_RAL_SUB_SITUATIONS_FROM_SUB_SITUATION_TYPES_RULE_, $sym2$_RAL_SUB_SITUATIONS_FROM_SUB_SITUATION_TYPES_RULE__INITIALIZER);
     utilities_macros.register_kb_variable_initialization($sym5$_SUB_SITUATION_TYPES_FROM_RAL_SUB_SITUATIONS_RULE_, $sym6$_SUB_SITUATION_TYPES_FROM_RAL_SUB_SITUATIONS_RULE__INITIALIZER);
     inference_modules.inference_rewrite_module($kw8$RELATION_ALL_EXISTS_SUB_SITUATIONS_FROM_SUB_SITUATION_TYPES_CHECK, $list9);
     inference_modules.inference_rewrite_module($kw12$SUB_SITUATION_TYPES_FROM_RELATION_ALL_EXISTS_SUB_SITUATIONS_CHECK, $list13);

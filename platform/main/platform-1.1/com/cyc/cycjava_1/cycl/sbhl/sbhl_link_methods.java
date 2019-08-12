@@ -1077,8 +1077,7 @@ public  final class sbhl_link_methods extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_link_methods_file() {
-    // CVS_ID("Id: sbhl-link-methods.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    subl_macro_promotions.declare_defglobal($sym30$_ISA_ARG2_NAUT_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym30$_ISA_ARG2_NAUT_TABLE_);
     subl_macro_promotions.declare_defglobal($sym57$_QUOTED_ISA_ARG2_NAUT_TABLE_);
     subl_macro_promotions.declare_defglobal($sym67$_NON_FORT_ISA_TABLE_);
     subl_macro_promotions.declare_defglobal($sym68$_NON_FORT_INSTANCE_TABLE_);

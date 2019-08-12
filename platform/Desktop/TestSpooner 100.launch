@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<launchConfiguration type="org.eclipse.jdt.launching.localJavaApplication">
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_PATHS">
+<listEntry value="/platform/main/logicmoo-main/org/logicmoo/translate/spoon/TestSpooner.java"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.core.MAPPED_RESOURCE_TYPES">
+<listEntry value="1"/>
+</listAttribute>
+<listAttribute key="org.eclipse.debug.ui.favoriteGroups">
+<listEntry value="org.eclipse.debug.ui.launchGroup.debug"/>
+<listEntry value="org.eclipse.debug.ui.launchGroup.run"/>
+</listAttribute>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_EXCLUDE_TEST_CODE" value="false"/>
+<booleanAttribute key="org.eclipse.jdt.launching.ATTR_USE_CLASSPATH_ONLY_JAR" value="false"/>
+<stringAttribute key="org.eclipse.jdt.launching.MAIN_TYPE" value="org.logicmoo.translate.spoon.TestSpooner"/>
+<stringAttribute key="org.eclipse.jdt.launching.PROJECT_ATTR" value="platform"/>
+<stringAttribute key="org.eclipse.jdt.launching.VM_ARGUMENTS" value="-server -Xms10000m -Xmx20000m -XX:ReservedCodeCacheSize=96m"/>
+</launchConfiguration>

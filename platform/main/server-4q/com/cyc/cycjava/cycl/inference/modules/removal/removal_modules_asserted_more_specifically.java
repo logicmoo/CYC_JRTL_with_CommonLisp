@@ -1,37 +1,29 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.arity;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_meta;
-import com.cyc.cycjava.cycl.equals;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.genl_mts;
-import com.cyc.cycjava.cycl.genl_predicates;
-import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.ghl_search_methods;
-import com.cyc.cycjava.cycl.hl_supports;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.forward;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_gp_mapping;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.pred_relevance_macros;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.tva_utilities;
-import com.cyc.cycjava.cycl.wff;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -42,92 +34,54 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_asserted_more_specifically extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      REMOVAL-MODULES-ASSERTED-MORE-SPECIFICALLY
+ * source file: /cyc/top/cycl/inference/modules/removal/removal-modules-asserted-more-specifically.lisp
+ * created:     2019/07/03 17:37:46
+ */
+public final class removal_modules_asserted_more_specifically extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_asserted_more_specifically();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically";
 
-    public static final String myFingerPrint = "0e52cf033bda483b29ed4bd5f207f8ff37bbcf7bf4ff45be6e49fa434dfa1d79";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $use_asserted_more_specifically_via_tva_supportP$ = makeSymbol("*USE-ASSERTED-MORE-SPECIFICALLY-VIA-TVA-SUPPORT?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $assertion_under_consideration_for_asserted_more_specifically$ = makeSymbol("*ASSERTION-UNDER-CONSIDERATION-FOR-ASSERTED-MORE-SPECIFICALLY*");
 
-    private static final SubLObject $$assertedMoreSpecifically = reader_make_constant_shell(makeString("assertedMoreSpecifically"));
 
 
 
-    private static final SubLObject $$not = reader_make_constant_shell(makeString("not"));
 
-    private static final SubLObject $$thereExists = reader_make_constant_shell(makeString("thereExists"));
+
 
     private static final SubLSymbol $sym4$_COL = makeSymbol("?COL");
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
-    private static final SubLObject $$assertedSentence = reader_make_constant_shell(makeString("assertedSentence"));
+
+
 
     private static final SubLList $list7 = list(makeSymbol("?COL"));
 
-    private static final SubLObject $$different = reader_make_constant_shell(makeString("different"));
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
 
 
 
     private static final SubLString $str11$Inconsistent_operators__s_and__s = makeString("Inconsistent operators ~s and ~s");
 
-    public static final SubLList $list12 = list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("genls")));
-
-    private static final SubLObject $$WFFConstraintPredicate = reader_make_constant_shell(makeString("WFFConstraintPredicate"));
-
-    private static final SubLObject $$transitiveViaArg = reader_make_constant_shell(makeString("transitiveViaArg"));
-
-    private static final SubLList $list15 = list(reader_make_constant_shell(makeString("genls")), TWO_INTEGER);
+    static private final SubLList $list12 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genls"));
 
 
 
 
 
-
-
-    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+    private static final SubLList $list15 = list(reader_make_constant_shell("genls"), TWO_INTEGER);
 
 
 
@@ -135,65 +89,51 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
 
 
 
-    private static final SubLObject $$genlInverse = reader_make_constant_shell(makeString("genlInverse"));
+    static private final SubLList $list27 = list(makeKeyword("MAX-NUMBER"), ONE_INTEGER);
 
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
+    private static final SubLList $list28 = list(list(ZERO_INTEGER, makeKeyword("TVA")), reader_make_constant_shell("genlPreds"));
 
+    static private final SubLList $list29 = cons(list(makeSymbol("ARGNUM"), makeSymbol("TVA-TYPE")), makeSymbol("TVA-PREDS"));
 
-
-
-
-    public static final SubLList $list27 = list(makeKeyword("MAX-NUMBER"), ONE_INTEGER);
-
-    private static final SubLList $list28 = list(list(ZERO_INTEGER, makeKeyword("TVA")), reader_make_constant_shell(makeString("genlPreds")));
-
-    public static final SubLList $list29 = cons(list(makeSymbol("ARGNUM"), makeSymbol("TVA-TYPE")), makeSymbol("TVA-PREDS"));
-
-    private static final SubLList $list30 = list(reader_make_constant_shell(makeString("Thing")), reader_make_constant_shell(makeString("Collection")));
-
-
-
-
+    private static final SubLList $list30 = list(reader_make_constant_shell("Thing"), reader_make_constant_shell("Collection"));
 
     private static final SubLSymbol NON_TVA_GAF_ASSERTION_P = makeSymbol("NON-TVA-GAF-ASSERTION-P");
 
-
-
     private static final SubLString $str35$More_than_one_assertion_in_justif = makeString("More than one assertion in justification of ~S");
 
-    private static final SubLObject $$transitiveViaArgInverse = reader_make_constant_shell(makeString("transitiveViaArgInverse"));
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
+
 
     private static final SubLSymbol $REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_POS = makeKeyword("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS");
 
-    private static final SubLList $list39 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("assertedMoreSpecifically")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("assertedMoreSpecifically")), list(reader_make_constant_shell(makeString("isa")), makeKeyword("FORT"), makeKeyword("FORT"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (#$isa <instance> <collection>)) where <instance> and <collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$assertedMoreSpecifically (#$isa #$genls #$Predicate)) \nfrom the asserted sentence in the KB (#isa #$genls #$VocabularyDefiningPredicate) ") });
+    private static final SubLList $list39 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("isa"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (#$isa <instance> <collection>)) where <instance> and <collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$assertedMoreSpecifically (#$isa #$genls #$Predicate)) \nfrom the asserted sentence in the KB (#isa #$genls #$VocabularyDefiningPredicate) ") });
 
     private static final SubLSymbol $REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_NEG = makeKeyword("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG");
 
-    private static final SubLList $list41 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("assertedMoreSpecifically")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("assertedMoreSpecifically")), list(reader_make_constant_shell(makeString("isa")), makeKeyword("FORT"), makeKeyword("FORT"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (#$isa <instance> <collection>)) where <instance> and <collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$not (#$assertedMoreSpecifically (#$isa #$genls #$VocabularyDefiningPredicate))) ") });
+    private static final SubLList $list41 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("isa"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (#$isa <instance> <collection>)) where <instance> and <collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$not (#$assertedMoreSpecifically (#$isa #$genls #$VocabularyDefiningPredicate))) ") });
 
     private static final SubLSymbol $REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_POS = makeKeyword("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS");
 
-    private static final SubLList $list43 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("assertedMoreSpecifically")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("assertedMoreSpecifically")), list(reader_make_constant_shell(makeString("genls")), makeKeyword("FORT"), makeKeyword("FORT"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (#$genls <spec-collection> <genl-collection>)) where <spec-collection> and <genl-collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$assertedMoreSpecifically (#$genls #$BinaryPredicate #$Individual)) \nfrom the asserted sentence in the KB (#genls #$BinaryPredicate #$Predicate) ") });
+    private static final SubLList $list43 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("genls"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (#$genls <spec-collection> <genl-collection>)) where <spec-collection> and <genl-collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$assertedMoreSpecifically (#$genls #$BinaryPredicate #$Individual)) \nfrom the asserted sentence in the KB (#genls #$BinaryPredicate #$Predicate) ") });
 
     private static final SubLSymbol $REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_NEG = makeKeyword("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG");
 
-    private static final SubLList $list45 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("assertedMoreSpecifically")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("assertedMoreSpecifically")), list(reader_make_constant_shell(makeString("genls")), makeKeyword("FORT"), makeKeyword("FORT"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (#$genls <spec-collection> <genl-collection>))) where <spec-collection> and <genl-collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$not (#$assertedMoreSpecifically (#$genls #$BinaryPredicate #$BinaryRelation))) ") });
+    private static final SubLList $list45 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("genls"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (#$genls <spec-collection> <genl-collection>))) where <spec-collection> and <genl-collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$not (#$assertedMoreSpecifically (#$genls #$BinaryPredicate #$BinaryRelation))) ") });
 
     private static final SubLSymbol $REMOVAL_ASSERTED_MORE_SPECIFICALLY_CHECK_POS = makeKeyword("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS");
 
-    private static final SubLList $list47 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("assertedMoreSpecifically")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("assertedMoreSpecifically")), cons(list(makeKeyword("AND"), makeKeyword("FORT"), list(makeKeyword("NOT"), reader_make_constant_shell(makeString("isa"))), list(makeKeyword("NOT"), reader_make_constant_shell(makeString("genls")))), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (<pred> . <fully-bound>))"), makeKeyword("EXAMPLE"), makeString("") });
+    private static final SubLList $list47 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), cons(list(makeKeyword("AND"), $FORT, list(makeKeyword("NOT"), reader_make_constant_shell("isa")), list(makeKeyword("NOT"), reader_make_constant_shell("genls"))), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (<pred> . <fully-bound>))"), makeKeyword("EXAMPLE"), makeString("") });
 
     private static final SubLSymbol $REMOVAL_ASSERTED_MORE_SPECIFICALLY_CHECK_NEG = makeKeyword("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG");
 
-    private static final SubLList $list49 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("assertedMoreSpecifically")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("assertedMoreSpecifically")), cons(list(makeKeyword("AND"), makeKeyword("FORT"), list(makeKeyword("NOT"), reader_make_constant_shell(makeString("isa"))), list(makeKeyword("NOT"), reader_make_constant_shell(makeString("genls")))), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (<pred> . <fully-bound>)))"), makeKeyword("EXAMPLE"), makeString("") });
+    private static final SubLList $list49 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), cons(list(makeKeyword("AND"), $FORT, list(makeKeyword("NOT"), reader_make_constant_shell("isa")), list(makeKeyword("NOT"), reader_make_constant_shell("genls"))), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (<pred> . <fully-bound>)))"), makeKeyword("EXAMPLE"), makeString("") });
 
-    private static final SubLObject $$strongestAssertedSentence = reader_make_constant_shell(makeString("strongestAssertedSentence"));
+
 
     private static final SubLSymbol $REMOVAL_STRONGEST_ASSERTED_SENTENCE_LOOKUP_POS = makeKeyword("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS");
 
-    private static final SubLList $list52 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("strongestAssertedSentence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("strongestAssertedSentence")), list(makeKeyword("OR"), cons(list(makeKeyword("TEST"), makeSymbol("INFERENCE-PREDICATE-P")), makeKeyword("ANYTHING")), list(reader_make_constant_shell(makeString("not")), cons(list(makeKeyword("TEST"), makeSymbol("INFERENCE-PREDICATE-P")), makeKeyword("ANYTHING"))))), makeKeyword("COST"), makeSymbol("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-COST"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$strongestAssertedSentence (<predicate> <anything>))"), makeKeyword("EXAMPLE"), makeString("") });
+    private static final SubLList $list52 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("strongestAssertedSentence"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("strongestAssertedSentence"), list(makeKeyword("OR"), cons(list($TEST, makeSymbol("INFERENCE-PREDICATE-P")), makeKeyword("ANYTHING")), list(reader_make_constant_shell("not"), cons(list($TEST, makeSymbol("INFERENCE-PREDICATE-P")), makeKeyword("ANYTHING"))))), $COST, makeSymbol("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-COST"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$strongestAssertedSentence (<predicate> <anything>))"), makeKeyword("EXAMPLE"), makeString("") });
 
     private static final SubLSymbol REMOVAL_STRONGEST_ASSERTED_SENTENCE_LOOKUP_POS_COST = makeSymbol("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-COST");
 
@@ -201,6 +141,30 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
 
     private static final SubLSymbol REMOVAL_STRONGEST_ASSERTED_SENTENCE_LOOKUP_POS_EXPAND = makeSymbol("REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-EXPAND");
 
+    // Definitions
+    public static final SubLObject removal_asserted_more_specifically_check_pos_internals_alt(SubLObject operator, SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject more_specific_assertions = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_more_specific_asserted_assertions(operator, asent);
+                SubLObject more_supports = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject assertion = NIL;
+                    SubLObject assertion_1 = NIL;
+                    SubLObject supports = NIL;
+                    SubLObject supports_2 = NIL;
+                    for (assertion = more_specific_assertions, assertion_1 = assertion.first(), supports = more_supports, supports_2 = supports.first(); !((NIL == supports) && (NIL == assertion)); assertion = assertion.rest() , assertion_1 = assertion.first() , supports = supports.rest() , supports_2 = supports.first()) {
+                        backward.removal_add_node(assertion_1, NIL, supports_2);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    // Definitions
     public static SubLObject removal_asserted_more_specifically_check_pos_internals(final SubLObject operator, final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -225,6 +189,20 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return NIL;
     }
 
+    public static final SubLObject removal_asserted_more_specifically_check_neg_internals(SubLObject operator, SubLObject asent) {
+        {
+            SubLObject more_specific_assertions = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_more_specific_asserted_assertions(operator, asent);
+            SubLObject sentence = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject v_term = cycl_utilities.atomic_sentence_arg1(sentence, UNPROVIDED);
+            SubLObject collection = cycl_utilities.atomic_sentence_arg2(sentence, UNPROVIDED);
+            SubLObject support = list($$not, list($$thereExists, $sym2$_COL, list($$and, list($$assertedSentence, listS(operator, v_term, $list_alt5)), list($$different, $sym2$_COL, collection), list($$genls, $sym2$_COL, collection))));
+            if (NIL == more_specific_assertions) {
+                backward.removal_add_node(arguments.make_hl_support($OPAQUE, support, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject removal_asserted_more_specifically_check_neg_internals(final SubLObject operator, final SubLObject asent, SubLObject v_bindings, SubLObject more_supports) {
         if (v_bindings == UNPROVIDED) {
             v_bindings = NIL;
@@ -246,6 +224,21 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
             backward.removal_add_node(arguments.make_hl_support($OPAQUE, support, UNPROVIDED, UNPROVIDED), v_bindings, more_supports);
         }
         return NIL;
+    }
+
+    public static final SubLObject removal_more_specific_asserted_assertions_alt(SubLObject operator, SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (operator != cycl_utilities.sentence_truth_function(cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED))) {
+                    Errors.error($str_alt9$Inconsistent_operators__s_and__s, operator, cycl_utilities.sentence_truth_function(cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED)));
+                }
+            }
+            {
+                SubLObject sentence = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+                return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertions(sentence);
+            }
+        }
     }
 
     public static SubLObject removal_more_specific_asserted_assertions(final SubLObject operator, final SubLObject asent) {
@@ -281,6 +274,33 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return values(more_specific_assertions, more_supports);
     }
 
+    /**
+     *
+     *
+     * @return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.
+     */
+    @LispMethod(comment = "@return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.")
+    public static final SubLObject more_specific_asserted_assertions_alt(SubLObject asent) {
+        {
+            SubLObject operator = cycl_utilities.atomic_sentence_predicate(asent);
+            if (NIL != list_utilities.member_eqP(operator, $list_alt10)) {
+                return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertions_for_isa_genls(operator, asent);
+            } else {
+                if (NIL != com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.transitive_via_genls_in_arg2P(operator)) {
+                    return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertions_for_isa_genls(operator, asent);
+                } else {
+                    return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertions_for_other_pred(operator, asent);
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.
+     */
+    @LispMethod(comment = "@return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.")
     public static SubLObject more_specific_asserted_assertions(final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject operator = cycl_utilities.atomic_sentence_predicate(asent);
@@ -296,10 +316,109 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return more_specific_asserted_assertions_for_other_pred(operator, asent);
     }
 
+    public static final SubLObject transitive_via_genls_in_arg2P_alt(SubLObject pred) {
+        return kb_mapping_utilities.tuple_holds(listS($$transitiveViaArg, pred, $list_alt12), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject transitive_via_genls_in_arg2P(final SubLObject pred) {
         return kb_mapping_utilities.tuple_holds(listS($$transitiveViaArg, pred, $list15), UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.
+     * @unknown this function works for anything transitive via genls in arg2, not just #$isa and #$genls.
+     */
+    @LispMethod(comment = "@return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.\r\n@unknown this function works for anything transitive via genls in arg2, not just #$isa and #$genls.")
+    public static final SubLObject more_specific_asserted_assertions_for_isa_genls_alt(SubLObject operator, SubLObject asent) {
+        {
+            SubLObject v_term = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject collection = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject more_specific_assertions = NIL;
+            SubLObject more_supports = NIL;
+            SubLObject pred_var = operator;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, ONE_INTEGER, pred_var);
+                    SubLObject done_var = NIL;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_3 = NIL;
+                                            SubLObject token_var_4 = NIL;
+                                            while (NIL == done_var_3) {
+                                                {
+                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_4);
+                                                    SubLObject valid_5 = makeBoolean(token_var_4 != assertion);
+                                                    if (NIL != valid_5) {
+                                                        {
+                                                            SubLObject asserted_collection = assertions_high.gaf_arg2(assertion);
+                                                            if (asserted_collection.equal(collection)) {
+                                                                {
+                                                                    SubLObject mt = assertions_high.assertion_mt(assertion);
+                                                                    if (NIL != genl_mts.proper_genl_mtP(com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertion_asent_mt(), mt, UNPROVIDED, UNPROVIDED)) {
+                                                                        {
+                                                                            SubLObject support = arguments.make_hl_support($GENLMT, list($$genlMt, com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertion_asent_mt(), mt), UNPROVIDED, UNPROVIDED);
+                                                                            more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                            more_supports = cons(list(support), more_supports);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                if (NIL != genls.genlsP(asserted_collection, collection, UNPROVIDED, UNPROVIDED)) {
+                                                                    {
+                                                                        SubLObject support = arguments.make_hl_support($GENLS, list($$genls, asserted_collection, collection), UNPROVIDED, UNPROVIDED);
+                                                                        more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                        more_supports = cons(list(support), more_supports);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var_3 = makeBoolean(NIL == valid_5);
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean(NIL == valid);
+                        }
+                    } 
+                }
+            }
+            return more_specific_assertions;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.
+     * @unknown this function works for anything transitive via genls in arg2, not just #$isa and #$genls.
+     */
+    @LispMethod(comment = "@return listp; a list of asserted assertions in relevant mts which are more specific than ASENT.\r\n@unknown this function works for anything transitive via genls in arg2, not just #$isa and #$genls.")
     public static SubLObject more_specific_asserted_assertions_for_isa_genls(final SubLObject operator, final SubLObject asent) {
         final SubLObject v_term = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
         final SubLObject collection = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
@@ -381,6 +500,357 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
             } 
         }
         return values(more_specific_assertions, more_supports);
+    }
+
+    public static final SubLObject more_specific_asserted_assertions_for_other_pred_alt(SubLObject operator, SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject args = cycl_utilities.atomic_sentence_args(asent, UNPROVIDED);
+                SubLObject rargs = reverse(args);
+                SubLObject base_mt = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.more_specific_asserted_assertion_asent_mt();
+                SubLObject more_specific_assertions = NIL;
+                SubLObject more_supports = NIL;
+                if (NIL != forts.fort_p(args.first())) {
+                    {
+                        SubLObject _prev_bind_0 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = pred_relevance_macros.$pred$.currentBinding(thread);
+                        try {
+                            pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_PRED, thread);
+                            pred_relevance_macros.$pred$.bind(operator, thread);
+                            {
+                                SubLObject pred_var = NIL;
+                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(args.first(), ONE_INTEGER, pred_var)) {
+                                    {
+                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(args.first(), ONE_INTEGER, pred_var);
+                                        SubLObject done_var = NIL;
+                                        SubLObject token_var = NIL;
+                                        while (NIL == done_var) {
+                                            {
+                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                if (NIL != valid) {
+                                                    {
+                                                        SubLObject final_index_iterator = NIL;
+                                                        try {
+                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                            {
+                                                                SubLObject done_var_6 = NIL;
+                                                                SubLObject token_var_7 = NIL;
+                                                                while (NIL == done_var_6) {
+                                                                    {
+                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_7);
+                                                                        SubLObject valid_8 = makeBoolean(token_var_7 != assertion);
+                                                                        if (NIL != valid_8) {
+                                                                            if (NIL != (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread) ? ((SubLObject) (equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), rargs))) : equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), args))) {
+                                                                                {
+                                                                                    SubLObject pred = assertions_high.gaf_arg0(assertion);
+                                                                                    SubLObject mt = assertions_high.assertion_mt(assertion);
+                                                                                    if (!pred.equal(operator)) {
+                                                                                        {
+                                                                                            SubLObject support = (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) ? ((SubLObject) (arguments.make_hl_support($GENLPREDS, list($$genlInverse, pred, operator), UNPROVIDED, UNPROVIDED))) : arguments.make_hl_support($GENLPREDS, list($$genlPreds, pred, operator), UNPROVIDED, UNPROVIDED);
+                                                                                            more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                            more_supports = cons(list(support), more_supports);
+                                                                                        }
+                                                                                    }
+                                                                                    if (NIL != genl_mts.proper_genl_mtP(base_mt, mt, UNPROVIDED, UNPROVIDED)) {
+                                                                                        {
+                                                                                            SubLObject support = arguments.make_hl_support($GENLMT, make_binary_formula($$genlMt, base_mt, mt), UNPROVIDED, UNPROVIDED);
+                                                                                            more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                            more_supports = cons(list(support), more_supports);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        done_var_6 = makeBoolean(NIL == valid_8);
+                                                                    }
+                                                                } 
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_9 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL != final_index_iterator) {
+                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_9, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                done_var = makeBoolean(NIL == valid);
+                                            }
+                                        } 
+                                    }
+                                }
+                            }
+                        } finally {
+                            pred_relevance_macros.$pred$.rebind(_prev_bind_1, thread);
+                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (NIL != kb_gp_mapping.dgaigp_binaryP(operator)) {
+                        {
+                            SubLObject _prev_bind_0 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = pred_relevance_macros.$pred$.currentBinding(thread);
+                            try {
+                                pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_INVERSE, thread);
+                                pred_relevance_macros.$pred$.bind(operator, thread);
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(args.first(), arity.binary_arg_swap(ONE_INTEGER), pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(args.first(), arity.binary_arg_swap(ONE_INTEGER), pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_10 = NIL;
+                                                                    SubLObject token_var_11 = NIL;
+                                                                    while (NIL == done_var_10) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_11);
+                                                                            SubLObject valid_12 = makeBoolean(token_var_11 != assertion);
+                                                                            if (NIL != valid_12) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_13 = kb_gp_mapping.$mapping_arg_swap$.currentBinding(thread);
+                                                                                    try {
+                                                                                        kb_gp_mapping.$mapping_arg_swap$.bind(makeBoolean(NIL == kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)), thread);
+                                                                                        if (NIL != (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread) ? ((SubLObject) (equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), rargs))) : equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), args))) {
+                                                                                            {
+                                                                                                SubLObject pred = assertions_high.gaf_arg0(assertion);
+                                                                                                SubLObject mt = assertions_high.assertion_mt(assertion);
+                                                                                                if (!pred.equal(operator)) {
+                                                                                                    {
+                                                                                                        SubLObject support = (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) ? ((SubLObject) (arguments.make_hl_support($GENLPREDS, list($$genlInverse, pred, operator), UNPROVIDED, UNPROVIDED))) : arguments.make_hl_support($GENLPREDS, list($$genlPreds, pred, operator), UNPROVIDED, UNPROVIDED);
+                                                                                                        more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                                        more_supports = cons(list(support), more_supports);
+                                                                                                    }
+                                                                                                }
+                                                                                                if (NIL != genl_mts.proper_genl_mtP(base_mt, mt, UNPROVIDED, UNPROVIDED)) {
+                                                                                                    {
+                                                                                                        SubLObject support = arguments.make_hl_support($GENLMT, make_binary_formula($$genlMt, base_mt, mt), UNPROVIDED, UNPROVIDED);
+                                                                                                        more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                                        more_supports = cons(list(support), more_supports);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    } finally {
+                                                                                        kb_gp_mapping.$mapping_arg_swap$.rebind(_prev_bind_0_13, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_10 = makeBoolean(NIL == valid_12);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_14 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_14, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                pred_relevance_macros.$pred$.rebind(_prev_bind_1, thread);
+                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    {
+                        SubLObject cdolist_list_var = genl_predicates.all_spec_preds(operator, UNPROVIDED, UNPROVIDED);
+                        SubLObject spec_pred = NIL;
+                        for (spec_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec_pred = cdolist_list_var.first()) {
+                            {
+                                SubLObject pred_var = spec_pred;
+                                if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                    {
+                                        SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                        SubLObject done_var = NIL;
+                                        SubLObject token_var = NIL;
+                                        while (NIL == done_var) {
+                                            {
+                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                if (NIL != valid) {
+                                                    {
+                                                        SubLObject final_index_iterator = NIL;
+                                                        try {
+                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                            {
+                                                                SubLObject done_var_15 = NIL;
+                                                                SubLObject token_var_16 = NIL;
+                                                                while (NIL == done_var_15) {
+                                                                    {
+                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_16);
+                                                                        SubLObject valid_17 = makeBoolean(token_var_16 != assertion);
+                                                                        if (NIL != valid_17) {
+                                                                            if (NIL != (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread) ? ((SubLObject) (equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), rargs))) : equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), args))) {
+                                                                                {
+                                                                                    SubLObject pred = assertions_high.gaf_arg0(assertion);
+                                                                                    SubLObject mt = assertions_high.assertion_mt(assertion);
+                                                                                    if (!pred.equal(operator)) {
+                                                                                        {
+                                                                                            SubLObject support = (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) ? ((SubLObject) (arguments.make_hl_support($GENLPREDS, list($$genlInverse, pred, operator), UNPROVIDED, UNPROVIDED))) : arguments.make_hl_support($GENLPREDS, list($$genlPreds, pred, operator), UNPROVIDED, UNPROVIDED);
+                                                                                            more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                            more_supports = cons(list(support), more_supports);
+                                                                                        }
+                                                                                    }
+                                                                                    if (NIL != genl_mts.proper_genl_mtP(base_mt, mt, UNPROVIDED, UNPROVIDED)) {
+                                                                                        {
+                                                                                            SubLObject support = arguments.make_hl_support($GENLMT, make_binary_formula($$genlMt, base_mt, mt), UNPROVIDED, UNPROVIDED);
+                                                                                            more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                            more_supports = cons(list(support), more_supports);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        done_var_15 = makeBoolean(NIL == valid_17);
+                                                                    }
+                                                                } 
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL != final_index_iterator) {
+                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                done_var = makeBoolean(NIL == valid);
+                                            }
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if (NIL != arity.binaryP(operator)) {
+                        {
+                            SubLObject _prev_bind_0 = kb_gp_mapping.$mapping_arg_swap$.currentBinding(thread);
+                            try {
+                                kb_gp_mapping.$mapping_arg_swap$.bind(makeBoolean(NIL == kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)), thread);
+                                {
+                                    SubLObject cdolist_list_var = genl_predicates.all_spec_inverses(operator, UNPROVIDED, UNPROVIDED);
+                                    SubLObject spec_pred = NIL;
+                                    for (spec_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec_pred = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject pred_var = spec_pred;
+                                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                                {
+                                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                                    SubLObject done_var = NIL;
+                                                    SubLObject token_var = NIL;
+                                                    while (NIL == done_var) {
+                                                        {
+                                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                            if (NIL != valid) {
+                                                                {
+                                                                    SubLObject final_index_iterator = NIL;
+                                                                    try {
+                                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                        {
+                                                                            SubLObject done_var_18 = NIL;
+                                                                            SubLObject token_var_19 = NIL;
+                                                                            while (NIL == done_var_18) {
+                                                                                {
+                                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_19);
+                                                                                    SubLObject valid_20 = makeBoolean(token_var_19 != assertion);
+                                                                                    if (NIL != valid_20) {
+                                                                                        if (NIL != (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread) ? ((SubLObject) (equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), rargs))) : equal(cycl_utilities.formula_args(assertions_high.assertion_formula(assertion), UNPROVIDED), args))) {
+                                                                                            {
+                                                                                                SubLObject pred = assertions_high.gaf_arg0(assertion);
+                                                                                                SubLObject mt = assertions_high.assertion_mt(assertion);
+                                                                                                if (!pred.equal(operator)) {
+                                                                                                    {
+                                                                                                        SubLObject support = (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) ? ((SubLObject) (arguments.make_hl_support($GENLPREDS, list($$genlInverse, pred, operator), UNPROVIDED, UNPROVIDED))) : arguments.make_hl_support($GENLPREDS, list($$genlPreds, pred, operator), UNPROVIDED, UNPROVIDED);
+                                                                                                        more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                                        more_supports = cons(list(support), more_supports);
+                                                                                                    }
+                                                                                                }
+                                                                                                if (NIL != genl_mts.proper_genl_mtP(base_mt, mt, UNPROVIDED, UNPROVIDED)) {
+                                                                                                    {
+                                                                                                        SubLObject support = arguments.make_hl_support($GENLMT, make_binary_formula($$genlMt, base_mt, mt), UNPROVIDED, UNPROVIDED);
+                                                                                                        more_specific_assertions = cons(assertion, more_specific_assertions);
+                                                                                                        more_supports = cons(list(support), more_supports);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    done_var_18 = makeBoolean(NIL == valid_20);
+                                                                                }
+                                                                            } 
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_21 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if (NIL != final_index_iterator) {
+                                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_21, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            done_var = makeBoolean(NIL == valid);
+                                                        }
+                                                    } 
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                kb_gp_mapping.$mapping_arg_swap$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                return values(more_specific_assertions, more_supports);
+            }
+        }
     }
 
     public static SubLObject more_specific_asserted_assertions_for_other_pred(final SubLObject operator, final SubLObject asent) {
@@ -708,6 +1178,28 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return values(more_specific_assertions, more_supports);
     }
 
+    static private final SubLSymbol $sym2$_COL = makeSymbol("?COL");
+
+    static private final SubLList $list_alt5 = list(makeSymbol("?COL"));
+
+    static private final SubLString $str_alt9$Inconsistent_operators__s_and__s = makeString("Inconsistent operators ~s and ~s");
+
+    static private final SubLList $list_alt10 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genls"));
+
+    static private final SubLList $list_alt12 = list(reader_make_constant_shell("genls"), TWO_INTEGER);
+
+    static private final SubLList $list_alt25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("isa"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (#$isa <instance> <collection>)) where <instance> and <collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$assertedMoreSpecifically (#$isa #$genls #$Predicate)) \nfrom the asserted sentence in the KB (#isa #$genls #$VocabularyDefiningPredicate) ") });
+
+    public static final SubLObject more_specific_asserted_assertion_asent_mt_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject forward_inference_assertion = forward.current_forward_inference_assertion();
+                return NIL != forward_inference_assertion ? ((SubLObject) (assertions_high.assertion_mt(forward_inference_assertion))) : mt_relevance_macros.$mt$.getDynamicValue(thread);
+            }
+        }
+    }
+
     public static SubLObject more_specific_asserted_assertion_asent_mt() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != assertion_handles.assertion_p($assertion_under_consideration_for_asserted_more_specifically$.getDynamicValue(thread))) && (NIL != genl_mts.genl_mtP(mt_relevance_macros.$mt$.getDynamicValue(thread), assertions_high.assertion_mt($assertion_under_consideration_for_asserted_more_specifically$.getDynamicValue(thread)), UNPROVIDED, UNPROVIDED))) {
@@ -722,6 +1214,8 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
     public static SubLObject within_assertive_wff_forward_inferenceP() {
         return wff.assertive_wff_ruleP(forward.current_forward_inference_rule());
     }
+
+    static private final SubLList $list_alt27 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("isa"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (#$isa <instance> <collection>)) where <instance> and <collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$not (#$assertedMoreSpecifically (#$isa #$genls #$VocabularyDefiningPredicate))) ") });
 
     public static SubLObject more_specific_asserted_assertions_for_other_pred_via_tva(final SubLObject operator, final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -851,8 +1345,21 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return values(more_specific_asents, more_supports);
     }
 
+    static private final SubLList $list_alt29 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("genls"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (#$genls <spec-collection> <genl-collection>)) where <spec-collection> and <genl-collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$assertedMoreSpecifically (#$genls #$BinaryPredicate #$Individual)) \nfrom the asserted sentence in the KB (#genls #$BinaryPredicate #$Predicate) ") });
+
+    static private final SubLList $list_alt31 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), list(reader_make_constant_shell("genls"), $FORT, $FORT)), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$assertedMoreSpecifically (#$genls <spec-collection> <genl-collection>))) where <spec-collection> and <genl-collection> are FORTs "), makeKeyword("EXAMPLE"), makeString("(#$not (#$assertedMoreSpecifically (#$genls #$BinaryPredicate #$BinaryRelation))) ") });
+
+    static private final SubLList $list_alt34 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("assertedMoreSpecifically"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("assertedMoreSpecifically"), cons(list(makeKeyword("AND"), $FORT, list(makeKeyword("NOT"), reader_make_constant_shell("isa")), list(makeKeyword("NOT"), reader_make_constant_shell("genls"))), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("DOCUMENTATION"), makeString("(#$assertedMoreSpecifically (<pred> . <fully-bound>))"), makeKeyword("EXAMPLE"), makeString("") });
+
     public static SubLObject non_tva_gaf_assertion_p(final SubLObject assertion) {
         return makeBoolean((NIL != assertions_high.gaf_assertionP(assertion)) && (NIL == list_utilities.member_kbeqP(assertions_high.gaf_predicate(assertion), tva_utilities.get_tva_predicates())));
+    }
+
+    public static final SubLObject removal_asserted_more_specifically_isa_check_pos_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_asserted_more_specifically_check_pos_internals($$isa, asent);
     }
 
     public static SubLObject removal_asserted_more_specifically_isa_check_pos_expand(final SubLObject asent, SubLObject sense) {
@@ -862,11 +1369,25 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return removal_asserted_more_specifically_check_pos_internals($$isa, asent);
     }
 
+    public static final SubLObject removal_asserted_more_specifically_isa_check_neg_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_asserted_more_specifically_check_neg_internals($$isa, asent);
+    }
+
     public static SubLObject removal_asserted_more_specifically_isa_check_neg_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
         return removal_asserted_more_specifically_check_neg_internals($$isa, asent, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject removal_asserted_more_specifically_genls_check_pos_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_asserted_more_specifically_check_pos_internals($$genls, asent);
     }
 
     public static SubLObject removal_asserted_more_specifically_genls_check_pos_expand(final SubLObject asent, SubLObject sense) {
@@ -876,11 +1397,25 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return removal_asserted_more_specifically_check_pos_internals($$genls, asent);
     }
 
+    public static final SubLObject removal_asserted_more_specifically_genls_check_neg_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_asserted_more_specifically_check_neg_internals($$genls, asent);
+    }
+
     public static SubLObject removal_asserted_more_specifically_genls_check_neg_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
         return removal_asserted_more_specifically_check_neg_internals($$genls, asent, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject removal_asserted_more_specifically_check_pos_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_asserted_more_specifically.removal_asserted_more_specifically_check_pos_internals(cycl_utilities.atomic_sentence_predicate(cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED)), asent);
     }
 
     public static SubLObject removal_asserted_more_specifically_check_pos_expand(final SubLObject asent, SubLObject sense) {
@@ -948,26 +1483,71 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return NIL;
     }
 
+    public static final SubLObject declare_removal_modules_asserted_more_specifically_file_alt() {
+        declareFunction("removal_asserted_more_specifically_check_pos_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-INTERNALS", 2, 0, false);
+        declareFunction("removal_asserted_more_specifically_check_neg_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-INTERNALS", 2, 0, false);
+        declareFunction("removal_more_specific_asserted_assertions", "REMOVAL-MORE-SPECIFIC-ASSERTED-ASSERTIONS", 2, 0, false);
+        declareFunction("more_specific_asserted_assertions", "MORE-SPECIFIC-ASSERTED-ASSERTIONS", 1, 0, false);
+        declareFunction("transitive_via_genls_in_arg2P", "TRANSITIVE-VIA-GENLS-IN-ARG2?", 1, 0, false);
+        declareFunction("more_specific_asserted_assertions_for_isa_genls", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-ISA-GENLS", 2, 0, false);
+        declareFunction("more_specific_asserted_assertions_for_other_pred", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED", 2, 0, false);
+        declareFunction("more_specific_asserted_assertion_asent_mt", "MORE-SPECIFIC-ASSERTED-ASSERTION-ASENT-MT", 0, 0, false);
+        declareFunction("removal_asserted_more_specifically_isa_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_isa_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_genls_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_genls_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND", 1, 1, false);
+        return NIL;
+    }
+
     public static SubLObject declare_removal_modules_asserted_more_specifically_file() {
-        declareFunction(me, "removal_asserted_more_specifically_check_pos_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-INTERNALS", 2, 0, false);
-        declareFunction(me, "removal_asserted_more_specifically_check_neg_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-INTERNALS", 2, 2, false);
-        declareFunction(me, "removal_more_specific_asserted_assertions", "REMOVAL-MORE-SPECIFIC-ASSERTED-ASSERTIONS", 2, 0, false);
-        declareFunction(me, "more_specific_asserted_assertions", "MORE-SPECIFIC-ASSERTED-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "transitive_via_genls_in_arg2P", "TRANSITIVE-VIA-GENLS-IN-ARG2?", 1, 0, false);
-        declareFunction(me, "more_specific_asserted_assertions_for_isa_genls", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-ISA-GENLS", 2, 0, false);
-        declareFunction(me, "more_specific_asserted_assertions_for_other_pred", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED", 2, 0, false);
-        declareFunction(me, "more_specific_asserted_assertion_asent_mt", "MORE-SPECIFIC-ASSERTED-ASSERTION-ASENT-MT", 0, 0, false);
-        declareFunction(me, "within_assertive_wff_forward_inferenceP", "WITHIN-ASSERTIVE-WFF-FORWARD-INFERENCE?", 0, 0, false);
-        declareFunction(me, "more_specific_asserted_assertions_for_other_pred_via_tva", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED-VIA-TVA", 2, 0, false);
-        declareFunction(me, "non_tva_gaf_assertion_p", "NON-TVA-GAF-ASSERTION-P", 1, 0, false);
-        declareFunction(me, "removal_asserted_more_specifically_isa_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_asserted_more_specifically_isa_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_asserted_more_specifically_genls_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_asserted_more_specifically_genls_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_asserted_more_specifically_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_asserted_more_specifically_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_strongest_asserted_sentence_lookup_pos_cost", "REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
-        declareFunction(me, "removal_strongest_asserted_sentence_lookup_pos_expand", "REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("removal_asserted_more_specifically_check_pos_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-INTERNALS", 2, 0, false);
+            declareFunction("removal_asserted_more_specifically_check_neg_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-INTERNALS", 2, 2, false);
+            declareFunction("removal_more_specific_asserted_assertions", "REMOVAL-MORE-SPECIFIC-ASSERTED-ASSERTIONS", 2, 0, false);
+            declareFunction("more_specific_asserted_assertions", "MORE-SPECIFIC-ASSERTED-ASSERTIONS", 1, 0, false);
+            declareFunction("transitive_via_genls_in_arg2P", "TRANSITIVE-VIA-GENLS-IN-ARG2?", 1, 0, false);
+            declareFunction("more_specific_asserted_assertions_for_isa_genls", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-ISA-GENLS", 2, 0, false);
+            declareFunction("more_specific_asserted_assertions_for_other_pred", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED", 2, 0, false);
+            declareFunction("more_specific_asserted_assertion_asent_mt", "MORE-SPECIFIC-ASSERTED-ASSERTION-ASENT-MT", 0, 0, false);
+            declareFunction("within_assertive_wff_forward_inferenceP", "WITHIN-ASSERTIVE-WFF-FORWARD-INFERENCE?", 0, 0, false);
+            declareFunction("more_specific_asserted_assertions_for_other_pred_via_tva", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED-VIA-TVA", 2, 0, false);
+            declareFunction("non_tva_gaf_assertion_p", "NON-TVA-GAF-ASSERTION-P", 1, 0, false);
+            declareFunction("removal_asserted_more_specifically_isa_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND", 1, 1, false);
+            declareFunction("removal_asserted_more_specifically_isa_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND", 1, 1, false);
+            declareFunction("removal_asserted_more_specifically_genls_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND", 1, 1, false);
+            declareFunction("removal_asserted_more_specifically_genls_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND", 1, 1, false);
+            declareFunction("removal_asserted_more_specifically_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND", 1, 1, false);
+            declareFunction("removal_asserted_more_specifically_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-EXPAND", 1, 1, false);
+            declareFunction("removal_strongest_asserted_sentence_lookup_pos_cost", "REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
+            declareFunction("removal_strongest_asserted_sentence_lookup_pos_expand", "REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("removal_asserted_more_specifically_check_neg_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-INTERNALS", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_removal_modules_asserted_more_specifically_file_Previous() {
+        declareFunction("removal_asserted_more_specifically_check_pos_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-INTERNALS", 2, 0, false);
+        declareFunction("removal_asserted_more_specifically_check_neg_internals", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-INTERNALS", 2, 2, false);
+        declareFunction("removal_more_specific_asserted_assertions", "REMOVAL-MORE-SPECIFIC-ASSERTED-ASSERTIONS", 2, 0, false);
+        declareFunction("more_specific_asserted_assertions", "MORE-SPECIFIC-ASSERTED-ASSERTIONS", 1, 0, false);
+        declareFunction("transitive_via_genls_in_arg2P", "TRANSITIVE-VIA-GENLS-IN-ARG2?", 1, 0, false);
+        declareFunction("more_specific_asserted_assertions_for_isa_genls", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-ISA-GENLS", 2, 0, false);
+        declareFunction("more_specific_asserted_assertions_for_other_pred", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED", 2, 0, false);
+        declareFunction("more_specific_asserted_assertion_asent_mt", "MORE-SPECIFIC-ASSERTED-ASSERTION-ASENT-MT", 0, 0, false);
+        declareFunction("within_assertive_wff_forward_inferenceP", "WITHIN-ASSERTIVE-WFF-FORWARD-INFERENCE?", 0, 0, false);
+        declareFunction("more_specific_asserted_assertions_for_other_pred_via_tva", "MORE-SPECIFIC-ASSERTED-ASSERTIONS-FOR-OTHER-PRED-VIA-TVA", 2, 0, false);
+        declareFunction("non_tva_gaf_assertion_p", "NON-TVA-GAF-ASSERTION-P", 1, 0, false);
+        declareFunction("removal_asserted_more_specifically_isa_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_isa_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-ISA-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_genls_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_genls_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-GENLS-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_check_pos_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("removal_asserted_more_specifically_check_neg_expand", "REMOVAL-ASSERTED-MORE-SPECIFICALLY-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_strongest_asserted_sentence_lookup_pos_cost", "REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-COST", 1, 1, false);
+        declareFunction("removal_strongest_asserted_sentence_lookup_pos_expand", "REMOVAL-STRONGEST-ASSERTED-SENTENCE-LOOKUP-POS-EXPAND", 1, 1, false);
         return NIL;
     }
 
@@ -977,7 +1557,42 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
         return NIL;
     }
 
+    public static final SubLObject setup_removal_modules_asserted_more_specifically_file_alt() {
+        inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_POS, $list_alt25);
+        inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_NEG, $list_alt27);
+        inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_POS, $list_alt29);
+        inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_NEG, $list_alt31);
+        inference_modules.register_solely_specific_removal_module_predicate($$assertedMoreSpecifically);
+        inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_CHECK_POS, $list_alt34);
+        return NIL;
+    }
+
     public static SubLObject setup_removal_modules_asserted_more_specifically_file() {
+        if (SubLFiles.USE_V1) {
+            inference_modules.register_solely_specific_removal_module_predicate($$assertedMoreSpecifically);
+            preference_modules.doomed_unless_all_args_bindable($BOTH, $$assertedMoreSpecifically);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_POS, $list39);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_NEG, $list41);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_POS, $list43);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_NEG, $list45);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_CHECK_POS, $list47);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_CHECK_NEG, $list49);
+            inference_modules.register_solely_specific_removal_module_predicate($$strongestAssertedSentence);
+            inference_modules.inference_removal_module($REMOVAL_STRONGEST_ASSERTED_SENTENCE_LOOKUP_POS, $list52);
+            note_funcall_helper_function(REMOVAL_STRONGEST_ASSERTED_SENTENCE_LOOKUP_POS_COST);
+            note_funcall_helper_function(REMOVAL_STRONGEST_ASSERTED_SENTENCE_LOOKUP_POS_EXPAND);
+        }
+        if (SubLFiles.USE_V2) {
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_POS, $list_alt25);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_NEG, $list_alt27);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_POS, $list_alt29);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_GENLS_CHECK_NEG, $list_alt31);
+            inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_CHECK_POS, $list_alt34);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_removal_modules_asserted_more_specifically_file_Previous() {
         inference_modules.register_solely_specific_removal_module_predicate($$assertedMoreSpecifically);
         preference_modules.doomed_unless_all_args_bindable($BOTH, $$assertedMoreSpecifically);
         inference_modules.inference_removal_module($REMOVAL_ASSERTED_MORE_SPECIFICALLY_ISA_CHECK_POS, $list39);
@@ -1009,65 +1624,6 @@ public final class removal_modules_asserted_more_specifically extends SubLTransl
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

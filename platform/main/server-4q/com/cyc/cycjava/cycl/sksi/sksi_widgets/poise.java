@@ -1,15 +1,29 @@
 package com.cyc.cycjava.cycl.sksi.sksi_widgets;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.accumulation;
 import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.cycjava.cycl.list_utilities;
 import com.cyc.cycjava.cycl.map_utilities;
 import com.cyc.cycjava.cycl.number_utilities;
 import com.cyc.cycjava.cycl.sdbc;
-import com.cyc.cycjava.cycl.sksi.sksi_widgets.poise;
+import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -24,40 +38,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.sksi.sksi_widgets.poise.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_A;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class poise extends SubLTranslatedFile {
+public final class poise extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new poise();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_widgets.poise";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.sksi_widgets.poise";
 
-    public static final String myFingerPrint = "f7ce2ba6422ab3f302c532e17a491660dce17c6629fc10ec09d4465e50d604a0";
 
     // deflexical
     public static final SubLSymbol $poise_normalization_schematic$ = makeSymbol("*POISE-NORMALIZATION-SCHEMATIC*");
@@ -411,18 +397,18 @@ public final class poise extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_poise_file() {
-        declareFunction(me, "connect_to_poise_schemata", "CONNECT-TO-POISE-SCHEMATA", 0, 0, false);
-        declareFunction(me, "connect_to_excel_file_sheet", "CONNECT-TO-EXCEL-FILE-SHEET", 2, 0, false);
-        declareFunction(me, "create_poise_normalization_schema", "CREATE-POISE-NORMALIZATION-SCHEMA", 2, 1, false);
-        declareFunction(me, "compile_poise_normalization_from_description", "COMPILE-POISE-NORMALIZATION-FROM-DESCRIPTION", 1, 1, false);
-        declareFunction(me, "extract_poise_data_from_binding_sets", "EXTRACT-POISE-DATA-FROM-BINDING-SETS", 1, 0, false);
-        declareFunction(me, "possibly_remove_old_poise_schema", "POSSIBLY-REMOVE-OLD-POISE-SCHEMA", 2, 0, false);
-        declareFunction(me, "get_poise_schema_id", "GET-POISE-SCHEMA-ID", 2, 0, false);
-        declareFunction(me, "store_poise_normalization_schema", "STORE-POISE-NORMALIZATION-SCHEMA", 3, 0, false);
-        declareFunction(me, "generate_sql_from_poise_schematic_description", "GENERATE-SQL-FROM-POISE-SCHEMATIC-DESCRIPTION", 2, 1, false);
-        declareFunction(me, "poise_column_description_column_index", "POISE-COLUMN-DESCRIPTION-COLUMN-INDEX", 1, 0, false);
-        declareFunction(me, "extract_poise_data_from_binding_set", "EXTRACT-POISE-DATA-FROM-BINDING-SET", 2, 0, false);
-        declareFunction(me, "poise_column_index_from_spreadsheet_name", "POISE-COLUMN-INDEX-FROM-SPREADSHEET-NAME", 1, 0, false);
+        declareFunction("connect_to_poise_schemata", "CONNECT-TO-POISE-SCHEMATA", 0, 0, false);
+        declareFunction("connect_to_excel_file_sheet", "CONNECT-TO-EXCEL-FILE-SHEET", 2, 0, false);
+        declareFunction("create_poise_normalization_schema", "CREATE-POISE-NORMALIZATION-SCHEMA", 2, 1, false);
+        declareFunction("compile_poise_normalization_from_description", "COMPILE-POISE-NORMALIZATION-FROM-DESCRIPTION", 1, 1, false);
+        declareFunction("extract_poise_data_from_binding_sets", "EXTRACT-POISE-DATA-FROM-BINDING-SETS", 1, 0, false);
+        declareFunction("possibly_remove_old_poise_schema", "POSSIBLY-REMOVE-OLD-POISE-SCHEMA", 2, 0, false);
+        declareFunction("get_poise_schema_id", "GET-POISE-SCHEMA-ID", 2, 0, false);
+        declareFunction("store_poise_normalization_schema", "STORE-POISE-NORMALIZATION-SCHEMA", 3, 0, false);
+        declareFunction("generate_sql_from_poise_schematic_description", "GENERATE-SQL-FROM-POISE-SCHEMATIC-DESCRIPTION", 2, 1, false);
+        declareFunction("poise_column_description_column_index", "POISE-COLUMN-DESCRIPTION-COLUMN-INDEX", 1, 0, false);
+        declareFunction("extract_poise_data_from_binding_set", "EXTRACT-POISE-DATA-FROM-BINDING-SET", 2, 0, false);
+        declareFunction("poise_column_index_from_spreadsheet_name", "POISE-COLUMN-INDEX-FROM-SPREADSHEET-NAME", 1, 0, false);
         return NIL;
     }
 

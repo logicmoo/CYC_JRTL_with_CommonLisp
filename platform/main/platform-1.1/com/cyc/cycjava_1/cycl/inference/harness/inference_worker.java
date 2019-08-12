@@ -5814,8 +5814,7 @@ Currently only NIL and T are supported. */
   }
 
   public static final SubLObject setup_inference_worker_file() {
-    // CVS_ID("Id: inference-worker.lisp 128760 2009-09-15 04:40:33Z pace ");
-    memoization_state.note_memoized_function($sym69$INTERMEDIATE_PROOF_STEP_VALID_MEMOIZED_);
+        memoization_state.note_memoized_function($sym69$INTERMEDIATE_PROOF_STEP_VALID_MEMOIZED_);
     memoization_state.note_memoized_function($sym105$CACHED_INFERENCE_PROOF_NON_EXPLANATORY_SUBPROOFS);
     subl_macro_promotions.declare_defglobal($sym162$_PROBLEM_STORE_PRUNE_REPORTS_);
     return NIL;

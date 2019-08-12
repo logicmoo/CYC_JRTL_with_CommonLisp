@@ -1,18 +1,31 @@
 package com.cyc.cycjava.cycl.inference.modules;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.bindings;
 import com.cyc.cycjava.cycl.clauses;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.memoization_state;
+import com.cyc.cycjava.cycl.mt_relevance_macros;
+import com.cyc.cycjava.cycl.variables;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_query;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava.cycl.inference.modules.progress_modules;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.variables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -22,38 +35,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.inference.modules.progress_modules.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class progress_modules extends SubLTranslatedFile {
+public final class progress_modules extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new progress_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.progress_modules";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.progress_modules";
 
-    public static final String myFingerPrint = "81a5fc86f3d77ee370df73b1994e0abcd9791ae2c9266b5bd301a46e9bc29208";
 
 
 
@@ -476,15 +463,15 @@ public final class progress_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_progress_modules_file() {
-        declareFunction(me, "compute_join_ordered_link_total_strategic_progress", "COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS", 1, 1, false);
-        declareFunction(me, "memoized_compute_join_ordered_link_total_strategic_progress_int_internal", "MEMOIZED-COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS-INT-INTERNAL", 2, 0, false);
-        declareFunction(me, "memoized_compute_join_ordered_link_total_strategic_progress_int", "MEMOIZED-COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS-INT", 2, 0, false);
-        declareFunction(me, "compute_literal_total_strategic_progress_qua_subquery", "COMPUTE-LITERAL-TOTAL-STRATEGIC-PROGRESS-QUA-SUBQUERY", 4, 1, false);
-        declareFunction(me, "literal_shared_vars_qua_subquery", "LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0, false);
-        declareFunction(me, "strategic_progress_wrt_varsP", "STRATEGIC-PROGRESS-WRT-VARS?", 5, 1, false);
-        declareFunction(me, "test_literal_shared_vars_qua_subquery", "TEST-LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0, false);
-        declareFunction(me, "test_strategic_progress_wrt_varsP", "TEST-STRATEGIC-PROGRESS-WRT-VARS?", 5, 0, false);
-        declareFunction(me, "test_compute_all_literals_total_strategic_progress_qua_subquery", "TEST-COMPUTE-ALL-LITERALS-TOTAL-STRATEGIC-PROGRESS-QUA-SUBQUERY", 1, 0, false);
+        declareFunction("compute_join_ordered_link_total_strategic_progress", "COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS", 1, 1, false);
+        declareFunction("memoized_compute_join_ordered_link_total_strategic_progress_int_internal", "MEMOIZED-COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS-INT-INTERNAL", 2, 0, false);
+        declareFunction("memoized_compute_join_ordered_link_total_strategic_progress_int", "MEMOIZED-COMPUTE-JOIN-ORDERED-LINK-TOTAL-STRATEGIC-PROGRESS-INT", 2, 0, false);
+        declareFunction("compute_literal_total_strategic_progress_qua_subquery", "COMPUTE-LITERAL-TOTAL-STRATEGIC-PROGRESS-QUA-SUBQUERY", 4, 1, false);
+        declareFunction("literal_shared_vars_qua_subquery", "LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0, false);
+        declareFunction("strategic_progress_wrt_varsP", "STRATEGIC-PROGRESS-WRT-VARS?", 5, 1, false);
+        declareFunction("test_literal_shared_vars_qua_subquery", "TEST-LITERAL-SHARED-VARS-QUA-SUBQUERY", 4, 0, false);
+        declareFunction("test_strategic_progress_wrt_varsP", "TEST-STRATEGIC-PROGRESS-WRT-VARS?", 5, 0, false);
+        declareFunction("test_compute_all_literals_total_strategic_progress_qua_subquery", "TEST-COMPUTE-ALL-LITERALS-TOTAL-STRATEGIC-PROGRESS-QUA-SUBQUERY", 1, 0, false);
         return NIL;
     }
 

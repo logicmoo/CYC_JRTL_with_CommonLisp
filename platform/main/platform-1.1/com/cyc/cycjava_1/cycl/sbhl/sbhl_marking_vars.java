@@ -535,8 +535,7 @@ public  final class sbhl_marking_vars extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_marking_vars_file() {
-    // CVS_ID("Id: sbhl-marking-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym10$DETERMINE_RESOURCE_LIMIT, $sym14$WITH_SBHL_RESOURCED_MARKING_SPACES);
+        access_macros.register_macro_helper($sym10$DETERMINE_RESOURCE_LIMIT, $sym14$WITH_SBHL_RESOURCED_MARKING_SPACES);
     access_macros.register_macro_helper($sym12$POSSIBLY_NEW_MARKING_RESOURCE, $sym14$WITH_SBHL_RESOURCED_MARKING_SPACES);
     access_macros.register_macro_helper($sym29$DETERMINE_MARKING_SPACE_LIMIT, NIL);
     access_macros.register_macro_helper($sym43$POSSIBLY_WITH_NEW_SBHL_SPACE, $sym44$POSSIBLY_WITH_NEW_SBHL_SPACES);

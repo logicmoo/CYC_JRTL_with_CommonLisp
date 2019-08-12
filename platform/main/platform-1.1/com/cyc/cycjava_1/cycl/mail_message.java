@@ -233,8 +233,7 @@ public  final class mail_message extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_mail_message_file() {
-    // CVS_ID("Id: mail-message.lisp 128599 2009-08-21 20:25:28Z baxter ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_message$.getGlobalValue(), Symbols.symbol_function($sym7$MESSAGE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_message$.getGlobalValue(), Symbols.symbol_function($sym7$MESSAGE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$MSG_FROM, $sym9$_CSETF_MSG_FROM);
     Structures.def_csetf($sym10$MSG_TO, $sym11$_CSETF_MSG_TO);
     Structures.def_csetf($sym12$MSG_CC, $sym13$_CSETF_MSG_CC);

@@ -1,22 +1,37 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.cyc_testing;
 
 
-import com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.cyc_testing.kb_content_test.kct_cyc_testing;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.file_utilities;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.numeric_date_utilities;
-import com.cyc.cycjava.cycl.regular_expression_utilities;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_utilities;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.system_info;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapper;
@@ -38,155 +53,259 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.control_vars.$read_require_constant_exists$;
-import static com.cyc.cycjava.cycl.control_vars.$save_asked_queriesP$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      CYC-TESTING-UTILITIES
+ * source file: /cyc/top/cycl/cyc-testing/cyc-testing-utilities.lisp
+ * created:     2019/07/03 17:37:16
+ */
+public final class cyc_testing_utilities extends SubLTranslatedFile implements V12 {
+    /**
+     * Assumes that MY-TEST-RUNS only contains test runs owned by OWNER.
+     *
+     * @param redirect-unless-failures?;
+     * 		if t, and there are no failures for OWNER, send the email to *default-cyc-test-run-email-recipient* instead of OWNER.
+     */
+    @LispMethod(comment = "Assumes that MY-TEST-RUNS only contains test runs owned by OWNER.\r\n\r\n@param redirect-unless-failures?;\r\n\t\tif t, and there are no failures for OWNER, send the email to *default-cyc-test-run-email-recipient* instead of OWNER.")
+    public static final SubLObject email_cyc_test_runs_summary(SubLObject owner, SubLObject my_test_runs, SubLObject comment, SubLObject overriding_to_address, SubLObject redirect_unless_failuresP) {
+        if (NIL == owner) {
+            owner = $$$UNOWNED;
+        }
+        {
+            SubLObject to_address = owner;
+            SubLObject subject = cconcatenate($str_alt8$Test_results_summary_for_, owner);
+            if (NIL == kb_accessors.current_cycorp_usernameP(owner)) {
+                Errors.warn($str_alt9$_a_is_not_a_current_Cycorp_userna, owner, $default_cyc_test_run_email_recipient$.getGlobalValue());
+                subject = cconcatenate(subject, $str_alt10$__unowned_);
+                to_address = $default_cyc_test_run_email_recipient$.getGlobalValue();
+            } else {
+                if (NIL == find_if(FAILING_CYC_TEST_RUN_P, my_test_runs, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                    subject = cconcatenate(subject, $str_alt12$__no_failures_);
+                    if (NIL != redirect_unless_failuresP) {
+                        Errors.warn($str_alt13$_a_has_no_failures_that_we_care_a, owner, $default_cyc_test_run_email_recipient$.getGlobalValue());
+                        to_address = $default_cyc_test_run_email_recipient$.getGlobalValue();
+                    }
+                } else {
+                    subject = cconcatenate($str_alt14$FAILING_TESTS__, subject);
+                }
+            }
+            {
+                SubLObject message = com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities.cyc_test_runs_summary_text(my_test_runs, owner, to_address, comment);
+                if (NIL != overriding_to_address) {
+                    to_address = overriding_to_address;
+                }
+                if (NIL != mail_utilities.mail_message($str_alt15$qa_cyc_com, cconcatenate(to_address, $str_alt16$_cyc_com), message, subject, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                    return T;
+                }
+            }
+        }
+        return NIL;
+    }
 
-public final class cyc_testing_utilities extends SubLTranslatedFile {
+    public static final SubLObject email_cyc_test_runs_summaries_int(SubLObject test_runs, SubLObject comment, SubLObject overriding_to_address, SubLObject redirect_unless_failuresP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != overriding_to_address) {
+                SubLTrampolineFile.checkType(overriding_to_address, $sym4$CURRENT_CYCORP_USERNAME_);
+            }
+            {
+                SubLObject count = ZERO_INTEGER;
+                SubLObject test_runs_by_owner = dictionary_utilities.new_classification_dictionary(test_runs, CYC_TEST_RUN_OWNER, UNPROVIDED);
+                SubLObject so_far = ZERO_INTEGER;
+                SubLObject total = dictionary.dictionary_length(test_runs_by_owner);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($str_alt6$Sending_test_summary_emails___);
+                        {
+                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(test_runs_by_owner));
+                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject owner = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                    SubLObject my_test_runs = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    if (NIL != com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities.email_cyc_test_runs_summary(owner, my_test_runs, comment, overriding_to_address, redirect_unless_failuresP)) {
+                                        count = add(count, ONE_INTEGER);
+                                    }
+                                    so_far = add(so_far, ONE_INTEGER);
+                                    note_percent_progress(so_far, total);
+                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                }
+                            } 
+                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return count;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param OVERRIDING-TO-ADDRESS
+     * 		stringp without @cyc.com; if specified, will send all emails to this address instead.  Useful for testing.
+     */
+    @LispMethod(comment = "@param OVERRIDING-TO-ADDRESS\r\n\t\tstringp without @cyc.com; if specified, will send all emails to this address instead.  Useful for testing.")
+    public static final SubLObject email_cyc_test_runs_summaries_if_failures(SubLObject test_runs, SubLObject comment, SubLObject overriding_to_address) {
+        if (overriding_to_address == UNPROVIDED) {
+            overriding_to_address = NIL;
+        }
+        return com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities.email_cyc_test_runs_summaries_int(test_runs, comment, overriding_to_address, T);
+    }
+
+    /**
+     *
+     *
+     * @param OVERRIDING-TO-ADDRESS
+     * 		stringp without @cyc.com; if specified, will send all emails to this address instead.  Useful for testing.
+     */
+    @LispMethod(comment = "@param OVERRIDING-TO-ADDRESS\r\n\t\tstringp without @cyc.com; if specified, will send all emails to this address instead.  Useful for testing.")
+    public static final SubLObject email_cyc_test_runs_summaries(SubLObject test_runs, SubLObject comment, SubLObject overriding_to_address) {
+        if (overriding_to_address == UNPROVIDED) {
+            overriding_to_address = NIL;
+        }
+        return com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities.email_cyc_test_runs_summaries_int(test_runs, comment, overriding_to_address, NIL);
+    }
+
+    public static final SubLObject cyc_test_runs_summary_text(SubLObject test_runs, SubLObject owner, SubLObject to_address, SubLObject comment) {
+        {
+            SubLObject string = NIL;
+            SubLObject s = NIL;
+            try {
+                s = make_private_string_output_stream();
+                format(s, $str_alt17$Dear__a_____, to_address);
+                format(s, $str_alt18$Here_is_a_results_summary_for_tes, owner);
+                format(s, $str_alt19$The_comment_on_this_test_run_was_, comment);
+                {
+                    SubLObject histogram_plist = list_utilities.histogram_as_plist(Mapping.mapcar(CYC_TEST_RUN_RESULT, test_runs), symbol_function($sym21$_), symbol_function(EQ), $sym22$CYC_TEST_RESULT__);
+                    format(s, $str_alt23$Histogram_of_results___);
+                    list_utilities.pretty_print_plist(histogram_plist, s);
+                    if (NIL != find($KCT, test_runs, symbol_function(EQ), CYC_TEST_RUN_TYPE, UNPROVIDED, UNPROVIDED)) {
+                        format(s, $str_alt26$__If_you_wish_to_examine_your_KB_);
+                    }
+                    cyc_testing.print_failing_cyc_tests_message(s, test_runs, NIL, T);
+                    terpri(s);
+                    terpri(s);
+                    cyc_testing.print_succeeding_cyc_tests_message(s, test_runs, NIL, T);
+                    terpri(s);
+                    terpri(s);
+                    cyc_testing.print_ignored_cyc_tests_message(s, test_runs, NIL, T);
+                    terpri(s);
+                }
+                string = get_output_stream_string(s);
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        close(s, UNPROVIDED);
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+            return string;
+        }
+    }
+
+    /**
+     * The email address to send notifications to if the owner is not current
+     */
+    // deflexical
+    @LispMethod(comment = "The email address to send notifications to if the owner is not current\ndeflexical")
+    private static final SubLSymbol $default_cyc_test_run_email_recipient$ = makeSymbol("*DEFAULT-CYC-TEST-RUN-EMAIL-RECIPIENT*");
+
     public static final SubLFile me = new cyc_testing_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.cyc_testing.cyc_testing_utilities";
 
-    public static final String myFingerPrint = "ff47dca27dfbb4984912829ba5b08fc2ea93ac2db75fdd8a7f8be9833b95c3c8";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_rerun_crashing_tests$ = makeSymbol("*DEFAULT-RERUN-CRASHING-TESTS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $cyc_test_write_image_directory$ = makeSymbol("*CYC-TEST-WRITE-IMAGE-DIRECTORY*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $tests_that_dont_work_with_real_time_pruning$ = makeSymbol("*TESTS-THAT-DONT-WORK-WITH-REAL-TIME-PRUNING*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $file_size_change_tolerance$ = makeSymbol("*FILE-SIZE-CHANGE-TOLERANCE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $file_size_ignore_regexes$ = makeSymbol("*FILE-SIZE-IGNORE-REGEXES*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $size_logs_directory$ = makeSymbol("*SIZE-LOGS-DIRECTORY*");
 
-    private static final SubLSymbol $sym0$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
+    private static final SubLSymbol $append_stack_traces_to_error_messagesP$ = makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*");
 
     private static final SubLList $list1 = list(makeSymbol("CSETQ"), makeSymbol("*APPEND-STACK-TRACES-TO-ERROR-MESSAGES?*"), NIL);
 
-
-
     private static final SubLString $str3$_lisp = makeString(".lisp");
-
-
 
     private static final SubLString $str5$_A = makeString("~A");
 
     private static final SubLString $str6$_ = makeString("/");
 
-    private static final SubLList $list7 = list(makeSymbol("NAME"), makeSymbol("&KEY"), list(makeSymbol("VERBOSITY"), makeKeyword("TERSE")), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(makeSymbol("QUOTE"), makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(makeSymbol("QUOTE"), makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))));
+    private static final SubLList $list7 = list(makeSymbol("NAME"), makeSymbol("&KEY"), list(makeSymbol("VERBOSITY"), makeKeyword("TERSE")), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(QUOTE, makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(QUOTE, makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))));
 
     private static final SubLList $list8 = list(makeKeyword("VERBOSITY"), makeKeyword("BROWSABLE?"), makeKeyword("BLOCK?"), makeKeyword("OUTPUT-FORMAT"), makeKeyword("STREAM"), makeKeyword("RUN-TINY-KB-TESTS-IN-FULL-KB?"));
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLSymbol $standard_output$ = makeSymbol("*STANDARD-OUTPUT*");
 
     private static final SubLSymbol $kw18$RUN_TINY_KB_TESTS_IN_FULL_KB_ = makeKeyword("RUN-TINY-KB-TESTS-IN-FULL-KB?");
 
-    private static final SubLSymbol $sym19$_RUN_TINY_KB_TESTS_IN_FULL_KB__ = makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*");
+    private static final SubLSymbol $run_tiny_kb_tests_in_full_kbP$ = makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*");
 
     private static final SubLSymbol RUN_CYC_TEST_INT = makeSymbol("RUN-CYC-TEST-INT");
 
-    private static final SubLList $list21 = list(new SubLObject[]{ makeSymbol("NAME"), makeSymbol("MIN-NUMBER"), makeSymbol("MAX-NUMBER"), makeSymbol("&KEY"), list(makeSymbol("VERBOSITY"), makeKeyword("TERSE")), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(makeSymbol("QUOTE"), makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(makeSymbol("QUOTE"), makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))) });
+    private static final SubLList $list21 = list(new SubLObject[]{ makeSymbol("NAME"), makeSymbol("MIN-NUMBER"), makeSymbol("MAX-NUMBER"), makeSymbol("&KEY"), list(makeSymbol("VERBOSITY"), makeKeyword("TERSE")), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(QUOTE, makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(QUOTE, makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))) });
 
     private static final SubLSymbol RUN_CYC_TEST_IN_RANGE_INT = makeSymbol("RUN-CYC-TEST-IN-RANGE-INT");
 
-    private static final SubLList $list23 = list(makeSymbol("NAME"), makeSymbol("&KEY"), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(makeSymbol("QUOTE"), makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(makeSymbol("QUOTE"), makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))));
+    private static final SubLList $list23 = list(makeSymbol("NAME"), makeSymbol("&KEY"), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(QUOTE, makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(QUOTE, makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))));
 
     private static final SubLList $list24 = list(makeKeyword("BROWSABLE?"), makeKeyword("BLOCK?"), makeKeyword("OUTPUT-FORMAT"), makeKeyword("STREAM"), makeKeyword("RUN-TINY-KB-TESTS-IN-FULL-KB?"));
-
-
 
     private static final SubLSymbol RUN_CYC_TEST = makeSymbol("RUN-CYC-TEST");
 
     private static final SubLSymbol CYC_TEST_VERBOSITY_LEVEL_P = makeSymbol("CYC-TEST-VERBOSITY-LEVEL-P");
 
-
-
     private static final SubLSymbol CYC_TEST_OUTPUT_FORMAT_P = makeSymbol("CYC-TEST-OUTPUT-FORMAT-P");
 
-
-
-    private static final SubLList $list31 = list(new SubLObject[]{ makeSymbol("NAME"), makeSymbol("&KEY"), list(makeSymbol("NTHREADS"), FOUR_INTEGER), list(makeSymbol("NTIMES"), TEN_INTEGER), list(makeSymbol("VERBOSITY"), makeKeyword("TERSE")), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(makeSymbol("QUOTE"), makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(makeSymbol("QUOTE"), makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))) });
+    private static final SubLList $list31 = list(new SubLObject[]{ makeSymbol("NAME"), makeSymbol("&KEY"), list(makeSymbol("NTHREADS"), FOUR_INTEGER), list(makeSymbol("NTIMES"), TEN_INTEGER), list(makeSymbol("VERBOSITY"), makeKeyword("TERSE")), makeSymbol("BROWSABLE?"), makeSymbol("BLOCK?"), list(makeSymbol("OUTPUT-FORMAT"), makeKeyword("STANDARD")), list(makeSymbol("STREAM"), list(QUOTE, makeSymbol("*STANDARD-OUTPUT*"))), list(makeSymbol("RUN-TINY-KB-TESTS-IN-FULL-KB?"), list(QUOTE, makeSymbol("*RUN-TINY-KB-TESTS-IN-FULL-KB?*"))) });
 
     private static final SubLList $list32 = list(makeKeyword("NTHREADS"), makeKeyword("NTIMES"), makeKeyword("VERBOSITY"), makeKeyword("BROWSABLE?"), makeKeyword("BLOCK?"), makeKeyword("OUTPUT-FORMAT"), makeKeyword("STREAM"), makeKeyword("RUN-TINY-KB-TESTS-IN-FULL-KB?"));
-
-
-
-
 
     private static final SubLSymbol RUN_CYC_TEST_PARALLEL_INT = makeSymbol("RUN-CYC-TEST-PARALLEL-INT");
 
     private static final SubLSymbol RUN_CYC_TEST_PARALLEL = makeSymbol("RUN-CYC-TEST-PARALLEL");
-
-
 
     private static final SubLString $$$Parallel_Test_Thread_for_ = makeString("Parallel Test Thread for ");
 
@@ -194,37 +313,13 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol RUN_CYC_TEST_OBJECT_PARALLEL = makeSymbol("RUN-CYC-TEST-OBJECT-PARALLEL");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLString $str49$Cyc_test_of_unexpected_type___s = makeString("Cyc test of unexpected type: ~s");
-
-
 
     private static final SubLString $str51$Can_t_run_inference_tests_in_brow = makeString("Can't run inference tests in browsable mode -- ignoring :browsable? setting~%");
 
     private static final SubLString $str52$Can_t_run_inference_tests_in_bloc = makeString("Can't run inference tests in blocking mode -- ignoring :block? setting~%");
 
-
-
-
-
     private static final SubLString $str55$Unexpected_testing_direction____S = makeString("Unexpected testing direction : ~S");
-
-
 
     private static final SubLString $str57$Can_t_run_removal_module_cost_tes = makeString("Can't run removal module cost tests in browsable mode -- ignoring :browsable? setting~%");
 
@@ -236,8 +331,6 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str61$Can_t_run_test_case_tables_in_blo = makeString("Can't run test case tables in blocking mode -- ignoring :block? setting~%");
 
-
-
     private static final SubLSymbol CYC_TEST_TYPE_SPEC_P = makeSymbol("CYC-TEST-TYPE-SPEC-P");
 
     private static final SubLSymbol FILE_VALID_FOR_WRITING_P = makeSymbol("FILE-VALID-FOR-WRITING-P");
@@ -246,27 +339,13 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str66$Invalid_phase__A_of__A_specified_ = makeString("Invalid phase ~A of ~A specified.");
 
-
-
     private static final SubLString $str68$Unable_to_open__S = makeString("Unable to open ~S");
 
     private static final SubLString $str69$___HARNESS_ERROR___A__ = makeString("~&:HARNESS-ERROR: ~A~%");
 
-
-
-
-
-
-
     private static final SubLSymbol CYC_TEST_RUN_P = makeSymbol("CYC-TEST-RUN-P");
 
-
-
-
-
     private static final SubLList $list76 = list(makeKeyword("RMT"), makeKeyword("TMT"), makeKeyword("TCT"));
-
-
 
     private static final SubLString $str78$Unexpected_value__s_for__run_non_ = makeString("Unexpected value ~s for :run-non-working-tests");
 
@@ -318,29 +397,71 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str102$__NOTE__The_following_cyc_tests_w = makeString("~&NOTE: The following cyc tests were noted as not working:~%");
 
+    static private final SubLString $str_alt1$_lisp = makeString(".lisp");
+
     private static final SubLString $str103$___Tests_finished_at__a_Total_tim = makeString("~&\nTests finished at ~a\nTotal time: ~a\nTotal test guts time: ~a\nHistogram of results:~%");
+
+    static private final SubLString $str_alt2$_A = makeString("~A");
+
+    static private final SubLString $$$qa = makeString("qa");
 
     private static final SubLSymbol CYC_TEST_RUN_RESULT = makeSymbol("CYC-TEST-RUN-RESULT");
 
+    static private final SubLSymbol $sym4$CURRENT_CYCORP_USERNAME_ = makeSymbol("CURRENT-CYCORP-USERNAME?");
+
     private static final SubLString $str105$Overall_result___s__ = makeString("Overall result: ~s~%");
+
+    private static final SubLSymbol CYC_TEST_RUN_OWNER = makeSymbol("CYC-TEST-RUN-OWNER");
 
     private static final SubLString $str106$_S__A__S__A = makeString("~S ~A ~S ~A");
 
+    static private final SubLString $str_alt6$Sending_test_summary_emails___ = makeString("Sending test summary emails...");
+
     private static final SubLString $str107$__A = makeString(" ~A");
 
-
+    static private final SubLString $$$UNOWNED = makeString("UNOWNED");
 
     private static final SubLString $str109$cyc_test_image_ = makeString("cyc-test-image-");
+
+    static private final SubLString $str_alt8$Test_results_summary_for_ = makeString("Test results summary for ");
 
     private static final SubLString $$$load = makeString("load");
 
     private static final SubLList $list111 = list(new SubLObject[]{ makeKeyword("CANONICALIZE-INFERENCE-ANSWER-JUSTIFICATIONS"), makeKeyword("NON-EXPLANATORY-SENTENCE-SUPPORTS"), makeKeyword("NON-EXPLANATORY-VARIABLE-MAP-SUPPORTS"), makeKeyword("TRUE-SENTENCE-OF-ATOMIC-SENTENCE-REDUCTION"), makeKeyword("IST-OF-ATOMIC-SENTENCE-REDUCTION"), makeKeyword("RELATION-ALL-INSTANCE-ITERATE-2"), makeKeyword("RELATION-INSTANCE-ALL-ITERATE-2"), makeKeyword("REJECT-PREVIOUSLY-PROVEN-PROOFS"), makeKeyword("INFERENCE-HARNESS-OVERHEAD"), makeKeyword("TACTICALLY-UNEXAMINED-NO-GOOD-IMPLIES-STRATEGICALLY-UNEXAMINED-NO-GOOD"), makeKeyword("KAPPA-REMOVAL-WORKS"), makeKeyword("DONT-REOPEN-ANSWER-LINK"), makeKeyword("REMOVAL-TRUE-SENTENCE-UNIVERSAL-DISJUNCTION-14A"), makeKeyword("CLOSED-ASENT-WITH-3-CHILDREN"), makeKeyword("SIMPLE-EXCEPT-WHEN"), makeKeyword("SIMPLE-EXCEPT-WHEN-RESIDUAL-TRANSFORMATION"), makeKeyword("PARTIAL-EXCEPT-WHEN"), makeKeyword("VARIABLE-MAP-EXCEPT-WHEN"), makeKeyword("EXCEPTION-TMS-BACKWARD-NO-OP"), makeKeyword("MULTIPLE-TRANSFORMATION-PROOFS-FOR-CLOSED-PROBLEM"), makeKeyword("BACKCHAIN-TO-REMOVAL-TRUE-SENTENCE-UNIVERSAL-DISJUNCTION-1"), makeKeyword("BACKCHAIN-TO-REMOVAL-TRUE-SENTENCE-UNIVERSAL-DISJUNCTION-2"), makeKeyword("BACKCHAIN-TO-REMOVAL-TRUE-SENTENCE-UNIVERSAL-DISJUNCTION-3"), makeKeyword("EXCEPT-MT-IN-MID-MT-BLOCKS-HIGH-MT-FROM-LOW-MT"), makeKeyword("EXCEPT-MT-IN-HIGH-MT-HOSES-BACKWARD-INFERENCE"), makeKeyword("TWO-STEP"), makeKeyword("TWO-STEP-ARG-1"), makeKeyword("RECONSIDER-DEDUCTION"), makeKeyword("THERE-EXISTS"), makeKeyword("EXCEPT-WHEN"), makeKeyword("STRENGTH-PROPAGATION"), makeKeyword("SEQUENCE-VARIABLES-INFERENCE"), makeKeyword("INFERENCE-ANSWER-TEMPLATE"), makeKeyword("EXCEPT-BLOCKS-BACKWARD"), makeKeyword("EXCEPT-BLOCKS-FORWARD"), makeKeyword("TRUE-SENTENCE-UNIVERSAL-DISJUNCTION-SCOPING"), makeKeyword("TMS-RECONSIDERATION-WITH-BACKCHAIN-FORBIDDEN"), makeKeyword("LAZILY-MANIFEST-NON-FOCALS"), makeKeyword("CONSIDER-NO-GOOD-AFTER-DETERMINING-TACTICS"), makeKeyword("IRRELEVANT-DOES-NOT-IMPLY-PENDING"), makeKeyword("PROBLEM-STORE-PRUNING-MAX-INSUFFICIENT"), makeKeyword("RESTRICTED-CLOSED-GOOD-PROBLEMS-STAY-UNEXAMINED"), makeKeyword("GENLS-BETWEEN"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-1"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-2"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-3"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-4"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-5"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-6"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-7"), makeKeyword("CONJUNCTIVE-INTEGER-BETWEEN-8"), makeKeyword("CONJUNCTIVE-FOLLOWUP-ADDITIONAL-JOIN-ORDERED"), makeKeyword("CONJUNCTIVE-FOLLOWUP-ADDITIONAL-JOIN-ORDERED-WITHOUT-INFERENCE"), makeKeyword("CIRCULAR-PROOFS"), makeKeyword("POSSIBLE-REUSED-PROBLEMS-GET-STRATEGICALLY-EVALUATED"), makeKeyword("RESIDUAL-TRANSFORMATION-PROBLEM-REUSE") });
 
+    static private final SubLString $str_alt9$_a_is_not_a_current_Cycorp_userna = makeString("~a is not a current Cycorp username, sending to ~a instead~%");
+
+    static private final SubLString $str_alt10$__unowned_ = makeString(" (unowned)");
+
+    static private final SubLString $str_alt12$__no_failures_ = makeString(" (no failures)");
+
+    static private final SubLString $str_alt13$_a_has_no_failures_that_we_care_a = makeString("~a has no failures that we care about, sending to ~a instead~%");
+
+    static private final SubLString $str_alt14$FAILING_TESTS__ = makeString("FAILING TESTS: ");
+
+    static private final SubLString $str_alt15$qa_cyc_com = makeString("qa@cyc.com");
+
+    static private final SubLString $str_alt16$_cyc_com = makeString("@cyc.com");
+
+    static private final SubLString $str_alt17$Dear__a_____ = makeString("Dear ~a,~%~%");
+
+    static private final SubLString $str_alt18$Here_is_a_results_summary_for_tes = makeString("Here is a results summary for tests owned by ~a.~%~%");
+
+    static private final SubLString $str_alt19$The_comment_on_this_test_run_was_ = makeString("The comment on this test run was:~%~a~%~%");
+
+    static private final SubLSymbol $sym21$_ = makeSymbol(">");
+
+    static private final SubLSymbol $sym22$CYC_TEST_RESULT__ = makeSymbol("CYC-TEST-RESULT-<");
+
+    static private final SubLString $str_alt23$Histogram_of_results___ = makeString("Histogram of results:~%");
+
+    private static final SubLSymbol CYC_TEST_RUN_TYPE = makeSymbol("CYC-TEST-RUN-TYPE");
+
+    static private final SubLString $str_alt26$__If_you_wish_to_examine_your_KB_ = makeString("~%If you wish to examine your KB Content Tests or change whether they are regression tests, go to the KB Content Test Control Panel, accessible in the Cyc Browser via Tools, KCT.  See http://wiki.cyc.com/wiki/index.php/KCT_loop for a more detailed explanation of the contents of this email.~%");
+
     private static final SubLFloat $float$1_2 = makeDouble(1.2);
 
     private static final SubLList $list113 = list(makeString(".*~[0-9]+~"));
-
-
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
@@ -364,6 +485,52 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $$$size_in_bytes_as_of_ = makeString("size in bytes as of ");
 
+    // Definitions
+    public static final SubLObject load_lisp_test_file_from_path_alt(SubLObject path, SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject successP = NIL;
+                {
+                    SubLObject _prev_bind_0 = $read_require_constant_exists$.currentBinding(thread);
+                    try {
+                        $read_require_constant_exists$.bind(NIL, thread);
+                        {
+                            SubLObject message_var = NIL;
+                            try {
+                                {
+                                    SubLObject _prev_bind_0_1 = Errors.$error_handler$.currentBinding(thread);
+                                    try {
+                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                        try {
+                                            {
+                                                SubLObject pathname = cconcatenate(path, new SubLObject[]{ filename, $str_alt1$_lisp });
+                                                successP = load(pathname);
+                                            }
+                                        } catch (Throwable catch_var) {
+                                            Errors.handleThrowable(catch_var, NIL);
+                                        }
+                                    } finally {
+                                        Errors.$error_handler$.rebind(_prev_bind_0_1, thread);
+                                    }
+                                }
+                            } catch (Throwable ccatch_env_var) {
+                                message_var = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                            }
+                            if (message_var.isString()) {
+                                Errors.warn($str_alt2$_A, message_var);
+                            }
+                        }
+                    } finally {
+                        $read_require_constant_exists$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return successP;
+            }
+        }
+    }
+
+    // Definitions
     public static SubLObject load_lisp_test_file_from_path(final SubLObject path, final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject successP = NIL;
@@ -371,7 +538,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         try {
             $read_require_constant_exists$.bind(NIL, thread);
             SubLObject message_var = NIL;
-            final SubLObject was_appendingP = eval($sym0$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
+            final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
             eval($list1);
             try {
                 try {
@@ -398,7 +565,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
                 try {
                     $is_thread_performing_cleanupP$.bind(T, thread);
                     final SubLObject _values = getValuesAsVector();
-                    eval(list(CSETQ, $sym0$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
+                    eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
                     restoreValuesFromVector(_values);
                 } finally {
                     $is_thread_performing_cleanupP$.rebind(_prev_bind_0_$2, thread);
@@ -456,7 +623,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         final SubLObject stream_tail = property_list_member($STREAM, current);
         final SubLObject stream = (NIL != stream_tail) ? cadr(stream_tail) : $standard_output$;
         final SubLObject run_tiny_kb_tests_in_full_kbP_tail = property_list_member($kw18$RUN_TINY_KB_TESTS_IN_FULL_KB_, current);
-        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $sym19$_RUN_TINY_KB_TESTS_IN_FULL_KB__;
+        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $run_tiny_kb_tests_in_full_kbP$;
         return list(RUN_CYC_TEST_INT, name, verbosity, browsableP, blockP, output_format, stream, run_tiny_kb_tests_in_full_kbP);
     }
 
@@ -506,7 +673,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         final SubLObject stream_tail = property_list_member($STREAM, current);
         final SubLObject stream = (NIL != stream_tail) ? cadr(stream_tail) : $standard_output$;
         final SubLObject run_tiny_kb_tests_in_full_kbP_tail = property_list_member($kw18$RUN_TINY_KB_TESTS_IN_FULL_KB_, current);
-        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $sym19$_RUN_TINY_KB_TESTS_IN_FULL_KB__;
+        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $run_tiny_kb_tests_in_full_kbP$;
         return list(new SubLObject[]{ RUN_CYC_TEST_IN_RANGE_INT, name, min_number, max_number, verbosity, browsableP, blockP, output_format, stream, run_tiny_kb_tests_in_full_kbP });
     }
 
@@ -546,17 +713,17 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         final SubLObject stream_tail = property_list_member($STREAM, current);
         final SubLObject stream = (NIL != stream_tail) ? cadr(stream_tail) : $standard_output$;
         final SubLObject run_tiny_kb_tests_in_full_kbP_tail = property_list_member($kw18$RUN_TINY_KB_TESTS_IN_FULL_KB_, current);
-        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $sym19$_RUN_TINY_KB_TESTS_IN_FULL_KB__;
+        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $run_tiny_kb_tests_in_full_kbP$;
         return list(RUN_CYC_TEST_INT, name, $VERBOSE, browsableP, blockP, output_format, stream, run_tiny_kb_tests_in_full_kbP);
     }
 
     public static SubLObject run_cyc_test_int(final SubLObject name, final SubLObject verbosity, final SubLObject browsableP, final SubLObject blockP, final SubLObject output_format, final SubLObject stream, final SubLObject run_tiny_kb_tests_in_full_kbP) {
-        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) " + verbosity;
-        assert NIL != booleanp(browsableP) : "Types.booleanp(browsableP) " + "CommonSymbols.NIL != Types.booleanp(browsableP) " + browsableP;
-        assert NIL != booleanp(blockP) : "Types.booleanp(blockP) " + "CommonSymbols.NIL != Types.booleanp(blockP) " + blockP;
-        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) " + output_format;
-        assert NIL != streamp(stream) : "Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) " + stream;
-        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + run_tiny_kb_tests_in_full_kbP;
+        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "! cyc_testing.cyc_test_verbosity_level_p(verbosity) " + ("cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) ") + verbosity;
+        assert NIL != booleanp(browsableP) : "! booleanp(browsableP) " + ("Types.booleanp(browsableP) " + "CommonSymbols.NIL != Types.booleanp(browsableP) ") + browsableP;
+        assert NIL != booleanp(blockP) : "! booleanp(blockP) " + ("Types.booleanp(blockP) " + "CommonSymbols.NIL != Types.booleanp(blockP) ") + blockP;
+        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "! cyc_testing.cyc_test_output_format_p(output_format) " + ("cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) ") + output_format;
+        assert NIL != streamp(stream) : "! streamp(stream) " + ("Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) ") + stream;
+        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "! booleanp(run_tiny_kb_tests_in_full_kbP) " + ("Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) ") + run_tiny_kb_tests_in_full_kbP;
         SubLObject test_runs = NIL;
         SubLObject cdolist_list_var = cyc_testing.find_cyc_tests(name);
         SubLObject ct = NIL;
@@ -570,12 +737,12 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject run_cyc_test_in_range_int(final SubLObject name, final SubLObject min_number, final SubLObject max_number, final SubLObject verbosity, final SubLObject browsableP, final SubLObject blockP, final SubLObject output_format, final SubLObject stream, final SubLObject run_tiny_kb_tests_in_full_kbP) {
-        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) " + verbosity;
-        assert NIL != booleanp(browsableP) : "Types.booleanp(browsableP) " + "CommonSymbols.NIL != Types.booleanp(browsableP) " + browsableP;
-        assert NIL != booleanp(blockP) : "Types.booleanp(blockP) " + "CommonSymbols.NIL != Types.booleanp(blockP) " + blockP;
-        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) " + output_format;
-        assert NIL != streamp(stream) : "Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) " + stream;
-        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + run_tiny_kb_tests_in_full_kbP;
+        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "! cyc_testing.cyc_test_verbosity_level_p(verbosity) " + ("cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) ") + verbosity;
+        assert NIL != booleanp(browsableP) : "! booleanp(browsableP) " + ("Types.booleanp(browsableP) " + "CommonSymbols.NIL != Types.booleanp(browsableP) ") + browsableP;
+        assert NIL != booleanp(blockP) : "! booleanp(blockP) " + ("Types.booleanp(blockP) " + "CommonSymbols.NIL != Types.booleanp(blockP) ") + blockP;
+        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "! cyc_testing.cyc_test_output_format_p(output_format) " + ("cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) ") + output_format;
+        assert NIL != streamp(stream) : "! streamp(stream) " + ("Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) ") + stream;
+        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "! booleanp(run_tiny_kb_tests_in_full_kbP) " + ("Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) ") + run_tiny_kb_tests_in_full_kbP;
         SubLObject test_runs = NIL;
         SubLObject cdolist_list_var = cyc_testing.find_cyc_tests_in_range(name, min_number, max_number);
         SubLObject ct = NIL;
@@ -630,20 +797,20 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         final SubLObject stream_tail = property_list_member($STREAM, current);
         final SubLObject stream = (NIL != stream_tail) ? cadr(stream_tail) : $standard_output$;
         final SubLObject run_tiny_kb_tests_in_full_kbP_tail = property_list_member($kw18$RUN_TINY_KB_TESTS_IN_FULL_KB_, current);
-        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $sym19$_RUN_TINY_KB_TESTS_IN_FULL_KB__;
+        final SubLObject run_tiny_kb_tests_in_full_kbP = (NIL != run_tiny_kb_tests_in_full_kbP_tail) ? cadr(run_tiny_kb_tests_in_full_kbP_tail) : $run_tiny_kb_tests_in_full_kbP$;
         return list(new SubLObject[]{ RUN_CYC_TEST_PARALLEL_INT, name, nthreads, ntimes, verbosity, browsableP, blockP, output_format, stream, run_tiny_kb_tests_in_full_kbP });
     }
 
     public static SubLObject run_cyc_test_parallel_int(final SubLObject name, final SubLObject nthreads, final SubLObject ntimes, final SubLObject verbosity, final SubLObject browsableP, final SubLObject blockP, final SubLObject output_format, final SubLObject stream, final SubLObject run_tiny_kb_tests_in_full_kbP) {
-        assert NIL != subl_promotions.non_negative_integer_p(nthreads) : "subl_promotions.non_negative_integer_p(nthreads) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(nthreads) " + nthreads;
-        assert NIL != subl_promotions.non_negative_integer_p(ntimes) : "subl_promotions.non_negative_integer_p(ntimes) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(ntimes) " + ntimes;
-        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) " + verbosity;
-        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) " + verbosity;
-        assert NIL != booleanp(browsableP) : "Types.booleanp(browsableP) " + "CommonSymbols.NIL != Types.booleanp(browsableP) " + browsableP;
-        assert NIL != booleanp(blockP) : "Types.booleanp(blockP) " + "CommonSymbols.NIL != Types.booleanp(blockP) " + blockP;
-        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) " + output_format;
-        assert NIL != streamp(stream) : "Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) " + stream;
-        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + run_tiny_kb_tests_in_full_kbP;
+        assert NIL != subl_promotions.non_negative_integer_p(nthreads) : "! subl_promotions.non_negative_integer_p(nthreads) " + ("subl_promotions.non_negative_integer_p(nthreads) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(nthreads) ") + nthreads;
+        assert NIL != subl_promotions.non_negative_integer_p(ntimes) : "! subl_promotions.non_negative_integer_p(ntimes) " + ("subl_promotions.non_negative_integer_p(ntimes) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(ntimes) ") + ntimes;
+        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "! cyc_testing.cyc_test_verbosity_level_p(verbosity) " + ("cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) ") + verbosity;
+        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "! cyc_testing.cyc_test_verbosity_level_p(verbosity) " + ("cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) ") + verbosity;
+        assert NIL != booleanp(browsableP) : "! booleanp(browsableP) " + ("Types.booleanp(browsableP) " + "CommonSymbols.NIL != Types.booleanp(browsableP) ") + browsableP;
+        assert NIL != booleanp(blockP) : "! booleanp(blockP) " + ("Types.booleanp(blockP) " + "CommonSymbols.NIL != Types.booleanp(blockP) ") + blockP;
+        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "! cyc_testing.cyc_test_output_format_p(output_format) " + ("cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) ") + output_format;
+        assert NIL != streamp(stream) : "! streamp(stream) " + ("Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) ") + stream;
+        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "! booleanp(run_tiny_kb_tests_in_full_kbP) " + ("Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) ") + run_tiny_kb_tests_in_full_kbP;
         SubLObject i;
         for (i = NIL, i = ZERO_INTEGER; i.numL(nthreads); i = add(i, ONE_INTEGER)) {
             subl_promotions.make_process_with_args(cconcatenate($$$Parallel_Test_Thread_for_, new SubLObject[]{ format_nil.format_nil_a_no_copy(name), $str39$_No__, format_nil.format_nil_a_no_copy(i) }), symbol_function(RUN_CYC_TEST_OBJECT_PARALLEL), list(new SubLObject[]{ name, i, ntimes, verbosity, browsableP, blockP, output_format, stream, run_tiny_kb_tests_in_full_kbP }));
@@ -930,19 +1097,19 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
             phases = ONE_INTEGER;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != streamp(stream) : "Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) " + stream;
-        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) " + verbosity;
-        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) " + output_format;
-        assert NIL != booleanp(stop_at_first_failureP) : "Types.booleanp(stop_at_first_failureP) " + "CommonSymbols.NIL != Types.booleanp(stop_at_first_failureP) " + stop_at_first_failureP;
-        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + run_tiny_kb_tests_in_full_kbP;
-        assert NIL != cyc_testing.cyc_test_type_spec_p(type) : "cyc_testing.cyc_test_type_spec_p(type) " + "CommonSymbols.NIL != cyc_testing.cyc_test_type_spec_p(type) " + type;
+        assert NIL != streamp(stream) : "! streamp(stream) " + ("Types.streamp(stream) " + "CommonSymbols.NIL != Types.streamp(stream) ") + stream;
+        assert NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) : "! cyc_testing.cyc_test_verbosity_level_p(verbosity) " + ("cyc_testing.cyc_test_verbosity_level_p(verbosity) " + "CommonSymbols.NIL != cyc_testing.cyc_test_verbosity_level_p(verbosity) ") + verbosity;
+        assert NIL != cyc_testing.cyc_test_output_format_p(output_format) : "! cyc_testing.cyc_test_output_format_p(output_format) " + ("cyc_testing.cyc_test_output_format_p(output_format) " + "CommonSymbols.NIL != cyc_testing.cyc_test_output_format_p(output_format) ") + output_format;
+        assert NIL != booleanp(stop_at_first_failureP) : "! booleanp(stop_at_first_failureP) " + ("Types.booleanp(stop_at_first_failureP) " + "CommonSymbols.NIL != Types.booleanp(stop_at_first_failureP) ") + stop_at_first_failureP;
+        assert NIL != booleanp(run_tiny_kb_tests_in_full_kbP) : "! booleanp(run_tiny_kb_tests_in_full_kbP) " + ("Types.booleanp(run_tiny_kb_tests_in_full_kbP) " + "CommonSymbols.NIL != Types.booleanp(run_tiny_kb_tests_in_full_kbP) ") + run_tiny_kb_tests_in_full_kbP;
+        assert NIL != cyc_testing.cyc_test_type_spec_p(type) : "! cyc_testing.cyc_test_type_spec_p(type) " + ("cyc_testing.cyc_test_type_spec_p(type) " + "CommonSymbols.NIL != cyc_testing.cyc_test_type_spec_p(type) ") + type;
         if (((NIL != progress_file) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.file_valid_for_writing_p(progress_file))) {
             throw new AssertionError(progress_file);
         }
         if (NIL == rerun_crashing_tests) {
             rerun_crashing_tests = $default_rerun_crashing_tests$.getDynamicValue(thread);
         }
-        assert NIL != subl_promotions.non_negative_integer_p(rerun_crashing_tests) : "subl_promotions.non_negative_integer_p(rerun_crashing_tests) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(rerun_crashing_tests) " + rerun_crashing_tests;
+        assert NIL != subl_promotions.non_negative_integer_p(rerun_crashing_tests) : "! subl_promotions.non_negative_integer_p(rerun_crashing_tests) " + ("subl_promotions.non_negative_integer_p(rerun_crashing_tests) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(rerun_crashing_tests) ") + rerun_crashing_tests;
         if (((NIL != cyc_test_write_image_directory()) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == file_utilities.directory_writeable_p(cyc_test_write_image_directory(), UNPROVIDED))) {
             throw new AssertionError(cyc_test_write_image_directory());
         }
@@ -1208,7 +1375,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
             }
             SubLObject stream_$10;
             for (stream_$10 = stream, current_test_run = cfasl_input(stream_$10, NIL, $EOF); $EOF != current_test_run; current_test_run = cfasl_input(stream_$10, NIL, $EOF)) {
-                assert NIL != cyc_testing.cyc_test_run_p(current_test_run) : "cyc_testing.cyc_test_run_p(current_test_run) " + "CommonSymbols.NIL != cyc_testing.cyc_test_run_p(current_test_run) " + current_test_run;
+                assert NIL != cyc_testing.cyc_test_run_p(current_test_run) : "! cyc_testing.cyc_test_run_p(current_test_run) " + ("cyc_testing.cyc_test_run_p(current_test_run) " + "CommonSymbols.NIL != cyc_testing.cyc_test_run_p(current_test_run) ") + current_test_run;
                 final SubLObject ct = cyc_testing.cyc_test_run_cyc_test(current_test_run);
                 dictionary.dictionary_enter(dict, ct, current_test_run);
                 dictionary_utilities.dictionary_increment(history_dict, ct, UNPROVIDED);
@@ -1476,7 +1643,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         final SubLObject filename = cyc_test_image_filename(ct, dir);
         if ($SUCCESS == cyc_testing.cyc_test_runs_overall_result(test_runs)) {
             SubLObject message_var = NIL;
-            final SubLObject was_appendingP = eval($sym0$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__);
+            final SubLObject was_appendingP = eval($append_stack_traces_to_error_messagesP$);
             eval($list1);
             try {
                 try {
@@ -1502,7 +1669,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
                 try {
                     $is_thread_performing_cleanupP$.bind(T, thread);
                     final SubLObject _values = getValuesAsVector();
-                    eval(list(CSETQ, $sym0$_APPEND_STACK_TRACES_TO_ERROR_MESSAGES__, was_appendingP));
+                    eval(list(CSETQ, $append_stack_traces_to_error_messagesP$, was_appendingP));
                     restoreValuesFromVector(_values);
                 } finally {
                     $is_thread_performing_cleanupP$.rebind(_prev_bind_2, thread);
@@ -1561,7 +1728,7 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
     public static SubLObject directory_file_size_dict(final SubLObject directory) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject dict = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
-        assert NIL != Filesys.directory_p(directory) : "Filesys.directory_p(directory) " + "CommonSymbols.NIL != Filesys.directory_p(directory) " + directory;
+        assert NIL != Filesys.directory_p(directory) : "! Filesys.directory_p(directory) " + ("Filesys.directory_p(directory) " + "CommonSymbols.NIL != Filesys.directory_p(directory) ") + directory;
         SubLObject directory_contents_var = Filesys.directory(directory, NIL);
         final SubLObject progress_message_var = NIL;
         final SubLObject _prev_bind_0 = $silent_progressP$.currentBinding(thread);
@@ -1727,61 +1894,154 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
         return compare_file_size_dictionaries(read_directory_file_size_log(old_logfile), read_directory_file_size_log(new_logfile));
     }
 
+    public static final SubLObject declare_cyc_testing_utilities_file_alt() {
+        declareFunction("load_lisp_test_file_from_path", "LOAD-LISP-TEST-FILE-FROM-PATH", 2, 0, false);
+        declareFunction("email_cyc_test_runs_summaries_if_failures", "EMAIL-CYC-TEST-RUNS-SUMMARIES-IF-FAILURES", 2, 1, false);
+        declareFunction("email_cyc_test_runs_summaries", "EMAIL-CYC-TEST-RUNS-SUMMARIES", 2, 1, false);
+        declareFunction("email_cyc_test_runs_summaries_int", "EMAIL-CYC-TEST-RUNS-SUMMARIES-INT", 4, 0, false);
+        declareFunction("email_cyc_test_runs_summary", "EMAIL-CYC-TEST-RUNS-SUMMARY", 5, 0, false);
+        declareFunction("cyc_test_runs_summary_text", "CYC-TEST-RUNS-SUMMARY-TEXT", 4, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_cyc_testing_utilities_file() {
-        declareFunction(me, "load_lisp_test_file_from_path", "LOAD-LISP-TEST-FILE-FROM-PATH", 2, 0, false);
-        declareFunction(me, "cyc_test_write_image_directory", "CYC-TEST-WRITE-IMAGE-DIRECTORY", 0, 0, false);
-        declareMacro(me, "run_cyc_test", "RUN-CYC-TEST");
-        declareMacro(me, "run_cyc_test_in_range", "RUN-CYC-TEST-IN-RANGE");
-        declareMacro(me, "run_cyc_test_verbose", "RUN-CYC-TEST-VERBOSE");
-        declareFunction(me, "run_cyc_test_int", "RUN-CYC-TEST-INT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_in_range_int", "RUN-CYC-TEST-IN-RANGE-INT", 9, 0, false);
-        declareMacro(me, "run_cyc_test_parallel", "RUN-CYC-TEST-PARALLEL");
-        declareFunction(me, "run_cyc_test_parallel_int", "RUN-CYC-TEST-PARALLEL-INT", 9, 0, false);
-        declareFunction(me, "run_cyc_test_object_parallel", "RUN-CYC-TEST-OBJECT-PARALLEL", 9, 0, false);
-        declareFunction(me, "run_cyc_test_object", "RUN-CYC-TEST-OBJECT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_iut", "RUN-CYC-TEST-IUT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_it", "RUN-CYC-TEST-IT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_it_int", "RUN-CYC-TEST-IT-INT", 4, 0, false);
-        declareFunction(me, "run_cyc_test_rmt", "RUN-CYC-TEST-RMT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_tmt", "RUN-CYC-TEST-TMT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_rmct", "RUN-CYC-TEST-RMCT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_ert", "RUN-CYC-TEST-ERT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_tct", "RUN-CYC-TEST-TCT", 7, 0, false);
-        declareFunction(me, "run_cyc_test_kct", "RUN-CYC-TEST-KCT", 7, 0, false);
-        declareFunction(me, "run_all_loaded_cyc_tests_int", "RUN-ALL-LOADED-CYC-TESTS-INT", 10, 3, false);
-        declareFunction(me, "cyc_test_part_of_phaseP", "CYC-TEST-PART-OF-PHASE?", 4, 0, false);
-        declareFunction(me, "load_cyc_tests_progress_file", "LOAD-CYC-TESTS-PROGRESS-FILE", 2, 0, false);
-        declareFunction(me, "new_cyc_test_null_run", "NEW-CYC-TEST-NULL-RUN", 1, 0, false);
-        declareFunction(me, "new_cyc_test_invalid_run", "NEW-CYC-TEST-INVALID-RUN", 1, 0, false);
-        declareFunction(me, "new_cyc_test_error_run", "NEW-CYC-TEST-ERROR-RUN", 1, 0, false);
-        declareFunction(me, "run_cyc_testP", "RUN-CYC-TEST?", 4, 1, false);
-        declareFunction(me, "print_failing_cyc_tests_message", "PRINT-FAILING-CYC-TESTS-MESSAGE", 2, 2, false);
-        declareFunction(me, "print_succeeding_cyc_tests_message", "PRINT-SUCCEEDING-CYC-TESTS-MESSAGE", 2, 2, false);
-        declareFunction(me, "print_ignored_cyc_tests_message", "PRINT-IGNORED-CYC-TESTS-MESSAGE", 2, 2, false);
-        declareFunction(me, "run_all_loaded_cyc_tests_print_header", "RUN-ALL-LOADED-CYC-TESTS-PRINT-HEADER", 3, 2, false);
-        declareFunction(me, "run_all_loaded_cyc_tests_print_footer", "RUN-ALL-LOADED-CYC-TESTS-PRINT-FOOTER", 5, 0, false);
-        declareFunction(me, "show_cyc_test_run", "SHOW-CYC-TEST-RUN", 4, 0, false);
-        declareFunction(me, "cyc_test_possibly_write_image", "CYC-TEST-POSSIBLY-WRITE-IMAGE", 1, 0, false);
-        declareFunction(me, "cyc_test_possibly_cleanup_write_image", "CYC-TEST-POSSIBLY-CLEANUP-WRITE-IMAGE", 2, 0, false);
-        declareFunction(me, "cyc_test_image_filename", "CYC-TEST-IMAGE-FILENAME", 2, 0, false);
-        declareFunction(me, "cyc_test_mentions_invalid_constantP", "CYC-TEST-MENTIONS-INVALID-CONSTANT?", 1, 0, false);
-        declareFunction(me, "compare_directories", "COMPARE-DIRECTORIES", 2, 0, false);
-        declareFunction(me, "directory_file_size_dict", "DIRECTORY-FILE-SIZE-DICT", 1, 0, false);
-        declareFunction(me, "compare_file_size_dictionaries", "COMPARE-FILE-SIZE-DICTIONARIES", 2, 0, false);
-        declareFunction(me, "file_size_difference_within_toleranceP", "FILE-SIZE-DIFFERENCE-WITHIN-TOLERANCE?", 3, 0, false);
-        declareFunction(me, "size_change_tolerance", "SIZE-CHANGE-TOLERANCE", 1, 0, false);
-        declareFunction(me, "file_size_grewP", "FILE-SIZE-GREW?", 2, 0, false);
-        declareFunction(me, "new_file_size_difference_alert", "NEW-FILE-SIZE-DIFFERENCE-ALERT", 3, 0, false);
-        declareFunction(me, "new_file_existence_difference_alert", "NEW-FILE-EXISTENCE-DIFFERENCE-ALERT", 2, 0, false);
-        declareFunction(me, "ignore_filename_due_to_regexP", "IGNORE-FILENAME-DUE-TO-REGEX?", 1, 0, false);
-        declareFunction(me, "string_matches_any_regexP", "STRING-MATCHES-ANY-REGEX?", 2, 0, false);
-        declareFunction(me, "write_directory_file_size_log", "WRITE-DIRECTORY-FILE-SIZE-LOG", 2, 0, false);
-        declareFunction(me, "read_directory_file_size_log", "READ-DIRECTORY-FILE-SIZE-LOG", 1, 0, false);
-        declareFunction(me, "compare_file_size_logs", "COMPARE-FILE-SIZE-LOGS", 2, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("load_lisp_test_file_from_path", "LOAD-LISP-TEST-FILE-FROM-PATH", 2, 0, false);
+            declareFunction("cyc_test_write_image_directory", "CYC-TEST-WRITE-IMAGE-DIRECTORY", 0, 0, false);
+            declareMacro("run_cyc_test", "RUN-CYC-TEST");
+            declareMacro("run_cyc_test_in_range", "RUN-CYC-TEST-IN-RANGE");
+            declareMacro("run_cyc_test_verbose", "RUN-CYC-TEST-VERBOSE");
+            declareFunction("run_cyc_test_int", "RUN-CYC-TEST-INT", 7, 0, false);
+            declareFunction("run_cyc_test_in_range_int", "RUN-CYC-TEST-IN-RANGE-INT", 9, 0, false);
+            declareMacro("run_cyc_test_parallel", "RUN-CYC-TEST-PARALLEL");
+            declareFunction("run_cyc_test_parallel_int", "RUN-CYC-TEST-PARALLEL-INT", 9, 0, false);
+            declareFunction("run_cyc_test_object_parallel", "RUN-CYC-TEST-OBJECT-PARALLEL", 9, 0, false);
+            declareFunction("run_cyc_test_object", "RUN-CYC-TEST-OBJECT", 7, 0, false);
+            declareFunction("run_cyc_test_iut", "RUN-CYC-TEST-IUT", 7, 0, false);
+            declareFunction("run_cyc_test_it", "RUN-CYC-TEST-IT", 7, 0, false);
+            declareFunction("run_cyc_test_it_int", "RUN-CYC-TEST-IT-INT", 4, 0, false);
+            declareFunction("run_cyc_test_rmt", "RUN-CYC-TEST-RMT", 7, 0, false);
+            declareFunction("run_cyc_test_tmt", "RUN-CYC-TEST-TMT", 7, 0, false);
+            declareFunction("run_cyc_test_rmct", "RUN-CYC-TEST-RMCT", 7, 0, false);
+            declareFunction("run_cyc_test_ert", "RUN-CYC-TEST-ERT", 7, 0, false);
+            declareFunction("run_cyc_test_tct", "RUN-CYC-TEST-TCT", 7, 0, false);
+            declareFunction("run_cyc_test_kct", "RUN-CYC-TEST-KCT", 7, 0, false);
+            declareFunction("run_all_loaded_cyc_tests_int", "RUN-ALL-LOADED-CYC-TESTS-INT", 10, 3, false);
+            declareFunction("cyc_test_part_of_phaseP", "CYC-TEST-PART-OF-PHASE?", 4, 0, false);
+            declareFunction("load_cyc_tests_progress_file", "LOAD-CYC-TESTS-PROGRESS-FILE", 2, 0, false);
+            declareFunction("new_cyc_test_null_run", "NEW-CYC-TEST-NULL-RUN", 1, 0, false);
+            declareFunction("new_cyc_test_invalid_run", "NEW-CYC-TEST-INVALID-RUN", 1, 0, false);
+            declareFunction("new_cyc_test_error_run", "NEW-CYC-TEST-ERROR-RUN", 1, 0, false);
+            declareFunction("run_cyc_testP", "RUN-CYC-TEST?", 4, 1, false);
+            declareFunction("print_failing_cyc_tests_message", "PRINT-FAILING-CYC-TESTS-MESSAGE", 2, 2, false);
+            declareFunction("print_succeeding_cyc_tests_message", "PRINT-SUCCEEDING-CYC-TESTS-MESSAGE", 2, 2, false);
+            declareFunction("print_ignored_cyc_tests_message", "PRINT-IGNORED-CYC-TESTS-MESSAGE", 2, 2, false);
+            declareFunction("run_all_loaded_cyc_tests_print_header", "RUN-ALL-LOADED-CYC-TESTS-PRINT-HEADER", 3, 2, false);
+            declareFunction("run_all_loaded_cyc_tests_print_footer", "RUN-ALL-LOADED-CYC-TESTS-PRINT-FOOTER", 5, 0, false);
+            declareFunction("show_cyc_test_run", "SHOW-CYC-TEST-RUN", 4, 0, false);
+            declareFunction("cyc_test_possibly_write_image", "CYC-TEST-POSSIBLY-WRITE-IMAGE", 1, 0, false);
+            declareFunction("cyc_test_possibly_cleanup_write_image", "CYC-TEST-POSSIBLY-CLEANUP-WRITE-IMAGE", 2, 0, false);
+            declareFunction("cyc_test_image_filename", "CYC-TEST-IMAGE-FILENAME", 2, 0, false);
+            declareFunction("cyc_test_mentions_invalid_constantP", "CYC-TEST-MENTIONS-INVALID-CONSTANT?", 1, 0, false);
+            declareFunction("compare_directories", "COMPARE-DIRECTORIES", 2, 0, false);
+            declareFunction("directory_file_size_dict", "DIRECTORY-FILE-SIZE-DICT", 1, 0, false);
+            declareFunction("compare_file_size_dictionaries", "COMPARE-FILE-SIZE-DICTIONARIES", 2, 0, false);
+            declareFunction("file_size_difference_within_toleranceP", "FILE-SIZE-DIFFERENCE-WITHIN-TOLERANCE?", 3, 0, false);
+            declareFunction("size_change_tolerance", "SIZE-CHANGE-TOLERANCE", 1, 0, false);
+            declareFunction("file_size_grewP", "FILE-SIZE-GREW?", 2, 0, false);
+            declareFunction("new_file_size_difference_alert", "NEW-FILE-SIZE-DIFFERENCE-ALERT", 3, 0, false);
+            declareFunction("new_file_existence_difference_alert", "NEW-FILE-EXISTENCE-DIFFERENCE-ALERT", 2, 0, false);
+            declareFunction("ignore_filename_due_to_regexP", "IGNORE-FILENAME-DUE-TO-REGEX?", 1, 0, false);
+            declareFunction("string_matches_any_regexP", "STRING-MATCHES-ANY-REGEX?", 2, 0, false);
+            declareFunction("write_directory_file_size_log", "WRITE-DIRECTORY-FILE-SIZE-LOG", 2, 0, false);
+            declareFunction("read_directory_file_size_log", "READ-DIRECTORY-FILE-SIZE-LOG", 1, 0, false);
+            declareFunction("compare_file_size_logs", "COMPARE-FILE-SIZE-LOGS", 2, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("email_cyc_test_runs_summaries_if_failures", "EMAIL-CYC-TEST-RUNS-SUMMARIES-IF-FAILURES", 2, 1, false);
+            declareFunction("email_cyc_test_runs_summaries", "EMAIL-CYC-TEST-RUNS-SUMMARIES", 2, 1, false);
+            declareFunction("email_cyc_test_runs_summaries_int", "EMAIL-CYC-TEST-RUNS-SUMMARIES-INT", 4, 0, false);
+            declareFunction("email_cyc_test_runs_summary", "EMAIL-CYC-TEST-RUNS-SUMMARY", 5, 0, false);
+            declareFunction("cyc_test_runs_summary_text", "CYC-TEST-RUNS-SUMMARY-TEXT", 4, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_cyc_testing_utilities_file_Previous() {
+        declareFunction("load_lisp_test_file_from_path", "LOAD-LISP-TEST-FILE-FROM-PATH", 2, 0, false);
+        declareFunction("cyc_test_write_image_directory", "CYC-TEST-WRITE-IMAGE-DIRECTORY", 0, 0, false);
+        declareMacro("run_cyc_test", "RUN-CYC-TEST");
+        declareMacro("run_cyc_test_in_range", "RUN-CYC-TEST-IN-RANGE");
+        declareMacro("run_cyc_test_verbose", "RUN-CYC-TEST-VERBOSE");
+        declareFunction("run_cyc_test_int", "RUN-CYC-TEST-INT", 7, 0, false);
+        declareFunction("run_cyc_test_in_range_int", "RUN-CYC-TEST-IN-RANGE-INT", 9, 0, false);
+        declareMacro("run_cyc_test_parallel", "RUN-CYC-TEST-PARALLEL");
+        declareFunction("run_cyc_test_parallel_int", "RUN-CYC-TEST-PARALLEL-INT", 9, 0, false);
+        declareFunction("run_cyc_test_object_parallel", "RUN-CYC-TEST-OBJECT-PARALLEL", 9, 0, false);
+        declareFunction("run_cyc_test_object", "RUN-CYC-TEST-OBJECT", 7, 0, false);
+        declareFunction("run_cyc_test_iut", "RUN-CYC-TEST-IUT", 7, 0, false);
+        declareFunction("run_cyc_test_it", "RUN-CYC-TEST-IT", 7, 0, false);
+        declareFunction("run_cyc_test_it_int", "RUN-CYC-TEST-IT-INT", 4, 0, false);
+        declareFunction("run_cyc_test_rmt", "RUN-CYC-TEST-RMT", 7, 0, false);
+        declareFunction("run_cyc_test_tmt", "RUN-CYC-TEST-TMT", 7, 0, false);
+        declareFunction("run_cyc_test_rmct", "RUN-CYC-TEST-RMCT", 7, 0, false);
+        declareFunction("run_cyc_test_ert", "RUN-CYC-TEST-ERT", 7, 0, false);
+        declareFunction("run_cyc_test_tct", "RUN-CYC-TEST-TCT", 7, 0, false);
+        declareFunction("run_cyc_test_kct", "RUN-CYC-TEST-KCT", 7, 0, false);
+        declareFunction("run_all_loaded_cyc_tests_int", "RUN-ALL-LOADED-CYC-TESTS-INT", 10, 3, false);
+        declareFunction("cyc_test_part_of_phaseP", "CYC-TEST-PART-OF-PHASE?", 4, 0, false);
+        declareFunction("load_cyc_tests_progress_file", "LOAD-CYC-TESTS-PROGRESS-FILE", 2, 0, false);
+        declareFunction("new_cyc_test_null_run", "NEW-CYC-TEST-NULL-RUN", 1, 0, false);
+        declareFunction("new_cyc_test_invalid_run", "NEW-CYC-TEST-INVALID-RUN", 1, 0, false);
+        declareFunction("new_cyc_test_error_run", "NEW-CYC-TEST-ERROR-RUN", 1, 0, false);
+        declareFunction("run_cyc_testP", "RUN-CYC-TEST?", 4, 1, false);
+        declareFunction("print_failing_cyc_tests_message", "PRINT-FAILING-CYC-TESTS-MESSAGE", 2, 2, false);
+        declareFunction("print_succeeding_cyc_tests_message", "PRINT-SUCCEEDING-CYC-TESTS-MESSAGE", 2, 2, false);
+        declareFunction("print_ignored_cyc_tests_message", "PRINT-IGNORED-CYC-TESTS-MESSAGE", 2, 2, false);
+        declareFunction("run_all_loaded_cyc_tests_print_header", "RUN-ALL-LOADED-CYC-TESTS-PRINT-HEADER", 3, 2, false);
+        declareFunction("run_all_loaded_cyc_tests_print_footer", "RUN-ALL-LOADED-CYC-TESTS-PRINT-FOOTER", 5, 0, false);
+        declareFunction("show_cyc_test_run", "SHOW-CYC-TEST-RUN", 4, 0, false);
+        declareFunction("cyc_test_possibly_write_image", "CYC-TEST-POSSIBLY-WRITE-IMAGE", 1, 0, false);
+        declareFunction("cyc_test_possibly_cleanup_write_image", "CYC-TEST-POSSIBLY-CLEANUP-WRITE-IMAGE", 2, 0, false);
+        declareFunction("cyc_test_image_filename", "CYC-TEST-IMAGE-FILENAME", 2, 0, false);
+        declareFunction("cyc_test_mentions_invalid_constantP", "CYC-TEST-MENTIONS-INVALID-CONSTANT?", 1, 0, false);
+        declareFunction("compare_directories", "COMPARE-DIRECTORIES", 2, 0, false);
+        declareFunction("directory_file_size_dict", "DIRECTORY-FILE-SIZE-DICT", 1, 0, false);
+        declareFunction("compare_file_size_dictionaries", "COMPARE-FILE-SIZE-DICTIONARIES", 2, 0, false);
+        declareFunction("file_size_difference_within_toleranceP", "FILE-SIZE-DIFFERENCE-WITHIN-TOLERANCE?", 3, 0, false);
+        declareFunction("size_change_tolerance", "SIZE-CHANGE-TOLERANCE", 1, 0, false);
+        declareFunction("file_size_grewP", "FILE-SIZE-GREW?", 2, 0, false);
+        declareFunction("new_file_size_difference_alert", "NEW-FILE-SIZE-DIFFERENCE-ALERT", 3, 0, false);
+        declareFunction("new_file_existence_difference_alert", "NEW-FILE-EXISTENCE-DIFFERENCE-ALERT", 2, 0, false);
+        declareFunction("ignore_filename_due_to_regexP", "IGNORE-FILENAME-DUE-TO-REGEX?", 1, 0, false);
+        declareFunction("string_matches_any_regexP", "STRING-MATCHES-ANY-REGEX?", 2, 0, false);
+        declareFunction("write_directory_file_size_log", "WRITE-DIRECTORY-FILE-SIZE-LOG", 2, 0, false);
+        declareFunction("read_directory_file_size_log", "READ-DIRECTORY-FILE-SIZE-LOG", 1, 0, false);
+        declareFunction("compare_file_size_logs", "COMPARE-FILE-SIZE-LOGS", 2, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_cyc_testing_utilities_file_alt() {
+        deflexical("*DEFAULT-CYC-TEST-RUN-EMAIL-RECIPIENT*", $$$qa);
         return NIL;
     }
 
     public static SubLObject init_cyc_testing_utilities_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*DEFAULT-RERUN-CRASHING-TESTS*", ONE_INTEGER);
+            defparameter("*CYC-TEST-WRITE-IMAGE-DIRECTORY*", NIL);
+            deflexical("*TESTS-THAT-DONT-WORK-WITH-REAL-TIME-PRUNING*", $list111);
+            defparameter("*FILE-SIZE-CHANGE-TOLERANCE*", $float$1_2);
+            defparameter("*FILE-SIZE-IGNORE-REGEXES*", $list113);
+            deflexical("*SIZE-LOGS-DIRECTORY*", $str96$);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*DEFAULT-CYC-TEST-RUN-EMAIL-RECIPIENT*", $$$qa);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_cyc_testing_utilities_file_Previous() {
         defparameter("*DEFAULT-RERUN-CRASHING-TESTS*", ONE_INTEGER);
         defparameter("*CYC-TEST-WRITE-IMAGE-DIRECTORY*", NIL);
         deflexical("*TESTS-THAT-DONT-WORK-WITH-REAL-TIME-PRUNING*", $list111);
@@ -1814,139 +2074,6 @@ public final class cyc_testing_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

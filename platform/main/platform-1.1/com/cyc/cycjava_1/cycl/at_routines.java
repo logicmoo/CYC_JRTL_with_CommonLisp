@@ -3288,8 +3288,7 @@ public  final class at_routines extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_routines_file() {
-    // CVS_ID("Id: at-routines.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_globally_cached_function($sym74$ARG_COLLECTIONS);
+        memoization_state.note_globally_cached_function($sym74$ARG_COLLECTIONS);
     return NIL;
   }
 

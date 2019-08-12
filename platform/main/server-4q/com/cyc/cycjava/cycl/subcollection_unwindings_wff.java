@@ -1,7 +1,19 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.subcollection_unwindings_wff;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -14,38 +26,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.subcollection_unwindings_wff.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class subcollection_unwindings_wff extends SubLTranslatedFile {
+public final class subcollection_unwindings_wff extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new subcollection_unwindings_wff();
 
-    public static final String myName = "com.cyc.cycjava.cycl.subcollection_unwindings_wff";
+    public static final String myName = "com.cyc.cycjava_2.cycl.subcollection_unwindings_wff";
 
-    public static final String myFingerPrint = "77e33bbe5ff606b5408836a519e352825d7826fb4ed2eeb39856428176fc0337";
 
     // defparameter
     public static final SubLSymbol $scg_wff_mt$ = makeSymbol("*SCG-WFF-MT*");
@@ -571,27 +557,27 @@ public final class subcollection_unwindings_wff extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_subcollection_unwindings_wff_file() {
-        declareFunction(me, "scg_sentence_wffP", "SCG-SENTENCE-WFF?", 1, 1, false);
-        declareFunction(me, "implausible_scg_unwindingP", "IMPLAUSIBLE-SCG-UNWINDING?", 1, 1, false);
-        declareFunction(me, "scg_sentence_plausibility_factor", "SCG-SENTENCE-PLAUSIBILITY-FACTOR", 1, 2, false);
-        declareFunction(me, "scg_sentence_unwinding_wffP", "SCG-SENTENCE-UNWINDING-WFF?", 1, 1, false);
-        declareFunction(me, "scg_wff_note_var_isa_constraints", "SCG-WFF-NOTE-VAR-ISA-CONSTRAINTS", 2, 0, false);
-        declareFunction(me, "scg_wff_note_var_genl_constraints", "SCG-WFF-NOTE-VAR-GENL-CONSTRAINTS", 2, 0, false);
-        declareFunction(me, "scg_wff_sort_type_constraints_internal", "SCG-WFF-SORT-TYPE-CONSTRAINTS-INTERNAL", 1, 0, false);
-        declareFunction(me, "scg_wff_sort_type_constraints", "SCG-WFF-SORT-TYPE-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "scg_wff_check_sentence_constraints", "SCG-WFF-CHECK-SENTENCE-CONSTRAINTS", 1, 1, false);
-        declareFunction(me, "scg_wff_type_constraints_disjointP_internal", "SCG-WFF-TYPE-CONSTRAINTS-DISJOINT?-INTERNAL", 1, 1, false);
-        declareFunction(me, "scg_wff_type_constraints_disjointP", "SCG-WFF-TYPE-CONSTRAINTS-DISJOINT?", 1, 1, false);
-        declareFunction(me, "scg_wff_term_isa_constraints_okP_internal", "SCG-WFF-TERM-ISA-CONSTRAINTS-OK?-INTERNAL", 2, 1, false);
-        declareFunction(me, "scg_wff_term_isa_constraints_okP", "SCG-WFF-TERM-ISA-CONSTRAINTS-OK?", 2, 1, false);
-        declareFunction(me, "scg_wff_term_genl_constraints_okP_internal", "SCG-WFF-TERM-GENL-CONSTRAINTS-OK?-INTERNAL", 2, 1, false);
-        declareFunction(me, "scg_wff_term_genl_constraints_okP", "SCG-WFF-TERM-GENL-CONSTRAINTS-OK?", 2, 1, false);
-        declareFunction(me, "scg_wff_term_isa_constraints_internal", "SCG-WFF-TERM-ISA-CONSTRAINTS-INTERNAL", 3, 0, false);
-        declareFunction(me, "scg_wff_term_isa_constraints", "SCG-WFF-TERM-ISA-CONSTRAINTS", 3, 0, false);
-        declareFunction(me, "scg_wff_term_genl_constraints_internal", "SCG-WFF-TERM-GENL-CONSTRAINTS-INTERNAL", 3, 0, false);
-        declareFunction(me, "scg_wff_term_genl_constraints", "SCG-WFF-TERM-GENL-CONSTRAINTS", 3, 0, false);
-        declareFunction(me, "scg_wff_canonicalize_variables", "SCG-WFF-CANONICALIZE-VARIABLES", 2, 0, false);
-        declareFunction(me, "scg_wff_literal_type_constraints_okP", "SCG-WFF-LITERAL-TYPE-CONSTRAINTS-OK?", 1, 1, false);
+        declareFunction("scg_sentence_wffP", "SCG-SENTENCE-WFF?", 1, 1, false);
+        declareFunction("implausible_scg_unwindingP", "IMPLAUSIBLE-SCG-UNWINDING?", 1, 1, false);
+        declareFunction("scg_sentence_plausibility_factor", "SCG-SENTENCE-PLAUSIBILITY-FACTOR", 1, 2, false);
+        declareFunction("scg_sentence_unwinding_wffP", "SCG-SENTENCE-UNWINDING-WFF?", 1, 1, false);
+        declareFunction("scg_wff_note_var_isa_constraints", "SCG-WFF-NOTE-VAR-ISA-CONSTRAINTS", 2, 0, false);
+        declareFunction("scg_wff_note_var_genl_constraints", "SCG-WFF-NOTE-VAR-GENL-CONSTRAINTS", 2, 0, false);
+        declareFunction("scg_wff_sort_type_constraints_internal", "SCG-WFF-SORT-TYPE-CONSTRAINTS-INTERNAL", 1, 0, false);
+        declareFunction("scg_wff_sort_type_constraints", "SCG-WFF-SORT-TYPE-CONSTRAINTS", 1, 0, false);
+        declareFunction("scg_wff_check_sentence_constraints", "SCG-WFF-CHECK-SENTENCE-CONSTRAINTS", 1, 1, false);
+        declareFunction("scg_wff_type_constraints_disjointP_internal", "SCG-WFF-TYPE-CONSTRAINTS-DISJOINT?-INTERNAL", 1, 1, false);
+        declareFunction("scg_wff_type_constraints_disjointP", "SCG-WFF-TYPE-CONSTRAINTS-DISJOINT?", 1, 1, false);
+        declareFunction("scg_wff_term_isa_constraints_okP_internal", "SCG-WFF-TERM-ISA-CONSTRAINTS-OK?-INTERNAL", 2, 1, false);
+        declareFunction("scg_wff_term_isa_constraints_okP", "SCG-WFF-TERM-ISA-CONSTRAINTS-OK?", 2, 1, false);
+        declareFunction("scg_wff_term_genl_constraints_okP_internal", "SCG-WFF-TERM-GENL-CONSTRAINTS-OK?-INTERNAL", 2, 1, false);
+        declareFunction("scg_wff_term_genl_constraints_okP", "SCG-WFF-TERM-GENL-CONSTRAINTS-OK?", 2, 1, false);
+        declareFunction("scg_wff_term_isa_constraints_internal", "SCG-WFF-TERM-ISA-CONSTRAINTS-INTERNAL", 3, 0, false);
+        declareFunction("scg_wff_term_isa_constraints", "SCG-WFF-TERM-ISA-CONSTRAINTS", 3, 0, false);
+        declareFunction("scg_wff_term_genl_constraints_internal", "SCG-WFF-TERM-GENL-CONSTRAINTS-INTERNAL", 3, 0, false);
+        declareFunction("scg_wff_term_genl_constraints", "SCG-WFF-TERM-GENL-CONSTRAINTS", 3, 0, false);
+        declareFunction("scg_wff_canonicalize_variables", "SCG-WFF-CANONICALIZE-VARIABLES", 2, 0, false);
+        declareFunction("scg_wff_literal_type_constraints_okP", "SCG-WFF-LITERAL-TYPE-CONSTRAINTS-OK?", 1, 1, false);
         return NIL;
     }
 

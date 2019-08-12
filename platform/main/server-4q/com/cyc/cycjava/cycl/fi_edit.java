@@ -10,7 +10,18 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.fi_edit;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.harness.forward;
 import com.cyc.cycjava.cycl.inference.harness.hl_prototypes;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -23,34 +34,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.fi_edit.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class fi_edit extends SubLTranslatedFile {
+public final class fi_edit extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new fi_edit();
 
-    public static final String myName = "com.cyc.cycjava.cycl.fi_edit";
+    public static final String myName = "com.cyc.cycjava_2.cycl.fi_edit";
 
-    public static final String myFingerPrint = "b258f4bd806c3fdb7c2468a3218d362efa7ddec5932f13807cd41d5d0f6c8360";
 
     // defparameter
     public static final SubLSymbol $within_fi_edit_add_old_exceptP$ = makeSymbol("*WITHIN-FI-EDIT-ADD-OLD-EXCEPT?*");
@@ -590,24 +579,24 @@ public final class fi_edit extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_fi_edit_file() {
-        declareFunction(me, "new_fi_edit_int", "NEW-FI-EDIT-INT", 2, 4, false);
-        declareFunction(me, "fi_edit_error", "FI-EDIT-ERROR", 1, 1, false);
-        declareFunction(me, "fi_edit_precanonicalize", "FI-EDIT-PRECANONICALIZE", 1, 1, false);
-        declareFunction(me, "fi_edit_canon_versions_invalidP", "FI-EDIT-CANON-VERSIONS-INVALID?", 1, 0, false);
-        declareFunction(me, "canonicalize_fi_assert_sentence", "CANONICALIZE-FI-ASSERT-SENTENCE", 1, 1, false);
-        declareFunction(me, "fi_edit_compute_old_assertions", "FI-EDIT-COMPUTE-OLD-ASSERTIONS", 1, 1, false);
-        declareFunction(me, "fi_edit_compute_old_assertions_from_canon_versions", "FI-EDIT-COMPUTE-OLD-ASSERTIONS-FROM-CANON-VERSIONS", 2, 0, false);
-        declareFunction(me, "fi_edit_compute_new_canon_tuples", "FI-EDIT-COMPUTE-NEW-CANON-TUPLES", 2, 0, false);
-        declareFunction(me, "fi_edit_add_old_excepts", "FI-EDIT-ADD-OLD-EXCEPTS", 1, 0, false);
-        declareFunction(me, "fi_edit_add_old_except", "FI-EDIT-ADD-OLD-EXCEPT", 1, 0, false);
-        declareFunction(me, "fi_edit_add_asserts", "FI-EDIT-ADD-ASSERTS", 3, 0, false);
-        declareFunction(me, "fi_edit_remove_new_cnfs", "FI-EDIT-REMOVE-NEW-CNFS", 1, 0, false);
-        declareFunction(me, "fi_edit_remove_new_assertions", "FI-EDIT-REMOVE-NEW-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "fi_edit_update_old_assertions_wrt_new", "FI-EDIT-UPDATE-OLD-ASSERTIONS-WRT-NEW", 2, 0, false);
-        declareFunction(me, "fi_edit_remove_old_excepts", "FI-EDIT-REMOVE-OLD-EXCEPTS", 1, 0, false);
-        declareFunction(me, "fi_edit_remove_old_assertions", "FI-EDIT-REMOVE-OLD-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "hl_unassert_all_assertions", "HL-UNASSERT-ALL-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "fi_edit_forward_propagate_new_asserts", "FI-EDIT-FORWARD-PROPAGATE-NEW-ASSERTS", 1, 0, false);
+        declareFunction("new_fi_edit_int", "NEW-FI-EDIT-INT", 2, 4, false);
+        declareFunction("fi_edit_error", "FI-EDIT-ERROR", 1, 1, false);
+        declareFunction("fi_edit_precanonicalize", "FI-EDIT-PRECANONICALIZE", 1, 1, false);
+        declareFunction("fi_edit_canon_versions_invalidP", "FI-EDIT-CANON-VERSIONS-INVALID?", 1, 0, false);
+        declareFunction("canonicalize_fi_assert_sentence", "CANONICALIZE-FI-ASSERT-SENTENCE", 1, 1, false);
+        declareFunction("fi_edit_compute_old_assertions", "FI-EDIT-COMPUTE-OLD-ASSERTIONS", 1, 1, false);
+        declareFunction("fi_edit_compute_old_assertions_from_canon_versions", "FI-EDIT-COMPUTE-OLD-ASSERTIONS-FROM-CANON-VERSIONS", 2, 0, false);
+        declareFunction("fi_edit_compute_new_canon_tuples", "FI-EDIT-COMPUTE-NEW-CANON-TUPLES", 2, 0, false);
+        declareFunction("fi_edit_add_old_excepts", "FI-EDIT-ADD-OLD-EXCEPTS", 1, 0, false);
+        declareFunction("fi_edit_add_old_except", "FI-EDIT-ADD-OLD-EXCEPT", 1, 0, false);
+        declareFunction("fi_edit_add_asserts", "FI-EDIT-ADD-ASSERTS", 3, 0, false);
+        declareFunction("fi_edit_remove_new_cnfs", "FI-EDIT-REMOVE-NEW-CNFS", 1, 0, false);
+        declareFunction("fi_edit_remove_new_assertions", "FI-EDIT-REMOVE-NEW-ASSERTIONS", 1, 0, false);
+        declareFunction("fi_edit_update_old_assertions_wrt_new", "FI-EDIT-UPDATE-OLD-ASSERTIONS-WRT-NEW", 2, 0, false);
+        declareFunction("fi_edit_remove_old_excepts", "FI-EDIT-REMOVE-OLD-EXCEPTS", 1, 0, false);
+        declareFunction("fi_edit_remove_old_assertions", "FI-EDIT-REMOVE-OLD-ASSERTIONS", 1, 0, false);
+        declareFunction("hl_unassert_all_assertions", "HL-UNASSERT-ALL-ASSERTIONS", 1, 0, false);
+        declareFunction("fi_edit_forward_propagate_new_asserts", "FI-EDIT-FORWARD-PROPAGATE-NEW-ASSERTS", 1, 0, false);
         return NIL;
     }
 

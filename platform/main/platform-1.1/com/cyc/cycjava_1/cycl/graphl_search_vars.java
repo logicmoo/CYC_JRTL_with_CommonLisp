@@ -567,8 +567,7 @@ public  final class graphl_search_vars extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_graphl_search_vars_file() {
-    // CVS_ID("Id: graphl-search-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_graphl_search$.getGlobalValue(), Symbols.symbol_function($sym7$GRAPHL_SEARCH_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_graphl_search$.getGlobalValue(), Symbols.symbol_function($sym7$GRAPHL_SEARCH_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$GRAPHL_SEARCH_DIRECTION, $sym9$_CSETF_GRAPHL_SEARCH_DIRECTION);
     Structures.def_csetf($sym10$GRAPHL_SEARCH_TYPE, $sym11$_CSETF_GRAPHL_SEARCH_TYPE);
     Structures.def_csetf($sym12$GRAPHL_SEARCH_ORDER, $sym13$_CSETF_GRAPHL_SEARCH_ORDER);

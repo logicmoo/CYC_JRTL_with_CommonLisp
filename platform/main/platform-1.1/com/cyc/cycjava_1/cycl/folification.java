@@ -453,8 +453,7 @@ public  final class folification extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_folification_file() {
-    // CVS_ID("Id: folification.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    memoization_state.note_globally_cached_function($sym157$FOL_SEQUENCE_VARIABLE_ARGS_FOR_ARITY);
+        memoization_state.note_globally_cached_function($sym157$FOL_SEQUENCE_VARIABLE_ARGS_FOR_ARITY);
     memoization_state.note_globally_cached_function($sym286$COMPUTE_TPTP_QUERY_INDEX_NUMBER);
     subl_macro_promotions.declare_defglobal($sym329$_TPTP_LONG_SYMBOL_NAME_CACHE_);
     memoization_state.note_globally_cached_function($sym351$FOL_NART_STRING);

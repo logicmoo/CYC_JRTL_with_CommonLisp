@@ -330,8 +330,7 @@ public  final class precanonicalizer extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_precanonicalizer_file() {
-    // CVS_ID("Id: precanonicalizer.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_memoized_function($sym6$PRECANONICALIZATIONS_INT);
+        memoization_state.note_memoized_function($sym6$PRECANONICALIZATIONS_INT);
     return NIL;
   }
 

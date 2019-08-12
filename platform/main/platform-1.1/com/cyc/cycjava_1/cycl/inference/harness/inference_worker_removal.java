@@ -2376,8 +2376,7 @@ Creates a new removal link to goal iff it would be interesting to do so. */
   }
 
   public static final SubLObject setup_inference_worker_removal_file() {
-    // CVS_ID("Id: inference-worker-removal.lisp 128830 2009-09-23 21:54:25Z jantos ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$REMOV_LINK_DATA_HL_MODULE, $sym9$_CSETF_REMOV_LINK_DATA_HL_MODULE);
     Structures.def_csetf($sym10$REMOV_LINK_DATA_BINDINGS, $sym11$_CSETF_REMOV_LINK_DATA_BINDINGS);
     Structures.def_csetf($sym12$REMOV_LINK_DATA_SUPPORTS, $sym13$_CSETF_REMOV_LINK_DATA_SUPPORTS);

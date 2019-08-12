@@ -464,8 +464,7 @@ public  final class removal_modules_isa extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_isa_file() {
-    // CVS_ID("Id: removal-modules-isa.lisp 128475 2009-08-04 16:03:42Z pace ");
-    inference_modules.register_solely_specific_removal_module_predicate($const0$isa);
+        inference_modules.register_solely_specific_removal_module_predicate($const0$isa);
     inference_modules.inference_removal_module_use_meta_removal($const0$isa, $kw1$META_REMOVAL_COMPLETELY_ENUMERABLE_POS);
     inference_modules.inference_removal_module_use_meta_removal($const0$isa, $kw2$META_REMOVAL_COMPLETELY_DECIDABLE_POS);
     inference_modules.inference_removal_module_use_generic($const0$isa, $kw3$REMOVAL_COMPLETELY_DECIDABLE_NEG);

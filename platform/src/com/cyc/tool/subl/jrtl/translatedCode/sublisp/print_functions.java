@@ -89,31 +89,31 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class print_functions extends SubLTranslatedFile {
     public static SubLObject declare_print_functions_file() {
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_integer_internal", "PRINT-INTEGER-INTERNAL", 3, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_bignum_internal", "PRINT-BIGNUM-INTERNAL", 5, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_integer", "PRINT-INTEGER", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_bignum_method", "PRINT-OBJECT-BIGNUM-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_fixnum_method", "PRINT-OBJECT-FIXNUM-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_flonum", "PRINT-FLONUM", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_float_method", "PRINT-OBJECT-FLOAT-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_character", "PRINT-CHARACTER", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_character_method", "PRINT-OBJECT-CHARACTER-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_symbol_package_portion", "PRINT-SYMBOL-PACKAGE-PORTION", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "escape_vertical_bars", "ESCAPE-VERTICAL-BARS", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_symbol", "PRINT-SYMBOL", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_symbol_method", "PRINT-OBJECT-SYMBOL-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_string", "PRINT-STRING", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_string_method", "PRINT-OBJECT-STRING-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_cons_cells", "PRINT-CONS-CELLS", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_cons_method", "PRINT-OBJECT-CONS-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_vector", "PRINT-VECTOR", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_vector_method", "PRINT-OBJECT-VECTOR-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_hashtable", "PRINT-HASHTABLE", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_hash_table_method", "PRINT-OBJECT-HASH-TABLE-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_function_method", "PRINT-OBJECT-FUNCTION-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "write_guid_string", "WRITE-GUID-STRING", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_guid_internal", "PRINT-GUID-INTERNAL", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_functions", "print_object_guid_method", "PRINT-OBJECT-GUID-METHOD", 2, 0, false);
+        declareFunction("print_integer_internal", "PRINT-INTEGER-INTERNAL", 3, 0, false);
+        declareFunction("print_bignum_internal", "PRINT-BIGNUM-INTERNAL", 5, 0, false);
+        declareFunction("print_integer", "PRINT-INTEGER", 2, 0, false);
+        declareFunction("print_object_bignum_method", "PRINT-OBJECT-BIGNUM-METHOD", 2, 0, false);
+        declareFunction("print_object_fixnum_method", "PRINT-OBJECT-FIXNUM-METHOD", 2, 0, false);
+        declareFunction("print_flonum", "PRINT-FLONUM", 2, 0, false);
+        declareFunction("print_object_float_method", "PRINT-OBJECT-FLOAT-METHOD", 2, 0, false);
+        declareFunction("print_character", "PRINT-CHARACTER", 2, 0, false);
+        declareFunction("print_object_character_method", "PRINT-OBJECT-CHARACTER-METHOD", 2, 0, false);
+        declareFunction("print_symbol_package_portion", "PRINT-SYMBOL-PACKAGE-PORTION", 2, 0, false);
+        declareFunction("escape_vertical_bars", "ESCAPE-VERTICAL-BARS", 1, 0, false);
+        declareFunction("print_symbol", "PRINT-SYMBOL", 2, 0, false);
+        declareFunction("print_object_symbol_method", "PRINT-OBJECT-SYMBOL-METHOD", 2, 0, false);
+        declareFunction("print_string", "PRINT-STRING", 2, 0, false);
+        declareFunction("print_object_string_method", "PRINT-OBJECT-STRING-METHOD", 2, 0, false);
+        declareFunction("print_cons_cells", "PRINT-CONS-CELLS", 2, 0, false);
+        declareFunction("print_object_cons_method", "PRINT-OBJECT-CONS-METHOD", 2, 0, false);
+        declareFunction("print_vector", "PRINT-VECTOR", 2, 0, false);
+        declareFunction("print_object_vector_method", "PRINT-OBJECT-VECTOR-METHOD", 2, 0, false);
+        declareFunction("print_hashtable", "PRINT-HASHTABLE", 2, 0, false);
+        declareFunction("print_object_hash_table_method", "PRINT-OBJECT-HASH-TABLE-METHOD", 2, 0, false);
+        declareFunction("print_object_function_method", "PRINT-OBJECT-FUNCTION-METHOD", 2, 0, false);
+        declareFunction("write_guid_string", "WRITE-GUID-STRING", 2, 0, false);
+        declareFunction("print_guid_internal", "PRINT-GUID-INTERNAL", 2, 0, false);
+        declareFunction("print_object_guid_method", "PRINT-OBJECT-GUID-METHOD", 2, 0, false);
         return SubLNil.NIL;
     }
 

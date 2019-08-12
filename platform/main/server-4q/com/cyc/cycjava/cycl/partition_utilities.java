@@ -1,7 +1,29 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.partition_utilities;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -11,75 +33,45 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.partition_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class partition_utilities extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      PARTITION-UTILITIES
+ * source file: /cyc/top/cycl/partition-utilities.lisp
+ * created:     2019/07/03 17:37:49
+ */
+public final class partition_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new partition_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.partition_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.partition_utilities";
 
-    public static final String myFingerPrint = "5661e6ef928787d495a9aff632259403c4d53b2bcbd436e41f089e2379dae2f1";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $assertion_partition$ = makeSymbol("*ASSERTION-PARTITION*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $assertion_list_for_assertion_partition$ = makeSymbol("*ASSERTION-LIST-FOR-ASSERTION-PARTITION*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $kb_diff_partition$ = makeSymbol("*KB-DIFF-PARTITION*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $kb_diff_for_partition$ = makeSymbol("*KB-DIFF-FOR-PARTITION*");
 
+    static private final SubLString $str2$Mismatch_between_parameterization = makeString("Mismatch between parameterization and actualization list: no actual for ~S~%");
 
+    static private final SubLList $list3 = list(makeSymbol("PARAMETER"), makeSymbol("ACTUAL"));
 
-
-
-    public static final SubLString $str2$Mismatch_between_parameterization = makeString("Mismatch between parameterization and actualization list: no actual for ~S~%");
-
-    public static final SubLList $list3 = list(makeSymbol("PARAMETER"), makeSymbol("ACTUAL"));
-
-
-
-
-
-    public static final SubLSymbol SCOPE_PARTITION_MT_INDEX = makeSymbol("SCOPE-PARTITION-MT-INDEX");
+    private static final SubLSymbol SCOPE_PARTITION_MT_INDEX = makeSymbol("SCOPE-PARTITION-MT-INDEX");
 
     private static final SubLList $list7 = list(list(makeKeyword("FUNCTION"), makeSymbol("SCOPE-ASSERTION-PARTITION")));
-
-
-
-
 
     private static final SubLSymbol $sym10$_EXIT = makeSymbol("%EXIT");
 
@@ -101,23 +93,52 @@ public final class partition_utilities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
     private static final SubLSymbol SK_SOURCE_P = makeSymbol("SK-SOURCE-P");
-
-
-
-
 
     private static final SubLSymbol SCOPE_SK_SOURCE = makeSymbol("SCOPE-SK-SOURCE");
 
+    // Definitions
+    /**
+     * Given a list of EXEMPLARS and PARAMETER -> ACTUAL mappings in PARAMETERIZED
+     * load the partition from STREAM.
+     *
+     * @return LISTP of CONSTANT-P the terms introduced
+     */
+    @LispMethod(comment = "Given a list of EXEMPLARS and PARAMETER -> ACTUAL mappings in PARAMETERIZED\r\nload the partition from STREAM.\r\n\r\n@return LISTP of CONSTANT-P the terms introduced\nGiven a list of EXEMPLARS and PARAMETER -> ACTUAL mappings in PARAMETERIZED\nload the partition from STREAM.")
+    public static final SubLObject instantiate_prepared_assertion_set_alt(SubLObject stream, SubLObject exemplars, SubLObject parameterized, SubLObject reset_sbhl_linksP) {
+        if (reset_sbhl_linksP == UNPROVIDED) {
+            reset_sbhl_linksP = partitions.$reset_sbhl_links$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(exemplars, LISTP);
+            SubLTrampolineFile.checkType(parameterized, HASH_TABLE_P);
+            thread.resetMultipleValues();
+            {
+                SubLObject preseeding = com.cyc.cycjava.cycl.partition_utilities.instantiate_prepared_assertion_set_constants(exemplars, parameterized);
+                SubLObject introduced = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                partitions.load_partition_from_stream_with_preseeding(stream, preseeding, reset_sbhl_linksP);
+                return introduced;
+            }
+        }
+    }
+
+    // Definitions
+    /**
+     * Given a list of EXEMPLARS and PARAMETER -> ACTUAL mappings in PARAMETERIZED
+     * load the partition from STREAM.
+     *
+     * @return LISTP of CONSTANT-P the terms introduced
+     */
+    @LispMethod(comment = "Given a list of EXEMPLARS and PARAMETER -> ACTUAL mappings in PARAMETERIZED\r\nload the partition from STREAM.\r\n\r\n@return LISTP of CONSTANT-P the terms introduced\nGiven a list of EXEMPLARS and PARAMETER -> ACTUAL mappings in PARAMETERIZED\nload the partition from STREAM.")
     public static SubLObject instantiate_prepared_assertion_set(final SubLObject stream, final SubLObject exemplars, final SubLObject parameterized, SubLObject reset_sbhl_linksP) {
         if (reset_sbhl_linksP == UNPROVIDED) {
             reset_sbhl_linksP = partitions.$reset_sbhl_links$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != listp(exemplars) : "Types.listp(exemplars) " + "CommonSymbols.NIL != Types.listp(exemplars) " + exemplars;
-        assert NIL != hash_table_p(parameterized) : "Types.hash_table_p(parameterized) " + "CommonSymbols.NIL != Types.hash_table_p(parameterized) " + parameterized;
+        assert NIL != listp(exemplars) : "! listp(exemplars) " + ("Types.listp(exemplars) " + "CommonSymbols.NIL != Types.listp(exemplars) ") + exemplars;
+        assert NIL != hash_table_p(parameterized) : "! hash_table_p(parameterized) " + ("Types.hash_table_p(parameterized) " + "CommonSymbols.NIL != Types.hash_table_p(parameterized) ") + parameterized;
         thread.resetMultipleValues();
         final SubLObject preseeding = instantiate_prepared_assertion_set_constants(exemplars, parameterized);
         final SubLObject introduced = thread.secondMultipleValue();
@@ -126,9 +147,68 @@ public final class partition_utilities extends SubLTranslatedFile {
         return introduced;
     }
 
+    /**
+     * Create equivalent terms for the EXEMPLARS and compute the preseeding set
+     * for the lookup of partition constants from the exemplars and the
+     * PARAMETER -> ACTUALS mapping.
+     *
+     * @return 0 HASH-TABLE-P preseeded map
+     * @return 1 LISTP of CONSTANT-P terms introduced for the exemplars
+     */
+    @LispMethod(comment = "Create equivalent terms for the EXEMPLARS and compute the preseeding set\r\nfor the lookup of partition constants from the exemplars and the\r\nPARAMETER -> ACTUALS mapping.\r\n\r\n@return 0 HASH-TABLE-P preseeded map\r\n@return 1 LISTP of CONSTANT-P terms introduced for the exemplars\nCreate equivalent terms for the EXEMPLARS and compute the preseeding set\nfor the lookup of partition constants from the exemplars and the\nPARAMETER -> ACTUALS mapping.")
+    public static final SubLObject instantiate_prepared_assertion_set_constants_alt(SubLObject exemplars, SubLObject parametized) {
+        SubLTrampolineFile.checkType(exemplars, LISTP);
+        SubLTrampolineFile.checkType(parametized, HASH_TABLE_P);
+        {
+            SubLObject estimated_size = add(length(exemplars), hash_table_count(parametized));
+            SubLObject preseeding = partitions.new_load_partition_constants_store(estimated_size);
+            SubLObject introduced = NIL;
+            SubLObject cdolist_list_var = exemplars;
+            SubLObject exemplar = NIL;
+            for (exemplar = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , exemplar = cdolist_list_var.first()) {
+                {
+                    SubLObject name = constants_high.constant_name(exemplar);
+                    SubLObject external_id = constants_high.constant_external_id(exemplar);
+                    SubLObject internal_id = constants_high.constant_internal_id(exemplar);
+                    SubLObject instance = cyc_kernel.cyc_create_new_permanent(constant_completion_high.uniquify_constant_name(name));
+                    sethash(external_id, preseeding, instance);
+                    sethash(internal_id, preseeding, instance);
+                    introduced = cons(instance, introduced);
+                }
+            }
+            {
+                SubLObject param_id = NIL;
+                SubLObject actual = NIL;
+                {
+                    final Iterator cdohash_iterator = getEntrySetIterator(parametized);
+                    try {
+                        while (iteratorHasNext(cdohash_iterator)) {
+                            final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                            param_id = getEntryKey(cdohash_entry);
+                            actual = getEntryValue(cdohash_entry);
+                            sethash(param_id, preseeding, actual);
+                        } 
+                    } finally {
+                        releaseEntrySetIterator(cdohash_iterator);
+                    }
+                }
+            }
+            return values(preseeding, introduced);
+        }
+    }
+
+    /**
+     * Create equivalent terms for the EXEMPLARS and compute the preseeding set
+     * for the lookup of partition constants from the exemplars and the
+     * PARAMETER -> ACTUALS mapping.
+     *
+     * @return 0 HASH-TABLE-P preseeded map
+     * @return 1 LISTP of CONSTANT-P terms introduced for the exemplars
+     */
+    @LispMethod(comment = "Create equivalent terms for the EXEMPLARS and compute the preseeding set\r\nfor the lookup of partition constants from the exemplars and the\r\nPARAMETER -> ACTUALS mapping.\r\n\r\n@return 0 HASH-TABLE-P preseeded map\r\n@return 1 LISTP of CONSTANT-P terms introduced for the exemplars\nCreate equivalent terms for the EXEMPLARS and compute the preseeding set\nfor the lookup of partition constants from the exemplars and the\nPARAMETER -> ACTUALS mapping.")
     public static SubLObject instantiate_prepared_assertion_set_constants(final SubLObject exemplars, final SubLObject parametized) {
-        assert NIL != listp(exemplars) : "Types.listp(exemplars) " + "CommonSymbols.NIL != Types.listp(exemplars) " + exemplars;
-        assert NIL != hash_table_p(parametized) : "Types.hash_table_p(parametized) " + "CommonSymbols.NIL != Types.hash_table_p(parametized) " + parametized;
+        assert NIL != listp(exemplars) : "! listp(exemplars) " + ("Types.listp(exemplars) " + "CommonSymbols.NIL != Types.listp(exemplars) ") + exemplars;
+        assert NIL != hash_table_p(parametized) : "! hash_table_p(parametized) " + ("Types.hash_table_p(parametized) " + "CommonSymbols.NIL != Types.hash_table_p(parametized) ") + parametized;
         final SubLObject estimated_size = add(length(exemplars), hash_table_count(parametized));
         final SubLObject preseeding = partitions.new_load_partition_constants_store(estimated_size);
         SubLObject introduced = NIL;
@@ -162,11 +242,44 @@ public final class partition_utilities extends SubLTranslatedFile {
         return values(preseeding, introduced);
     }
 
+    /**
+     * Given a binary sream, unserialize a exemplar-based parameterized partition, creating new terms for the
+     * exemplars and substituting the constants in ACTUALS-MAP for the paramterizing constants.
+     *
+     * @return LISTP of CONSTANTP the introduced terms
+     */
+    @LispMethod(comment = "Given a binary sream, unserialize a exemplar-based parameterized partition, creating new terms for the\r\nexemplars and substituting the constants in ACTUALS-MAP for the paramterizing constants.\r\n\r\n@return LISTP of CONSTANTP the introduced terms\nGiven a binary sream, unserialize a exemplar-based parameterized partition, creating new terms for the\nexemplars and substituting the constants in ACTUALS-MAP for the paramterizing constants.")
+    public static final SubLObject unserialize_prepared_assertion_set_alt(SubLObject stream, SubLObject actuals_map, SubLObject reset_sbhl_linksP) {
+        if (reset_sbhl_linksP == UNPROVIDED) {
+            reset_sbhl_linksP = partitions.$reset_sbhl_links$.getDynamicValue();
+        }
+        SubLTrampolineFile.checkType(actuals_map, HASH_TABLE_P);
+        {
+            SubLObject exemplars = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
+            SubLObject parameterized = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
+            SubLObject cdolist_list_var = parameterized;
+            SubLObject parameter = NIL;
+            for (parameter = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , parameter = cdolist_list_var.first()) {
+                if (NIL == gethash_without_values(constants_high.constant_external_id(parameter), actuals_map, UNPROVIDED)) {
+                    Errors.error($str_alt2$Mismatch_between_parameterization, parameter);
+                }
+            }
+            return com.cyc.cycjava.cycl.partition_utilities.instantiate_prepared_assertion_set(stream, exemplars, actuals_map, reset_sbhl_linksP);
+        }
+    }
+
+    /**
+     * Given a binary sream, unserialize a exemplar-based parameterized partition, creating new terms for the
+     * exemplars and substituting the constants in ACTUALS-MAP for the paramterizing constants.
+     *
+     * @return LISTP of CONSTANTP the introduced terms
+     */
+    @LispMethod(comment = "Given a binary sream, unserialize a exemplar-based parameterized partition, creating new terms for the\r\nexemplars and substituting the constants in ACTUALS-MAP for the paramterizing constants.\r\n\r\n@return LISTP of CONSTANTP the introduced terms\nGiven a binary sream, unserialize a exemplar-based parameterized partition, creating new terms for the\nexemplars and substituting the constants in ACTUALS-MAP for the paramterizing constants.")
     public static SubLObject unserialize_prepared_assertion_set(final SubLObject stream, final SubLObject actuals_map, SubLObject reset_sbhl_linksP) {
         if (reset_sbhl_linksP == UNPROVIDED) {
             reset_sbhl_linksP = partitions.$reset_sbhl_links$.getDynamicValue();
         }
-        assert NIL != hash_table_p(actuals_map) : "Types.hash_table_p(actuals_map) " + "CommonSymbols.NIL != Types.hash_table_p(actuals_map) " + actuals_map;
+        assert NIL != hash_table_p(actuals_map) : "! hash_table_p(actuals_map) " + ("Types.hash_table_p(actuals_map) " + "CommonSymbols.NIL != Types.hash_table_p(actuals_map) ") + actuals_map;
         final SubLObject exemplars = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
         SubLObject cdolist_list_var;
         final SubLObject parameterized = cdolist_list_var = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
@@ -182,9 +295,35 @@ public final class partition_utilities extends SubLTranslatedFile {
         return instantiate_prepared_assertion_set(stream, exemplars, actuals_map, reset_sbhl_linksP);
     }
 
+    /**
+     * Given the list of EXEMPLARS and PARAMETERIZED constants, serialize a partition to
+     * the STREAM after noting the exemplars and parameters in it.
+     *
+     * @return STREAM
+     */
+    @LispMethod(comment = "Given the list of EXEMPLARS and PARAMETERIZED constants, serialize a partition to\r\nthe STREAM after noting the exemplars and parameters in it.\r\n\r\n@return STREAM\nGiven the list of EXEMPLARS and PARAMETERIZED constants, serialize a partition to\nthe STREAM after noting the exemplars and parameters in it.")
+    public static final SubLObject serialize_prepared_assertion_set_alt(SubLObject stream, SubLObject exemplars, SubLObject parameterized) {
+        SubLTrampolineFile.checkType(exemplars, LISTP);
+        SubLTrampolineFile.checkType(parameterized, LISTP);
+        {
+            SubLObject partition = com.cyc.cycjava.cycl.partition_utilities.determine_prepared_assertion_set_partition(exemplars);
+            cfasl_output(exemplars, stream);
+            cfasl_output(parameterized, stream);
+            partitions.save_partition_to_stream(stream, partition);
+        }
+        return stream;
+    }
+
+    /**
+     * Given the list of EXEMPLARS and PARAMETERIZED constants, serialize a partition to
+     * the STREAM after noting the exemplars and parameters in it.
+     *
+     * @return STREAM
+     */
+    @LispMethod(comment = "Given the list of EXEMPLARS and PARAMETERIZED constants, serialize a partition to\r\nthe STREAM after noting the exemplars and parameters in it.\r\n\r\n@return STREAM\nGiven the list of EXEMPLARS and PARAMETERIZED constants, serialize a partition to\nthe STREAM after noting the exemplars and parameters in it.")
     public static SubLObject serialize_prepared_assertion_set(final SubLObject stream, final SubLObject exemplars, final SubLObject parameterized) {
-        assert NIL != listp(exemplars) : "Types.listp(exemplars) " + "CommonSymbols.NIL != Types.listp(exemplars) " + exemplars;
-        assert NIL != listp(parameterized) : "Types.listp(parameterized) " + "CommonSymbols.NIL != Types.listp(parameterized) " + parameterized;
+        assert NIL != listp(exemplars) : "! listp(exemplars) " + ("Types.listp(exemplars) " + "CommonSymbols.NIL != Types.listp(exemplars) ") + exemplars;
+        assert NIL != listp(parameterized) : "! listp(parameterized) " + ("Types.listp(parameterized) " + "CommonSymbols.NIL != Types.listp(parameterized) ") + parameterized;
         final SubLObject partition = determine_prepared_assertion_set_partition(exemplars);
         cfasl_output(exemplars, stream);
         cfasl_output(parameterized, stream);
@@ -192,8 +331,52 @@ public final class partition_utilities extends SubLTranslatedFile {
         return stream;
     }
 
+    /**
+     * Given a list of tuples of the form (PARAMETER ACTUAL), both CONSTANT-P,
+     * generate a actuals' map for use with UNSERIALIZE-PREPARED-ASSERTION-SET
+     *
+     * @return HASH-TABLE-P the map of actuals
+     */
+    @LispMethod(comment = "Given a list of tuples of the form (PARAMETER ACTUAL), both CONSTANT-P,\r\ngenerate a actuals\' map for use with UNSERIALIZE-PREPARED-ASSERTION-SET\r\n\r\n@return HASH-TABLE-P the map of actuals\nGiven a list of tuples of the form (PARAMETER ACTUAL), both CONSTANT-P,\ngenerate a actuals\' map for use with UNSERIALIZE-PREPARED-ASSERTION-SET")
+    public static final SubLObject generate_prepared_assertion_actuals_for_parameters_map_alt(SubLObject actual_parameter_tuples) {
+        SubLTrampolineFile.checkType(actual_parameter_tuples, LISTP);
+        {
+            SubLObject map = make_hash_table(length(actual_parameter_tuples), symbol_function(EQL), UNPROVIDED);
+            SubLObject cdolist_list_var = actual_parameter_tuples;
+            SubLObject tuple = NIL;
+            for (tuple = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tuple = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = tuple;
+                    SubLObject current = datum;
+                    SubLObject parameter = NIL;
+                    SubLObject actual = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt3);
+                    parameter = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt3);
+                    actual = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        sethash(constants_high.constant_external_id(parameter), map, actual);
+                        sethash(constants_high.constant_internal_id(parameter), map, actual);
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt3);
+                    }
+                }
+            }
+            return map;
+        }
+    }
+
+    /**
+     * Given a list of tuples of the form (PARAMETER ACTUAL), both CONSTANT-P,
+     * generate a actuals' map for use with UNSERIALIZE-PREPARED-ASSERTION-SET
+     *
+     * @return HASH-TABLE-P the map of actuals
+     */
+    @LispMethod(comment = "Given a list of tuples of the form (PARAMETER ACTUAL), both CONSTANT-P,\r\ngenerate a actuals\' map for use with UNSERIALIZE-PREPARED-ASSERTION-SET\r\n\r\n@return HASH-TABLE-P the map of actuals\nGiven a list of tuples of the form (PARAMETER ACTUAL), both CONSTANT-P,\ngenerate a actuals\' map for use with UNSERIALIZE-PREPARED-ASSERTION-SET")
     public static SubLObject generate_prepared_assertion_actuals_for_parameters_map(final SubLObject actual_parameter_tuples) {
-        assert NIL != listp(actual_parameter_tuples) : "Types.listp(actual_parameter_tuples) " + "CommonSymbols.NIL != Types.listp(actual_parameter_tuples) " + actual_parameter_tuples;
+        assert NIL != listp(actual_parameter_tuples) : "! listp(actual_parameter_tuples) " + ("Types.listp(actual_parameter_tuples) " + "CommonSymbols.NIL != Types.listp(actual_parameter_tuples) ") + actual_parameter_tuples;
         final SubLObject map = make_hash_table(length(actual_parameter_tuples), symbol_function(EQL), UNPROVIDED);
         SubLObject cdolist_list_var = actual_parameter_tuples;
         SubLObject tuple = NIL;
@@ -221,6 +404,31 @@ public final class partition_utilities extends SubLTranslatedFile {
         return map;
     }
 
+    public static final SubLObject determine_prepared_assertion_set_partition_alt(SubLObject exemplars) {
+        {
+            SubLObject partition_spec = NIL;
+            SubLObject mts = NIL;
+            {
+                SubLObject cdolist_list_var = exemplars;
+                SubLObject constant = NIL;
+                for (constant = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constant = cdolist_list_var.first()) {
+                    partition_spec = cons(list($TERM, constant), partition_spec);
+                    if (NIL != fort_types_interface.microtheory_p(constant)) {
+                        mts = cons(constant, mts);
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = nreverse(mts);
+                SubLObject mt = NIL;
+                for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                    partition_spec = cons(list($FUNCTION, SCOPE_PARTITION_MT_INDEX, mt), partition_spec);
+                }
+            }
+            return nreverse(partition_spec);
+        }
+    }
+
     public static SubLObject determine_prepared_assertion_set_partition(final SubLObject exemplars) {
         SubLObject partition_spec = NIL;
         SubLObject mts = NIL;
@@ -246,17 +454,21 @@ public final class partition_utilities extends SubLTranslatedFile {
         return nreverse(partition_spec);
     }
 
+    static private final SubLString $str_alt2$Mismatch_between_parameterization = makeString("Mismatch between parameterization and actualization list: no actual for ~S~%");
+
+    static private final SubLList $list_alt3 = list(makeSymbol("PARAMETER"), makeSymbol("ACTUAL"));
+
     public static SubLObject save_assertion_partition(final SubLObject assertion_list, final SubLObject filename, SubLObject fort_filter_function) {
         if (fort_filter_function == UNPROVIDED) {
             fort_filter_function = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != list_utilities.non_dotted_list_p(assertion_list) : "list_utilities.non_dotted_list_p(assertion_list) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(assertion_list) " + assertion_list;
+        assert NIL != list_utilities.non_dotted_list_p(assertion_list) : "! list_utilities.non_dotted_list_p(assertion_list) " + ("list_utilities.non_dotted_list_p(assertion_list) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(assertion_list) ") + assertion_list;
         SubLObject cdolist_list_var = assertion_list;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != assertion_handles.assertion_p(elem) : "assertion_handles.assertion_p(elem) " + "CommonSymbols.NIL != assertion_handles.assertion_p(elem) " + elem;
+            assert NIL != assertion_handles.assertion_p(elem) : "! assertion_handles.assertion_p(elem) " + ("assertion_handles.assertion_p(elem) " + "CommonSymbols.NIL != assertion_handles.assertion_p(elem) ") + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -287,7 +499,7 @@ public final class partition_utilities extends SubLTranslatedFile {
 
     public static SubLObject save_kb_diff_partition(final SubLObject kb_diff, final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != kb_compare.kb_difference_p(kb_diff) : "kb_compare.kb_difference_p(kb_diff) " + "CommonSymbols.NIL != kb_compare.kb_difference_p(kb_diff) " + kb_diff;
+        assert NIL != kb_compare.kb_difference_p(kb_diff) : "! kb_compare.kb_difference_p(kb_diff) " + ("kb_compare.kb_difference_p(kb_diff) " + "CommonSymbols.NIL != kb_compare.kb_difference_p(kb_diff) ") + kb_diff;
         final SubLObject _prev_bind_0 = $kb_diff_for_partition$.currentBinding(thread);
         try {
             $kb_diff_for_partition$.bind(kb_diff, thread);
@@ -437,7 +649,7 @@ public final class partition_utilities extends SubLTranslatedFile {
         try {
             mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
             mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-            assert NIL != sksi_kb_accessors.sk_source_p(sk_source) : "sksi_kb_accessors.sk_source_p(sk_source) " + "CommonSymbols.NIL != sksi_kb_accessors.sk_source_p(sk_source) " + sk_source;
+            assert NIL != sksi_kb_accessors.sk_source_p(sk_source) : "! sksi_kb_accessors.sk_source_p(sk_source) " + ("sksi_kb_accessors.sk_source_p(sk_source) " + "CommonSymbols.NIL != sksi_kb_accessors.sk_source_p(sk_source) ") + sk_source;
             final SubLObject defining_mt = kb_accessors.defining_mt(sk_source);
             final SubLObject content_mt = sksi_kb_accessors.sk_source_content_mt(sk_source);
             if (NIL != fort_types_interface.microtheory_p(defining_mt)) {
@@ -464,7 +676,7 @@ public final class partition_utilities extends SubLTranslatedFile {
                                 final SubLObject valid_$3 = makeBoolean(!token_var_$2.eql(tou_gaf));
                                 if (NIL != valid_$3) {
                                     final SubLObject nart = assertions_high.gaf_arg1(tou_gaf);
-                                    assert NIL != nart_handles.nart_p(nart) : "nart_handles.nart_p(nart) " + "CommonSymbols.NIL != nart_handles.nart_p(nart) " + nart;
+                                    assert NIL != nart_handles.nart_p(nart) : "! nart_handles.nart_p(nart) " + ("nart_handles.nart_p(nart) " + "CommonSymbols.NIL != nart_handles.nart_p(nart) ") + nart;
                                     if (NIL != fort_types_interface.microtheory_p(nart)) {
                                         scope_microtheory_contents_and_implicitly_defined_terms(nart);
                                     }
@@ -496,22 +708,22 @@ public final class partition_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_partition_utilities_file() {
-        declareFunction(me, "instantiate_prepared_assertion_set", "INSTANTIATE-PREPARED-ASSERTION-SET", 3, 1, false);
-        declareFunction(me, "instantiate_prepared_assertion_set_constants", "INSTANTIATE-PREPARED-ASSERTION-SET-CONSTANTS", 2, 0, false);
-        declareFunction(me, "unserialize_prepared_assertion_set", "UNSERIALIZE-PREPARED-ASSERTION-SET", 2, 1, false);
-        declareFunction(me, "serialize_prepared_assertion_set", "SERIALIZE-PREPARED-ASSERTION-SET", 3, 0, false);
-        declareFunction(me, "generate_prepared_assertion_actuals_for_parameters_map", "GENERATE-PREPARED-ASSERTION-ACTUALS-FOR-PARAMETERS-MAP", 1, 0, false);
-        declareFunction(me, "determine_prepared_assertion_set_partition", "DETERMINE-PREPARED-ASSERTION-SET-PARTITION", 1, 0, false);
-        declareFunction(me, "save_assertion_partition", "SAVE-ASSERTION-PARTITION", 2, 1, false);
-        declareFunction(me, "scope_assertion_partition", "SCOPE-ASSERTION-PARTITION", 0, 0, false);
-        declareFunction(me, "save_kb_diff_partition", "SAVE-KB-DIFF-PARTITION", 2, 0, false);
-        declareFunction(me, "scope_kb_diff_constants", "SCOPE-KB-DIFF-CONSTANTS", 0, 0, false);
-        declareFunction(me, "scope_kb_diff_narts", "SCOPE-KB-DIFF-NARTS", 0, 0, false);
-        declareFunction(me, "scope_kb_diff_assertions", "SCOPE-KB-DIFF-ASSERTIONS", 0, 0, false);
-        declareFunction(me, "scope_kb_diff_deductions", "SCOPE-KB-DIFF-DEDUCTIONS", 0, 0, false);
-        declareFunction(me, "scope_microtheory_contents_and_implicitly_defined_terms", "SCOPE-MICROTHEORY-CONTENTS-AND-IMPLICITLY-DEFINED-TERMS", 1, 0, false);
-        declareFunction(me, "rf_defined_in_mtP", "RF-DEFINED-IN-MT?", 2, 0, false);
-        declareFunction(me, "scope_sk_source", "SCOPE-SK-SOURCE", 1, 0, false);
+        declareFunction("instantiate_prepared_assertion_set", "INSTANTIATE-PREPARED-ASSERTION-SET", 3, 1, false);
+        declareFunction("instantiate_prepared_assertion_set_constants", "INSTANTIATE-PREPARED-ASSERTION-SET-CONSTANTS", 2, 0, false);
+        declareFunction("unserialize_prepared_assertion_set", "UNSERIALIZE-PREPARED-ASSERTION-SET", 2, 1, false);
+        declareFunction("serialize_prepared_assertion_set", "SERIALIZE-PREPARED-ASSERTION-SET", 3, 0, false);
+        declareFunction("generate_prepared_assertion_actuals_for_parameters_map", "GENERATE-PREPARED-ASSERTION-ACTUALS-FOR-PARAMETERS-MAP", 1, 0, false);
+        declareFunction("determine_prepared_assertion_set_partition", "DETERMINE-PREPARED-ASSERTION-SET-PARTITION", 1, 0, false);
+        declareFunction("save_assertion_partition", "SAVE-ASSERTION-PARTITION", 2, 1, false);
+        declareFunction("scope_assertion_partition", "SCOPE-ASSERTION-PARTITION", 0, 0, false);
+        declareFunction("save_kb_diff_partition", "SAVE-KB-DIFF-PARTITION", 2, 0, false);
+        declareFunction("scope_kb_diff_constants", "SCOPE-KB-DIFF-CONSTANTS", 0, 0, false);
+        declareFunction("scope_kb_diff_narts", "SCOPE-KB-DIFF-NARTS", 0, 0, false);
+        declareFunction("scope_kb_diff_assertions", "SCOPE-KB-DIFF-ASSERTIONS", 0, 0, false);
+        declareFunction("scope_kb_diff_deductions", "SCOPE-KB-DIFF-DEDUCTIONS", 0, 0, false);
+        declareFunction("scope_microtheory_contents_and_implicitly_defined_terms", "SCOPE-MICROTHEORY-CONTENTS-AND-IMPLICITLY-DEFINED-TERMS", 1, 0, false);
+        declareFunction("rf_defined_in_mtP", "RF-DEFINED-IN-MT?", 2, 0, false);
+        declareFunction("scope_sk_source", "SCOPE-SK-SOURCE", 1, 0, false);
         return NIL;
     }
 
@@ -550,36 +762,6 @@ public final class partition_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

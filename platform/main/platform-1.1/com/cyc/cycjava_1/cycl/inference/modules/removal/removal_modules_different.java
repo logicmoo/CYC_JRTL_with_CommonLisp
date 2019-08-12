@@ -98,8 +98,7 @@ public  final class removal_modules_different extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_different_file() {
-    // CVS_ID("Id: removal-modules-different.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.register_solely_specific_removal_module_predicate($const0$different);
+        inference_modules.register_solely_specific_removal_module_predicate($const0$different);
     inference_modules.inference_removal_module_use_generic($const0$different, $kw1$REMOVAL_EVAL);
     inference_modules.inference_removal_module_use_generic($const0$different, $kw2$REMOVAL_NOT_EVAL);
     preference_modules.inference_preference_module($kw3$DIFFERENT_DELAY_POS, $list4);

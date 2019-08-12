@@ -280,8 +280,7 @@ public  final class skolems extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_skolems_file() {
-    // CVS_ID("Id: skolems.lisp 128518 2009-08-11 19:30:58Z goolsbey ");
-    memoization_state.note_globally_cached_function($sym24$FORMULA_CONSTANT_STR);
+        memoization_state.note_globally_cached_function($sym24$FORMULA_CONSTANT_STR);
     memoization_state.note_memoized_function($sym109$DIAGNOSE_JUST_THIS_SKOLEM);
     return NIL;
   }

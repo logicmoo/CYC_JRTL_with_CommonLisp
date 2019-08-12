@@ -1,52 +1,41 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_physics;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.quantities;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$typical_hl_module_check_cost$;
 import static com.cyc.cycjava.cycl.control_vars.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_physics.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.V10;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.assertions_high;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.iteration;
+import com.cyc.cycjava.cycl.kb_mapping_macros;
+import com.cyc.cycjava.cycl.quantities;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_physics extends SubLTranslatedFile {
+public final class removal_modules_physics extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_physics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_physics";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_physics";
 
-    public static final String myFingerPrint = "8b9f51f4fdcaa3b9a6024ba4df93da10bb10782dce68519eec8b6a838e86c7c6";
 
     // defparameter
     private static final SubLSymbol $default_type_has_boiling_point_temperature_and_pressure_cost$ = makeSymbol("*DEFAULT-TYPE-HAS-BOILING-POINT-TEMPERATURE-AND-PRESSURE-COST*");
@@ -264,12 +253,12 @@ public final class removal_modules_physics extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_physics_file() {
-        declareFunction(me, "antoine_equation_constants_for_temperature_of_liquid", "ANTOINE-EQUATION-CONSTANTS-FOR-TEMPERATURE-OF-LIQUID", 2, 0, false);
-        declareFunction(me, "boiling_point_temperature_to_pressure", "BOILING-POINT-TEMPERATURE-TO-PRESSURE", 2, 0, false);
-        declareFunction(me, "antoine_equation_constants_for_pressure_of_liquid", "ANTOINE-EQUATION-CONSTANTS-FOR-PRESSURE-OF-LIQUID", 2, 0, false);
-        declareFunction(me, "boiling_point_pressure_to_temperature", "BOILING-POINT-PRESSURE-TO-TEMPERATURE", 2, 0, false);
-        declareFunction(me, "removal_type_has_boiling_point_temperature_at_pressure_expand", "REMOVAL-TYPE-HAS-BOILING-POINT-TEMPERATURE-AT-PRESSURE-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_type_has_boiling_point_pressure_at_temperature_expand", "REMOVAL-TYPE-HAS-BOILING-POINT-PRESSURE-AT-TEMPERATURE-EXPAND", 1, 1, false);
+        declareFunction("antoine_equation_constants_for_temperature_of_liquid", "ANTOINE-EQUATION-CONSTANTS-FOR-TEMPERATURE-OF-LIQUID", 2, 0, false);
+        declareFunction("boiling_point_temperature_to_pressure", "BOILING-POINT-TEMPERATURE-TO-PRESSURE", 2, 0, false);
+        declareFunction("antoine_equation_constants_for_pressure_of_liquid", "ANTOINE-EQUATION-CONSTANTS-FOR-PRESSURE-OF-LIQUID", 2, 0, false);
+        declareFunction("boiling_point_pressure_to_temperature", "BOILING-POINT-PRESSURE-TO-TEMPERATURE", 2, 0, false);
+        declareFunction("removal_type_has_boiling_point_temperature_at_pressure_expand", "REMOVAL-TYPE-HAS-BOILING-POINT-TEMPERATURE-AT-PRESSURE-EXPAND", 1, 1, false);
+        declareFunction("removal_type_has_boiling_point_pressure_at_temperature_expand", "REMOVAL-TYPE-HAS-BOILING-POINT-PRESSURE-AT-TEMPERATURE-EXPAND", 1, 1, false);
         return NIL;
     }
 

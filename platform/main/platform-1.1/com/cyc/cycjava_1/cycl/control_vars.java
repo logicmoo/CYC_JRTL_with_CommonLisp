@@ -931,8 +931,7 @@ which uniquely identifies every separate Cyc image */
   }
 
   public static final SubLObject setup_control_vars_file() {
-    // CVS_ID("Id: control-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-	 $rkf_mt$ = defvar("*RKF-MT*", NIL);
+    	 $rkf_mt$ = defvar("*RKF-MT*", NIL);
     subl_macro_promotions.declare_defglobal($sym0$_TABLE_AREA_);
     subl_macro_promotions.declare_defglobal($sym1$_HL_LOCK_);
     utilities_macros.register_global_lock($sym1$_HL_LOCK_, $str2$HL_Store_Lock);

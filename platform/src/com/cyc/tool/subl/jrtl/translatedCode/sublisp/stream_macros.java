@@ -60,16 +60,16 @@ public class stream_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_stream_macros_file() {
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "ensure_private_stream", "ENSURE-PRIVATE-STREAM");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "ensure_private_stream_internal", "ENSURE-PRIVATE-STREAM-INTERNAL", 1, 0, false);
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "cwith_output_to_string", "CWITH-OUTPUT-TO-STRING");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "with_input_from_string", "WITH-INPUT-FROM-STRING");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "with_input_from_string_internal", "WITH-INPUT-FROM-STRING-INTERNAL", 6, 0, false);
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "with_open_stream", "WITH-OPEN-STREAM");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "with_open_file", "WITH-OPEN-FILE");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "with_bounding_index_designators", "WITH-BOUNDING-INDEX-DESIGNATORS");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "with_stream_lock", "WITH-STREAM-LOCK");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros", "synonym_stream_p", "SYNONYM-STREAM-P");
+        declareMacro("ensure_private_stream", "ENSURE-PRIVATE-STREAM");
+        declareFunction("ensure_private_stream_internal", "ENSURE-PRIVATE-STREAM-INTERNAL", 1, 0, false);
+        declareMacro("cwith_output_to_string", "CWITH-OUTPUT-TO-STRING");
+        declareMacro("with_input_from_string", "WITH-INPUT-FROM-STRING");
+        declareFunction("with_input_from_string_internal", "WITH-INPUT-FROM-STRING-INTERNAL", 6, 0, false);
+        declareMacro("with_open_stream", "WITH-OPEN-STREAM");
+        declareMacro("with_open_file", "WITH-OPEN-FILE");
+        declareMacro("with_bounding_index_designators", "WITH-BOUNDING-INDEX-DESIGNATORS");
+        declareMacro("with_stream_lock", "WITH-STREAM-LOCK");
+        declareMacro("synonym_stream_p", "SYNONYM-STREAM-P");
         return SubLNil.NIL;
     }
 

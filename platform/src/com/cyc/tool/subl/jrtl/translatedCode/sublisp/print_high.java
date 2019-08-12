@@ -87,21 +87,21 @@ public class print_high extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_print_high_file() {
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "read_print_eq", "READ-PRINT-EQ", 1, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "print_error", "PRINT-ERROR", 2, 0, false);
-	declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "with_printer_state", "WITH-PRINTER-STATE");
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "handle_circularity", "HANDLE-CIRCULARITY", 2, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "circular_reference_p", "CIRCULAR-REFERENCE-P", 2, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "print_object", "PRINT-OBJECT", 2, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "print_object_wrapper", "PRINT-OBJECT-WRAPPER", 2, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "really_write", "REALLY-WRITE", 2, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "prin1", "PRIN1", 1, 1, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "print", "PRINT", 1, 1, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "princ", "PRINC", 1, 1, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "really_write_to_string", "REALLY-WRITE-TO-STRING", 2, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "prin1_to_string", "PRIN1-TO-STRING", 1, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "princ_to_string", "PRINC-TO-STRING", 1, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high", "print_not_readable", "PRINT-NOT-READABLE", 2, 0, false);
+	declareFunction("read_print_eq", "READ-PRINT-EQ", 1, 0, false);
+	declareFunction("print_error", "PRINT-ERROR", 2, 0, false);
+	declareMacro("with_printer_state", "WITH-PRINTER-STATE");
+	declareFunction("handle_circularity", "HANDLE-CIRCULARITY", 2, 0, false);
+	declareFunction("circular_reference_p", "CIRCULAR-REFERENCE-P", 2, 0, false);
+	declareFunction("print_object", "PRINT-OBJECT", 2, 0, false);
+	declareFunction("print_object_wrapper", "PRINT-OBJECT-WRAPPER", 2, 0, false);
+	declareFunction("really_write", "REALLY-WRITE", 2, 0, false);
+	declareFunction("prin1", "PRIN1", 1, 1, false);
+	declareFunction("print", "PRINT", 1, 1, false);
+	declareFunction("princ", "PRINC", 1, 1, false);
+	declareFunction("really_write_to_string", "REALLY-WRITE-TO-STRING", 2, 0, false);
+	declareFunction("prin1_to_string", "PRIN1-TO-STRING", 1, 0, false);
+	declareFunction("princ_to_string", "PRINC-TO-STRING", 1, 0, false);
+	declareFunction("print_not_readable", "PRINT-NOT-READABLE", 2, 0, false);
 	return SubLNil.NIL;
     }
 

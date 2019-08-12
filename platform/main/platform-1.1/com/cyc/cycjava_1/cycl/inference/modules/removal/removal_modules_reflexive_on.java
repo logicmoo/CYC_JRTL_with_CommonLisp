@@ -86,8 +86,7 @@ public  final class removal_modules_reflexive_on extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_reflexive_on_file() {
-    // CVS_ID("Id: removal-modules-reflexive-on.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.note_funcall_helper_function($sym7$REFLEXIVE_ON_COMPLETNESS);
+        utilities_macros.note_funcall_helper_function($sym7$REFLEXIVE_ON_COMPLETNESS);
     inference_modules.inference_removal_module($kw8$REMOVAL_REFLEXIVE_ON, $list9);
     return NIL;
   }

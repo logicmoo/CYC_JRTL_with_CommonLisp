@@ -916,8 +916,7 @@ modules pass these in. */
   }
 
   public static final SubLObject setup_backward_file() {
-    // CVS_ID("Id: backward.lisp 128499 2009-08-06 15:49:24Z pace ");
-    access_macros.register_external_symbol($sym6$REMOVAL_ASK);
+        access_macros.register_external_symbol($sym6$REMOVAL_ASK);
     utilities_macros.declare_control_parameter_internal($sym38$_TRANSFORMATION_SEMANTIC_PRUNING_ENABLED_, $str39$Semantic_pruning_of_results_of_ba, $str40$This_controls_whether_or_not_the_, $list41);
     return NIL;
   }

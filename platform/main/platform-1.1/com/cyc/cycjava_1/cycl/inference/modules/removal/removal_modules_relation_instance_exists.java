@@ -661,8 +661,7 @@ public  final class removal_modules_relation_instance_exists extends SubLTransla
   }
 
   public static final SubLObject setup_removal_modules_relation_instance_exists_file() {
-    // CVS_ID("Id: removal-modules-relation-instance-exists.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym6$_RELATION_INSTANCE_EXISTS_DEFINING_MT_);
+        subl_macro_promotions.declare_defglobal($sym6$_RELATION_INSTANCE_EXISTS_DEFINING_MT_);
     mt_vars.note_mt_var($sym6$_RELATION_INSTANCE_EXISTS_DEFINING_MT_, $const3$relationInstanceExists);
     inference_modules.inference_removal_module($kw10$REMOVAL_RELATION_INSTANCE_EXISTS_PRUNE, $list11);
     inference_modules.inference_removal_module($kw26$REMOVAL_RELATION_INSTANCE_EXISTS_CHECK, $list27);

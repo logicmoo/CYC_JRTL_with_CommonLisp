@@ -1,13 +1,31 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.golem_satisfaction;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -20,51 +38,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.golem_satisfaction.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class golem_satisfaction extends SubLTranslatedFile {
+public final class golem_satisfaction extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new golem_satisfaction();
 
-    public static final String myName = "com.cyc.cycjava.cycl.golem_satisfaction";
+    public static final String myName = "com.cyc.cycjava_2.cycl.golem_satisfaction";
 
-    public static final String myFingerPrint = "8cc8b1b802684ecf998a273ca02b1c34c6f70f45da3a58b7745566605982cfe4";
 
     // defvar
     private static final SubLSymbol $golem_debugP$ = makeSymbol("*GOLEM-DEBUG?*");
@@ -236,35 +215,35 @@ public final class golem_satisfaction extends SubLTranslatedFile {
 
     private static final SubLSymbol $REMOVAL_SATISFIABLE_GOLEM_IN_MODEL_CHECK_POS = makeKeyword("REMOVAL-SATISFIABLE-GOLEM-IN-MODEL-CHECK-POS");
 
-    private static final SubLList $list70 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfiableGolemInModel")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfiableGolemInModel")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfiableGolemInModel")), list(makeKeyword("BIND"), makeSymbol("GOLEM-MT")), list(makeKeyword("BIND"), makeSymbol("GOLEM")), list(makeKeyword("BIND"), makeSymbol("OBJECT"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT")), list(makeKeyword("CALL"), makeSymbol("GOLEM-SATISFIABLE?"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfiableGolemInModel <golem-mt> <golem> <object>)") });
+    private static final SubLList $list70 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfiableGolemInModel")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfiableGolemInModel")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfiableGolemInModel")), list($BIND, makeSymbol("GOLEM-MT")), list($BIND, makeSymbol("GOLEM")), list($BIND, makeSymbol("OBJECT"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT")), list($CALL, makeSymbol("GOLEM-SATISFIABLE?"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfiableGolemInModel <golem-mt> <golem> <object>)") });
 
     private static final SubLObject $const71$satisfyingGolemInModelProducesCor = reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence"));
 
     private static final SubLSymbol $REMOVAL_GOLEM_SATISFACTION_PRODUCES_CORRESPONDENCE_CHECK_POS = makeKeyword("REMOVAL-GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE-CHECK-POS");
 
-    private static final SubLList $list73 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list(makeKeyword("BIND"), makeSymbol("GOLEM-MT")), list(makeKeyword("BIND"), makeSymbol("GOLEM")), list(makeKeyword("BIND"), makeSymbol("OBJECT")), list(makeKeyword("BIND"), makeSymbol("CORRESPONDENCE"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE")))), makeKeyword("INPUT-ENCODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT"), makeSymbol("CORRESPONDENCE")), list(list(makeKeyword("CALL"), makeSymbol("INFERENCIFY-KB-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("CORRESPONDENCE")), list(list(list(makeKeyword("CALL"), makeSymbol("GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))))), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("CORRESPONDENCE")), list(list(makeKeyword("CALL"), makeSymbol("KBIFY-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("EL-CORRESPONDENCE")), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("EL-CORRESPONDENCE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfyingGolemInModelProducesCorrespondence <golem-mt> <golem> <object> <correspondence>)") });
+    private static final SubLList $list73 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list($BIND, makeSymbol("GOLEM-MT")), list($BIND, makeSymbol("GOLEM")), list($BIND, makeSymbol("OBJECT")), list($BIND, makeSymbol("CORRESPONDENCE"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE")))), makeKeyword("INPUT-ENCODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT"), makeSymbol("CORRESPONDENCE")), list(list($CALL, makeSymbol("INFERENCIFY-KB-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("CORRESPONDENCE")), list(list(list($CALL, makeSymbol("GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))))), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("CORRESPONDENCE")), list(list($CALL, makeSymbol("KBIFY-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("EL-CORRESPONDENCE")), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("EL-CORRESPONDENCE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfyingGolemInModelProducesCorrespondence <golem-mt> <golem> <object> <correspondence>)") });
 
     private static final SubLSymbol $REMOVAL_GOLEM_SATISFACTION_PRODUCES_CORRESPONDENCE_GENERATE_POS = makeKeyword("REMOVAL-GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE-GENERATE-POS");
 
-    private static final SubLList $list75 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("NOT-FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list(makeKeyword("BIND"), makeSymbol("GOLEM-MT")), list(makeKeyword("BIND"), makeSymbol("GOLEM")), list(makeKeyword("BIND"), makeSymbol("OBJECT")), makeKeyword("ANYTHING")), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT")), list(list(list(makeKeyword("CALL"), makeSymbol("GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))))), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("CORRESPONDENCE")), list(list(makeKeyword("CALL"), makeSymbol("KBIFY-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("EL-CORRESPONDENCE")), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("EL-CORRESPONDENCE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfyingGolemInModelProducesCorrespondence <golem-mt> <golem> <object> <not-fully-bound>)") });
+    private static final SubLList $list75 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("NOT-FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list($BIND, makeSymbol("GOLEM-MT")), list($BIND, makeSymbol("GOLEM")), list($BIND, makeSymbol("OBJECT")), makeKeyword("ANYTHING")), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT")), list(list(list($CALL, makeSymbol("GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")))))), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("CORRESPONDENCE")), list(list($CALL, makeSymbol("KBIFY-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("EL-CORRESPONDENCE")), list(reader_make_constant_shell(makeString("satisfyingGolemInModelProducesCorrespondence")), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("EL-CORRESPONDENCE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfyingGolemInModelProducesCorrespondence <golem-mt> <golem> <object> <not-fully-bound>)") });
 
     private static final SubLObject $const76$satisfiableGolemInModelGivenParti = reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence"));
 
     private static final SubLSymbol $REMOVAL_GOLEM_SATISFACTION_GIVEN_PARTIAL_CORRESPONDENCE_CHECK_POS = makeKeyword("REMOVAL-GOLEM-SATISFACTION-GIVEN-PARTIAL-CORRESPONDENCE-CHECK-POS");
 
-    private static final SubLList $list78 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence")), list(makeKeyword("BIND"), makeSymbol("GOLEM-MT")), list(makeKeyword("BIND"), makeSymbol("GOLEM")), list(makeKeyword("BIND"), makeSymbol("OBJECT")), list(makeKeyword("BIND"), makeSymbol("CORRESPONDENCE"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE")))), makeKeyword("INPUT-ENCODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT"), makeSymbol("CORRESPONDENCE")), list(list(makeKeyword("CALL"), makeSymbol("INFERENCIFY-KB-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("HL-CORRESPONDENCE")), list(makeKeyword("CALL"), makeSymbol("GOLEM-SATISFIABLE-WITH-PARTIAL-CORRESPONDENCE?"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("HL-CORRESPONDENCE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfiableGolemInModelGivenPartialCorrespondence <golem-mt> <golem> <object> <correspondence>)") });
+    private static final SubLList $list78 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelGivenPartialCorrespondence")), list($BIND, makeSymbol("GOLEM-MT")), list($BIND, makeSymbol("GOLEM")), list($BIND, makeSymbol("OBJECT")), list($BIND, makeSymbol("CORRESPONDENCE"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE")))), makeKeyword("INPUT-ENCODE-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT"), makeSymbol("CORRESPONDENCE")), list(list($CALL, makeSymbol("INFERENCIFY-KB-BINDING-SET"), list(makeKeyword("VALUE"), makeSymbol("CORRESPONDENCE"))))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("HL-CORRESPONDENCE")), list($CALL, makeSymbol("GOLEM-SATISFIABLE-WITH-PARTIAL-CORRESPONDENCE?"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("HL-CORRESPONDENCE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfiableGolemInModelGivenPartialCorrespondence <golem-mt> <golem> <object> <correspondence>)") });
 
     private static final SubLObject $$satisfiableGolemInModelAtNode = reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode"));
 
     private static final SubLSymbol $REMOVAL_GOLEM_SATISFACTION_AT_NODE_CHECK_POS = makeKeyword("REMOVAL-GOLEM-SATISFACTION-AT-NODE-CHECK-POS");
 
-    private static final SubLList $list81 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode")), list(makeKeyword("BIND"), makeSymbol("GOLEM-MT")), list(makeKeyword("BIND"), makeSymbol("GOLEM")), list(makeKeyword("BIND"), makeSymbol("OBJECT")), list(makeKeyword("BIND"), makeSymbol("NODE"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("NODE")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT"), makeSymbol("NODE")), list(makeKeyword("CALL"), makeSymbol("GOLEM-SATISFIABLE-AT-NODE?"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("NODE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfiableGolemInModelAtNode <golem-mt> <golem> <object> <node>)") });
+    private static final SubLList $list81 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*EXPENSIVE-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("satisfiableGolemInModelAtNode")), list($BIND, makeSymbol("GOLEM-MT")), list($BIND, makeSymbol("GOLEM")), list($BIND, makeSymbol("OBJECT")), list($BIND, makeSymbol("NODE"))), list(list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("NODE")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("GOLEM-MT"), makeSymbol("GOLEM"), makeSymbol("OBJECT"), makeSymbol("NODE")), list($CALL, makeSymbol("GOLEM-SATISFIABLE-AT-NODE?"), list(makeKeyword("VALUE"), makeSymbol("GOLEM-MT")), list(makeKeyword("VALUE"), makeSymbol("GOLEM")), list(makeKeyword("VALUE"), makeSymbol("OBJECT")), list(makeKeyword("VALUE"), makeSymbol("NODE")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("DOCUMENTATION"), makeString("(#$satisfiableGolemInModelAtNode <golem-mt> <golem> <object> <node>)") });
 
     private static final SubLObject $$golemOfModelMt = reader_make_constant_shell(makeString("golemOfModelMt"));
 
     private static final SubLSymbol $REMOVAL_GOLEMOFMODELMT = makeKeyword("REMOVAL-GOLEMOFMODELMT");
 
-    private static final SubLList $list84 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("golemOfModelMt")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("golemOfModelMt")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("COST"), makeSymbol("REMOVAL-GOLEMOFMODELMT-COST"), makeKeyword("COMPLETENESS"), makeKeyword("INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-GOLEMOFMODELMT-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$golemOfModelMt <fully-bound-p> <anything>)"), makeKeyword("EXAMPLE"), makeString("(golemOfModelMt\n (CanonicalProcessForProblemTypeMtFn MultiplyingADecimalAndAnInteger)\n (The PlacingADecimalPoint))") });
+    private static final SubLList $list84 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("golemOfModelMt")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("golemOfModelMt")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING")), $COST, makeSymbol("REMOVAL-GOLEMOFMODELMT-COST"), makeKeyword("COMPLETENESS"), makeKeyword("INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-GOLEMOFMODELMT-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$golemOfModelMt <fully-bound-p> <anything>)"), makeKeyword("EXAMPLE"), makeString("(golemOfModelMt\n (CanonicalProcessForProblemTypeMtFn MultiplyingADecimalAndAnInteger)\n (The PlacingADecimalPoint))") });
 
     private static final SubLObject $$GolemModelMicrotheory = reader_make_constant_shell(makeString("GolemModelMicrotheory"));
 
@@ -1485,45 +1464,45 @@ public final class golem_satisfaction extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_golem_satisfaction_file() {
-        declareFunction(me, "golem_satisfiableP", "GOLEM-SATISFIABLE?", 3, 1, false);
-        declareFunction(me, "golem_satisfaction_produces_correspondence", "GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE", 3, 2, false);
-        declareFunction(me, "golem_satisfiable_with_partial_correspondenceP", "GOLEM-SATISFIABLE-WITH-PARTIAL-CORRESPONDENCE?", 4, 1, false);
-        declareFunction(me, "golem_satisfiable_at_nodeP", "GOLEM-SATISFIABLE-AT-NODE?", 4, 1, false);
-        declareFunction(me, "golem_to_object_arbitrary_maximal_correspondence", "GOLEM-TO-OBJECT-ARBITRARY-MAXIMAL-CORRESPONDENCE", 5, 0, false);
-        declareFunction(me, "golem_to_object_maximal_correspondences", "GOLEM-TO-OBJECT-MAXIMAL-CORRESPONDENCES", 5, 0, false);
-        declareFunction(me, "golem_to_object_correspondences", "GOLEM-TO-OBJECT-CORRESPONDENCES", 5, 0, false);
-        declareFunction(me, "golem_to_object_correspondences_among", "GOLEM-TO-OBJECT-CORRESPONDENCES-AMONG", 5, 0, false);
-        declareFunction(me, "golem_to_object_correspondences_from_partial", "GOLEM-TO-OBJECT-CORRESPONDENCES-FROM-PARTIAL", 6, 0, false);
-        declareFunction(me, "verify_partial_correspondence", "VERIFY-PARTIAL-CORRESPONDENCE", 4, 0, false);
-        declareFunction(me, "golem_extend_correspondence_recursive", "GOLEM-EXTEND-CORRESPONDENCE-RECURSIVE", 6, 0, false);
-        declareFunction(me, "golem_find_next_candidate_and_extend_correspondence", "GOLEM-FIND-NEXT-CANDIDATE-AND-EXTEND-CORRESPONDENCE", 4, 0, false);
-        declareFunction(me, "golem_compute_candidate_extension_map", "GOLEM-COMPUTE-CANDIDATE-EXTENSION-MAP", 3, 0, false);
-        declareFunction(me, "golem_correspondence_satisfies_preconditions", "GOLEM-CORRESPONDENCE-SATISFIES-PRECONDITIONS", 3, 0, false);
-        declareFunction(me, "golem_binding_valid_wrt_typesP", "GOLEM-BINDING-VALID-WRT-TYPES?", 3, 0, false);
-        declareFunction(me, "golem_candidate_extension_query_internal", "GOLEM-CANDIDATE-EXTENSION-QUERY-INTERNAL", 3, 1, false);
-        declareFunction(me, "golem_candidate_extension_query", "GOLEM-CANDIDATE-EXTENSION-QUERY", 3, 1, false);
-        declareFunction(me, "golem_sentence_satisfiedP_internal", "GOLEM-SENTENCE-SATISFIED?-INTERNAL", 2, 1, false);
-        declareFunction(me, "golem_sentence_satisfiedP", "GOLEM-SENTENCE-SATISFIED?", 2, 1, false);
-        declareFunction(me, "golem_precondition_sentences", "GOLEM-PRECONDITION-SENTENCES", 2, 0, false);
-        declareFunction(me, "golem_precondition_satisfiedP", "GOLEM-PRECONDITION-SATISFIED?", 2, 0, false);
-        declareFunction(me, "golem_sentence_relative_to_node", "GOLEM-SENTENCE-RELATIVE-TO-NODE", 2, 0, false);
-        declareFunction(me, "all_golem_roles", "ALL-GOLEM-ROLES", 2, 0, false);
-        declareFunction(me, "all_golem_gafs_in_golem_mt", "ALL-GOLEM-GAFS-IN-GOLEM-MT", 2, 0, false);
-        declareFunction(me, "golem_roles_relevant_to_satisfiability", "GOLEM-ROLES-RELEVANT-TO-SATISFIABILITY", 1, 0, false);
-        declareFunction(me, "golem_preconditions_filtered_wrt_relevant_roles", "GOLEM-PRECONDITIONS-FILTERED-WRT-RELEVANT-ROLES", 2, 0, false);
-        declareFunction(me, "all_golem_sentences_wrt_roles", "ALL-GOLEM-SENTENCES-WRT-ROLES", 2, 0, false);
-        declareFunction(me, "golem_gaf_relevant_wrt_golemsP", "GOLEM-GAF-RELEVANT-WRT-GOLEMS?", 3, 0, false);
-        declareFunction(me, "golem_gaf_first_relevant_witness", "GOLEM-GAF-FIRST-RELEVANT-WITNESS", 1, 0, false);
-        declareFunction(me, "golem_gaf_first_irrelevant_witness", "GOLEM-GAF-FIRST-IRRELEVANT-WITNESS", 1, 0, false);
-        declareFunction(me, "golem_gaf_relevant_witnessP", "GOLEM-GAF-RELEVANT-WITNESS?", 1, 0, false);
-        declareFunction(me, "golem_gaf_irrelevant_witnessP", "GOLEM-GAF-IRRELEVANT-WITNESS?", 1, 0, false);
-        declareFunction(me, "golem_gaf_formula", "GOLEM-GAF-FORMULA", 1, 0, false);
-        declareFunction(me, "possibly_golem_termP", "POSSIBLY-GOLEM-TERM?", 1, 1, false);
-        declareFunction(me, "gather_golem_terms", "GATHER-GOLEM-TERMS", 1, 1, false);
-        declareFunction(me, "golem_sentence_role_count", "GOLEM-SENTENCE-ROLE-COUNT", 1, 1, false);
-        declareFunction(me, "removal_golemofmodelmt_cost", "REMOVAL-GOLEMOFMODELMT-COST", 1, 1, false);
-        declareFunction(me, "possible_golem_of_a_model_mtP", "POSSIBLE-GOLEM-OF-A-MODEL-MT?", 1, 0, false);
-        declareFunction(me, "removal_golemofmodelmt_expand", "REMOVAL-GOLEMOFMODELMT-EXPAND", 1, 1, false);
+        declareFunction("golem_satisfiableP", "GOLEM-SATISFIABLE?", 3, 1, false);
+        declareFunction("golem_satisfaction_produces_correspondence", "GOLEM-SATISFACTION-PRODUCES-CORRESPONDENCE", 3, 2, false);
+        declareFunction("golem_satisfiable_with_partial_correspondenceP", "GOLEM-SATISFIABLE-WITH-PARTIAL-CORRESPONDENCE?", 4, 1, false);
+        declareFunction("golem_satisfiable_at_nodeP", "GOLEM-SATISFIABLE-AT-NODE?", 4, 1, false);
+        declareFunction("golem_to_object_arbitrary_maximal_correspondence", "GOLEM-TO-OBJECT-ARBITRARY-MAXIMAL-CORRESPONDENCE", 5, 0, false);
+        declareFunction("golem_to_object_maximal_correspondences", "GOLEM-TO-OBJECT-MAXIMAL-CORRESPONDENCES", 5, 0, false);
+        declareFunction("golem_to_object_correspondences", "GOLEM-TO-OBJECT-CORRESPONDENCES", 5, 0, false);
+        declareFunction("golem_to_object_correspondences_among", "GOLEM-TO-OBJECT-CORRESPONDENCES-AMONG", 5, 0, false);
+        declareFunction("golem_to_object_correspondences_from_partial", "GOLEM-TO-OBJECT-CORRESPONDENCES-FROM-PARTIAL", 6, 0, false);
+        declareFunction("verify_partial_correspondence", "VERIFY-PARTIAL-CORRESPONDENCE", 4, 0, false);
+        declareFunction("golem_extend_correspondence_recursive", "GOLEM-EXTEND-CORRESPONDENCE-RECURSIVE", 6, 0, false);
+        declareFunction("golem_find_next_candidate_and_extend_correspondence", "GOLEM-FIND-NEXT-CANDIDATE-AND-EXTEND-CORRESPONDENCE", 4, 0, false);
+        declareFunction("golem_compute_candidate_extension_map", "GOLEM-COMPUTE-CANDIDATE-EXTENSION-MAP", 3, 0, false);
+        declareFunction("golem_correspondence_satisfies_preconditions", "GOLEM-CORRESPONDENCE-SATISFIES-PRECONDITIONS", 3, 0, false);
+        declareFunction("golem_binding_valid_wrt_typesP", "GOLEM-BINDING-VALID-WRT-TYPES?", 3, 0, false);
+        declareFunction("golem_candidate_extension_query_internal", "GOLEM-CANDIDATE-EXTENSION-QUERY-INTERNAL", 3, 1, false);
+        declareFunction("golem_candidate_extension_query", "GOLEM-CANDIDATE-EXTENSION-QUERY", 3, 1, false);
+        declareFunction("golem_sentence_satisfiedP_internal", "GOLEM-SENTENCE-SATISFIED?-INTERNAL", 2, 1, false);
+        declareFunction("golem_sentence_satisfiedP", "GOLEM-SENTENCE-SATISFIED?", 2, 1, false);
+        declareFunction("golem_precondition_sentences", "GOLEM-PRECONDITION-SENTENCES", 2, 0, false);
+        declareFunction("golem_precondition_satisfiedP", "GOLEM-PRECONDITION-SATISFIED?", 2, 0, false);
+        declareFunction("golem_sentence_relative_to_node", "GOLEM-SENTENCE-RELATIVE-TO-NODE", 2, 0, false);
+        declareFunction("all_golem_roles", "ALL-GOLEM-ROLES", 2, 0, false);
+        declareFunction("all_golem_gafs_in_golem_mt", "ALL-GOLEM-GAFS-IN-GOLEM-MT", 2, 0, false);
+        declareFunction("golem_roles_relevant_to_satisfiability", "GOLEM-ROLES-RELEVANT-TO-SATISFIABILITY", 1, 0, false);
+        declareFunction("golem_preconditions_filtered_wrt_relevant_roles", "GOLEM-PRECONDITIONS-FILTERED-WRT-RELEVANT-ROLES", 2, 0, false);
+        declareFunction("all_golem_sentences_wrt_roles", "ALL-GOLEM-SENTENCES-WRT-ROLES", 2, 0, false);
+        declareFunction("golem_gaf_relevant_wrt_golemsP", "GOLEM-GAF-RELEVANT-WRT-GOLEMS?", 3, 0, false);
+        declareFunction("golem_gaf_first_relevant_witness", "GOLEM-GAF-FIRST-RELEVANT-WITNESS", 1, 0, false);
+        declareFunction("golem_gaf_first_irrelevant_witness", "GOLEM-GAF-FIRST-IRRELEVANT-WITNESS", 1, 0, false);
+        declareFunction("golem_gaf_relevant_witnessP", "GOLEM-GAF-RELEVANT-WITNESS?", 1, 0, false);
+        declareFunction("golem_gaf_irrelevant_witnessP", "GOLEM-GAF-IRRELEVANT-WITNESS?", 1, 0, false);
+        declareFunction("golem_gaf_formula", "GOLEM-GAF-FORMULA", 1, 0, false);
+        declareFunction("possibly_golem_termP", "POSSIBLY-GOLEM-TERM?", 1, 1, false);
+        declareFunction("gather_golem_terms", "GATHER-GOLEM-TERMS", 1, 1, false);
+        declareFunction("golem_sentence_role_count", "GOLEM-SENTENCE-ROLE-COUNT", 1, 1, false);
+        declareFunction("removal_golemofmodelmt_cost", "REMOVAL-GOLEMOFMODELMT-COST", 1, 1, false);
+        declareFunction("possible_golem_of_a_model_mtP", "POSSIBLE-GOLEM-OF-A-MODEL-MT?", 1, 0, false);
+        declareFunction("removal_golemofmodelmt_expand", "REMOVAL-GOLEMOFMODELMT-EXPAND", 1, 1, false);
         return NIL;
     }
 

@@ -210,8 +210,7 @@ public  final class sbhl_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_macros_file() {
-    // CVS_ID("Id: sbhl-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym88$DO_SBHL_NON_FORT_LINKS_, $sym91$DO_SBHL_NON_FORT_LINKS);
+        access_macros.register_macro_helper($sym88$DO_SBHL_NON_FORT_LINKS_, $sym91$DO_SBHL_NON_FORT_LINKS);
     access_macros.register_macro_helper($sym93$ADMISSIBLE_NON_FORT_LINK_NODE_, $sym91$DO_SBHL_NON_FORT_LINKS);
     access_macros.register_macro_helper($sym152$GET_SBHL_ACCESSIBLE_MODULES, $sym104$DO_WITH_RELEVANT_SBHL_MODULES);
     utilities_macros.register_cyc_api_macro($sym289$DO_ALL_INSTANCES, $list287, $str290$Iterator___see_do_all_simple_back);

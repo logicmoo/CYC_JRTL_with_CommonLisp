@@ -749,8 +749,7 @@ list would contain same-named keys for queue items. */
   }
 
   public static final SubLObject setup_queues_file() {
-    // CVS_ID("Id: queues.lisp 128337 2009-07-16 16:57:29Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_queue$.getGlobalValue(), Symbols.symbol_function($sym7$QUEUE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_queue$.getGlobalValue(), Symbols.symbol_function($sym7$QUEUE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$Q_NUM, $sym9$_CSETF_Q_NUM);
     Structures.def_csetf($sym10$Q_ELEMENTS, $sym11$_CSETF_Q_ELEMENTS);
     Structures.def_csetf($sym12$Q_LAST, $sym13$_CSETF_Q_LAST);

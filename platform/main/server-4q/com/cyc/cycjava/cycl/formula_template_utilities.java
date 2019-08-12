@@ -1,23 +1,45 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.formula_template_utilities;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava.cycl.utilities_macros;
+import com.cyc.cycjava.cycl.sbhl.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -33,128 +55,1953 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.formula_template_utilities.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$most_positive_fixnum$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      FORMULA-TEMPLATE-UTILITIES
+ * source file: /cyc/top/cycl/formula-template-utilities.lisp
+ * created:     2019/07/03 17:38:41
+ */
+public final class formula_template_utilities extends SubLTranslatedFile implements V12 {
+    public static final SubLObject update_promising_induction_topic_type_collections(SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        if (NIL != ke.cyclist_is_guest()) {
+            operation_communication.set_the_cyclist($$Baxter);
+        }
+        $package$.setDynamicValue(find_package($CYC));
+        {
+            SubLObject collection = NIL;
+            SubLObject done = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject around_againP = NIL;
+            while (NIL != sublisp_true()) {
+                while ((NIL == collection) || (NIL != set.set_memberP(collection, done))) {
+                    if (NIL != around_againP) {
+                        sleep($int$30);
+                    }
+                    collection = NIL;
+                    if (NIL == collection) {
+                        {
+                            SubLObject csome_list_var = $promising_induction_topic_type_collections$.getGlobalValue();
+                            SubLObject pair = NIL;
+                            for (pair = csome_list_var.first(); !((NIL != collection) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , pair = csome_list_var.first()) {
+                                if (NIL == set.set_memberP(pair.first(), done)) {
+                                    collection = pair.first();
+                                }
+                            }
+                        }
+                    }
+                    around_againP = T;
+                } 
+                if (NIL != collection) {
+                    around_againP = NIL;
+                    com.cyc.cycjava.cycl.formula_template_utilities.update_promising_induction_topic_type_collection(collection, type);
+                    set.set_add(collection, done);
+                }
+            } 
+        }
+        return NIL;
+    }
 
-public final class formula_template_utilities extends SubLTranslatedFile {
+    public static final SubLObject update_promising_induction_topic_type_collection(SubLObject collection, SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        ke.ensure_cyclist_ok();
+        if (NIL != constant_p(collection)) {
+            {
+                SubLObject existing = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_assertions_for_collection(collection, $$InferencePSC, type);
+                SubLObject new_mt = com.cyc.cycjava.cycl.formula_template_utilities.qualify_mt_for_today($$BaseKB);
+                SubLObject pred = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_collection_pred_for_type(type);
+                SubLObject sentence = list(pred, collection);
+                com.cyc.cycjava.cycl.formula_template_utilities.update_asserted_info(existing, sentence, new_mt);
+            }
+        } else {
+            if (NIL != nart_handles.nart_p(collection)) {
+                {
+                    SubLObject new_monad_mts = com.cyc.cycjava.cycl.formula_template_utilities.nart_collection_definitional_mts(collection);
+                    SubLObject pred = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_collection_pred_for_type(type);
+                    SubLObject cdolist_list_var = new_monad_mts;
+                    SubLObject new_monad_mt = NIL;
+                    for (new_monad_mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , new_monad_mt = cdolist_list_var.first()) {
+                        {
+                            SubLObject new_mt = com.cyc.cycjava.cycl.formula_template_utilities.qualify_mt_for_today(new_monad_mt);
+                            if (NIL == czer_meta.find_assertion_cycl(list(pred, collection), new_mt)) {
+                                ke.ke_assert(list(pred, collection), new_mt, UNPROVIDED, UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    public static final SubLObject update_asserted_info(SubLObject existing, SubLObject sentence, SubLObject new_mt) {
+        {
+            SubLObject already_good = find(new_mt, existing, $sym98$HLMT_EQUAL_, ASSERTION_HLMT, UNPROVIDED, UNPROVIDED);
+            SubLObject keeper = (NIL != already_good) ? ((SubLObject) (already_good)) : existing.first();
+            SubLObject to_unassert = remove(keeper, existing, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            if (NIL != already_good) {
+            } else {
+                if (NIL != keeper) {
+                    ke.ke_change_assertion_mt(keeper, new_mt, UNPROVIDED);
+                } else {
+                    keeper = ke.ke_assert(sentence, new_mt, UNPROVIDED, UNPROVIDED);
+                }
+            }
+            {
+                SubLObject cdolist_list_var = to_unassert;
+                SubLObject other = NIL;
+                for (other = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other = cdolist_list_var.first()) {
+                    ke.ke_unassert_assertion(other);
+                }
+            }
+            return keeper;
+        }
+    }
+
+    public static final SubLObject some_asserted_pred_value_in_mt(SubLObject instance, SubLObject pred, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject foundP = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject pred_var = pred;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(instance, NIL, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(instance, NIL, pred_var);
+                                    SubLObject done_var = foundP;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                        {
+                                                            SubLObject done_var_180 = foundP;
+                                                            SubLObject token_var_181 = NIL;
+                                                            while (NIL == done_var_180) {
+                                                                {
+                                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_181);
+                                                                    SubLObject valid_182 = makeBoolean(token_var_181 != gaf);
+                                                                    if (NIL != valid_182) {
+                                                                        foundP = makeBoolean((NIL != assertions_high.asserted_assertionP(gaf)) && mt.equal(hlmt.hlmt_monad_mt(assertions_high.assertion_mt(gaf))));
+                                                                    }
+                                                                    done_var_180 = makeBoolean((NIL == valid_182) || (NIL != foundP));
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0_183 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_183, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean((NIL == valid) || (NIL != foundP));
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return foundP;
+            }
+        }
+    }
+
+    public static final SubLObject some_asserted_pred_ref_in_mt(SubLObject pred, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject foundP = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject pred_var = pred;
+                            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                    SubLObject done_var = foundP;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                        {
+                                                            SubLObject done_var_184 = foundP;
+                                                            SubLObject token_var_185 = NIL;
+                                                            while (NIL == done_var_184) {
+                                                                {
+                                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_185);
+                                                                    SubLObject valid_186 = makeBoolean(token_var_185 != gaf);
+                                                                    if (NIL != valid_186) {
+                                                                        foundP = makeBoolean((NIL != assertions_high.asserted_assertionP(gaf)) && mt.equal(hlmt.hlmt_monad_mt(assertions_high.assertion_mt(gaf))));
+                                                                    }
+                                                                    done_var_184 = makeBoolean((NIL == valid_186) || (NIL != foundP));
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0_187 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_187, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean((NIL == valid) || (NIL != foundP));
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return foundP;
+            }
+        }
+    }
+
+    /**
+     * Was FORT asserted to be a promising collection w/in the last week?
+     */
+    @LispMethod(comment = "Was FORT asserted to be a promising collection w/in the last week?")
+    public static final SubLObject recently_asserted_promising_collectionP(SubLObject fort, SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            SubLObject pred = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_collection_pred_for_type(type);
+            SubLObject as = kb_indexing.find_assertion_any_mt(list(NIL, list(list(pred, fort))));
+            if (NIL != as) {
+                {
+                    SubLObject mt = assertions_high.assertion_mt(as);
+                    SubLObject date = hlmt.extract_hlmt_temporal_index(mt);
+                    if (NIL != date_utilities.date_p(date)) {
+                        {
+                            SubLObject today = date_utilities.universal_date_to_cycl_date(numeric_date_utilities.today());
+                            if ((NIL != date_utilities.dateLE(date, today)) && (NIL != time_parameter_utilities.durationL(date_utilities.time_elapsed(date, today, UNPROVIDED), $list_alt89))) {
+                                return T;
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    public static final SubLObject rank_promising_induction_topic_type_collections(SubLObject type) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject reuse_existingP = rkf_salient_descriptor.rkf_sd_problem_store_okP(rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread));
+                {
+                    SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_sd_problem_store$.currentBinding(thread);
+                    try {
+                        rkf_salient_descriptor.$rkf_sd_problem_store$.bind(rkf_salient_descriptor.rkf_sd_find_or_make_problem_store(), thread);
+                        {
+                            SubLObject store = rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread);
+                            try {
+                                {
+                                    SubLObject state = memoization_state.possibly_new_memoization_state();
+                                    SubLObject local_state = state;
+                                    {
+                                        SubLObject _prev_bind_0_85 = memoization_state.$memoization_state$.currentBinding(thread);
+                                        try {
+                                            memoization_state.$memoization_state$.bind(local_state, thread);
+                                            {
+                                                SubLObject original_memoization_process = NIL;
+                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                    {
+                                                        SubLObject current_proc = current_process();
+                                                        if (NIL == original_memoization_process) {
+                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                        } else {
+                                                            if (original_memoization_process != current_proc) {
+                                                                Errors.error($str_alt91$Invalid_attempt_to_reuse_memoizat);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                try {
+                                                    {
+                                                        SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_86 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
+                                                            SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
+                                                            SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
+                                                            try {
+                                                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
+                                                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
+                                                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
+                                                                {
+                                                                    SubLObject pairs = copy_list($promising_induction_topic_type_collections$.getGlobalValue());
+                                                                    SubLObject count = length(pairs);
+                                                                    SubLObject sofar = ZERO_INTEGER;
+                                                                    {
+                                                                        SubLObject _prev_bind_0_87 = $last_percent_progress_index$.currentBinding(thread);
+                                                                        SubLObject _prev_bind_1_88 = $last_percent_progress_prediction$.currentBinding(thread);
+                                                                        SubLObject _prev_bind_2_89 = $within_noting_percent_progress$.currentBinding(thread);
+                                                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                                                        try {
+                                                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                                                            $within_noting_percent_progress$.bind(T, thread);
+                                                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                                                            noting_percent_progress_preamble($str_alt92$Ranking_induction_collections___);
+                                                                            {
+                                                                                SubLObject cdolist_list_var = pairs;
+                                                                                SubLObject pair = NIL;
+                                                                                for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
+                                                                                    {
+                                                                                        SubLObject collection = pair.first();
+                                                                                        if (NIL == list_utilities.tree_find(collection, $ranked_promising_induction_topic_type_collections$.getGlobalValue(), UNPROVIDED, UNPROVIDED)) {
+                                                                                            {
+                                                                                                SubLObject bin_preds = rkf_salient_descriptor.rkf_induced_salient_descriptor_binary_preds($$InferencePSC, collection, type, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                SubLObject new_entry = list(pair, bin_preds);
+                                                                                                $ranked_promising_induction_topic_type_collections$.setGlobalValue(cons(new_entry, $ranked_promising_induction_topic_type_collections$.getGlobalValue()));
+                                                                                                $ranked_promising_induction_topic_type_collections$.setGlobalValue(Sort.sort($ranked_promising_induction_topic_type_collections$.getGlobalValue(), symbol_function(GREATER_LENGTH_P), symbol_function(SECOND)));
+                                                                                                if (NIL != list_utilities.greater_length_p(bin_preds, second($ranked_promising_induction_topic_type_collections$.getGlobalValue().first()))) {
+                                                                                                    Errors.warn($str_alt94$New_most_promising___S____S__, pair, bin_preds);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    note_percent_progress(sofar, count);
+                                                                                }
+                                                                            }
+                                                                            noting_percent_progress_postamble();
+                                                                        } finally {
+                                                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                                                            $within_noting_percent_progress$.rebind(_prev_bind_2_89, thread);
+                                                                            $last_percent_progress_prediction$.rebind(_prev_bind_1_88, thread);
+                                                                            $last_percent_progress_index$.rebind(_prev_bind_0_87, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
+                                                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
+                                                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_86, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0_90 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                        try {
+                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                            }
+                                                        } finally {
+                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_90, thread);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_85, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_91 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuse_existingP) {
+                                            rkf_salient_descriptor.rkf_sd_free_problem_store(store);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_91, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        rkf_salient_descriptor.$rkf_sd_problem_store$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return $ranked_promising_induction_topic_type_collections$.getGlobalValue();
+        }
+    }
+
+    public static final SubLObject qualify_mt_for_today(SubLObject monad_mt) {
+        {
+            SubLObject today = date_utilities.indexical_today();
+            SubLObject v_hlmt = list($$MtSpace, monad_mt, listS($$MtTimeWithGranularityDimFn, today, $list_alt106));
+            return v_hlmt;
+        }
+    }
+
+    public static final SubLObject num_pred_assertions_on_type_in_mt(SubLObject pred, SubLObject col, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_count = ZERO_INTEGER;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject node_var = col;
+                            {
+                                SubLObject _prev_bind_0_143 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                SubLObject _prev_bind_1_144 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
+                                try {
+                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                    sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                    {
+                                        SubLObject node_var_145 = node_var;
+                                        SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                                        SubLObject recur_deck = deck.create_deck(deck_type);
+                                        {
+                                            SubLObject _prev_bind_0_146 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                            try {
+                                                sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                {
+                                                    SubLObject tv_var = NIL;
+                                                    {
+                                                        SubLObject _prev_bind_0_147 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_148 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                        try {
+                                                            sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                            if (NIL != tv_var) {
+                                                                if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                                    if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                                        {
+                                                                            SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                            if (pcase_var.eql($ERROR)) {
+                                                                                sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                            } else {
+                                                                                if (pcase_var.eql($CERROR)) {
+                                                                                    sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                } else {
+                                                                                    if (pcase_var.eql($WARN)) {
+                                                                                        Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                    } else {
+                                                                                        Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                        Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            {
+                                                                SubLObject _prev_bind_0_149 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_150 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                try {
+                                                                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                    if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_151 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1_152 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_2_153 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                            try {
+                                                                                sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
+                                                                                sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_var_145, UNPROVIDED);
+                                                                                while (NIL != node_var_145) {
+                                                                                    {
+                                                                                        SubLObject tt_node_var = node_var_145;
+                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
+                                                                                        SubLObject cdolist_list_var = accessible_modules;
+                                                                                        SubLObject module_var = NIL;
+                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                            {
+                                                                                                SubLObject _prev_bind_0_154 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_1_155 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                try {
+                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                    {
+                                                                                                        SubLObject node = function_terms.naut_to_nart(tt_node_var);
+                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                            {
+                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                if (NIL != d_link) {
+                                                                                                                    {
+                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                        if (NIL != mt_links) {
+                                                                                                                            {
+                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject mt_156 = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt_156)) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_157 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt_156, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject iteration_state_158 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_158)) {
+                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_158);
+                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject _prev_bind_0_159 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                        try {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                SubLObject cdolist_list_var_160 = new_list;
+                                                                                                                                                                                SubLObject instance = NIL;
+                                                                                                                                                                                for (instance = cdolist_list_var_160.first(); NIL != cdolist_list_var_160; cdolist_list_var_160 = cdolist_list_var_160.rest() , instance = cdolist_list_var_160.first()) {
+                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(instance, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(instance, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                                        if (NIL != forts.fort_p(instance)) {
+                                                                                                                                                                                            if (NIL != com.cyc.cycjava.cycl.formula_template_utilities.some_asserted_pred_value_in_mt(instance, pred, mt)) {
+                                                                                                                                                                                                mt_count = add(mt_count, ONE_INTEGER);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        } finally {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_159, thread);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                                iteration_state_158 = dictionary_contents.do_dictionary_contents_next(iteration_state_158);
+                                                                                                                                                            }
+                                                                                                                                                        } 
+                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_158);
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_157, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                    }
+                                                                                                                                } 
+                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } else {
+                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                }
+                                                                                                            }
+                                                                                                            if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
+                                                                                                                {
+                                                                                                                    SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
+                                                                                                                    SubLObject instance_tuple = NIL;
+                                                                                                                    for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
+                                                                                                                        {
+                                                                                                                            SubLObject datum = instance_tuple;
+                                                                                                                            SubLObject current = datum;
+                                                                                                                            SubLObject link_node = NIL;
+                                                                                                                            SubLObject mt_161 = NIL;
+                                                                                                                            SubLObject tv = NIL;
+                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt122);
+                                                                                                                            link_node = current.first();
+                                                                                                                            current = current.rest();
+                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt122);
+                                                                                                                            mt_161 = current.first();
+                                                                                                                            current = current.rest();
+                                                                                                                            destructuring_bind_must_consp(current, datum, $list_alt122);
+                                                                                                                            tv = current.first();
+                                                                                                                            current = current.rest();
+                                                                                                                            if (NIL == current) {
+                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt_161)) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_162 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt_161, thread);
+                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_163 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject link_nodes = list(link_node);
+                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                            SubLObject cdolist_list_var_164 = new_list;
+                                                                                                                                                            SubLObject instance = NIL;
+                                                                                                                                                            for (instance = cdolist_list_var_164.first(); NIL != cdolist_list_var_164; cdolist_list_var_164 = cdolist_list_var_164.rest() , instance = cdolist_list_var_164.first()) {
+                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(instance, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(instance, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                    if (NIL != forts.fort_p(instance)) {
+                                                                                                                                                                        if (NIL != com.cyc.cycjava.cycl.formula_template_utilities.some_asserted_pred_value_in_mt(instance, pred, mt)) {
+                                                                                                                                                                            mt_count = add(mt_count, ONE_INTEGER);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } finally {
+                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_163, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_162, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } else {
+                                                                                                                                cdestructuring_bind_error(datum, $list_alt122);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                {
+                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                    SubLObject cdolist_list_var_165 = new_list;
+                                                                                                                    SubLObject generating_fn = NIL;
+                                                                                                                    for (generating_fn = cdolist_list_var_165.first(); NIL != cdolist_list_var_165; cdolist_list_var_165 = cdolist_list_var_165.rest() , generating_fn = cdolist_list_var_165.first()) {
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_166 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                {
+                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                    SubLObject new_list_167 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                    SubLObject cdolist_list_var_168 = new_list_167;
+                                                                                                                                    SubLObject instance = NIL;
+                                                                                                                                    for (instance = cdolist_list_var_168.first(); NIL != cdolist_list_var_168; cdolist_list_var_168 = cdolist_list_var_168.rest() , instance = cdolist_list_var_168.first()) {
+                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(instance, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(instance, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                            if (NIL != forts.fort_p(instance)) {
+                                                                                                                                                if (NIL != com.cyc.cycjava.cycl.formula_template_utilities.some_asserted_pred_value_in_mt(instance, pred, mt)) {
+                                                                                                                                                    mt_count = add(mt_count, ONE_INTEGER);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_166, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                } finally {
+                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_155, thread);
+                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_154, thread);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    {
+                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
+                                                                                        SubLObject cdolist_list_var = accessible_modules;
+                                                                                        SubLObject module_var = NIL;
+                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                            {
+                                                                                                SubLObject _prev_bind_0_169 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_1_170 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                try {
+                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                    {
+                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var_145);
+                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                            {
+                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                if (NIL != d_link) {
+                                                                                                                    {
+                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                        if (NIL != mt_links) {
+                                                                                                                            {
+                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject mt_171 = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt_171)) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_172 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt_171, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject iteration_state_173 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_173)) {
+                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_173);
+                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject _prev_bind_0_174 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                        try {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                SubLObject cdolist_list_var_175 = new_list;
+                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_175.first(); NIL != cdolist_list_var_175; cdolist_list_var_175 = cdolist_list_var_175.rest() , node_vars_link_node = cdolist_list_var_175.first()) {
+                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        } finally {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_174, thread);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                                iteration_state_173 = dictionary_contents.do_dictionary_contents_next(iteration_state_173);
+                                                                                                                                                            }
+                                                                                                                                                        } 
+                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_173);
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_172, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                    }
+                                                                                                                                } 
+                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } else {
+                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                {
+                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                    SubLObject cdolist_list_var_176 = new_list;
+                                                                                                                    SubLObject generating_fn = NIL;
+                                                                                                                    for (generating_fn = cdolist_list_var_176.first(); NIL != cdolist_list_var_176; cdolist_list_var_176 = cdolist_list_var_176.rest() , generating_fn = cdolist_list_var_176.first()) {
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_177 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                {
+                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                    SubLObject new_list_178 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                    SubLObject cdolist_list_var_179 = new_list_178;
+                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                    for (node_vars_link_node = cdolist_list_var_179.first(); NIL != cdolist_list_var_179; cdolist_list_var_179 = cdolist_list_var_179.rest() , node_vars_link_node = cdolist_list_var_179.first()) {
+                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_177, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                } finally {
+                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_170, thread);
+                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_169, thread);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    node_var_145 = deck.deck_pop(recur_deck);
+                                                                                } 
+                                                                            } finally {
+                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_153, thread);
+                                                                                sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_152, thread);
+                                                                                sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_151, thread);
+                                                                            }
+                                                                        }
+                                                                    } else {
+                                                                        sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                    }
+                                                                } finally {
+                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                                                                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_150, thread);
+                                                                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_149, thread);
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_148, thread);
+                                                            sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_147, thread);
+                                                        }
+                                                    }
+                                                    sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                                }
+                                            } finally {
+                                                sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_146, thread);
+                                            }
+                                        }
+                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                    }
+                                } finally {
+                                    sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_144, thread);
+                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_143, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return mt_count;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown LISTP of HLMT-P; where instances of NART are defined to be such.
+     */
+    @LispMethod(comment = "@unknown LISTP of HLMT-P; where instances of NART are defined to be such.")
+    public static final SubLObject nart_collection_definitional_mts(SubLObject nart) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(nart, NART_P);
+            SubLTrampolineFile.checkType(nart, $sym101$COLLECTION_);
+            {
+                SubLObject definitional_mts = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject node_var = nart;
+                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                            SubLObject recur_deck = deck.create_deck(deck_type);
+                            {
+                                SubLObject _prev_bind_0_92 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                try {
+                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                    {
+                                        SubLObject tv_var = NIL;
+                                        {
+                                            SubLObject _prev_bind_0_93 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                            SubLObject _prev_bind_1_94 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                            try {
+                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                if (NIL != tv_var) {
+                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                            {
+                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                if (pcase_var.eql($ERROR)) {
+                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                } else {
+                                                                    if (pcase_var.eql($CERROR)) {
+                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                    } else {
+                                                                        if (pcase_var.eql($WARN)) {
+                                                                            Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                        } else {
+                                                                            Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                            Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                {
+                                                    SubLObject _prev_bind_0_95 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_96 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genls), thread);
+                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genls), thread);
+                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(nart, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                            {
+                                                                SubLObject _prev_bind_0_97 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_98 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                SubLObject _prev_bind_2_99 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                try {
+                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var, UNPROVIDED);
+                                                                    while (NIL != node_var) {
+                                                                        {
+                                                                            SubLObject subcol = node_var;
+                                                                            SubLObject node_var_100 = $$isa;
+                                                                            SubLObject deck_type_101 = (false) ? ((SubLObject) ($STACK)) : $QUEUE;
+                                                                            SubLObject recur_deck_102 = deck.create_deck(deck_type_101);
+                                                                            SubLObject node_and_predicate_mode = NIL;
+                                                                            {
+                                                                                SubLObject _prev_bind_0_103 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                                                                try {
+                                                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                                                    {
+                                                                                        SubLObject tv_var_104 = NIL;
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_105 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                                                            SubLObject _prev_bind_1_106 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                                                            try {
+                                                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var_104 ? ((SubLObject) (tv_var_104)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var_104 ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                                                                if (NIL != tv_var_104) {
+                                                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var_104)) {
+                                                                                                            {
+                                                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                                                                if (pcase_var.eql($ERROR)) {
+                                                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var_104, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                } else {
+                                                                                                                    if (pcase_var.eql($CERROR)) {
+                                                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var_104, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                    } else {
+                                                                                                                        if (pcase_var.eql($WARN)) {
+                                                                                                                            Errors.warn($str_alt33$_A_is_not_a__A, tv_var_104, SBHL_TRUE_TV_P);
+                                                                                                                        } else {
+                                                                                                                            Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                                                            Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var_104, SBHL_TRUE_TV_P);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_107 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_1_108 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_2_109 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_3_110 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_4_111 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genlPreds), thread);
+                                                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genlPreds)), thread);
+                                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genlPreds)), thread);
+                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genlPreds), thread);
+                                                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test($$isa, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_112 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_1_113 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_2_114 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
+                                                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_vars.get_sbhl_module($$genlPreds)), thread);
+                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var_100, UNPROVIDED);
+                                                                                                                    node_and_predicate_mode = list($$isa, sbhl_search_vars.genl_inverse_mode_p());
+                                                                                                                    while (NIL != node_and_predicate_mode) {
+                                                                                                                        {
+                                                                                                                            SubLObject node_var_115 = node_and_predicate_mode.first();
+                                                                                                                            SubLObject predicate_mode = second(node_and_predicate_mode);
+                                                                                                                            SubLObject isa_pred = node_var_115;
+                                                                                                                            {
+                                                                                                                                SubLObject _prev_bind_0_116 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                                try {
+                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(predicate_mode, thread);
+                                                                                                                                    if (NIL != sbhl_search_utilities.apply_sbhl_add_node_test(sbhl_search_vars.get_sbhl_search_add_node_test(), node_var_115)) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject cdolist_list_var = kb_indexing.key_gaf_arg_index(subcol, TWO_INTEGER, isa_pred);
+                                                                                                                                            SubLObject mt = NIL;
+                                                                                                                                            for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject item_var = mt;
+                                                                                                                                                    if (NIL == member(item_var, definitional_mts, HLMT_EQUAL, symbol_function(IDENTITY))) {
+                                                                                                                                                        definitional_mts = cons(item_var, definitional_mts);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                    {
+                                                                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genlPreds));
+                                                                                                                                        SubLObject cdolist_list_var = accessible_modules;
+                                                                                                                                        SubLObject module_var = NIL;
+                                                                                                                                        for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_117 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                                                SubLObject _prev_bind_1_118 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var_115);
+                                                                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                if (NIL != d_link) {
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                        if (NIL != mt_links) {
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject _prev_bind_0_119 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                                                try {
+                                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        SubLObject iteration_state_120 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_120)) {
+                                                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_120);
+                                                                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        SubLObject _prev_bind_0_121 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                                                        try {
+                                                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                                                SubLObject cdolist_list_var_122 = new_list;
+                                                                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_122.first(); NIL != cdolist_list_var_122; cdolist_list_var_122 = cdolist_list_var_122.rest() , node_vars_link_node = cdolist_list_var_122.first()) {
+                                                                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                                                        deck.deck_push(list(node_vars_link_node, sbhl_search_vars.genl_inverse_mode_p()), recur_deck_102);
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        } finally {
+                                                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_121, thread);
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                                iteration_state_120 = dictionary_contents.do_dictionary_contents_next(iteration_state_120);
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        } 
+                                                                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_120);
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                } finally {
+                                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_119, thread);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                                                    }
+                                                                                                                                                                                } 
+                                                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } else {
+                                                                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        } else {
+                                                                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                    SubLObject cdolist_list_var_123 = new_list;
+                                                                                                                                                                    SubLObject generating_fn = NIL;
+                                                                                                                                                                    for (generating_fn = cdolist_list_var_123.first(); NIL != cdolist_list_var_123; cdolist_list_var_123 = cdolist_list_var_123.rest() , generating_fn = cdolist_list_var_123.first()) {
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject _prev_bind_0_124 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                                            try {
+                                                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                                                    SubLObject new_list_125 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                    SubLObject cdolist_list_var_126 = new_list_125;
+                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_126.first(); NIL != cdolist_list_var_126; cdolist_list_var_126 = cdolist_list_var_126.rest() , node_vars_link_node = cdolist_list_var_126.first()) {
+                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                            deck.deck_push(list(node_vars_link_node, sbhl_search_vars.genl_inverse_mode_p()), recur_deck_102);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            } finally {
+                                                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_124, thread);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_118, thread);
+                                                                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_117, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                } finally {
+                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_0_116, thread);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        node_and_predicate_mode = deck.deck_pop(recur_deck_102);
+                                                                                                                    } 
+                                                                                                                } finally {
+                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_114, thread);
+                                                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_113, thread);
+                                                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_112, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, $$isa, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4_111, thread);
+                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3_110, thread);
+                                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_109, thread);
+                                                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_108, thread);
+                                                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_107, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            } finally {
+                                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_106, thread);
+                                                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_105, thread);
+                                                                                            }
+                                                                                        }
+                                                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                                                                    }
+                                                                                } finally {
+                                                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_103, thread);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        {
+                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genls));
+                                                                            SubLObject cdolist_list_var = accessible_modules;
+                                                                            SubLObject module_var = NIL;
+                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_127 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_1_128 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                    try {
+                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                        {
+                                                                                            SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                {
+                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                    if (NIL != d_link) {
+                                                                                                        {
+                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                            if (NIL != mt_links) {
+                                                                                                                {
+                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_129 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                        {
+                                                                                                                                            SubLObject iteration_state_130 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_130)) {
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_130);
+                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_131 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                    SubLObject cdolist_list_var_132 = new_list;
+                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_132.first(); NIL != cdolist_list_var_132; cdolist_list_var_132 = cdolist_list_var_132.rest() , node_vars_link_node = cdolist_list_var_132.first()) {
+                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_131, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    iteration_state_130 = dictionary_contents.do_dictionary_contents_next(iteration_state_130);
+                                                                                                                                                }
+                                                                                                                                            } 
+                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_130);
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_129, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                        }
+                                                                                                                    } 
+                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                    }
+                                                                                                }
+                                                                                            } else {
+                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                    {
+                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                        SubLObject cdolist_list_var_133 = new_list;
+                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                        for (generating_fn = cdolist_list_var_133.first(); NIL != cdolist_list_var_133; cdolist_list_var_133 = cdolist_list_var_133.rest() , generating_fn = cdolist_list_var_133.first()) {
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_134 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                    {
+                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                        SubLObject new_list_135 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                        SubLObject cdolist_list_var_136 = new_list_135;
+                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                        for (node_vars_link_node = cdolist_list_var_136.first(); NIL != cdolist_list_var_136; cdolist_list_var_136 = cdolist_list_var_136.rest() , node_vars_link_node = cdolist_list_var_136.first()) {
+                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_134, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    } finally {
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_128, thread);
+                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_127, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        node_var = deck.deck_pop(recur_deck);
+                                                                    } 
+                                                                } finally {
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_99, thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_98, thread);
+                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_97, thread);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, nart, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        }
+                                                    } finally {
+                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_96, thread);
+                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_95, thread);
+                                                    }
+                                                }
+                                            } finally {
+                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_94, thread);
+                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_93, thread);
+                                            }
+                                        }
+                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                    }
+                                } finally {
+                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_92, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return genl_mts.max_mts(list_utilities.remove_if_not(CONSTANT_P, definitional_mts, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED);
+            }
+        }
+    }
+
+    public static final SubLObject mt_with_most_pred_assertions_on_type(SubLObject pred, SubLObject col, SubLObject mts) {
+        {
+            SubLObject champ = NIL;
+            SubLObject champ_count = ZERO_INTEGER;
+            SubLObject cdolist_list_var = mts;
+            SubLObject contender = NIL;
+            for (contender = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , contender = cdolist_list_var.first()) {
+                if ((NIL == champ) || kb_indexing.num_predicate_extent_index(pred, contender).isPositive()) {
+                    {
+                        SubLObject contender_count = com.cyc.cycjava.cycl.formula_template_utilities.num_pred_assertions_on_type_in_mt(pred, col, contender);
+                        if ((NIL == champ) || contender_count.numG(champ_count)) {
+                            champ = contender;
+                            champ_count = contender_count;
+                        }
+                    }
+                }
+            }
+            return champ;
+        }
+    }
+
+    public static final SubLObject mt_with_most_pred_assertions(SubLObject pred, SubLObject mts) {
+        {
+            SubLObject champ = NIL;
+            SubLObject champ_count = ZERO_INTEGER;
+            SubLObject cdolist_list_var = mts;
+            SubLObject contender = NIL;
+            for (contender = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , contender = cdolist_list_var.first()) {
+                {
+                    SubLObject contender_count = kb_indexing.num_predicate_extent_index(pred, contender);
+                    if (contender_count.numG(champ_count)) {
+                        champ = contender;
+                        champ_count = contender_count;
+                    }
+                }
+            }
+            return champ;
+        }
+    }
+
+    public static final SubLObject get_example_for_promising_collection(SubLObject collection, SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            SubLObject pcase_var = type;
+            if (pcase_var.eql($ISA)) {
+                return find_if(CONSTANT_P, isa.all_fort_instances(collection, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            } else {
+                return find_if(CONSTANT_P, remove(collection, genls.all_specs(collection, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+        }
+    }
+
+    public static final SubLObject find_promising_induction_topic_type_collections(SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            com.cyc.cycjava.cycl.formula_template_utilities.clear_promising_induction_topic_type_collectionP_verify();
+            {
+                SubLObject last_one_foundP = sublisp_null($last_promising_collection_done$.getGlobalValue());
+                SubLObject idx = do_constants_table();
+                SubLObject total = id_index_count(idx);
+                SubLObject sofar = ZERO_INTEGER;
+                SubLTrampolineFile.checkType($$$mapping_Cyc_constants, STRINGP);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$mapping_Cyc_constants);
+                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                            {
+                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
+                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
+                                SubLObject constant = NIL;
+                                while (NIL != id) {
+                                    constant = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                    if (NIL != do_id_index_id_and_object_validP(id, constant, $SKIP)) {
+                                        note_percent_progress(sofar, total);
+                                        sofar = add(sofar, ONE_INTEGER);
+                                        if (constant.eql($last_promising_collection_done$.getGlobalValue())) {
+                                            last_one_foundP = T;
+                                        }
+                                        if ((NIL == $last_promising_collection_done$.getGlobalValue()) || (NIL != last_one_foundP)) {
+                                            if ((((NIL != fort_types_interface.collectionP(constant)) && (NIL == list_utilities.tree_find(constant, $promising_induction_topic_type_collections$.getGlobalValue(), UNPROVIDED, UNPROVIDED))) && (NIL == com.cyc.cycjava.cycl.formula_template_utilities.recently_asserted_promising_collectionP(constant, type))) && (NIL != com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_topic_type_collectionP_verify(constant, $$InferencePSC, type, UNPROVIDED))) {
+                                                {
+                                                    SubLObject _prev_bind_0_83 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_84 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                    try {
+                                                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                                        {
+                                                            SubLObject example = com.cyc.cycjava.cycl.formula_template_utilities.get_example_for_promising_collection(constant, type);
+                                                            SubLObject pred = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_collection_pred_for_type(type);
+                                                            if (NIL != constant_p(example)) {
+                                                                $promising_induction_topic_type_collections$.setGlobalValue(cons(list(constant, example), $promising_induction_topic_type_collections$.getGlobalValue()));
+                                                                if (NIL == kb_mapping_utilities.some_pred_value_in_any_mt(constant, pred, UNPROVIDED, UNPROVIDED)) {
+                                                                    Errors.warn($str_alt87$Promising_new_collection___S__e_g, constant, example);
+                                                                }
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_1_84, thread);
+                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_83, thread);
+                                                    }
+                                                }
+                                                $last_promising_collection_done$.setGlobalValue(constant);
+                                            }
+                                        }
+                                    }
+                                    id = do_id_index_next_id(idx, T, id, state_var);
+                                    state_var = do_id_index_next_state(idx, T, id, state_var);
+                                } 
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    public static final SubLObject find_or_induce_formula_template_forts(SubLObject collections, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject reuse_existingP = rkf_salient_descriptor.rkf_sd_problem_store_okP(rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread));
+                {
+                    SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_sd_problem_store$.currentBinding(thread);
+                    try {
+                        rkf_salient_descriptor.$rkf_sd_problem_store$.bind(rkf_salient_descriptor.rkf_sd_find_or_make_problem_store(), thread);
+                        {
+                            SubLObject store = rkf_salient_descriptor.$rkf_sd_problem_store$.getDynamicValue(thread);
+                            try {
+                                {
+                                    SubLObject cdolist_list_var = collections;
+                                    SubLObject col = NIL;
+                                    for (col = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , col = cdolist_list_var.first()) {
+                                        com.cyc.cycjava.cycl.formula_template_utilities.induced_formula_template_forts_for_focal_term_type(col, mt, UNPROVIDED);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_192 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuse_existingP) {
+                                            rkf_salient_descriptor.rkf_sd_free_problem_store(store);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_192, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        rkf_salient_descriptor.$rkf_sd_problem_store$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return HLMT-P; The MT we want to assert (#$keInducedSuggestionPreds COL PRED) in.
+     */
+    @LispMethod(comment = "@return HLMT-P; The MT we want to assert (#$keInducedSuggestionPreds COL PRED) in.")
+    public static final SubLObject determine_induced_suggestion_preds_mt(SubLObject col, SubLObject pred, SubLObject qualify_for_todayP) {
+        if (qualify_for_todayP == UNPROVIDED) {
+            qualify_for_todayP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject monad_mt = NIL;
+                SubLObject v_hlmt = NIL;
+                if (NIL != fboundp(SUGGEST_MT)) {
+                    monad_mt = eval(list(SUGGEST_MT, list(QUOTE, list($$keInducedSuggestionPreds, col, pred))));
+                } else {
+                    Errors.warn($str_alt116$Can_t_find_MT_suggestor__Using_ol);
+                    {
+                        SubLObject asserted_mts = (NIL != nart_handles.nart_p(col)) ? ((SubLObject) (com.cyc.cycjava.cycl.formula_template_utilities.nart_collection_definitional_mts(col))) : com.cyc.cycjava.cycl.formula_template_utilities.asserted_arg1_mts(col, pred, UNPROVIDED, UNPROVIDED);
+                        SubLObject monad_mts = remove_duplicates(Mapping.mapcar(HLMT_MONAD_MT, asserted_mts), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject fort_mts = list_utilities.remove_if_not(FORT_P, monad_mts, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject min_ceiling_mts = (NIL != nart_handles.nart_p(col)) ? ((SubLObject) (fort_mts)) : genl_mts.min_ceiling_mts(fort_mts, UNPROVIDED, UNPROVIDED);
+                        SubLObject sorted_min_ceiling_mts = cardinality_estimates.sort_by_generality_estimate(min_ceiling_mts, $ASCENDING);
+                        SubLObject candidate_mts = append(sorted_min_ceiling_mts, fort_mts);
+                        if (NIL == monad_mt) {
+                            {
+                                SubLObject current_rank = NIL;
+                                for (current_rank = ONE_INTEGER; NIL == monad_mt; current_rank = number_utilities.f_1X(current_rank)) {
+                                    {
+                                        SubLObject current_mts = list_utilities.nth_rank_items(current_rank, candidate_mts, symbol_function(EQL), GENERALITY_ESTIMATE);
+                                        SubLObject most_populous_mt = (NIL != list_utilities.lengthG(current_mts, ONE_INTEGER, UNPROVIDED)) ? ((SubLObject) (com.cyc.cycjava.cycl.formula_template_utilities.mt_with_most_pred_assertions_on_type(pred, col, current_mts))) : current_mts.first();
+                                        if (NIL != list_utilities.lengthL(candidate_mts, current_rank, UNPROVIDED)) {
+                                            monad_mt = $$BaseKB;
+                                        } else {
+                                            if (NIL != com.cyc.cycjava.cycl.formula_template_utilities.some_asserted_pred_ref_in_mt(pred, most_populous_mt)) {
+                                                monad_mt = most_populous_mt;
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                v_hlmt = (NIL != qualify_for_todayP) ? ((SubLObject) (com.cyc.cycjava.cycl.formula_template_utilities.qualify_mt_for_today(monad_mt))) : monad_mt;
+                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                    if (NIL == hlmt.hlmt_p(v_hlmt)) {
+                        Errors.error($str_alt121$Couldn_t_determine_mt_to_assert__, col, pred);
+                    }
+                }
+                return v_hlmt;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of HLMT-P; in which PREDICATE is asserted of at least one instance of COL.
+     */
+    @LispMethod(comment = "@return LISTP of HLMT-P; in which PREDICATE is asserted of at least one instance of COL.")
+    public static final SubLObject asserted_arg1_mts(SubLObject col, SubLObject predicate, SubLObject max_number, SubLObject sort_fn_spec) {
+        if (max_number == UNPROVIDED) {
+            max_number = $int$50;
+        }
+        if (sort_fn_spec == UNPROVIDED) {
+            sort_fn_spec = $sym124$GENERALITY_ESTIMATE_;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_mts = kb_indexing.key_predicate_extent_index(predicate);
+                SubLObject mts = NIL;
+                SubLObject enoughP = list_utilities.lengthGE(mts, max_number, UNPROVIDED);
+                if (NIL == enoughP) {
+                    {
+                        SubLObject csome_list_var = Sort.sort(copy_list(all_mts), sort_fn_spec, UNPROVIDED);
+                        SubLObject mt = NIL;
+                        for (mt = csome_list_var.first(); !((NIL != enoughP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , mt = csome_list_var.first()) {
+                            if (NIL == kb_accessors.not_assertible_mtP(mt)) {
+                                {
+                                    SubLObject found_oneP = NIL;
+                                    {
+                                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                        try {
+                                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
+                                            mt_relevance_macros.$mt$.bind(mt, thread);
+                                            {
+                                                SubLObject pred_var = predicate;
+                                                if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                                    {
+                                                        SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                                        SubLObject done_var = found_oneP;
+                                                        SubLObject token_var = NIL;
+                                                        while (NIL == done_var) {
+                                                            {
+                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                                if (NIL != valid) {
+                                                                    {
+                                                                        SubLObject final_index_iterator = NIL;
+                                                                        try {
+                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                            {
+                                                                                SubLObject done_var_188 = found_oneP;
+                                                                                SubLObject token_var_189 = NIL;
+                                                                                while (NIL == done_var_188) {
+                                                                                    {
+                                                                                        SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_189);
+                                                                                        SubLObject valid_190 = makeBoolean(token_var_189 != gaf);
+                                                                                        if (NIL != valid_190) {
+                                                                                            if (NIL != isa.isaP(assertions_high.gaf_arg1(gaf), col, mt, UNPROVIDED)) {
+                                                                                                found_oneP = T;
+                                                                                            }
+                                                                                        }
+                                                                                        done_var_188 = makeBoolean((NIL == valid_190) || (NIL != found_oneP));
+                                                                                    }
+                                                                                } 
+                                                                            }
+                                                                        } finally {
+                                                                            {
+                                                                                SubLObject _prev_bind_0_191 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                try {
+                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                    if (NIL != final_index_iterator) {
+                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                    }
+                                                                                } finally {
+                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_191, thread);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                done_var = makeBoolean((NIL == valid) || (NIL != found_oneP));
+                                                            }
+                                                        } 
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                    if (NIL != found_oneP) {
+                                        mts = cons(mt, mts);
+                                        enoughP = list_utilities.lengthGE(mts, max_number, UNPROVIDED);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return nreverse(mts);
+            }
+        }
+    }
+
+    public static final SubLObject assert_induced_suggestion_preds_for_promising_collections(SubLObject strength, SubLObject type) {
+        if (strength == UNPROVIDED) {
+            strength = $STRONG;
+        }
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != ke.cyclist_is_guest()) {
+                operation_communication.set_the_cyclist($$Baxter);
+                fi.set_ke_purpose($$MySentientProject);
+            }
+            ke.ensure_cyclist_ok();
+            $package$.setDynamicValue(find_package($CYC), thread);
+            {
+                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                try {
+                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                    {
+                        SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
+                        {
+                            SubLObject _prev_bind_0_137 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
+                            SubLObject _prev_bind_1_138 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
+                            SubLObject _prev_bind_3 = $last_percent_progress_index$.currentBinding(thread);
+                            SubLObject _prev_bind_4 = $last_percent_progress_prediction$.currentBinding(thread);
+                            SubLObject _prev_bind_5 = $within_noting_percent_progress$.currentBinding(thread);
+                            SubLObject _prev_bind_6 = $percent_progress_start_time$.currentBinding(thread);
+                            try {
+                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
+                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
+                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
+                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                $last_percent_progress_prediction$.bind(NIL, thread);
+                                $within_noting_percent_progress$.bind(T, thread);
+                                $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                noting_percent_progress_preamble($str_alt109$Asserting_induced_suggestion_pred);
+                                {
+                                    SubLObject pred = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_collection_pred_for_type(type);
+                                    SubLObject total = kb_indexing.num_predicate_extent_index(pred, UNPROVIDED);
+                                    SubLObject sofar = ZERO_INTEGER;
+                                    SubLObject last_one_foundP = sublisp_null($last_promising_collection_done$.getGlobalValue());
+                                    SubLObject pred_var = pred;
+                                    if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_139 = NIL;
+                                                                    SubLObject token_var_140 = NIL;
+                                                                    while (NIL == done_var_139) {
+                                                                        {
+                                                                            SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_140);
+                                                                            SubLObject valid_141 = makeBoolean(token_var_140 != gaf);
+                                                                            if (NIL != valid_141) {
+                                                                                {
+                                                                                    SubLObject collection = assertions_high.gaf_arg1(gaf);
+                                                                                    if (collection.eql($last_promising_collection_done$.getGlobalValue())) {
+                                                                                        last_one_foundP = T;
+                                                                                    }
+                                                                                    if ((NIL == $last_promising_collection_done$.getGlobalValue()) || (NIL != last_one_foundP)) {
+                                                                                        com.cyc.cycjava.cycl.formula_template_utilities.assert_induced_suggestion_preds_for_collection(collection, strength, type);
+                                                                                        $last_promising_collection_done$.setGlobalValue(collection);
+                                                                                    }
+                                                                                }
+                                                                                note_percent_progress(sofar, total);
+                                                                            }
+                                                                            done_var_139 = makeBoolean(NIL == valid_141);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_142 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_142, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                                noting_percent_progress_postamble();
+                            } finally {
+                                $percent_progress_start_time$.rebind(_prev_bind_6, thread);
+                                $within_noting_percent_progress$.rebind(_prev_bind_5, thread);
+                                $last_percent_progress_prediction$.rebind(_prev_bind_4, thread);
+                                $last_percent_progress_index$.rebind(_prev_bind_3, thread);
+                                sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
+                                sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1_138, thread);
+                                sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_137, thread);
+                            }
+                        }
+                    }
+                } finally {
+                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
+    }
+
+    public static final SubLObject assert_induced_suggestion_preds_for_collection(SubLObject collection, SubLObject strength, SubLObject type) {
+        if (strength == UNPROVIDED) {
+            strength = $STRONG;
+        }
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            ke.ensure_cyclist_ok();
+            {
+                SubLObject bin_preds = NIL;
+                if (strength == $ALL) {
+                    {
+                        SubLObject cdolist_list_var = $list_alt112;
+                        SubLObject this_strength = NIL;
+                        for (this_strength = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , this_strength = cdolist_list_var.first()) {
+                            {
+                                SubLObject new_bin_preds = com.cyc.cycjava.cycl.formula_template_utilities.assert_induced_suggestion_preds_for_collection(collection, this_strength, type);
+                                bin_preds = append(bin_preds, new_bin_preds);
+                            }
+                        }
+                    }
+                    return bin_preds;
+                }
+                {
+                    SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.currentBinding(thread);
+                    try {
+                        rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.bind(NIL, thread);
+                        {
+                            SubLObject bin_pred_pairs = rkf_salient_descriptor.rkf_induced_salient_descriptor_binary_preds($$InferencePSC, collection, type, TEN_INTEGER, strength, UNPROVIDED);
+                            bin_preds = Mapping.mapcar(symbol_function(FIRST), bin_pred_pairs);
+                        }
+                    } finally {
+                        rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                {
+                    SubLObject sugg_pred = rkf_salient_descriptor.rkf_induced_suggestion_pred_of_strength(strength, type);
+                    SubLObject cdolist_list_var = bin_preds;
+                    SubLObject bin_pred = NIL;
+                    for (bin_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , bin_pred = cdolist_list_var.first()) {
+                        {
+                            SubLObject mt = com.cyc.cycjava.cycl.formula_template_utilities.determine_induced_suggestion_preds_mt(collection, bin_pred, T);
+                            SubLObject sentence = list(sugg_pred, collection, bin_pred);
+                            SubLObject existing = kb_indexing.find_all_assertions(list(NIL, list(sentence)));
+                            com.cyc.cycjava.cycl.formula_template_utilities.update_asserted_info(existing, sentence, mt);
+                        }
+                    }
+                }
+                return bin_preds;
+            }
+        }
+    }
+
+    public static final SubLSymbol $ranked_promising_induction_topic_type_collections$ = makeSymbol("*RANKED-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS*");
+
+    public static final SubLSymbol $last_promising_collection_done$ = makeSymbol("*LAST-PROMISING-COLLECTION-DONE*");
+
+    public static final SubLSymbol $promising_induction_topic_type_collections$ = makeSymbol("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS*");
+
+    static private final SubLString $str_alt72$ = makeString("");
+
     public static final SubLFile me = new formula_template_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.formula_template_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.formula_template_utilities";
 
-    public static final String myFingerPrint = "4e650404a9b1f0312cdc36cae56995f2f3b2ecb6040ce89f33044a06ac6ed697";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $assume_induced_fet_templates_already_reifiedP$ = makeSymbol("*ASSUME-INDUCED-FET-TEMPLATES-ALREADY-REIFIED?*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $promising_induction_topic_type_collectionP_verify_caching_state$ = makeSymbol("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-CACHING-STATE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $make_fet_gloss_for_arg2_of_binary_pred_caching_state$ = makeSymbol("*MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-CACHING-STATE*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $ftemplate_utilities_example_template_topic_cases$ = makeSymbol("*FTEMPLATE-UTILITIES-EXAMPLE-TEMPLATE-TOPIC-CASES*");
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
-    private static final SubLObject $$FormulaTemplateTopicType = reader_make_constant_shell(makeString("FormulaTemplateTopicType"));
-
-    public static final SubLSymbol $sym3$STRING_ = makeSymbol("STRING<");
 
 
+    static private final SubLSymbol $sym3$STRING_ = makeSymbol("STRING<");
 
-    private static final SubLObject $$FormulaTemplateMicrotheory_FET = reader_make_constant_shell(makeString("FormulaTemplateMicrotheory-FET"));
+    private static final SubLObject $$FormulaTemplateMicrotheory_FET = reader_make_constant_shell("FormulaTemplateMicrotheory-FET");
 
+    static private final SubLList $list7 = list(reader_make_constant_shell("templateTypeForFocalTermType"), $TYPE, makeSymbol("??TOPICS"));
 
+    static private final SubLList $list8 = list(reader_make_constant_shell("templateTypeForFocalTermType"), makeSymbol("?TERM"), makeSymbol("?TOPIC"));
 
-    public static final SubLList $list7 = list(reader_make_constant_shell(makeString("templateTypeForFocalTermType")), makeKeyword("TYPE"), makeSymbol("??TOPICS"));
+    static private final SubLList $list9 = list(makeSymbol("BINDINGS"), makeSymbol("ASSERTIONS"));
 
-    public static final SubLList $list8 = list(reader_make_constant_shell(makeString("templateTypeForFocalTermType")), makeSymbol("?TERM"), makeSymbol("?TOPIC"));
+    static private final SubLSymbol $sym10$_TERM = makeSymbol("?TERM");
 
-    public static final SubLList $list9 = list(makeSymbol("BINDINGS"), makeSymbol("ASSERTIONS"));
+    static private final SubLSymbol $sym11$_TOPIC = makeSymbol("?TOPIC");
 
-    public static final SubLSymbol $sym10$_TERM = makeSymbol("?TERM");
+    private static final SubLSymbol FORMULA_TEMPLATE_DEFTUPLE_ORDER = makeSymbol("FORMULA-TEMPLATE-DEFTUPLE-ORDER");
 
-    public static final SubLSymbol $sym11$_TOPIC = makeSymbol("?TOPIC");
+    static private final SubLList $list13 = list(reader_make_constant_shell("templateTopicGenls"), makeSymbol("?TOPIC"), makeSymbol("?COL"));
 
-    public static final SubLSymbol FORMULA_TEMPLATE_DEFTUPLE_ORDER = makeSymbol("FORMULA-TEMPLATE-DEFTUPLE-ORDER");
-
-    public static final SubLList $list13 = list(reader_make_constant_shell(makeString("templateTopicGenls")), makeSymbol("?TOPIC"), makeSymbol("?COL"));
-
-    public static final SubLSymbol $sym14$_COL = makeSymbol("?COL");
-
-
-
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
-
-
+    static private final SubLSymbol $sym14$_COL = makeSymbol("?COL");
 
 
 
     private static final SubLSymbol $INTERMEDIATE_STEP_VALIDATION_LEVEL = makeKeyword("INTERMEDIATE-STEP-VALIDATION-LEVEL");
 
-
-
-
-
-    public static final SubLList $list22 = list(makeSymbol("?TOPIC"), makeSymbol("?WHERE"), makeSymbol("?REL"));
-
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
-
-    private static final SubLObject $$relationAllInstance = reader_make_constant_shell(makeString("relationAllInstance"));
-
-    private static final SubLObject $$meetsSomeConstraintOfTopicType = reader_make_constant_shell(makeString("meetsSomeConstraintOfTopicType"));
-
-    public static final SubLList $list26 = list(makeSymbol("?TOPIC"));
-
-    public static final SubLList $list27 = list(list(reader_make_constant_shell(makeString("definingMt")), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell(makeString("equals")), makeSymbol("?REL"), reader_make_constant_shell(makeString("isa"))));
+    static private final SubLList $list22 = list(makeSymbol("?TOPIC"), makeSymbol("?WHERE"), makeSymbol("?REL"));
 
 
 
@@ -162,25 +2009,19 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
 
 
+    static private final SubLList $list26 = list(makeSymbol("?TOPIC"));
+
+    static private final SubLList $list27 = list(list(reader_make_constant_shell("definingMt"), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell("equals"), makeSymbol("?REL"), reader_make_constant_shell("isa")));
+
+    static private final SubLString $str33$_A_is_not_a__A = makeString("~A is not a ~A");
+
+    static private final SubLString $$$continue_anyway = makeString("continue anyway");
+
+    static private final SubLString $str38$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
 
 
 
-    public static final SubLString $str33$_A_is_not_a__A = makeString("~A is not a ~A");
-
-
-
-
-
-    public static final SubLString $$$continue_anyway = makeString("continue anyway");
-
-
-
-    public static final SubLString $str38$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
-
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
-
-    private static final SubLObject $$assertedSentence = reader_make_constant_shell(makeString("assertedSentence"));
 
     private static final SubLString $str41$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
@@ -190,11 +2031,9 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+    private static final SubLObject $const46$meetsSomeGenlsConstraintOfTopicTy = reader_make_constant_shell("meetsSomeGenlsConstraintOfTopicType");
 
-    private static final SubLObject $const46$meetsSomeGenlsConstraintOfTopicTy = reader_make_constant_shell(makeString("meetsSomeGenlsConstraintOfTopicType"));
-
-    private static final SubLList $list47 = list(list(reader_make_constant_shell(makeString("definingMt")), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell(makeString("equals")), makeSymbol("?REL"), reader_make_constant_shell(makeString("genls"))));
+    private static final SubLList $list47 = list(list(reader_make_constant_shell("definingMt"), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell("equals"), makeSymbol("?REL"), reader_make_constant_shell("genls")));
 
     private static final SubLSymbol APPLICABLE_TEMPLATE_TOPICS_FOR_TERM = makeSymbol("APPLICABLE-TEMPLATE-TOPICS-FOR-TERM");
 
@@ -202,49 +2041,45 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str50$Took__S_seconds_to_determine_indu = makeString("Took ~S seconds to determine induced fet topics for ~S");
 
+    private static final SubLObject $$True_JustificationTruth = reader_make_constant_shell("True-JustificationTruth");
+
+    private static final SubLObject $const53$FormulaTemplateInductionTopicType = reader_make_constant_shell("FormulaTemplateInductionTopicTypeFn");
 
 
-    private static final SubLObject $$True_JustificationTruth = reader_make_constant_shell(makeString("True-JustificationTruth"));
 
-    private static final SubLObject $const53$FormulaTemplateInductionTopicType = reader_make_constant_shell(makeString("FormulaTemplateInductionTopicTypeFn"));
-
-    private static final SubLObject $$formulaTemplateHasType = reader_make_constant_shell(makeString("formulaTemplateHasType"));
-
-    private static final SubLList $list55 = list(list(reader_make_constant_shell(makeString("isa")), makeSymbol("?TOPIC"), reader_make_constant_shell(makeString("InducedFormulaTemplateTopicType"))), list(reader_make_constant_shell(makeString("formulaTemplateTypeHasTopicType")), makeSymbol("?TOPIC"), makeSymbol("?TOPIC-TYPE")));
+    private static final SubLList $list55 = list(list(reader_make_constant_shell("isa"), makeSymbol("?TOPIC"), reader_make_constant_shell("InducedFormulaTemplateTopicType")), list(reader_make_constant_shell("formulaTemplateTypeHasTopicType"), makeSymbol("?TOPIC"), makeSymbol("?TOPIC-TYPE")));
 
     private static final SubLSymbol $sym56$_TEMPLATE = makeSymbol("?TEMPLATE");
 
-    private static final SubLList $list57 = list(reader_make_constant_shell(makeString("formulaTemplateHasType")), makeSymbol("?TEMPLATE"), makeSymbol("?TOPIC"));
+    private static final SubLList $list57 = list(reader_make_constant_shell("formulaTemplateHasType"), makeSymbol("?TEMPLATE"), makeSymbol("?TOPIC"));
 
     private static final SubLSymbol $sym58$_TOPIC_TYPE = makeSymbol("?TOPIC-TYPE");
 
-    public static final SubLList $list59 = list(makeKeyword("MAX-NUMBER"), ONE_INTEGER);
+    static private final SubLList $list59 = list(makeKeyword("MAX-NUMBER"), ONE_INTEGER);
 
-    public static final SubLList $list60 = list(makeSymbol("?TOPIC"), makeSymbol("?WHERE"));
+    static private final SubLList $list60 = list(makeSymbol("?TOPIC"), makeSymbol("?WHERE"));
 
-    private static final SubLList $list61 = list(list(reader_make_constant_shell(makeString("definingMt")), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell(makeString("unknownSentence")), list(reader_make_constant_shell(makeString("isa")), makeSymbol("?TOPIC"), reader_make_constant_shell(makeString("InducedFormulaTemplateTopicType")))));
+    private static final SubLList $list61 = list(list(reader_make_constant_shell("definingMt"), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell("unknownSentence"), list(reader_make_constant_shell("isa"), makeSymbol("?TOPIC"), reader_make_constant_shell("InducedFormulaTemplateTopicType"))));
 
     private static final SubLSymbol $sym62$_WHAT = makeSymbol("?WHAT");
 
-    private static final SubLObject $$templateTypeForFocalTermType = reader_make_constant_shell(makeString("templateTypeForFocalTermType"));
+
 
     private static final SubLList $list64 = list(makeSymbol("?WHAT"), makeSymbol("?WHERE"));
 
-    private static final SubLObject $$ist_Asserted = reader_make_constant_shell(makeString("ist-Asserted"));
+    private static final SubLObject $$ist_Asserted = reader_make_constant_shell("ist-Asserted");
 
     private static final SubLSymbol $sym66$_WHERE = makeSymbol("?WHERE");
 
-    private static final SubLObject $$templateTopicGenls = reader_make_constant_shell(makeString("templateTopicGenls"));
+
 
     private static final SubLList $list68 = list(makeSymbol("?WHAT"));
 
 
 
-    private static final SubLObject $$termOfUnit = reader_make_constant_shell(makeString("termOfUnit"));
 
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
-    private static final SubLObject $$Cyc = reader_make_constant_shell(makeString("Cyc"));
+
 
     private static final SubLString $str73$ = makeString("");
 
@@ -260,33 +2095,27 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol MAKE_SPECS_FN = makeSymbol("MAKE-SPECS-FN");
 
+    private static final SubLObject $const81$promisingSalientDescriptorInducti = reader_make_constant_shell("promisingSalientDescriptorInductionCollection");
 
-
-    private static final SubLObject $const81$promisingSalientDescriptorInducti = reader_make_constant_shell(makeString("promisingSalientDescriptorInductionCollection"));
-
-    private static final SubLObject $const82$promisingSalientDescriptorInducti = reader_make_constant_shell(makeString("promisingSalientDescriptorInductionCollectionForSpecs"));
+    private static final SubLObject $const82$promisingSalientDescriptorInducti = reader_make_constant_shell("promisingSalientDescriptorInductionCollectionForSpecs");
 
     private static final SubLString $str83$promisingSalientDescriptorInducti = makeString("promisingSalientDescriptorInductionCollection");
 
     private static final SubLInteger $int$90 = makeInteger(90);
 
-    private static final SubLObject $$DateBeforeFn = reader_make_constant_shell(makeString("DateBeforeFn"));
 
-    private static final SubLObject $$DaysDuration = reader_make_constant_shell(makeString("DaysDuration"));
+
+
 
     private static final SubLSymbol $sym87$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY = makeSymbol("PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY");
 
     private static final SubLSymbol $sym88$_PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY_CACHING_STATE_ = makeSymbol("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-CACHING-STATE*");
 
-    private static final SubLObject $$InducedFormulaTemplate = reader_make_constant_shell(makeString("InducedFormulaTemplate"));
 
-    private static final SubLObject $$SalientDescriptorFETForTypeFn = reader_make_constant_shell(makeString("SalientDescriptorFETForTypeFn"));
+
+
 
     private static final SubLSymbol FOCAL_TERM_TYPE_FOR_TOPIC_TYPE = makeSymbol("FOCAL-TERM-TYPE-FOR-TOPIC-TYPE");
-
-
-
-
 
     private static final SubLSymbol $sym94$_COLLECTION = makeSymbol("?COLLECTION");
 
@@ -296,47 +2125,41 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
-
-    private static final SubLList $list99 = list(list(reader_make_constant_shell(makeString("templateTypeForFocalTermType")), makeSymbol("?TYPE"), makeKeyword("TOPICS")));
+    private static final SubLList $list99 = list(list(reader_make_constant_shell("templateTypeForFocalTermType"), makeSymbol("?TYPE"), makeKeyword("TOPICS")));
 
     private static final SubLList $list100 = list(makeSymbol("?TYPE"));
 
     private static final SubLSymbol $sym101$TERM__ = makeSymbol("TERM-<");
 
-    private static final SubLList $list102 = list(list(reader_make_constant_shell(makeString("templateTopicGenls")), makeKeyword("TOPICS"), makeSymbol("?TYPE")));
+    private static final SubLList $list102 = list(list(reader_make_constant_shell("templateTopicGenls"), makeKeyword("TOPICS"), makeSymbol("?TYPE")));
 
-
-
-    private static final SubLList $list104 = list(reader_make_constant_shell(makeString("isa")), makeKeyword("TOPIC-TYPE"), reader_make_constant_shell(makeString("FormulaTemplateTopicType")));
+    private static final SubLList $list104 = list(reader_make_constant_shell("isa"), makeKeyword("TOPIC-TYPE"), reader_make_constant_shell("FormulaTemplateTopicType"));
 
     private static final SubLList $list105 = list(makeKeyword("TOPIC-TYPE"));
 
-    private static final SubLObject $$FormulaArgPositionFn = reader_make_constant_shell(makeString("FormulaArgPositionFn"));
-
-    private static final SubLObject $$SomeExampleFn = reader_make_constant_shell(makeString("SomeExampleFn"));
-
-    private static final SubLObject $$SingleAssertionEntry = reader_make_constant_shell(makeString("SingleAssertionEntry"));
-
-    private static final SubLObject $$MultipleAssertionEntry = reader_make_constant_shell(makeString("MultipleAssertionEntry"));
 
 
 
-    private static final SubLList $list111 = list(makeKeyword("WHAT"));
 
-    public static final SubLList $list112 = list(TWO_INTEGER);
+
+
+
+
+    private static final SubLList $list111 = list($WHAT);
+
+    static private final SubLList $list112 = list(TWO_INTEGER);
 
     private static final SubLList $list113 = list(THREE_INTEGER);
 
-    private static final SubLObject $$relationAllExists = reader_make_constant_shell(makeString("relationAllExists"));
+
 
     private static final SubLString $str115$_ = makeString(":");
 
     private static final SubLString $str116$__type__ = makeString(" (type):");
 
-    private static final SubLObject $$glossForInducedSuggestionPred = reader_make_constant_shell(makeString("glossForInducedSuggestionPred"));
 
-    private static final SubLObject $$GKEFormulaTemplatesMt = reader_make_constant_shell(makeString("GKEFormulaTemplatesMt"));
+
+
 
     private static final SubLList $list119 = list(ONE_INTEGER);
 
@@ -348,11 +2171,9 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$DenotesArgInRelnPredicate = reader_make_constant_shell(makeString("DenotesArgInRelnPredicate"));
+    private static final SubLList $list125 = list(reader_make_constant_shell("nonPlural-Generic"));
 
-    private static final SubLList $list125 = list(reader_make_constant_shell(makeString("nonPlural-Generic")));
-
-    private static final SubLList $list126 = list(reader_make_constant_shell(makeString("singular-Generic")), reader_make_constant_shell(makeString("thirdPersonSg-Generic")));
+    private static final SubLList $list126 = list(reader_make_constant_shell("singular-Generic"), reader_make_constant_shell("thirdPersonSg-Generic"));
 
     private static final SubLSymbol $sym127$_MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED_CACHING_STATE_ = makeSymbol("*MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-CACHING-STATE*");
 
@@ -360,15 +2181,13 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
     private static final SubLList $list129 = list(list(ONE_INTEGER, ONE_INTEGER), list(TWO_INTEGER, TWO_INTEGER));
 
-    private static final SubLList $list130 = list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("isa")), list(makeKeyword("BIND"), makeSymbol("ISA-VAR")), list(makeKeyword("BIND"), makeSymbol("META-ISA"))), list(reader_make_constant_shell(makeString("isa")), makeKeyword("ANYTHING"), list(makeKeyword("BIND"), makeSymbol("ISA-VAR"))));
-
-
+    private static final SubLList $list130 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), list($BIND, makeSymbol("ISA-VAR")), list($BIND, makeSymbol("META-ISA"))), list(reader_make_constant_shell("isa"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("ISA-VAR"))));
 
     private static final SubLSymbol META_ISA = makeSymbol("META-ISA");
 
     private static final SubLList $list133 = list(list(ONE_INTEGER, TWO_INTEGER), list(TWO_INTEGER, ONE_INTEGER));
 
-    private static final SubLList $list134 = list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("isa")), makeKeyword("ANYTHING"), list(makeKeyword("BIND"), makeSymbol("ISA-VAR"))), list(reader_make_constant_shell(makeString("isa")), list(makeKeyword("BIND"), makeSymbol("ISA-VAR")), list(makeKeyword("BIND"), makeSymbol("META-ISA"))));
+    private static final SubLList $list134 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("ISA-VAR"))), list(reader_make_constant_shell("isa"), list($BIND, makeSymbol("ISA-VAR")), list($BIND, makeSymbol("META-ISA"))));
 
     private static final SubLSymbol MAKE_FET_GLOSS_FOR_META_ISA = makeSymbol("MAKE-FET-GLOSS-FOR-META-ISA");
 
@@ -376,47 +2195,43 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol ARG_POSITION_P = makeSymbol("ARG-POSITION-P");
 
-    private static final SubLObject $$nonPlural_Generic = reader_make_constant_shell(makeString("nonPlural-Generic"));
+    private static final SubLObject $$nonPlural_Generic = reader_make_constant_shell("nonPlural-Generic");
 
-    private static final SubLList $list139 = list(reader_make_constant_shell(makeString("Demonstrative-ClassA-NLAttr")));
-
-    private static final SubLObject $$formulaTemplateTypeHasTopicType = reader_make_constant_shell(makeString("formulaTemplateTypeHasTopicType"));
-
-    private static final SubLObject $$UniversalVocabularyMt = reader_make_constant_shell(makeString("UniversalVocabularyMt"));
-
-    private static final SubLList $list142 = list(reader_make_constant_shell(makeString("Individual")));
-
-    private static final SubLObject $$formulaForFormulaTemplate = reader_make_constant_shell(makeString("formulaForFormulaTemplate"));
-
-    private static final SubLObject $$assertMtForFormulaTemplate = reader_make_constant_shell(makeString("assertMtForFormulaTemplate"));
-
-    private static final SubLObject $const145$focalTermPositionForFormulaTempla = reader_make_constant_shell(makeString("focalTermPositionForFormulaTemplate"));
-
-    private static final SubLObject $$assertionFormatForFormulaTemplate = reader_make_constant_shell(makeString("assertionFormatForFormulaTemplate"));
-
-    private static final SubLObject $$formulaTemplateArgExplanation = reader_make_constant_shell(makeString("formulaTemplateArgExplanation"));
-
-    private static final SubLObject $$glossForFormulaTemplate = reader_make_constant_shell(makeString("glossForFormulaTemplate"));
-
-    private static final SubLObject $$candidateReplacementForPosition = reader_make_constant_shell(makeString("candidateReplacementForPosition"));
-
-    private static final SubLObject $const150$validationRequiredOnTemplatePosit = reader_make_constant_shell(makeString("validationRequiredOnTemplatePosition"));
-
-    private static final SubLObject $const151$templateReplacementsInvisibleForP = reader_make_constant_shell(makeString("templateReplacementsInvisibleForPosition"));
-
-    private static final SubLObject $$formulaTemplateExample = reader_make_constant_shell(makeString("formulaTemplateExample"));
-
-    private static final SubLObject $$higherPriorityTemplateForType = reader_make_constant_shell(makeString("higherPriorityTemplateForType"));
+    private static final SubLList $list139 = list(reader_make_constant_shell("Demonstrative-ClassA-NLAttr"));
 
 
 
-    private static final SubLObject $$TKBTemplate_Attack = reader_make_constant_shell(makeString("TKBTemplate-Attack"));
-
-    public static final SubLList $list156 = list(makeSymbol("LAUNCH-LEXIFY-TERRORIST-ATTACK-TASK"));
-
-    public static final SubLList $list157 = list(makeUninternedSymbol("LINK-NODE"), makeUninternedSymbol("MT"), makeUninternedSymbol("TV"));
 
 
+    private static final SubLList $list142 = list(reader_make_constant_shell("Individual"));
+
+
+
+
+
+    private static final SubLObject $const145$focalTermPositionForFormulaTempla = reader_make_constant_shell("focalTermPositionForFormulaTemplate");
+
+
+
+
+
+
+
+
+
+    private static final SubLObject $const150$validationRequiredOnTemplatePosit = reader_make_constant_shell("validationRequiredOnTemplatePosition");
+
+    private static final SubLObject $const151$templateReplacementsInvisibleForP = reader_make_constant_shell("templateReplacementsInvisibleForPosition");
+
+
+
+
+
+    private static final SubLObject $$TKBTemplate_Attack = reader_make_constant_shell("TKBTemplate-Attack");
+
+    static private final SubLList $list156 = list(makeSymbol("LAUNCH-LEXIFY-TERRORIST-ATTACK-TASK"));
+
+    static private final SubLList $list157 = list(makeUninternedSymbol("LINK-NODE"), makeUninternedSymbol("MT"), makeUninternedSymbol("TV"));
 
     private static final SubLSymbol CONSTRAINT_COL_FOR_CONSTRAINT_TERM = makeSymbol("CONSTRAINT-COL-FOR-CONSTRAINT-TERM");
 
@@ -430,19 +2245,15 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$IndexicalConcept = reader_make_constant_shell(makeString("IndexicalConcept"));
 
-    private static final SubLObject $$SomeExampleSpecFn = reader_make_constant_shell(makeString("SomeExampleSpecFn"));
 
-    private static final SubLObject $$SpecsFn = reader_make_constant_shell(makeString("SpecsFn"));
+
 
     private static final SubLString $str168$__Couldn_t_find__S___in_denots_of = makeString("~%Couldn't find ~S~% in denots of ~S qua ~S~% Found ~S~%");
 
-    public static final SubLList $list169 = list(reader_make_constant_shell(makeString("nounStrings")), reader_make_constant_shell(makeString("properNameStrings")), reader_make_constant_shell(makeString("adjStrings")));
+    static private final SubLList $list169 = list(reader_make_constant_shell("nounStrings"), reader_make_constant_shell("properNameStrings"), reader_make_constant_shell("adjStrings"));
 
-
-
-    private static final SubLList $list171 = list(reader_make_constant_shell(makeString("TKBTemplate-Individual")), reader_make_constant_shell(makeString("TKBTemplate-Organization")), reader_make_constant_shell(makeString("TKBTemplate-Attack")));
+    private static final SubLList $list171 = list(reader_make_constant_shell("TKBTemplate-Individual"), reader_make_constant_shell("TKBTemplate-Organization"), reader_make_constant_shell("TKBTemplate-Attack"));
 
     private static final SubLString $str172$_ = makeString("/");
 
@@ -450,39 +2261,27 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str174$Generating__S_seen_from__S_into__ = makeString("Generating ~S seen from ~S into ~S ... ");
 
-
-
     private static final SubLString $str176$Unable_to_open__S = makeString("Unable to open ~S");
 
     private static final SubLString $str177$_done__ = makeString(" done~%");
-
-
 
     private static final SubLList $list179 = list(list(makeSymbol("TOPIC"), makeSymbol("FORT")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     private static final SubLSymbol $sym180$ISA = makeUninternedSymbol("ISA");
 
-
-
     private static final SubLSymbol DO_ALL_ISA = makeSymbol("DO-ALL-ISA");
-
-
 
     private static final SubLSymbol PRED_VALUES = makeSymbol("PRED-VALUES");
 
-    private static final SubLList $list185 = list(reader_make_constant_shell(makeString("templateTypeForFocalTermType")));
+    private static final SubLList $list185 = list(reader_make_constant_shell("templateTypeForFocalTermType"));
 
     private static final SubLString $$$mapping_Cyc_FORTs = makeString("mapping Cyc FORTs");
 
 
 
-    private static final SubLObject $$InducedFormulaTemplateTopicType = reader_make_constant_shell(makeString("InducedFormulaTemplateTopicType"));
 
-    private static final SubLObject $$keInducedStrongSuggestionPreds = reader_make_constant_shell(makeString("keInducedStrongSuggestionPreds"));
 
-    private static final SubLObject $$keInducedWeakSuggestionPreds = reader_make_constant_shell(makeString("keInducedWeakSuggestionPreds"));
 
-    private static final SubLObject $$keInducedSuggestionPreds = reader_make_constant_shell(makeString("keInducedSuggestionPreds"));
 
 
 
@@ -490,6 +2289,46 @@ public final class formula_template_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str194$__Hand___S___4F___Induced___S___4 = makeString("~&Hand: ~S (~4F%) Induced: ~S (~4F%) Both: ~S (~4F%)~%");
 
+    // Definitions
+    public static final SubLObject get_all_formula_template_topics_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject topics_found = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject cdolist_list_var = isa.all_fort_instances($$FormulaTemplateTopicType, UNPROVIDED, UNPROVIDED);
+                            SubLObject topic_type = NIL;
+                            for (topic_type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , topic_type = cdolist_list_var.first()) {
+                                {
+                                    SubLObject specs = genls.all_specs(topic_type, UNPROVIDED, UNPROVIDED);
+                                    SubLObject cdolist_list_var_1 = specs;
+                                    SubLObject spec = NIL;
+                                    for (spec = cdolist_list_var_1.first(); NIL != cdolist_list_var_1; cdolist_list_var_1 = cdolist_list_var_1.rest() , spec = cdolist_list_var_1.first()) {
+                                        dictionary.dictionary_enter(topics_found, spec, spec);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                {
+                    SubLObject topics = dictionary.dictionary_keys(topics_found);
+                    return Sort.sort(topics, symbol_function($sym3$STRING_), FORT_NAME);
+                }
+            }
+        }
+    }
+
+    // Definitions
     public static SubLObject get_all_formula_template_topics() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject topics_found = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
@@ -522,8 +2361,43 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return Sort.sort(topics, symbol_function($sym3$STRING_), FORT_NAME);
     }
 
+    public static final SubLObject formula_template_topic_typeP_alt(SubLObject v_object) {
+        return isa.isa_in_any_mtP(v_object, $$FormulaTemplateTopicType);
+    }
+
     public static SubLObject formula_template_topic_typeP(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$FormulaTemplateTopicType);
+    }
+
+    public static final SubLObject get_all_formula_template_subtopics_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject topics = com.cyc.cycjava.cycl.formula_template_utilities.get_all_formula_template_topics();
+                SubLObject subtopics = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject cdolist_list_var = topics;
+                            SubLObject topic = NIL;
+                            for (topic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , topic = cdolist_list_var.first()) {
+                                if (NIL == com.cyc.cycjava.cycl.formula_template_utilities.formula_template_topic_typeP(topic)) {
+                                    subtopics = cons(topic, subtopics);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(subtopics);
+            }
+        }
     }
 
     public static SubLObject get_all_formula_template_subtopics() {
@@ -552,8 +2426,30 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return nreverse(subtopics);
     }
 
+    public static final SubLObject get_all_template_topics_alt() {
+        return Sort.sort(isa.all_fort_instances($$FormulaTemplateTopicType, UNPROVIDED, UNPROVIDED), symbol_function($sym3$STRING_), symbol_function(FORT_NAME));
+    }
+
     public static SubLObject get_all_template_topics() {
         return Sort.sort(isa.all_fort_instances($$FormulaTemplateTopicType, UNPROVIDED, UNPROVIDED), symbol_function($sym3$STRING_), symbol_function(FORT_NAME));
+    }
+
+    public static final SubLObject get_all_formula_template_definition_mts_alt() {
+        {
+            SubLObject mts = isa.all_fort_instances($$FormulaTemplateMicrotheory_FET, UNPROVIDED, UNPROVIDED);
+            SubLObject scanned_mts = NIL;
+            SubLObject cdolist_list_var = mts;
+            SubLObject mt = NIL;
+            for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                if (NIL != narts_high.naut_p(mt)) {
+                    mt = narts_high.find_nart(mt);
+                }
+                if (NIL != forts.fort_p(mt)) {
+                    scanned_mts = cons(mt, scanned_mts);
+                }
+            }
+            return Sort.sort(scanned_mts, symbol_function($sym3$STRING_), symbol_function(FORT_NAME));
+        }
     }
 
     public static SubLObject get_all_formula_template_definition_mts() {
@@ -575,8 +2471,30 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return Sort.sort(scanned_mts, symbol_function($sym3$STRING_), symbol_function(FORT_NAME));
     }
 
+    public static final SubLObject get_all_formula_templated_types_alt() {
+        return com.cyc.cycjava.cycl.formula_template_utilities.get_applicable_formula_templated_types($$EverythingPSC);
+    }
+
     public static SubLObject get_all_formula_templated_types() {
         return get_applicable_formula_templated_types($$EverythingPSC);
+    }
+
+    public static final SubLObject get_applicable_formula_templated_types_alt(SubLObject mt) {
+        {
+            SubLObject types = ask_utilities.ask_variable($TYPE, $list_alt7, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject scanned_types = NIL;
+            SubLObject cdolist_list_var = types;
+            SubLObject type = NIL;
+            for (type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , type = cdolist_list_var.first()) {
+                if (NIL != narts_high.naut_p(type)) {
+                    type = narts_high.find_nart(type);
+                }
+                if (NIL != forts.fort_p(type)) {
+                    scanned_types = cons(type, scanned_types);
+                }
+            }
+            return Sort.sort(scanned_types, symbol_function($sym3$STRING_), symbol_function(FORT_NAME));
+        }
     }
 
     public static SubLObject get_applicable_formula_templated_types(final SubLObject mt) {
@@ -598,8 +2516,47 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return Sort.sort(scanned_types, symbol_function($sym3$STRING_), symbol_function(FORT_NAME));
     }
 
+    public static final SubLObject get_all_formula_template_definition_tuples_alt() {
+        return com.cyc.cycjava.cycl.formula_template_utilities.get_applicable_formula_template_definition_tuples($$EverythingPSC);
+    }
+
     public static SubLObject get_all_formula_template_definition_tuples() {
         return get_applicable_formula_template_definition_tuples($$EverythingPSC);
+    }
+
+    public static final SubLObject get_applicable_formula_template_definition_tuples_alt(SubLObject mt) {
+        {
+            SubLObject binding_lists = rkf_query_utilities.rkf_ask($list_alt8, mt, ZERO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
+            SubLObject tuples = NIL;
+            SubLObject cdolist_list_var = binding_lists;
+            SubLObject binding_list = NIL;
+            for (binding_list = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , binding_list = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = binding_list;
+                    SubLObject current = datum;
+                    SubLObject v_bindings = NIL;
+                    SubLObject assertions = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt9);
+                    v_bindings = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt9);
+                    assertions = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject term_type = assoc($sym10$_TERM, v_bindings, UNPROVIDED, UNPROVIDED).rest();
+                            SubLObject topic_type = assoc($sym11$_TOPIC, v_bindings, UNPROVIDED, UNPROVIDED).rest();
+                            SubLObject assertion = assertions.first();
+                            SubLObject elmt = assertions_high.assertion_mt(assertion);
+                            tuples = cons(list(term_type, topic_type, elmt), tuples);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt9);
+                    }
+                }
+            }
+            return Sort.sort(tuples, symbol_function($sym3$STRING_), symbol_function(FORMULA_TEMPLATE_DEFTUPLE_ORDER));
+        }
     }
 
     public static SubLObject get_applicable_formula_template_definition_tuples(final SubLObject mt) {
@@ -634,6 +2591,41 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return Sort.sort(tuples, symbol_function($sym3$STRING_), symbol_function(FORMULA_TEMPLATE_DEFTUPLE_ORDER));
     }
 
+    public static final SubLObject get_applicable_formula_template_collection_tuples_alt(SubLObject mt) {
+        {
+            SubLObject binding_lists = rkf_query_utilities.rkf_ask($list_alt13, mt, ZERO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
+            SubLObject tuples = NIL;
+            SubLObject cdolist_list_var = binding_lists;
+            SubLObject binding_list = NIL;
+            for (binding_list = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , binding_list = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = binding_list;
+                    SubLObject current = datum;
+                    SubLObject v_bindings = NIL;
+                    SubLObject assertions = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt9);
+                    v_bindings = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt9);
+                    assertions = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject term_type = assoc($sym14$_COL, v_bindings, UNPROVIDED, UNPROVIDED).rest();
+                            SubLObject topic_type = assoc($sym11$_TOPIC, v_bindings, UNPROVIDED, UNPROVIDED).rest();
+                            SubLObject assertion = assertions.first();
+                            SubLObject elmt = assertions_high.assertion_mt(assertion);
+                            tuples = cons(list(term_type, topic_type, elmt), tuples);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt9);
+                    }
+                }
+            }
+            return Sort.sort(tuples, symbol_function($sym3$STRING_), symbol_function(FORMULA_TEMPLATE_DEFTUPLE_ORDER));
+        }
+    }
+
     public static SubLObject get_applicable_formula_template_collection_tuples(final SubLObject mt) {
         final SubLObject binding_lists = rkf_query_utilities.rkf_ask($list13, mt, ZERO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
         SubLObject tuples = NIL;
@@ -666,8 +2658,20 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return Sort.sort(tuples, symbol_function($sym3$STRING_), symbol_function(FORMULA_TEMPLATE_DEFTUPLE_ORDER));
     }
 
+    public static final SubLObject formula_template_deftuple_order_alt(SubLObject element) {
+        return kb_paths.fort_name(second(element));
+    }
+
     public static SubLObject formula_template_deftuple_order(final SubLObject element) {
         return kb_paths.fort_name(second(element));
+    }
+
+    public static final SubLObject get_template_topic_loading_elmt_alt(SubLObject template_topic) {
+        {
+            SubLObject template_tupples = com.cyc.cycjava.cycl.formula_template_utilities.get_all_formula_template_definition_tuples();
+            SubLObject template_mt = third(find(template_topic, template_tupples, symbol_function(EQ), symbol_function(SECOND), UNPROVIDED, UNPROVIDED));
+            return template_mt;
+        }
     }
 
     public static SubLObject get_template_topic_loading_elmt(final SubLObject template_topic) {
@@ -676,6 +2680,70 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return template_mt;
     }
 
+    /**
+     * Returns list of topic-mt-rel tuples applicable to an instance or spec of collection.  The rel indicates whether the the new term will be an instance or spec of the collection..
+     */
+    @LispMethod(comment = "Returns list of topic-mt-rel tuples applicable to an instance or spec of collection.  The rel indicates whether the the new term will be an instance or spec of the collection..")
+    public static final SubLObject applicable_template_topics_for_collection_alt(SubLObject coll, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject results = NIL;
+                if (NIL != fort_types_interface.isa_collectionP(coll, UNPROVIDED)) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                {
+                                    SubLObject v_properties = list($ANSWER_LANGUAGE, $HL, $INTERMEDIATE_STEP_VALIDATION_LEVEL, $NONE);
+                                    SubLObject problem_store_properties = inference_datastructures_enumerated_types.extract_problem_store_static_properties(v_properties);
+                                    SubLObject problem_store = NIL;
+                                    try {
+                                        problem_store = inference_datastructures_problem_store.new_problem_store(problem_store_properties);
+                                        {
+                                            SubLObject query_properties = putf(v_properties, $PROBLEM_STORE, problem_store);
+                                            SubLObject instance_topic_tuples = com.cyc.cycjava.cycl.formula_template_utilities.applicable_template_instance_topics_for_collection(coll, mt, query_properties);
+                                            SubLObject spec_topic_tuples = com.cyc.cycjava.cycl.formula_template_utilities.applicable_template_spec_topics_for_collection(coll, mt, query_properties);
+                                            results = append(instance_topic_tuples, spec_topic_tuples);
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0_2 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                            try {
+                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                inference_datastructures_problem_store.destroy_problem_store(problem_store);
+                                            } finally {
+                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_2, thread);
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                return results;
+            }
+        }
+    }
+
+    /**
+     * Returns list of topic-mt-rel tuples applicable to an instance or spec of collection.  The rel indicates whether the the new term will be an instance or spec of the collection..
+     */
+    @LispMethod(comment = "Returns list of topic-mt-rel tuples applicable to an instance or spec of collection.  The rel indicates whether the the new term will be an instance or spec of the collection..")
     public static SubLObject applicable_template_topics_for_collection(final SubLObject coll, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -720,8 +2788,20 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return results;
     }
 
+    public static final SubLObject applicable_template_instance_topics_for_collection_alt(SubLObject coll, SubLObject mt, SubLObject query_properties) {
+        return com.cyc.cycjava.cycl.formula_template_utilities.applicable_template_instance_topics_for_collection_via_index_surfing(coll, mt, query_properties);
+    }
+
     public static SubLObject applicable_template_instance_topics_for_collection(final SubLObject coll, final SubLObject mt, final SubLObject query_properties) {
         return applicable_template_instance_topics_for_collection_via_index_surfing(coll, mt, query_properties);
+    }
+
+    public static final SubLObject applicable_template_instance_topics_for_collection_via_inference_alt(SubLObject coll, SubLObject mt, SubLObject query_properties) {
+        {
+            SubLObject template = $list_alt22;
+            SubLObject query_sentence = listS($$and, listS($$relationAllInstance, $$meetsSomeConstraintOfTopicType, coll, $list_alt26), $list_alt27);
+            return ask_utilities.query_template(template, query_sentence, mt, query_properties);
+        }
     }
 
     public static SubLObject applicable_template_instance_topics_for_collection_via_inference(final SubLObject coll, final SubLObject mt, final SubLObject query_properties) {
@@ -730,6 +2810,264 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return ask_utilities.query_template(template, query_sentence, mt, query_properties);
     }
 
+    /**
+     * workaround for bug 11822.
+     */
+    @LispMethod(comment = "workaround for bug 11822.")
+    public static final SubLObject applicable_template_instance_topics_for_collection_tva_workaround_alt(SubLObject coll, SubLObject mt, SubLObject query_properties) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template = $list_alt22;
+                SubLObject tuples = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject node_var = coll;
+                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                            SubLObject recur_deck = deck.create_deck(deck_type);
+                            {
+                                SubLObject _prev_bind_0_3 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                try {
+                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                    {
+                                        SubLObject tv_var = NIL;
+                                        {
+                                            SubLObject _prev_bind_0_4 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                            SubLObject _prev_bind_1_5 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                            try {
+                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                if (NIL != tv_var) {
+                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                            {
+                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                if (pcase_var.eql($ERROR)) {
+                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                } else {
+                                                                    if (pcase_var.eql($CERROR)) {
+                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                    } else {
+                                                                        if (pcase_var.eql($WARN)) {
+                                                                            Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                        } else {
+                                                                            Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                            Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                {
+                                                    SubLObject _prev_bind_0_6 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_7 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2_8 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genls), thread);
+                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genls), thread);
+                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(coll, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                            {
+                                                                SubLObject _prev_bind_0_9 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_10 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                SubLObject _prev_bind_2_11 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                try {
+                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_forward_search_direction(), sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var, UNPROVIDED);
+                                                                    while (NIL != node_var) {
+                                                                        {
+                                                                            SubLObject genl = node_var;
+                                                                            SubLObject query_sentence = listS($$and, list($$assertedSentence, listS($$relationAllInstance, $$meetsSomeConstraintOfTopicType, genl, $list_alt26)), $list_alt27);
+                                                                            SubLObject cdolist_list_var = ask_utilities.query_template(template, query_sentence, mt, query_properties);
+                                                                            SubLObject tuple = NIL;
+                                                                            for (tuple = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tuple = cdolist_list_var.first()) {
+                                                                                tuples = cons(tuple, tuples);
+                                                                            }
+                                                                        }
+                                                                        {
+                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genls));
+                                                                            SubLObject cdolist_list_var = accessible_modules;
+                                                                            SubLObject module_var = NIL;
+                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_12 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_1_13 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                    try {
+                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                        {
+                                                                                            SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                {
+                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                    if (NIL != d_link) {
+                                                                                                        {
+                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                            if (NIL != mt_links) {
+                                                                                                                {
+                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject mt_14 = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt_14)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_15 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt_14, thread);
+                                                                                                                                        {
+                                                                                                                                            SubLObject iteration_state_16 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_16)) {
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_16);
+                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_17 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                    SubLObject cdolist_list_var_18 = new_list;
+                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_18.first(); NIL != cdolist_list_var_18; cdolist_list_var_18 = cdolist_list_var_18.rest() , node_vars_link_node = cdolist_list_var_18.first()) {
+                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_17, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    iteration_state_16 = dictionary_contents.do_dictionary_contents_next(iteration_state_16);
+                                                                                                                                                }
+                                                                                                                                            } 
+                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_16);
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_15, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                        }
+                                                                                                                    } 
+                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                    }
+                                                                                                }
+                                                                                            } else {
+                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                    {
+                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                        SubLObject cdolist_list_var_19 = new_list;
+                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                        for (generating_fn = cdolist_list_var_19.first(); NIL != cdolist_list_var_19; cdolist_list_var_19 = cdolist_list_var_19.rest() , generating_fn = cdolist_list_var_19.first()) {
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_20 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                    {
+                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                        SubLObject new_list_21 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                        SubLObject cdolist_list_var_22 = new_list_21;
+                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                        for (node_vars_link_node = cdolist_list_var_22.first(); NIL != cdolist_list_var_22; cdolist_list_var_22 = cdolist_list_var_22.rest() , node_vars_link_node = cdolist_list_var_22.first()) {
+                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_20, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    } finally {
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_13, thread);
+                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_12, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        node_var = deck.deck_pop(recur_deck);
+                                                                    } 
+                                                                } finally {
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_11, thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_10, thread);
+                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_9, thread);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, coll, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        }
+                                                    } finally {
+                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_8, thread);
+                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_7, thread);
+                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_6, thread);
+                                                    }
+                                                }
+                                            } finally {
+                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_5, thread);
+                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_4, thread);
+                                            }
+                                        }
+                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                    }
+                                } finally {
+                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_3, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return tuples;
+            }
+        }
+    }
+
+    /**
+     * workaround for bug 11822.
+     */
+    @LispMethod(comment = "workaround for bug 11822.")
     public static SubLObject applicable_template_instance_topics_for_collection_tva_workaround(final SubLObject coll, final SubLObject mt, final SubLObject query_properties) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject template = $list22;
@@ -984,6 +3322,316 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return tuples;
     }
 
+    /**
+     * workaround for bug 11821.
+     */
+    @LispMethod(comment = "workaround for bug 11821.")
+    public static final SubLObject applicable_template_instance_topics_for_collection_via_index_surfing_alt(SubLObject coll, SubLObject mt, SubLObject query_properties) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject tuples = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject node_var = coll;
+                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                            SubLObject recur_deck = deck.create_deck(deck_type);
+                            {
+                                SubLObject _prev_bind_0_23 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                try {
+                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                    {
+                                        SubLObject tv_var = NIL;
+                                        {
+                                            SubLObject _prev_bind_0_24 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                            SubLObject _prev_bind_1_25 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                            try {
+                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                if (NIL != tv_var) {
+                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                            {
+                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                if (pcase_var.eql($ERROR)) {
+                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                } else {
+                                                                    if (pcase_var.eql($CERROR)) {
+                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                    } else {
+                                                                        if (pcase_var.eql($WARN)) {
+                                                                            Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                        } else {
+                                                                            Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                            Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                {
+                                                    SubLObject _prev_bind_0_26 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_27 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2_28 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genls), thread);
+                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genls), thread);
+                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(coll, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                            {
+                                                                SubLObject _prev_bind_0_29 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_30 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                SubLObject _prev_bind_2_31 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                try {
+                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_forward_search_direction(), sbhl_module_vars.get_sbhl_module($$genls)), thread);
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var, UNPROVIDED);
+                                                                    while (NIL != node_var) {
+                                                                        {
+                                                                            SubLObject genl = node_var;
+                                                                            SubLObject pred_var = $$relationAllInstance;
+                                                                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(genl, TWO_INTEGER, pred_var)) {
+                                                                                {
+                                                                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(genl, TWO_INTEGER, pred_var);
+                                                                                    SubLObject done_var = NIL;
+                                                                                    SubLObject token_var = NIL;
+                                                                                    while (NIL == done_var) {
+                                                                                        {
+                                                                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                                                            if (NIL != valid) {
+                                                                                                {
+                                                                                                    SubLObject final_index_iterator = NIL;
+                                                                                                    try {
+                                                                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                                                                        {
+                                                                                                            SubLObject done_var_32 = NIL;
+                                                                                                            SubLObject token_var_33 = NIL;
+                                                                                                            while (NIL == done_var_32) {
+                                                                                                                {
+                                                                                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_33);
+                                                                                                                    SubLObject valid_34 = makeBoolean(token_var_33 != gaf);
+                                                                                                                    if (NIL != valid_34) {
+                                                                                                                        if (assertions_high.gaf_arg1(gaf).eql($$meetsSomeConstraintOfTopicType)) {
+                                                                                                                            {
+                                                                                                                                SubLObject topic = assertions_high.gaf_arg3(gaf);
+                                                                                                                                SubLObject mt_35 = assertions_high.assertion_mt(gaf);
+                                                                                                                                SubLObject tuple = list(topic, mt_35, $$isa);
+                                                                                                                                SubLObject item_var = tuple;
+                                                                                                                                if (NIL == member(item_var, tuples, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                                                                                                    tuples = cons(item_var, tuples);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                    done_var_32 = makeBoolean(NIL == valid_34);
+                                                                                                                }
+                                                                                                            } 
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        {
+                                                                                                            SubLObject _prev_bind_0_36 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                            try {
+                                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                if (NIL != final_index_iterator) {
+                                                                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                                                }
+                                                                                                            } finally {
+                                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_36, thread);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                            done_var = makeBoolean(NIL == valid);
+                                                                                        }
+                                                                                    } 
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        {
+                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genls));
+                                                                            SubLObject cdolist_list_var = accessible_modules;
+                                                                            SubLObject module_var = NIL;
+                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_37 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_1_38 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                    try {
+                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                        {
+                                                                                            SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                {
+                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                    if (NIL != d_link) {
+                                                                                                        {
+                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                            if (NIL != mt_links) {
+                                                                                                                {
+                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject mt_39 = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt_39)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_40 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt_39, thread);
+                                                                                                                                        {
+                                                                                                                                            SubLObject iteration_state_41 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_41)) {
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_41);
+                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_42 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                    SubLObject cdolist_list_var_43 = new_list;
+                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_43.first(); NIL != cdolist_list_var_43; cdolist_list_var_43 = cdolist_list_var_43.rest() , node_vars_link_node = cdolist_list_var_43.first()) {
+                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_42, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    iteration_state_41 = dictionary_contents.do_dictionary_contents_next(iteration_state_41);
+                                                                                                                                                }
+                                                                                                                                            } 
+                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_41);
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_40, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                        }
+                                                                                                                    } 
+                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                    }
+                                                                                                }
+                                                                                            } else {
+                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                    {
+                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                        SubLObject cdolist_list_var_44 = new_list;
+                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                        for (generating_fn = cdolist_list_var_44.first(); NIL != cdolist_list_var_44; cdolist_list_var_44 = cdolist_list_var_44.rest() , generating_fn = cdolist_list_var_44.first()) {
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_45 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                    {
+                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                        SubLObject new_list_46 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                        SubLObject cdolist_list_var_47 = new_list_46;
+                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                        for (node_vars_link_node = cdolist_list_var_47.first(); NIL != cdolist_list_var_47; cdolist_list_var_47 = cdolist_list_var_47.rest() , node_vars_link_node = cdolist_list_var_47.first()) {
+                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_45, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    } finally {
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_38, thread);
+                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_37, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        node_var = deck.deck_pop(recur_deck);
+                                                                    } 
+                                                                } finally {
+                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_31, thread);
+                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_30, thread);
+                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_29, thread);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, coll, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        }
+                                                    } finally {
+                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_28, thread);
+                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_27, thread);
+                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_26, thread);
+                                                    }
+                                                }
+                                            } finally {
+                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_25, thread);
+                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_24, thread);
+                                            }
+                                        }
+                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                    }
+                                } finally {
+                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_23, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return tuples;
+            }
+        }
+    }
+
+    /**
+     * workaround for bug 11821.
+     */
+    @LispMethod(comment = "workaround for bug 11821.")
     public static SubLObject applicable_template_instance_topics_for_collection_via_index_surfing(final SubLObject coll, final SubLObject mt, final SubLObject query_properties) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject tuples = NIL;
@@ -1273,12 +3921,85 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return tuples;
     }
 
+    public static final SubLObject applicable_template_spec_topics_for_collection_alt(SubLObject coll, SubLObject mt, SubLObject query_properties) {
+        {
+            SubLObject template = $list_alt22;
+            SubLObject query_sentence = listS($$and, listS($const45$meetsSomeGenlsConstraintOfTopicTy, coll, $list_alt26), $list_alt46);
+            return ask_utilities.query_template(template, query_sentence, mt, query_properties);
+        }
+    }
+
     public static SubLObject applicable_template_spec_topics_for_collection(final SubLObject coll, final SubLObject mt, final SubLObject query_properties) {
         final SubLObject template = $list22;
         final SubLObject query_sentence = listS($$and, listS($const46$meetsSomeGenlsConstraintOfTopicTy, coll, $list26), $list47);
         return ask_utilities.query_template(template, query_sentence, mt, query_properties);
     }
 
+    /**
+     * Given TERM, collect up all the templates that could apply via its
+     * isas and genls seen from MT and return these as a LISTP of pairs,
+     * each of the form (TOPIC MT)
+     */
+    @LispMethod(comment = "Given TERM, collect up all the templates that could apply via its\r\nisas and genls seen from MT and return these as a LISTP of pairs,\r\neach of the form (TOPIC MT)\nGiven TERM, collect up all the templates that could apply via its\nisas and genls seen from MT and return these as a LISTP of pairs,\neach of the form (TOPIC MT)")
+    public static final SubLObject applicable_template_topics_for_term_alt(SubLObject v_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject timeP = NIL;
+                SubLObject time = NIL;
+                SubLObject time_var = get_internal_real_time();
+                {
+                    SubLObject problem_store = NIL;
+                    try {
+                        problem_store = inference_datastructures_problem_store.new_problem_store(NIL);
+                        {
+                            SubLObject v_properties = list($PROBLEM_STORE, problem_store);
+                            SubLObject candidate_topic_tuples = com.cyc.cycjava.cycl.formula_template_utilities.candidate_topic_tuples_for_term(v_term, mt, v_properties);
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject filtered_topics = com.cyc.cycjava.cycl.formula_template_utilities.filter_topic_tuples_for_term(v_term, mt, candidate_topic_tuples, v_properties);
+                                SubLObject mt_dictionary = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject cdolist_list_var = filtered_topics;
+                                    SubLObject topic = NIL;
+                                    for (topic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , topic = cdolist_list_var.first()) {
+                                        result = cons(list(topic, dictionary.dictionary_lookup(mt_dictionary, topic, UNPROVIDED)), result);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                inference_datastructures_problem_store.destroy_problem_store(problem_store);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
+                if ((NIL != timeP) && time.numG($float$0_1)) {
+                    Errors.warn($str_alt49$Took__S_seconds_to_determine_indu, time, v_term);
+                }
+                return delete_duplicates(result, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+        }
+    }
+
+    /**
+     * Given TERM, collect up all the templates that could apply via its
+     * isas and genls seen from MT and return these as a LISTP of pairs,
+     * each of the form (TOPIC MT)
+     */
+    @LispMethod(comment = "Given TERM, collect up all the templates that could apply via its\r\nisas and genls seen from MT and return these as a LISTP of pairs,\r\neach of the form (TOPIC MT)\nGiven TERM, collect up all the templates that could apply via its\nisas and genls seen from MT and return these as a LISTP of pairs,\neach of the form (TOPIC MT)")
     public static SubLObject applicable_template_topics_for_term(final SubLObject v_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -1323,12 +4044,416 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return delete_duplicates(result, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject term_has_induced_fet_topicP_alt(SubLObject v_term) {
+        {
+            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.make_induced_topic_type_for_term(v_term);
+            if (NIL != nart_handles.nart_p(topic_type)) {
+                return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.formula_template_utilities.find_valid_fet_topic(topic_type, $$InferencePSC));
+            }
+        }
+        return com.cyc.cycjava.cycl.formula_template_utilities.term_has_induced_fet_topicP_via_index_surfing(v_term);
+    }
+
     public static SubLObject term_has_induced_fet_topicP(final SubLObject v_term) {
         final SubLObject topic_type = make_induced_topic_type_for_term(v_term);
         if (NIL != nart_handles.nart_p(topic_type)) {
             return list_utilities.sublisp_boolean(find_valid_fet_topic(topic_type, $$InferencePSC));
         }
         return term_has_induced_fet_topicP_via_index_surfing(v_term);
+    }
+
+    public static final SubLObject term_has_induced_fet_topicP_via_index_surfing_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        if (NIL == ans) {
+                            {
+                                SubLObject node_var = v_term;
+                                SubLObject deck_type = (false) ? ((SubLObject) ($STACK)) : $QUEUE;
+                                SubLObject recur_deck = deck.create_deck(deck_type);
+                                {
+                                    SubLObject _prev_bind_0_48 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                    try {
+                                        sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                        {
+                                            SubLObject tv_var = $$True_JustificationTruth;
+                                            {
+                                                SubLObject _prev_bind_0_49 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                SubLObject _prev_bind_1_50 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                try {
+                                                    sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                    sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                    if (NIL != tv_var) {
+                                                        if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                            if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                                {
+                                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                    if (pcase_var.eql($ERROR)) {
+                                                                        sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                    } else {
+                                                                        if (pcase_var.eql($CERROR)) {
+                                                                            sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                        } else {
+                                                                            if (pcase_var.eql($WARN)) {
+                                                                                Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                            } else {
+                                                                                Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    {
+                                                        SubLObject _prev_bind_0_51 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_52 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                        SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                        try {
+                                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(v_term, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                {
+                                                                    SubLObject _prev_bind_0_53 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_54 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_2_55 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                    try {
+                                                                        sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                                        sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                        {
+                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
+                                                                            SubLObject rest = NIL;
+                                                                            for (rest = accessible_modules; !((NIL != ans) || (NIL == rest)); rest = rest.rest()) {
+                                                                                {
+                                                                                    SubLObject module_var = rest.first();
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_56 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                        SubLObject _prev_bind_1_57 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                        try {
+                                                                                            sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                            {
+                                                                                                SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                                if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                    {
+                                                                                                        SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                        if (NIL != d_link) {
+                                                                                                            {
+                                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                if (NIL != mt_links) {
+                                                                                                                    {
+                                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                        while (!((NIL != ans) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            {
+                                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_58 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                            {
+                                                                                                                                                SubLObject iteration_state_59 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                while (!((NIL != ans) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_59)))) {
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_59);
+                                                                                                                                                        SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_60 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                        SubLObject rest_61 = NIL;
+                                                                                                                                                                        for (rest_61 = new_list; !((NIL != ans) || (NIL == rest_61)); rest_61 = rest_61.rest()) {
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject node_vars_link_node = rest_61.first();
+                                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                    deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } finally {
+                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_60, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                        iteration_state_59 = dictionary_contents.do_dictionary_contents_next(iteration_state_59);
+                                                                                                                                                    }
+                                                                                                                                                } 
+                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_59);
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_58, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                            }
+                                                                                                                        } 
+                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                        }
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                        {
+                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                            SubLObject rest_62 = NIL;
+                                                                                                            for (rest_62 = new_list; !((NIL != ans) || (NIL == rest_62)); rest_62 = rest_62.rest()) {
+                                                                                                                {
+                                                                                                                    SubLObject generating_fn = rest_62.first();
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_63 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                            {
+                                                                                                                                SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                SubLObject new_list_64 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                SubLObject rest_65 = NIL;
+                                                                                                                                for (rest_65 = new_list_64; !((NIL != ans) || (NIL == rest_65)); rest_65 = rest_65.rest()) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject node_vars_link_node = rest_65.first();
+                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_63, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_57, thread);
+                                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_56, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        node_var = deck.deck_pop(recur_deck);
+                                                                        {
+                                                                            SubLObject _prev_bind_0_66 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1_67 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_2_68 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                            try {
+                                                                                sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_search_vars.get_sbhl_search_module()), thread);
+                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                                                                                while ((NIL != node_var) && (NIL == ans)) {
+                                                                                    {
+                                                                                        SubLObject v_isa = node_var;
+                                                                                        ans = com.cyc.cycjava.cycl.formula_template_utilities.collection_has_induced_fet_topicP(v_isa);
+                                                                                    }
+                                                                                    {
+                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                        SubLObject rest = NIL;
+                                                                                        for (rest = accessible_modules; !((NIL != ans) || (NIL == rest)); rest = rest.rest()) {
+                                                                                            {
+                                                                                                SubLObject module_var = rest.first();
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_69 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_1_70 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                        {
+                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                {
+                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                    if (NIL != d_link) {
+                                                                                                                        {
+                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                            if (NIL != mt_links) {
+                                                                                                                                {
+                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                    while (!((NIL != ans) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state)))) {
+                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                        {
+                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_71 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject iteration_state_72 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                            while (!((NIL != ans) || (NIL != dictionary_contents.do_dictionary_contents_doneP(iteration_state_72)))) {
+                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_72);
+                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject _prev_bind_0_73 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                            try {
+                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                    SubLObject rest_74 = NIL;
+                                                                                                                                                                                    for (rest_74 = new_list; !((NIL != ans) || (NIL == rest_74)); rest_74 = rest_74.rest()) {
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject node_vars_link_node = rest_74.first();
+                                                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            } finally {
+                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_73, thread);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                    iteration_state_72 = dictionary_contents.do_dictionary_contents_next(iteration_state_72);
+                                                                                                                                                                }
+                                                                                                                                                            } 
+                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_72);
+                                                                                                                                                        }
+                                                                                                                                                    } finally {
+                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_71, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                        }
+                                                                                                                                    } 
+                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } else {
+                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                    {
+                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                        SubLObject rest_75 = NIL;
+                                                                                                                        for (rest_75 = new_list; !((NIL != ans) || (NIL == rest_75)); rest_75 = rest_75.rest()) {
+                                                                                                                            {
+                                                                                                                                SubLObject generating_fn = rest_75.first();
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_76 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                        {
+                                                                                                                                            SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                            SubLObject new_list_77 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                            SubLObject rest_78 = NIL;
+                                                                                                                                            for (rest_78 = new_list_77; !((NIL != ans) || (NIL == rest_78)); rest_78 = rest_78.rest()) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject node_vars_link_node = rest_78.first();
+                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_76, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_70, thread);
+                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_69, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    node_var = deck.deck_pop(recur_deck);
+                                                                                } 
+                                                                            } finally {
+                                                                                sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_2_68, thread);
+                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_67, thread);
+                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_66, thread);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_55, thread);
+                                                                        sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_54, thread);
+                                                                        sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_53, thread);
+                                                                    }
+                                                                }
+                                                            } else {
+                                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, v_term, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                            }
+                                                        } finally {
+                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_52, thread);
+                                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_51, thread);
+                                                        }
+                                                    }
+                                                } finally {
+                                                    sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_50, thread);
+                                                    sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_49, thread);
+                                                }
+                                            }
+                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_48, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ans;
+            }
+        }
     }
 
     public static SubLObject term_has_induced_fet_topicP_via_index_surfing(final SubLObject v_term) {
@@ -1764,6 +4889,85 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return ans;
     }
 
+    public static final SubLObject collection_has_induced_fet_topicP_alt(SubLObject collection) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject pred_var = $$relationAllInstance;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(collection, TWO_INTEGER, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(collection, TWO_INTEGER, pred_var);
+                                    SubLObject done_var = ans;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                        {
+                                                            SubLObject done_var_79 = ans;
+                                                            SubLObject token_var_80 = NIL;
+                                                            while (NIL == done_var_79) {
+                                                                {
+                                                                    SubLObject rai_gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_80);
+                                                                    SubLObject valid_81 = makeBoolean(token_var_80 != rai_gaf);
+                                                                    if (NIL != valid_81) {
+                                                                        if (assertions_high.gaf_arg1(rai_gaf).eql($$meetsSomeConstraintOfTopicType)) {
+                                                                            {
+                                                                                SubLObject topic = assertions_high.gaf_arg3(rai_gaf);
+                                                                                if (((NIL != nart_handles.nart_p(topic)) && cycl_utilities.nat_functor(topic).eql($const52$FormulaTemplateInductionTopicType)) && ((NIL != kb_mapping_utilities.some_pred_value(topic, $$formulaTemplateHasType, TWO_INTEGER, UNPROVIDED)) || (NIL != kb_mapping_utilities.some_pred_value(topic, $$isa, TWO_INTEGER, UNPROVIDED)))) {
+                                                                                    ans = T;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var_79 = makeBoolean((NIL == valid_81) || (NIL != ans));
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0_82 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_82, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean((NIL == valid) || (NIL != ans));
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ans;
+            }
+        }
+    }
+
     public static SubLObject collection_has_induced_fet_topicP(final SubLObject collection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -1821,6 +5025,25 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return ans;
     }
 
+    public static final SubLObject term_has_induced_fet_topicP_via_inference_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject assume_templates_reifiedP = $assume_induced_fet_templates_already_reifiedP$.getDynamicValue(thread);
+                SubLObject conjuncts = bq_cons(listS($$meetsSomeConstraintOfTopicType, v_term, $list_alt26), $list_alt54);
+                if (NIL != assume_templates_reifiedP) {
+                    conjuncts = cons(make_existential($sym55$_TEMPLATE, $list_alt56), conjuncts);
+                }
+                {
+                    SubLObject conjunction = make_conjunction(conjuncts);
+                    SubLObject existential = make_existential($sym57$_TOPIC_TYPE, make_existential($sym11$_TOPIC, conjunction));
+                    SubLObject v_properties = $list_alt58;
+                    return cyc_kernel.closed_query_success_result_p(inference_kernel.new_cyc_query(existential, $$InferencePSC, v_properties));
+                }
+            }
+        }
+    }
+
     public static SubLObject term_has_induced_fet_topicP_via_inference(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject assume_templates_reifiedP = $assume_induced_fet_templates_already_reifiedP$.getDynamicValue(thread);
@@ -1834,6 +5057,19 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return cyc_kernel.closed_query_success_result_p(inference_kernel.new_cyc_query(existential, $$InferencePSC, v_properties));
     }
 
+    public static final SubLObject candidate_topic_tuples_for_term_alt(SubLObject v_term, SubLObject mt, SubLObject query_properties) {
+        if (query_properties == UNPROVIDED) {
+            query_properties = NIL;
+        }
+        query_properties = putf(query_properties, $ANSWER_LANGUAGE, $HL);
+        query_properties = putf(query_properties, $INTERMEDIATE_STEP_VALIDATION_LEVEL, $NONE);
+        {
+            SubLObject template = $list_alt59;
+            SubLObject query_sentence = listS($$and, listS($$meetsSomeConstraintOfTopicType, v_term, $list_alt26), $list_alt60);
+            return ask_utilities.query_template(template, query_sentence, mt, query_properties);
+        }
+    }
+
     public static SubLObject candidate_topic_tuples_for_term(final SubLObject v_term, final SubLObject mt, SubLObject query_properties) {
         if (query_properties == UNPROVIDED) {
             query_properties = NIL;
@@ -1843,6 +5079,61 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         final SubLObject template = $list60;
         final SubLObject query_sentence = listS($$and, listS($$meetsSomeConstraintOfTopicType, v_term, $list26), $list61);
         return ask_utilities.query_template(template, query_sentence, mt, query_properties);
+    }
+
+    public static final SubLObject filter_topic_tuples_for_term_alt(SubLObject v_term, SubLObject mt, SubLObject candidate_topic_tuples, SubLObject query_properties) {
+        if (query_properties == UNPROVIDED) {
+            query_properties = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_dictionary = dictionary_utilities.add_tuple_list_to_dictionary(candidate_topic_tuples, UNPROVIDED);
+                SubLObject filtered_topics = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject term_isas = isa.all_isa(v_term, UNPROVIDED, UNPROVIDED);
+                            SubLObject term_genls = genls.all_genls(v_term, UNPROVIDED, UNPROVIDED);
+                            SubLObject cdolist_list_var = candidate_topic_tuples;
+                            SubLObject candidate_topic_tuple = NIL;
+                            for (candidate_topic_tuple = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate_topic_tuple = cdolist_list_var.first()) {
+                                {
+                                    SubLObject topic = candidate_topic_tuple.first();
+                                    SubLObject isas_for_topic = ask_utilities.query_variable($sym61$_WHAT, list($$templateTypeForFocalTermType, $sym61$_WHAT, topic), mt, query_properties);
+                                    SubLObject genls_for_topic_tuple = ask_utilities.query_template($list_alt63, list($$ist_Asserted, $sym65$_WHERE, listS($$templateTopicGenls, topic, $list_alt67)), mt, query_properties);
+                                    SubLObject genls_for_topic = Mapping.mapcar(symbol_function(FIRST), genls_for_topic_tuple);
+                                    dictionary_utilities.add_tuple_list_to_dictionary(genls_for_topic_tuple, mt_dictionary);
+                                    if (NIL != genls.all_genl_of_someP(term_isas, isas_for_topic, UNPROVIDED, UNPROVIDED)) {
+                                        if (NIL == disjoint_with.any_disjoint_withP(isas_for_topic, term_isas, UNPROVIDED, UNPROVIDED)) {
+                                            if (NIL != genls.all_genl_of_someP(term_genls, genls_for_topic, UNPROVIDED, UNPROVIDED)) {
+                                                if (NIL == disjoint_with.any_disjoint_withP(genls_for_topic, term_genls, UNPROVIDED, UNPROVIDED)) {
+                                                    if ((NIL == forts.fort_p(topic)) || (NIL != com.cyc.cycjava.cycl.formula_template_utilities.valid_fet_topic_fortP(topic, mt, T))) {
+                                                        filtered_topics = cons(topic, filtered_topics);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(filtered_topics, mt_dictionary);
+            }
+        }
     }
 
     public static SubLObject filter_topic_tuples_for_term(final SubLObject v_term, final SubLObject mt, final SubLObject candidate_topic_tuples, SubLObject query_properties) {
@@ -1885,6 +5176,52 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return values(filtered_topics, mt_dictionary);
     }
 
+    /**
+     *
+     *
+     * @return FORT-P or NIL; A valid template topic term.
+    Reifies TEMPLATE-TOPIC-TERM if necessary.
+     */
+    @LispMethod(comment = "@return FORT-P or NIL; A valid template topic term.\r\nReifies TEMPLATE-TOPIC-TERM if necessary.")
+    public static final SubLObject find_valid_fet_topic_alt(SubLObject template_topic_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != narts_high.naut_p(template_topic_term)) {
+                {
+                    SubLObject nart = czer_main.cyc_find_or_create_nart(template_topic_term, UNPROVIDED);
+                    SubLObject tou_gaf = czer_meta.find_assertion_cycl(list($$termOfUnit, template_topic_term, template_topic_term), $$BaseKB);
+                    {
+                        SubLObject _prev_bind_0 = api_control_vars.$the_cyclist$.currentBinding(thread);
+                        try {
+                            api_control_vars.$the_cyclist$.bind(NIL != ke.cyclist_is_guest() ? ((SubLObject) ($$Cyc)) : api_control_vars.$the_cyclist$.getDynamicValue(thread), thread);
+                            ke.ke_repropagate_assertion_now(tou_gaf);
+                        } finally {
+                            api_control_vars.$the_cyclist$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    template_topic_term = nart;
+                }
+            }
+            thread.resetMultipleValues();
+            {
+                SubLObject validP = com.cyc.cycjava.cycl.formula_template_utilities.valid_fet_topic_fortP(template_topic_term, mt, UNPROVIDED);
+                SubLObject error_message = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                return values(NIL != validP ? ((SubLObject) (template_topic_term)) : NIL, error_message);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return FORT-P or NIL; A valid template topic term.
+    Reifies TEMPLATE-TOPIC-TERM if necessary.
+     */
+    @LispMethod(comment = "@return FORT-P or NIL; A valid template topic term.\r\nReifies TEMPLATE-TOPIC-TERM if necessary.")
     public static SubLObject find_valid_fet_topic(SubLObject template_topic_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -1909,6 +5246,69 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return values(NIL != validP ? template_topic_term : NIL, error_message);
     }
 
+    /**
+     *
+     *
+     * @return BOOLEANP; Is TEMPLATE-TOPIC-TERM a valid fort for use in the Factivore?
+     * @param CHECK-FOR-INDUCED-TEMPLATES?
+     * 		if non-NIL, passes induction topic terms even if
+     * 		they don't (yet) have any instance templates.
+     */
+    @LispMethod(comment = "@return BOOLEANP; Is TEMPLATE-TOPIC-TERM a valid fort for use in the Factivore?\r\n@param CHECK-FOR-INDUCED-TEMPLATES?\r\n\t\tif non-NIL, passes induction topic terms even if\r\n\t\tthey don\'t (yet) have any instance templates.")
+    public static final SubLObject valid_fet_topic_fortP_alt(SubLObject template_topic_term, SubLObject mt, SubLObject check_for_induced_templatesP) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        if (check_for_induced_templatesP == UNPROVIDED) {
+            check_for_induced_templatesP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject okP = NIL;
+                SubLObject error_message = $str_alt72$;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        if (NIL == forts.fort_p(template_topic_term)) {
+                            error_message = $str_alt73$Can_t_use_a_non_FORT_for_an_FET_t;
+                        } else {
+                            if (NIL == formula_templates.fet_topic_fort_has_subtopicsP(template_topic_term, mt)) {
+                                error_message = $str_alt74$No_subtopics_;
+                            } else {
+                                if (!(((NIL == check_for_induced_templatesP) && (NIL != com.cyc.cycjava.cycl.formula_template_utilities.induction_topic_typeP(template_topic_term))) || (NIL != formula_templates.fet_topic_fort_has_templatesP(template_topic_term, mt)))) {
+                                    error_message = $str_alt75$No_templates_;
+                                } else {
+                                    okP = T;
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(okP, error_message);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return BOOLEANP; Is TEMPLATE-TOPIC-TERM a valid fort for use in the Factivore?
+     * @param CHECK-FOR-INDUCED-TEMPLATES?
+     * 		if non-NIL, passes induction topic terms even if
+     * 		they don't (yet) have any instance templates.
+     */
+    @LispMethod(comment = "@return BOOLEANP; Is TEMPLATE-TOPIC-TERM a valid fort for use in the Factivore?\r\n@param CHECK-FOR-INDUCED-TEMPLATES?\r\n\t\tif non-NIL, passes induction topic terms even if\r\n\t\tthey don\'t (yet) have any instance templates.")
     public static SubLObject valid_fet_topic_fortP(final SubLObject template_topic_term, SubLObject mt, SubLObject check_for_induced_templatesP) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -1948,6 +5348,65 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return values(okP, error_message);
     }
 
+    /**
+     *
+     *
+     * @return BOOLEANP; Is TEMPLATE-SUBTOPIC-TERM a valid fort for use in the Factivore?
+     * @param CHECK-FOR-INDUCED-TEMPLATES?
+     * 		if non-NIL, passes induction subtopic terms even if
+     * 		they don't (yet) have any instance templates.
+     */
+    @LispMethod(comment = "@return BOOLEANP; Is TEMPLATE-SUBTOPIC-TERM a valid fort for use in the Factivore?\r\n@param CHECK-FOR-INDUCED-TEMPLATES?\r\n\t\tif non-NIL, passes induction subtopic terms even if\r\n\t\tthey don\'t (yet) have any instance templates.")
+    public static final SubLObject valid_fet_subtopic_fortP_alt(SubLObject template_subtopic_term, SubLObject mt, SubLObject check_for_induced_templatesP) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        if (check_for_induced_templatesP == UNPROVIDED) {
+            check_for_induced_templatesP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject okP = NIL;
+                SubLObject error_message = $str_alt72$;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        if (NIL == forts.fort_p(template_subtopic_term)) {
+                            error_message = $str_alt76$Can_t_use_a_non_FORT_for_an_FET_s;
+                        } else {
+                            if (!(((NIL == check_for_induced_templatesP) && (NIL != com.cyc.cycjava.cycl.formula_template_utilities.induction_topic_typeP(template_subtopic_term))) || (NIL != formula_templates.fet_topic_fort_has_templatesP(template_subtopic_term, mt)))) {
+                                error_message = $str_alt75$No_templates_;
+                            } else {
+                                okP = T;
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(okP, error_message);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return BOOLEANP; Is TEMPLATE-SUBTOPIC-TERM a valid fort for use in the Factivore?
+     * @param CHECK-FOR-INDUCED-TEMPLATES?
+     * 		if non-NIL, passes induction subtopic terms even if
+     * 		they don't (yet) have any instance templates.
+     */
+    @LispMethod(comment = "@return BOOLEANP; Is TEMPLATE-SUBTOPIC-TERM a valid fort for use in the Factivore?\r\n@param CHECK-FOR-INDUCED-TEMPLATES?\r\n\t\tif non-NIL, passes induction subtopic terms even if\r\n\t\tthey don\'t (yet) have any instance templates.")
     public static SubLObject valid_fet_subtopic_fortP(final SubLObject template_subtopic_term, SubLObject mt, SubLObject check_for_induced_templatesP) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -1983,14 +5442,41 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return values(okP, error_message);
     }
 
+    public static final SubLObject salient_descriptor_fet_fn_alt() {
+        return constants_high.find_constant($$$SalientDescriptorFETFn);
+    }
+
     public static SubLObject salient_descriptor_fet_fn() {
         return constants_high.find_constant($$$SalientDescriptorFETFn);
+    }
+
+    public static final SubLObject make_induced_topic_type_for_term_alt(SubLObject v_term) {
+        return function_terms.naut_to_nart(make_unary_formula(com.cyc.cycjava.cycl.formula_template_utilities.salient_descriptor_fet_fn(), v_term));
     }
 
     public static SubLObject make_induced_topic_type_for_term(final SubLObject v_term) {
         return function_terms.naut_to_nart(make_unary_formula(salient_descriptor_fet_fn(), v_term));
     }
 
+    /**
+     * Figure out what subtopics TOPIC should have, and assert them.
+     */
+    @LispMethod(comment = "Figure out what subtopics TOPIC should have, and assert them.")
+    public static final SubLObject induce_formula_template_subtopics_for_type_alt(SubLObject topic, SubLObject elmt) {
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.formula_template_utilities.induced_formula_template_subtopics_for_type(topic, elmt);
+            SubLObject subtopic = NIL;
+            for (subtopic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subtopic = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.formula_template_utilities.assert_formula_template_type_subtopic(topic, subtopic);
+            }
+        }
+        return topic;
+    }
+
+    /**
+     * Figure out what subtopics TOPIC should have, and assert them.
+     */
+    @LispMethod(comment = "Figure out what subtopics TOPIC should have, and assert them.")
     public static SubLObject induce_formula_template_subtopics_for_type(final SubLObject topic, final SubLObject elmt) {
         SubLObject cdolist_list_var = induced_formula_template_subtopics_for_type(topic, elmt);
         SubLObject subtopic = NIL;
@@ -2001,8 +5487,58 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             subtopic = cdolist_list_var.first();
         } 
         return topic;
+    }/**
+     * Figure out what subtopics TOPIC should have, and assert them.
+     */
+
+
+    /**
+     *
+     *
+     * @return LISTP of EL subtopics appropriate for TOPIC.
+     */
+    @LispMethod(comment = "@return LISTP of EL subtopics appropriate for TOPIC.")
+    public static final SubLObject induced_formula_template_subtopics_for_type_alt(SubLObject topic, SubLObject elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject subtopics = NIL;
+                if (((NIL != com.cyc.cycjava.cycl.formula_template_utilities.induction_topic_typeP(topic)) && (NIL != nart_handles.nart_p(topic))) && (cycl_utilities.nat_functor(topic) == com.cyc.cycjava.cycl.formula_template_utilities.salient_descriptor_fet_fn())) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(elmt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                {
+                                    SubLObject focal_term = cycl_utilities.nat_arg1(topic, UNPROVIDED);
+                                    SubLObject term_isas = append(isa.all_isa(focal_term, UNPROVIDED, UNPROVIDED), Mapping.mapcar(MAKE_SPECS_FN, genls.all_genls(focal_term, UNPROVIDED, UNPROVIDED)));
+                                    SubLObject induceP = T;
+                                    subtopics = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_topic_types(term_isas, elmt, induceP);
+                                }
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                return subtopics;
+            }
+        }
     }
 
+    /**
+     *
+     *
+     * @return LISTP of EL subtopics appropriate for TOPIC.
+     */
+    @LispMethod(comment = "@return LISTP of EL subtopics appropriate for TOPIC.")
     public static SubLObject induced_formula_template_subtopics_for_type(final SubLObject topic, final SubLObject elmt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject subtopics = NIL;
@@ -2026,6 +5562,48 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             }
         }
         return subtopics;
+    }
+
+    public static final SubLObject promising_induction_topic_types_alt(SubLObject term_isas, SubLObject mt, SubLObject induceP) {
+        if (induceP == UNPROVIDED) {
+            induceP = NIL;
+        }
+        {
+            SubLObject promising = NIL;
+            SubLObject problem_store = NIL;
+            try {
+                problem_store = inference_datastructures_problem_store.new_problem_store(NIL);
+                {
+                    SubLObject cdolist_list_var = term_isas;
+                    SubLObject v_isa = NIL;
+                    for (v_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_isa = cdolist_list_var.first()) {
+                        {
+                            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.induction_topic_type_for_collection(v_isa);
+                            if (NIL != forts.fort_p(topic_type)) {
+                                if (NIL != com.cyc.cycjava.cycl.formula_template_utilities.valid_fet_subtopic_fortP(topic_type, mt, NIL)) {
+                                    promising = cons(topic_type, promising);
+                                }
+                            } else {
+                                if ((NIL != induceP) && (NIL != com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_topic_type_collectionP(v_isa, mt, problem_store, UNPROVIDED))) {
+                                    promising = cons(topic_type, promising);
+                                }
+                            }
+                        }
+                    }
+                }
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        inference_datastructures_problem_store.destroy_problem_store(problem_store);
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+            return promising;
+        }
     }
 
     public static SubLObject promising_induction_topic_types(final SubLObject term_isas, final SubLObject mt, SubLObject induceP) {
@@ -2067,8 +5645,47 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return promising;
     }
 
+    public static final SubLObject promising_induction_collection_pred_for_type_alt(SubLObject type) {
+        return type == $ISA ? ((SubLObject) ($const80$promisingSalientDescriptorInducti)) : $const81$promisingSalientDescriptorInducti;
+    }
+
     public static SubLObject promising_induction_collection_pred_for_type(final SubLObject type) {
         return type == $ISA ? $const81$promisingSalientDescriptorInducti : $const82$promisingSalientDescriptorInducti;
+    }
+
+    public static final SubLObject promising_induction_topic_type_collectionP_alt(SubLObject collection, SubLObject mt, SubLObject problem_store, SubLObject type) {
+        if (problem_store == UNPROVIDED) {
+            problem_store = NIL;
+        }
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            SubLObject promising_pred = constants_high.find_constant($str_alt126$promisingSalientDescriptorInducti);
+            if (NIL != promising_pred) {
+                {
+                    SubLObject today = date_utilities.indexical_today();
+                    SubLObject days_ago_limit = $int$90;
+                    SubLObject prior_day = relation_evaluation.cyc_evaluate(list($$DateBeforeFn, today, list($$DaysDuration, days_ago_limit)));
+                    SubLObject okP = NIL;
+                    if (NIL == okP) {
+                        {
+                            SubLObject csome_list_var = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_assertions_for_collection(collection, mt, type);
+                            SubLObject gaf = NIL;
+                            for (gaf = csome_list_var.first(); !((NIL != okP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , gaf = csome_list_var.first()) {
+                                {
+                                    SubLObject gaf_mt = assertions_high.assertion_mt(gaf);
+                                    SubLObject time_index = com.cyc.cycjava.cycl.formula_template_utilities.mt_time_index(gaf_mt);
+                                    okP = makeBoolean((NIL == date_utilities.date_p(time_index)) || (NIL != date_utilities.dateLE(prior_day, date_utilities.cycl_date_final_second(time_index))));
+                                }
+                            }
+                        }
+                    }
+                    return okP;
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject promising_induction_topic_type_collectionP(final SubLObject collection, final SubLObject mt, SubLObject problem_store, SubLObject type) {
@@ -2101,6 +5718,43 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject promising_induction_assertions_for_collection_alt(SubLObject collection, SubLObject mt, SubLObject type) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject assertions = NIL;
+                SubLObject promising_pred = com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_collection_pred_for_type(type);
+                if (NIL != valid_constantP(promising_pred, UNPROVIDED)) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                assertions = kb_mapping.gather_gaf_arg_index(collection, ONE_INTEGER, promising_pred, UNPROVIDED, UNPROVIDED);
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                return assertions;
+            }
+        }
+    }
+
     public static SubLObject promising_induction_assertions_for_collection(final SubLObject collection, SubLObject mt, SubLObject type) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -2130,8 +5784,22 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return assertions;
     }
 
+    public static final SubLObject mt_time_index_alt(SubLObject mt) {
+        return nth_value_step_2(nth_value_step_1(ZERO_INTEGER), hlmt.explode_hlmt_temporal_facets_with_defaults(mt));
+    }
+
     public static SubLObject mt_time_index(final SubLObject mt) {
         return nth_value_step_2(nth_value_step_1(ZERO_INTEGER), hlmt.explode_hlmt_temporal_facets_with_defaults(mt));
+    }
+
+    public static final SubLObject clear_promising_induction_topic_type_collectionP_verify_alt() {
+        {
+            SubLObject cs = $promising_induction_topic_type_collectionP_verify_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject clear_promising_induction_topic_type_collectionP_verify() {
@@ -2140,6 +5808,16 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             memoization_state.caching_state_clear(cs);
         }
         return NIL;
+    }
+
+    public static final SubLObject remove_promising_induction_topic_type_collectionP_verify_alt(SubLObject collection, SubLObject mt, SubLObject type, SubLObject minimum) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        if (minimum == UNPROVIDED) {
+            minimum = THREE_INTEGER;
+        }
+        return memoization_state.caching_state_remove_function_results_with_args($promising_induction_topic_type_collectionP_verify_caching_state$.getGlobalValue(), list(collection, mt, type, minimum), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject remove_promising_induction_topic_type_collectionP_verify(final SubLObject collection, final SubLObject mt, SubLObject type, SubLObject minimum) {
@@ -2152,9 +5830,64 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return memoization_state.caching_state_remove_function_results_with_args($promising_induction_topic_type_collectionP_verify_caching_state$.getGlobalValue(), list(collection, mt, type, minimum), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject promising_induction_topic_type_collectionP_verify_internal_alt(SubLObject collection, SubLObject mt, SubLObject type, SubLObject minimum) {
+        {
+            SubLObject mt_to_use = $$InferencePSC;
+            return rkf_salient_descriptor.rkf_collection_promising_for_binary_pred_inductionP(mt_to_use, collection, type, minimum);
+        }
+    }
+
     public static SubLObject promising_induction_topic_type_collectionP_verify_internal(final SubLObject collection, final SubLObject mt, final SubLObject type, final SubLObject minimum) {
         final SubLObject mt_to_use = $$InferencePSC;
         return rkf_salient_descriptor.rkf_collection_promising_for_binary_pred_inductionP(mt_to_use, collection, type, minimum);
+    }
+
+    public static final SubLObject promising_induction_topic_type_collectionP_verify_alt(SubLObject collection, SubLObject mt, SubLObject type, SubLObject minimum) {
+        if (type == UNPROVIDED) {
+            type = $ISA;
+        }
+        if (minimum == UNPROVIDED) {
+            minimum = THREE_INTEGER;
+        }
+        {
+            SubLObject caching_state = $promising_induction_topic_type_collectionP_verify_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name($sym130$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY, $sym131$_PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY_CACHING_STATE_, NIL, EQ, FOUR_INTEGER, ZERO_INTEGER);
+            }
+            {
+                SubLObject sxhash = memoization_state.sxhash_calc_4(collection, mt, type, minimum);
+                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                if (collisions != $kw132$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    {
+                        SubLObject cdolist_list_var = collisions;
+                        SubLObject collision = NIL;
+                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                            {
+                                SubLObject cached_args = collision.first();
+                                SubLObject results2 = second(collision);
+                                if (collection == cached_args.first()) {
+                                    cached_args = cached_args.rest();
+                                    if (mt == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (type == cached_args.first()) {
+                                            cached_args = cached_args.rest();
+                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && (minimum == cached_args.first())) {
+                                                return memoization_state.caching_results(results2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.formula_template_utilities.promising_induction_topic_type_collectionP_verify_internal(collection, mt, type, minimum)));
+                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(collection, mt, type, minimum));
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject promising_induction_topic_type_collectionP_verify(final SubLObject collection, final SubLObject mt, SubLObject type, SubLObject minimum) {
@@ -2198,14 +5931,71 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject induction_topic_type_for_collection_alt(SubLObject collection) {
+        return narts_high.nart_substitute(make_unary_formula($const52$FormulaTemplateInductionTopicType, collection));
+    }
+
     public static SubLObject induction_topic_type_for_collection(final SubLObject collection) {
         return narts_high.nart_substitute(make_unary_formula($const53$FormulaTemplateInductionTopicType, collection));
+    }
+
+    public static final SubLObject induction_topic_typeP_alt(SubLObject v_object) {
+        return makeBoolean((NIL != forts.fort_p(v_object)) && (NIL != genls.genlP(v_object, $$InducedFormulaTemplate, UNPROVIDED, UNPROVIDED)));
     }
 
     public static SubLObject induction_topic_typeP(final SubLObject v_object) {
         return makeBoolean((NIL != forts.fort_p(v_object)) && (NIL != genls.genlP(v_object, $$InducedFormulaTemplate, UNPROVIDED, UNPROVIDED)));
     }
 
+    /**
+     *
+     *
+     * @return LISTP of FORT-P.
+     */
+    @LispMethod(comment = "@return LISTP of FORT-P.")
+    public static final SubLObject induced_formula_template_forts_for_focal_term_type_alt(SubLObject focal_term_type, SubLObject elmt, SubLObject topic_id) {
+        if (topic_id == UNPROVIDED) {
+            topic_id = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == forts.fort_p(topic_id)) {
+                topic_id = com.cyc.cycjava.cycl.formula_template_utilities.induction_topic_type_for_collection(focal_term_type);
+                if (NIL != possibly_naut_p(topic_id)) {
+                    topic_id = czer_main.cyc_find_or_create_nart(topic_id, UNPROVIDED);
+                }
+            }
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = rkf_salient_descriptor.$rkf_salient_descriptor_transformation_cutoff$.currentBinding(thread);
+                    try {
+                        rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.bind(NIL, thread);
+                        rkf_salient_descriptor.$rkf_salient_descriptor_transformation_cutoff$.bind(ZERO_INTEGER, thread);
+                        {
+                            SubLObject cdolist_list_var = rkf_salient_descriptor_prompter.rkf_induced_salient_descriptor_prompts_for_focal_term_type(focal_term_type, elmt);
+                            SubLObject prompt = NIL;
+                            for (prompt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , prompt = cdolist_list_var.first()) {
+                                ans = cons(rkf_salient_descriptor_prompter.formula_template_fort_for_rkf_salient_descriptor_prompt(prompt, topic_id), ans);
+                            }
+                        }
+                    } finally {
+                        rkf_salient_descriptor.$rkf_salient_descriptor_transformation_cutoff$.rebind(_prev_bind_1, thread);
+                        rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(ans);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of FORT-P.
+     */
+    @LispMethod(comment = "@return LISTP of FORT-P.")
     public static SubLObject induced_formula_template_forts_for_focal_term_type(final SubLObject focal_term_type, final SubLObject elmt, SubLObject topic_id) {
         if (topic_id == UNPROVIDED) {
             topic_id = NIL;
@@ -2238,6 +6028,52 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return nreverse(ans);
     }
 
+    /**
+     *
+     *
+     * @return LISTP of FORT-P.
+     */
+    @LispMethod(comment = "@return LISTP of FORT-P.")
+    public static final SubLObject rkf_salient_descriptor_formula_template_forts_for_focal_term_type_alt(SubLObject focal_term_type, SubLObject elmt, SubLObject topic_id) {
+        if (topic_id == UNPROVIDED) {
+            topic_id = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == forts.fort_p(topic_id)) {
+                topic_id = com.cyc.cycjava.cycl.formula_template_utilities.rkf_salient_descriptor_topic_type_for_collection(focal_term_type);
+                if (NIL != possibly_naut_p(topic_id)) {
+                    topic_id = czer_main.cyc_find_or_create_nart(topic_id, UNPROVIDED);
+                }
+            }
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.currentBinding(thread);
+                    try {
+                        rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.bind(NIL, thread);
+                        {
+                            SubLObject cdolist_list_var = rkf_salient_descriptor_prompter.rkf_salient_descriptor_prompts_for_focal_term_type(focal_term_type, elmt);
+                            SubLObject prompt = NIL;
+                            for (prompt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , prompt = cdolist_list_var.first()) {
+                                ans = cons(rkf_salient_descriptor_prompter.formula_template_fort_for_rkf_salient_descriptor_prompt(prompt, topic_id), ans);
+                            }
+                        }
+                    } finally {
+                        rkf_salient_descriptor.$rkf_salient_descriptor_number_cutoff$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(ans);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of FORT-P.
+     */
+    @LispMethod(comment = "@return LISTP of FORT-P.")
     public static SubLObject rkf_salient_descriptor_formula_template_forts_for_focal_term_type(final SubLObject focal_term_type, final SubLObject elmt, SubLObject topic_id) {
         if (topic_id == UNPROVIDED) {
             topic_id = NIL;
@@ -2267,22 +6103,73 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return nreverse(ans);
     }
 
+    public static final SubLObject rkf_salient_descriptor_topic_type_for_collection_alt(SubLObject collection) {
+        return narts_high.nart_substitute(make_unary_formula($$SalientDescriptorFETForTypeFn, collection));
+    }
+
     public static SubLObject rkf_salient_descriptor_topic_type_for_collection(final SubLObject collection) {
         return narts_high.nart_substitute(make_unary_formula($$SalientDescriptorFETForTypeFn, collection));
     }
 
+    /**
+     *
+     *
+     * @return Cyc term or NIL.
+     */
+    @LispMethod(comment = "@return Cyc term or NIL.")
+    public static final SubLObject focal_term_type_for_topic_type_alt(SubLObject topic_type, SubLObject elmt) {
+        if (elmt == UNPROVIDED) {
+            elmt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        SubLTrampolineFile.checkType(topic_type, EL_FORT_P);
+        {
+            SubLObject v_properties = list($ANSWER_LANGUAGE, $HL, $MAX_NUMBER, ONE_INTEGER);
+            SubLObject focal_term_type = ask_utilities.query_variable($sym138$_COLLECTION, list($$templateTypeForFocalTermType, $sym138$_COLLECTION, topic_type), elmt, v_properties).first();
+            return focal_term_type;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return Cyc term or NIL.
+     */
+    @LispMethod(comment = "@return Cyc term or NIL.")
     public static SubLObject focal_term_type_for_topic_type(final SubLObject topic_type, SubLObject elmt) {
         if (elmt == UNPROVIDED) {
             elmt = mt_relevance_macros.$mt$.getDynamicValue();
         }
-        assert NIL != term.el_fort_p(topic_type) : "term.el_fort_p(topic_type) " + "CommonSymbols.NIL != term.el_fort_p(topic_type) " + topic_type;
+        assert NIL != term.el_fort_p(topic_type) : "! term.el_fort_p(topic_type) " + ("term.el_fort_p(topic_type) " + "CommonSymbols.NIL != term.el_fort_p(topic_type) ") + topic_type;
         final SubLObject v_properties = list($ANSWER_LANGUAGE, $HL, $MAX_NUMBER, ONE_INTEGER);
         final SubLObject focal_term_type = ask_utilities.query_variable($sym94$_COLLECTION, list($$templateTypeForFocalTermType, $sym94$_COLLECTION, topic_type), elmt, v_properties).first();
         return focal_term_type;
     }
 
+    /**
+     *
+     *
+     * @return Cyc term or NIL.
+     */
+    @LispMethod(comment = "@return Cyc term or NIL.")
+    public static final SubLObject focal_term_type_for_induced_template_type_alt(SubLObject template_type, SubLObject elmt) {
+        SubLTrampolineFile.checkType(template_type, EL_FORT_P);
+        {
+            SubLObject new_pred = constants_high.find_constant($str_alt139$focalTermTypeForInducedTemplateTy);
+            SubLObject pred = (NIL != new_pred) ? ((SubLObject) (new_pred)) : $$templateTypeForFocalTermType;
+            SubLObject v_properties = list($ANSWER_LANGUAGE, $HL, $MAX_NUMBER, ONE_INTEGER);
+            SubLObject focal_term_type = ask_utilities.query_variable($sym138$_COLLECTION, list(pred, $sym138$_COLLECTION, template_type), elmt, v_properties).first();
+            return focal_term_type;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return Cyc term or NIL.
+     */
+    @LispMethod(comment = "@return Cyc term or NIL.")
     public static SubLObject focal_term_type_for_induced_template_type(final SubLObject template_type, final SubLObject elmt) {
-        assert NIL != term.el_fort_p(template_type) : "term.el_fort_p(template_type) " + "CommonSymbols.NIL != term.el_fort_p(template_type) " + template_type;
+        assert NIL != term.el_fort_p(template_type) : "! term.el_fort_p(template_type) " + ("term.el_fort_p(template_type) " + "CommonSymbols.NIL != term.el_fort_p(template_type) ") + template_type;
         final SubLObject new_pred = constants_high.find_constant($str95$focalTermTypeForInducedTemplateTy);
         final SubLObject pred = (NIL != new_pred) ? new_pred : $$templateTypeForFocalTermType;
         final SubLObject v_properties = list($ANSWER_LANGUAGE, $HL, $MAX_NUMBER, ONE_INTEGER);
@@ -2290,6 +6177,29 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return focal_term_type;
     }
 
+    /**
+     * Given a term, collect up all the templates that could apply via its
+     * isas and genls seen from mt and return these as a LISTP of the form
+     * (TOPIC MT COLLECTION)
+     */
+    @LispMethod(comment = "Given a term, collect up all the templates that could apply via its\r\nisas and genls seen from mt and return these as a LISTP of the form\r\n(TOPIC MT COLLECTION)\nGiven a term, collect up all the templates that could apply via its\nisas and genls seen from mt and return these as a LISTP of the form\n(TOPIC MT COLLECTION)")
+    public static final SubLObject applicable_template_topics_by_types_alt(SubLObject v_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $$InferencePSC;
+        }
+        {
+            SubLObject collection_var = $sym14$_COL;
+            SubLObject mt_var = $sym140$_MT;
+            SubLObject topic_var = $sym11$_TOPIC;
+            SubLObject tvi_query_sentence = com.cyc.cycjava.cycl.formula_template_utilities.topics_via_isa_query_sentence(v_term, mt_var, topic_var, collection_var);
+            SubLObject topics_via_isas = ask_utilities.query_template(list(topic_var, mt_var, collection_var), tvi_query_sentence, mt, UNPROVIDED);
+            SubLObject tvg_query_sentence = com.cyc.cycjava.cycl.formula_template_utilities.topics_via_genls_query_sentence(v_term, mt_var, topic_var, collection_var);
+            SubLObject topics_via_genls = (NIL != fort_types_interface.collectionP(v_term)) ? ((SubLObject) (ask_utilities.query_template(list(topic_var, mt_var, collection_var), tvg_query_sentence, mt, UNPROVIDED))) : NIL;
+            return list(list($$isa, topics_via_isas), list($$genls, topics_via_genls));
+        }
+    }
+
+    @LispMethod(comment = "Given a term, collect up all the templates that could apply via its\r\nisas and genls seen from mt and return these as a LISTP of the form\r\n(TOPIC MT COLLECTION)\nGiven a term, collect up all the templates that could apply via its\nisas and genls seen from mt and return these as a LISTP of the form\n(TOPIC MT COLLECTION)")
     public static SubLObject applicable_template_topics_by_types(final SubLObject v_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = $$InferencePSC;
@@ -2302,6 +6212,24 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         final SubLObject tvg_query_sentence = topics_via_genls_query_sentence(v_term, mt_var, topic_var, collection_var);
         final SubLObject topics_via_genls = (NIL != fort_types_interface.collectionP(v_term)) ? ask_utilities.query_template(list(topic_var, mt_var, collection_var), tvg_query_sentence, mt, UNPROVIDED) : NIL;
         return list(list($$isa, topics_via_isas), list($$genls, topics_via_genls));
+    }/**
+     * Given a term, collect up all the templates that could apply via its
+     * isas and genls seen from mt and return these as a LISTP of the form
+     * (TOPIC MT COLLECTION)
+     */
+
+
+    public static final SubLObject topics_via_isa_query_sentence_alt(SubLObject v_term, SubLObject mt_var, SubLObject topic_var, SubLObject collection_var) {
+        if (mt_var == UNPROVIDED) {
+            mt_var = $sym140$_MT;
+        }
+        if (topic_var == UNPROVIDED) {
+            topic_var = $sym11$_TOPIC;
+        }
+        if (collection_var == UNPROVIDED) {
+            collection_var = $sym14$_COL;
+        }
+        return list($$and, list($$isa, v_term, collection_var), list($$ist_Asserted, mt_var, list($$templateTypeForFocalTermType, collection_var, topic_var)));
     }
 
     public static SubLObject topics_via_isa_query_sentence(final SubLObject v_term, SubLObject mt_var, SubLObject topic_var, SubLObject collection_var) {
@@ -2317,6 +6245,19 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return list($$and, list($$isa, v_term, collection_var), list($$ist_Asserted, mt_var, list($$templateTypeForFocalTermType, collection_var, topic_var)));
     }
 
+    public static final SubLObject topics_via_genls_query_sentence_alt(SubLObject v_term, SubLObject mt_var, SubLObject topic_var, SubLObject collection_var) {
+        if (mt_var == UNPROVIDED) {
+            mt_var = $sym140$_MT;
+        }
+        if (topic_var == UNPROVIDED) {
+            topic_var = $sym11$_TOPIC;
+        }
+        if (collection_var == UNPROVIDED) {
+            collection_var = $sym14$_COL;
+        }
+        return list($$and, list($$genls, v_term, collection_var), list($$ist_Asserted, mt_var, list($$templateTopicGenls, topic_var, collection_var)));
+    }
+
     public static SubLObject topics_via_genls_query_sentence(final SubLObject v_term, SubLObject mt_var, SubLObject topic_var, SubLObject collection_var) {
         if (mt_var == UNPROVIDED) {
             mt_var = $sym96$_MT;
@@ -2328,6 +6269,30 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             collection_var = $sym14$_COL;
         }
         return list($$and, list($$genls, v_term, collection_var), list($$ist_Asserted, mt_var, list($$templateTopicGenls, topic_var, collection_var)));
+    }
+
+    public static final SubLObject suggest_template_topic_for_term_alt(SubLObject v_term, SubLObject term_definition_mt, SubLObject template_mt) {
+        if (template_mt == UNPROVIDED) {
+            template_mt = NIL;
+        }
+        if (NIL == template_mt) {
+            template_mt = term_definition_mt;
+        }
+        {
+            SubLObject types = ask_utilities.ask_variable($TOPICS, list($$and, listS($$ist, template_mt, $list_alt143), list($$ist, term_definition_mt, listS($$isa, v_term, $list_alt144))), term_definition_mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject scanned_types = NIL;
+            SubLObject cdolist_list_var = types;
+            SubLObject type = NIL;
+            for (type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , type = cdolist_list_var.first()) {
+                if (NIL != narts_high.naut_p(type)) {
+                    type = narts_high.find_nart(type);
+                }
+                if (NIL != forts.fort_p(type)) {
+                    scanned_types = cons(type, scanned_types);
+                }
+            }
+            return Sort.sort(scanned_types, symbol_function($sym145$TERM__), UNPROVIDED);
+        }
     }
 
     public static SubLObject suggest_template_topic_for_term(final SubLObject v_term, final SubLObject term_definition_mt, SubLObject template_mt) {
@@ -2353,6 +6318,33 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             type = cdolist_list_var.first();
         } 
         return Sort.sort(scanned_types, symbol_function($sym101$TERM__), UNPROVIDED);
+    }
+
+    public static final SubLObject suggest_template_topic_for_collection_alt(SubLObject collection, SubLObject collection_definition_mt, SubLObject template_mt) {
+        if (template_mt == UNPROVIDED) {
+            template_mt = NIL;
+        }
+        if (NIL == template_mt) {
+            template_mt = collection_definition_mt;
+        }
+        if (NIL == fort_types_interface.collectionP(collection)) {
+            return NIL;
+        }
+        {
+            SubLObject types = ask_utilities.ask_variable($TOPICS, list($$and, listS($$ist, template_mt, $list_alt146), list($$ist, collection_definition_mt, listS($$genls, collection, $list_alt144))), collection_definition_mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject scanned_types = NIL;
+            SubLObject cdolist_list_var = types;
+            SubLObject type = NIL;
+            for (type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , type = cdolist_list_var.first()) {
+                if (NIL != narts_high.naut_p(type)) {
+                    type = narts_high.find_nart(type);
+                }
+                if (NIL != forts.fort_p(type)) {
+                    scanned_types = cons(type, scanned_types);
+                }
+            }
+            return Sort.sort(scanned_types, symbol_function($sym145$TERM__), UNPROVIDED);
+        }
     }
 
     public static SubLObject suggest_template_topic_for_collection(final SubLObject collection, final SubLObject collection_definition_mt, SubLObject template_mt) {
@@ -2383,8 +6375,98 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return Sort.sort(scanned_types, symbol_function($sym101$TERM__), UNPROVIDED);
     }
 
+    public static final SubLObject formula_template_topic_type_from_topic_alt(SubLObject parent_topic, SubLObject elmt) {
+        return ask_utilities.ask_variable($TOPIC_TYPE, list($$and, $list_alt148, listS($$genls, parent_topic, $list_alt149)), elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
+    }
+
     public static SubLObject formula_template_topic_type_from_topic(final SubLObject parent_topic, final SubLObject elmt) {
         return ask_utilities.ask_variable($TOPIC_TYPE, list($$and, $list104, listS($$genls, parent_topic, $list105)), elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED).first();
+    }
+
+    public static final SubLObject formula_template_prototype_from_el_formula_alt(SubLObject name, SubLObject parent_topic, SubLObject el_formula, SubLObject focal_argpos, SubLObject editable_positions, SubLObject validation_positions, SubLObject replacement_invisible_positions, SubLObject elmt) {
+        if (focal_argpos == UNPROVIDED) {
+            focal_argpos = ONE_INTEGER;
+        }
+        if (editable_positions == UNPROVIDED) {
+            editable_positions = NIL;
+        }
+        if (validation_positions == UNPROVIDED) {
+            validation_positions = NIL;
+        }
+        if (replacement_invisible_positions == UNPROVIDED) {
+            replacement_invisible_positions = NIL;
+        }
+        if (elmt == UNPROVIDED) {
+            elmt = NIL;
+        }
+        {
+            SubLObject formula_template = com.cyc.cycjava.cycl.formula_template_utilities.create_formula_template_from_name_and_topic(name, parent_topic);
+            SubLObject assertion_formula = copy_formula(el_formula);
+            SubLObject predicate = cycl_utilities.formula_operator(assertion_formula);
+            SubLObject argpos_details = NIL;
+            SubLObject single_entryP = NIL;
+            if (NIL == editable_positions) {
+                {
+                    SubLObject cdotimes_end_var = length(el_formula);
+                    SubLObject i = NIL;
+                    for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                        editable_positions = cons(i, editable_positions);
+                    }
+                }
+                editable_positions = nreverse(editable_positions);
+            }
+            formula_templates._csetf_formula_template_elmt(formula_template, elmt);
+            {
+                SubLObject argpos_fn = make_unary_formula($$FormulaArgPositionFn, focal_argpos);
+                SubLObject argpos_detail = formula_templates.get_ftemplate_arg_position_details(formula_template, argpos_fn);
+                SubLObject arg_isa = com.cyc.cycjava.cycl.formula_template_utilities.template_type_for_focal_term_type(parent_topic, $$EverythingPSC);
+                SubLObject new_term = NIL;
+                if (NIL == arg_isa) {
+                    arg_isa = lexification_utilities.most_specific_argn_constraint(predicate, focal_argpos);
+                }
+                new_term = make_unary_formula($$SomeExampleFn, arg_isa);
+                cycl_utilities.formula_arg_position_nsubst(new_term, argpos_fn.rest(), assertion_formula);
+                formula_templates._csetf_arg_position_details_ordering(argpos_detail, $most_positive_fixnum$.getGlobalValue());
+                formula_templates._csetf_formula_template_focal_term(formula_template, argpos_detail);
+                argpos_details = cons(argpos_detail, argpos_details);
+            }
+            {
+                SubLObject ordering = ZERO_INTEGER;
+                SubLObject cdotimes_end_var = arity.arity(predicate);
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                    {
+                        SubLObject argpos = add(i, ONE_INTEGER);
+                        if (NIL != subl_promotions.memberP(argpos, editable_positions, UNPROVIDED, UNPROVIDED)) {
+                            ordering = add(ordering, ONE_INTEGER);
+                            {
+                                SubLObject argpos_fn = make_unary_formula($$FormulaArgPositionFn, argpos);
+                                SubLObject argpos_detail = formula_templates.get_ftemplate_arg_position_details(formula_template, argpos_fn);
+                                formula_templates._csetf_arg_position_details_ordering(argpos_detail, ordering);
+                                formula_templates._csetf_arg_position_details_is_editable(argpos_detail, T);
+                                formula_templates._csetf_arg_position_details_invisible_replacement_positions(argpos_detail, subl_promotions.memberP(argpos, replacement_invisible_positions, UNPROVIDED, UNPROVIDED));
+                                formula_templates._csetf_arg_position_details_requires_validation(argpos_detail, subl_promotions.memberP(argpos, validation_positions, UNPROVIDED, UNPROVIDED));
+                                if (NIL == single_entryP) {
+                                    if (NIL != kb_accessors.arg_n_single_entry_formatP(predicate, argpos, elmt)) {
+                                        single_entryP = T;
+                                    }
+                                }
+                                {
+                                    SubLObject arg_isa = lexification_utilities.most_specific_argn_constraint(predicate, argpos);
+                                    SubLObject new_term = make_unary_formula($$SomeExampleFn, arg_isa);
+                                    cycl_utilities.formula_arg_position_nsubst(new_term, argpos_fn.rest(), assertion_formula);
+                                }
+                                argpos_details = cons(argpos_detail, argpos_details);
+                            }
+                        }
+                    }
+                }
+            }
+            formula_templates._csetf_formula_template_formula(formula_template, assertion_formula);
+            formula_templates._csetf_formula_template_argpos_ordering(formula_template, formula_templates.sort_argpos_details_by_ordering(argpos_details));
+            formula_templates._csetf_formula_template_entry_format(formula_template, NIL != single_entryP ? ((SubLObject) ($$SingleAssertionEntry)) : $$MultipleAssertionEntry);
+            return formula_template;
+        }
     }
 
     public static SubLObject formula_template_prototype_from_el_formula(final SubLObject name, final SubLObject parent_topic, final SubLObject el_formula, SubLObject focal_argpos, SubLObject editable_positions, SubLObject validation_positions, SubLObject replacement_invisible_positions, SubLObject elmt) {
@@ -2462,6 +6544,22 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return formula_template;
     }
 
+    public static final SubLObject formula_template_prototype_from_assertion_alt(SubLObject name, SubLObject parent_topic, SubLObject base_assertion, SubLObject focal_argpos, SubLObject editable_positions, SubLObject validation_positions, SubLObject replacement_invisible_positions) {
+        if (focal_argpos == UNPROVIDED) {
+            focal_argpos = ONE_INTEGER;
+        }
+        if (editable_positions == UNPROVIDED) {
+            editable_positions = NIL;
+        }
+        if (validation_positions == UNPROVIDED) {
+            validation_positions = NIL;
+        }
+        if (replacement_invisible_positions == UNPROVIDED) {
+            replacement_invisible_positions = NIL;
+        }
+        return com.cyc.cycjava.cycl.formula_template_utilities.formula_template_prototype_from_el_formula(name, parent_topic, uncanonicalizer.assertion_el_formula(base_assertion), focal_argpos, editable_positions, validation_positions, replacement_invisible_positions, assertions_high.assertion_mt(base_assertion));
+    }
+
     public static SubLObject formula_template_prototype_from_assertion(final SubLObject name, final SubLObject parent_topic, final SubLObject base_assertion, SubLObject focal_argpos, SubLObject editable_positions, SubLObject validation_positions, SubLObject replacement_invisible_positions) {
         if (focal_argpos == UNPROVIDED) {
             focal_argpos = ONE_INTEGER;
@@ -2478,21 +6576,54 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return formula_template_prototype_from_el_formula(name, parent_topic, uncanonicalizer.assertion_el_formula(base_assertion), focal_argpos, editable_positions, validation_positions, replacement_invisible_positions, assertions_high.assertion_mt(base_assertion));
     }
 
+    public static final SubLObject template_type_for_focal_term_type_alt(SubLObject topic, SubLObject elmt) {
+        return com.cyc.cycjava.cycl.formula_template_utilities.template_type_for_focal_term_types(topic, elmt).first();
+    }
+
     public static SubLObject template_type_for_focal_term_type(final SubLObject topic, final SubLObject elmt) {
         return template_type_for_focal_term_types(topic, elmt).first();
+    }
+
+    public static final SubLObject template_type_for_focal_term_types_alt(SubLObject topic, SubLObject elmt) {
+        return ask_utilities.ask_variable($WHAT, list($$templateTypeForFocalTermType, $WHAT, topic), elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject template_type_for_focal_term_types(final SubLObject topic, final SubLObject elmt) {
         return ask_utilities.ask_variable($WHAT, list($$templateTypeForFocalTermType, $WHAT, topic), elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject template_topic_genls_alt(SubLObject topic, SubLObject elmt) {
+        return ask_utilities.ask_variable($WHAT, listS($$templateTopicGenls, topic, $list_alt155), elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject template_topic_genls(final SubLObject topic, final SubLObject elmt) {
         return ask_utilities.ask_variable($WHAT, listS($$templateTopicGenls, topic, $list111), elmt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject create_formula_template_from_name_and_topic_alt(SubLObject name, SubLObject parent) {
+        {
+            SubLObject template_id = name;
+            SubLObject formula_template = formula_templates.new_formula_template(template_id, parent);
+            return formula_template;
+        }
     }
 
     public static SubLObject create_formula_template_from_name_and_topic(final SubLObject name, final SubLObject parent) {
         final SubLObject formula_template = formula_templates.new_formula_template(name, parent);
         return formula_template;
+    }
+
+    public static final SubLObject find_matching_formula_template_argpos_details_alt(SubLObject formula_template, SubLObject arg_pos) {
+        {
+            SubLObject cdolist_list_var = formula_templates.formula_template_argpos_ordering(formula_template);
+            SubLObject argpos_detail = NIL;
+            for (argpos_detail = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argpos_detail = cdolist_list_var.first()) {
+                if (arg_pos.numE(second(formula_templates.arg_position_details_argument_position(argpos_detail)))) {
+                    return argpos_detail;
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject find_matching_formula_template_argpos_details(final SubLObject formula_template, final SubLObject arg_pos) {
@@ -2509,6 +6640,48 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @return NIL or STRINGP - Asserted gloss for ARG-POSITION in FORMULA.
+     */
+    @LispMethod(comment = "@return NIL or STRINGP - Asserted gloss for ARG-POSITION in FORMULA.")
+    public static final SubLObject maybe_assert_fet_gloss_for_arg_position_alt(SubLObject arg_position, SubLObject formula, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
+        }
+        {
+            SubLObject gloss = NIL;
+            if ((NIL != el_binary_formula_p(formula)) && arg_position.equal($list_alt156)) {
+                gloss = com.cyc.cycjava.cycl.formula_template_utilities.maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula(formula, language_mt);
+            } else {
+                if (arg_position.equal($list_alt157) && (NIL != el_formula_with_operator_p(formula, $$relationAllInstance))) {
+                    {
+                        SubLObject binary_version = cycl_utilities.formula_args(formula, UNPROVIDED);
+                        gloss = com.cyc.cycjava.cycl.formula_template_utilities.maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula(binary_version, language_mt);
+                    }
+                } else {
+                    if (arg_position.equal($list_alt157) && (NIL != el_formula_with_operator_p(formula, $$relationAllExists))) {
+                        {
+                            SubLObject binary_version = cycl_utilities.formula_args(formula, UNPROVIDED);
+                            SubLObject instance_level_gloss = com.cyc.cycjava.cycl.formula_template_utilities.maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula(binary_version, language_mt);
+                            SubLObject no_colon = string_utilities.post_remove(instance_level_gloss, $str_alt159$_, UNPROVIDED);
+                            SubLObject type_level_gloss = cconcatenate(no_colon, $str_alt160$__type__);
+                            gloss = type_level_gloss;
+                        }
+                    }
+                }
+            }
+            return gloss;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return NIL or STRINGP - Asserted gloss for ARG-POSITION in FORMULA.
+     */
+    @LispMethod(comment = "@return NIL or STRINGP - Asserted gloss for ARG-POSITION in FORMULA.")
     public static SubLObject maybe_assert_fet_gloss_for_arg_position(final SubLObject arg_position, final SubLObject formula, SubLObject language_mt) {
         if (language_mt == UNPROVIDED) {
             language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -2532,10 +6705,54 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return gloss;
     }
 
+    public static final SubLObject maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula_alt(SubLObject formula, SubLObject language_mt) {
+        {
+            SubLObject arg0 = cycl_utilities.formula_arg0(formula);
+            SubLObject gloss = com.cyc.cycjava.cycl.formula_template_utilities.maybe_assert_fet_gloss_for_arg2_of_binary_pred(arg0, language_mt);
+            return gloss;
+        }
+    }
+
     public static SubLObject maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula(final SubLObject formula, final SubLObject language_mt) {
         final SubLObject arg0 = cycl_utilities.formula_arg0(formula);
         final SubLObject gloss = maybe_assert_fet_gloss_for_arg2_of_binary_pred(arg0, language_mt);
         return gloss;
+    }
+
+    public static final SubLObject maybe_assert_fet_gloss_for_arg2_of_binary_pred_alt(SubLObject bin_pred, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject gloss = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(language_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        gloss = kb_mapping_utilities.fpred_value(bin_pred, $$glossForInducedSuggestionPred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (!gloss.isString()) {
+                    gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_arg2_of_binary_pred(bin_pred, language_mt);
+                    if (NIL != ke.cyclist_is_guest()) {
+                        operation_communication.set_the_cyclist($$Cyc);
+                    }
+                    ke.ke_assert(list($$glossForInducedSuggestionPred, bin_pred, gloss), $$GKEFormulaTemplatesMt, UNPROVIDED, UNPROVIDED);
+                }
+                return gloss;
+            }
+        }
     }
 
     public static SubLObject maybe_assert_fet_gloss_for_arg2_of_binary_pred(final SubLObject bin_pred, SubLObject language_mt) {
@@ -2568,6 +6785,84 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return gloss;
     }
 
+    /**
+     *
+     *
+     * @return STRINGP - Our best guess at a suitable gloss for ARG-POSITION in FORMULA.
+     */
+    @LispMethod(comment = "@return STRINGP - Our best guess at a suitable gloss for ARG-POSITION in FORMULA.")
+    public static final SubLObject make_fet_gloss_for_arg_position_alt(SubLObject arg_position, SubLObject formula, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg0 = cycl_utilities.formula_arg0(formula);
+                SubLObject use_generation_with_blankP = NIL;
+                SubLObject use_formula_with_blankP = T;
+                SubLObject gloss = NIL;
+                if ((NIL != el_binary_formula_p(formula)) && (arg_position.equal($list_alt156) || ((NIL != fort_types_interface.symmetric_binary_predicate_p(cycl_utilities.formula_arg0(formula))) && arg_position.equal($list_alt163)))) {
+                    gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_arg2_of_binary_pred_formula(formula, language_mt);
+                } else {
+                    if (arg_position.equal($list_alt157) && (NIL != el_formula_with_operator_p(formula, $$relationAllInstance))) {
+                        {
+                            SubLObject binary_version = cycl_utilities.formula_args(formula, UNPROVIDED);
+                            gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_arg2_of_binary_pred_formula(binary_version, language_mt);
+                        }
+                    } else {
+                        if (arg_position.equal($list_alt157) && (NIL != el_formula_with_operator_p(formula, $$relationAllExists))) {
+                            {
+                                SubLObject binary_version = cycl_utilities.formula_args(formula, UNPROVIDED);
+                                SubLObject instance_level_gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_arg2_of_binary_pred_formula(binary_version, language_mt);
+                                SubLObject no_colon = string_utilities.post_remove(instance_level_gloss, $str_alt159$_, UNPROVIDED);
+                                SubLObject type_level_gloss = cconcatenate(no_colon, $str_alt160$__type__);
+                                gloss = type_level_gloss;
+                            }
+                        } else {
+                            if (NIL != com.cyc.cycjava.cycl.formula_template_utilities.formula_template_meta_isaP(formula, arg_position)) {
+                                gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_meta_isa_formula(arg_position, formula, language_mt);
+                            }
+                        }
+                    }
+                }
+                if (!gloss.isString()) {
+                    if (NIL != use_generation_with_blankP) {
+                        {
+                            SubLObject var = czer_utilities.unique_el_var_wrt_expression(formula, UNPROVIDED);
+                            SubLObject formula_with_var = replace_formula_arg_position(arg_position, var, formula);
+                            {
+                                SubLObject _prev_bind_0 = pph_vars.$pph_blanks_for_varsP$.currentBinding(thread);
+                                try {
+                                    pph_vars.$pph_blanks_for_varsP$.bind(T, thread);
+                                    gloss = pph_question.generate_question(formula_with_var, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                } finally {
+                                    pph_vars.$pph_blanks_for_varsP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (!gloss.isString()) {
+                    if (NIL != use_formula_with_blankP) {
+                        {
+                            SubLObject blank_string = $str_alt164$______;
+                            SubLObject formula_with_blank = replace_formula_arg_position(arg_position, blank_string, formula);
+                            gloss = princ_to_string(formula_with_blank);
+                        }
+                    }
+                }
+                return string_utilities.nupcase_leading(NIL != gloss ? ((SubLObject) (gloss)) : format(NIL, $str_alt165$arg__S_of__S_, arg_position, arg0));
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return STRINGP - Our best guess at a suitable gloss for ARG-POSITION in FORMULA.
+     */
+    @LispMethod(comment = "@return STRINGP - Our best guess at a suitable gloss for ARG-POSITION in FORMULA.")
     public static SubLObject make_fet_gloss_for_arg_position(final SubLObject arg_position, final SubLObject formula, SubLObject language_mt) {
         if (language_mt == UNPROVIDED) {
             language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -2615,6 +6910,17 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return string_utilities.nupcase_leading(NIL != gloss ? gloss : format(NIL, $str121$arg__S_of__S_, arg_position, arg0));
     }
 
+    public static final SubLObject make_fet_gloss_for_arg2_of_binary_pred_formula_alt(SubLObject formula, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
+        }
+        {
+            SubLObject arg0 = cycl_utilities.formula_arg0(formula);
+            SubLObject gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_arg2_of_binary_pred(arg0, language_mt);
+            return gloss;
+        }
+    }
+
     public static SubLObject make_fet_gloss_for_arg2_of_binary_pred_formula(final SubLObject formula, SubLObject language_mt) {
         if (language_mt == UNPROVIDED) {
             language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -2622,6 +6928,16 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         final SubLObject arg0 = cycl_utilities.formula_arg0(formula);
         final SubLObject gloss = make_fet_gloss_for_arg2_of_binary_pred(arg0, language_mt);
         return gloss;
+    }
+
+    public static final SubLObject clear_make_fet_gloss_for_arg2_of_binary_pred_alt() {
+        {
+            SubLObject cs = $make_fet_gloss_for_arg2_of_binary_pred_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject clear_make_fet_gloss_for_arg2_of_binary_pred() {
@@ -2632,6 +6948,13 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_make_fet_gloss_for_arg2_of_binary_pred_alt(SubLObject bin_pred, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
+        }
+        return memoization_state.caching_state_remove_function_results_with_args($make_fet_gloss_for_arg2_of_binary_pred_caching_state$.getGlobalValue(), list(bin_pred, language_mt), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_make_fet_gloss_for_arg2_of_binary_pred(final SubLObject bin_pred, SubLObject language_mt) {
         if (language_mt == UNPROVIDED) {
             language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -2639,9 +6962,163 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return memoization_state.caching_state_remove_function_results_with_args($make_fet_gloss_for_arg2_of_binary_pred_caching_state$.getGlobalValue(), list(bin_pred, language_mt), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject make_fet_gloss_for_arg2_of_binary_pred_internal_alt(SubLObject bin_pred, SubLObject language_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(bin_pred, PREDICATE_P);
+            {
+                SubLObject gloss = NIL;
+                SubLObject use_denotes_arg_in_relnP = T;
+                SubLObject use_pred_generationP = T;
+                SubLObject use_constant_nameP = T;
+                if (NIL != use_denotes_arg_in_relnP) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(language_mt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                {
+                                    SubLObject assertions = NIL;
+                                    if (NIL == gloss) {
+                                        {
+                                            SubLObject csome_list_var = isa.all_fort_instances($$DenotesArgInRelnPredicate, UNPROVIDED, UNPROVIDED);
+                                            SubLObject air_pred = NIL;
+                                            for (air_pred = csome_list_var.first(); !((NIL != gloss) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , air_pred = csome_list_var.first()) {
+                                                {
+                                                    SubLObject denot_arg = lexicon_utilities.denotatum_arg_of_pred_cached(air_pred);
+                                                    if (NIL != denot_arg) {
+                                                        {
+                                                            SubLObject pred_var = air_pred;
+                                                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(bin_pred, denot_arg, pred_var)) {
+                                                                {
+                                                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(bin_pred, denot_arg, pred_var);
+                                                                    SubLObject done_var = gloss;
+                                                                    SubLObject token_var = NIL;
+                                                                    while (NIL == done_var) {
+                                                                        {
+                                                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                                            if (NIL != valid) {
+                                                                                {
+                                                                                    SubLObject final_index_iterator = NIL;
+                                                                                    try {
+                                                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                                                        {
+                                                                                            SubLObject done_var_193 = gloss;
+                                                                                            SubLObject token_var_194 = NIL;
+                                                                                            while (NIL == done_var_193) {
+                                                                                                {
+                                                                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_194);
+                                                                                                    SubLObject valid_195 = makeBoolean(token_var_194 != gaf);
+                                                                                                    if (NIL != valid_195) {
+                                                                                                        if (TWO_INTEGER.eql(list_utilities.last_one(assertions_high.gaf_args(gaf)))) {
+                                                                                                            assertions = cons(gaf, assertions);
+                                                                                                        }
+                                                                                                    }
+                                                                                                    done_var_193 = makeBoolean((NIL == valid_195) || (NIL != gloss));
+                                                                                                }
+                                                                                            } 
+                                                                                        }
+                                                                                    } finally {
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_196 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                            try {
+                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                if (NIL != final_index_iterator) {
+                                                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                                }
+                                                                                            } finally {
+                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_196, thread);
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var = makeBoolean((NIL == valid) || (NIL != gloss));
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject cdolist_list_var = pph_utilities.pph_sort_assertions(assertions, symbol_function(IDENTITY), language_mt);
+                                        SubLObject gaf = NIL;
+                                        for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                                            {
+                                                SubLObject _prev_bind_0_197 = lexicon_vars.$lexicon_lookup_mt$.currentBinding(thread);
+                                                try {
+                                                    lexicon_vars.$lexicon_lookup_mt$.bind(language_mt, thread);
+                                                    {
+                                                        SubLObject nl_preds = $list_alt169;
+                                                        if (NIL == gloss) {
+                                                            {
+                                                                SubLObject csome_list_var = lexification_utilities.phrases_from_semantic_assertion(gaf, nl_preds);
+                                                                SubLObject phrase = NIL;
+                                                                for (phrase = csome_list_var.first(); !((NIL != gloss) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , phrase = csome_list_var.first()) {
+                                                                    if (phrase.isString()) {
+                                                                        gloss = cconcatenate(phrase, $str_alt159$_);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    lexicon_vars.$lexicon_lookup_mt$.rebind(_prev_bind_0_197, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                if (!gloss.isString()) {
+                    if (NIL != use_pred_generationP) {
+                        if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(number_utilities.positive_infinity())))) {
+                            {
+                                SubLObject new_format_string = cconcatenate($str_alt170$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt171$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(number_utilities.positive_infinity()), new SubLObject[]{ $str_alt172$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                            }
+                        }
+                        {
+                            SubLObject _prev_bind_0 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                            try {
+                                pph_vars.$pph_demerit_cutoff$.bind(number_utilities.positive_infinity(), thread);
+                                gloss = cconcatenate(pph_main.generate_phrase(bin_pred, $list_alt174, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), $str_alt159$_);
+                            } finally {
+                                pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+                if (!gloss.isString()) {
+                    if (NIL != use_constant_nameP) {
+                        gloss = cconcatenate(string_utilities.to_string(bin_pred), $str_alt159$_);
+                    }
+                }
+                return gloss.isString() ? ((SubLObject) (string_utilities.nupcase_leading(gloss))) : NIL;
+            }
+        }
+    }
+
     public static SubLObject make_fet_gloss_for_arg2_of_binary_pred_internal(final SubLObject bin_pred, final SubLObject language_mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != fort_types_interface.predicate_p(bin_pred) : "fort_types_interface.predicate_p(bin_pred) " + "CommonSymbols.NIL != fort_types_interface.predicate_p(bin_pred) " + bin_pred;
+        assert NIL != fort_types_interface.predicate_p(bin_pred) : "! fort_types_interface.predicate_p(bin_pred) " + ("fort_types_interface.predicate_p(bin_pred) " + "CommonSymbols.NIL != fort_types_interface.predicate_p(bin_pred) ") + bin_pred;
         SubLObject gloss = NIL;
         final SubLObject use_denotes_arg_in_relnP = T;
         final SubLObject use_pred_generationP = T;
@@ -2754,6 +7231,46 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return gloss.isString() ? string_utilities.nupcase_leading(gloss) : NIL;
     }
 
+    public static final SubLObject make_fet_gloss_for_arg2_of_binary_pred_alt(SubLObject bin_pred, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
+        }
+        {
+            SubLObject caching_state = $make_fet_gloss_for_arg2_of_binary_pred_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED, $sym175$_MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED_CACHING_STATE_, NIL, EQUAL, TWO_INTEGER, ZERO_INTEGER);
+                memoization_state.register_hl_store_cache_clear_callback(CLEAR_MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED);
+            }
+            {
+                SubLObject sxhash = memoization_state.sxhash_calc_2(bin_pred, language_mt);
+                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                if (collisions != $kw132$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    {
+                        SubLObject cdolist_list_var = collisions;
+                        SubLObject collision = NIL;
+                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                            {
+                                SubLObject cached_args = collision.first();
+                                SubLObject results2 = second(collision);
+                                if (bin_pred.equal(cached_args.first())) {
+                                    cached_args = cached_args.rest();
+                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && language_mt.equal(cached_args.first())) {
+                                        return memoization_state.caching_results(results2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_arg2_of_binary_pred_internal(bin_pred, language_mt)));
+                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(bin_pred, language_mt));
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
+    }
+
     public static SubLObject make_fet_gloss_for_arg2_of_binary_pred(final SubLObject bin_pred, SubLObject language_mt) {
         if (language_mt == UNPROVIDED) {
             language_mt = lexicon_vars.$lexicon_lookup_mt$.getDynamicValue();
@@ -2787,8 +7304,56 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject formula_template_meta_isaP_alt(SubLObject formula, SubLObject arg_position) {
+        return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.formula_template_utilities.formula_template_meta_isa(formula, arg_position));
+    }
+
     public static SubLObject formula_template_meta_isaP(final SubLObject formula, final SubLObject arg_position) {
         return list_utilities.sublisp_boolean(formula_template_meta_isa(formula, arg_position));
+    }
+
+    public static final SubLObject formula_template_meta_isa_alt(SubLObject formula, SubLObject arg_position) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != member(arg_position, $list_alt177, symbol_function(EQUAL), UNPROVIDED)) {
+                thread.resetMultipleValues();
+                {
+                    SubLObject success = formula_pattern_match.formula_matches_pattern(formula, $list_alt178);
+                    SubLObject v_bindings = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL != success) {
+                        {
+                            SubLObject isa_var = list_utilities.alist_lookup_without_values(v_bindings, ISA_VAR, UNPROVIDED, UNPROVIDED);
+                            SubLObject meta_isa = list_utilities.alist_lookup_without_values(v_bindings, META_ISA, UNPROVIDED, UNPROVIDED);
+                            if ((NIL != cycl_variables.el_varP(isa_var)) && (NIL != forts.fort_p(meta_isa))) {
+                                return meta_isa;
+                            }
+                        }
+                    }
+                }
+            } else {
+                if (NIL != member(arg_position, $list_alt181, symbol_function(EQUAL), UNPROVIDED)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject success = formula_pattern_match.formula_matches_pattern(formula, $list_alt182);
+                        SubLObject v_bindings = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != success) {
+                            {
+                                SubLObject isa_var = list_utilities.alist_lookup_without_values(v_bindings, ISA_VAR, UNPROVIDED, UNPROVIDED);
+                                SubLObject meta_isa = list_utilities.alist_lookup_without_values(v_bindings, META_ISA, UNPROVIDED, UNPROVIDED);
+                                if ((NIL != cycl_variables.el_varP(isa_var)) && (NIL != forts.fort_p(meta_isa))) {
+                                    return meta_isa;
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    return NIL;
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject formula_template_meta_isa(final SubLObject formula, final SubLObject arg_position) {
@@ -2824,10 +7389,28 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject make_fet_gloss_for_meta_isa_formula_alt(SubLObject arg_position, SubLObject formula, SubLObject language_mt) {
+        {
+            SubLObject meta_isa = com.cyc.cycjava.cycl.formula_template_utilities.formula_template_meta_isa(formula, arg_position);
+            SubLObject gloss = com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_meta_isa(meta_isa, language_mt);
+            return gloss;
+        }
+    }
+
     public static SubLObject make_fet_gloss_for_meta_isa_formula(final SubLObject arg_position, final SubLObject formula, final SubLObject language_mt) {
         final SubLObject meta_isa = formula_template_meta_isa(formula, arg_position);
         final SubLObject gloss = make_fet_gloss_for_meta_isa(meta_isa, language_mt);
         return gloss;
+    }
+
+    public static final SubLObject clear_make_fet_gloss_for_meta_isa_alt() {
+        {
+            SubLObject cs = $make_fet_gloss_for_meta_isa_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject clear_make_fet_gloss_for_meta_isa() {
@@ -2838,8 +7421,37 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_make_fet_gloss_for_meta_isa_alt(SubLObject meta_isa, SubLObject language_mt) {
+        return memoization_state.caching_state_remove_function_results_with_args($make_fet_gloss_for_meta_isa_caching_state$.getGlobalValue(), list(meta_isa, language_mt), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_make_fet_gloss_for_meta_isa(final SubLObject meta_isa, final SubLObject language_mt) {
         return memoization_state.caching_state_remove_function_results_with_args($make_fet_gloss_for_meta_isa_caching_state$.getGlobalValue(), list(meta_isa, language_mt), UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject make_fet_gloss_for_meta_isa_internal_alt(SubLObject meta_isa, SubLObject language_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject gloss = NIL;
+                {
+                    SubLObject _prev_bind_0 = lexicon_vars.$lexicon_lookup_mt$.currentBinding(thread);
+                    try {
+                        lexicon_vars.$lexicon_lookup_mt$.bind(language_mt, thread);
+                        {
+                            SubLObject nl_preds = $list_alt169;
+                            SubLObject phrase = pph_main.generate_phrase(meta_isa, nl_preds, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            if (phrase.isString()) {
+                                gloss = cconcatenate(phrase, $str_alt159$_);
+                            }
+                        }
+                    } finally {
+                        lexicon_vars.$lexicon_lookup_mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return gloss;
+            }
+        }
     }
 
     public static SubLObject make_fet_gloss_for_meta_isa_internal(final SubLObject meta_isa, final SubLObject language_mt) {
@@ -2857,6 +7469,42 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             lexicon_vars.$lexicon_lookup_mt$.rebind(_prev_bind_0, thread);
         }
         return gloss;
+    }
+
+    public static final SubLObject make_fet_gloss_for_meta_isa_alt(SubLObject meta_isa, SubLObject language_mt) {
+        {
+            SubLObject caching_state = $make_fet_gloss_for_meta_isa_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(MAKE_FET_GLOSS_FOR_META_ISA, $make_fet_gloss_for_meta_isa_caching_state$, NIL, EQUAL, TWO_INTEGER, ZERO_INTEGER);
+            }
+            {
+                SubLObject sxhash = memoization_state.sxhash_calc_2(meta_isa, language_mt);
+                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                if (collisions != $kw132$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    {
+                        SubLObject cdolist_list_var = collisions;
+                        SubLObject collision = NIL;
+                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                            {
+                                SubLObject cached_args = collision.first();
+                                SubLObject results2 = second(collision);
+                                if (meta_isa.equal(cached_args.first())) {
+                                    cached_args = cached_args.rest();
+                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && language_mt.equal(cached_args.first())) {
+                                        return memoization_state.caching_results(results2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.formula_template_utilities.make_fet_gloss_for_meta_isa_internal(meta_isa, language_mt)));
+                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(meta_isa, language_mt));
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject make_fet_gloss_for_meta_isa(final SubLObject meta_isa, final SubLObject language_mt) {
@@ -2888,13 +7536,68 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     *
+     *
+     * @return STRINGP - Our best guess at a suitable explanation for ARG-POSITION in FORMULA.
+     */
+    @LispMethod(comment = "@return STRINGP - Our best guess at a suitable explanation for ARG-POSITION in FORMULA.")
+    public static final SubLObject make_fet_explanation_for_arg_position_alt(SubLObject arg_position, SubLObject focal_term_arg_position, SubLObject formula, SubLObject pph_language_mt) {
+        if (pph_language_mt == UNPROVIDED) {
+            pph_language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(arg_position, ARG_POSITION_P);
+            SubLTrampolineFile.checkType(focal_term_arg_position, ARG_POSITION_P);
+            {
+                SubLObject focal_term = cycl_utilities.formula_arg_position(formula, focal_term_arg_position, UNPROVIDED);
+                SubLObject term_to_explain = cycl_utilities.formula_arg_position(formula, arg_position, UNPROVIDED);
+                SubLObject formula_to_paraphrase = copy_expression(formula);
+                SubLObject explanation_string = $str_alt72$;
+                if (NIL != rkf_domain_examples.rkf_generic_example_p(focal_term)) {
+                    {
+                        SubLObject collection = cycl_utilities.formula_arg1(focal_term, UNPROVIDED);
+                        SubLObject focal_term_type = (NIL != rkf_domain_examples.rkf_generic_example_instance_level_p(focal_term)) ? ((SubLObject) (collection)) : make_specs_fn(collection);
+                        SubLObject new_focal_term = list($$BestDetNbarFn_Definite, list($$TermParaphraseFn_Constrained, $$nonPlural_Generic, focal_term_type));
+                        formula_to_paraphrase = nreplace_formula_arg_position(focal_term_arg_position, new_focal_term, formula_to_paraphrase);
+                    }
+                }
+                if (NIL != rkf_domain_examples.rkf_generic_example_p(term_to_explain)) {
+                    {
+                        SubLObject collection = cycl_utilities.formula_arg1(term_to_explain, UNPROVIDED);
+                        SubLObject term_to_explain_type = (NIL != rkf_domain_examples.rkf_generic_example_instance_level_p(term_to_explain)) ? ((SubLObject) (collection)) : make_specs_fn(collection);
+                        SubLObject new_term_to_explain = list($$BestDetNbarFn, $list_alt190, list($$TermParaphraseFn_Constrained, $$nonPlural_Generic, term_to_explain_type));
+                        formula_to_paraphrase = nreplace_formula_arg_position(arg_position, new_term_to_explain, formula_to_paraphrase);
+                    }
+                }
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                    try {
+                        pph_vars.$pph_language_mt$.bind(pph_language_mt, thread);
+                        explanation_string = pph_main.generate_text(formula_to_paraphrase, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        pph_vars.$pph_language_mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return explanation_string;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return STRINGP - Our best guess at a suitable explanation for ARG-POSITION in FORMULA.
+     */
+    @LispMethod(comment = "@return STRINGP - Our best guess at a suitable explanation for ARG-POSITION in FORMULA.")
     public static SubLObject make_fet_explanation_for_arg_position(final SubLObject arg_position, final SubLObject focal_term_arg_position, final SubLObject formula, SubLObject pph_language_mt) {
         if (pph_language_mt == UNPROVIDED) {
             pph_language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != cycl_utilities.arg_position_p(arg_position) : "cycl_utilities.arg_position_p(arg_position) " + "CommonSymbols.NIL != cycl_utilities.arg_position_p(arg_position) " + arg_position;
-        assert NIL != cycl_utilities.arg_position_p(focal_term_arg_position) : "cycl_utilities.arg_position_p(focal_term_arg_position) " + "CommonSymbols.NIL != cycl_utilities.arg_position_p(focal_term_arg_position) " + focal_term_arg_position;
+        assert NIL != cycl_utilities.arg_position_p(arg_position) : "! cycl_utilities.arg_position_p(arg_position) " + ("cycl_utilities.arg_position_p(arg_position) " + "CommonSymbols.NIL != cycl_utilities.arg_position_p(arg_position) ") + arg_position;
+        assert NIL != cycl_utilities.arg_position_p(focal_term_arg_position) : "! cycl_utilities.arg_position_p(focal_term_arg_position) " + ("cycl_utilities.arg_position_p(focal_term_arg_position) " + "CommonSymbols.NIL != cycl_utilities.arg_position_p(focal_term_arg_position) ") + focal_term_arg_position;
         final SubLObject focal_term = cycl_utilities.formula_arg_position(formula, focal_term_arg_position, UNPROVIDED);
         final SubLObject term_to_explain = cycl_utilities.formula_arg_position(formula, arg_position, UNPROVIDED);
         SubLObject formula_to_paraphrase = copy_expression(formula);
@@ -2921,6 +7624,35 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return explanation_string;
     }
 
+    public static final SubLObject reify_formula_template_description_alt(SubLObject formula_template) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject name = formula_templates.formula_template_id(formula_template);
+                if (NIL == forts.fort_p(name)) {
+                    {
+                        SubLObject v_term = constants_high.find_constant(name);
+                        if (NIL == forts.fort_p(v_term)) {
+                            {
+                                SubLObject _prev_bind_0 = api_control_vars.$use_local_queueP$.currentBinding(thread);
+                                try {
+                                    api_control_vars.$use_local_queueP$.bind(NIL, thread);
+                                    v_term = ke.ke_create(name);
+                                } finally {
+                                    api_control_vars.$use_local_queueP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                        if (NIL != forts.fort_p(v_term)) {
+                            formula_templates._csetf_formula_template_id(formula_template, v_term);
+                        }
+                    }
+                }
+            }
+            return forts.fort_p(formula_templates.formula_template_id(formula_template));
+        }
+    }
+
     public static SubLObject reify_formula_template_description(final SubLObject formula_template) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject name = formula_templates.formula_template_id(formula_template);
@@ -2942,9 +7674,26 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return forts.fort_p(formula_templates.formula_template_id(formula_template));
     }
 
+    public static final SubLObject assert_formula_template_type_subtopic_alt(SubLObject topic, SubLObject subtopic) {
+        {
+            SubLObject successP = rkf_assertion_utilities.rkf_assert_now(list($$formulaTemplateTypeHasTopicType, subtopic, topic), $$BaseKB);
+            return successP;
+        }
+    }
+
     public static SubLObject assert_formula_template_type_subtopic(final SubLObject topic, final SubLObject subtopic) {
         final SubLObject successP = rkf_assertion_utilities.rkf_assert_now(list($$formulaTemplateTypeHasTopicType, subtopic, topic), $$BaseKB);
         return successP;
+    }
+
+    public static final SubLObject make_formula_template_type_assertions_alt(SubLObject formula_template) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject successP = NIL;
+            successP = makeBoolean((NIL != list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$formulaTemplateHasType, v_term, topic), $$UniversalVocabularyMt, UNPROVIDED, UNPROVIDED))) && (NIL != list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(listS($$isa, v_term, $list_alt193), $$UniversalVocabularyMt, UNPROVIDED, UNPROVIDED))));
+            return successP;
+        }
     }
 
     public static SubLObject make_formula_template_type_assertions(final SubLObject formula_template) {
@@ -2955,16 +7704,43 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return successP;
     }
 
+    public static final SubLObject assert_formula_template_formula_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject formula = formula_templates.formula_template_formula(formula_template);
+            return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$formulaForFormulaTemplate, v_term, formula), target_mt, UNPROVIDED, UNPROVIDED));
+        }
+    }
+
     public static SubLObject assert_formula_template_formula(final SubLObject formula_template, final SubLObject target_mt) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject formula = formula_templates.formula_template_formula(formula_template);
         return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$formulaForFormulaTemplate, v_term, formula), target_mt, UNPROVIDED, UNPROVIDED));
     }
 
+    public static final SubLObject assert_formula_template_elmt_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject elmt = formula_templates.formula_template_elmt(formula_template);
+            return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$assertMtForFormulaTemplate, v_term, elmt), target_mt, UNPROVIDED, UNPROVIDED));
+        }
+    }
+
     public static SubLObject assert_formula_template_elmt(final SubLObject formula_template, final SubLObject target_mt) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject elmt = formula_templates.formula_template_elmt(formula_template);
         return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$assertMtForFormulaTemplate, v_term, elmt), target_mt, UNPROVIDED, UNPROVIDED));
+    }
+
+    public static final SubLObject assert_formula_template_focal_term_position_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject focal_term = formula_templates.formula_template_focal_term(formula_template);
+            SubLObject focal_term_pos = formula_templates.arg_position_details_argument_position(focal_term);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.formula_template_topic_type_from_topic(topic, target_mt);
+            return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($const196$focalTermPositionForFormulaTempla, v_term, focal_term_pos, topic_type), target_mt, UNPROVIDED, UNPROVIDED));
+        }
     }
 
     public static SubLObject assert_formula_template_focal_term_position(final SubLObject formula_template, final SubLObject target_mt) {
@@ -2976,12 +7752,45 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($const145$focalTermPositionForFormulaTempla, v_term, focal_term_pos, topic_type), target_mt, UNPROVIDED, UNPROVIDED));
     }
 
+    public static final SubLObject assert_formula_template_assertion_format_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject entry_format = formula_templates.formula_template_entry_format(formula_template);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.formula_template_topic_type_from_topic(topic, target_mt);
+            return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$assertionFormatForFormulaTemplate, v_term, entry_format, topic_type), target_mt, UNPROVIDED, UNPROVIDED));
+        }
+    }
+
     public static SubLObject assert_formula_template_assertion_format(final SubLObject formula_template, final SubLObject target_mt) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject entry_format = formula_templates.formula_template_entry_format(formula_template);
         final SubLObject topic = formula_templates.formula_template_topic(formula_template);
         final SubLObject topic_type = formula_template_topic_type_from_topic(topic, target_mt);
         return list_utilities.sublisp_boolean(rkf_assertion_utilities.rkf_assert(list($$assertionFormatForFormulaTemplate, v_term, entry_format, topic_type), target_mt, UNPROVIDED, UNPROVIDED));
+    }
+
+    public static final SubLObject assert_formula_template_assertion_explanations_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.formula_template_topic_type_from_topic(topic, target_mt);
+            SubLObject argpos_details = formula_templates.formula_template_argpos_ordering(formula_template);
+            SubLObject successP = T;
+            SubLObject list_var = NIL;
+            SubLObject argpos = NIL;
+            SubLObject number = NIL;
+            for (list_var = argpos_details, argpos = list_var.first(), number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , argpos = list_var.first() , number = add(ONE_INTEGER, number)) {
+                {
+                    SubLObject term_pos = formula_templates.arg_position_details_argument_position(argpos);
+                    SubLObject explanation = formula_templates.arg_position_details_explanation(argpos);
+                    if (explanation.isString() && (NIL == string_utilities.empty_string_p(explanation))) {
+                        successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($$formulaTemplateArgExplanation, v_term, topic_type, term_pos, explanation), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+                    }
+                }
+            }
+            return successP;
+        }
     }
 
     public static SubLObject assert_formula_template_assertion_explanations(final SubLObject formula_template, final SubLObject target_mt) {
@@ -3005,6 +7814,30 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return successP;
     }
 
+    public static final SubLObject assert_formula_template_assertion_glosses_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.formula_template_topic_type_from_topic(topic, target_mt);
+            SubLObject argpos_details = formula_templates.formula_template_argpos_ordering(formula_template);
+            SubLObject successP = T;
+            SubLObject list_var = NIL;
+            SubLObject argpos = NIL;
+            SubLObject number = NIL;
+            for (list_var = argpos_details, argpos = list_var.first(), number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , argpos = list_var.first() , number = add(ONE_INTEGER, number)) {
+                {
+                    SubLObject term_pos = formula_templates.arg_position_details_argument_position(argpos);
+                    SubLObject gloss = formula_templates.arg_position_details_gloss(argpos);
+                    SubLObject position = add(ONE_INTEGER, number);
+                    if (gloss.isString() && (NIL == string_utilities.empty_string_p(gloss))) {
+                        successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($$glossForFormulaTemplate, v_term, topic_type, term_pos, gloss, position), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+                    }
+                }
+            }
+            return successP;
+        }
+    }
+
     public static SubLObject assert_formula_template_assertion_glosses(final SubLObject formula_template, final SubLObject target_mt) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject topic = formula_templates.formula_template_topic(formula_template);
@@ -3025,6 +7858,28 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             }
         }
         return successP;
+    }
+
+    public static final SubLObject assert_formula_template_candidate_replacements_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject argpos_details = formula_templates.formula_template_argpos_ordering(formula_template);
+            SubLObject successP = T;
+            SubLObject list_var = NIL;
+            SubLObject argpos = NIL;
+            SubLObject number = NIL;
+            for (list_var = argpos_details, argpos = list_var.first(), number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , argpos = list_var.first() , number = add(ONE_INTEGER, number)) {
+                {
+                    SubLObject term_pos = formula_templates.arg_position_details_argument_position(argpos);
+                    SubLObject cdolist_list_var = formula_templates.arg_position_details_candidate_replacements(argpos);
+                    SubLObject candidate_replacement = NIL;
+                    for (candidate_replacement = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate_replacement = cdolist_list_var.first()) {
+                        successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($$candidateReplacementForPosition, v_term, term_pos, candidate_replacement), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+                    }
+                }
+            }
+            return successP;
+        }
     }
 
     public static SubLObject assert_formula_template_candidate_replacements(final SubLObject formula_template, final SubLObject target_mt) {
@@ -3050,6 +7905,26 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return successP;
     }
 
+    public static final SubLObject assert_formula_template_assertion_validation_required_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject argpos_details = formula_templates.formula_template_argpos_ordering(formula_template);
+            SubLObject successP = T;
+            SubLObject list_var = NIL;
+            SubLObject argpos = NIL;
+            SubLObject number = NIL;
+            for (list_var = argpos_details, argpos = list_var.first(), number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , argpos = list_var.first() , number = add(ONE_INTEGER, number)) {
+                {
+                    SubLObject term_pos = formula_templates.arg_position_details_argument_position(argpos);
+                    if (NIL != formula_templates.arg_position_details_requires_validation(argpos)) {
+                        successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($const201$validationRequiredOnTemplatePosit, v_term, term_pos), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+                    }
+                }
+            }
+            return successP;
+        }
+    }
+
     public static SubLObject assert_formula_template_assertion_validation_required(final SubLObject formula_template, final SubLObject target_mt) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject argpos_details = formula_templates.formula_template_argpos_ordering(formula_template);
@@ -3066,6 +7941,26 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             }
         }
         return successP;
+    }
+
+    public static final SubLObject assert_formula_template_assertion_replacements_invisible_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject argpos_details = formula_templates.formula_template_argpos_ordering(formula_template);
+            SubLObject successP = T;
+            SubLObject list_var = NIL;
+            SubLObject argpos = NIL;
+            SubLObject number = NIL;
+            for (list_var = argpos_details, argpos = list_var.first(), number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , argpos = list_var.first() , number = add(ONE_INTEGER, number)) {
+                {
+                    SubLObject term_pos = formula_templates.arg_position_details_argument_position(argpos);
+                    if (NIL != formula_templates.arg_position_details_invisible_replacement_positions(argpos)) {
+                        successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($const202$templateReplacementsInvisibleForP, v_term, term_pos), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+                    }
+                }
+            }
+            return successP;
+        }
     }
 
     public static SubLObject assert_formula_template_assertion_replacements_invisible(final SubLObject formula_template, final SubLObject target_mt) {
@@ -3086,6 +7981,23 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return successP;
     }
 
+    public static final SubLObject assert_formula_template_examples_alt(SubLObject formula_template, SubLObject target_mt) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject topic_type = com.cyc.cycjava.cycl.formula_template_utilities.formula_template_topic_type_from_topic(topic, target_mt);
+            SubLObject successP = T;
+            SubLObject cdolist_list_var = formula_templates.formula_template_examples(formula_template);
+            SubLObject example = NIL;
+            for (example = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , example = cdolist_list_var.first()) {
+                if (NIL != el_formula_p(example)) {
+                    successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($$formulaTemplateExample, v_term, topic_type, example), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+                }
+            }
+            return successP;
+        }
+    }
+
     public static SubLObject assert_formula_template_examples(final SubLObject formula_template, final SubLObject target_mt) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject topic = formula_templates.formula_template_topic(formula_template);
@@ -3104,12 +8016,72 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return successP;
     }
 
+    public static final SubLObject assert_formula_template_priority_ordering_alt(SubLObject formula_template, SubLObject target_mt, SubLObject higher_template_id) {
+        {
+            SubLObject v_term = formula_templates.formula_template_id(formula_template);
+            SubLObject topic = formula_templates.formula_template_topic(formula_template);
+            SubLObject successP = T;
+            successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($$higherPriorityTemplateForType, higher_template_id, v_term, topic), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
+            return successP;
+        }
+    }
+
     public static SubLObject assert_formula_template_priority_ordering(final SubLObject formula_template, final SubLObject target_mt, final SubLObject higher_template_id) {
         final SubLObject v_term = formula_templates.formula_template_id(formula_template);
         final SubLObject topic = formula_templates.formula_template_topic(formula_template);
         SubLObject successP = T;
         successP = makeBoolean((NIL != rkf_assertion_utilities.rkf_assert(list($$higherPriorityTemplateForType, higher_template_id, v_term, topic), target_mt, UNPROVIDED, UNPROVIDED)) && (NIL != successP));
         return successP;
+    }
+
+    public static final SubLObject find_ftemplate_topic_from_id_alt(SubLObject topic_id, SubLObject template_elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template_topic = NIL;
+                SubLObject local_state = formula_template_vars.get_template_topic_memoization_state();
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt91$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                template_topic = api_widgets.formula_template_load_template_graph_memoized(topic_id, template_elmt);
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_198 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_198, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return template_topic;
+            }
+        }
     }
 
     public static SubLObject find_ftemplate_topic_from_id(final SubLObject topic_id, final SubLObject template_elmt) {
@@ -3137,6 +8109,57 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return template_topic;
+    }
+
+    public static final SubLObject find_ftemplate_from_ids_alt(SubLObject template_id, SubLObject topic_id, SubLObject template_elmt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject template_topic = com.cyc.cycjava.cycl.formula_template_utilities.find_ftemplate_topic_from_id(topic_id, template_elmt);
+                SubLObject ftemplate = NIL;
+                SubLObject local_state = formula_template_vars.get_template_topic_memoization_state();
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt91$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                ftemplate = com.cyc.cycjava.cycl.formula_template_utilities.find_ftemplate_in_template_topic(template_id, template_topic);
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_199 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_199, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ftemplate;
+            }
+        }
     }
 
     public static SubLObject find_ftemplate_from_ids(final SubLObject template_id, final SubLObject topic_id, final SubLObject template_elmt) {
@@ -3167,6 +8190,33 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return ftemplate;
     }
 
+    public static final SubLObject find_ftemplate_in_template_topic_alt(SubLObject template_id, SubLObject template_topic) {
+        {
+            SubLObject ans = NIL;
+            if (NIL == ans) {
+                {
+                    SubLObject csome_list_var = formula_templates.template_topic_templates(template_topic);
+                    SubLObject ftemplate = NIL;
+                    for (ftemplate = csome_list_var.first(); !((NIL != ans) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , ftemplate = csome_list_var.first()) {
+                        if (formula_templates.formula_template_id(ftemplate).eql(template_id)) {
+                            ans = ftemplate;
+                        }
+                    }
+                }
+            }
+            if (NIL == ans) {
+                {
+                    SubLObject csome_list_var = formula_templates.template_topic_subtopics(template_topic);
+                    SubLObject subtopic = NIL;
+                    for (subtopic = csome_list_var.first(); !((NIL != ans) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , subtopic = csome_list_var.first()) {
+                        ans = com.cyc.cycjava.cycl.formula_template_utilities.find_ftemplate_in_template_topic(template_id, subtopic);
+                    }
+                }
+            }
+            return ans;
+        }
+    }
+
     public static SubLObject find_ftemplate_in_template_topic(final SubLObject template_id, final SubLObject template_topic) {
         SubLObject ans = NIL;
         if (NIL == ans) {
@@ -3190,9 +8240,24 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return ans;
     }
 
+    public static final SubLObject perform_after_creatings_for_new_template_term_alt(SubLObject template_id, SubLObject new_constant) {
+        SubLTrampolineFile.checkType(template_id, EL_FORT_P);
+        SubLTrampolineFile.checkType(new_constant, CONSTANT_P);
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.formula_template_utilities.after_creating_function_specs_for_template_id(template_id);
+            SubLObject fn_spec = NIL;
+            for (fn_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fn_spec = cdolist_list_var.first()) {
+                if (fn_spec.isFunctionSpec()) {
+                    apply(fn_spec, list(new_constant));
+                }
+            }
+        }
+        return new_constant;
+    }
+
     public static SubLObject perform_after_creatings_for_new_template_term(final SubLObject template_id, final SubLObject new_constant) {
-        assert NIL != term.el_fort_p(template_id) : "term.el_fort_p(template_id) " + "CommonSymbols.NIL != term.el_fort_p(template_id) " + template_id;
-        assert NIL != constant_p(new_constant) : "constant_handles.constant_p(new_constant) " + "CommonSymbols.NIL != constant_handles.constant_p(new_constant) " + new_constant;
+        assert NIL != term.el_fort_p(template_id) : "! term.el_fort_p(template_id) " + ("term.el_fort_p(template_id) " + "CommonSymbols.NIL != term.el_fort_p(template_id) ") + template_id;
+        assert NIL != constant_p(new_constant) : "! constant_handles.constant_p(new_constant) " + ("constant_handles.constant_p(new_constant) " + "CommonSymbols.NIL != constant_handles.constant_p(new_constant) ") + new_constant;
         SubLObject cdolist_list_var = after_creating_function_specs_for_template_id(template_id);
         SubLObject fn_spec = NIL;
         fn_spec = cdolist_list_var.first();
@@ -3206,11 +8271,523 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return new_constant;
     }
 
+    /**
+     *
+     *
+     * @unknown 
+     */
+    @LispMethod(comment = "@unknown")
+    public static final SubLObject after_creating_function_specs_for_template_id_alt(SubLObject template_id) {
+        {
+            SubLObject pcase_var = template_id;
+            if (pcase_var.eql($$TKBTemplate_Attack)) {
+                return $list_alt206;
+            } else {
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown 
+     */
+    @LispMethod(comment = "@unknown")
     public static SubLObject after_creating_function_specs_for_template_id(final SubLObject template_id) {
         if (template_id.eql($$TKBTemplate_Attack)) {
             return $list156;
         }
         return NIL;
+    }
+
+    public static final SubLObject check_template_type_menu_item_parsing_alt(SubLObject template_type, SubLObject domain_mt) {
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $$InferencePSC;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject done = set.new_set(UNPROVIDED, UNPROVIDED);
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject state = memoization_state.possibly_new_memoization_state();
+                            SubLObject local_state = state;
+                            {
+                                SubLObject _prev_bind_0_200 = memoization_state.$memoization_state$.currentBinding(thread);
+                                try {
+                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                    {
+                                        SubLObject original_memoization_process = NIL;
+                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                            {
+                                                SubLObject current_proc = current_process();
+                                                if (NIL == original_memoization_process) {
+                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                } else {
+                                                    if (original_memoization_process != current_proc) {
+                                                        Errors.error($str_alt91$Invalid_attempt_to_reuse_memoizat);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        try {
+                                            {
+                                                SubLObject node_var = template_type;
+                                                {
+                                                    SubLObject _prev_bind_0_201 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_202 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                        sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                        {
+                                                            SubLObject node_var_203 = node_var;
+                                                            SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                                                            SubLObject recur_deck = deck.create_deck(deck_type);
+                                                            {
+                                                                SubLObject _prev_bind_0_204 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                                                try {
+                                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                                    {
+                                                                        SubLObject tv_var = NIL;
+                                                                        {
+                                                                            SubLObject _prev_bind_0_205 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1_206 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                                            try {
+                                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                                                if (NIL != tv_var) {
+                                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                                                            {
+                                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                                                if (pcase_var.eql($ERROR)) {
+                                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                } else {
+                                                                                                    if (pcase_var.eql($CERROR)) {
+                                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                    } else {
+                                                                                                        if (pcase_var.eql($WARN)) {
+                                                                                                            Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                        } else {
+                                                                                                            Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                                            Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_207 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_1_208 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_2_209 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                    try {
+                                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                                            {
+                                                                                                SubLObject _prev_bind_0_210 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_1_211 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_2_212 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                try {
+                                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
+                                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_var_203, UNPROVIDED);
+                                                                                                    while (NIL != node_var_203) {
+                                                                                                        {
+                                                                                                            SubLObject tt_node_var = node_var_203;
+                                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
+                                                                                                            SubLObject cdolist_list_var = accessible_modules;
+                                                                                                            SubLObject module_var = NIL;
+                                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                                                {
+                                                                                                                    SubLObject _prev_bind_0_213 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_1_214 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                    try {
+                                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                        {
+                                                                                                                            SubLObject node = function_terms.naut_to_nart(tt_node_var);
+                                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                    if (NIL != d_link) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                            if (NIL != mt_links) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject _prev_bind_0_215 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                    try {
+                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject iteration_state_216 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_216)) {
+                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_216);
+                                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject _prev_bind_0_217 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                            try {
+                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                    SubLObject cdolist_list_var_218 = new_list;
+                                                                                                                                                                                                    SubLObject template = NIL;
+                                                                                                                                                                                                    for (template = cdolist_list_var_218.first(); NIL != cdolist_list_var_218; cdolist_list_var_218 = cdolist_list_var_218.rest() , template = cdolist_list_var_218.first()) {
+                                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(template, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(template, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                                                            if (NIL != forts.fort_p(template)) {
+                                                                                                                                                                                                                com.cyc.cycjava.cycl.formula_template_utilities.check_template_menu_item_parsing(template, domain_mt, done);
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                }
+                                                                                                                                                                                            } finally {
+                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_217, thread);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                    iteration_state_216 = dictionary_contents.do_dictionary_contents_next(iteration_state_216);
+                                                                                                                                                                                }
+                                                                                                                                                                            } 
+                                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_216);
+                                                                                                                                                                        }
+                                                                                                                                                                    } finally {
+                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_215, thread);
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                        }
+                                                                                                                                                    } 
+                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    } else {
+                                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
+                                                                                                                                        SubLObject instance_tuple = NIL;
+                                                                                                                                        for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject datum = instance_tuple;
+                                                                                                                                                SubLObject current = datum;
+                                                                                                                                                SubLObject link_node = NIL;
+                                                                                                                                                SubLObject mt = NIL;
+                                                                                                                                                SubLObject tv = NIL;
+                                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt122);
+                                                                                                                                                link_node = current.first();
+                                                                                                                                                current = current.rest();
+                                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt122);
+                                                                                                                                                mt = current.first();
+                                                                                                                                                current = current.rest();
+                                                                                                                                                destructuring_bind_must_consp(current, datum, $list_alt122);
+                                                                                                                                                tv = current.first();
+                                                                                                                                                current = current.rest();
+                                                                                                                                                if (NIL == current) {
+                                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_219 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject _prev_bind_0_220 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                        try {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject link_nodes = list(link_node);
+                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                SubLObject cdolist_list_var_221 = new_list;
+                                                                                                                                                                                SubLObject template = NIL;
+                                                                                                                                                                                for (template = cdolist_list_var_221.first(); NIL != cdolist_list_var_221; cdolist_list_var_221 = cdolist_list_var_221.rest() , template = cdolist_list_var_221.first()) {
+                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(template, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(template, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                                        if (NIL != forts.fort_p(template)) {
+                                                                                                                                                                                            com.cyc.cycjava.cycl.formula_template_utilities.check_template_menu_item_parsing(template, domain_mt, done);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        } finally {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_220, thread);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_219, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } else {
+                                                                                                                                                    cdestructuring_bind_error(datum, $list_alt122);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } else {
+                                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                        SubLObject cdolist_list_var_222 = new_list;
+                                                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                                                        for (generating_fn = cdolist_list_var_222.first(); NIL != cdolist_list_var_222; cdolist_list_var_222 = cdolist_list_var_222.rest() , generating_fn = cdolist_list_var_222.first()) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_223 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                        SubLObject new_list_224 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                        SubLObject cdolist_list_var_225 = new_list_224;
+                                                                                                                                                        SubLObject template = NIL;
+                                                                                                                                                        for (template = cdolist_list_var_225.first(); NIL != cdolist_list_var_225; cdolist_list_var_225 = cdolist_list_var_225.rest() , template = cdolist_list_var_225.first()) {
+                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(template, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(template, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                if (NIL != forts.fort_p(template)) {
+                                                                                                                                                                    com.cyc.cycjava.cycl.formula_template_utilities.check_template_menu_item_parsing(template, domain_mt, done);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_223, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } finally {
+                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_214, thread);
+                                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_213, thread);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                        {
+                                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
+                                                                                                            SubLObject cdolist_list_var = accessible_modules;
+                                                                                                            SubLObject module_var = NIL;
+                                                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                                                {
+                                                                                                                    SubLObject _prev_bind_0_226 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_1_227 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                    try {
+                                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                        {
+                                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var_203);
+                                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                    if (NIL != d_link) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                            if (NIL != mt_links) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject _prev_bind_0_228 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                    try {
+                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject iteration_state_229 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_229)) {
+                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_229);
+                                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject _prev_bind_0_230 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                            try {
+                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                    SubLObject cdolist_list_var_231 = new_list;
+                                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_231.first(); NIL != cdolist_list_var_231; cdolist_list_var_231 = cdolist_list_var_231.rest() , node_vars_link_node = cdolist_list_var_231.first()) {
+                                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                }
+                                                                                                                                                                                            } finally {
+                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_230, thread);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                    iteration_state_229 = dictionary_contents.do_dictionary_contents_next(iteration_state_229);
+                                                                                                                                                                                }
+                                                                                                                                                                            } 
+                                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_229);
+                                                                                                                                                                        }
+                                                                                                                                                                    } finally {
+                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_228, thread);
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                        }
+                                                                                                                                                    } 
+                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    } else {
+                                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } else {
+                                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                        SubLObject cdolist_list_var_232 = new_list;
+                                                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                                                        for (generating_fn = cdolist_list_var_232.first(); NIL != cdolist_list_var_232; cdolist_list_var_232 = cdolist_list_var_232.rest() , generating_fn = cdolist_list_var_232.first()) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_233 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                        SubLObject new_list_234 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                        SubLObject cdolist_list_var_235 = new_list_234;
+                                                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                                                        for (node_vars_link_node = cdolist_list_var_235.first(); NIL != cdolist_list_var_235; cdolist_list_var_235 = cdolist_list_var_235.rest() , node_vars_link_node = cdolist_list_var_235.first()) {
+                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_233, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } finally {
+                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_227, thread);
+                                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_226, thread);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                        node_var_203 = deck.deck_pop(recur_deck);
+                                                                                                    } 
+                                                                                                } finally {
+                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_212, thread);
+                                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_211, thread);
+                                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_210, thread);
+                                                                                                }
+                                                                                            }
+                                                                                        } else {
+                                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                        }
+                                                                                    } finally {
+                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_209, thread);
+                                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_208, thread);
+                                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_207, thread);
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_206, thread);
+                                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_205, thread);
+                                                                            }
+                                                                        }
+                                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                                                    }
+                                                                } finally {
+                                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_204, thread);
+                                                                }
+                                                            }
+                                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                        }
+                                                    } finally {
+                                                        sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_202, thread);
+                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_201, thread);
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0_236 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                try {
+                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                    }
+                                                } finally {
+                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_236, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_200, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject check_template_type_menu_item_parsing(final SubLObject template_type, SubLObject domain_mt) {
@@ -3726,6 +9303,50 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject check_template_menu_item_parsing_alt(SubLObject template, SubLObject domain_mt, SubLObject done) {
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $$InferencePSC;
+        }
+        if (done == UNPROVIDED) {
+            done = set.new_set(UNPROVIDED, UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject formula = kb_mapping_utilities.fpred_value(template, $$formulaForFormulaTemplate, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            if (NIL != formula) {
+                                {
+                                    SubLObject cdolist_list_var = cycl_utilities.arg_positions_if_bfs(CONSTRAINT_COL_FOR_CONSTRAINT_TERM, formula, UNPROVIDED);
+                                    SubLObject arg_pos = NIL;
+                                    for (arg_pos = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg_pos = cdolist_list_var.first()) {
+                                        if (!((NIL != subl_promotions.memberP(arg_pos, kb_mapping_utilities.pred_values(template, $const196$focalTermPositionForFormulaTempla, UNPROVIDED, UNPROVIDED, UNPROVIDED), symbol_function(EQUAL), symbol_function(REST))) || (NIL != member(arg_pos, kb_mapping_utilities.pred_values(template, $const202$templateReplacementsInvisibleForP, UNPROVIDED, UNPROVIDED, UNPROVIDED), symbol_function(EQUAL), symbol_function(REST))))) {
+                                            com.cyc.cycjava.cycl.formula_template_utilities.check_template_arg_pos_menu_item_parsing(template, arg_pos, formula, domain_mt, done);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject check_template_menu_item_parsing(final SubLObject template, SubLObject domain_mt, SubLObject done) {
         if (domain_mt == UNPROVIDED) {
             domain_mt = $$InferencePSC;
@@ -3763,6 +9384,123 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject check_template_arg_pos_menu_item_parsing_alt(SubLObject template, SubLObject arg_pos, SubLObject formula, SubLObject domain_mt, SubLObject done) {
+        if (formula == UNPROVIDED) {
+            formula = NIL;
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $$InferencePSC;
+        }
+        if (done == UNPROVIDED) {
+            done = set.new_set(UNPROVIDED, UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(arg_pos, ARG_POSITION_P);
+            if (NIL == formula) {
+                {
+                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                            formula = kb_mapping_utilities.fpred_value(template, $$formulaForFormulaTemplate, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        } finally {
+                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            if (NIL != formula) {
+                {
+                    SubLObject found_replacement_gafP = NIL;
+                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                            {
+                                SubLObject pred_var = $$candidateReplacementForPosition;
+                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(template, NIL, pred_var)) {
+                                    {
+                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(template, NIL, pred_var);
+                                        SubLObject done_var = NIL;
+                                        SubLObject token_var = NIL;
+                                        while (NIL == done_var) {
+                                            {
+                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                if (NIL != valid) {
+                                                    {
+                                                        SubLObject final_index_iterator = NIL;
+                                                        try {
+                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                            {
+                                                                SubLObject done_var_237 = NIL;
+                                                                SubLObject token_var_238 = NIL;
+                                                                while (NIL == done_var_237) {
+                                                                    {
+                                                                        SubLObject replacement_gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_238);
+                                                                        SubLObject valid_239 = makeBoolean(token_var_238 != replacement_gaf);
+                                                                        if (NIL != valid_239) {
+                                                                            if (arg_pos.equal(cycl_utilities.nat_args(assertions_high.gaf_arg2(replacement_gaf), UNPROVIDED))) {
+                                                                                found_replacement_gafP = T;
+                                                                                com.cyc.cycjava.cycl.formula_template_utilities.check_template_candidate_replacement_gaf_parsing(replacement_gaf, formula, domain_mt, done);
+                                                                            }
+                                                                        }
+                                                                        done_var_237 = makeBoolean(NIL == valid_239);
+                                                                    }
+                                                                } 
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_240 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL != final_index_iterator) {
+                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_240, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                done_var = makeBoolean(NIL == valid);
+                                            }
+                                        } 
+                                    }
+                                }
+                            }
+                        } finally {
+                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (NIL == found_replacement_gafP) {
+                        {
+                            SubLObject constraint_col = com.cyc.cycjava.cycl.formula_template_utilities.constraint_col_for_formula_arg_position(formula, arg_pos);
+                            com.cyc.cycjava.cycl.formula_template_utilities.check_template_arg_position_candidates(constraint_col, constraint_col, domain_mt, done);
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject check_template_arg_pos_menu_item_parsing(final SubLObject template, final SubLObject arg_pos, SubLObject formula, SubLObject domain_mt, SubLObject done) {
         if (formula == UNPROVIDED) {
             formula = NIL;
@@ -3774,7 +9512,7 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             done = set.new_set(UNPROVIDED, UNPROVIDED);
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != cycl_utilities.arg_position_p(arg_pos) : "cycl_utilities.arg_position_p(arg_pos) " + "CommonSymbols.NIL != cycl_utilities.arg_position_p(arg_pos) " + arg_pos;
+        assert NIL != cycl_utilities.arg_position_p(arg_pos) : "! cycl_utilities.arg_position_p(arg_pos) " + ("cycl_utilities.arg_position_p(arg_pos) " + "CommonSymbols.NIL != cycl_utilities.arg_position_p(arg_pos) ") + arg_pos;
         if (NIL == formula) {
             final SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
             final SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -3854,6 +9592,71 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject check_template_candidate_replacement_gaf_parsing_alt(SubLObject replacement_gaf, SubLObject formula, SubLObject domain_mt, SubLObject done) {
+        if (formula == UNPROVIDED) {
+            formula = NIL;
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $$InferencePSC;
+        }
+        if (done == UNPROVIDED) {
+            done = set.new_set(UNPROVIDED, UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject datum = assertions_high.gaf_args(replacement_gaf);
+                SubLObject current = datum;
+                SubLObject template = NIL;
+                SubLObject el_arg_pos = NIL;
+                SubLObject set_or_collection = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt209);
+                template = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt209);
+                el_arg_pos = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt209);
+                set_or_collection = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    if (NIL == formula) {
+                        {
+                            SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(domain_mt);
+                            {
+                                SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                try {
+                                    mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                    formula = kb_mapping_utilities.fpred_value(template, $$formulaForFormulaTemplate, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                } finally {
+                                    mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                    mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                    if (NIL != formula) {
+                        {
+                            SubLObject arg_pos = el_arg_pos.rest();
+                            SubLObject constraint_col = com.cyc.cycjava.cycl.formula_template_utilities.constraint_col_for_formula_arg_position(formula, arg_pos);
+                            if (NIL != constraint_col) {
+                                com.cyc.cycjava.cycl.formula_template_utilities.check_template_arg_position_candidates(set_or_collection, constraint_col, domain_mt, done);
+                            }
+                        }
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt209);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject check_template_candidate_replacement_gaf_parsing(final SubLObject replacement_gaf, SubLObject formula, SubLObject domain_mt, SubLObject done) {
         if (formula == UNPROVIDED) {
             formula = NIL;
@@ -3909,6 +9712,21 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject check_template_arg_position_candidates_alt(SubLObject set_or_collection, SubLObject constraint_col, SubLObject domain_mt, SubLObject done) {
+        {
+            SubLObject candidates = com.cyc.cycjava.cycl.formula_template_utilities.arg_position_candidates_memoized(set_or_collection, domain_mt, $int$350);
+            SubLObject cdolist_list_var = candidates;
+            SubLObject candidate = NIL;
+            for (candidate = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate = cdolist_list_var.first()) {
+                if (NIL == set.set_memberP(candidate, done)) {
+                    com.cyc.cycjava.cycl.formula_template_utilities.check_template_candidate_replacement_parsing(candidate, constraint_col);
+                    set.set_add(candidate, done);
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject check_template_arg_position_candidates(final SubLObject set_or_collection, final SubLObject constraint_col, final SubLObject domain_mt, final SubLObject done) {
         SubLObject cdolist_list_var;
         final SubLObject candidates = cdolist_list_var = arg_position_candidates_memoized(set_or_collection, domain_mt, $int$350);
@@ -3925,6 +9743,23 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject arg_position_candidates_memoized_internal_alt(SubLObject set_or_collection, SubLObject domain_mt, SubLObject n) {
+        if (n == UNPROVIDED) {
+            n = $int$350;
+        }
+        if ((NIL != forts.fort_p(set_or_collection)) && (NIL == api_widgets.get_collection_extent_estimates(set_or_collection, domain_mt).first())) {
+            return NIL;
+        }
+        {
+            SubLObject filtered = rkf_ontology_utilities.rkf_all_instantiations(set_or_collection, domain_mt);
+            SubLObject sorted = Sort.sort(filtered, symbol_function($sym212$_), symbol_function(NUM_INDEX));
+            SubLObject candidates = list_utilities.first_n(n, sorted);
+            if (NIL == candidates) {
+            }
+            return candidates;
+        }
+    }
+
     public static SubLObject arg_position_candidates_memoized_internal(final SubLObject set_or_collection, final SubLObject domain_mt, SubLObject n) {
         if (n == UNPROVIDED) {
             n = $int$350;
@@ -3938,6 +9773,57 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         if (NIL == candidates) {
         }
         return candidates;
+    }
+
+    public static final SubLObject arg_position_candidates_memoized_alt(SubLObject set_or_collection, SubLObject domain_mt, SubLObject n) {
+        if (n == UNPROVIDED) {
+            n = $int$350;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.formula_template_utilities.arg_position_candidates_memoized_internal(set_or_collection, domain_mt, n);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, ARG_POSITION_CANDIDATES_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), ARG_POSITION_CANDIDATES_MEMOIZED, THREE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, ARG_POSITION_CANDIDATES_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_3(set_or_collection, domain_mt, n);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw132$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (set_or_collection.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (domain_mt.equal(cached_args.first())) {
+                                            cached_args = cached_args.rest();
+                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && n.equal(cached_args.first())) {
+                                                return memoization_state.caching_results(results2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.formula_template_utilities.arg_position_candidates_memoized_internal(set_or_collection, domain_mt, n)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(set_or_collection, domain_mt, n));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject arg_position_candidates_memoized(final SubLObject set_or_collection, final SubLObject domain_mt, SubLObject n) {
@@ -3982,13 +9868,36 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject omit_from_fet_menuP_alt(SubLObject v_object) {
+        return makeBoolean((NIL != nart_handles.nart_p(v_object)) || (NIL != isa.isa_in_any_mtP(v_object, $$IndexicalConcept)));
+    }
+
     public static SubLObject omit_from_fet_menuP(final SubLObject v_object) {
         return makeBoolean((NIL != nart_handles.nart_p(v_object)) || (NIL != isa.isa_in_any_mtP(v_object, $$IndexicalConcept)));
+    }
+
+    public static final SubLObject constraint_col_for_formula_arg_position_alt(SubLObject formula, SubLObject arg_pos) {
+        {
+            SubLObject constraint_term = cycl_utilities.formula_arg_position(formula, arg_pos, UNPROVIDED);
+            return com.cyc.cycjava.cycl.formula_template_utilities.constraint_col_for_constraint_term(constraint_term);
+        }
     }
 
     public static SubLObject constraint_col_for_formula_arg_position(final SubLObject formula, final SubLObject arg_pos) {
         final SubLObject constraint_term = cycl_utilities.formula_arg_position(formula, arg_pos, UNPROVIDED);
         return constraint_col_for_constraint_term(constraint_term);
+    }
+
+    public static final SubLObject constraint_col_for_constraint_term_alt(SubLObject constraint_term) {
+        if (NIL != el_formula_with_operator_p(constraint_term, $$SomeExampleFn)) {
+            return cycl_utilities.nat_arg1(constraint_term, UNPROVIDED);
+        } else {
+            if (NIL != el_formula_with_operator_p(constraint_term, $$SomeExampleSpecFn)) {
+                return list($$SpecsFn, cycl_utilities.nat_arg1(constraint_term, UNPROVIDED));
+            } else {
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject constraint_col_for_constraint_term(final SubLObject constraint_term) {
@@ -3999,6 +9908,24 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             return list($$SpecsFn, cycl_utilities.nat_arg1(constraint_term, UNPROVIDED));
         }
         return NIL;
+    }
+
+    public static final SubLObject check_template_candidate_replacement_parsing_alt(SubLObject candidate, SubLObject constraint_col) {
+        {
+            SubLObject failed_phrases = NIL;
+            SubLObject cdolist_list_var = pph_methods_lexicon.all_phrases_for_term(candidate, $list_alt218, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject phrase = NIL;
+            for (phrase = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , phrase = cdolist_list_var.first()) {
+                {
+                    SubLObject parsed = lexicon_accessors.typed_denots_of_string(phrase, constraint_col, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    if (NIL == subl_promotions.memberP(candidate, parsed, UNPROVIDED, UNPROVIDED)) {
+                        format(T, $str_alt217$__Couldn_t_find__S___in_denots_of, new SubLObject[]{ candidate, phrase, constraint_col, parsed });
+                        failed_phrases = cons(phrase, failed_phrases);
+                    }
+                }
+            }
+            return NIL != failed_phrases ? ((SubLObject) (failed_phrases)) : $OK;
+        }
     }
 
     public static SubLObject check_template_candidate_replacement_parsing(final SubLObject candidate, final SubLObject constraint_col) {
@@ -4016,6 +9943,67 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             phrase = cdolist_list_var.first();
         } 
         return NIL != failed_phrases ? failed_phrases : $OK;
+    }
+
+    public static final SubLObject ftemplate_utilities_generate_example_template_topic_cases_alt(SubLObject output_dir, SubLObject examples) {
+        if (examples == UNPROVIDED) {
+            examples = $ftemplate_utilities_example_template_topic_cases$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == string_utilities.ends_with(output_dir, $str_alt221$_, UNPROVIDED)) {
+                output_dir = cconcatenate(output_dir, $str_alt221$_);
+            }
+            {
+                SubLObject cdolist_list_var = examples;
+                SubLObject example_template_topic = NIL;
+                for (example_template_topic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , example_template_topic = cdolist_list_var.first()) {
+                    {
+                        SubLObject output_filename = cconcatenate(output_dir, new SubLObject[]{ kb_paths.fort_name(example_template_topic), $str_alt222$_xml });
+                        SubLObject template_topic_mt = com.cyc.cycjava.cycl.formula_template_utilities.get_template_topic_loading_elmt(example_template_topic);
+                        if (NIL != hlmt.possibly_hlmt_p(template_topic_mt)) {
+                            format(T, $str_alt223$Generating__S_seen_from__S_into__, new SubLObject[]{ example_template_topic, template_topic_mt, output_filename });
+                            {
+                                SubLObject stream = NIL;
+                                try {
+                                    {
+                                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                                        try {
+                                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                                            stream = compatibility.open_text(output_filename, $OUTPUT, NIL);
+                                        } finally {
+                                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                    if (!stream.isStream()) {
+                                        Errors.error($str_alt225$Unable_to_open__S, output_filename);
+                                    }
+                                    {
+                                        SubLObject s = stream;
+                                        SubLObject xml_string = api_widgets.get_template_topic_in_xml(example_template_topic, template_topic_mt);
+                                        write_string(xml_string, s, UNPROVIDED, UNPROVIDED);
+                                    }
+                                } finally {
+                                    {
+                                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                        try {
+                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                            if (stream.isStream()) {
+                                                close(stream, UNPROVIDED);
+                                            }
+                                        } finally {
+                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                }
+                            }
+                            format(T, $str_alt226$_done__);
+                        }
+                    }
+                }
+            }
+            return output_dir;
+        }
     }
 
     public static SubLObject ftemplate_utilities_generate_example_template_topic_cases(SubLObject output_dir, SubLObject examples) {
@@ -4068,6 +10056,70 @@ public final class formula_template_utilities extends SubLTranslatedFile {
             example_template_topic = cdolist_list_var.first();
         } 
         return output_dir;
+    }
+
+    public static final SubLObject ftemplate_utilities_generate_example_instances_for_template_topic_alt(SubLObject output_dir, SubLObject collection, SubLObject template_topic, SubLObject elmt, SubLObject percentage) {
+        if (percentage == UNPROVIDED) {
+            percentage = $float$0_1;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == string_utilities.ends_with(output_dir, $str_alt221$_, UNPROVIDED)) {
+                output_dir = cconcatenate(output_dir, $str_alt221$_);
+            }
+            if (ONE_INTEGER.numL(percentage)) {
+                percentage = divide(percentage, $int$100);
+            }
+            {
+                SubLObject template_topic_mt = com.cyc.cycjava.cycl.formula_template_utilities.get_template_topic_loading_elmt(template_topic);
+                SubLObject in_most_known_order = rkf_ontology_utilities.rkf_salient_instance_exemplars(collection, elmt, UNPROVIDED);
+                SubLObject top_n = round(multiply(percentage, length(in_most_known_order)), UNPROVIDED);
+                SubLObject top_most_known = list_utilities.first_n(top_n, in_most_known_order);
+                SubLObject cdolist_list_var = top_most_known;
+                SubLObject instance = NIL;
+                for (instance = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , instance = cdolist_list_var.first()) {
+                    {
+                        SubLObject output_filename = cconcatenate(output_dir, new SubLObject[]{ kb_paths.fort_name(instance), $str_alt222$_xml });
+                        format(T, $str_alt223$Generating__S_seen_from__S_into__, new SubLObject[]{ instance, elmt, output_filename });
+                        {
+                            SubLObject stream = NIL;
+                            try {
+                                {
+                                    SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                                    try {
+                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                                        stream = compatibility.open_text(output_filename, $OUTPUT, NIL);
+                                    } finally {
+                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                                if (!stream.isStream()) {
+                                    Errors.error($str_alt225$Unable_to_open__S, output_filename);
+                                }
+                                {
+                                    SubLObject s = stream;
+                                    write_string(api_widgets.get_template_topic_assertions_for_match_in_xml(template_topic, template_topic_mt, elmt, instance, UNPROVIDED), s, UNPROVIDED, UNPROVIDED);
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (stream.isStream()) {
+                                            close(stream, UNPROVIDED);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            }
+                        }
+                        format(T, $str_alt226$_done__);
+                    }
+                }
+            }
+            return output_dir;
+        }
     }
 
     public static SubLObject ftemplate_utilities_generate_example_instances_for_template_topic(SubLObject output_dir, final SubLObject collection, final SubLObject template_topic, final SubLObject elmt, SubLObject percentage) {
@@ -4125,6 +10177,39 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return output_dir;
     }
 
+    public static final SubLObject do_quick_fort_topics_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt228);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject topic = NIL;
+                    SubLObject fort = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt228);
+                    topic = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt228);
+                    fort = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            SubLObject v_isa = $sym229$ISA;
+                            return list(WITH_ALL_MTS, list(DO_ALL_ISA, list(v_isa, fort), listS(CDOLIST, list(topic, listS(PRED_VALUES, v_isa, $list_alt234)), append(body, NIL))));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt228);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject do_quick_fort_topics(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -4147,6 +10232,847 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         }
         cdestructuring_bind_error(datum, $list179);
         return NIL;
+    }
+
+    public static final SubLObject gather_fet_stats_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = ZERO_INTEGER;
+                SubLObject has_hand = ZERO_INTEGER;
+                SubLObject has_induced = ZERO_INTEGER;
+                SubLObject has_topic = ZERO_INTEGER;
+                SubLObject has_both = ZERO_INTEGER;
+                SubLObject could_have_topic = ZERO_INTEGER;
+                SubLObject promising = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject message = $$$mapping_Cyc_FORTs;
+                            SubLObject total_241 = forts.fort_count();
+                            SubLObject sofar = ZERO_INTEGER;
+                            {
+                                SubLObject _prev_bind_0_242 = $last_percent_progress_index$.currentBinding(thread);
+                                SubLObject _prev_bind_1_243 = $last_percent_progress_prediction$.currentBinding(thread);
+                                SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                try {
+                                    $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                    $last_percent_progress_prediction$.bind(NIL, thread);
+                                    $within_noting_percent_progress$.bind(T, thread);
+                                    $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                    noting_percent_progress_preamble(message);
+                                    {
+                                        SubLObject cdolist_list_var = forts.do_forts_tables();
+                                        SubLObject table_var = NIL;
+                                        for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
+                                            if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
+                                                {
+                                                    SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
+                                                    SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
+                                                    SubLObject fort = NIL;
+                                                    while (NIL != id) {
+                                                        fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
+                                                        if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
+                                                            sofar = add(sofar, ONE_INTEGER);
+                                                            note_percent_progress(sofar, total_241);
+                                                            total = add(total, ONE_INTEGER);
+                                                            {
+                                                                SubLObject has_handP = NIL;
+                                                                SubLObject has_inducedP = NIL;
+                                                                {
+                                                                    SubLObject _prev_bind_0_244 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_245 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                                    try {
+                                                                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                                                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                                                        {
+                                                                            SubLObject node_var = fort;
+                                                                            SubLObject deck_type = (false) ? ((SubLObject) ($STACK)) : $QUEUE;
+                                                                            SubLObject recur_deck = deck.create_deck(deck_type);
+                                                                            {
+                                                                                SubLObject _prev_bind_0_246 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                                                                try {
+                                                                                    sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                                                    {
+                                                                                        SubLObject tv_var = NIL;
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_247 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                                                            SubLObject _prev_bind_1_248 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                                                            try {
+                                                                                                sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                                                                if (NIL != tv_var) {
+                                                                                                    if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                                                                        if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                                                                            {
+                                                                                                                SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                                                                if (pcase_var.eql($ERROR)) {
+                                                                                                                    sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                } else {
+                                                                                                                    if (pcase_var.eql($CERROR)) {
+                                                                                                                        sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                    } else {
+                                                                                                                        if (pcase_var.eql($WARN)) {
+                                                                                                                            Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                                        } else {
+                                                                                                                            Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                                                            Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_249 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_1_250 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_2_251 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_3_252 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                                                                        sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                        sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                                                                        if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(fort, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_253 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_1_254 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_2_255 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                                                                                    sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                                    {
+                                                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
+                                                                                                                        SubLObject cdolist_list_var_256 = accessible_modules;
+                                                                                                                        SubLObject module_var = NIL;
+                                                                                                                        for (module_var = cdolist_list_var_256.first(); NIL != cdolist_list_var_256; cdolist_list_var_256 = cdolist_list_var_256.rest() , module_var = cdolist_list_var_256.first()) {
+                                                                                                                            {
+                                                                                                                                SubLObject _prev_bind_0_257 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                                SubLObject _prev_bind_1_258 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                                try {
+                                                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                                    {
+                                                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                if (NIL != d_link) {
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                        if (NIL != mt_links) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject _prev_bind_0_259 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                                try {
+                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject iteration_state_260 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_260)) {
+                                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_260);
+                                                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        SubLObject _prev_bind_0_261 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                                        try {
+                                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                                SubLObject cdolist_list_var_262 = new_list;
+                                                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_262.first(); NIL != cdolist_list_var_262; cdolist_list_var_262 = cdolist_list_var_262.rest() , node_vars_link_node = cdolist_list_var_262.first()) {
+                                                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        } finally {
+                                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_261, thread);
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                }
+                                                                                                                                                                                                iteration_state_260 = dictionary_contents.do_dictionary_contents_next(iteration_state_260);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        } 
+                                                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_260);
+                                                                                                                                                                                    }
+                                                                                                                                                                                } finally {
+                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_259, thread);
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                                    }
+                                                                                                                                                                } 
+                                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } else {
+                                                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } else {
+                                                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                    SubLObject cdolist_list_var_263 = new_list;
+                                                                                                                                                    SubLObject generating_fn = NIL;
+                                                                                                                                                    for (generating_fn = cdolist_list_var_263.first(); NIL != cdolist_list_var_263; cdolist_list_var_263 = cdolist_list_var_263.rest() , generating_fn = cdolist_list_var_263.first()) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_264 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                                    SubLObject new_list_265 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                    SubLObject cdolist_list_var_266 = new_list_265;
+                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_266.first(); NIL != cdolist_list_var_266; cdolist_list_var_266 = cdolist_list_var_266.rest() , node_vars_link_node = cdolist_list_var_266.first()) {
+                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_264, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                } finally {
+                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_258, thread);
+                                                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_257, thread);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                    node_var = deck.deck_pop(recur_deck);
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_267 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                        SubLObject _prev_bind_1_268 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                        SubLObject _prev_bind_2_269 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_search_vars.get_sbhl_search_module()), thread);
+                                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                                            sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                                                                                                                            while (NIL != node_var) {
+                                                                                                                                {
+                                                                                                                                    SubLObject v_isa = node_var;
+                                                                                                                                    SubLObject cdolist_list_var_270 = kb_mapping_utilities.pred_values(v_isa, $$templateTypeForFocalTermType, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                    SubLObject topic = NIL;
+                                                                                                                                    for (topic = cdolist_list_var_270.first(); NIL != cdolist_list_var_270; cdolist_list_var_270 = cdolist_list_var_270.rest() , topic = cdolist_list_var_270.first()) {
+                                                                                                                                        if (!((NIL != has_handP) && (NIL != has_inducedP))) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject inducedP = isa.isaP(topic, $$InducedFormulaTemplateTopicType, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                if (NIL != inducedP) {
+                                                                                                                                                    has_inducedP = T;
+                                                                                                                                                } else {
+                                                                                                                                                    has_handP = T;
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                {
+                                                                                                                                    SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                    SubLObject cdolist_list_var_271 = accessible_modules;
+                                                                                                                                    SubLObject module_var = NIL;
+                                                                                                                                    for (module_var = cdolist_list_var_271.first(); NIL != cdolist_list_var_271; cdolist_list_var_271 = cdolist_list_var_271.rest() , module_var = cdolist_list_var_271.first()) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject _prev_bind_0_272 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                                            SubLObject _prev_bind_1_273 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                                            try {
+                                                                                                                                                sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                                                {
+                                                                                                                                                    SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                                                                                    if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                            if (NIL != d_link) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                    if (NIL != mt_links) {
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                                                    SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject _prev_bind_0_274 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                                            try {
+                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    SubLObject iteration_state_275 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_275)) {
+                                                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                                                        {
+                                                                                                                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_275);
+                                                                                                                                                                                                            SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                                                {
+                                                                                                                                                                                                                    SubLObject _prev_bind_0_276 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                                                    try {
+                                                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                                        {
+                                                                                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                                            SubLObject cdolist_list_var_277 = new_list;
+                                                                                                                                                                                                                            SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                                                            for (node_vars_link_node = cdolist_list_var_277.first(); NIL != cdolist_list_var_277; cdolist_list_var_277 = cdolist_list_var_277.rest() , node_vars_link_node = cdolist_list_var_277.first()) {
+                                                                                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                                                    deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                    } finally {
+                                                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_276, thread);
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                            iteration_state_275 = dictionary_contents.do_dictionary_contents_next(iteration_state_275);
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    } 
+                                                                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_275);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            } finally {
+                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_274, thread);
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                                                }
+                                                                                                                                                                            } 
+                                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } else {
+                                                                                                                                                                sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } else {
+                                                                                                                                                        if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                SubLObject cdolist_list_var_278 = new_list;
+                                                                                                                                                                SubLObject generating_fn = NIL;
+                                                                                                                                                                for (generating_fn = cdolist_list_var_278.first(); NIL != cdolist_list_var_278; cdolist_list_var_278 = cdolist_list_var_278.rest() , generating_fn = cdolist_list_var_278.first()) {
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject _prev_bind_0_279 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                                        try {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                                                SubLObject new_list_280 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                SubLObject cdolist_list_var_281 = new_list_280;
+                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_281.first(); NIL != cdolist_list_var_281; cdolist_list_var_281 = cdolist_list_var_281.rest() , node_vars_link_node = cdolist_list_var_281.first()) {
+                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        } finally {
+                                                                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_279, thread);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            } finally {
+                                                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_273, thread);
+                                                                                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_272, thread);
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                                node_var = deck.deck_pop(recur_deck);
+                                                                                                                            } 
+                                                                                                                        } finally {
+                                                                                                                            sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_2_269, thread);
+                                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_268, thread);
+                                                                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_267, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_255, thread);
+                                                                                                                    sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_254, thread);
+                                                                                                                    sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_253, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, fort, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3_252, thread);
+                                                                                                        sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_251, thread);
+                                                                                                        sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_250, thread);
+                                                                                                        sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_249, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            } finally {
+                                                                                                sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_248, thread);
+                                                                                                sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_247, thread);
+                                                                                            }
+                                                                                        }
+                                                                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                                                                    }
+                                                                                } finally {
+                                                                                    sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_246, thread);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_1_245, thread);
+                                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_244, thread);
+                                                                    }
+                                                                }
+                                                                if ((NIL != has_inducedP) && (NIL != has_handP)) {
+                                                                    has_induced = add(has_induced, ONE_INTEGER);
+                                                                    has_hand = add(has_hand, ONE_INTEGER);
+                                                                    has_topic = add(has_topic, ONE_INTEGER);
+                                                                    has_both = add(has_both, ONE_INTEGER);
+                                                                } else {
+                                                                    if (NIL != has_inducedP) {
+                                                                        has_induced = add(has_induced, ONE_INTEGER);
+                                                                        has_topic = add(has_topic, ONE_INTEGER);
+                                                                    } else {
+                                                                        if (NIL != has_handP) {
+                                                                            has_hand = add(has_hand, ONE_INTEGER);
+                                                                            has_topic = add(has_topic, ONE_INTEGER);
+                                                                        } else {
+                                                                            {
+                                                                                SubLObject could_have_topicP = NIL;
+                                                                                SubLObject node_var = fort;
+                                                                                SubLObject deck_type = (false) ? ((SubLObject) ($STACK)) : $QUEUE;
+                                                                                SubLObject recur_deck = deck.create_deck(deck_type);
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_282 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                                                                    try {
+                                                                                        sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                                                        {
+                                                                                            SubLObject tv_var = NIL;
+                                                                                            {
+                                                                                                SubLObject _prev_bind_0_283 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_1_284 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                                                                try {
+                                                                                                    sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                                                                    sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                                                                    if (NIL != tv_var) {
+                                                                                                        if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                                                                            if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                                                                                {
+                                                                                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                                                                    if (pcase_var.eql($ERROR)) {
+                                                                                                                        sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                    } else {
+                                                                                                                        if (pcase_var.eql($CERROR)) {
+                                                                                                                            sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                        } else {
+                                                                                                                            if (pcase_var.eql($WARN)) {
+                                                                                                                                Errors.warn($str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                                            } else {
+                                                                                                                                Errors.warn($str_alt38$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                                                                Errors.cerror($$$continue_anyway, $str_alt33$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_285 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                                                                        SubLObject _prev_bind_1_286 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                                                                        SubLObject _prev_bind_2_287 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                                                                        SubLObject _prev_bind_3_288 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                                                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                                                                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(fort, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                                                                {
+                                                                                                                    SubLObject _prev_bind_0_289 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_1_290 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_2_291 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                    try {
+                                                                                                                        sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                                                                                        sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                                        {
+                                                                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
+                                                                                                                            SubLObject cdolist_list_var_292 = accessible_modules;
+                                                                                                                            SubLObject module_var = NIL;
+                                                                                                                            for (module_var = cdolist_list_var_292.first(); NIL != cdolist_list_var_292; cdolist_list_var_292 = cdolist_list_var_292.rest() , module_var = cdolist_list_var_292.first()) {
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_293 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                                    SubLObject _prev_bind_1_294 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                                        {
+                                                                                                                                            SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                    if (NIL != d_link) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                            if (NIL != mt_links) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject _prev_bind_0_295 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                                    try {
+                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject iteration_state_296 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_296)) {
+                                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_296);
+                                                                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                                        {
+                                                                                                                                                                                                            SubLObject _prev_bind_0_297 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                                            try {
+                                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                                {
+                                                                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                                    SubLObject cdolist_list_var_298 = new_list;
+                                                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_298.first(); NIL != cdolist_list_var_298; cdolist_list_var_298 = cdolist_list_var_298.rest() , node_vars_link_node = cdolist_list_var_298.first()) {
+                                                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                            } finally {
+                                                                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_297, thread);
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                    iteration_state_296 = dictionary_contents.do_dictionary_contents_next(iteration_state_296);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            } 
+                                                                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_296);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    } finally {
+                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_295, thread);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                                        }
+                                                                                                                                                                    } 
+                                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } else {
+                                                                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            } else {
+                                                                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                        SubLObject cdolist_list_var_299 = new_list;
+                                                                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                                                                        for (generating_fn = cdolist_list_var_299.first(); NIL != cdolist_list_var_299; cdolist_list_var_299 = cdolist_list_var_299.rest() , generating_fn = cdolist_list_var_299.first()) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_300 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                                        SubLObject new_list_301 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                        SubLObject cdolist_list_var_302 = new_list_301;
+                                                                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                        for (node_vars_link_node = cdolist_list_var_302.first(); NIL != cdolist_list_var_302; cdolist_list_var_302 = cdolist_list_var_302.rest() , node_vars_link_node = cdolist_list_var_302.first()) {
+                                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } finally {
+                                                                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_300, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_294, thread);
+                                                                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_293, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        node_var = deck.deck_pop(recur_deck);
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_303 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                            SubLObject _prev_bind_1_304 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                            SubLObject _prev_bind_2_305 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_search_vars.get_sbhl_search_module()), thread);
+                                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                                                                sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.get_sbhl_module_forward_direction(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), thread);
+                                                                                                                                while (NIL != node_var) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject v_isa = node_var;
+                                                                                                                                        if (!((((NIL != could_have_topicP) || (NIL == kb_mapping_utilities.some_pred_value(v_isa, $$keInducedStrongSuggestionPreds, UNPROVIDED, UNPROVIDED))) || (NIL == kb_mapping_utilities.some_pred_value(v_isa, $$keInducedWeakSuggestionPreds, UNPROVIDED, UNPROVIDED))) || (NIL == kb_mapping_utilities.some_pred_value(v_isa, $$keInducedSuggestionPreds, UNPROVIDED, UNPROVIDED)))) {
+                                                                                                                                            could_have_topicP = T;
+                                                                                                                                            dictionary_utilities.dictionary_increment(promising, v_isa, UNPROVIDED);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                    {
+                                                                                                                                        SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                        SubLObject cdolist_list_var_306 = accessible_modules;
+                                                                                                                                        SubLObject module_var = NIL;
+                                                                                                                                        for (module_var = cdolist_list_var_306.first(); NIL != cdolist_list_var_306; cdolist_list_var_306 = cdolist_list_var_306.rest() , module_var = cdolist_list_var_306.first()) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_307 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                                                                SubLObject _prev_bind_1_308 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                                                                                        if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                if (NIL != d_link) {
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                        if (NIL != mt_links) {
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                                                        SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                                        if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject _prev_bind_0_309 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                                                                try {
+                                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                                                    {
+                                                                                                                                                                                                        SubLObject iteration_state_310 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_310)) {
+                                                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_310);
+                                                                                                                                                                                                                SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                                                                if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                                                    {
+                                                                                                                                                                                                                        SubLObject _prev_bind_0_311 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                                                        try {
+                                                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                                                            {
+                                                                                                                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                                                                SubLObject cdolist_list_var_312 = new_list;
+                                                                                                                                                                                                                                SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                                                                for (node_vars_link_node = cdolist_list_var_312.first(); NIL != cdolist_list_var_312; cdolist_list_var_312 = cdolist_list_var_312.rest() , node_vars_link_node = cdolist_list_var_312.first()) {
+                                                                                                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                }
+                                                                                                                                                                                                                            }
+                                                                                                                                                                                                                        } finally {
+                                                                                                                                                                                                                            sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_311, thread);
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                }
+                                                                                                                                                                                                                iteration_state_310 = dictionary_contents.do_dictionary_contents_next(iteration_state_310);
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        } 
+                                                                                                                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state_310);
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                } finally {
+                                                                                                                                                                                                    sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_309, thread);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                                                    }
+                                                                                                                                                                                } 
+                                                                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } else {
+                                                                                                                                                                    sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt41$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        } else {
+                                                                                                                                                            if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                                                    SubLObject cdolist_list_var_313 = new_list;
+                                                                                                                                                                    SubLObject generating_fn = NIL;
+                                                                                                                                                                    for (generating_fn = cdolist_list_var_313.first(); NIL != cdolist_list_var_313; cdolist_list_var_313 = cdolist_list_var_313.rest() , generating_fn = cdolist_list_var_313.first()) {
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject _prev_bind_0_314 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                                                            try {
+                                                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                                                    SubLObject new_list_315 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                    SubLObject cdolist_list_var_316 = new_list_315;
+                                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_316.first(); NIL != cdolist_list_var_316; cdolist_list_var_316 = cdolist_list_var_316.rest() , node_vars_link_node = cdolist_list_var_316.first()) {
+                                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                            deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            } finally {
+                                                                                                                                                                                sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_314, thread);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_308, thread);
+                                                                                                                                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_307, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                    node_var = deck.deck_pop(recur_deck);
+                                                                                                                                } 
+                                                                                                                            } finally {
+                                                                                                                                sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_2_305, thread);
+                                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_304, thread);
+                                                                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_303, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } finally {
+                                                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_291, thread);
+                                                                                                                        sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_290, thread);
+                                                                                                                        sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_289, thread);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } else {
+                                                                                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt42$Node__a_does_not_pass_sbhl_type_t, fort, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3_288, thread);
+                                                                                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_287, thread);
+                                                                                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_286, thread);
+                                                                                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_285, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                } finally {
+                                                                                                    sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_284, thread);
+                                                                                                    sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_283, thread);
+                                                                                                }
+                                                                                            }
+                                                                                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                                                                        }
+                                                                                    } finally {
+                                                                                        sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_282, thread);
+                                                                                    }
+                                                                                }
+                                                                                if (NIL != could_have_topicP) {
+                                                                                    could_have_topic = add(could_have_topic, ONE_INTEGER);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (mod(total, $int$1000).isZero()) {
+                                                                format(T, $str_alt240$__Total___S_Have_topic___S___4F__, new SubLObject[]{ total, has_topic, multiply($int$100, divide(has_topic, total)), could_have_topic, multiply($int$100, divide(could_have_topic, total)) });
+                                                                format(T, $str_alt241$__Hand___S___4F___Induced___S___4, new SubLObject[]{ has_hand, multiply($int$100, divide(has_hand, total)), has_induced, multiply($int$100, divide(has_induced, total)), has_both, multiply($int$100, divide(has_both, total)) });
+                                                                format_nil.print_one_per_line(list_utilities.first_n(TEN_INTEGER, dictionary_utilities.sort_dictionary_by_values(promising, symbol_function($sym212$_))), UNPROVIDED);
+                                                            }
+                                                        }
+                                                        id = do_id_index_next_id(table_var, T, id, state_var);
+                                                        state_var = do_id_index_next_state(table_var, T, id, state_var);
+                                                    } 
+                                                }
+                                            }
+                                        }
+                                    }
+                                    noting_percent_progress_postamble();
+                                } finally {
+                                    $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                    $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                    $last_percent_progress_prediction$.rebind(_prev_bind_1_243, thread);
+                                    $last_percent_progress_index$.rebind(_prev_bind_0_242, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject gather_fet_stats() {
@@ -6003,123 +12929,426 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject declare_formula_template_utilities_file_alt() {
+        declareFunction("get_all_formula_template_topics", "GET-ALL-FORMULA-TEMPLATE-TOPICS", 0, 0, false);
+        declareFunction("formula_template_topic_typeP", "FORMULA-TEMPLATE-TOPIC-TYPE?", 1, 0, false);
+        declareFunction("get_all_formula_template_subtopics", "GET-ALL-FORMULA-TEMPLATE-SUBTOPICS", 0, 0, false);
+        declareFunction("get_all_template_topics", "GET-ALL-TEMPLATE-TOPICS", 0, 0, false);
+        declareFunction("get_all_formula_template_definition_mts", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-MTS", 0, 0, false);
+        declareFunction("get_all_formula_templated_types", "GET-ALL-FORMULA-TEMPLATED-TYPES", 0, 0, false);
+        declareFunction("get_applicable_formula_templated_types", "GET-APPLICABLE-FORMULA-TEMPLATED-TYPES", 1, 0, false);
+        declareFunction("get_all_formula_template_definition_tuples", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-TUPLES", 0, 0, false);
+        declareFunction("get_applicable_formula_template_definition_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-DEFINITION-TUPLES", 1, 0, false);
+        declareFunction("get_applicable_formula_template_collection_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-COLLECTION-TUPLES", 1, 0, false);
+        declareFunction("formula_template_deftuple_order", "FORMULA-TEMPLATE-DEFTUPLE-ORDER", 1, 0, false);
+        declareFunction("get_template_topic_loading_elmt", "GET-TEMPLATE-TOPIC-LOADING-ELMT", 1, 0, false);
+        declareFunction("applicable_template_topics_for_collection", "APPLICABLE-TEMPLATE-TOPICS-FOR-COLLECTION", 1, 1, false);
+        declareFunction("applicable_template_instance_topics_for_collection", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION", 3, 0, false);
+        declareFunction("applicable_template_instance_topics_for_collection_via_inference", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INFERENCE", 3, 0, false);
+        declareFunction("applicable_template_instance_topics_for_collection_tva_workaround", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-TVA-WORKAROUND", 3, 0, false);
+        declareFunction("applicable_template_instance_topics_for_collection_via_index_surfing", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INDEX-SURFING", 3, 0, false);
+        declareFunction("applicable_template_spec_topics_for_collection", "APPLICABLE-TEMPLATE-SPEC-TOPICS-FOR-COLLECTION", 3, 0, false);
+        declareFunction("applicable_template_topics_for_term", "APPLICABLE-TEMPLATE-TOPICS-FOR-TERM", 1, 1, false);
+        declareFunction("term_has_induced_fet_topicP", "TERM-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
+        declareFunction("term_has_induced_fet_topicP_via_index_surfing", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INDEX-SURFING", 1, 0, false);
+        declareFunction("collection_has_induced_fet_topicP", "COLLECTION-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
+        declareFunction("term_has_induced_fet_topicP_via_inference", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INFERENCE", 1, 0, false);
+        declareFunction("candidate_topic_tuples_for_term", "CANDIDATE-TOPIC-TUPLES-FOR-TERM", 2, 1, false);
+        declareFunction("filter_topic_tuples_for_term", "FILTER-TOPIC-TUPLES-FOR-TERM", 3, 1, false);
+        declareFunction("find_valid_fet_topic", "FIND-VALID-FET-TOPIC", 1, 1, false);
+        declareFunction("valid_fet_topic_fortP", "VALID-FET-TOPIC-FORT?", 1, 2, false);
+        declareFunction("valid_fet_subtopic_fortP", "VALID-FET-SUBTOPIC-FORT?", 1, 2, false);
+        declareFunction("salient_descriptor_fet_fn", "SALIENT-DESCRIPTOR-FET-FN", 0, 0, false);
+        declareFunction("make_induced_topic_type_for_term", "MAKE-INDUCED-TOPIC-TYPE-FOR-TERM", 1, 0, false);
+        declareFunction("induce_formula_template_subtopics_for_type", "INDUCE-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("induced_formula_template_subtopics_for_type", "INDUCED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("promising_induction_topic_types", "PROMISING-INDUCTION-TOPIC-TYPES", 2, 1, false);
+        declareFunction("promising_induction_collection_pred_for_type", "PROMISING-INDUCTION-COLLECTION-PRED-FOR-TYPE", 1, 0, false);
+        declareFunction("find_promising_induction_topic_type_collections", "FIND-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS", 0, 1, false);
+        declareFunction("get_example_for_promising_collection", "GET-EXAMPLE-FOR-PROMISING-COLLECTION", 1, 1, false);
+        declareFunction("recently_asserted_promising_collectionP", "RECENTLY-ASSERTED-PROMISING-COLLECTION?", 1, 1, false);
+        declareFunction("rank_promising_induction_topic_type_collections", "RANK-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS", 1, 0, false);
+        declareFunction("update_promising_induction_topic_type_collections", "UPDATE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS", 0, 1, false);
+        declareFunction("update_promising_induction_topic_type_collection", "UPDATE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION", 1, 1, false);
+        declareFunction("update_asserted_info", "UPDATE-ASSERTED-INFO", 3, 0, false);
+        declareFunction("nart_collection_definitional_mts", "NART-COLLECTION-DEFINITIONAL-MTS", 1, 0, false);
+        declareFunction("qualify_mt_for_today", "QUALIFY-MT-FOR-TODAY", 1, 0, false);
+        declareFunction("assert_induced_suggestion_preds_for_promising_collections", "ASSERT-INDUCED-SUGGESTION-PREDS-FOR-PROMISING-COLLECTIONS", 0, 2, false);
+        declareFunction("assert_induced_suggestion_preds_for_collection", "ASSERT-INDUCED-SUGGESTION-PREDS-FOR-COLLECTION", 1, 2, false);
+        declareFunction("determine_induced_suggestion_preds_mt", "DETERMINE-INDUCED-SUGGESTION-PREDS-MT", 2, 1, false);
+        declareFunction("mt_with_most_pred_assertions", "MT-WITH-MOST-PRED-ASSERTIONS", 2, 0, false);
+        declareFunction("mt_with_most_pred_assertions_on_type", "MT-WITH-MOST-PRED-ASSERTIONS-ON-TYPE", 3, 0, false);
+        declareFunction("num_pred_assertions_on_type_in_mt", "NUM-PRED-ASSERTIONS-ON-TYPE-IN-MT", 3, 0, false);
+        declareFunction("some_asserted_pred_value_in_mt", "SOME-ASSERTED-PRED-VALUE-IN-MT", 3, 0, false);
+        declareFunction("some_asserted_pred_ref_in_mt", "SOME-ASSERTED-PRED-REF-IN-MT", 2, 0, false);
+        declareFunction("asserted_arg1_mts", "ASSERTED-ARG1-MTS", 2, 2, false);
+        declareFunction("promising_induction_topic_type_collectionP", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?", 2, 2, false);
+        declareFunction("promising_induction_assertions_for_collection", "PROMISING-INDUCTION-ASSERTIONS-FOR-COLLECTION", 1, 2, false);
+        declareFunction("mt_time_index", "MT-TIME-INDEX", 1, 0, false);
+        declareFunction("clear_promising_induction_topic_type_collectionP_verify", "CLEAR-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 0, 0, false);
+        declareFunction("remove_promising_induction_topic_type_collectionP_verify", "REMOVE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
+        declareFunction("promising_induction_topic_type_collectionP_verify_internal", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-INTERNAL", 4, 0, false);
+        declareFunction("promising_induction_topic_type_collectionP_verify", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
+        declareFunction("induction_topic_type_for_collection", "INDUCTION-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
+        declareFunction("induction_topic_typeP", "INDUCTION-TOPIC-TYPE?", 1, 0, false);
+        declareFunction("induced_formula_template_forts_for_focal_term_type", "INDUCED-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
+        declareFunction("rkf_salient_descriptor_formula_template_forts_for_focal_term_type", "RKF-SALIENT-DESCRIPTOR-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
+        declareFunction("rkf_salient_descriptor_topic_type_for_collection", "RKF-SALIENT-DESCRIPTOR-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
+        declareFunction("find_or_induce_formula_template_forts", "FIND-OR-INDUCE-FORMULA-TEMPLATE-FORTS", 1, 1, false);
+        declareFunction("focal_term_type_for_topic_type", "FOCAL-TERM-TYPE-FOR-TOPIC-TYPE", 1, 1, false);
+        declareFunction("focal_term_type_for_induced_template_type", "FOCAL-TERM-TYPE-FOR-INDUCED-TEMPLATE-TYPE", 2, 0, false);
+        declareFunction("applicable_template_topics_by_types", "APPLICABLE-TEMPLATE-TOPICS-BY-TYPES", 1, 1, false);
+        declareFunction("topics_via_isa_query_sentence", "TOPICS-VIA-ISA-QUERY-SENTENCE", 1, 3, false);
+        declareFunction("topics_via_genls_query_sentence", "TOPICS-VIA-GENLS-QUERY-SENTENCE", 1, 3, false);
+        declareFunction("suggest_template_topic_for_term", "SUGGEST-TEMPLATE-TOPIC-FOR-TERM", 2, 1, false);
+        declareFunction("suggest_template_topic_for_collection", "SUGGEST-TEMPLATE-TOPIC-FOR-COLLECTION", 2, 1, false);
+        declareFunction("formula_template_topic_type_from_topic", "FORMULA-TEMPLATE-TOPIC-TYPE-FROM-TOPIC", 2, 0, false);
+        declareFunction("formula_template_prototype_from_el_formula", "FORMULA-TEMPLATE-PROTOTYPE-FROM-EL-FORMULA", 3, 5, false);
+        declareFunction("formula_template_prototype_from_assertion", "FORMULA-TEMPLATE-PROTOTYPE-FROM-ASSERTION", 3, 4, false);
+        declareFunction("template_type_for_focal_term_type", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPE", 2, 0, false);
+        declareFunction("template_type_for_focal_term_types", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPES", 2, 0, false);
+        declareFunction("template_topic_genls", "TEMPLATE-TOPIC-GENLS", 2, 0, false);
+        declareFunction("create_formula_template_from_name_and_topic", "CREATE-FORMULA-TEMPLATE-FROM-NAME-AND-TOPIC", 2, 0, false);
+        declareFunction("find_matching_formula_template_argpos_details", "FIND-MATCHING-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
+        declareFunction("maybe_assert_fet_gloss_for_arg_position", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
+        declareFunction("maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 2, 0, false);
+        declareFunction("maybe_assert_fet_gloss_for_arg2_of_binary_pred", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+        declareFunction("make_fet_gloss_for_arg_position", "MAKE-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
+        declareFunction("make_fet_gloss_for_arg2_of_binary_pred_formula", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 1, 1, false);
+        declareFunction("clear_make_fet_gloss_for_arg2_of_binary_pred", "CLEAR-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 0, 0, false);
+        declareFunction("remove_make_fet_gloss_for_arg2_of_binary_pred", "REMOVE-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+        declareFunction("make_fet_gloss_for_arg2_of_binary_pred_internal", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-INTERNAL", 2, 0, false);
+        declareFunction("make_fet_gloss_for_arg2_of_binary_pred", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+        declareFunction("formula_template_meta_isaP", "FORMULA-TEMPLATE-META-ISA?", 2, 0, false);
+        declareFunction("formula_template_meta_isa", "FORMULA-TEMPLATE-META-ISA", 2, 0, false);
+        declareFunction("make_fet_gloss_for_meta_isa_formula", "MAKE-FET-GLOSS-FOR-META-ISA-FORMULA", 3, 0, false);
+        declareFunction("clear_make_fet_gloss_for_meta_isa", "CLEAR-MAKE-FET-GLOSS-FOR-META-ISA", 0, 0, false);
+        declareFunction("remove_make_fet_gloss_for_meta_isa", "REMOVE-MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
+        declareFunction("make_fet_gloss_for_meta_isa_internal", "MAKE-FET-GLOSS-FOR-META-ISA-INTERNAL", 2, 0, false);
+        declareFunction("make_fet_gloss_for_meta_isa", "MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
+        declareFunction("make_fet_explanation_for_arg_position", "MAKE-FET-EXPLANATION-FOR-ARG-POSITION", 3, 1, false);
+        declareFunction("reify_formula_template_description", "REIFY-FORMULA-TEMPLATE-DESCRIPTION", 1, 0, false);
+        declareFunction("assert_formula_template_type_subtopic", "ASSERT-FORMULA-TEMPLATE-TYPE-SUBTOPIC", 2, 0, false);
+        declareFunction("make_formula_template_type_assertions", "MAKE-FORMULA-TEMPLATE-TYPE-ASSERTIONS", 1, 0, false);
+        declareFunction("assert_formula_template_formula", "ASSERT-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
+        declareFunction("assert_formula_template_elmt", "ASSERT-FORMULA-TEMPLATE-ELMT", 2, 0, false);
+        declareFunction("assert_formula_template_focal_term_position", "ASSERT-FORMULA-TEMPLATE-FOCAL-TERM-POSITION", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_format", "ASSERT-FORMULA-TEMPLATE-ASSERTION-FORMAT", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_explanations", "ASSERT-FORMULA-TEMPLATE-ASSERTION-EXPLANATIONS", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_glosses", "ASSERT-FORMULA-TEMPLATE-ASSERTION-GLOSSES", 2, 0, false);
+        declareFunction("assert_formula_template_candidate_replacements", "ASSERT-FORMULA-TEMPLATE-CANDIDATE-REPLACEMENTS", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_validation_required", "ASSERT-FORMULA-TEMPLATE-ASSERTION-VALIDATION-REQUIRED", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_replacements_invisible", "ASSERT-FORMULA-TEMPLATE-ASSERTION-REPLACEMENTS-INVISIBLE", 2, 0, false);
+        declareFunction("assert_formula_template_examples", "ASSERT-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
+        declareFunction("assert_formula_template_priority_ordering", "ASSERT-FORMULA-TEMPLATE-PRIORITY-ORDERING", 3, 0, false);
+        declareFunction("find_ftemplate_topic_from_id", "FIND-FTEMPLATE-TOPIC-FROM-ID", 2, 0, false);
+        declareFunction("find_ftemplate_from_ids", "FIND-FTEMPLATE-FROM-IDS", 3, 0, false);
+        declareFunction("find_ftemplate_in_template_topic", "FIND-FTEMPLATE-IN-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("perform_after_creatings_for_new_template_term", "PERFORM-AFTER-CREATINGS-FOR-NEW-TEMPLATE-TERM", 2, 0, false);
+        declareFunction("after_creating_function_specs_for_template_id", "AFTER-CREATING-FUNCTION-SPECS-FOR-TEMPLATE-ID", 1, 0, false);
+        declareFunction("check_template_type_menu_item_parsing", "CHECK-TEMPLATE-TYPE-MENU-ITEM-PARSING", 1, 1, false);
+        declareFunction("check_template_menu_item_parsing", "CHECK-TEMPLATE-MENU-ITEM-PARSING", 1, 2, false);
+        declareFunction("check_template_arg_pos_menu_item_parsing", "CHECK-TEMPLATE-ARG-POS-MENU-ITEM-PARSING", 2, 3, false);
+        declareFunction("check_template_candidate_replacement_gaf_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-GAF-PARSING", 1, 3, false);
+        declareFunction("check_template_arg_position_candidates", "CHECK-TEMPLATE-ARG-POSITION-CANDIDATES", 4, 0, false);
+        declareFunction("arg_position_candidates_memoized_internal", "ARG-POSITION-CANDIDATES-MEMOIZED-INTERNAL", 2, 1, false);
+        declareFunction("arg_position_candidates_memoized", "ARG-POSITION-CANDIDATES-MEMOIZED", 2, 1, false);
+        declareFunction("omit_from_fet_menuP", "OMIT-FROM-FET-MENU?", 1, 0, false);
+        declareFunction("constraint_col_for_formula_arg_position", "CONSTRAINT-COL-FOR-FORMULA-ARG-POSITION", 2, 0, false);
+        declareFunction("constraint_col_for_constraint_term", "CONSTRAINT-COL-FOR-CONSTRAINT-TERM", 1, 0, false);
+        declareFunction("check_template_candidate_replacement_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-PARSING", 2, 0, false);
+        declareFunction("ftemplate_utilities_generate_example_template_topic_cases", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-TEMPLATE-TOPIC-CASES", 1, 1, false);
+        declareFunction("ftemplate_utilities_generate_example_instances_for_template_topic", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-INSTANCES-FOR-TEMPLATE-TOPIC", 4, 1, false);
+        declareMacro("do_quick_fort_topics", "DO-QUICK-FORT-TOPICS");
+        declareFunction("gather_fet_stats", "GATHER-FET-STATS", 0, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_formula_template_utilities_file() {
-        declareFunction(me, "get_all_formula_template_topics", "GET-ALL-FORMULA-TEMPLATE-TOPICS", 0, 0, false);
-        declareFunction(me, "formula_template_topic_typeP", "FORMULA-TEMPLATE-TOPIC-TYPE?", 1, 0, false);
-        declareFunction(me, "get_all_formula_template_subtopics", "GET-ALL-FORMULA-TEMPLATE-SUBTOPICS", 0, 0, false);
-        declareFunction(me, "get_all_template_topics", "GET-ALL-TEMPLATE-TOPICS", 0, 0, false);
-        declareFunction(me, "get_all_formula_template_definition_mts", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-MTS", 0, 0, false);
-        declareFunction(me, "get_all_formula_templated_types", "GET-ALL-FORMULA-TEMPLATED-TYPES", 0, 0, false);
-        declareFunction(me, "get_applicable_formula_templated_types", "GET-APPLICABLE-FORMULA-TEMPLATED-TYPES", 1, 0, false);
-        declareFunction(me, "get_all_formula_template_definition_tuples", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-TUPLES", 0, 0, false);
-        declareFunction(me, "get_applicable_formula_template_definition_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-DEFINITION-TUPLES", 1, 0, false);
-        declareFunction(me, "get_applicable_formula_template_collection_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-COLLECTION-TUPLES", 1, 0, false);
-        declareFunction(me, "formula_template_deftuple_order", "FORMULA-TEMPLATE-DEFTUPLE-ORDER", 1, 0, false);
-        declareFunction(me, "get_template_topic_loading_elmt", "GET-TEMPLATE-TOPIC-LOADING-ELMT", 1, 0, false);
-        declareFunction(me, "applicable_template_topics_for_collection", "APPLICABLE-TEMPLATE-TOPICS-FOR-COLLECTION", 1, 1, false);
-        declareFunction(me, "applicable_template_instance_topics_for_collection", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION", 3, 0, false);
-        declareFunction(me, "applicable_template_instance_topics_for_collection_via_inference", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INFERENCE", 3, 0, false);
-        declareFunction(me, "applicable_template_instance_topics_for_collection_tva_workaround", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-TVA-WORKAROUND", 3, 0, false);
-        declareFunction(me, "applicable_template_instance_topics_for_collection_via_index_surfing", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INDEX-SURFING", 3, 0, false);
-        declareFunction(me, "applicable_template_spec_topics_for_collection", "APPLICABLE-TEMPLATE-SPEC-TOPICS-FOR-COLLECTION", 3, 0, false);
-        declareFunction(me, "applicable_template_topics_for_term", "APPLICABLE-TEMPLATE-TOPICS-FOR-TERM", 1, 1, false);
-        declareFunction(me, "term_has_induced_fet_topicP", "TERM-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
-        declareFunction(me, "term_has_induced_fet_topicP_via_index_surfing", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INDEX-SURFING", 1, 0, false);
-        declareFunction(me, "collection_has_induced_fet_topicP", "COLLECTION-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
-        declareFunction(me, "term_has_induced_fet_topicP_via_inference", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INFERENCE", 1, 0, false);
-        declareFunction(me, "candidate_topic_tuples_for_term", "CANDIDATE-TOPIC-TUPLES-FOR-TERM", 2, 1, false);
-        declareFunction(me, "filter_topic_tuples_for_term", "FILTER-TOPIC-TUPLES-FOR-TERM", 3, 1, false);
-        declareFunction(me, "find_valid_fet_topic", "FIND-VALID-FET-TOPIC", 1, 1, false);
-        declareFunction(me, "valid_fet_topic_fortP", "VALID-FET-TOPIC-FORT?", 1, 2, false);
-        declareFunction(me, "valid_fet_subtopic_fortP", "VALID-FET-SUBTOPIC-FORT?", 1, 2, false);
-        declareFunction(me, "salient_descriptor_fet_fn", "SALIENT-DESCRIPTOR-FET-FN", 0, 0, false);
-        declareFunction(me, "make_induced_topic_type_for_term", "MAKE-INDUCED-TOPIC-TYPE-FOR-TERM", 1, 0, false);
-        declareFunction(me, "induce_formula_template_subtopics_for_type", "INDUCE-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "induced_formula_template_subtopics_for_type", "INDUCED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "promising_induction_topic_types", "PROMISING-INDUCTION-TOPIC-TYPES", 2, 1, false);
-        declareFunction(me, "promising_induction_collection_pred_for_type", "PROMISING-INDUCTION-COLLECTION-PRED-FOR-TYPE", 1, 0, false);
-        declareFunction(me, "promising_induction_topic_type_collectionP", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?", 2, 2, false);
-        declareFunction(me, "promising_induction_assertions_for_collection", "PROMISING-INDUCTION-ASSERTIONS-FOR-COLLECTION", 1, 2, false);
-        declareFunction(me, "mt_time_index", "MT-TIME-INDEX", 1, 0, false);
-        declareFunction(me, "clear_promising_induction_topic_type_collectionP_verify", "CLEAR-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 0, 0, false);
-        declareFunction(me, "remove_promising_induction_topic_type_collectionP_verify", "REMOVE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
-        declareFunction(me, "promising_induction_topic_type_collectionP_verify_internal", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-INTERNAL", 4, 0, false);
-        declareFunction(me, "promising_induction_topic_type_collectionP_verify", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
-        declareFunction(me, "induction_topic_type_for_collection", "INDUCTION-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
-        declareFunction(me, "induction_topic_typeP", "INDUCTION-TOPIC-TYPE?", 1, 0, false);
-        declareFunction(me, "induced_formula_template_forts_for_focal_term_type", "INDUCED-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
-        declareFunction(me, "rkf_salient_descriptor_formula_template_forts_for_focal_term_type", "RKF-SALIENT-DESCRIPTOR-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
-        declareFunction(me, "rkf_salient_descriptor_topic_type_for_collection", "RKF-SALIENT-DESCRIPTOR-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
-        declareFunction(me, "focal_term_type_for_topic_type", "FOCAL-TERM-TYPE-FOR-TOPIC-TYPE", 1, 1, false);
-        declareFunction(me, "focal_term_type_for_induced_template_type", "FOCAL-TERM-TYPE-FOR-INDUCED-TEMPLATE-TYPE", 2, 0, false);
-        declareFunction(me, "applicable_template_topics_by_types", "APPLICABLE-TEMPLATE-TOPICS-BY-TYPES", 1, 1, false);
-        declareFunction(me, "topics_via_isa_query_sentence", "TOPICS-VIA-ISA-QUERY-SENTENCE", 1, 3, false);
-        declareFunction(me, "topics_via_genls_query_sentence", "TOPICS-VIA-GENLS-QUERY-SENTENCE", 1, 3, false);
-        declareFunction(me, "suggest_template_topic_for_term", "SUGGEST-TEMPLATE-TOPIC-FOR-TERM", 2, 1, false);
-        declareFunction(me, "suggest_template_topic_for_collection", "SUGGEST-TEMPLATE-TOPIC-FOR-COLLECTION", 2, 1, false);
-        declareFunction(me, "formula_template_topic_type_from_topic", "FORMULA-TEMPLATE-TOPIC-TYPE-FROM-TOPIC", 2, 0, false);
-        declareFunction(me, "formula_template_prototype_from_el_formula", "FORMULA-TEMPLATE-PROTOTYPE-FROM-EL-FORMULA", 3, 5, false);
-        declareFunction(me, "formula_template_prototype_from_assertion", "FORMULA-TEMPLATE-PROTOTYPE-FROM-ASSERTION", 3, 4, false);
-        declareFunction(me, "template_type_for_focal_term_type", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPE", 2, 0, false);
-        declareFunction(me, "template_type_for_focal_term_types", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPES", 2, 0, false);
-        declareFunction(me, "template_topic_genls", "TEMPLATE-TOPIC-GENLS", 2, 0, false);
-        declareFunction(me, "create_formula_template_from_name_and_topic", "CREATE-FORMULA-TEMPLATE-FROM-NAME-AND-TOPIC", 2, 0, false);
-        declareFunction(me, "find_matching_formula_template_argpos_details", "FIND-MATCHING-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
-        declareFunction(me, "maybe_assert_fet_gloss_for_arg_position", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
-        declareFunction(me, "maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 2, 0, false);
-        declareFunction(me, "maybe_assert_fet_gloss_for_arg2_of_binary_pred", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
-        declareFunction(me, "make_fet_gloss_for_arg_position", "MAKE-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
-        declareFunction(me, "make_fet_gloss_for_arg2_of_binary_pred_formula", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 1, 1, false);
-        declareFunction(me, "clear_make_fet_gloss_for_arg2_of_binary_pred", "CLEAR-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 0, 0, false);
-        declareFunction(me, "remove_make_fet_gloss_for_arg2_of_binary_pred", "REMOVE-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
-        declareFunction(me, "make_fet_gloss_for_arg2_of_binary_pred_internal", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-INTERNAL", 2, 0, false);
-        declareFunction(me, "make_fet_gloss_for_arg2_of_binary_pred", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
-        declareFunction(me, "formula_template_meta_isaP", "FORMULA-TEMPLATE-META-ISA?", 2, 0, false);
-        declareFunction(me, "formula_template_meta_isa", "FORMULA-TEMPLATE-META-ISA", 2, 0, false);
-        declareFunction(me, "make_fet_gloss_for_meta_isa_formula", "MAKE-FET-GLOSS-FOR-META-ISA-FORMULA", 3, 0, false);
-        declareFunction(me, "clear_make_fet_gloss_for_meta_isa", "CLEAR-MAKE-FET-GLOSS-FOR-META-ISA", 0, 0, false);
-        declareFunction(me, "remove_make_fet_gloss_for_meta_isa", "REMOVE-MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
-        declareFunction(me, "make_fet_gloss_for_meta_isa_internal", "MAKE-FET-GLOSS-FOR-META-ISA-INTERNAL", 2, 0, false);
-        declareFunction(me, "make_fet_gloss_for_meta_isa", "MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
-        declareFunction(me, "make_fet_explanation_for_arg_position", "MAKE-FET-EXPLANATION-FOR-ARG-POSITION", 3, 1, false);
-        declareFunction(me, "reify_formula_template_description", "REIFY-FORMULA-TEMPLATE-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "assert_formula_template_type_subtopic", "ASSERT-FORMULA-TEMPLATE-TYPE-SUBTOPIC", 2, 0, false);
-        declareFunction(me, "make_formula_template_type_assertions", "MAKE-FORMULA-TEMPLATE-TYPE-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "assert_formula_template_formula", "ASSERT-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
-        declareFunction(me, "assert_formula_template_elmt", "ASSERT-FORMULA-TEMPLATE-ELMT", 2, 0, false);
-        declareFunction(me, "assert_formula_template_focal_term_position", "ASSERT-FORMULA-TEMPLATE-FOCAL-TERM-POSITION", 2, 0, false);
-        declareFunction(me, "assert_formula_template_assertion_format", "ASSERT-FORMULA-TEMPLATE-ASSERTION-FORMAT", 2, 0, false);
-        declareFunction(me, "assert_formula_template_assertion_explanations", "ASSERT-FORMULA-TEMPLATE-ASSERTION-EXPLANATIONS", 2, 0, false);
-        declareFunction(me, "assert_formula_template_assertion_glosses", "ASSERT-FORMULA-TEMPLATE-ASSERTION-GLOSSES", 2, 0, false);
-        declareFunction(me, "assert_formula_template_candidate_replacements", "ASSERT-FORMULA-TEMPLATE-CANDIDATE-REPLACEMENTS", 2, 0, false);
-        declareFunction(me, "assert_formula_template_assertion_validation_required", "ASSERT-FORMULA-TEMPLATE-ASSERTION-VALIDATION-REQUIRED", 2, 0, false);
-        declareFunction(me, "assert_formula_template_assertion_replacements_invisible", "ASSERT-FORMULA-TEMPLATE-ASSERTION-REPLACEMENTS-INVISIBLE", 2, 0, false);
-        declareFunction(me, "assert_formula_template_examples", "ASSERT-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
-        declareFunction(me, "assert_formula_template_priority_ordering", "ASSERT-FORMULA-TEMPLATE-PRIORITY-ORDERING", 3, 0, false);
-        declareFunction(me, "find_ftemplate_topic_from_id", "FIND-FTEMPLATE-TOPIC-FROM-ID", 2, 0, false);
-        declareFunction(me, "find_ftemplate_from_ids", "FIND-FTEMPLATE-FROM-IDS", 3, 0, false);
-        declareFunction(me, "find_ftemplate_in_template_topic", "FIND-FTEMPLATE-IN-TEMPLATE-TOPIC", 2, 0, false);
-        declareFunction(me, "perform_after_creatings_for_new_template_term", "PERFORM-AFTER-CREATINGS-FOR-NEW-TEMPLATE-TERM", 2, 0, false);
-        declareFunction(me, "after_creating_function_specs_for_template_id", "AFTER-CREATING-FUNCTION-SPECS-FOR-TEMPLATE-ID", 1, 0, false);
-        declareFunction(me, "check_template_type_menu_item_parsing", "CHECK-TEMPLATE-TYPE-MENU-ITEM-PARSING", 1, 1, false);
-        declareFunction(me, "check_template_menu_item_parsing", "CHECK-TEMPLATE-MENU-ITEM-PARSING", 1, 2, false);
-        declareFunction(me, "check_template_arg_pos_menu_item_parsing", "CHECK-TEMPLATE-ARG-POS-MENU-ITEM-PARSING", 2, 3, false);
-        declareFunction(me, "check_template_candidate_replacement_gaf_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-GAF-PARSING", 1, 3, false);
-        declareFunction(me, "check_template_arg_position_candidates", "CHECK-TEMPLATE-ARG-POSITION-CANDIDATES", 4, 0, false);
-        declareFunction(me, "arg_position_candidates_memoized_internal", "ARG-POSITION-CANDIDATES-MEMOIZED-INTERNAL", 2, 1, false);
-        declareFunction(me, "arg_position_candidates_memoized", "ARG-POSITION-CANDIDATES-MEMOIZED", 2, 1, false);
-        declareFunction(me, "omit_from_fet_menuP", "OMIT-FROM-FET-MENU?", 1, 0, false);
-        declareFunction(me, "constraint_col_for_formula_arg_position", "CONSTRAINT-COL-FOR-FORMULA-ARG-POSITION", 2, 0, false);
-        declareFunction(me, "constraint_col_for_constraint_term", "CONSTRAINT-COL-FOR-CONSTRAINT-TERM", 1, 0, false);
-        declareFunction(me, "check_template_candidate_replacement_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-PARSING", 2, 0, false);
-        declareFunction(me, "ftemplate_utilities_generate_example_template_topic_cases", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-TEMPLATE-TOPIC-CASES", 1, 1, false);
-        declareFunction(me, "ftemplate_utilities_generate_example_instances_for_template_topic", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-INSTANCES-FOR-TEMPLATE-TOPIC", 4, 1, false);
-        declareMacro(me, "do_quick_fort_topics", "DO-QUICK-FORT-TOPICS");
-        declareFunction(me, "gather_fet_stats", "GATHER-FET-STATS", 0, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("get_all_formula_template_topics", "GET-ALL-FORMULA-TEMPLATE-TOPICS", 0, 0, false);
+            declareFunction("formula_template_topic_typeP", "FORMULA-TEMPLATE-TOPIC-TYPE?", 1, 0, false);
+            declareFunction("get_all_formula_template_subtopics", "GET-ALL-FORMULA-TEMPLATE-SUBTOPICS", 0, 0, false);
+            declareFunction("get_all_template_topics", "GET-ALL-TEMPLATE-TOPICS", 0, 0, false);
+            declareFunction("get_all_formula_template_definition_mts", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-MTS", 0, 0, false);
+            declareFunction("get_all_formula_templated_types", "GET-ALL-FORMULA-TEMPLATED-TYPES", 0, 0, false);
+            declareFunction("get_applicable_formula_templated_types", "GET-APPLICABLE-FORMULA-TEMPLATED-TYPES", 1, 0, false);
+            declareFunction("get_all_formula_template_definition_tuples", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-TUPLES", 0, 0, false);
+            declareFunction("get_applicable_formula_template_definition_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-DEFINITION-TUPLES", 1, 0, false);
+            declareFunction("get_applicable_formula_template_collection_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-COLLECTION-TUPLES", 1, 0, false);
+            declareFunction("formula_template_deftuple_order", "FORMULA-TEMPLATE-DEFTUPLE-ORDER", 1, 0, false);
+            declareFunction("get_template_topic_loading_elmt", "GET-TEMPLATE-TOPIC-LOADING-ELMT", 1, 0, false);
+            declareFunction("applicable_template_topics_for_collection", "APPLICABLE-TEMPLATE-TOPICS-FOR-COLLECTION", 1, 1, false);
+            declareFunction("applicable_template_instance_topics_for_collection", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION", 3, 0, false);
+            declareFunction("applicable_template_instance_topics_for_collection_via_inference", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INFERENCE", 3, 0, false);
+            declareFunction("applicable_template_instance_topics_for_collection_tva_workaround", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-TVA-WORKAROUND", 3, 0, false);
+            declareFunction("applicable_template_instance_topics_for_collection_via_index_surfing", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INDEX-SURFING", 3, 0, false);
+            declareFunction("applicable_template_spec_topics_for_collection", "APPLICABLE-TEMPLATE-SPEC-TOPICS-FOR-COLLECTION", 3, 0, false);
+            declareFunction("applicable_template_topics_for_term", "APPLICABLE-TEMPLATE-TOPICS-FOR-TERM", 1, 1, false);
+            declareFunction("term_has_induced_fet_topicP", "TERM-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
+            declareFunction("term_has_induced_fet_topicP_via_index_surfing", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INDEX-SURFING", 1, 0, false);
+            declareFunction("collection_has_induced_fet_topicP", "COLLECTION-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
+            declareFunction("term_has_induced_fet_topicP_via_inference", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INFERENCE", 1, 0, false);
+            declareFunction("candidate_topic_tuples_for_term", "CANDIDATE-TOPIC-TUPLES-FOR-TERM", 2, 1, false);
+            declareFunction("filter_topic_tuples_for_term", "FILTER-TOPIC-TUPLES-FOR-TERM", 3, 1, false);
+            declareFunction("find_valid_fet_topic", "FIND-VALID-FET-TOPIC", 1, 1, false);
+            declareFunction("valid_fet_topic_fortP", "VALID-FET-TOPIC-FORT?", 1, 2, false);
+            declareFunction("valid_fet_subtopic_fortP", "VALID-FET-SUBTOPIC-FORT?", 1, 2, false);
+            declareFunction("salient_descriptor_fet_fn", "SALIENT-DESCRIPTOR-FET-FN", 0, 0, false);
+            declareFunction("make_induced_topic_type_for_term", "MAKE-INDUCED-TOPIC-TYPE-FOR-TERM", 1, 0, false);
+            declareFunction("induce_formula_template_subtopics_for_type", "INDUCE-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+            declareFunction("induced_formula_template_subtopics_for_type", "INDUCED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+            declareFunction("promising_induction_topic_types", "PROMISING-INDUCTION-TOPIC-TYPES", 2, 1, false);
+            declareFunction("promising_induction_collection_pred_for_type", "PROMISING-INDUCTION-COLLECTION-PRED-FOR-TYPE", 1, 0, false);
+            declareFunction("promising_induction_topic_type_collectionP", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?", 2, 2, false);
+            declareFunction("promising_induction_assertions_for_collection", "PROMISING-INDUCTION-ASSERTIONS-FOR-COLLECTION", 1, 2, false);
+            declareFunction("mt_time_index", "MT-TIME-INDEX", 1, 0, false);
+            declareFunction("clear_promising_induction_topic_type_collectionP_verify", "CLEAR-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 0, 0, false);
+            declareFunction("remove_promising_induction_topic_type_collectionP_verify", "REMOVE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
+            declareFunction("promising_induction_topic_type_collectionP_verify_internal", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-INTERNAL", 4, 0, false);
+            declareFunction("promising_induction_topic_type_collectionP_verify", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
+            declareFunction("induction_topic_type_for_collection", "INDUCTION-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
+            declareFunction("induction_topic_typeP", "INDUCTION-TOPIC-TYPE?", 1, 0, false);
+            declareFunction("induced_formula_template_forts_for_focal_term_type", "INDUCED-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
+            declareFunction("rkf_salient_descriptor_formula_template_forts_for_focal_term_type", "RKF-SALIENT-DESCRIPTOR-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
+            declareFunction("rkf_salient_descriptor_topic_type_for_collection", "RKF-SALIENT-DESCRIPTOR-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
+            declareFunction("focal_term_type_for_topic_type", "FOCAL-TERM-TYPE-FOR-TOPIC-TYPE", 1, 1, false);
+            declareFunction("focal_term_type_for_induced_template_type", "FOCAL-TERM-TYPE-FOR-INDUCED-TEMPLATE-TYPE", 2, 0, false);
+            declareFunction("applicable_template_topics_by_types", "APPLICABLE-TEMPLATE-TOPICS-BY-TYPES", 1, 1, false);
+            declareFunction("topics_via_isa_query_sentence", "TOPICS-VIA-ISA-QUERY-SENTENCE", 1, 3, false);
+            declareFunction("topics_via_genls_query_sentence", "TOPICS-VIA-GENLS-QUERY-SENTENCE", 1, 3, false);
+            declareFunction("suggest_template_topic_for_term", "SUGGEST-TEMPLATE-TOPIC-FOR-TERM", 2, 1, false);
+            declareFunction("suggest_template_topic_for_collection", "SUGGEST-TEMPLATE-TOPIC-FOR-COLLECTION", 2, 1, false);
+            declareFunction("formula_template_topic_type_from_topic", "FORMULA-TEMPLATE-TOPIC-TYPE-FROM-TOPIC", 2, 0, false);
+            declareFunction("formula_template_prototype_from_el_formula", "FORMULA-TEMPLATE-PROTOTYPE-FROM-EL-FORMULA", 3, 5, false);
+            declareFunction("formula_template_prototype_from_assertion", "FORMULA-TEMPLATE-PROTOTYPE-FROM-ASSERTION", 3, 4, false);
+            declareFunction("template_type_for_focal_term_type", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPE", 2, 0, false);
+            declareFunction("template_type_for_focal_term_types", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPES", 2, 0, false);
+            declareFunction("template_topic_genls", "TEMPLATE-TOPIC-GENLS", 2, 0, false);
+            declareFunction("create_formula_template_from_name_and_topic", "CREATE-FORMULA-TEMPLATE-FROM-NAME-AND-TOPIC", 2, 0, false);
+            declareFunction("find_matching_formula_template_argpos_details", "FIND-MATCHING-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
+            declareFunction("maybe_assert_fet_gloss_for_arg_position", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
+            declareFunction("maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 2, 0, false);
+            declareFunction("maybe_assert_fet_gloss_for_arg2_of_binary_pred", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+            declareFunction("make_fet_gloss_for_arg_position", "MAKE-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
+            declareFunction("make_fet_gloss_for_arg2_of_binary_pred_formula", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 1, 1, false);
+            declareFunction("clear_make_fet_gloss_for_arg2_of_binary_pred", "CLEAR-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 0, 0, false);
+            declareFunction("remove_make_fet_gloss_for_arg2_of_binary_pred", "REMOVE-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+            declareFunction("make_fet_gloss_for_arg2_of_binary_pred_internal", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-INTERNAL", 2, 0, false);
+            declareFunction("make_fet_gloss_for_arg2_of_binary_pred", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+            declareFunction("formula_template_meta_isaP", "FORMULA-TEMPLATE-META-ISA?", 2, 0, false);
+            declareFunction("formula_template_meta_isa", "FORMULA-TEMPLATE-META-ISA", 2, 0, false);
+            declareFunction("make_fet_gloss_for_meta_isa_formula", "MAKE-FET-GLOSS-FOR-META-ISA-FORMULA", 3, 0, false);
+            declareFunction("clear_make_fet_gloss_for_meta_isa", "CLEAR-MAKE-FET-GLOSS-FOR-META-ISA", 0, 0, false);
+            declareFunction("remove_make_fet_gloss_for_meta_isa", "REMOVE-MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
+            declareFunction("make_fet_gloss_for_meta_isa_internal", "MAKE-FET-GLOSS-FOR-META-ISA-INTERNAL", 2, 0, false);
+            declareFunction("make_fet_gloss_for_meta_isa", "MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
+            declareFunction("make_fet_explanation_for_arg_position", "MAKE-FET-EXPLANATION-FOR-ARG-POSITION", 3, 1, false);
+            declareFunction("reify_formula_template_description", "REIFY-FORMULA-TEMPLATE-DESCRIPTION", 1, 0, false);
+            declareFunction("assert_formula_template_type_subtopic", "ASSERT-FORMULA-TEMPLATE-TYPE-SUBTOPIC", 2, 0, false);
+            declareFunction("make_formula_template_type_assertions", "MAKE-FORMULA-TEMPLATE-TYPE-ASSERTIONS", 1, 0, false);
+            declareFunction("assert_formula_template_formula", "ASSERT-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
+            declareFunction("assert_formula_template_elmt", "ASSERT-FORMULA-TEMPLATE-ELMT", 2, 0, false);
+            declareFunction("assert_formula_template_focal_term_position", "ASSERT-FORMULA-TEMPLATE-FOCAL-TERM-POSITION", 2, 0, false);
+            declareFunction("assert_formula_template_assertion_format", "ASSERT-FORMULA-TEMPLATE-ASSERTION-FORMAT", 2, 0, false);
+            declareFunction("assert_formula_template_assertion_explanations", "ASSERT-FORMULA-TEMPLATE-ASSERTION-EXPLANATIONS", 2, 0, false);
+            declareFunction("assert_formula_template_assertion_glosses", "ASSERT-FORMULA-TEMPLATE-ASSERTION-GLOSSES", 2, 0, false);
+            declareFunction("assert_formula_template_candidate_replacements", "ASSERT-FORMULA-TEMPLATE-CANDIDATE-REPLACEMENTS", 2, 0, false);
+            declareFunction("assert_formula_template_assertion_validation_required", "ASSERT-FORMULA-TEMPLATE-ASSERTION-VALIDATION-REQUIRED", 2, 0, false);
+            declareFunction("assert_formula_template_assertion_replacements_invisible", "ASSERT-FORMULA-TEMPLATE-ASSERTION-REPLACEMENTS-INVISIBLE", 2, 0, false);
+            declareFunction("assert_formula_template_examples", "ASSERT-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
+            declareFunction("assert_formula_template_priority_ordering", "ASSERT-FORMULA-TEMPLATE-PRIORITY-ORDERING", 3, 0, false);
+            declareFunction("find_ftemplate_topic_from_id", "FIND-FTEMPLATE-TOPIC-FROM-ID", 2, 0, false);
+            declareFunction("find_ftemplate_from_ids", "FIND-FTEMPLATE-FROM-IDS", 3, 0, false);
+            declareFunction("find_ftemplate_in_template_topic", "FIND-FTEMPLATE-IN-TEMPLATE-TOPIC", 2, 0, false);
+            declareFunction("perform_after_creatings_for_new_template_term", "PERFORM-AFTER-CREATINGS-FOR-NEW-TEMPLATE-TERM", 2, 0, false);
+            declareFunction("after_creating_function_specs_for_template_id", "AFTER-CREATING-FUNCTION-SPECS-FOR-TEMPLATE-ID", 1, 0, false);
+            declareFunction("check_template_type_menu_item_parsing", "CHECK-TEMPLATE-TYPE-MENU-ITEM-PARSING", 1, 1, false);
+            declareFunction("check_template_menu_item_parsing", "CHECK-TEMPLATE-MENU-ITEM-PARSING", 1, 2, false);
+            declareFunction("check_template_arg_pos_menu_item_parsing", "CHECK-TEMPLATE-ARG-POS-MENU-ITEM-PARSING", 2, 3, false);
+            declareFunction("check_template_candidate_replacement_gaf_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-GAF-PARSING", 1, 3, false);
+            declareFunction("check_template_arg_position_candidates", "CHECK-TEMPLATE-ARG-POSITION-CANDIDATES", 4, 0, false);
+            declareFunction("arg_position_candidates_memoized_internal", "ARG-POSITION-CANDIDATES-MEMOIZED-INTERNAL", 2, 1, false);
+            declareFunction("arg_position_candidates_memoized", "ARG-POSITION-CANDIDATES-MEMOIZED", 2, 1, false);
+            declareFunction("omit_from_fet_menuP", "OMIT-FROM-FET-MENU?", 1, 0, false);
+            declareFunction("constraint_col_for_formula_arg_position", "CONSTRAINT-COL-FOR-FORMULA-ARG-POSITION", 2, 0, false);
+            declareFunction("constraint_col_for_constraint_term", "CONSTRAINT-COL-FOR-CONSTRAINT-TERM", 1, 0, false);
+            declareFunction("check_template_candidate_replacement_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-PARSING", 2, 0, false);
+            declareFunction("ftemplate_utilities_generate_example_template_topic_cases", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-TEMPLATE-TOPIC-CASES", 1, 1, false);
+            declareFunction("ftemplate_utilities_generate_example_instances_for_template_topic", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-INSTANCES-FOR-TEMPLATE-TOPIC", 4, 1, false);
+            declareMacro("do_quick_fort_topics", "DO-QUICK-FORT-TOPICS");
+            declareFunction("gather_fet_stats", "GATHER-FET-STATS", 0, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("find_promising_induction_topic_type_collections", "FIND-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS", 0, 1, false);
+            declareFunction("get_example_for_promising_collection", "GET-EXAMPLE-FOR-PROMISING-COLLECTION", 1, 1, false);
+            declareFunction("recently_asserted_promising_collectionP", "RECENTLY-ASSERTED-PROMISING-COLLECTION?", 1, 1, false);
+            declareFunction("rank_promising_induction_topic_type_collections", "RANK-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS", 1, 0, false);
+            declareFunction("update_promising_induction_topic_type_collections", "UPDATE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS", 0, 1, false);
+            declareFunction("update_promising_induction_topic_type_collection", "UPDATE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION", 1, 1, false);
+            declareFunction("update_asserted_info", "UPDATE-ASSERTED-INFO", 3, 0, false);
+            declareFunction("nart_collection_definitional_mts", "NART-COLLECTION-DEFINITIONAL-MTS", 1, 0, false);
+            declareFunction("qualify_mt_for_today", "QUALIFY-MT-FOR-TODAY", 1, 0, false);
+            declareFunction("assert_induced_suggestion_preds_for_promising_collections", "ASSERT-INDUCED-SUGGESTION-PREDS-FOR-PROMISING-COLLECTIONS", 0, 2, false);
+            declareFunction("assert_induced_suggestion_preds_for_collection", "ASSERT-INDUCED-SUGGESTION-PREDS-FOR-COLLECTION", 1, 2, false);
+            declareFunction("determine_induced_suggestion_preds_mt", "DETERMINE-INDUCED-SUGGESTION-PREDS-MT", 2, 1, false);
+            declareFunction("mt_with_most_pred_assertions", "MT-WITH-MOST-PRED-ASSERTIONS", 2, 0, false);
+            declareFunction("mt_with_most_pred_assertions_on_type", "MT-WITH-MOST-PRED-ASSERTIONS-ON-TYPE", 3, 0, false);
+            declareFunction("num_pred_assertions_on_type_in_mt", "NUM-PRED-ASSERTIONS-ON-TYPE-IN-MT", 3, 0, false);
+            declareFunction("some_asserted_pred_value_in_mt", "SOME-ASSERTED-PRED-VALUE-IN-MT", 3, 0, false);
+            declareFunction("some_asserted_pred_ref_in_mt", "SOME-ASSERTED-PRED-REF-IN-MT", 2, 0, false);
+            declareFunction("asserted_arg1_mts", "ASSERTED-ARG1-MTS", 2, 2, false);
+            declareFunction("find_or_induce_formula_template_forts", "FIND-OR-INDUCE-FORMULA-TEMPLATE-FORTS", 1, 1, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_formula_template_utilities_file_Previous() {
+        declareFunction("get_all_formula_template_topics", "GET-ALL-FORMULA-TEMPLATE-TOPICS", 0, 0, false);
+        declareFunction("formula_template_topic_typeP", "FORMULA-TEMPLATE-TOPIC-TYPE?", 1, 0, false);
+        declareFunction("get_all_formula_template_subtopics", "GET-ALL-FORMULA-TEMPLATE-SUBTOPICS", 0, 0, false);
+        declareFunction("get_all_template_topics", "GET-ALL-TEMPLATE-TOPICS", 0, 0, false);
+        declareFunction("get_all_formula_template_definition_mts", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-MTS", 0, 0, false);
+        declareFunction("get_all_formula_templated_types", "GET-ALL-FORMULA-TEMPLATED-TYPES", 0, 0, false);
+        declareFunction("get_applicable_formula_templated_types", "GET-APPLICABLE-FORMULA-TEMPLATED-TYPES", 1, 0, false);
+        declareFunction("get_all_formula_template_definition_tuples", "GET-ALL-FORMULA-TEMPLATE-DEFINITION-TUPLES", 0, 0, false);
+        declareFunction("get_applicable_formula_template_definition_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-DEFINITION-TUPLES", 1, 0, false);
+        declareFunction("get_applicable_formula_template_collection_tuples", "GET-APPLICABLE-FORMULA-TEMPLATE-COLLECTION-TUPLES", 1, 0, false);
+        declareFunction("formula_template_deftuple_order", "FORMULA-TEMPLATE-DEFTUPLE-ORDER", 1, 0, false);
+        declareFunction("get_template_topic_loading_elmt", "GET-TEMPLATE-TOPIC-LOADING-ELMT", 1, 0, false);
+        declareFunction("applicable_template_topics_for_collection", "APPLICABLE-TEMPLATE-TOPICS-FOR-COLLECTION", 1, 1, false);
+        declareFunction("applicable_template_instance_topics_for_collection", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION", 3, 0, false);
+        declareFunction("applicable_template_instance_topics_for_collection_via_inference", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INFERENCE", 3, 0, false);
+        declareFunction("applicable_template_instance_topics_for_collection_tva_workaround", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-TVA-WORKAROUND", 3, 0, false);
+        declareFunction("applicable_template_instance_topics_for_collection_via_index_surfing", "APPLICABLE-TEMPLATE-INSTANCE-TOPICS-FOR-COLLECTION-VIA-INDEX-SURFING", 3, 0, false);
+        declareFunction("applicable_template_spec_topics_for_collection", "APPLICABLE-TEMPLATE-SPEC-TOPICS-FOR-COLLECTION", 3, 0, false);
+        declareFunction("applicable_template_topics_for_term", "APPLICABLE-TEMPLATE-TOPICS-FOR-TERM", 1, 1, false);
+        declareFunction("term_has_induced_fet_topicP", "TERM-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
+        declareFunction("term_has_induced_fet_topicP_via_index_surfing", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INDEX-SURFING", 1, 0, false);
+        declareFunction("collection_has_induced_fet_topicP", "COLLECTION-HAS-INDUCED-FET-TOPIC?", 1, 0, false);
+        declareFunction("term_has_induced_fet_topicP_via_inference", "TERM-HAS-INDUCED-FET-TOPIC?-VIA-INFERENCE", 1, 0, false);
+        declareFunction("candidate_topic_tuples_for_term", "CANDIDATE-TOPIC-TUPLES-FOR-TERM", 2, 1, false);
+        declareFunction("filter_topic_tuples_for_term", "FILTER-TOPIC-TUPLES-FOR-TERM", 3, 1, false);
+        declareFunction("find_valid_fet_topic", "FIND-VALID-FET-TOPIC", 1, 1, false);
+        declareFunction("valid_fet_topic_fortP", "VALID-FET-TOPIC-FORT?", 1, 2, false);
+        declareFunction("valid_fet_subtopic_fortP", "VALID-FET-SUBTOPIC-FORT?", 1, 2, false);
+        declareFunction("salient_descriptor_fet_fn", "SALIENT-DESCRIPTOR-FET-FN", 0, 0, false);
+        declareFunction("make_induced_topic_type_for_term", "MAKE-INDUCED-TOPIC-TYPE-FOR-TERM", 1, 0, false);
+        declareFunction("induce_formula_template_subtopics_for_type", "INDUCE-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("induced_formula_template_subtopics_for_type", "INDUCED-FORMULA-TEMPLATE-SUBTOPICS-FOR-TYPE", 2, 0, false);
+        declareFunction("promising_induction_topic_types", "PROMISING-INDUCTION-TOPIC-TYPES", 2, 1, false);
+        declareFunction("promising_induction_collection_pred_for_type", "PROMISING-INDUCTION-COLLECTION-PRED-FOR-TYPE", 1, 0, false);
+        declareFunction("promising_induction_topic_type_collectionP", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?", 2, 2, false);
+        declareFunction("promising_induction_assertions_for_collection", "PROMISING-INDUCTION-ASSERTIONS-FOR-COLLECTION", 1, 2, false);
+        declareFunction("mt_time_index", "MT-TIME-INDEX", 1, 0, false);
+        declareFunction("clear_promising_induction_topic_type_collectionP_verify", "CLEAR-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 0, 0, false);
+        declareFunction("remove_promising_induction_topic_type_collectionP_verify", "REMOVE-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
+        declareFunction("promising_induction_topic_type_collectionP_verify_internal", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-INTERNAL", 4, 0, false);
+        declareFunction("promising_induction_topic_type_collectionP_verify", "PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY", 2, 2, false);
+        declareFunction("induction_topic_type_for_collection", "INDUCTION-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
+        declareFunction("induction_topic_typeP", "INDUCTION-TOPIC-TYPE?", 1, 0, false);
+        declareFunction("induced_formula_template_forts_for_focal_term_type", "INDUCED-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
+        declareFunction("rkf_salient_descriptor_formula_template_forts_for_focal_term_type", "RKF-SALIENT-DESCRIPTOR-FORMULA-TEMPLATE-FORTS-FOR-FOCAL-TERM-TYPE", 2, 1, false);
+        declareFunction("rkf_salient_descriptor_topic_type_for_collection", "RKF-SALIENT-DESCRIPTOR-TOPIC-TYPE-FOR-COLLECTION", 1, 0, false);
+        declareFunction("focal_term_type_for_topic_type", "FOCAL-TERM-TYPE-FOR-TOPIC-TYPE", 1, 1, false);
+        declareFunction("focal_term_type_for_induced_template_type", "FOCAL-TERM-TYPE-FOR-INDUCED-TEMPLATE-TYPE", 2, 0, false);
+        declareFunction("applicable_template_topics_by_types", "APPLICABLE-TEMPLATE-TOPICS-BY-TYPES", 1, 1, false);
+        declareFunction("topics_via_isa_query_sentence", "TOPICS-VIA-ISA-QUERY-SENTENCE", 1, 3, false);
+        declareFunction("topics_via_genls_query_sentence", "TOPICS-VIA-GENLS-QUERY-SENTENCE", 1, 3, false);
+        declareFunction("suggest_template_topic_for_term", "SUGGEST-TEMPLATE-TOPIC-FOR-TERM", 2, 1, false);
+        declareFunction("suggest_template_topic_for_collection", "SUGGEST-TEMPLATE-TOPIC-FOR-COLLECTION", 2, 1, false);
+        declareFunction("formula_template_topic_type_from_topic", "FORMULA-TEMPLATE-TOPIC-TYPE-FROM-TOPIC", 2, 0, false);
+        declareFunction("formula_template_prototype_from_el_formula", "FORMULA-TEMPLATE-PROTOTYPE-FROM-EL-FORMULA", 3, 5, false);
+        declareFunction("formula_template_prototype_from_assertion", "FORMULA-TEMPLATE-PROTOTYPE-FROM-ASSERTION", 3, 4, false);
+        declareFunction("template_type_for_focal_term_type", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPE", 2, 0, false);
+        declareFunction("template_type_for_focal_term_types", "TEMPLATE-TYPE-FOR-FOCAL-TERM-TYPES", 2, 0, false);
+        declareFunction("template_topic_genls", "TEMPLATE-TOPIC-GENLS", 2, 0, false);
+        declareFunction("create_formula_template_from_name_and_topic", "CREATE-FORMULA-TEMPLATE-FROM-NAME-AND-TOPIC", 2, 0, false);
+        declareFunction("find_matching_formula_template_argpos_details", "FIND-MATCHING-FORMULA-TEMPLATE-ARGPOS-DETAILS", 2, 0, false);
+        declareFunction("maybe_assert_fet_gloss_for_arg_position", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
+        declareFunction("maybe_assert_fet_gloss_for_arg2_of_binary_pred_formula", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 2, 0, false);
+        declareFunction("maybe_assert_fet_gloss_for_arg2_of_binary_pred", "MAYBE-ASSERT-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+        declareFunction("make_fet_gloss_for_arg_position", "MAKE-FET-GLOSS-FOR-ARG-POSITION", 2, 1, false);
+        declareFunction("make_fet_gloss_for_arg2_of_binary_pred_formula", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-FORMULA", 1, 1, false);
+        declareFunction("clear_make_fet_gloss_for_arg2_of_binary_pred", "CLEAR-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 0, 0, false);
+        declareFunction("remove_make_fet_gloss_for_arg2_of_binary_pred", "REMOVE-MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+        declareFunction("make_fet_gloss_for_arg2_of_binary_pred_internal", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-INTERNAL", 2, 0, false);
+        declareFunction("make_fet_gloss_for_arg2_of_binary_pred", "MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED", 1, 1, false);
+        declareFunction("formula_template_meta_isaP", "FORMULA-TEMPLATE-META-ISA?", 2, 0, false);
+        declareFunction("formula_template_meta_isa", "FORMULA-TEMPLATE-META-ISA", 2, 0, false);
+        declareFunction("make_fet_gloss_for_meta_isa_formula", "MAKE-FET-GLOSS-FOR-META-ISA-FORMULA", 3, 0, false);
+        declareFunction("clear_make_fet_gloss_for_meta_isa", "CLEAR-MAKE-FET-GLOSS-FOR-META-ISA", 0, 0, false);
+        declareFunction("remove_make_fet_gloss_for_meta_isa", "REMOVE-MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
+        declareFunction("make_fet_gloss_for_meta_isa_internal", "MAKE-FET-GLOSS-FOR-META-ISA-INTERNAL", 2, 0, false);
+        declareFunction("make_fet_gloss_for_meta_isa", "MAKE-FET-GLOSS-FOR-META-ISA", 2, 0, false);
+        declareFunction("make_fet_explanation_for_arg_position", "MAKE-FET-EXPLANATION-FOR-ARG-POSITION", 3, 1, false);
+        declareFunction("reify_formula_template_description", "REIFY-FORMULA-TEMPLATE-DESCRIPTION", 1, 0, false);
+        declareFunction("assert_formula_template_type_subtopic", "ASSERT-FORMULA-TEMPLATE-TYPE-SUBTOPIC", 2, 0, false);
+        declareFunction("make_formula_template_type_assertions", "MAKE-FORMULA-TEMPLATE-TYPE-ASSERTIONS", 1, 0, false);
+        declareFunction("assert_formula_template_formula", "ASSERT-FORMULA-TEMPLATE-FORMULA", 2, 0, false);
+        declareFunction("assert_formula_template_elmt", "ASSERT-FORMULA-TEMPLATE-ELMT", 2, 0, false);
+        declareFunction("assert_formula_template_focal_term_position", "ASSERT-FORMULA-TEMPLATE-FOCAL-TERM-POSITION", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_format", "ASSERT-FORMULA-TEMPLATE-ASSERTION-FORMAT", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_explanations", "ASSERT-FORMULA-TEMPLATE-ASSERTION-EXPLANATIONS", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_glosses", "ASSERT-FORMULA-TEMPLATE-ASSERTION-GLOSSES", 2, 0, false);
+        declareFunction("assert_formula_template_candidate_replacements", "ASSERT-FORMULA-TEMPLATE-CANDIDATE-REPLACEMENTS", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_validation_required", "ASSERT-FORMULA-TEMPLATE-ASSERTION-VALIDATION-REQUIRED", 2, 0, false);
+        declareFunction("assert_formula_template_assertion_replacements_invisible", "ASSERT-FORMULA-TEMPLATE-ASSERTION-REPLACEMENTS-INVISIBLE", 2, 0, false);
+        declareFunction("assert_formula_template_examples", "ASSERT-FORMULA-TEMPLATE-EXAMPLES", 2, 0, false);
+        declareFunction("assert_formula_template_priority_ordering", "ASSERT-FORMULA-TEMPLATE-PRIORITY-ORDERING", 3, 0, false);
+        declareFunction("find_ftemplate_topic_from_id", "FIND-FTEMPLATE-TOPIC-FROM-ID", 2, 0, false);
+        declareFunction("find_ftemplate_from_ids", "FIND-FTEMPLATE-FROM-IDS", 3, 0, false);
+        declareFunction("find_ftemplate_in_template_topic", "FIND-FTEMPLATE-IN-TEMPLATE-TOPIC", 2, 0, false);
+        declareFunction("perform_after_creatings_for_new_template_term", "PERFORM-AFTER-CREATINGS-FOR-NEW-TEMPLATE-TERM", 2, 0, false);
+        declareFunction("after_creating_function_specs_for_template_id", "AFTER-CREATING-FUNCTION-SPECS-FOR-TEMPLATE-ID", 1, 0, false);
+        declareFunction("check_template_type_menu_item_parsing", "CHECK-TEMPLATE-TYPE-MENU-ITEM-PARSING", 1, 1, false);
+        declareFunction("check_template_menu_item_parsing", "CHECK-TEMPLATE-MENU-ITEM-PARSING", 1, 2, false);
+        declareFunction("check_template_arg_pos_menu_item_parsing", "CHECK-TEMPLATE-ARG-POS-MENU-ITEM-PARSING", 2, 3, false);
+        declareFunction("check_template_candidate_replacement_gaf_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-GAF-PARSING", 1, 3, false);
+        declareFunction("check_template_arg_position_candidates", "CHECK-TEMPLATE-ARG-POSITION-CANDIDATES", 4, 0, false);
+        declareFunction("arg_position_candidates_memoized_internal", "ARG-POSITION-CANDIDATES-MEMOIZED-INTERNAL", 2, 1, false);
+        declareFunction("arg_position_candidates_memoized", "ARG-POSITION-CANDIDATES-MEMOIZED", 2, 1, false);
+        declareFunction("omit_from_fet_menuP", "OMIT-FROM-FET-MENU?", 1, 0, false);
+        declareFunction("constraint_col_for_formula_arg_position", "CONSTRAINT-COL-FOR-FORMULA-ARG-POSITION", 2, 0, false);
+        declareFunction("constraint_col_for_constraint_term", "CONSTRAINT-COL-FOR-CONSTRAINT-TERM", 1, 0, false);
+        declareFunction("check_template_candidate_replacement_parsing", "CHECK-TEMPLATE-CANDIDATE-REPLACEMENT-PARSING", 2, 0, false);
+        declareFunction("ftemplate_utilities_generate_example_template_topic_cases", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-TEMPLATE-TOPIC-CASES", 1, 1, false);
+        declareFunction("ftemplate_utilities_generate_example_instances_for_template_topic", "FTEMPLATE-UTILITIES-GENERATE-EXAMPLE-INSTANCES-FOR-TEMPLATE-TOPIC", 4, 1, false);
+        declareMacro("do_quick_fort_topics", "DO-QUICK-FORT-TOPICS");
+        declareFunction("gather_fet_stats", "GATHER-FET-STATS", 0, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_formula_template_utilities_file_alt() {
+        defparameter("*ASSUME-INDUCED-FET-TEMPLATES-ALREADY-REIFIED?*", NIL);
+        deflexical("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS*", NIL != boundp($promising_induction_topic_type_collections$) ? ((SubLObject) ($promising_induction_topic_type_collections$.getGlobalValue())) : NIL);
+        deflexical("*LAST-PROMISING-COLLECTION-DONE*", NIL != boundp($last_promising_collection_done$) ? ((SubLObject) ($last_promising_collection_done$.getGlobalValue())) : NIL);
+        deflexical("*RANKED-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS*", NIL != boundp($ranked_promising_induction_topic_type_collections$) ? ((SubLObject) ($ranked_promising_induction_topic_type_collections$.getGlobalValue())) : NIL);
+        deflexical("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-CACHING-STATE*", NIL);
+        deflexical("*MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-CACHING-STATE*", NIL);
+        deflexical("*MAKE-FET-GLOSS-FOR-META-ISA-CACHING-STATE*", NIL);
+        defparameter("*FTEMPLATE-UTILITIES-EXAMPLE-TEMPLATE-TOPIC-CASES*", $list_alt220);
         return NIL;
     }
 
     public static SubLObject init_formula_template_utilities_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*ASSUME-INDUCED-FET-TEMPLATES-ALREADY-REIFIED?*", NIL);
+            deflexical("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-CACHING-STATE*", NIL);
+            deflexical("*MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-CACHING-STATE*", NIL);
+            deflexical("*MAKE-FET-GLOSS-FOR-META-ISA-CACHING-STATE*", NIL);
+            defparameter("*FTEMPLATE-UTILITIES-EXAMPLE-TEMPLATE-TOPIC-CASES*", $list171);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS*", NIL != boundp($promising_induction_topic_type_collections$) ? ((SubLObject) ($promising_induction_topic_type_collections$.getGlobalValue())) : NIL);
+            deflexical("*LAST-PROMISING-COLLECTION-DONE*", NIL != boundp($last_promising_collection_done$) ? ((SubLObject) ($last_promising_collection_done$.getGlobalValue())) : NIL);
+            deflexical("*RANKED-PROMISING-INDUCTION-TOPIC-TYPE-COLLECTIONS*", NIL != boundp($ranked_promising_induction_topic_type_collections$) ? ((SubLObject) ($ranked_promising_induction_topic_type_collections$.getGlobalValue())) : NIL);
+            defparameter("*FTEMPLATE-UTILITIES-EXAMPLE-TEMPLATE-TOPIC-CASES*", $list_alt220);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_formula_template_utilities_file_Previous() {
         defparameter("*ASSUME-INDUCED-FET-TEMPLATES-ALREADY-REIFIED?*", NIL);
         deflexical("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-CACHING-STATE*", NIL);
         deflexical("*MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-CACHING-STATE*", NIL);
@@ -6128,7 +13357,38 @@ public final class formula_template_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_formula_template_utilities_file_alt() {
+        register_external_symbol(APPLICABLE_TEMPLATE_TOPICS_FOR_TERM);
+        declare_defglobal($promising_induction_topic_type_collections$);
+        declare_defglobal($last_promising_collection_done$);
+        declare_defglobal($ranked_promising_induction_topic_type_collections$);
+        memoization_state.note_globally_cached_function($sym130$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY);
+        register_external_symbol(FOCAL_TERM_TYPE_FOR_TOPIC_TYPE);
+        memoization_state.note_globally_cached_function(MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED);
+        memoization_state.note_globally_cached_function(MAKE_FET_GLOSS_FOR_META_ISA);
+        memoization_state.note_memoized_function(ARG_POSITION_CANDIDATES_MEMOIZED);
+        return NIL;
+    }
+
     public static SubLObject setup_formula_template_utilities_file() {
+        if (SubLFiles.USE_V1) {
+            register_external_symbol(APPLICABLE_TEMPLATE_TOPICS_FOR_TERM);
+            memoization_state.note_globally_cached_function($sym87$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY);
+            register_external_symbol(FOCAL_TERM_TYPE_FOR_TOPIC_TYPE);
+            memoization_state.note_globally_cached_function(MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED);
+            memoization_state.note_globally_cached_function(MAKE_FET_GLOSS_FOR_META_ISA);
+            memoization_state.note_memoized_function(ARG_POSITION_CANDIDATES_MEMOIZED);
+        }
+        if (SubLFiles.USE_V2) {
+            declare_defglobal($promising_induction_topic_type_collections$);
+            declare_defglobal($last_promising_collection_done$);
+            declare_defglobal($ranked_promising_induction_topic_type_collections$);
+            memoization_state.note_globally_cached_function($sym130$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_formula_template_utilities_file_Previous() {
         register_external_symbol(APPLICABLE_TEMPLATE_TOPICS_FOR_TERM);
         memoization_state.note_globally_cached_function($sym87$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY);
         register_external_symbol(FOCAL_TERM_TYPE_FOR_TOPIC_TYPE);
@@ -6154,208 +13414,231 @@ public final class formula_template_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt7 = list(reader_make_constant_shell("templateTypeForFocalTermType"), $TYPE, makeSymbol("??TOPICS"));
+
+    static private final SubLList $list_alt8 = list(reader_make_constant_shell("templateTypeForFocalTermType"), makeSymbol("?TERM"), makeSymbol("?TOPIC"));
+
+    static private final SubLList $list_alt9 = list(makeSymbol("BINDINGS"), makeSymbol("ASSERTIONS"));
+
+    static private final SubLList $list_alt13 = list(reader_make_constant_shell("templateTopicGenls"), makeSymbol("?TOPIC"), makeSymbol("?COL"));
+
+    static private final SubLList $list_alt22 = list(makeSymbol("?TOPIC"), makeSymbol("?WHERE"), makeSymbol("?REL"));
+
+    static private final SubLList $list_alt26 = list(makeSymbol("?TOPIC"));
+
+    static private final SubLList $list_alt27 = list(list(reader_make_constant_shell("definingMt"), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell("equals"), makeSymbol("?REL"), reader_make_constant_shell("isa")));
+
+    static private final SubLString $str_alt33$_A_is_not_a__A = makeString("~A is not a ~A");
+
+    static private final SubLString $str_alt38$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
+
+    static private final SubLString $str_alt41$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
+
+    static private final SubLString $str_alt42$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
+
+    public static final SubLObject $const45$meetsSomeGenlsConstraintOfTopicTy = reader_make_constant_shell("meetsSomeGenlsConstraintOfTopicType");
+
+    static private final SubLList $list_alt46 = list(list(reader_make_constant_shell("definingMt"), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell("equals"), makeSymbol("?REL"), reader_make_constant_shell("genls")));
+
+    static private final SubLString $str_alt49$Took__S_seconds_to_determine_indu = makeString("Took ~S seconds to determine induced fet topics for ~S");
+
+    public static final SubLObject $const52$FormulaTemplateInductionTopicType = reader_make_constant_shell("FormulaTemplateInductionTopicTypeFn");
+
+    static private final SubLList $list_alt54 = list(list(reader_make_constant_shell("isa"), makeSymbol("?TOPIC"), reader_make_constant_shell("InducedFormulaTemplateTopicType")), list(reader_make_constant_shell("formulaTemplateTypeHasTopicType"), makeSymbol("?TOPIC"), makeSymbol("?TOPIC-TYPE")));
+
+    static private final SubLSymbol $sym55$_TEMPLATE = makeSymbol("?TEMPLATE");
+
+    static private final SubLList $list_alt56 = list(reader_make_constant_shell("formulaTemplateHasType"), makeSymbol("?TEMPLATE"), makeSymbol("?TOPIC"));
+
+    static private final SubLSymbol $sym57$_TOPIC_TYPE = makeSymbol("?TOPIC-TYPE");
+
+    static private final SubLList $list_alt58 = list(makeKeyword("MAX-NUMBER"), ONE_INTEGER);
+
+    static private final SubLList $list_alt59 = list(makeSymbol("?TOPIC"), makeSymbol("?WHERE"));
+
+    static private final SubLList $list_alt60 = list(list(reader_make_constant_shell("definingMt"), makeSymbol("?TOPIC"), makeSymbol("?WHERE")), list(reader_make_constant_shell("unknownSentence"), list(reader_make_constant_shell("isa"), makeSymbol("?TOPIC"), reader_make_constant_shell("InducedFormulaTemplateTopicType"))));
+
+    static private final SubLSymbol $sym61$_WHAT = makeSymbol("?WHAT");
+
+    static private final SubLList $list_alt63 = list(makeSymbol("?WHAT"), makeSymbol("?WHERE"));
+
+    static private final SubLSymbol $sym65$_WHERE = makeSymbol("?WHERE");
+
+    static private final SubLList $list_alt67 = list(makeSymbol("?WHAT"));
+
+    static private final SubLString $str_alt73$Can_t_use_a_non_FORT_for_an_FET_t = makeString("Can't use a non-FORT for an FET topic.");
+
+    static private final SubLString $str_alt74$No_subtopics_ = makeString("No subtopics.");
+
+    static private final SubLString $str_alt75$No_templates_ = makeString("No templates.");
+
+    static private final SubLString $str_alt76$Can_t_use_a_non_FORT_for_an_FET_s = makeString("Can't use a non-FORT for an FET subtopic.");
+
+    public static final SubLObject $const80$promisingSalientDescriptorInducti = reader_make_constant_shell("promisingSalientDescriptorInductionCollection");
+
+    static private final SubLString $$$mapping_Cyc_constants = makeString("mapping Cyc constants");
+
+    static private final SubLString $str_alt87$Promising_new_collection___S__e_g = makeString("Promising new collection: ~S (e.g. ~S)~%");
+
+    static private final SubLList $list_alt89 = list(reader_make_constant_shell("WeeksDuration"), ONE_INTEGER);
+
+    static private final SubLString $str_alt91$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+
+    static private final SubLString $str_alt92$Ranking_induction_collections___ = makeString("Ranking induction collections...");
+
+    private static final SubLSymbol GREATER_LENGTH_P = makeSymbol("GREATER-LENGTH-P");
+
+    static private final SubLString $str_alt94$New_most_promising___S____S__ = makeString("New most promising: ~S~% ~S~%");
+
+
+
+
+
+    static private final SubLSymbol $sym98$HLMT_EQUAL_ = makeSymbol("HLMT-EQUAL?");
+
+    private static final SubLSymbol ASSERTION_HLMT = makeSymbol("ASSERTION-HLMT");
+
+    static private final SubLSymbol $sym101$COLLECTION_ = makeSymbol("COLLECTION?");
+
+
+
+
+
+
+
+    static private final SubLList $list_alt106 = list(reader_make_constant_shell("TimePoint"));
+
+
+
+    static private final SubLString $str_alt109$Asserting_induced_suggestion_pred = makeString("Asserting induced suggestion preds for promising collections...");
+
+    static private final SubLList $list_alt112 = list($WEAK, makeKeyword("STRONG"));
+
+    private static final SubLSymbol SUGGEST_MT = makeSymbol("SUGGEST-MT");
+
+    static private final SubLString $str_alt116$Can_t_find_MT_suggestor__Using_ol = makeString("Can't find MT suggestor. Using older, more expensive method.");
+
+    private static final SubLSymbol HLMT_MONAD_MT = makeSymbol("HLMT-MONAD-MT");
+
+    static private final SubLString $str_alt121$Couldn_t_determine_mt_to_assert__ = makeString("Couldn't determine mt to assert (#$keInducedSuggestionPreds ~S ~S).");
+
+    static private final SubLList $list_alt122 = list(makeUninternedSymbol("LINK-NODE"), makeUninternedSymbol("MT"), makeUninternedSymbol("TV"));
+
+    public static final SubLInteger $int$50 = makeInteger(50);
+
+    static private final SubLSymbol $sym124$GENERALITY_ESTIMATE_ = makeSymbol("GENERALITY-ESTIMATE>");
+
+    static private final SubLString $str_alt126$promisingSalientDescriptorInducti = makeString("promisingSalientDescriptorInductionCollection");
+
+    static private final SubLSymbol $sym130$PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY = makeSymbol("PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY");
+
+    static private final SubLSymbol $sym131$_PROMISING_INDUCTION_TOPIC_TYPE_COLLECTION__VERIFY_CACHING_STATE_ = makeSymbol("*PROMISING-INDUCTION-TOPIC-TYPE-COLLECTION?-VERIFY-CACHING-STATE*");
+
+    public static final SubLSymbol $kw132$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLSymbol $sym138$_COLLECTION = makeSymbol("?COLLECTION");
+
+    static private final SubLString $str_alt139$focalTermTypeForInducedTemplateTy = makeString("focalTermTypeForInducedTemplateType");
+
+    static private final SubLSymbol $sym140$_MT = makeSymbol("?MT");
+
+    static private final SubLList $list_alt143 = list(list(reader_make_constant_shell("templateTypeForFocalTermType"), makeSymbol("?TYPE"), makeKeyword("TOPICS")));
+
+    static private final SubLList $list_alt144 = list(makeSymbol("?TYPE"));
+
+    static private final SubLSymbol $sym145$TERM__ = makeSymbol("TERM-<");
+
+    static private final SubLList $list_alt146 = list(list(reader_make_constant_shell("templateTopicGenls"), makeKeyword("TOPICS"), makeSymbol("?TYPE")));
+
+    static private final SubLList $list_alt148 = list(reader_make_constant_shell("isa"), makeKeyword("TOPIC-TYPE"), reader_make_constant_shell("FormulaTemplateTopicType"));
+
+    static private final SubLList $list_alt149 = list(makeKeyword("TOPIC-TYPE"));
+
+    static private final SubLList $list_alt155 = list($WHAT);
+
+    static private final SubLList $list_alt156 = list(TWO_INTEGER);
+
+    static private final SubLList $list_alt157 = list(THREE_INTEGER);
+
+    static private final SubLString $str_alt159$_ = makeString(":");
+
+    static private final SubLString $str_alt160$__type__ = makeString(" (type):");
+
+    static private final SubLList $list_alt163 = list(ONE_INTEGER);
+
+    static private final SubLString $str_alt164$______ = makeString("______");
+
+    static private final SubLString $str_alt165$arg__S_of__S_ = makeString("arg ~S of ~S:");
+
+    static private final SubLList $list_alt169 = list(reader_make_constant_shell("nonPlural-Generic"));
+
+    static private final SubLString $str_alt170$_PPH_error_level_ = makeString("(PPH error level ");
+
+    static private final SubLString $str_alt171$__ = makeString(") ");
+
+    static private final SubLString $str_alt172$_is_not_a_ = makeString(" is not a ");
+
+    static private final SubLList $list_alt174 = list(reader_make_constant_shell("singular-Generic"), reader_make_constant_shell("thirdPersonSg-Generic"));
+
+    static private final SubLSymbol $sym175$_MAKE_FET_GLOSS_FOR_ARG2_OF_BINARY_PRED_CACHING_STATE_ = makeSymbol("*MAKE-FET-GLOSS-FOR-ARG2-OF-BINARY-PRED-CACHING-STATE*");
+
+    static private final SubLList $list_alt177 = list(list(ONE_INTEGER, ONE_INTEGER), list(TWO_INTEGER, TWO_INTEGER));
+
+    static private final SubLList $list_alt178 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), list($BIND, makeSymbol("ISA-VAR")), list($BIND, makeSymbol("META-ISA"))), list(reader_make_constant_shell("isa"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("ISA-VAR"))));
+
+    static private final SubLList $list_alt181 = list(list(ONE_INTEGER, TWO_INTEGER), list(TWO_INTEGER, ONE_INTEGER));
+
+    static private final SubLList $list_alt182 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("ISA-VAR"))), list(reader_make_constant_shell("isa"), list($BIND, makeSymbol("ISA-VAR")), list($BIND, makeSymbol("META-ISA"))));
+
+    public static final SubLObject $$BestDetNbarFn_Definite = reader_make_constant_shell("BestDetNbarFn-Definite");
+
+    public static final SubLObject $$TermParaphraseFn_Constrained = reader_make_constant_shell("TermParaphraseFn-Constrained");
+
+
+
+    static private final SubLList $list_alt190 = list(reader_make_constant_shell("TermParaphraseFn"), reader_make_constant_shell("Demonstrative-ClassA-NLAttr"));
+
+    static private final SubLList $list_alt193 = list(reader_make_constant_shell("Individual"));
+
+    public static final SubLObject $const196$focalTermPositionForFormulaTempla = reader_make_constant_shell("focalTermPositionForFormulaTemplate");
+
+    public static final SubLObject $const201$validationRequiredOnTemplatePosit = reader_make_constant_shell("validationRequiredOnTemplatePosition");
+
+    public static final SubLObject $const202$templateReplacementsInvisibleForP = reader_make_constant_shell("templateReplacementsInvisibleForPosition");
+
+    static private final SubLList $list_alt206 = list(makeSymbol("LAUNCH-LEXIFY-TERRORIST-ATTACK-TASK"));
+
+    static private final SubLList $list_alt209 = list(makeSymbol("TEMPLATE"), makeSymbol("EL-ARG-POS"), makeSymbol("SET-OR-COLLECTION"));
+
+    static private final SubLSymbol $sym212$_ = makeSymbol(">");
+
+    static private final SubLString $str_alt217$__Couldn_t_find__S___in_denots_of = makeString("~%Couldn't find ~S~% in denots of ~S qua ~S~% Found ~S~%");
+
+    static private final SubLList $list_alt218 = list(reader_make_constant_shell("nounStrings"), reader_make_constant_shell("properNameStrings"), reader_make_constant_shell("adjStrings"));
+
+    static private final SubLList $list_alt220 = list(reader_make_constant_shell("TKBTemplate-Individual"), reader_make_constant_shell("TKBTemplate-Organization"), reader_make_constant_shell("TKBTemplate-Attack"));
+
+    static private final SubLString $str_alt221$_ = makeString("/");
+
+    static private final SubLString $str_alt222$_xml = makeString(".xml");
+
+    static private final SubLString $str_alt223$Generating__S_seen_from__S_into__ = makeString("Generating ~S seen from ~S into ~S ... ");
+
+    static private final SubLString $str_alt225$Unable_to_open__S = makeString("Unable to open ~S");
+
+    static private final SubLString $str_alt226$_done__ = makeString(" done~%");
+
+    static private final SubLList $list_alt228 = list(list(makeSymbol("TOPIC"), makeSymbol("FORT")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym229$ISA = makeUninternedSymbol("ISA");
+
+    static private final SubLList $list_alt234 = list(reader_make_constant_shell("templateTypeForFocalTermType"));
+
+    static private final SubLString $str_alt240$__Total___S_Have_topic___S___4F__ = makeString("~&Total: ~S Have topic: ~S (~4F%) Could have topic: ~S (~4F%)~%");
+
+    static private final SubLString $str_alt241$__Hand___S___4F___Induced___S___4 = makeString("~&Hand: ~S (~4F%) Induced: ~S (~4F%) Both: ~S (~4F%)~%");
 }
 
 /**

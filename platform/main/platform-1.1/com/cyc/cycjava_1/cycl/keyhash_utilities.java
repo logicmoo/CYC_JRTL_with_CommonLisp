@@ -168,8 +168,7 @@ public  final class keyhash_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_keyhash_utilities_file() {
-    // CVS_ID("Id: keyhash-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

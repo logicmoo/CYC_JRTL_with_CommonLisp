@@ -1,40 +1,7 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.date_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_temporal_projection;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.temporal_projection;
-import com.cyc.cycjava.cycl.temporal_projection_cols;
-import com.cyc.cycjava.cycl.temporal_projection_preds;
-import com.cyc.cycjava.cycl.temporal_projection_utilities;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_temporal_projection.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -44,15 +11,25 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_temporal_projection extends SubLTranslatedFile {
+public final class removal_modules_temporal_projection extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_temporal_projection();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_temporal_projection";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_temporal_projection";
 
-    public static final String myFingerPrint = "c1139927e9efdc5589369ce813ab55044c1f39ef9693bdacc9b31b80138c8af2";
 
     private static final SubLObject $const0$likelihoodOfTruthOfAssertionAtTim = reader_make_constant_shell(makeString("likelihoodOfTruthOfAssertionAtTime"));
 
@@ -504,21 +481,21 @@ public final class removal_modules_temporal_projection extends SubLTranslatedFil
     }
 
     public static SubLObject declare_removal_modules_temporal_projection_file() {
-        declareFunction(me, "removal_likelihood_of_assertion_at_time", "REMOVAL-LIKELIHOOD-OF-ASSERTION-AT-TIME", 1, 1, false);
-        declareFunction(me, "removal_location_has_qualitative_time_of_day_at_time", "REMOVAL-LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME", 1, 1, false);
-        declareFunction(me, "removal_location_has_qualitative_time_of_day_at_time_check", "REMOVAL-LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME-CHECK", 1, 1, false);
-        declareFunction(me, "removal_location_has_sunrise_time", "REMOVAL-LOCATION-HAS-SUNRISE-TIME", 1, 1, false);
-        declareFunction(me, "removal_local_sunrise_time_for_coordinates", "REMOVAL-LOCAL-SUNRISE-TIME-FOR-COORDINATES", 1, 1, false);
-        declareFunction(me, "removal_local_sunset_time_for_coordinates", "REMOVAL-LOCAL-SUNSET-TIME-FOR-COORDINATES", 1, 1, false);
-        declareFunction(me, "removal_location_has_sunset_time", "REMOVAL-LOCATION-HAS-SUNSET-TIME", 1, 1, false);
-        declareFunction(me, "removal_likelihood_of_truth_of_sentence", "REMOVAL-LIKELIHOOD-OF-TRUTH-OF-SENTENCE", 1, 1, false);
-        declareFunction(me, "removal_time_intervals_for_sentence", "REMOVAL-TIME-INTERVALS-FOR-SENTENCE", 1, 1, false);
-        declareFunction(me, "removal_has_level_of_opaque_expertise_on_topic_with_rating", "REMOVAL-HAS-LEVEL-OF-OPAQUE-EXPERTISE-ON-TOPIC-WITH-RATING", 1, 1, false);
-        declareFunction(me, "removal_time_intervals_intersect", "REMOVAL-TIME-INTERVALS-INTERSECT", 1, 1, false);
-        declareFunction(me, "time_intervals_intersectP", "TIME-INTERVALS-INTERSECT?", 2, 0, false);
-        declareFunction(me, "removal_likely_close_acquaintances", "REMOVAL-LIKELY-CLOSE-ACQUAINTANCES", 1, 1, false);
-        declareFunction(me, "removal_language_spoken", "REMOVAL-LANGUAGE-SPOKEN", 1, 1, false);
-        declareFunction(me, "removal_average_deviation_from_guidelines_in_interval", "REMOVAL-AVERAGE-DEVIATION-FROM-GUIDELINES-IN-INTERVAL", 1, 1, false);
+        declareFunction("removal_likelihood_of_assertion_at_time", "REMOVAL-LIKELIHOOD-OF-ASSERTION-AT-TIME", 1, 1, false);
+        declareFunction("removal_location_has_qualitative_time_of_day_at_time", "REMOVAL-LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME", 1, 1, false);
+        declareFunction("removal_location_has_qualitative_time_of_day_at_time_check", "REMOVAL-LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME-CHECK", 1, 1, false);
+        declareFunction("removal_location_has_sunrise_time", "REMOVAL-LOCATION-HAS-SUNRISE-TIME", 1, 1, false);
+        declareFunction("removal_local_sunrise_time_for_coordinates", "REMOVAL-LOCAL-SUNRISE-TIME-FOR-COORDINATES", 1, 1, false);
+        declareFunction("removal_local_sunset_time_for_coordinates", "REMOVAL-LOCAL-SUNSET-TIME-FOR-COORDINATES", 1, 1, false);
+        declareFunction("removal_location_has_sunset_time", "REMOVAL-LOCATION-HAS-SUNSET-TIME", 1, 1, false);
+        declareFunction("removal_likelihood_of_truth_of_sentence", "REMOVAL-LIKELIHOOD-OF-TRUTH-OF-SENTENCE", 1, 1, false);
+        declareFunction("removal_time_intervals_for_sentence", "REMOVAL-TIME-INTERVALS-FOR-SENTENCE", 1, 1, false);
+        declareFunction("removal_has_level_of_opaque_expertise_on_topic_with_rating", "REMOVAL-HAS-LEVEL-OF-OPAQUE-EXPERTISE-ON-TOPIC-WITH-RATING", 1, 1, false);
+        declareFunction("removal_time_intervals_intersect", "REMOVAL-TIME-INTERVALS-INTERSECT", 1, 1, false);
+        declareFunction("time_intervals_intersectP", "TIME-INTERVALS-INTERSECT?", 2, 0, false);
+        declareFunction("removal_likely_close_acquaintances", "REMOVAL-LIKELY-CLOSE-ACQUAINTANCES", 1, 1, false);
+        declareFunction("removal_language_spoken", "REMOVAL-LANGUAGE-SPOKEN", 1, 1, false);
+        declareFunction("removal_average_deviation_from_guidelines_in_interval", "REMOVAL-AVERAGE-DEVIATION-FROM-GUIDELINES-IN-INTERVAL", 1, 1, false);
         return NIL;
     }
 

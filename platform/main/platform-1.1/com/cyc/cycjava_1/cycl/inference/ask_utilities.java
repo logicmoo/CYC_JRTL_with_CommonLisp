@@ -148,8 +148,7 @@ public  final class ask_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_ask_utilities_file() {
-    // CVS_ID("Id: ask-utilities.lisp 128695 2009-09-02 21:55:44Z jantos ");
-    utilities_macros.register_cyc_api_function($sym26$QUERY_JUSTIFIED, $list27, $str28$Ask_for_bindings_for_free_variabl, NIL, $list29);
+        utilities_macros.register_cyc_api_function($sym26$QUERY_JUSTIFIED, $list27, $str28$Ask_for_bindings_for_free_variabl, NIL, $list29);
     utilities_macros.register_obsolete_cyc_api_function($sym30$ASK_JUSTIFIED, $list31, $list32, $str33$Ask_for_bindings_for_free_variabl, NIL, $list29);
     utilities_macros.register_cyc_api_function($sym34$QUERY_TEMPLATE, $list35, $str36$Ask_SENTENCE_in_MT___Return_resul, NIL, $list29);
     utilities_macros.register_obsolete_cyc_api_function($sym37$ASK_TEMPLATE, $list38, $list39, $str40$Ask_SENTENCE_in_MT___Return_resul, NIL, $list29);

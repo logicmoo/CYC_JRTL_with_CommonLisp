@@ -45,18 +45,18 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class visitation extends SubLTranslatedFile {
     public static SubLObject declare_visitation_file() {
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct", "VISIT-DEFSTRUCT", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object", "VISIT-DEFSTRUCT-OBJECT", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_noop", "VISIT-DEFSTRUCT-NOOP", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_integer_method", "VISIT-DEFSTRUCT-OBJECT-INTEGER-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_float_method", "VISIT-DEFSTRUCT-OBJECT-FLOAT-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_string_method", "VISIT-DEFSTRUCT-OBJECT-STRING-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_character_method", "VISIT-DEFSTRUCT-OBJECT-CHARACTER-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_symbol_method", "VISIT-DEFSTRUCT-OBJECT-SYMBOL-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_vector_method", "VISIT-DEFSTRUCT-OBJECT-VECTOR-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_cons_method", "VISIT-DEFSTRUCT-OBJECT-CONS-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "visit_defstruct_object_hash_table_method", "VISIT-DEFSTRUCT-OBJECT-HASH-TABLE-METHOD", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation", "print_visitor", "PRINT-VISITOR", 4, 0, false);
+        declareFunction("visit_defstruct", "VISIT-DEFSTRUCT", 2, 0, false);
+        declareFunction("visit_defstruct_object", "VISIT-DEFSTRUCT-OBJECT", 2, 0, false);
+        declareFunction("visit_defstruct_noop", "VISIT-DEFSTRUCT-NOOP", 2, 0, false);
+        declareFunction("visit_defstruct_object_integer_method", "VISIT-DEFSTRUCT-OBJECT-INTEGER-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_float_method", "VISIT-DEFSTRUCT-OBJECT-FLOAT-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_string_method", "VISIT-DEFSTRUCT-OBJECT-STRING-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_character_method", "VISIT-DEFSTRUCT-OBJECT-CHARACTER-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_symbol_method", "VISIT-DEFSTRUCT-OBJECT-SYMBOL-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_vector_method", "VISIT-DEFSTRUCT-OBJECT-VECTOR-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_cons_method", "VISIT-DEFSTRUCT-OBJECT-CONS-METHOD", 2, 0, false);
+        declareFunction("visit_defstruct_object_hash_table_method", "VISIT-DEFSTRUCT-OBJECT-HASH-TABLE-METHOD", 2, 0, false);
+        declareFunction("print_visitor", "PRINT-VISITOR", 4, 0, false);
         return SubLNil.NIL;
     }
 

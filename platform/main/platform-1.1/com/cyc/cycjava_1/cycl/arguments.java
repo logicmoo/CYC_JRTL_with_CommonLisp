@@ -710,8 +710,7 @@ ROBUST requests more thorough checking. */
   }
 
   public static final SubLObject setup_arguments_file() {
-    // CVS_ID("Id: arguments.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym13$ARGUMENT_P, $list14, $str15$Return_T_iff_OBJECT_is_an_HL_argu, NIL, $list16);
+        utilities_macros.register_cyc_api_function($sym13$ARGUMENT_P, $list14, $str15$Return_T_iff_OBJECT_is_an_HL_argu, NIL, $list16);
     utilities_macros.register_cyc_api_function($sym21$ARGUMENT_EQUAL, $list22, $str23$Return_T_iff_ARGUMENT1_and_ARGUME, NIL, $list16);
     utilities_macros.register_cyc_api_function($sym24$ARGUMENT_TRUTH, $list25, $str26$Return_the_truth_of_ARGUMENT_, $list27, $list28);
     utilities_macros.register_cyc_api_function($sym29$ARGUMENT_STRENGTH, $list25, $str30$Return_the_strength_of_ARGUMENT_, $list27, $list31);

@@ -1,14 +1,22 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_events;
 import com.cyc.cycjava.cycl.kb_mapping;
 import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.mt_vars;
+import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -19,29 +27,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_events.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_events extends SubLTranslatedFile {
+public final class removal_modules_events extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_events();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_events";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_events";
 
-    public static final String myFingerPrint = "b804476d8b7903d95d79750c4ca83bfede084408eaf7ae2d803eee18941fc6cb";
 
 
 
@@ -59,7 +50,7 @@ public final class removal_modules_events extends SubLTranslatedFile {
 
     private static final SubLSymbol $REMOVAL_CURRENT_COMPLETION_VALUE_POS = makeKeyword("REMOVAL-CURRENT-COMPLETION-VALUE-POS");
 
-    private static final SubLList $list7 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("currentCompletionValue")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("currentCompletionValue")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("COST-EXPRESSION"), ONE_INTEGER, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("currentCompletionValue")), list(makeKeyword("BIND"), makeSymbol("EVENT")), makeKeyword("ANYTHING")), list(makeKeyword("VALUE"), makeSymbol("EVENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("ANSWER-TO-SINGLETON"), list(makeKeyword("CALL"), makeSymbol("EVENT-COMPLETION-VALUE"), makeKeyword("INPUT"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(reader_make_constant_shell(makeString("currentCompletionValue")), list(makeKeyword("VALUE"), makeSymbol("EVENT")), makeKeyword("INPUT")), makeKeyword("DOCUMENTATION"), makeString("(currentCompletionValue <FULLY BOUND> <ANYTHING>)"), makeKeyword("EXAMPLE"), makeString("(currentCompletionValue Solving-RobotFuel-PlannedBy-VersionOfElleForHarper-On-2011 ?VAR)") });
+    private static final SubLList $list7 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("currentCompletionValue")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("currentCompletionValue")), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("COST-EXPRESSION"), ONE_INTEGER, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("currentCompletionValue")), list($BIND, makeSymbol("EVENT")), makeKeyword("ANYTHING")), list(makeKeyword("VALUE"), makeSymbol("EVENT"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("ANSWER-TO-SINGLETON"), list($CALL, makeSymbol("EVENT-COMPLETION-VALUE"), makeKeyword("INPUT"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(reader_make_constant_shell(makeString("currentCompletionValue")), list(makeKeyword("VALUE"), makeSymbol("EVENT")), makeKeyword("INPUT")), makeKeyword("DOCUMENTATION"), makeString("(currentCompletionValue <FULLY BOUND> <ANYTHING>)"), makeKeyword("EXAMPLE"), makeString("(currentCompletionValue Solving-RobotFuel-PlannedBy-VersionOfElleForHarper-On-2011 ?VAR)") });
 
     private static final SubLFloat $float$1_0 = makeDouble(1.0);
 
@@ -157,10 +148,10 @@ public final class removal_modules_events extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_events_file() {
-        declareFunction(me, "event_completion_value", "EVENT-COMPLETION-VALUE", 1, 0, false);
-        declareFunction(me, "get_proper_sub_events", "GET-PROPER-SUB-EVENTS", 1, 0, false);
-        declareFunction(me, "get_completion_value", "GET-COMPLETION-VALUE", 1, 0, false);
-        declareFunction(me, "get_proper_sub_events_inf", "GET-PROPER-SUB-EVENTS-INF", 1, 0, false);
+        declareFunction("event_completion_value", "EVENT-COMPLETION-VALUE", 1, 0, false);
+        declareFunction("get_proper_sub_events", "GET-PROPER-SUB-EVENTS", 1, 0, false);
+        declareFunction("get_completion_value", "GET-COMPLETION-VALUE", 1, 0, false);
+        declareFunction("get_proper_sub_events_inf", "GET-PROPER-SUB-EVENTS-INF", 1, 0, false);
         return NIL;
     }
 

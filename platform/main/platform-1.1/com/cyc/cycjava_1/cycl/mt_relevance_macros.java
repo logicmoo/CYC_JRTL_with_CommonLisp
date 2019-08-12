@@ -486,8 +486,7 @@ about which we need to be conservative, return the mt in which we should look fo
   }
 
   public static final SubLObject setup_mt_relevance_macros_file() {
-    // CVS_ID("Id: mt-relevance-macros.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    mt_vars.note_mt_var($mt$.getDynamicValue(), UNPROVIDED);
+        mt_vars.note_mt_var($mt$.getDynamicValue(), UNPROVIDED);
     access_macros.register_macro_helper($sym5$IN_MT_LIST, $list6);
     utilities_macros.register_cyc_api_macro($sym23$WITH_GENL_MTS, $list3, $str24$MT_and_all_its_genl_mts_are_relev);
     utilities_macros.register_cyc_api_macro($sym27$WITH_MT, $list3, $str24$MT_and_all_its_genl_mts_are_relev);

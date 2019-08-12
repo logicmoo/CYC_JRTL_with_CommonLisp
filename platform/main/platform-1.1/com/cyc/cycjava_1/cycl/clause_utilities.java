@@ -607,8 +607,7 @@ public  final class clause_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_clause_utilities_file() {
-    // CVS_ID("Id: clause-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

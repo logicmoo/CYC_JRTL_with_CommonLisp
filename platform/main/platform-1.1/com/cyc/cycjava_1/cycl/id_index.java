@@ -769,8 +769,7 @@ Access to OLD-OBJECTS-SIZE number of ids starting at 0 will be optimized. */
   }
 
   public static final SubLObject setup_id_index_file() {
-    // CVS_ID("Id: id-index.lisp 128690 2009-09-02 19:44:47Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_id_index$.getGlobalValue(), Symbols.symbol_function($sym7$ID_INDEX_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_id_index$.getGlobalValue(), Symbols.symbol_function($sym7$ID_INDEX_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$IDIX_LOCK, $sym9$_CSETF_IDIX_LOCK);
     Structures.def_csetf($sym10$IDIX_COUNT, $sym11$_CSETF_IDIX_COUNT);
     Structures.def_csetf($sym12$IDIX_NEXT_ID, $sym13$_CSETF_IDIX_NEXT_ID);

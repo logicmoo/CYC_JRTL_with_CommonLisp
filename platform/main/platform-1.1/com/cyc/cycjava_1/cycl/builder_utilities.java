@@ -366,8 +366,7 @@ public  final class builder_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_builder_utilities_file() {
-    // CVS_ID("Id: builder-utilities.lisp 128922 2009-10-07 14:10:45Z rck ");
-    access_macros.register_external_symbol($sym1$CYC_BUILD_WORLD_VERIFY);
+        access_macros.register_external_symbol($sym1$CYC_BUILD_WORLD_VERIFY);
     declare_cyc_product($kw41$HEAD, $kw42$STANDARD, $kw43$FULL, $str44$head);
     declare_cyc_product($kw45$CAE_0_3, $kw46$TKB, $kw47$AKB, $str48$cake_release_0p3_20051215);
     subl_macro_promotions.declare_defglobal($sym49$_CYC_PRODUCT_);

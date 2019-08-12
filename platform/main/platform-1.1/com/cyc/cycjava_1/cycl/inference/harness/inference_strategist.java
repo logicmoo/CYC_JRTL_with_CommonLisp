@@ -1906,8 +1906,7 @@ nil indicates it's not time to suspend yet (still more work to do) */
   }
 
   public static final SubLObject setup_inference_strategist_file() {
-    // CVS_ID("Id: inference-strategist.lisp 128924 2009-10-07 17:48:12Z pace ");
-    utilities_macros.note_funcall_helper_function($sym12$QUERY_INTERRUPT_INT);
+        utilities_macros.note_funcall_helper_function($sym12$QUERY_INTERRUPT_INT);
     access_macros.register_macro_helper($sym98$WITH_QUERY_ABORT_TIMEOUT_START_TIMER, $sym100$WITH_QUERY_ABORT_TIMEOUT);
     access_macros.register_macro_helper($sym99$WITH_QUERY_ABORT_TIMEOUT_STOP_TIMER, $sym100$WITH_QUERY_ABORT_TIMEOUT);
     return NIL;

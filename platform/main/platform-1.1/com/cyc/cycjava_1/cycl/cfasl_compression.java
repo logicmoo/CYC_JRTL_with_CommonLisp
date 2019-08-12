@@ -159,8 +159,7 @@ public  final class cfasl_compression extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cfasl_compression_file() {
-    // CVS_ID("Id: cfasl-compression.lisp 126640 2008-12-04 13:39:36Z builder ");
-    cfasl.register_cfasl_input_function($cfasl_opcode_open_compressed_block$.getGlobalValue(), $sym1$CFASL_INPUT_OPEN_COMPRESSED_BLOCK);
+        cfasl.register_cfasl_input_function($cfasl_opcode_open_compressed_block$.getGlobalValue(), $sym1$CFASL_INPUT_OPEN_COMPRESSED_BLOCK);
     cfasl.register_cfasl_input_function($cfasl_opcode_compression_pair$.getGlobalValue(), $sym3$CFASL_INPUT_COMPRESSION_PAIR);
     cfasl.register_cfasl_input_function($cfasl_opcode_compression_key$.getGlobalValue(), $sym5$CFASL_INPUT_COMPRESSION_KEY);
     cfasl.register_cfasl_input_function($cfasl_opcode_close_compressed_block$.getGlobalValue(), $sym7$CFASL_INPUT_CLOSE_COMPRESSED_BLOCK);

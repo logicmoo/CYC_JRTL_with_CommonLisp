@@ -864,8 +864,7 @@ public  final class removal_modules_genlpreds_lookup extends SubLTranslatedFile 
   }
 
   public static final SubLObject setup_removal_modules_genlpreds_lookup_file() {
-    // CVS_ID("Id: removal-modules-genlpreds-lookup.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_removal_module($kw1$REMOVAL_GENLPREDS_LOOKUP_POS, $list2);
+        inference_modules.inference_removal_module($kw1$REMOVAL_GENLPREDS_LOOKUP_POS, $list2);
     inference_modules.inference_removal_module($kw6$REMOVAL_GENLPREDS_LOOKUP_NEG, $list7);
     subl_macro_promotions.declare_defglobal($sym11$_UNKNOWN_EL_VARIABLE_);
     inference_modules.inference_removal_module($kw29$REMOVAL_GENLPREDS_PRED_INDEX_POS, $list30);

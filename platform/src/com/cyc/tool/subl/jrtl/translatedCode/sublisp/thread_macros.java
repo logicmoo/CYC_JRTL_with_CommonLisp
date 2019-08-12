@@ -35,8 +35,8 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class thread_macros extends SubLTranslatedFile {
     public static SubLObject declare_thread_macros_file() {
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.thread_macros", "with_lock_held", "WITH-LOCK-HELD");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.thread_macros", "with_lock_held_internal", "WITH-LOCK-HELD-INTERNAL", 3, 0, false);
+        declareMacro("with_lock_held", "WITH-LOCK-HELD");
+        declareFunction("with_lock_held_internal", "WITH-LOCK-HELD-INTERNAL", 3, 0, false);
         return SubLNil.NIL;
     }
 

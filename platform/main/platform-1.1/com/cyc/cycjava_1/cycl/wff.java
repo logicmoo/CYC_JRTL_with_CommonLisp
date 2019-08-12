@@ -2380,8 +2380,7 @@ of the non-atomic sentence NASENT are semantically well-formed. */
   }
 
   public static final SubLObject setup_wff_file() {
-    // CVS_ID("Id: wff.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym21$EL_WFF_SYNTAX_, $list22, $str23$Is_SENTENCE_well_formed_wrt_synta, NIL, $list24);
+        utilities_macros.register_cyc_api_function($sym21$EL_WFF_SYNTAX_, $list22, $str23$Is_SENTENCE_well_formed_wrt_synta, NIL, $list24);
     memoization_state.note_memoized_function($sym33$MEMOIZED_SYNTACTICALLY_WF_FORMULA_);
     memoization_state.note_memoized_function($sym35$MEMOIZED_SEMANTICALLY_WF_LITERAL_);
     memoization_state.note_memoized_function($sym56$MEMOIZED_SEMANTICALLY_WF_SENTENCE_);

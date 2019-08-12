@@ -866,8 +866,7 @@ public  final class preference_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_preference_modules_file() {
-    // CVS_ID("Id: preference-modules.lisp 128153 2009-06-26 17:30:24Z pace ");
-    subl_macro_promotions.declare_defglobal($sym18$_PREFERENCE_MODULES_BY_NAME_);
+        subl_macro_promotions.declare_defglobal($sym18$_PREFERENCE_MODULES_BY_NAME_);
     subl_macro_promotions.declare_defglobal($sym5$_GENERIC_PREFERENCE_MODULES_);
     subl_macro_promotions.declare_defglobal($sym69$_SPECIFIC_PREFERENCE_MODULES_);
     subl_macro_promotions.declare_defglobal($sym70$_PREFERENCE_MODULE_SUPPLANTS_);

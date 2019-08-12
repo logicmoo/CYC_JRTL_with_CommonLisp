@@ -238,8 +238,7 @@ public  final class equality_store extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_equality_store_file() {
-    // CVS_ID("Id: equality-store.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym2$_SOME_EQUALITY_ASSERTIONS_SOMEWHERE_SET_);
+        subl_macro_promotions.declare_defglobal($sym2$_SOME_EQUALITY_ASSERTIONS_SOMEWHERE_SET_);
     utilities_macros.register_kb_function($sym7$DECACHE_SOME_EQUALITY_ASSERTIONS_SOMEWHERE);
     return NIL;
   }

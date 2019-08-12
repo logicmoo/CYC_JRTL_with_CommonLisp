@@ -1,7 +1,22 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.locking_map;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ReadWriteLocks;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -19,38 +34,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
 
-import static com.cyc.cycjava.cycl.locking_map.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class locking_map extends SubLTranslatedFile {
+ public final class locking_map extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new locking_map();
 
-    public static final String myName = "com.cyc.cycjava.cycl.locking_map";
+    public static final String myName = "com.cyc.cycjava_2.cycl.locking_map";
 
-    public static final String myFingerPrint = "70fcfd1edec2c251ea139afe430b22849d81a16a900fcc68bb17bbbeff9dd4e6";
 
     // defconstant
     public static final SubLSymbol $dtp_locking_map$ = makeSymbol("*DTP-LOCKING-MAP*");
@@ -63,7 +52,7 @@ public final class locking_map extends SubLTranslatedFile {
 
     private static final SubLList $list3 = list(makeSymbol("MAP"), makeSymbol("LOCK"));
 
-    private static final SubLList $list4 = list(makeKeyword("MAP"), makeKeyword("LOCK"));
+    private static final SubLList $list4 = list(makeKeyword("MAP"), $LOCK);
 
     private static final SubLList $list5 = list(makeSymbol("LMAP-MAP"), makeSymbol("LMAP-LOCK"));
 
@@ -150,26 +139,26 @@ public final class locking_map extends SubLTranslatedFile {
     }
 
     public static SubLObject locking_map_p(final SubLObject v_object) {
-        return v_object.getClass() == locking_map.$locking_map_native.class ? T : NIL;
+        return v_object.getClass() == $locking_map_native.class ? T : NIL;
     }
 
     public static SubLObject lmap_map(final SubLObject v_object) {
-        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p(v_object) " + "CommonSymbols.NIL != locking_map.locking_map_p(v_object) " + v_object;
+        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject lmap_lock(final SubLObject v_object) {
-        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p(v_object) " + "CommonSymbols.NIL != locking_map.locking_map_p(v_object) " + v_object;
+        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject _csetf_lmap_map(final SubLObject v_object, final SubLObject value) {
-        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p(v_object) " + "CommonSymbols.NIL != locking_map.locking_map_p(v_object) " + v_object;
+        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_lmap_lock(final SubLObject v_object, final SubLObject value) {
-        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p(v_object) " + "CommonSymbols.NIL != locking_map.locking_map_p(v_object) " + v_object;
+        assert NIL != locking_map_p(v_object) : "locking_map.locking_map_p error :" + v_object;
         return v_object.setField3(value);
     }
 
@@ -177,7 +166,7 @@ public final class locking_map extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new locking_map.$locking_map_native();
+        final SubLObject v_new = new $locking_map_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -475,43 +464,43 @@ public final class locking_map extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_locking_map_file() {
-        declareFunction(me, "create_locking_map", "CREATE-LOCKING-MAP", 1, 0, false);
-        declareFunction(me, "locking_map_print_function_trampoline", "LOCKING-MAP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "locking_map_p", "LOCKING-MAP-P", 1, 0, false);
+        declareFunction("create_locking_map", "CREATE-LOCKING-MAP", 1, 0, false);
+        declareFunction("locking_map_print_function_trampoline", "LOCKING-MAP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("locking_map_p", "LOCKING-MAP-P", 1, 0, false);
         new locking_map.$locking_map_p$UnaryFunction();
-        declareFunction(me, "lmap_map", "LMAP-MAP", 1, 0, false);
-        declareFunction(me, "lmap_lock", "LMAP-LOCK", 1, 0, false);
-        declareFunction(me, "_csetf_lmap_map", "_CSETF-LMAP-MAP", 2, 0, false);
-        declareFunction(me, "_csetf_lmap_lock", "_CSETF-LMAP-LOCK", 2, 0, false);
-        declareFunction(me, "make_locking_map", "MAKE-LOCKING-MAP", 0, 1, false);
-        declareFunction(me, "visit_defstruct_locking_map", "VISIT-DEFSTRUCT-LOCKING-MAP", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_locking_map_method", "VISIT-DEFSTRUCT-OBJECT-LOCKING-MAP-METHOD", 2, 0, false);
-        declareFunction(me, "print_locking_map", "PRINT-LOCKING-MAP", 3, 0, false);
-        declareFunction(me, "is_map_object_p_locking_map_method", "IS-MAP-OBJECT-P-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_size_locking_map_method", "MAP-OBJECT-SIZE-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_test_locking_map_method", "MAP-OBJECT-TEST-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_put_locking_map_method", "MAP-OBJECT-PUT-LOCKING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "locking_map_put", "LOCKING-MAP-PUT", 3, 0, false);
-        declareFunction(me, "map_object_get_locking_map_method", "MAP-OBJECT-GET-LOCKING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "locking_map_get", "LOCKING-MAP-GET", 3, 0, false);
-        declareFunction(me, "map_object_get_without_values_locking_map_method", "MAP-OBJECT-GET-WITHOUT-VALUES-LOCKING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "locking_map_get_without_values", "LOCKING-MAP-GET-WITHOUT-VALUES", 3, 0, false);
-        declareFunction(me, "map_object_remove_locking_map_method", "MAP-OBJECT-REMOVE-LOCKING-MAP-METHOD", 2, 0, false);
-        declareFunction(me, "locking_map_remove", "LOCKING-MAP-REMOVE", 2, 0, false);
-        declareFunction(me, "new_map_object_with_same_properties_locking_map_method", "NEW-MAP-OBJECT-WITH-SAME-PROPERTIES-LOCKING-MAP-METHOD", 3, 0, false);
-        declareFunction(me, "map_object_arbitrary_key_locking_map_method", "MAP-OBJECT-ARBITRARY-KEY-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "new_map_object_iterator_locking_map_method", "NEW-MAP-OBJECT-ITERATOR-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_remove_all_locking_map_method", "MAP-OBJECT-REMOVE-ALL-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "locking_map_remove_all", "LOCKING-MAP-REMOVE-ALL", 1, 0, false);
-        declareFunction(me, "map_object_keys_locking_map_method", "MAP-OBJECT-KEYS-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "map_object_values_locking_map_method", "MAP-OBJECT-VALUES-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "new_locking_map", "NEW-LOCKING-MAP", 1, 0, false);
-        declareFunction(me, "locking_map_map", "LOCKING-MAP-MAP", 1, 0, false);
-        declareFunction(me, "locking_map_lock", "LOCKING-MAP-LOCK", 1, 0, false);
-        declareMacro(me, "with_locking_map_writer_lock", "WITH-LOCKING-MAP-WRITER-LOCK");
-        declareMacro(me, "with_locking_map_reader_lock", "WITH-LOCKING-MAP-READER-LOCK");
-        declareFunction(me, "sxhash_locking_map_method", "SXHASH-LOCKING-MAP-METHOD", 1, 0, false);
-        declareFunction(me, "sxhash_locking_map", "SXHASH-LOCKING-MAP", 1, 0, false);
+        declareFunction("lmap_map", "LMAP-MAP", 1, 0, false);
+        declareFunction("lmap_lock", "LMAP-LOCK", 1, 0, false);
+        declareFunction("_csetf_lmap_map", "_CSETF-LMAP-MAP", 2, 0, false);
+        declareFunction("_csetf_lmap_lock", "_CSETF-LMAP-LOCK", 2, 0, false);
+        declareFunction("make_locking_map", "MAKE-LOCKING-MAP", 0, 1, false);
+        declareFunction("visit_defstruct_locking_map", "VISIT-DEFSTRUCT-LOCKING-MAP", 2, 0, false);
+        declareFunction("visit_defstruct_object_locking_map_method", "VISIT-DEFSTRUCT-OBJECT-LOCKING-MAP-METHOD", 2, 0, false);
+        declareFunction("print_locking_map", "PRINT-LOCKING-MAP", 3, 0, false);
+        declareFunction("is_map_object_p_locking_map_method", "IS-MAP-OBJECT-P-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_size_locking_map_method", "MAP-OBJECT-SIZE-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_test_locking_map_method", "MAP-OBJECT-TEST-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_put_locking_map_method", "MAP-OBJECT-PUT-LOCKING-MAP-METHOD", 3, 0, false);
+        declareFunction("locking_map_put", "LOCKING-MAP-PUT", 3, 0, false);
+        declareFunction("map_object_get_locking_map_method", "MAP-OBJECT-GET-LOCKING-MAP-METHOD", 3, 0, false);
+        declareFunction("locking_map_get", "LOCKING-MAP-GET", 3, 0, false);
+        declareFunction("map_object_get_without_values_locking_map_method", "MAP-OBJECT-GET-WITHOUT-VALUES-LOCKING-MAP-METHOD", 3, 0, false);
+        declareFunction("locking_map_get_without_values", "LOCKING-MAP-GET-WITHOUT-VALUES", 3, 0, false);
+        declareFunction("map_object_remove_locking_map_method", "MAP-OBJECT-REMOVE-LOCKING-MAP-METHOD", 2, 0, false);
+        declareFunction("locking_map_remove", "LOCKING-MAP-REMOVE", 2, 0, false);
+        declareFunction("new_map_object_with_same_properties_locking_map_method", "NEW-MAP-OBJECT-WITH-SAME-PROPERTIES-LOCKING-MAP-METHOD", 3, 0, false);
+        declareFunction("map_object_arbitrary_key_locking_map_method", "MAP-OBJECT-ARBITRARY-KEY-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("new_map_object_iterator_locking_map_method", "NEW-MAP-OBJECT-ITERATOR-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_remove_all_locking_map_method", "MAP-OBJECT-REMOVE-ALL-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("locking_map_remove_all", "LOCKING-MAP-REMOVE-ALL", 1, 0, false);
+        declareFunction("map_object_keys_locking_map_method", "MAP-OBJECT-KEYS-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("map_object_values_locking_map_method", "MAP-OBJECT-VALUES-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("new_locking_map", "NEW-LOCKING-MAP", 1, 0, false);
+        declareFunction("locking_map_map", "LOCKING-MAP-MAP", 1, 0, false);
+        declareFunction("locking_map_lock", "LOCKING-MAP-LOCK", 1, 0, false);
+        declareMacro("with_locking_map_writer_lock", "WITH-LOCKING-MAP-WRITER-LOCK");
+        declareMacro("with_locking_map_reader_lock", "WITH-LOCKING-MAP-READER-LOCK");
+        declareFunction("sxhash_locking_map_method", "SXHASH-LOCKING-MAP-METHOD", 1, 0, false);
+        declareFunction("sxhash_locking_map", "SXHASH-LOCKING-MAP", 1, 0, false);
         return NIL;
     }
 
@@ -614,7 +603,7 @@ public final class locking_map extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $locking_map_native() {
+        private $locking_map_native() {
             this.$map = Lisp.NIL;
             this.$lock = Lisp.NIL;
         }
@@ -645,7 +634,7 @@ public final class locking_map extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(locking_map.$locking_map_native.class, LOCKING_MAP, LOCKING_MAP_P, $list3, $list4, new String[]{ "$map", "$lock" }, $list5, $list6, PRINT_LOCKING_MAP);
+            structDecl = makeStructDeclNative($locking_map_native.class, LOCKING_MAP, LOCKING_MAP_P, $list3, $list4, new String[]{ "$map", "$lock" }, $list5, $list6, PRINT_LOCKING_MAP);
         }
     }
 

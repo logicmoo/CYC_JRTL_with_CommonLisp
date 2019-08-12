@@ -124,8 +124,7 @@ public  final class fraction_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_fraction_utilities_file() {
-    // CVS_ID("Id: fraction-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_fraction$.getGlobalValue(), Symbols.symbol_function($sym7$FRACTION_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_fraction$.getGlobalValue(), Symbols.symbol_function($sym7$FRACTION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$FRACT_NUMERATOR, $sym9$_CSETF_FRACT_NUMERATOR);
     Structures.def_csetf($sym10$FRACT_DENOMINATOR, $sym11$_CSETF_FRACT_DENOMINATOR);
     Equality.identity($sym0$FRACTION);

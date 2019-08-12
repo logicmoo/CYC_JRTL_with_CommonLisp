@@ -806,8 +806,7 @@ canonicalized DNF as input.
   }
 
   public static final SubLObject setup_inference_kernel_file() {
-    // CVS_ID("Id: inference-kernel.lisp 128924 2009-10-07 17:48:12Z pace ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

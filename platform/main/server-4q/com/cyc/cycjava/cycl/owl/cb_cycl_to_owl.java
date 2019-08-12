@@ -1,58 +1,12 @@
 package com.cyc.cycjava.cycl.owl;
 
 
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.cyc_file_dependencies;
-import com.cyc.cycjava.cycl.cyc_navigator_internals;
-import com.cyc.cycjava.cycl.dhtml_macros;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.html_arghash;
-import com.cyc.cycjava.cycl.html_complete;
-import com.cyc.cycjava.cycl.html_macros;
-import com.cyc.cycjava.cycl.html_script_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava.cycl.integer_sequence_generator;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.owl.cb_cycl_to_owl;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.system_parameters;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
 import static com.cyc.cycjava.cycl.cb_parameters.*;
 import static com.cyc.cycjava.cycl.cb_utilities.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.html_utilities.*;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.owl.cb_cycl_to_owl.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -63,15 +17,28 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class cb_cycl_to_owl extends SubLTranslatedFile {
+public final class cb_cycl_to_owl extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_cycl_to_owl();
 
-    public static final String myName = "com.cyc.cycjava.cycl.owl.cb_cycl_to_owl";
+    public static final String myName = "com.cyc.cycjava_2.cycl.owl.cb_cycl_to_owl";
 
-    public static final String myFingerPrint = "5b8f42c4887d30956244a867a1cb2c84d24315cc1267fed1296d5a450de0b915";
 
     // defparameter
     private static final SubLSymbol $cb_owl_export_inference_justification_termsP$ = makeSymbol("*CB-OWL-EXPORT-INFERENCE-JUSTIFICATION-TERMS?*");
@@ -1028,12 +995,12 @@ public final class cb_cycl_to_owl extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_cycl_to_owl_file() {
-        declareFunction(me, "cb_owl_export", "CB-OWL-EXPORT", 0, 1, false);
-        declareFunction(me, "cb_owl_export_internal", "CB-OWL-EXPORT-INTERNAL", 1, 0, false);
-        declareFunction(me, "cb_link_cb_owl_export_xml", "CB-LINK-CB-OWL-EXPORT-XML", 2, 0, false);
-        declareFunction(me, "cb_owl_export_xml_link", "CB-OWL-EXPORT-XML-LINK", 2, 1, false);
-        declareFunction(me, "cb_owl_export_xml", "CB-OWL-EXPORT-XML", 1, 0, false);
-        declareFunction(me, "cb_link_cb_owl_export_inference_answers", "CB-LINK-CB-OWL-EXPORT-INFERENCE-ANSWERS", 1, 1, false);
+        declareFunction("cb_owl_export", "CB-OWL-EXPORT", 0, 1, false);
+        declareFunction("cb_owl_export_internal", "CB-OWL-EXPORT-INTERNAL", 1, 0, false);
+        declareFunction("cb_link_cb_owl_export_xml", "CB-LINK-CB-OWL-EXPORT-XML", 2, 0, false);
+        declareFunction("cb_owl_export_xml_link", "CB-OWL-EXPORT-XML-LINK", 2, 1, false);
+        declareFunction("cb_owl_export_xml", "CB-OWL-EXPORT-XML", 1, 0, false);
+        declareFunction("cb_link_cb_owl_export_inference_answers", "CB-LINK-CB-OWL-EXPORT-INFERENCE-ANSWERS", 1, 1, false);
         return NIL;
     }
 

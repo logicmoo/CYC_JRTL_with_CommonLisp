@@ -222,8 +222,7 @@ public  final class backward_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_backward_utilities_file() {
-    // CVS_ID("Id: backward-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.define_obsolete_register($sym12$INFERENCE_CANONICALIZE_HL_SUPPORT_LITERAL, $list13);
+        access_macros.define_obsolete_register($sym12$INFERENCE_CANONICALIZE_HL_SUPPORT_LITERAL, $list13);
     access_macros.define_obsolete_register($sym14$INFERENCE_MAKE_COMMUTATIVE_LITERAL, $list15);
     return NIL;
   }

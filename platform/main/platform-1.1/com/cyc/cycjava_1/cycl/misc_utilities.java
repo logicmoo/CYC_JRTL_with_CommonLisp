@@ -528,8 +528,7 @@ public  final class misc_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_misc_utilities_file() {
-    // CVS_ID("Id: misc-utilities.lisp 128079 2009-06-22 13:40:40Z pace ");
-    subl_macro_promotions.declare_defglobal($sym2$_SYSTEM_CODE_INITIALIZATIONS_MARKER_);
+        subl_macro_promotions.declare_defglobal($sym2$_SYSTEM_CODE_INITIALIZATIONS_MARKER_);
     access_macros.register_external_symbol($sym4$SYSTEM_CODE_INITIALIZATIONS_RUN_P);
     subl_macro_promotions.declare_defglobal($sym9$_HL_STORE_CACHES_DIRECTORY_);
     subl_macro_promotions.declare_defglobal($sym10$_HL_STORE_CACHES_SHARED_SYMBOLS_);

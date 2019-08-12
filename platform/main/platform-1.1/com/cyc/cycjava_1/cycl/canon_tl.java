@@ -219,8 +219,7 @@ public  final class canon_tl extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_canon_tl_file() {
-    // CVS_ID("Id: canon-tl.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_kb_function($sym19$TL_ASSERTION_TERM_TO_EL);
+        utilities_macros.register_kb_function($sym19$TL_ASSERTION_TERM_TO_EL);
     utilities_macros.register_kb_function($sym20$TL_FUNCTION_TERM_TO_EL);
     utilities_macros.register_kb_function($sym21$TL_VAR_TO_EL);
     return NIL;

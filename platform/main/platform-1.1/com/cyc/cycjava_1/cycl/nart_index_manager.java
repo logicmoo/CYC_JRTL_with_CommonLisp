@@ -104,8 +104,7 @@ public  final class nart_index_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_nart_index_manager_file() {
-    // CVS_ID("Id: nart-index-manager.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_NART_INDEX_MANAGER_);
+        subl_macro_promotions.declare_defglobal($sym0$_NART_INDEX_MANAGER_);
     return NIL;
   }
 

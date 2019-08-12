@@ -1,27 +1,46 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.browser;
 
 
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.cb_sentence_browser;
-import com.cyc.cycjava.cycl.cb_web_services;
-import com.cyc.cycjava.cycl.cyc_file_dependencies;
-import com.cyc.cycjava.cycl.czer_meta;
-import com.cyc.cycjava.cycl.dhtml_macros;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.html_macros;
-import com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.forward;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava.cycl.integer_sequence_generator;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.numeric_date_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
@@ -38,92 +57,142 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_assertion_history$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class cb_forward_inference_browser extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      CB-FORWARD-INFERENCE-BROWSER
+ * source file: /cyc/top/cycl/inference/browser/cb-forward-inference-browser.lisp
+ * created:     2019/07/03 17:38:08
+ */
+public final class cb_forward_inference_browser extends SubLTranslatedFile implements V12 {
+    public static final class $forward_inference_info_native extends SubLStructNative {
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        public SubLObject getField2() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.this.$inference;
+        }
+
+        public SubLObject getField3() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.this.$rule;
+        }
+
+        public SubLObject getField4() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.this.$more_info;
+        }
+
+        public SubLObject setField2(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.this.$inference = value;
+        }
+
+        public SubLObject setField3(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.this.$rule = value;
+        }
+
+        public SubLObject setField4(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.this.$more_info = value;
+        }
+
+        public SubLObject $inference = Lisp.NIL;
+
+        public SubLObject $rule = Lisp.NIL;
+
+        public SubLObject $more_info = Lisp.NIL;
+
+        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.class, FORWARD_INFERENCE_INFO, FORWARD_INFERENCE_INFO_P, $list_alt30, $list_alt31, new String[]{ "$inference", "$rule", "$more_info" }, $list_alt32, $list_alt33, DEFAULT_STRUCT_PRINT_FUNCTION);
+    }
+
+    public static final class $forward_inference_clump_native extends SubLStructNative {
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        public SubLObject getField2() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$id;
+        }
+
+        public SubLObject getField3() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$timestamp;
+        }
+
+        public SubLObject getField4() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$triggering_assertion;
+        }
+
+        public SubLObject getField5() {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$inference_infos;
+        }
+
+        public SubLObject setField2(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$id = value;
+        }
+
+        public SubLObject setField3(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$timestamp = value;
+        }
+
+        public SubLObject setField4(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$triggering_assertion = value;
+        }
+
+        public SubLObject setField5(SubLObject value) {
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.this.$inference_infos = value;
+        }
+
+        public SubLObject $id = Lisp.NIL;
+
+        public SubLObject $timestamp = Lisp.NIL;
+
+        public SubLObject $triggering_assertion = Lisp.NIL;
+
+        public SubLObject $inference_infos = Lisp.NIL;
+
+        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.class, FORWARD_INFERENCE_CLUMP, FORWARD_INFERENCE_CLUMP_P, $list_alt2, $list_alt3, new String[]{ "$id", "$timestamp", "$triggering_assertion", "$inference_infos" }, $list_alt4, $list_alt5, DEFAULT_STRUCT_PRINT_FUNCTION);
+    }
+
     public static final SubLFile me = new cb_forward_inference_browser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser";
 
-    public static final String myFingerPrint = "8368e68f0fd4163486b424d23b32586af7078fc39f846b659c3620bcbdbd4dfd";
 
     // defparameter
+    // Definitions
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $cb_forward_inference_clump_id_index$ = makeSymbol("*CB-FORWARD-INFERENCE-CLUMP-ID-INDEX*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $cb_forward_inference_browser_show_focus_sectionsP$ = makeSymbol("*CB-FORWARD-INFERENCE-BROWSER-SHOW-FOCUS-SECTIONS?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $cb_forward_inference_browser_show_el_queriesP$ = makeSymbol("*CB-FORWARD-INFERENCE-BROWSER-SHOW-EL-QUERIES?*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_forward_inference_clump$ = makeSymbol("*DTP-FORWARD-INFERENCE-CLUMP*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_forward_inference_info$ = makeSymbol("*DTP-FORWARD-INFERENCE-INFO*");
 
-
-
     // Internal Constants
-    public static final SubLSymbol FORWARD_INFERENCE_CLUMP = makeSymbol("FORWARD-INFERENCE-CLUMP");
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol FORWARD_INFERENCE_CLUMP = makeSymbol("FORWARD-INFERENCE-CLUMP");
 
-    public static final SubLSymbol FORWARD_INFERENCE_CLUMP_P = makeSymbol("FORWARD-INFERENCE-CLUMP-P");
+    private static final SubLSymbol FORWARD_INFERENCE_CLUMP_P = makeSymbol("FORWARD-INFERENCE-CLUMP-P");
 
-    public static final SubLList $list2 = list(makeSymbol("ID"), makeSymbol("TIMESTAMP"), makeSymbol("TRIGGERING-ASSERTION"), makeSymbol("INFERENCE-INFOS"));
+    static private final SubLList $list2 = list(makeSymbol("ID"), makeSymbol("TIMESTAMP"), makeSymbol("TRIGGERING-ASSERTION"), makeSymbol("INFERENCE-INFOS"));
 
-    public static final SubLList $list3 = list(makeKeyword("ID"), makeKeyword("TIMESTAMP"), makeKeyword("TRIGGERING-ASSERTION"), makeKeyword("INFERENCE-INFOS"));
+    static private final SubLList $list3 = list(makeKeyword("ID"), makeKeyword("TIMESTAMP"), makeKeyword("TRIGGERING-ASSERTION"), makeKeyword("INFERENCE-INFOS"));
 
-    public static final SubLList $list4 = list(makeSymbol("FWD-INF-CLUMP-ID"), makeSymbol("FWD-INF-CLUMP-TIMESTAMP"), makeSymbol("FWD-INF-CLUMP-TRIGGERING-ASSERTION"), makeSymbol("FWD-INF-CLUMP-INFERENCE-INFOS"));
+    static private final SubLList $list4 = list(makeSymbol("FWD-INF-CLUMP-ID"), makeSymbol("FWD-INF-CLUMP-TIMESTAMP"), makeSymbol("FWD-INF-CLUMP-TRIGGERING-ASSERTION"), makeSymbol("FWD-INF-CLUMP-INFERENCE-INFOS"));
 
-    public static final SubLList $list5 = list(makeSymbol("_CSETF-FWD-INF-CLUMP-ID"), makeSymbol("_CSETF-FWD-INF-CLUMP-TIMESTAMP"), makeSymbol("_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION"), makeSymbol("_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS"));
+    static private final SubLList $list5 = list(makeSymbol("_CSETF-FWD-INF-CLUMP-ID"), makeSymbol("_CSETF-FWD-INF-CLUMP-TIMESTAMP"), makeSymbol("_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION"), makeSymbol("_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS"));
 
-
-
-    public static final SubLSymbol FORWARD_INFERENCE_CLUMP_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("FORWARD-INFERENCE-CLUMP-PRINT-FUNCTION-TRAMPOLINE");
+    private static final SubLSymbol FORWARD_INFERENCE_CLUMP_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("FORWARD-INFERENCE-CLUMP-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list8 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("FORWARD-INFERENCE-CLUMP-P"));
 
@@ -143,37 +212,17 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_FWD_INF_CLUMP_INFERENCE_INFOS = makeSymbol("_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS");
 
-
-
-
-
-
-
-
-
     private static final SubLString $str21$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
-
-
 
     private static final SubLSymbol MAKE_FORWARD_INFERENCE_CLUMP = makeSymbol("MAKE-FORWARD-INFERENCE-CLUMP");
 
-
-
-
-
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_FORWARD_INFERENCE_CLUMP_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-CLUMP-METHOD");
-
-
 
     private static final SubLList $list28 = list(list(makeSymbol("INFERENCE-INFO"), makeSymbol("CLUMP"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list29 = list(makeKeyword("DONE"));
+    private static final SubLList $list29 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
-
-
-
-
 
     private static final SubLSymbol FORWARD_INFERENCE_CLUMP_INFERENCE_INFOS = makeSymbol("FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS");
 
@@ -183,7 +232,7 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLList $list36 = list(makeSymbol("INFERENCE"), makeSymbol("RULE"), makeSymbol("MORE-INFO"));
 
-    private static final SubLList $list37 = list(makeKeyword("INFERENCE"), makeKeyword("RULE"), makeKeyword("MORE-INFO"));
+    private static final SubLList $list37 = list(makeKeyword("INFERENCE"), $RULE, makeKeyword("MORE-INFO"));
 
     private static final SubLList $list38 = list(makeSymbol("FWD-INF-INFO-INFERENCE"), makeSymbol("FWD-INF-INFO-RULE"), makeSymbol("FWD-INF-INFO-MORE-INFO"));
 
@@ -205,17 +254,9 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_FWD_INF_INFO_MORE_INFO = makeSymbol("_CSETF-FWD-INF-INFO-MORE-INFO");
 
-
-
-
-
-
-
     private static final SubLSymbol MAKE_FORWARD_INFERENCE_INFO = makeSymbol("MAKE-FORWARD-INFERENCE-INFO");
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_FORWARD_INFERENCE_INFO_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-INFO-METHOD");
-
-
 
     public static final SubLSymbol $cb_current_forward_inference_clump$ = makeSymbol("*CB-CURRENT-FORWARD-INFERENCE-CLUMP*");
 
@@ -225,11 +266,7 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLSymbol CB_FORWARD_INFERENCE_BROWSER = makeSymbol("CB-FORWARD-INFERENCE-BROWSER");
 
-
-
     private static final SubLString $$$FwdInf = makeString("FwdInf");
-
-
 
     private static final SubLString $str61$cb_forward_inference_browser = makeString("cb-forward-inference-browser");
 
@@ -245,13 +282,7 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLString $str67$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
 
-
-
-
-
     private static final SubLSymbol $SAM_AUTOCOMPLETE_CSS = makeKeyword("SAM-AUTOCOMPLETE-CSS");
-
-
 
     private static final SubLString $str72$yui_skin_sam = makeString("yui-skin-sam");
 
@@ -269,27 +300,17 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLString $str79$Last_browsable_forward_inference_ = makeString("Last browsable forward inference clump was triggered at ~a by the forward propagation of");
 
-
-
     private static final SubLString $str81$Successful_and_watched_results_ = makeString("Successful and watched results:");
 
     private static final SubLString $str82$_all = makeString("#all");
 
     private static final SubLString $str83$_Jump_to_all_results_ = makeString("[Jump to all results]");
 
-
-
     private static final SubLString $$$all = makeString("all");
 
     private static final SubLString $$$All_results = makeString("All results");
 
-
-
     private static final SubLString $str88$_ = makeString("_");
-
-
-
-
 
     private static final SubLString $str91$Propagating_rule__ = makeString("Propagating rule: ");
 
@@ -299,41 +320,17 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLString $str94$_Next_ = makeString("[Next]");
 
-
-
     private static final SubLString $str96$_Jump_to_all_rules_ = makeString("[Jump to all rules]");
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLString $str102$ = makeString("");
 
     private static final SubLString $$$_into_mt_ = makeString(" into mt ");
 
-
-
-
-
-    private static final SubLList $list106 = list(makeKeyword("TYPE"), makeKeyword("ASENT"), makeKeyword("PLACEMENT-MT"));
-
-
+    private static final SubLList $list106 = list($TYPE, makeKeyword("ASENT"), makeKeyword("PLACEMENT-MT"));
 
     private static final SubLList $list108 = list(makeKeyword("SUPPORTS"), makeKeyword("PRAGMATIC-SUPPORTS"));
 
-
-
-
-
     private static final SubLString $str111$_d_answer__P = makeString("~d answer~:P");
-
-
 
     private static final SubLString $str113$___d_justification__P = makeString(", ~d justification~:P");
 
@@ -345,9 +342,21 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEANUP_FROM_BROWSING_NEW_FORWARD_INFERENCE = makeSymbol("CLEANUP-FROM-BROWSING-NEW-FORWARD-INFERENCE");
 
+    public static final SubLObject cb_forward_inference_clump_lookup_by_id_alt(SubLObject id) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return id_index_lookup($cb_forward_inference_clump_id_index$.getDynamicValue(thread), id, UNPROVIDED);
+        }
+    }
+
     public static SubLObject cb_forward_inference_clump_lookup_by_id(final SubLObject id) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return id_index_lookup($cb_forward_inference_clump_id_index$.getDynamicValue(thread), id, UNPROVIDED);
+    }
+
+    public static final SubLObject forward_inference_clump_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        compatibility.default_struct_print_function(v_object, stream, ZERO_INTEGER);
+        return NIL;
     }
 
     public static SubLObject forward_inference_clump_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
@@ -355,48 +364,127 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_inference_clump_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native.class ? ((SubLObject) (T)) : NIL;
+    }
+
     public static SubLObject forward_inference_clump_p(final SubLObject v_object) {
         return v_object.getClass() == cb_forward_inference_browser.$forward_inference_clump_native.class ? T : NIL;
     }
 
-    public static SubLObject fwd_inf_clump_id(final SubLObject v_object) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static final SubLObject fwd_inf_clump_id_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.getField2();
     }
 
-    public static SubLObject fwd_inf_clump_timestamp(final SubLObject v_object) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_clump_id(final SubLObject v_object) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject fwd_inf_clump_timestamp_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.getField3();
     }
 
-    public static SubLObject fwd_inf_clump_triggering_assertion(final SubLObject v_object) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_clump_timestamp(final SubLObject v_object) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject fwd_inf_clump_triggering_assertion_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.getField4();
     }
 
-    public static SubLObject fwd_inf_clump_inference_infos(final SubLObject v_object) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_clump_triggering_assertion(final SubLObject v_object) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject fwd_inf_clump_inference_infos_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.getField5();
     }
 
-    public static SubLObject _csetf_fwd_inf_clump_id(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_clump_inference_infos(final SubLObject v_object) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject _csetf_fwd_inf_clump_id_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_fwd_inf_clump_timestamp(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject _csetf_fwd_inf_clump_id(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_fwd_inf_clump_timestamp_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_fwd_inf_clump_triggering_assertion(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject _csetf_fwd_inf_clump_timestamp(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_fwd_inf_clump_triggering_assertion_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_fwd_inf_clump_inference_infos(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_clump_p(v_object) : "cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_clump_p(v_object) " + v_object;
+    public static SubLObject _csetf_fwd_inf_clump_triggering_assertion(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_fwd_inf_clump_inference_infos_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_CLUMP_P);
         return v_object.setField5(value);
+    }
+
+    public static SubLObject _csetf_fwd_inf_clump_inference_infos(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_clump_p(v_object) : "! cb_forward_inference_browser.forward_inference_clump_p(v_object) " + "cb_forward_inference_browser.forward_inference_clump_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject make_forward_inference_clump_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($ID)) {
+                        com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_id(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($TIMESTAMP)) {
+                            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_timestamp(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($TRIGGERING_ASSERTION)) {
+                                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_triggering_assertion(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($INFERENCE_INFOS)) {
+                                    com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_inference_infos(v_new, current_value);
+                                } else {
+                                    Errors.error($str_alt20$Invalid_slot__S_for_construction_, current_arg);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_forward_inference_clump(SubLObject arglist) {
@@ -447,8 +535,28 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return visit_defstruct_forward_inference_clump(obj, visitor_fn);
     }
 
+    public static final SubLObject valid_forward_inference_clump_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_p(v_object)) && ($FREE != com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_clump_timestamp(v_object)));
+    }
+
     public static SubLObject valid_forward_inference_clump_p(final SubLObject v_object) {
         return makeBoolean((NIL != forward_inference_clump_p(v_object)) && ($FREE != fwd_inf_clump_timestamp(v_object)));
+    }
+
+    public static final SubLObject new_forward_inference_clump_alt(SubLObject triggering_assertion_or_sentence) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject clump = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.make_forward_inference_clump(UNPROVIDED);
+                SubLObject id = id_index_reserve($cb_forward_inference_clump_id_index$.getDynamicValue(thread));
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_id(clump, id);
+                id_index_enter($cb_forward_inference_clump_id_index$.getDynamicValue(thread), id, clump);
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_timestamp(clump, get_universal_time());
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_triggering_assertion(clump, triggering_assertion_or_sentence);
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_inference_infos(clump, NIL);
+                return clump;
+            }
+        }
     }
 
     public static SubLObject new_forward_inference_clump(final SubLObject triggering_assertion_or_sentence) {
@@ -461,6 +569,59 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         _csetf_fwd_inf_clump_triggering_assertion(clump, triggering_assertion_or_sentence);
         _csetf_fwd_inf_clump_inference_infos(clump, NIL);
         return clump;
+    }
+
+    public static final SubLObject do_forward_inference_clump_inference_infos_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt22);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject inference_info = NIL;
+                    SubLObject clump = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt22);
+                    inference_info = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt22);
+                    clump = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_1 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt22);
+                            current_1 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt22);
+                            if (NIL == member(current_1, $list_alt23, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_1 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt22);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                return listS(DO_LIST, list(inference_info, list(FORWARD_INFERENCE_CLUMP_INFERENCE_INFOS, clump), $DONE, done), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_forward_inference_clump_inference_infos(final SubLObject macroform, final SubLObject environment) {
@@ -504,6 +665,36 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return listS(DO_LIST, list(inference_info, list(FORWARD_INFERENCE_CLUMP_INFERENCE_INFOS, clump), $DONE, done), append(body, NIL));
     }
 
+    /**
+     * Destroys CLUMP, all inferences in CLUMP, and all problem stores
+     * used by any inferences in CLUMP.
+     */
+    @LispMethod(comment = "Destroys CLUMP, all inferences in CLUMP, and all problem stores\r\nused by any inferences in CLUMP.\nDestroys CLUMP, all inferences in CLUMP, and all problem stores\nused by any inferences in CLUMP.")
+    public static final SubLObject destroy_forward_inference_clump_alt(SubLObject clump) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.valid_forward_inference_clump_p(clump)) {
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_inference_infos(clump);
+                    SubLObject inference_info = NIL;
+                    for (inference_info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , inference_info = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.destroy_inference_info(inference_info);
+                    }
+                }
+                id_index_remove($cb_forward_inference_clump_id_index$.getDynamicValue(thread), com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_clump_id(clump));
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_timestamp(clump, $FREE);
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_triggering_assertion(clump, $FREE);
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_inference_infos(clump, $FREE);
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Destroys CLUMP, all inferences in CLUMP, and all problem stores
+     * used by any inferences in CLUMP.
+     */
+    @LispMethod(comment = "Destroys CLUMP, all inferences in CLUMP, and all problem stores\r\nused by any inferences in CLUMP.\nDestroys CLUMP, all inferences in CLUMP, and all problem stores\nused by any inferences in CLUMP.")
     public static SubLObject destroy_forward_inference_clump(final SubLObject clump) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != valid_forward_inference_clump_p(clump)) {
@@ -523,12 +714,36 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_inference_clump_id_alt(SubLObject clump) {
+        return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_clump_id(clump);
+    }
+
     public static SubLObject forward_inference_clump_id(final SubLObject clump) {
         return fwd_inf_clump_id(clump);
     }
 
+    public static final SubLObject forward_inference_clump_timestamp_alt(SubLObject clump) {
+        return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_clump_timestamp(clump);
+    }
+
     public static SubLObject forward_inference_clump_timestamp(final SubLObject clump) {
         return fwd_inf_clump_timestamp(clump);
+    }
+
+    public static final SubLObject forward_inference_clump_triggering_assertion_alt(SubLObject clump) {
+        {
+            SubLObject assertion = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_clump_triggering_assertion(clump);
+            if (NIL == assertion_handles.assertion_p(assertion)) {
+                {
+                    SubLObject found_assertion = czer_meta.find_assertion_cycl(assertion, UNPROVIDED);
+                    if (NIL != assertion_handles.assertion_p(found_assertion)) {
+                        assertion = found_assertion;
+                        com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_triggering_assertion(clump, assertion);
+                    }
+                }
+            }
+            return assertion;
+        }
     }
 
     public static SubLObject forward_inference_clump_triggering_assertion(final SubLObject clump) {
@@ -543,16 +758,49 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return assertion;
     }
 
+    public static final SubLObject forward_inference_clump_inference_infos_alt(SubLObject clump) {
+        return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_clump_inference_infos(clump);
+    }
+
     public static SubLObject forward_inference_clump_inference_infos(final SubLObject clump) {
         return fwd_inf_clump_inference_infos(clump);
     }
 
+    public static final SubLObject add_forward_inference_info_to_clump_alt(SubLObject clump, SubLObject inference_info) {
+        SubLTrampolineFile.checkType(inference_info, FORWARD_INFERENCE_INFO_P);
+        {
+            SubLObject inference_infos = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_inference_infos(clump);
+            inference_infos = append(inference_infos, list(inference_info));
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_clump_inference_infos(clump, inference_infos);
+            return clump;
+        }
+    }
+
     public static SubLObject add_forward_inference_info_to_clump(final SubLObject clump, final SubLObject inference_info) {
-        assert NIL != forward_inference_info_p(inference_info) : "cb_forward_inference_browser.forward_inference_info_p(inference_info) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(inference_info) " + inference_info;
+        assert NIL != forward_inference_info_p(inference_info) : "! cb_forward_inference_browser.forward_inference_info_p(inference_info) " + ("cb_forward_inference_browser.forward_inference_info_p(inference_info) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(inference_info) ") + inference_info;
         SubLObject inference_infos = forward_inference_clump_inference_infos(clump);
         inference_infos = append(inference_infos, list(inference_info));
         _csetf_fwd_inf_clump_inference_infos(clump, inference_infos);
         return clump;
+    }
+
+    public static final SubLObject forward_inference_clump_total_answer_count_alt(SubLObject clump) {
+        {
+            SubLObject count = ZERO_INTEGER;
+            SubLObject inference_infos = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_inference_infos(clump);
+            SubLObject cdolist_list_var = inference_infos;
+            SubLObject inference_info = NIL;
+            for (inference_info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , inference_info = cdolist_list_var.first()) {
+                {
+                    SubLObject inference = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_inference(inference_info);
+                    SubLObject answer_count = inference_datastructures_inference.inference_answer_count(inference);
+                    if (answer_count.isInteger()) {
+                        count = add(count, answer_count);
+                    }
+                }
+            }
+            return count;
+        }
     }
 
     public static SubLObject forward_inference_clump_total_answer_count(final SubLObject clump) {
@@ -573,43 +821,113 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return count;
     }
 
+    public static final SubLObject forward_inference_info_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        compatibility.default_struct_print_function(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject forward_inference_info_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         compatibility.default_struct_print_function(v_object, stream, ZERO_INTEGER);
         return NIL;
+    }
+
+    public static final SubLObject forward_inference_info_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native.class ? ((SubLObject) (T)) : NIL;
     }
 
     public static SubLObject forward_inference_info_p(final SubLObject v_object) {
         return v_object.getClass() == cb_forward_inference_browser.$forward_inference_info_native.class ? T : NIL;
     }
 
-    public static SubLObject fwd_inf_info_inference(final SubLObject v_object) {
-        assert NIL != forward_inference_info_p(v_object) : "cb_forward_inference_browser.forward_inference_info_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(v_object) " + v_object;
+    public static final SubLObject fwd_inf_info_inference_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_INFO_P);
         return v_object.getField2();
     }
 
-    public static SubLObject fwd_inf_info_rule(final SubLObject v_object) {
-        assert NIL != forward_inference_info_p(v_object) : "cb_forward_inference_browser.forward_inference_info_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_info_inference(final SubLObject v_object) {
+        assert NIL != forward_inference_info_p(v_object) : "! cb_forward_inference_browser.forward_inference_info_p(v_object) " + "cb_forward_inference_browser.forward_inference_info_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject fwd_inf_info_rule_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_INFO_P);
         return v_object.getField3();
     }
 
-    public static SubLObject fwd_inf_info_more_info(final SubLObject v_object) {
-        assert NIL != forward_inference_info_p(v_object) : "cb_forward_inference_browser.forward_inference_info_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_info_rule(final SubLObject v_object) {
+        assert NIL != forward_inference_info_p(v_object) : "! cb_forward_inference_browser.forward_inference_info_p(v_object) " + "cb_forward_inference_browser.forward_inference_info_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject fwd_inf_info_more_info_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_INFO_P);
         return v_object.getField4();
     }
 
-    public static SubLObject _csetf_fwd_inf_info_inference(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_info_p(v_object) : "cb_forward_inference_browser.forward_inference_info_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(v_object) " + v_object;
+    public static SubLObject fwd_inf_info_more_info(final SubLObject v_object) {
+        assert NIL != forward_inference_info_p(v_object) : "! cb_forward_inference_browser.forward_inference_info_p(v_object) " + "cb_forward_inference_browser.forward_inference_info_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject _csetf_fwd_inf_info_inference_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_INFO_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_fwd_inf_info_rule(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_info_p(v_object) : "cb_forward_inference_browser.forward_inference_info_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(v_object) " + v_object;
+    public static SubLObject _csetf_fwd_inf_info_inference(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_info_p(v_object) : "! cb_forward_inference_browser.forward_inference_info_p(v_object) " + "cb_forward_inference_browser.forward_inference_info_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_fwd_inf_info_rule_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_INFO_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_fwd_inf_info_more_info(final SubLObject v_object, final SubLObject value) {
-        assert NIL != forward_inference_info_p(v_object) : "cb_forward_inference_browser.forward_inference_info_p(v_object) " + "CommonSymbols.NIL != cb_forward_inference_browser.forward_inference_info_p(v_object) " + v_object;
+    public static SubLObject _csetf_fwd_inf_info_rule(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_info_p(v_object) : "! cb_forward_inference_browser.forward_inference_info_p(v_object) " + "cb_forward_inference_browser.forward_inference_info_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_fwd_inf_info_more_info_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORWARD_INFERENCE_INFO_P);
         return v_object.setField4(value);
+    }
+
+    public static SubLObject _csetf_fwd_inf_info_more_info(final SubLObject v_object, final SubLObject value) {
+        assert NIL != forward_inference_info_p(v_object) : "! cb_forward_inference_browser.forward_inference_info_p(v_object) " + "cb_forward_inference_browser.forward_inference_info_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject make_forward_inference_info_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($INFERENCE)) {
+                        com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_inference(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($RULE)) {
+                            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_rule(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($MORE_INFO)) {
+                                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_more_info(v_new, current_value);
+                            } else {
+                                Errors.error($str_alt20$Invalid_slot__S_for_construction_, current_arg);
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_forward_inference_info(SubLObject arglist) {
@@ -655,8 +973,26 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return visit_defstruct_forward_inference_info(obj, visitor_fn);
     }
 
+    public static final SubLObject valid_forward_inference_info_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_p(v_object)) && ($FREE != com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_info_inference(v_object)));
+    }
+
     public static SubLObject valid_forward_inference_info_p(final SubLObject v_object) {
         return makeBoolean((NIL != forward_inference_info_p(v_object)) && ($FREE != fwd_inf_info_inference(v_object)));
+    }
+
+    public static final SubLObject new_forward_inference_info_alt(SubLObject inference, SubLObject rule, SubLObject more_info) {
+        if (more_info == UNPROVIDED) {
+            more_info = NIL;
+        }
+        SubLTrampolineFile.checkType(inference, INFERENCE_P);
+        {
+            SubLObject forward_inference_info = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.make_forward_inference_info(UNPROVIDED);
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_inference(forward_inference_info, inference);
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_rule(forward_inference_info, rule);
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_more_info(forward_inference_info, more_info);
+            return forward_inference_info;
+        }
     }
 
     public static SubLObject new_forward_inference_info(final SubLObject possible_inference, final SubLObject rule, SubLObject more_info) {
@@ -673,6 +1009,19 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return forward_inference_info;
     }
 
+    public static final SubLObject destroy_inference_info_alt(SubLObject inference_info) {
+        if (NIL != com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.valid_forward_inference_info_p(inference_info)) {
+            {
+                SubLObject inference = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_inference(inference_info);
+                inference_datastructures_inference.destroy_inference_and_problem_store(inference);
+            }
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_inference(inference_info, $FREE);
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_rule(inference_info, $FREE);
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser._csetf_fwd_inf_info_more_info(inference_info, $FREE);
+        }
+        return NIL;
+    }
+
     public static SubLObject destroy_inference_info(final SubLObject inference_info) {
         if (NIL != valid_forward_inference_info_p(inference_info)) {
             final SubLObject inference = forward_inference_info_inference(inference_info);
@@ -684,22 +1033,86 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_inference_info_inference_alt(SubLObject inference_info) {
+        return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_info_inference(inference_info);
+    }
+
     public static SubLObject forward_inference_info_inference(final SubLObject inference_info) {
         return fwd_inf_info_inference(inference_info);
+    }
+
+    public static final SubLObject forward_inference_info_rule_alt(SubLObject inference_info) {
+        return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_info_rule(inference_info);
     }
 
     public static SubLObject forward_inference_info_rule(final SubLObject inference_info) {
         return fwd_inf_info_rule(inference_info);
     }
 
+    public static final SubLObject forward_inference_info_more_info_alt(SubLObject inference_info) {
+        return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.fwd_inf_info_more_info(inference_info);
+    }
+
     public static SubLObject forward_inference_info_more_info(final SubLObject inference_info) {
         return fwd_inf_info_more_info(inference_info);
+    }
+
+    public static final SubLObject inference_info_G_alt(SubLObject info1, SubLObject info2) {
+        return makeBoolean((info1 != info2) && (NIL == com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.inference_info_L(info1, info2)));
     }
 
     public static SubLObject inference_info_G(final SubLObject info1, final SubLObject info2) {
         return makeBoolean((!info1.eql(info2)) && (NIL == inference_info_L(info1, info2)));
     }
 
+    /**
+     * A sorting function intended to sort by interestingness to the user.
+     */
+    @LispMethod(comment = "A sorting function intended to sort by interestingness to the user.")
+    public static final SubLObject inference_info_L_alt(SubLObject info1, SubLObject info2) {
+        {
+            SubLObject inference1 = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_inference(info1);
+            SubLObject inference2 = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_inference(info2);
+            SubLObject store1 = inference_datastructures_inference.inference_problem_store(inference1);
+            SubLObject store2 = inference_datastructures_inference.inference_problem_store(inference2);
+            SubLObject answer_count_1 = inference_datastructures_inference.inference_answer_count(inference1);
+            SubLObject answer_count_2 = inference_datastructures_inference.inference_answer_count(inference2);
+            SubLObject problem_count_1 = inference_datastructures_problem_store.problem_store_size(store1);
+            SubLObject problem_count_2 = inference_datastructures_problem_store.problem_store_size(store2);
+            SubLObject id1 = inference_datastructures_inference.inference_suid(inference1);
+            SubLObject id2 = inference_datastructures_inference.inference_suid(inference2);
+            if (answer_count_1.numL(answer_count_2)) {
+                return T;
+            } else {
+                if (answer_count_1.numG(answer_count_2)) {
+                    return NIL;
+                } else {
+                    if (problem_count_1.numL(problem_count_2)) {
+                        return T;
+                    } else {
+                        if (problem_count_1.numG(problem_count_2)) {
+                            return NIL;
+                        } else {
+                            if (id1.numL(id2)) {
+                                return T;
+                            } else {
+                                if (id1.numG(id2)) {
+                                    return NIL;
+                                } else {
+                                    return NIL;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * A sorting function intended to sort by interestingness to the user.
+     */
+    @LispMethod(comment = "A sorting function intended to sort by interestingness to the user.")
     public static SubLObject inference_info_L(final SubLObject info1, final SubLObject info2) {
         final SubLObject inference1 = forward_inference_info_inference(info1);
         final SubLObject inference2 = forward_inference_info_inference(info2);
@@ -749,9 +1162,65 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cb_current_forward_inference_clump_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $cb_current_forward_inference_clump$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject cb_current_forward_inference_clump() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $cb_current_forward_inference_clump$.getDynamicValue(thread);
+    }
+
+    public static final SubLObject do_current_forward_inference_infos_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt46);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject inference_info = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt46);
+                    inference_info = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_2 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt46);
+                            current_2 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt46);
+                            if (NIL == member(current_2, $list_alt23, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_2 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt46);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                return listS(DO_FORWARD_INFERENCE_CLUMP_INFERENCE_INFOS, list(inference_info, $cb_current_forward_inference_clump$, $DONE, done), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_current_forward_inference_infos(final SubLObject macroform, final SubLObject environment) {
@@ -791,6 +1260,19 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return listS(DO_FORWARD_INFERENCE_CLUMP_INFERENCE_INFOS, list(inference_info, $cb_current_forward_inference_clump$, $DONE, done), append(body, NIL));
     }
 
+    public static final SubLObject cb_forward_inference_browser_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            SubLObject browser_title = (NIL != args) ? ((SubLObject) (args.first())) : NIL;
+            if (NIL != browser_title) {
+                return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.cb_forward_inference_browser_int(com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.cb_current_forward_inference_clump(), browser_title);
+            }
+            return com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.cb_forward_inference_browser_int(com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.cb_current_forward_inference_clump(), UNPROVIDED);
+        }
+    }
+
     public static SubLObject cb_forward_inference_browser(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -800,6 +1282,45 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
             return cb_forward_inference_browser_int(cb_current_forward_inference_clump(), browser_title);
         }
         return cb_forward_inference_browser_int(cb_current_forward_inference_clump(), UNPROVIDED);
+    }
+
+    public static final SubLObject cb_link_forward_inference_browser_alt(SubLObject linktext) {
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == linktext) {
+                linktext = $$$FwdInf;
+            }
+            {
+                SubLObject frame_name_var = cb_frame_name($MAIN);
+                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                cyc_cgi_url_int();
+                html_princ($str_alt51$cb_forward_inference_browser);
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (NIL != frame_name_var) {
+                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(frame_name_var);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_princ(linktext);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_link_forward_inference_browser(SubLObject linktext) {
@@ -833,6 +1354,152 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         }
         html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
         return NIL;
+    }
+
+    public static final SubLObject cb_forward_inference_browser_int_alt(SubLObject clump, SubLObject message) {
+        if (message == UNPROVIDED) {
+            message = $$$Forward_Inference_Browser;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject title_var = message;
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+                    try {
+                        html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+                        html_markup(html_macros.$html_html_head$.getGlobalValue());
+                        html_markup(html_macros.$html_head_head$.getGlobalValue());
+                        html_macros.html_head_content_type();
+                        cb_head_shortcut_icon();
+                        html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                        if (NIL != title_var) {
+                            html_source_readability_terpri(UNPROVIDED);
+                            html_markup(html_macros.$html_title_head$.getGlobalValue());
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                        }
+                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        {
+                            SubLObject _prev_bind_0_3 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                            try {
+                                html_macros.$html_inside_bodyP$.bind(T, thread);
+                                html_markup(html_macros.$html_body_head$.getGlobalValue());
+                                if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                                    html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                if (true) {
+                                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup($str_alt58$yui_skin_sam);
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_4 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        if (NIL != title_var) {
+                                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                                            html_markup(TWO_INTEGER);
+                                            html_char(CHAR_greater, UNPROVIDED);
+                                            html_princ(title_var);
+                                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                                            html_markup(TWO_INTEGER);
+                                            html_char(CHAR_greater, UNPROVIDED);
+                                        }
+                                        if (NIL == com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_p(clump)) {
+                                            html_princ($str_alt59$No_forward_inferences_to_browse_);
+                                        } else {
+                                            {
+                                                SubLObject universal_time = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_timestamp(clump);
+                                                SubLObject triggering_assertion = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_triggering_assertion(clump);
+                                                SubLObject triggered_by_ruleP = (NIL != assertion_handles.assertion_p(triggering_assertion)) ? ((SubLObject) (assertions_high.rule_assertionP(triggering_assertion))) : NIL;
+                                                SubLObject inference_infos = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_clump_inference_infos(clump);
+                                                inference_infos = Sort.sort(copy_list(inference_infos), $sym60$INFERENCE_INFO__, UNPROVIDED);
+                                                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt61$Last_browsable_forward_inference_, numeric_date_utilities.timestring(universal_time));
+                                                html_newline(UNPROVIDED);
+                                                if (NIL != assertion_handles.assertion_p(triggering_assertion)) {
+                                                    cb_show_assertion_readably(triggering_assertion, UNPROVIDED, UNPROVIDED);
+                                                } else {
+                                                    cb_sentence_browser.cb_show_sentence_readably(triggering_assertion, NIL, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                }
+                                                html_newline(TWO_INTEGER);
+                                                html_markup(html_macros.$html_unordered_list_head$.getGlobalValue());
+                                                html_char(CHAR_greater, UNPROVIDED);
+                                                {
+                                                    SubLObject _prev_bind_0_5 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                    try {
+                                                        html_macros.$html_safe_print$.bind(T, thread);
+                                                        {
+                                                            SubLObject cdolist_list_var = inference_infos;
+                                                            SubLObject inference_info = NIL;
+                                                            for (inference_info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , inference_info = cdolist_list_var.first()) {
+                                                                {
+                                                                    SubLObject inference = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_inference(inference_info);
+                                                                    SubLObject rule = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.forward_inference_info_rule(inference_info);
+                                                                    SubLObject answer_count = inference_datastructures_inference.inference_answer_count(inference);
+                                                                    html_markup(html_macros.$html_list_item_head$.getGlobalValue());
+                                                                    html_char(CHAR_greater, UNPROVIDED);
+                                                                    {
+                                                                        SubLObject _prev_bind_0_6 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                                        try {
+                                                                            html_macros.$html_safe_print$.bind(T, thread);
+                                                                            cb_link($INFERENCE, inference, $VERBOSE, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                            html_newline(UNPROVIDED);
+                                                                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                                            format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt63$_d_answer_P, answer_count, answer_count);
+                                                                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                                            html_newline(UNPROVIDED);
+                                                                            if (NIL == triggered_by_ruleP) {
+                                                                                html_princ_strong($str_alt64$Rule__);
+                                                                                html_newline(UNPROVIDED);
+                                                                                cb_show_assertion_readably(rule, UNPROVIDED, UNPROVIDED);
+                                                                                html_newline(UNPROVIDED);
+                                                                            }
+                                                                            cb_query_browser.cb_show_inference_el_query(inference, NIL);
+                                                                            html_newline(UNPROVIDED);
+                                                                            html_newline(UNPROVIDED);
+                                                                        } finally {
+                                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_6, thread);
+                                                                        }
+                                                                    }
+                                                                    html_markup(html_macros.$html_list_item_tail$.getGlobalValue());
+                                                                }
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_5, thread);
+                                                    }
+                                                }
+                                                html_markup(html_macros.$html_unordered_list_tail$.getGlobalValue());
+                                            }
+                                        }
+                                        html_source_readability_terpri(UNPROVIDED);
+                                        html_copyright_notice();
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_4, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                            } finally {
+                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_3, thread);
+                            }
+                        }
+                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_forward_inference_browser_int(final SubLObject clump, SubLObject message) {
@@ -1042,11 +1709,19 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt2 = list(makeSymbol("ID"), makeSymbol("TIMESTAMP"), makeSymbol("TRIGGERING-ASSERTION"), makeSymbol("INFERENCE-INFOS"));
+
+    static private final SubLList $list_alt3 = list(makeKeyword("ID"), makeKeyword("TIMESTAMP"), makeKeyword("TRIGGERING-ASSERTION"), makeKeyword("INFERENCE-INFOS"));
+
+    static private final SubLList $list_alt4 = list(makeSymbol("FWD-INF-CLUMP-ID"), makeSymbol("FWD-INF-CLUMP-TIMESTAMP"), makeSymbol("FWD-INF-CLUMP-TRIGGERING-ASSERTION"), makeSymbol("FWD-INF-CLUMP-INFERENCE-INFOS"));
+
     public static SubLObject cb_fib_trigger_support_link_name(final SubLObject support, final SubLObject type_keyword) {
         final SubLObject assertion_id = (NIL != assertion_handles.assertion_p(support)) ? assertion_handles.assertion_id(support) : NIL;
         final SubLObject type_string = symbol_name(type_keyword);
         return cconcatenate(format_nil.format_nil_a_no_copy(type_string), new SubLObject[]{ $str88$_, format_nil.format_nil_a_no_copy(assertion_id) });
     }
+
+    static private final SubLList $list_alt5 = list(makeSymbol("_CSETF-FWD-INF-CLUMP-ID"), makeSymbol("_CSETF-FWD-INF-CLUMP-TIMESTAMP"), makeSymbol("_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION"), makeSymbol("_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS"));
 
     public static SubLObject cb_fib_next_trigger_support_link_name(final SubLObject number, final SubLObject type_keyword) {
         final SubLObject type_string = symbol_name(type_keyword);
@@ -1458,6 +2133,53 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt20$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLList $list_alt22 = list(list(makeSymbol("INFERENCE-INFO"), makeSymbol("CLUMP"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt23 = list($DONE);
+
+    static private final SubLList $list_alt30 = list(makeSymbol("INFERENCE"), makeSymbol("RULE"), makeSymbol("MORE-INFO"));
+
+    static private final SubLList $list_alt31 = list(makeKeyword("INFERENCE"), $RULE, makeKeyword("MORE-INFO"));
+
+    static private final SubLList $list_alt32 = list(makeSymbol("FWD-INF-INFO-INFERENCE"), makeSymbol("FWD-INF-INFO-RULE"), makeSymbol("FWD-INF-INFO-MORE-INFO"));
+
+    static private final SubLList $list_alt33 = list(makeSymbol("_CSETF-FWD-INF-INFO-INFERENCE"), makeSymbol("_CSETF-FWD-INF-INFO-RULE"), makeSymbol("_CSETF-FWD-INF-INFO-MORE-INFO"));
+
+    static private final SubLList $list_alt46 = list(list(makeSymbol("INFERENCE-INFO"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLString $str_alt51$cb_forward_inference_browser = makeString("cb-forward-inference-browser");
+
+    static private final SubLString $str_alt55$Browse_the_most_recent_browsable_ = makeString("Browse the most recent browsable forward inference");
+
+    static private final SubLString $str_alt57$text_javascript = makeString("text/javascript");
+
+    static private final SubLString $str_alt58$yui_skin_sam = makeString("yui-skin-sam");
+
+    static private final SubLString $str_alt59$No_forward_inferences_to_browse_ = makeString("No forward inferences to browse.");
+
+    static private final SubLSymbol $sym60$INFERENCE_INFO__ = makeSymbol("INFERENCE-INFO->");
+
+    static private final SubLString $str_alt61$Last_browsable_forward_inference_ = makeString("Last browsable forward inference clump was triggered at ~a by the forward propagation of");
+
+    static private final SubLString $str_alt63$_d_answer_P = makeString("~d answer~P");
+
+    static private final SubLString $str_alt64$Rule__ = makeString("Rule :");
+
+    public static final SubLObject cb_note_new_forward_inference_for_browsing(SubLObject inference, SubLObject rule) {
+        if (NIL == com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.cb_current_forward_inference_clump()) {
+            return NIL;
+        }
+        if (NIL != inference_datastructures_inference.inference_p(inference)) {
+            {
+                SubLObject inference_info = com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.new_forward_inference_info(inference, rule, UNPROVIDED);
+                com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.add_forward_inference_info_to_clump(com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.cb_current_forward_inference_clump(), inference_info);
+            }
+        }
+        return inference;
+    }
+
     public static SubLObject cb_note_new_forward_inference_for_browsing(final SubLObject inference, final SubLObject rule, SubLObject more_info) {
         if (more_info == UNPROVIDED) {
             more_info = NIL;
@@ -1471,6 +2193,15 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return inference;
     }
 
+    public static final SubLObject prepare_to_browse_new_forward_inference_alt(SubLObject triggering_assertion_or_sentence) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.destroy_forward_inference_clump($cb_current_forward_inference_clump$.getDynamicValue(thread));
+            $cb_current_forward_inference_clump$.setDynamicValue(com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.new_forward_inference_clump(triggering_assertion_or_sentence), thread);
+            return NIL;
+        }
+    }
+
     public static SubLObject prepare_to_browse_new_forward_inference(final SubLObject triggering_assertion_or_sentence) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         destroy_forward_inference_clump($cb_current_forward_inference_clump$.getDynamicValue(thread));
@@ -1478,67 +2209,189 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cleanup_from_browsing_new_forward_inference_alt() {
+        return NIL;
+    }
+
     public static SubLObject cleanup_from_browsing_new_forward_inference() {
         return NIL;
     }
 
+    public static final SubLObject declare_cb_forward_inference_browser_file_alt() {
+        declareFunction("cb_forward_inference_clump_lookup_by_id", "CB-FORWARD-INFERENCE-CLUMP-LOOKUP-BY-ID", 1, 0, false);
+        declareFunction("forward_inference_clump_print_function_trampoline", "FORWARD-INFERENCE-CLUMP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("forward_inference_clump_p", "FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_clump_p$UnaryFunction();
+        declareFunction("fwd_inf_clump_id", "FWD-INF-CLUMP-ID", 1, 0, false);
+        declareFunction("fwd_inf_clump_timestamp", "FWD-INF-CLUMP-TIMESTAMP", 1, 0, false);
+        declareFunction("fwd_inf_clump_triggering_assertion", "FWD-INF-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
+        declareFunction("fwd_inf_clump_inference_infos", "FWD-INF-CLUMP-INFERENCE-INFOS", 1, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_id", "_CSETF-FWD-INF-CLUMP-ID", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_timestamp", "_CSETF-FWD-INF-CLUMP-TIMESTAMP", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_triggering_assertion", "_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_inference_infos", "_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS", 2, 0, false);
+        declareFunction("make_forward_inference_clump", "MAKE-FORWARD-INFERENCE-CLUMP", 0, 1, false);
+        declareFunction("valid_forward_inference_clump_p", "VALID-FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
+        declareFunction("new_forward_inference_clump", "NEW-FORWARD-INFERENCE-CLUMP", 1, 0, false);
+        declareMacro("do_forward_inference_clump_inference_infos", "DO-FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS");
+        declareFunction("destroy_forward_inference_clump", "DESTROY-FORWARD-INFERENCE-CLUMP", 1, 0, false);
+        declareFunction("forward_inference_clump_id", "FORWARD-INFERENCE-CLUMP-ID", 1, 0, false);
+        declareFunction("forward_inference_clump_timestamp", "FORWARD-INFERENCE-CLUMP-TIMESTAMP", 1, 0, false);
+        declareFunction("forward_inference_clump_triggering_assertion", "FORWARD-INFERENCE-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
+        declareFunction("forward_inference_clump_inference_infos", "FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS", 1, 0, false);
+        declareFunction("add_forward_inference_info_to_clump", "ADD-FORWARD-INFERENCE-INFO-TO-CLUMP", 2, 0, false);
+        declareFunction("forward_inference_clump_total_answer_count", "FORWARD-INFERENCE-CLUMP-TOTAL-ANSWER-COUNT", 1, 0, false);
+        declareFunction("forward_inference_info_print_function_trampoline", "FORWARD-INFERENCE-INFO-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("forward_inference_info_p", "FORWARD-INFERENCE-INFO-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.inference.browser.cb_forward_inference_browser.$forward_inference_info_p$UnaryFunction();
+        declareFunction("fwd_inf_info_inference", "FWD-INF-INFO-INFERENCE", 1, 0, false);
+        declareFunction("fwd_inf_info_rule", "FWD-INF-INFO-RULE", 1, 0, false);
+        declareFunction("fwd_inf_info_more_info", "FWD-INF-INFO-MORE-INFO", 1, 0, false);
+        declareFunction("_csetf_fwd_inf_info_inference", "_CSETF-FWD-INF-INFO-INFERENCE", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_info_rule", "_CSETF-FWD-INF-INFO-RULE", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_info_more_info", "_CSETF-FWD-INF-INFO-MORE-INFO", 2, 0, false);
+        declareFunction("make_forward_inference_info", "MAKE-FORWARD-INFERENCE-INFO", 0, 1, false);
+        declareFunction("valid_forward_inference_info_p", "VALID-FORWARD-INFERENCE-INFO-P", 1, 0, false);
+        declareFunction("new_forward_inference_info", "NEW-FORWARD-INFERENCE-INFO", 2, 1, false);
+        declareFunction("destroy_inference_info", "DESTROY-INFERENCE-INFO", 1, 0, false);
+        declareFunction("forward_inference_info_inference", "FORWARD-INFERENCE-INFO-INFERENCE", 1, 0, false);
+        declareFunction("forward_inference_info_rule", "FORWARD-INFERENCE-INFO-RULE", 1, 0, false);
+        declareFunction("forward_inference_info_more_info", "FORWARD-INFERENCE-INFO-MORE-INFO", 1, 0, false);
+        declareFunction("inference_info_G", "INFERENCE-INFO->", 2, 0, false);
+        declareFunction("inference_info_L", "INFERENCE-INFO-<", 2, 0, false);
+        declareFunction("cb_current_forward_inference_clump", "CB-CURRENT-FORWARD-INFERENCE-CLUMP", 0, 0, false);
+        declareMacro("do_current_forward_inference_infos", "DO-CURRENT-FORWARD-INFERENCE-INFOS");
+        declareFunction("cb_forward_inference_browser", "CB-FORWARD-INFERENCE-BROWSER", 0, 1, false);
+        declareFunction("cb_link_forward_inference_browser", "CB-LINK-FORWARD-INFERENCE-BROWSER", 0, 1, false);
+        declareFunction("cb_forward_inference_browser_int", "CB-FORWARD-INFERENCE-BROWSER-INT", 1, 1, false);
+        declareFunction("cb_note_new_forward_inference_for_browsing", "CB-NOTE-NEW-FORWARD-INFERENCE-FOR-BROWSING", 2, 0, false);
+        declareFunction("prepare_to_browse_new_forward_inference", "PREPARE-TO-BROWSE-NEW-FORWARD-INFERENCE", 1, 0, false);
+        declareFunction("cleanup_from_browsing_new_forward_inference", "CLEANUP-FROM-BROWSING-NEW-FORWARD-INFERENCE", 0, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_cb_forward_inference_browser_file() {
-        declareFunction(me, "cb_forward_inference_clump_lookup_by_id", "CB-FORWARD-INFERENCE-CLUMP-LOOKUP-BY-ID", 1, 0, false);
-        declareFunction(me, "forward_inference_clump_print_function_trampoline", "FORWARD-INFERENCE-CLUMP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "forward_inference_clump_p", "FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("cb_forward_inference_clump_lookup_by_id", "CB-FORWARD-INFERENCE-CLUMP-LOOKUP-BY-ID", 1, 0, false);
+            declareFunction("forward_inference_clump_print_function_trampoline", "FORWARD-INFERENCE-CLUMP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("forward_inference_clump_p", "FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
+            new cb_forward_inference_browser.$forward_inference_clump_p$UnaryFunction();
+            declareFunction("fwd_inf_clump_id", "FWD-INF-CLUMP-ID", 1, 0, false);
+            declareFunction("fwd_inf_clump_timestamp", "FWD-INF-CLUMP-TIMESTAMP", 1, 0, false);
+            declareFunction("fwd_inf_clump_triggering_assertion", "FWD-INF-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
+            declareFunction("fwd_inf_clump_inference_infos", "FWD-INF-CLUMP-INFERENCE-INFOS", 1, 0, false);
+            declareFunction("_csetf_fwd_inf_clump_id", "_CSETF-FWD-INF-CLUMP-ID", 2, 0, false);
+            declareFunction("_csetf_fwd_inf_clump_timestamp", "_CSETF-FWD-INF-CLUMP-TIMESTAMP", 2, 0, false);
+            declareFunction("_csetf_fwd_inf_clump_triggering_assertion", "_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION", 2, 0, false);
+            declareFunction("_csetf_fwd_inf_clump_inference_infos", "_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS", 2, 0, false);
+            declareFunction("make_forward_inference_clump", "MAKE-FORWARD-INFERENCE-CLUMP", 0, 1, false);
+            declareFunction("visit_defstruct_forward_inference_clump", "VISIT-DEFSTRUCT-FORWARD-INFERENCE-CLUMP", 2, 0, false);
+            declareFunction("visit_defstruct_object_forward_inference_clump_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-CLUMP-METHOD", 2, 0, false);
+            declareFunction("valid_forward_inference_clump_p", "VALID-FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
+            declareFunction("new_forward_inference_clump", "NEW-FORWARD-INFERENCE-CLUMP", 1, 0, false);
+            declareMacro("do_forward_inference_clump_inference_infos", "DO-FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS");
+            declareFunction("destroy_forward_inference_clump", "DESTROY-FORWARD-INFERENCE-CLUMP", 1, 0, false);
+            declareFunction("forward_inference_clump_id", "FORWARD-INFERENCE-CLUMP-ID", 1, 0, false);
+            declareFunction("forward_inference_clump_timestamp", "FORWARD-INFERENCE-CLUMP-TIMESTAMP", 1, 0, false);
+            declareFunction("forward_inference_clump_triggering_assertion", "FORWARD-INFERENCE-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
+            declareFunction("forward_inference_clump_inference_infos", "FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS", 1, 0, false);
+            declareFunction("add_forward_inference_info_to_clump", "ADD-FORWARD-INFERENCE-INFO-TO-CLUMP", 2, 0, false);
+            declareFunction("forward_inference_clump_total_answer_count", "FORWARD-INFERENCE-CLUMP-TOTAL-ANSWER-COUNT", 1, 0, false);
+            declareFunction("forward_inference_info_print_function_trampoline", "FORWARD-INFERENCE-INFO-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("forward_inference_info_p", "FORWARD-INFERENCE-INFO-P", 1, 0, false);
+            new cb_forward_inference_browser.$forward_inference_info_p$UnaryFunction();
+            declareFunction("fwd_inf_info_inference", "FWD-INF-INFO-INFERENCE", 1, 0, false);
+            declareFunction("fwd_inf_info_rule", "FWD-INF-INFO-RULE", 1, 0, false);
+            declareFunction("fwd_inf_info_more_info", "FWD-INF-INFO-MORE-INFO", 1, 0, false);
+            declareFunction("_csetf_fwd_inf_info_inference", "_CSETF-FWD-INF-INFO-INFERENCE", 2, 0, false);
+            declareFunction("_csetf_fwd_inf_info_rule", "_CSETF-FWD-INF-INFO-RULE", 2, 0, false);
+            declareFunction("_csetf_fwd_inf_info_more_info", "_CSETF-FWD-INF-INFO-MORE-INFO", 2, 0, false);
+            declareFunction("make_forward_inference_info", "MAKE-FORWARD-INFERENCE-INFO", 0, 1, false);
+            declareFunction("visit_defstruct_forward_inference_info", "VISIT-DEFSTRUCT-FORWARD-INFERENCE-INFO", 2, 0, false);
+            declareFunction("visit_defstruct_object_forward_inference_info_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-INFO-METHOD", 2, 0, false);
+            declareFunction("valid_forward_inference_info_p", "VALID-FORWARD-INFERENCE-INFO-P", 1, 0, false);
+            declareFunction("new_forward_inference_info", "NEW-FORWARD-INFERENCE-INFO", 2, 1, false);
+            declareFunction("destroy_inference_info", "DESTROY-INFERENCE-INFO", 1, 0, false);
+            declareFunction("forward_inference_info_inference", "FORWARD-INFERENCE-INFO-INFERENCE", 1, 0, false);
+            declareFunction("forward_inference_info_rule", "FORWARD-INFERENCE-INFO-RULE", 1, 0, false);
+            declareFunction("forward_inference_info_more_info", "FORWARD-INFERENCE-INFO-MORE-INFO", 1, 0, false);
+            declareFunction("inference_info_G", "INFERENCE-INFO->", 2, 0, false);
+            declareFunction("inference_info_L", "INFERENCE-INFO-<", 2, 0, false);
+            declareFunction("cb_current_forward_inference_clump", "CB-CURRENT-FORWARD-INFERENCE-CLUMP", 0, 0, false);
+            declareMacro("do_current_forward_inference_infos", "DO-CURRENT-FORWARD-INFERENCE-INFOS");
+            declareFunction("cb_forward_inference_browser", "CB-FORWARD-INFERENCE-BROWSER", 0, 1, false);
+            declareFunction("cb_link_forward_inference_browser", "CB-LINK-FORWARD-INFERENCE-BROWSER", 0, 1, false);
+            declareFunction("cb_forward_inference_browser_int", "CB-FORWARD-INFERENCE-BROWSER-INT", 1, 1, false);
+            declareFunction("cb_fib_trigger_support_link_name", "CB-FIB-TRIGGER-SUPPORT-LINK-NAME", 2, 0, false);
+            declareFunction("cb_fib_next_trigger_support_link_name", "CB-FIB-NEXT-TRIGGER-SUPPORT-LINK-NAME", 2, 0, false);
+            declareFunction("cb_forward_inference_browser_show_infos", "CB-FORWARD-INFERENCE-BROWSER-SHOW-INFOS", 2, 0, false);
+            declareFunction("cb_note_new_forward_inference_for_browsing", "CB-NOTE-NEW-FORWARD-INFERENCE-FOR-BROWSING", 2, 1, false);
+            declareFunction("prepare_to_browse_new_forward_inference", "PREPARE-TO-BROWSE-NEW-FORWARD-INFERENCE", 1, 0, false);
+            declareFunction("cleanup_from_browsing_new_forward_inference", "CLEANUP-FROM-BROWSING-NEW-FORWARD-INFERENCE", 0, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("cb_note_new_forward_inference_for_browsing", "CB-NOTE-NEW-FORWARD-INFERENCE-FOR-BROWSING", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_cb_forward_inference_browser_file_Previous() {
+        declareFunction("cb_forward_inference_clump_lookup_by_id", "CB-FORWARD-INFERENCE-CLUMP-LOOKUP-BY-ID", 1, 0, false);
+        declareFunction("forward_inference_clump_print_function_trampoline", "FORWARD-INFERENCE-CLUMP-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("forward_inference_clump_p", "FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
         new cb_forward_inference_browser.$forward_inference_clump_p$UnaryFunction();
-        declareFunction(me, "fwd_inf_clump_id", "FWD-INF-CLUMP-ID", 1, 0, false);
-        declareFunction(me, "fwd_inf_clump_timestamp", "FWD-INF-CLUMP-TIMESTAMP", 1, 0, false);
-        declareFunction(me, "fwd_inf_clump_triggering_assertion", "FWD-INF-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
-        declareFunction(me, "fwd_inf_clump_inference_infos", "FWD-INF-CLUMP-INFERENCE-INFOS", 1, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_clump_id", "_CSETF-FWD-INF-CLUMP-ID", 2, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_clump_timestamp", "_CSETF-FWD-INF-CLUMP-TIMESTAMP", 2, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_clump_triggering_assertion", "_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION", 2, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_clump_inference_infos", "_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS", 2, 0, false);
-        declareFunction(me, "make_forward_inference_clump", "MAKE-FORWARD-INFERENCE-CLUMP", 0, 1, false);
-        declareFunction(me, "visit_defstruct_forward_inference_clump", "VISIT-DEFSTRUCT-FORWARD-INFERENCE-CLUMP", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_forward_inference_clump_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-CLUMP-METHOD", 2, 0, false);
-        declareFunction(me, "valid_forward_inference_clump_p", "VALID-FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
-        declareFunction(me, "new_forward_inference_clump", "NEW-FORWARD-INFERENCE-CLUMP", 1, 0, false);
-        declareMacro(me, "do_forward_inference_clump_inference_infos", "DO-FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS");
-        declareFunction(me, "destroy_forward_inference_clump", "DESTROY-FORWARD-INFERENCE-CLUMP", 1, 0, false);
-        declareFunction(me, "forward_inference_clump_id", "FORWARD-INFERENCE-CLUMP-ID", 1, 0, false);
-        declareFunction(me, "forward_inference_clump_timestamp", "FORWARD-INFERENCE-CLUMP-TIMESTAMP", 1, 0, false);
-        declareFunction(me, "forward_inference_clump_triggering_assertion", "FORWARD-INFERENCE-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
-        declareFunction(me, "forward_inference_clump_inference_infos", "FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS", 1, 0, false);
-        declareFunction(me, "add_forward_inference_info_to_clump", "ADD-FORWARD-INFERENCE-INFO-TO-CLUMP", 2, 0, false);
-        declareFunction(me, "forward_inference_clump_total_answer_count", "FORWARD-INFERENCE-CLUMP-TOTAL-ANSWER-COUNT", 1, 0, false);
-        declareFunction(me, "forward_inference_info_print_function_trampoline", "FORWARD-INFERENCE-INFO-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "forward_inference_info_p", "FORWARD-INFERENCE-INFO-P", 1, 0, false);
+        declareFunction("fwd_inf_clump_id", "FWD-INF-CLUMP-ID", 1, 0, false);
+        declareFunction("fwd_inf_clump_timestamp", "FWD-INF-CLUMP-TIMESTAMP", 1, 0, false);
+        declareFunction("fwd_inf_clump_triggering_assertion", "FWD-INF-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
+        declareFunction("fwd_inf_clump_inference_infos", "FWD-INF-CLUMP-INFERENCE-INFOS", 1, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_id", "_CSETF-FWD-INF-CLUMP-ID", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_timestamp", "_CSETF-FWD-INF-CLUMP-TIMESTAMP", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_triggering_assertion", "_CSETF-FWD-INF-CLUMP-TRIGGERING-ASSERTION", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_clump_inference_infos", "_CSETF-FWD-INF-CLUMP-INFERENCE-INFOS", 2, 0, false);
+        declareFunction("make_forward_inference_clump", "MAKE-FORWARD-INFERENCE-CLUMP", 0, 1, false);
+        declareFunction("visit_defstruct_forward_inference_clump", "VISIT-DEFSTRUCT-FORWARD-INFERENCE-CLUMP", 2, 0, false);
+        declareFunction("visit_defstruct_object_forward_inference_clump_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-CLUMP-METHOD", 2, 0, false);
+        declareFunction("valid_forward_inference_clump_p", "VALID-FORWARD-INFERENCE-CLUMP-P", 1, 0, false);
+        declareFunction("new_forward_inference_clump", "NEW-FORWARD-INFERENCE-CLUMP", 1, 0, false);
+        declareMacro("do_forward_inference_clump_inference_infos", "DO-FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS");
+        declareFunction("destroy_forward_inference_clump", "DESTROY-FORWARD-INFERENCE-CLUMP", 1, 0, false);
+        declareFunction("forward_inference_clump_id", "FORWARD-INFERENCE-CLUMP-ID", 1, 0, false);
+        declareFunction("forward_inference_clump_timestamp", "FORWARD-INFERENCE-CLUMP-TIMESTAMP", 1, 0, false);
+        declareFunction("forward_inference_clump_triggering_assertion", "FORWARD-INFERENCE-CLUMP-TRIGGERING-ASSERTION", 1, 0, false);
+        declareFunction("forward_inference_clump_inference_infos", "FORWARD-INFERENCE-CLUMP-INFERENCE-INFOS", 1, 0, false);
+        declareFunction("add_forward_inference_info_to_clump", "ADD-FORWARD-INFERENCE-INFO-TO-CLUMP", 2, 0, false);
+        declareFunction("forward_inference_clump_total_answer_count", "FORWARD-INFERENCE-CLUMP-TOTAL-ANSWER-COUNT", 1, 0, false);
+        declareFunction("forward_inference_info_print_function_trampoline", "FORWARD-INFERENCE-INFO-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("forward_inference_info_p", "FORWARD-INFERENCE-INFO-P", 1, 0, false);
         new cb_forward_inference_browser.$forward_inference_info_p$UnaryFunction();
-        declareFunction(me, "fwd_inf_info_inference", "FWD-INF-INFO-INFERENCE", 1, 0, false);
-        declareFunction(me, "fwd_inf_info_rule", "FWD-INF-INFO-RULE", 1, 0, false);
-        declareFunction(me, "fwd_inf_info_more_info", "FWD-INF-INFO-MORE-INFO", 1, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_info_inference", "_CSETF-FWD-INF-INFO-INFERENCE", 2, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_info_rule", "_CSETF-FWD-INF-INFO-RULE", 2, 0, false);
-        declareFunction(me, "_csetf_fwd_inf_info_more_info", "_CSETF-FWD-INF-INFO-MORE-INFO", 2, 0, false);
-        declareFunction(me, "make_forward_inference_info", "MAKE-FORWARD-INFERENCE-INFO", 0, 1, false);
-        declareFunction(me, "visit_defstruct_forward_inference_info", "VISIT-DEFSTRUCT-FORWARD-INFERENCE-INFO", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_forward_inference_info_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-INFO-METHOD", 2, 0, false);
-        declareFunction(me, "valid_forward_inference_info_p", "VALID-FORWARD-INFERENCE-INFO-P", 1, 0, false);
-        declareFunction(me, "new_forward_inference_info", "NEW-FORWARD-INFERENCE-INFO", 2, 1, false);
-        declareFunction(me, "destroy_inference_info", "DESTROY-INFERENCE-INFO", 1, 0, false);
-        declareFunction(me, "forward_inference_info_inference", "FORWARD-INFERENCE-INFO-INFERENCE", 1, 0, false);
-        declareFunction(me, "forward_inference_info_rule", "FORWARD-INFERENCE-INFO-RULE", 1, 0, false);
-        declareFunction(me, "forward_inference_info_more_info", "FORWARD-INFERENCE-INFO-MORE-INFO", 1, 0, false);
-        declareFunction(me, "inference_info_G", "INFERENCE-INFO->", 2, 0, false);
-        declareFunction(me, "inference_info_L", "INFERENCE-INFO-<", 2, 0, false);
-        declareFunction(me, "cb_current_forward_inference_clump", "CB-CURRENT-FORWARD-INFERENCE-CLUMP", 0, 0, false);
-        declareMacro(me, "do_current_forward_inference_infos", "DO-CURRENT-FORWARD-INFERENCE-INFOS");
-        declareFunction(me, "cb_forward_inference_browser", "CB-FORWARD-INFERENCE-BROWSER", 0, 1, false);
-        declareFunction(me, "cb_link_forward_inference_browser", "CB-LINK-FORWARD-INFERENCE-BROWSER", 0, 1, false);
-        declareFunction(me, "cb_forward_inference_browser_int", "CB-FORWARD-INFERENCE-BROWSER-INT", 1, 1, false);
-        declareFunction(me, "cb_fib_trigger_support_link_name", "CB-FIB-TRIGGER-SUPPORT-LINK-NAME", 2, 0, false);
-        declareFunction(me, "cb_fib_next_trigger_support_link_name", "CB-FIB-NEXT-TRIGGER-SUPPORT-LINK-NAME", 2, 0, false);
-        declareFunction(me, "cb_forward_inference_browser_show_infos", "CB-FORWARD-INFERENCE-BROWSER-SHOW-INFOS", 2, 0, false);
-        declareFunction(me, "cb_note_new_forward_inference_for_browsing", "CB-NOTE-NEW-FORWARD-INFERENCE-FOR-BROWSING", 2, 1, false);
-        declareFunction(me, "prepare_to_browse_new_forward_inference", "PREPARE-TO-BROWSE-NEW-FORWARD-INFERENCE", 1, 0, false);
-        declareFunction(me, "cleanup_from_browsing_new_forward_inference", "CLEANUP-FROM-BROWSING-NEW-FORWARD-INFERENCE", 0, 0, false);
+        declareFunction("fwd_inf_info_inference", "FWD-INF-INFO-INFERENCE", 1, 0, false);
+        declareFunction("fwd_inf_info_rule", "FWD-INF-INFO-RULE", 1, 0, false);
+        declareFunction("fwd_inf_info_more_info", "FWD-INF-INFO-MORE-INFO", 1, 0, false);
+        declareFunction("_csetf_fwd_inf_info_inference", "_CSETF-FWD-INF-INFO-INFERENCE", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_info_rule", "_CSETF-FWD-INF-INFO-RULE", 2, 0, false);
+        declareFunction("_csetf_fwd_inf_info_more_info", "_CSETF-FWD-INF-INFO-MORE-INFO", 2, 0, false);
+        declareFunction("make_forward_inference_info", "MAKE-FORWARD-INFERENCE-INFO", 0, 1, false);
+        declareFunction("visit_defstruct_forward_inference_info", "VISIT-DEFSTRUCT-FORWARD-INFERENCE-INFO", 2, 0, false);
+        declareFunction("visit_defstruct_object_forward_inference_info_method", "VISIT-DEFSTRUCT-OBJECT-FORWARD-INFERENCE-INFO-METHOD", 2, 0, false);
+        declareFunction("valid_forward_inference_info_p", "VALID-FORWARD-INFERENCE-INFO-P", 1, 0, false);
+        declareFunction("new_forward_inference_info", "NEW-FORWARD-INFERENCE-INFO", 2, 1, false);
+        declareFunction("destroy_inference_info", "DESTROY-INFERENCE-INFO", 1, 0, false);
+        declareFunction("forward_inference_info_inference", "FORWARD-INFERENCE-INFO-INFERENCE", 1, 0, false);
+        declareFunction("forward_inference_info_rule", "FORWARD-INFERENCE-INFO-RULE", 1, 0, false);
+        declareFunction("forward_inference_info_more_info", "FORWARD-INFERENCE-INFO-MORE-INFO", 1, 0, false);
+        declareFunction("inference_info_G", "INFERENCE-INFO->", 2, 0, false);
+        declareFunction("inference_info_L", "INFERENCE-INFO-<", 2, 0, false);
+        declareFunction("cb_current_forward_inference_clump", "CB-CURRENT-FORWARD-INFERENCE-CLUMP", 0, 0, false);
+        declareMacro("do_current_forward_inference_infos", "DO-CURRENT-FORWARD-INFERENCE-INFOS");
+        declareFunction("cb_forward_inference_browser", "CB-FORWARD-INFERENCE-BROWSER", 0, 1, false);
+        declareFunction("cb_link_forward_inference_browser", "CB-LINK-FORWARD-INFERENCE-BROWSER", 0, 1, false);
+        declareFunction("cb_forward_inference_browser_int", "CB-FORWARD-INFERENCE-BROWSER-INT", 1, 1, false);
+        declareFunction("cb_fib_trigger_support_link_name", "CB-FIB-TRIGGER-SUPPORT-LINK-NAME", 2, 0, false);
+        declareFunction("cb_fib_next_trigger_support_link_name", "CB-FIB-NEXT-TRIGGER-SUPPORT-LINK-NAME", 2, 0, false);
+        declareFunction("cb_forward_inference_browser_show_infos", "CB-FORWARD-INFERENCE-BROWSER-SHOW-INFOS", 2, 0, false);
+        declareFunction("cb_note_new_forward_inference_for_browsing", "CB-NOTE-NEW-FORWARD-INFERENCE-FOR-BROWSING", 2, 1, false);
+        declareFunction("prepare_to_browse_new_forward_inference", "PREPARE-TO-BROWSE-NEW-FORWARD-INFERENCE", 1, 0, false);
+        declareFunction("cleanup_from_browsing_new_forward_inference", "CLEANUP-FROM-BROWSING-NEW-FORWARD-INFERENCE", 0, 0, false);
         return NIL;
     }
 
@@ -1552,7 +2405,59 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_cb_forward_inference_browser_file_alt() {
+        register_method($print_object_method_table$.getGlobalValue(), $dtp_forward_inference_clump$.getGlobalValue(), symbol_function(FORWARD_INFERENCE_CLUMP_PRINT_FUNCTION_TRAMPOLINE));
+        def_csetf(FWD_INF_CLUMP_ID, _CSETF_FWD_INF_CLUMP_ID);
+        def_csetf(FWD_INF_CLUMP_TIMESTAMP, _CSETF_FWD_INF_CLUMP_TIMESTAMP);
+        def_csetf(FWD_INF_CLUMP_TRIGGERING_ASSERTION, _CSETF_FWD_INF_CLUMP_TRIGGERING_ASSERTION);
+        def_csetf(FWD_INF_CLUMP_INFERENCE_INFOS, _CSETF_FWD_INF_CLUMP_INFERENCE_INFOS);
+        identity(FORWARD_INFERENCE_CLUMP);
+        register_method($print_object_method_table$.getGlobalValue(), $dtp_forward_inference_info$.getGlobalValue(), symbol_function(FORWARD_INFERENCE_INFO_PRINT_FUNCTION_TRAMPOLINE));
+        def_csetf(FWD_INF_INFO_INFERENCE, _CSETF_FWD_INF_INFO_INFERENCE);
+        def_csetf(FWD_INF_INFO_RULE, _CSETF_FWD_INF_INFO_RULE);
+        def_csetf(FWD_INF_INFO_MORE_INFO, _CSETF_FWD_INF_INFO_MORE_INFO);
+        identity(FORWARD_INFERENCE_INFO);
+        register_html_state_variable($cb_current_forward_inference_clump$);
+        html_macros.note_html_handler_function(CB_FORWARD_INFERENCE_BROWSER);
+        setup_cb_link_method($FORWARD_INFERENCE_BROWSER, CB_LINK_FORWARD_INFERENCE_BROWSER, ONE_INTEGER);
+        declare_cb_tool($FORWARD_INFERENCE_BROWSER, $$$Forward_Inference_Browser, $$$FwdInf, $str_alt55$Browse_the_most_recent_browsable_);
+        register_macro_helper(PREPARE_TO_BROWSE_NEW_FORWARD_INFERENCE, BROWSING_NEW_FORWARD_INFERENCE);
+        register_macro_helper(CLEANUP_FROM_BROWSING_NEW_FORWARD_INFERENCE, BROWSING_NEW_FORWARD_INFERENCE);
+        return NIL;
+    }
+
     public static SubLObject setup_cb_forward_inference_browser_file() {
+        if (SubLFiles.USE_V1) {
+            register_method($print_object_method_table$.getGlobalValue(), $dtp_forward_inference_clump$.getGlobalValue(), symbol_function(FORWARD_INFERENCE_CLUMP_PRINT_FUNCTION_TRAMPOLINE));
+            SubLSpecialOperatorDeclarations.proclaim($list8);
+            def_csetf(FWD_INF_CLUMP_ID, _CSETF_FWD_INF_CLUMP_ID);
+            def_csetf(FWD_INF_CLUMP_TIMESTAMP, _CSETF_FWD_INF_CLUMP_TIMESTAMP);
+            def_csetf(FWD_INF_CLUMP_TRIGGERING_ASSERTION, _CSETF_FWD_INF_CLUMP_TRIGGERING_ASSERTION);
+            def_csetf(FWD_INF_CLUMP_INFERENCE_INFOS, _CSETF_FWD_INF_CLUMP_INFERENCE_INFOS);
+            identity(FORWARD_INFERENCE_CLUMP);
+            register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_forward_inference_clump$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_FORWARD_INFERENCE_CLUMP_METHOD));
+            register_method($print_object_method_table$.getGlobalValue(), $dtp_forward_inference_info$.getGlobalValue(), symbol_function(FORWARD_INFERENCE_INFO_PRINT_FUNCTION_TRAMPOLINE));
+            SubLSpecialOperatorDeclarations.proclaim($list41);
+            def_csetf(FWD_INF_INFO_INFERENCE, _CSETF_FWD_INF_INFO_INFERENCE);
+            def_csetf(FWD_INF_INFO_RULE, _CSETF_FWD_INF_INFO_RULE);
+            def_csetf(FWD_INF_INFO_MORE_INFO, _CSETF_FWD_INF_INFO_MORE_INFO);
+            identity(FORWARD_INFERENCE_INFO);
+            register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_forward_inference_info$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_FORWARD_INFERENCE_INFO_METHOD));
+            register_html_state_variable($cb_current_forward_inference_clump$);
+            html_macros.note_cgi_handler_function(CB_FORWARD_INFERENCE_BROWSER, $HTML_HANDLER);
+            setup_cb_link_method($FORWARD_INFERENCE_BROWSER, CB_LINK_FORWARD_INFERENCE_BROWSER, ONE_INTEGER);
+            declare_cb_tool($FORWARD_INFERENCE_BROWSER, $$$Forward_Inference_Browser, $$$FwdInf, $str65$Browse_the_most_recent_browsable_);
+            register_macro_helper(PREPARE_TO_BROWSE_NEW_FORWARD_INFERENCE, BROWSING_NEW_FORWARD_INFERENCE);
+            register_macro_helper(CLEANUP_FROM_BROWSING_NEW_FORWARD_INFERENCE, BROWSING_NEW_FORWARD_INFERENCE);
+        }
+        if (SubLFiles.USE_V2) {
+            html_macros.note_html_handler_function(CB_FORWARD_INFERENCE_BROWSER);
+            declare_cb_tool($FORWARD_INFERENCE_BROWSER, $$$Forward_Inference_Browser, $$$FwdInf, $str_alt55$Browse_the_most_recent_browsable_);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_cb_forward_inference_browser_file_Previous() {
         register_method($print_object_method_table$.getGlobalValue(), $dtp_forward_inference_clump$.getGlobalValue(), symbol_function(FORWARD_INFERENCE_CLUMP_PRINT_FUNCTION_TRAMPOLINE));
         SubLSpecialOperatorDeclarations.proclaim($list8);
         def_csetf(FWD_INF_CLUMP_ID, _CSETF_FWD_INF_CLUMP_ID);
@@ -1593,199 +2498,6 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    }
-
-    public static final class $forward_inference_clump_native extends SubLStructNative {
-        public SubLObject $id;
-
-        public SubLObject $timestamp;
-
-        public SubLObject $triggering_assertion;
-
-        public SubLObject $inference_infos;
-
-        private static final SubLStructDeclNative structDecl;
-
-        public $forward_inference_clump_native() {
-            this.$id = Lisp.NIL;
-            this.$timestamp = Lisp.NIL;
-            this.$triggering_assertion = Lisp.NIL;
-            this.$inference_infos = Lisp.NIL;
-        }
-
-        @Override
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        @Override
-        public SubLObject getField2() {
-            return this.$id;
-        }
-
-        @Override
-        public SubLObject getField3() {
-            return this.$timestamp;
-        }
-
-        @Override
-        public SubLObject getField4() {
-            return this.$triggering_assertion;
-        }
-
-        @Override
-        public SubLObject getField5() {
-            return this.$inference_infos;
-        }
-
-        @Override
-        public SubLObject setField2(final SubLObject value) {
-            return this.$id = value;
-        }
-
-        @Override
-        public SubLObject setField3(final SubLObject value) {
-            return this.$timestamp = value;
-        }
-
-        @Override
-        public SubLObject setField4(final SubLObject value) {
-            return this.$triggering_assertion = value;
-        }
-
-        @Override
-        public SubLObject setField5(final SubLObject value) {
-            return this.$inference_infos = value;
-        }
-
-        static {
-            structDecl = makeStructDeclNative(cb_forward_inference_browser.$forward_inference_clump_native.class, FORWARD_INFERENCE_CLUMP, FORWARD_INFERENCE_CLUMP_P, $list2, $list3, new String[]{ "$id", "$timestamp", "$triggering_assertion", "$inference_infos" }, $list4, $list5, DEFAULT_STRUCT_PRINT_FUNCTION);
-        }
     }
 
     public static final class $forward_inference_clump_p$UnaryFunction extends UnaryFunction {
@@ -1796,61 +2508,6 @@ public final class cb_forward_inference_browser extends SubLTranslatedFile {
         @Override
         public SubLObject processItem(final SubLObject arg1) {
             return forward_inference_clump_p(arg1);
-        }
-    }
-
-    public static final class $forward_inference_info_native extends SubLStructNative {
-        public SubLObject $inference;
-
-        public SubLObject $rule;
-
-        public SubLObject $more_info;
-
-        private static final SubLStructDeclNative structDecl;
-
-        public $forward_inference_info_native() {
-            this.$inference = Lisp.NIL;
-            this.$rule = Lisp.NIL;
-            this.$more_info = Lisp.NIL;
-        }
-
-        @Override
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        @Override
-        public SubLObject getField2() {
-            return this.$inference;
-        }
-
-        @Override
-        public SubLObject getField3() {
-            return this.$rule;
-        }
-
-        @Override
-        public SubLObject getField4() {
-            return this.$more_info;
-        }
-
-        @Override
-        public SubLObject setField2(final SubLObject value) {
-            return this.$inference = value;
-        }
-
-        @Override
-        public SubLObject setField3(final SubLObject value) {
-            return this.$rule = value;
-        }
-
-        @Override
-        public SubLObject setField4(final SubLObject value) {
-            return this.$more_info = value;
-        }
-
-        static {
-            structDecl = makeStructDeclNative(cb_forward_inference_browser.$forward_inference_info_native.class, FORWARD_INFERENCE_INFO, FORWARD_INFERENCE_INFO_P, $list36, $list37, new String[]{ "$inference", "$rule", "$more_info" }, $list38, $list39, DEFAULT_STRUCT_PRINT_FUNCTION);
         }
     }
 

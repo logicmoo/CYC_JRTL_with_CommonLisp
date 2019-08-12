@@ -263,8 +263,7 @@ public  final class czer_graph extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_czer_graph_file() {
-    // CVS_ID("Id: czer-graph.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_v_colour$.getGlobalValue(), Symbols.symbol_function($sym7$V_COLOUR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_v_colour$.getGlobalValue(), Symbols.symbol_function($sym7$V_COLOUR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$V_COLOUR_SORTED_CONSTANT_LIST, $sym9$_CSETF_V_COLOUR_SORTED_CONSTANT_LIST);
     Structures.def_csetf($sym10$V_COLOUR_SORTED_NAT_LIST, $sym11$_CSETF_V_COLOUR_SORTED_NAT_LIST);
     Structures.def_csetf($sym12$V_COLOUR_SORTED_ASSERTION_LIST, $sym13$_CSETF_V_COLOUR_SORTED_ASSERTION_LIST);

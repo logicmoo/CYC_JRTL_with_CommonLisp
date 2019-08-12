@@ -148,8 +148,7 @@ public  final class neural_net extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_neural_net_file() {
-    // CVS_ID("Id: neural-net.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_neural_net$.getGlobalValue(), Symbols.symbol_function($sym7$NEURAL_NET_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_neural_net$.getGlobalValue(), Symbols.symbol_function($sym7$NEURAL_NET_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$NN_INPUT_NODES, $sym9$_CSETF_NN_INPUT_NODES);
     Equality.identity($sym0$NEURAL_NET);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_nn_input_node$.getGlobalValue(), Symbols.symbol_function($sym21$NN_INPUT_NODE_PRINT_FUNCTION_TRAMPOLINE));

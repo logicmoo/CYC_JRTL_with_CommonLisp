@@ -106,8 +106,7 @@ public  final class kb_access_metering extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_access_metering_file() {
-    // CVS_ID("Id: kb-access-metering.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_KB_ACCESS_METERING_ENABLED__);
+        subl_macro_promotions.declare_defglobal($sym0$_KB_ACCESS_METERING_ENABLED__);
     access_macros.register_macro_helper($sym11$NEW_KB_ACCESS_METERING_TABLE, $sym19$WITH_KB_ACCESS_METERING);
     access_macros.register_macro_helper($sym17$POSTPROCESS_KB_ACCESS_METERING_TABLE, $sym19$WITH_KB_ACCESS_METERING);
     access_macros.register_macro_helper($sym27$NOTE_KB_ACCESS_SBHL_, $sym28$POSSIBLY_NOTE_KB_ACCESS_SBHL_LINK);

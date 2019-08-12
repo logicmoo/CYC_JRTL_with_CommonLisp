@@ -128,8 +128,7 @@ public  final class inference_datastructures_forward_propagate extends SubLTrans
   }
 
   public static final SubLObject setup_inference_datastructures_forward_propagate_file() {
-    // CVS_ID("Id: inference-datastructures-forward-propagate.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_forward_propagate$.getGlobalValue(), Symbols.symbol_function($sym7$FORWARD_PROPAGATE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_forward_propagate$.getGlobalValue(), Symbols.symbol_function($sym7$FORWARD_PROPAGATE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$FPMT_OLD_QUEUE, $sym9$_CSETF_FPMT_OLD_QUEUE);
     Structures.def_csetf($sym10$FPMT_NEW_QUEUE, $sym11$_CSETF_FPMT_NEW_QUEUE);
     Equality.identity($sym0$FORWARD_PROPAGATE);

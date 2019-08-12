@@ -319,8 +319,7 @@ public  final class clauses extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_clauses_file() {
-    // CVS_ID("Id: clauses.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym0$CLAUSE_P, $list1, $str2$Returns_T_iff_OBJECT_is_either_a_, NIL, $list3);
+        utilities_macros.register_cyc_api_function($sym0$CLAUSE_P, $list1, $str2$Returns_T_iff_OBJECT_is_either_a_, NIL, $list3);
     utilities_macros.register_cyc_api_function($sym5$MAKE_CLAUSE, $list6, $str7$Construct_a_clause_from_NEG_LITS_, $list8, $list9);
     utilities_macros.register_cyc_api_function($sym10$NEG_LITS, $list11, $str12$Return_the_neg_lits_of_CLAUSE_, $list13, $list14);
     utilities_macros.register_cyc_api_function($sym15$POS_LITS, $list11, $str16$Return_the_pos_lits_of_CLAUSE_, $list13, $list14);

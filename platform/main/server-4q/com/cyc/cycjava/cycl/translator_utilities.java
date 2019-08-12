@@ -1,8 +1,33 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.translator_utilities;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -14,64 +39,42 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.translator_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class translator_utilities extends SubLTranslatedFile {
+public final class translator_utilities extends SubLTranslatedFile implements V12 {
+    public static final SubLObject td_module_cvsweb_url(SubLObject module) {
+        SubLTrampolineFile.checkType(module, TD_MODULE_P);
+        {
+            SubLObject pathname = com.cyc.cycjava.cycl.translator_utilities.td_module_pathname(module);
+            return format(NIL, $str_alt7$http___localhost_cgi_bin_cvsweb_c, pathname);
+        }
+    }
+
     public static final SubLFile me = new translator_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.translator_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.translator_utilities";
 
-    public static final String myFingerPrint = "fd79add18a143ca3c3bb322fc1fe6f116d1056a215907dbd83707c078d392ce1";
 
     // defvar
+    @LispMethod(comment = "Temporary control variable -- eventually should stay :new on all platforms\r\nonce the old translator is excised.\ndefvar\nTemporary control variable -- eventually should stay :new on all platforms\nonce the old translator is excised.")
+    // Definitions
+    /**
+     * Temporary control variable -- eventually should stay :new on all platforms
+     * once the old translator is excised.
+     */
     public static final SubLSymbol $xref_database_mode$ = makeSymbol("*XREF-DATABASE-MODE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $td_methods_called_transitively$ = makeSymbol("*TD-METHODS-CALLED-TRANSITIVELY*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $td_globals_called_transitively$ = makeSymbol("*TD-GLOBALS-CALLED-TRANSITIVELY*");
 
-
-
-    public static final SubLSymbol TD_TRANSLATION_MODULES_MEMOIZED = makeSymbol("TD-TRANSLATION-MODULES-MEMOIZED");
+    private static final SubLSymbol TD_TRANSLATION_MODULES_MEMOIZED = makeSymbol("TD-TRANSLATION-MODULES-MEMOIZED");
 
     private static final SubLSymbol TD_MODULE_TRANSLATION_POSITION = makeSymbol("TD-MODULE-TRANSLATION-POSITION");
 
@@ -79,33 +82,13 @@ public final class translator_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol TD_MODULE_P = makeSymbol("TD-MODULE-P");
 
-
-
-
-
-
-
-
-
     private static final SubLString $str9$Checking__A_for_dependencies___ = makeString("Checking ~A for dependencies.~%");
-
-
-
-
 
     private static final SubLSymbol TD_MODULE_LATER = makeSymbol("TD-MODULE-LATER");
 
     private static final SubLSymbol TD_METHOD_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED = makeSymbol("TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED");
 
-
-
     private static final SubLSymbol TD_GLOBAL_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED = makeSymbol("TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED");
-
-
-
-
-
-
 
     private static final SubLSymbol NON_FEATURE_SYMBOL_P = makeSymbol("NON-FEATURE-SYMBOL-P");
 
@@ -115,12 +98,6 @@ public final class translator_utilities extends SubLTranslatedFile {
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
-
-
-
-
-
-
     private static final SubLSymbol POTENTIAL_MODULE_LEVEL_FEATURE_INCONGRUENCE = makeSymbol("POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE");
 
     private static final SubLList $list27 = list(list(makeSymbol("DEF-TYPE"), makeSymbol("&REST"), makeSymbol("DEF-ARGS")), list(makeSymbol("REF-TYPE"), makeSymbol("&REST"), makeSymbol("REF-ARGS")), makeSymbol("INCONGRUENCE"));
@@ -129,7 +106,7 @@ public final class translator_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str29$__Top_level_form_in__A__ = makeString("~%Top-level form in ~A~%");
 
-    public static final SubLList $list30 = list(makeSymbol("DEF-OBJECT"), makeSymbol("MODULE"), makeSymbol("DEF-FEATURES"));
+    static private final SubLList $list30 = list(makeSymbol("DEF-OBJECT"), makeSymbol("MODULE"), makeSymbol("DEF-FEATURES"));
 
     private static final SubLString $str31$__Method__A_in__A__ = makeString("~%Method ~A in ~A~%");
 
@@ -155,11 +132,11 @@ public final class translator_utilities extends SubLTranslatedFile {
 
     private static final SubLList $list42 = list(makeSymbol("MODULE"));
 
-    public static final SubLList $list43 = list(makeSymbol("DEF-OBJECT"), makeSymbol("MODULE"));
+    static private final SubLList $list43 = list(makeSymbol("DEF-OBJECT"), makeSymbol("MODULE"));
 
     private static final SubLString $$$_references_private = makeString(" references private");
 
-    public static final SubLList $list45 = list(makeSymbol("REF-OBJECT"), makeSymbol("MODULE"));
+    static private final SubLList $list45 = list(makeSymbol("REF-OBJECT"), makeSymbol("MODULE"));
 
     private static final SubLString $str46$Identifying_early_rebinding_viola = makeString("Identifying early rebinding violations");
 
@@ -223,12 +200,6 @@ public final class translator_utilities extends SubLTranslatedFile {
 
     private static final SubLString $$$Determining_build_problems = makeString("Determining build problems");
 
-
-
-
-
-
-
     private static final SubLSymbol $EARLY_CONSTANT_REFERENCES = makeKeyword("EARLY-CONSTANT-REFERENCES");
 
     private static final SubLSymbol $EARLY_REFERENCE_VIOLATIONS = makeKeyword("EARLY-REFERENCE-VIOLATIONS");
@@ -241,20 +212,31 @@ public final class translator_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str85$Unknown_build_problem_class__S = makeString("Unknown build problem class ~S");
 
-
-
     private static final SubLSymbol $sym87$_ = makeSymbol(">");
-
-
-
-
 
     private static final SubLString $$$CLEAR = makeString("CLEAR");
 
     private static final SubLString $$$REMOVE = makeString("REMOVE");
 
+    public static final SubLObject td_module_p_alt(SubLObject module) {
+        return stringp(module);
+    }
+
     public static SubLObject td_module_p(final SubLObject module) {
         return stringp(module);
+    }
+
+    public static final SubLObject td_current_translation_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return system_translation.current_system_translation();
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject td_current_translation() {
@@ -266,6 +248,19 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_translation_modules_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.current_xref_system_modules();
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_translation_modules() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
@@ -275,8 +270,38 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_translation_modules_memoized_internal_alt() {
+        return com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+    }
+
     public static SubLObject td_translation_modules_memoized_internal() {
         return td_translation_modules();
+    }
+
+    public static final SubLObject td_translation_modules_memoized_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.translator_utilities.td_translation_modules_memoized_internal();
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, TD_TRANSLATION_MODULES_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), TD_TRANSLATION_MODULES_MEMOIZED, ZERO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, TD_TRANSLATION_MODULES_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
+                    if (results == $kw2$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.translator_utilities.td_translation_modules_memoized_internal()));
+                        memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject td_translation_modules_memoized() {
@@ -299,6 +324,30 @@ public final class translator_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    /**
+     * Return T iff EARLIER-MODULE is strictly earlier than LATER-MODULE in the sysdcl.
+     */
+    @LispMethod(comment = "Return T iff EARLIER-MODULE is strictly earlier than LATER-MODULE in the sysdcl.")
+    public static final SubLObject td_module_earlier_alt(SubLObject earlier_module, SubLObject later_module) {
+        {
+            SubLObject position1 = com.cyc.cycjava.cycl.translator_utilities.td_module_translation_position(earlier_module);
+            SubLObject position2 = com.cyc.cycjava.cycl.translator_utilities.td_module_translation_position(later_module);
+            if (position1.isInteger()) {
+                if (position2.isInteger()) {
+                    return numL(position1, position2);
+                } else {
+                    return T;
+                }
+            } else {
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     * Return T iff EARLIER-MODULE is strictly earlier than LATER-MODULE in the sysdcl.
+     */
+    @LispMethod(comment = "Return T iff EARLIER-MODULE is strictly earlier than LATER-MODULE in the sysdcl.")
     public static SubLObject td_module_earlier(final SubLObject earlier_module, final SubLObject later_module) {
         final SubLObject position1 = td_module_translation_position(earlier_module);
         final SubLObject position2 = td_module_translation_position(later_module);
@@ -311,8 +360,38 @@ public final class translator_utilities extends SubLTranslatedFile {
         return T;
     }
 
+    public static final SubLObject td_module_translation_position_internal_alt(SubLObject module) {
+        return position(module, com.cyc.cycjava.cycl.translator_utilities.td_translation_modules_memoized(), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject td_module_translation_position_internal(final SubLObject module) {
         return position(module, td_translation_modules_memoized(), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject td_module_translation_position_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.translator_utilities.td_module_translation_position_internal(module);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, TD_MODULE_TRANSLATION_POSITION, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), TD_MODULE_TRANSLATION_POSITION, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, TD_MODULE_TRANSLATION_POSITION, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, module, $kw2$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw2$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.translator_utilities.td_module_translation_position_internal(module)));
+                        memoization_state.caching_state_put(caching_state, module, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject td_module_translation_position(final SubLObject module) {
@@ -335,10 +414,81 @@ public final class translator_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    /**
+     * Return T iff LATER-MODULE is strictly later than EARLIER-MODULE in the sysdcl.
+     */
+    @LispMethod(comment = "Return T iff LATER-MODULE is strictly later than EARLIER-MODULE in the sysdcl.")
+    public static final SubLObject td_module_later_alt(SubLObject later_module, SubLObject earlier_module) {
+        return com.cyc.cycjava.cycl.translator_utilities.td_module_earlier(earlier_module, later_module);
+    }
+
+    /**
+     * Return T iff LATER-MODULE is strictly later than EARLIER-MODULE in the sysdcl.
+     */
+    @LispMethod(comment = "Return T iff LATER-MODULE is strictly later than EARLIER-MODULE in the sysdcl.")
     public static SubLObject td_module_later(final SubLObject later_module, final SubLObject earlier_module) {
         return td_module_earlier(earlier_module, later_module);
     }
 
+    /**
+     * Return a copy of MODULES sorted in sysdcl order.
+     */
+    @LispMethod(comment = "Return a copy of MODULES sorted in sysdcl order.")
+    public static final SubLObject td_sort_modules_by_load_order_alt(SubLObject v_modules) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                result = Sort.sort(copy_list(v_modules), symbol_function(TD_MODULE_EARLIER), UNPROVIDED);
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_1 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_1, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Return a copy of MODULES sorted in sysdcl order.
+     */
+    @LispMethod(comment = "Return a copy of MODULES sorted in sysdcl order.")
     public static SubLObject td_sort_modules_by_load_order(final SubLObject v_modules) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -367,22 +517,57 @@ public final class translator_utilities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject td_module_earlier_memoized_alt(SubLObject earlier_module, SubLObject later_module) {
+        return com.cyc.cycjava.cycl.translator_utilities.td_module_earlier(earlier_module, later_module);
+    }
+
     public static SubLObject td_module_earlier_memoized(final SubLObject earlier_module, final SubLObject later_module) {
         return td_module_earlier(earlier_module, later_module);
+    }
+
+    public static final SubLObject td_module_later_memoized_alt(SubLObject later_module, SubLObject earlier_module) {
+        return com.cyc.cycjava.cycl.translator_utilities.td_module_earlier_memoized(earlier_module, later_module);
     }
 
     public static SubLObject td_module_later_memoized(final SubLObject later_module, final SubLObject earlier_module) {
         return td_module_earlier_memoized(earlier_module, later_module);
     }
 
+    public static final SubLObject td_module_features_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_module_features(module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_module_features(final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_module_features(module);
         }
         return NIL;
+    }
+
+    public static final SubLObject td_translation_features_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.current_xref_system_features();
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject td_translation_features() {
@@ -394,9 +579,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_module_pathname_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_module_input_filename(module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_module_pathname(final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_module_input_filename(module);
@@ -404,9 +603,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_predefined_method_p_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_predefined_method_p(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_predefined_method_p(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_predefined_method_p(method);
@@ -414,9 +627,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_predefined_global_p_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_predefined_global_p(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_predefined_global_p(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_predefined_global_p(global);
@@ -424,14 +651,33 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
-    public static SubLObject td_method_macro_p(final SubLObject method) {
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+    public static final SubLObject td_method_macro_p_alt(SubLObject method) {
+        SubLTrampolineFile.checkType(method, SYMBOLP);
         return macro_operator_p(method);
+    }
+
+    public static SubLObject td_method_macro_p(final SubLObject method) {
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
+        return macro_operator_p(method);
+    }
+
+    public static final SubLObject td_method_defining_module_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_defining_module(method);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject td_method_defining_module(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_defining_module(method);
@@ -439,9 +685,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_definition_position_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_definition_position(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_definition_position(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_definition_position(method);
@@ -449,9 +709,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_has_multiple_definitionsP_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_has_multiple_definitionsP(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_has_multiple_definitionsP(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_has_multiple_definitionsP(method);
@@ -459,9 +733,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_definition_positions_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_definition_positions(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_definition_positions(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_definition_positions(method);
@@ -469,9 +757,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_formal_arglist_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(method)) {
+                {
+                    SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                    if (pcase_var.eql($NEW)) {
+                        return xref_database.xref_method_formal_arglist(method);
+                    }
+                }
+            }
+            return subl_promotions.function_symbol_arglist(method);
+        }
+    }
+
     public static SubLObject td_method_formal_arglist(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         if (NIL != td_method_defining_module(method)) {
             final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
             if (pcase_var.eql($NEW)) {
@@ -481,8 +785,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return subl_promotions.function_symbol_arglist(method);
     }
 
+    public static final SubLObject td_global_binding_type_alt(SubLObject global) {
+        SubLTrampolineFile.checkType(global, SYMBOLP);
+        {
+            SubLObject binding_type = form_translation.global_binding_type(global);
+            SubLObject pcase_var = binding_type;
+            if (pcase_var.eql($DYNAMIC)) {
+                return $SPECIAL;
+            } else {
+                if (pcase_var.eql($UNSPECIFIED)) {
+                    return NIL;
+                } else {
+                    return binding_type;
+                }
+            }
+        }
+    }
+
     public static SubLObject td_global_binding_type(final SubLObject global) {
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var;
         final SubLObject binding_type = pcase_var = form_translation.global_binding_type(global);
         if (pcase_var.eql($DYNAMIC)) {
@@ -494,9 +815,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return binding_type;
     }
 
+    public static final SubLObject td_global_defining_module_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_global_defining_module(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_global_defining_module(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_global_defining_module(global);
@@ -504,9 +839,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_global_definition_position_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_global_definition_position(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_global_definition_position(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_global_definition_position(global);
@@ -514,9 +863,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_global_has_multiple_definitionsP_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_global_has_multiple_definitionsP(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_global_has_multiple_definitionsP(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_global_has_multiple_definitionsP(global);
@@ -524,9 +887,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_global_definition_positions_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_global_definition_positions(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_global_definition_positions(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_global_definition_positions(global);
@@ -534,9 +911,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_methods_defined_by_module_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_methods_defined_by_module(module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_methods_defined_by_module(final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_methods_defined_by_module(module);
@@ -544,9 +935,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_defined_by_module_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_defined_by_module(module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_defined_by_module(final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_defined_by_module(module);
@@ -554,9 +959,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_called_by_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_accessed_by_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_called_by_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_accessed_by_method(method);
@@ -564,9 +983,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_rebound_by_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_rebound_by_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_rebound_by_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_rebound_by_method(method);
@@ -574,9 +1007,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_methods_called_by_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_methods_called_by_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_methods_called_by_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_methods_called_by_method(method);
@@ -584,10 +1031,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_called_by_methodP_alt(SubLObject client_method, SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(client_method, SYMBOLP);
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_called_by_methodP(client_method, method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_called_by_methodP(final SubLObject client_method, final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(client_method) : "Types.symbolp(client_method) " + "CommonSymbols.NIL != Types.symbolp(client_method) " + client_method;
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(client_method) : "! symbolp(client_method) " + ("Types.symbolp(client_method) " + "CommonSymbols.NIL != Types.symbolp(client_method) ") + client_method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_called_by_methodP(client_method, method);
@@ -595,9 +1057,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_referenced_by_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_accessed_by_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_referenced_by_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_accessed_by_method(method);
@@ -605,9 +1081,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_called_by_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_referenced_by_global(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_called_by_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_referenced_by_global(global);
@@ -615,9 +1105,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_methods_called_by_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_methods_called_by_global(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_methods_called_by_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_methods_called_by_global(global);
@@ -625,10 +1129,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_called_by_globalP_alt(SubLObject client_method, SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(client_method, SYMBOLP);
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_called_by_globalP(client_method, global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_called_by_globalP(final SubLObject client_method, final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(client_method) : "Types.symbolp(client_method) " + "CommonSymbols.NIL != Types.symbolp(client_method) " + client_method;
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(client_method) : "! symbolp(client_method) " + ("Types.symbolp(client_method) " + "CommonSymbols.NIL != Types.symbolp(client_method) ") + client_method;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_called_by_globalP(client_method, global);
@@ -636,9 +1155,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_referenced_by_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_accessed_by_global(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_referenced_by_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_accessed_by_global(global);
@@ -646,9 +1179,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_called_by_module_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_accessed_by_module(module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_called_by_module(final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_accessed_by_module(module);
@@ -656,9 +1203,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_methods_called_by_module_alt(SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_methods_called_by_module(module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_methods_called_by_module(final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_methods_called_by_module(module);
@@ -666,10 +1227,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_called_by_moduleP_alt(SubLObject client_method, SubLObject module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(client_method, SYMBOLP);
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_called_by_moduleP(client_method, module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_called_by_moduleP(final SubLObject client_method, final SubLObject module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(client_method) : "Types.symbolp(client_method) " + "CommonSymbols.NIL != Types.symbolp(client_method) " + client_method;
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
+        assert NIL != symbolp(client_method) : "! symbolp(client_method) " + ("Types.symbolp(client_method) " + "CommonSymbols.NIL != Types.symbolp(client_method) ") + client_method;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_called_by_moduleP(client_method, module);
@@ -677,10 +1253,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_module_positions_calling_global_alt(SubLObject module, SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_module_positions_accessing_global(module, global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_module_positions_calling_global(final SubLObject module, final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_module_positions_accessing_global(module, global);
@@ -688,10 +1279,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_module_positions_calling_method_alt(SubLObject module, SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(module, TD_MODULE_P);
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_module_positions_calling_method(module, method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_module_positions_calling_method(final SubLObject module, final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(module) : "translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) " + module;
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != td_module_p(module) : "! translator_utilities.td_module_p(module) " + ("translator_utilities.td_module_p(module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(module) ") + module;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_module_positions_calling_method(module, method);
@@ -699,9 +1305,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_unused_p_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_unused_p(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_unused_p(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_unused_p(method);
@@ -709,9 +1329,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_calling_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_that_call_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_calling_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_that_call_method(method);
@@ -719,9 +1353,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_methods_calling_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_methods_that_call_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_methods_calling_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_methods_that_call_method(method);
@@ -729,9 +1377,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_calling_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_that_call_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_calling_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_that_call_method(method);
@@ -739,9 +1401,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_referencing_method_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_that_access_method(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_referencing_method(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_that_access_method(method);
@@ -749,9 +1425,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_global_unused_p_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_global_never_accessed_p(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_global_unused_p(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_global_never_accessed_p(global);
@@ -759,9 +1449,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_globals_calling_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_globals_that_reference_global(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_globals_calling_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_globals_that_reference_global(global);
@@ -769,9 +1473,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_methods_calling_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_methods_that_access_global(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_methods_calling_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_methods_that_access_global(global);
@@ -779,9 +1497,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_calling_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_that_access_global(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_calling_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_that_access_global(global);
@@ -789,9 +1521,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_referencing_global_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_that_access_global_anywhere(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_referencing_global(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_that_access_global_anywhere(global);
@@ -799,9 +1545,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_method_potentially_private_p_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(method, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_method_potentially_private_p(method);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_method_potentially_private_p(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(method) : "Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) " + method;
+        assert NIL != symbolp(method) : "! symbolp(method) " + ("Types.symbolp(method) " + "CommonSymbols.NIL != Types.symbolp(method) ") + method;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_method_potentially_private_p(method);
@@ -809,9 +1569,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_global_potentially_private_p_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(global, SYMBOLP);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_global_potentially_private_p(global);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_global_potentially_private_p(final SubLObject global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != symbolp(global) : "Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) " + global;
+        assert NIL != symbolp(global) : "! symbolp(global) " + ("Types.symbolp(global) " + "CommonSymbols.NIL != Types.symbolp(global) ") + global;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_global_potentially_private_p(global);
@@ -819,9 +1593,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_referencing_module_alt(SubLObject server_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(server_module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_that_access_module_anywhere(server_module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_referencing_module(final SubLObject server_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(server_module) : "translator_utilities.td_module_p(server_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(server_module) " + server_module;
+        assert NIL != td_module_p(server_module) : "! translator_utilities.td_module_p(server_module) " + ("translator_utilities.td_module_p(server_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(server_module) ") + server_module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_that_access_module_anywhere(server_module);
@@ -829,9 +1617,23 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_modules_referenced_by_module_alt(SubLObject client_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(client_module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_modules_accessed_anywhere_by_module(client_module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_modules_referenced_by_module(final SubLObject client_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(client_module) : "translator_utilities.td_module_p(client_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(client_module) " + client_module;
+        assert NIL != td_module_p(client_module) : "! translator_utilities.td_module_p(client_module) " + ("translator_utilities.td_module_p(client_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(client_module) ") + client_module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_modules_accessed_anywhere_by_module(client_module);
@@ -839,10 +1641,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject td_justify_module_referencing_module_alt(SubLObject client_module, SubLObject server_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(client_module, TD_MODULE_P);
+            SubLTrampolineFile.checkType(server_module, TD_MODULE_P);
+            {
+                SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
+                if (pcase_var.eql($NEW)) {
+                    return xref_database.xref_justify_module_referencing_module(client_module, server_module);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject td_justify_module_referencing_module(final SubLObject client_module, final SubLObject server_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != td_module_p(client_module) : "translator_utilities.td_module_p(client_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(client_module) " + client_module;
-        assert NIL != td_module_p(server_module) : "translator_utilities.td_module_p(server_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(server_module) " + server_module;
+        assert NIL != td_module_p(client_module) : "! translator_utilities.td_module_p(client_module) " + ("translator_utilities.td_module_p(client_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(client_module) ") + client_module;
+        assert NIL != td_module_p(server_module) : "! translator_utilities.td_module_p(server_module) " + ("translator_utilities.td_module_p(server_module) " + "CommonSymbols.NIL != translator_utilities.td_module_p(server_module) ") + server_module;
         final SubLObject pcase_var = $xref_database_mode$.getDynamicValue(thread);
         if (pcase_var.eql($NEW)) {
             return xref_database.xref_justify_module_referencing_module(client_module, server_module);
@@ -850,6 +1667,32 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Given a set of methods, compute the set of modules that this implies
+     * and return it; extend the passed in set if provided.
+     */
+    @LispMethod(comment = "Given a set of methods, compute the set of modules that this implies\r\nand return it; extend the passed in set if provided.\nGiven a set of methods, compute the set of modules that this implies\nand return it; extend the passed in set if provided.")
+    public static final SubLObject td_modules_implied_by_methods_alt(SubLObject v_methods, SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = NIL;
+        }
+        {
+            SubLObject cdolist_list_var = v_methods;
+            SubLObject method = NIL;
+            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
+                {
+                    SubLObject my_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(method);
+                    SubLObject item_var = my_module;
+                    if (NIL == member(item_var, v_modules, symbol_function(EQL), symbol_function(IDENTITY))) {
+                        v_modules = cons(item_var, v_modules);
+                    }
+                }
+            }
+        }
+        return v_modules;
+    }
+
+    @LispMethod(comment = "Given a set of methods, compute the set of modules that this implies\r\nand return it; extend the passed in set if provided.\nGiven a set of methods, compute the set of modules that this implies\nand return it; extend the passed in set if provided.")
     public static SubLObject td_modules_implied_by_methods(final SubLObject v_methods, SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = NIL;
@@ -869,6 +1712,32 @@ public final class translator_utilities extends SubLTranslatedFile {
         return v_modules;
     }
 
+    /**
+     * Given a set of globals, compute the set of modules that this implies
+     * and return it; extend the passed in set if provided.
+     */
+    @LispMethod(comment = "Given a set of globals, compute the set of modules that this implies\r\nand return it; extend the passed in set if provided.\nGiven a set of globals, compute the set of modules that this implies\nand return it; extend the passed in set if provided.")
+    public static final SubLObject td_modules_implied_by_globals_alt(SubLObject globals, SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = NIL;
+        }
+        {
+            SubLObject cdolist_list_var = globals;
+            SubLObject global = NIL;
+            for (global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , global = cdolist_list_var.first()) {
+                {
+                    SubLObject my_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(global);
+                    SubLObject item_var = my_module;
+                    if (NIL == member(item_var, v_modules, symbol_function(EQL), symbol_function(IDENTITY))) {
+                        v_modules = cons(item_var, v_modules);
+                    }
+                }
+            }
+        }
+        return v_modules;
+    }
+
+    @LispMethod(comment = "Given a set of globals, compute the set of modules that this implies\r\nand return it; extend the passed in set if provided.\nGiven a set of globals, compute the set of modules that this implies\nand return it; extend the passed in set if provided.")
     public static SubLObject td_modules_implied_by_globals(final SubLObject globals, SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = NIL;
@@ -888,6 +1757,37 @@ public final class translator_utilities extends SubLTranslatedFile {
         return v_modules;
     }
 
+    /**
+     * Gather all of the callers of all of the methods whose arglist
+     * has changed, then simplify that down to the modules affected for
+     * rebuilding.
+     */
+    @LispMethod(comment = "Gather all of the callers of all of the methods whose arglist\r\nhas changed, then simplify that down to the modules affected for\r\nrebuilding.\nGather all of the callers of all of the methods whose arglist\nhas changed, then simplify that down to the modules affected for\nrebuilding.")
+    public static final SubLObject td_modules_affected_by_arglist_change_alt(SubLObject changed_methods) {
+        {
+            SubLObject v_methods = NIL;
+            SubLObject cdolist_list_var = changed_methods;
+            SubLObject symbol = NIL;
+            for (symbol = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , symbol = cdolist_list_var.first()) {
+                {
+                    SubLObject these_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_method(symbol);
+                    SubLObject cdolist_list_var_2 = these_methods;
+                    SubLObject this_method = NIL;
+                    for (this_method = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , this_method = cdolist_list_var_2.first()) {
+                        {
+                            SubLObject item_var = this_method;
+                            if (NIL == member(item_var, v_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                v_methods = cons(item_var, v_methods);
+                            }
+                        }
+                    }
+                }
+            }
+            return com.cyc.cycjava.cycl.translator_utilities.td_modules_implied_by_methods(v_methods, UNPROVIDED);
+        }
+    }
+
+    @LispMethod(comment = "Gather all of the callers of all of the methods whose arglist\r\nhas changed, then simplify that down to the modules affected for\r\nrebuilding.\nGather all of the callers of all of the methods whose arglist\nhas changed, then simplify that down to the modules affected for\nrebuilding.")
     public static SubLObject td_modules_affected_by_arglist_change(final SubLObject changed_methods) {
         SubLObject v_methods = NIL;
         SubLObject cdolist_list_var = changed_methods;
@@ -912,6 +1812,42 @@ public final class translator_utilities extends SubLTranslatedFile {
         SubLObject v_modules = td_modules_implied_by_methods(v_methods, UNPROVIDED);
         v_modules = td_sort_modules_by_load_order(v_modules);
         return v_modules;
+    }
+
+    public static final SubLObject td_modules_cluster_containing_module_alt(SubLObject seed_module, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        {
+            SubLObject mark_space = set.new_set(symbol_function(EQUALP), UNPROVIDED);
+            SubLObject unvisited = NIL;
+            unvisited = cons(seed_module, unvisited);
+            while (NIL != unvisited) {
+                {
+                    SubLObject current = unvisited.first();
+                    unvisited = unvisited.rest();
+                    if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_module_p(current)) {
+                        if (NIL != verboseP) {
+                            format(T, $str_alt12$Checking__A_for_dependencies___, current);
+                        }
+                        if (NIL == set.set_memberP(current, mark_space)) {
+                            set.set_add(current, mark_space);
+                            {
+                                SubLObject connected = com.cyc.cycjava.cycl.translator_utilities.td_modules_referencing_module(current);
+                                SubLObject cdolist_list_var = connected;
+                                SubLObject neighbor = NIL;
+                                for (neighbor = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , neighbor = cdolist_list_var.first()) {
+                                    if (NIL == set.set_memberP(neighbor, mark_space)) {
+                                        unvisited = cons(neighbor, unvisited);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } 
+            return set.set_element_list(mark_space);
+        }
     }
 
     public static SubLObject td_modules_cluster_containing_module(final SubLObject seed_module, SubLObject verboseP) {
@@ -948,6 +1884,20 @@ public final class translator_utilities extends SubLTranslatedFile {
         return set.set_element_list(mark_space);
     }
 
+    /**
+     * Given a set of modules, identify all modules that
+     * (a) are dependent on these and
+     * (b) are not a member of the leaf-modules.
+     */
+    @LispMethod(comment = "Given a set of modules, identify all modules that\r\n(a) are dependent on these and\r\n(b) are not a member of the leaf-modules.\nGiven a set of modules, identify all modules that\n(a) are dependent on these and\n(b) are not a member of the leaf-modules.")
+    public static final SubLObject td_modules_properly_dependent_on_modules_alt(SubLObject leaf_modules, SubLObject dependent_modules) {
+        if (dependent_modules == UNPROVIDED) {
+            dependent_modules = NIL;
+        }
+        return set_difference(com.cyc.cycjava.cycl.translator_utilities.td_modules_dependent_on_modules(leaf_modules, dependent_modules), leaf_modules, EQUAL, UNPROVIDED);
+    }
+
+    @LispMethod(comment = "Given a set of modules, identify all modules that\r\n(a) are dependent on these and\r\n(b) are not a member of the leaf-modules.\nGiven a set of modules, identify all modules that\n(a) are dependent on these and\n(b) are not a member of the leaf-modules.")
     public static SubLObject td_modules_properly_dependent_on_modules(final SubLObject leaf_modules, SubLObject dependent_modules) {
         if (dependent_modules == UNPROVIDED) {
             dependent_modules = NIL;
@@ -955,6 +1905,25 @@ public final class translator_utilities extends SubLTranslatedFile {
         return set_difference(td_modules_dependent_on_modules(leaf_modules, dependent_modules), leaf_modules, EQUAL, UNPROVIDED);
     }
 
+    /**
+     * Given a set of modules, identify all the modules that are dependent on these.
+     */
+    @LispMethod(comment = "Given a set of modules, identify all the modules that are dependent on these.")
+    public static final SubLObject td_modules_dependent_on_modules_alt(SubLObject leaf_modules, SubLObject dependent_modules) {
+        if (dependent_modules == UNPROVIDED) {
+            dependent_modules = NIL;
+        }
+        {
+            SubLObject cdolist_list_var = leaf_modules;
+            SubLObject leaf_module = NIL;
+            for (leaf_module = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , leaf_module = cdolist_list_var.first()) {
+                dependent_modules = com.cyc.cycjava.cycl.translator_utilities.td_modules_dependent_on_module(leaf_module, dependent_modules);
+            }
+        }
+        return dependent_modules;
+    }
+
+    @LispMethod(comment = "Given a set of modules, identify all the modules that are dependent on these.")
     public static SubLObject td_modules_dependent_on_modules(final SubLObject leaf_modules, SubLObject dependent_modules) {
         if (dependent_modules == UNPROVIDED) {
             dependent_modules = NIL;
@@ -970,6 +1939,18 @@ public final class translator_utilities extends SubLTranslatedFile {
         return dependent_modules;
     }
 
+    /**
+     * Given a module, return all modules that are dependent on these.
+     */
+    @LispMethod(comment = "Given a module, return all modules that are dependent on these.")
+    public static final SubLObject td_modules_dependent_on_module_alt(SubLObject leaf_module, SubLObject dependent_modules) {
+        if (dependent_modules == UNPROVIDED) {
+            dependent_modules = NIL;
+        }
+        return com.cyc.cycjava.cycl.translator_utilities.td_modules_dependent_on_module_globals(leaf_module, com.cyc.cycjava.cycl.translator_utilities.td_modules_dependent_on_module_methods(leaf_module, dependent_modules));
+    }
+
+    @LispMethod(comment = "Given a module, return all modules that are dependent on these.")
     public static SubLObject td_modules_dependent_on_module(final SubLObject leaf_module, SubLObject dependent_modules) {
         if (dependent_modules == UNPROVIDED) {
             dependent_modules = NIL;
@@ -977,6 +1958,49 @@ public final class translator_utilities extends SubLTranslatedFile {
         return td_modules_dependent_on_module_globals(leaf_module, td_modules_dependent_on_module_methods(leaf_module, dependent_modules));
     }
 
+    /**
+     * Methods includes both functions and macros.
+     */
+    @LispMethod(comment = "Methods includes both functions and macros.")
+    public static final SubLObject td_modules_dependent_on_module_methods_alt(SubLObject leaf_module, SubLObject dependent_modules) {
+        if (dependent_modules == UNPROVIDED) {
+            dependent_modules = NIL;
+        }
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(leaf_module);
+            SubLObject method = NIL;
+            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_3 = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_method(method);
+                    SubLObject client_method = NIL;
+                    for (client_method = cdolist_list_var_3.first(); NIL != cdolist_list_var_3; cdolist_list_var_3 = cdolist_list_var_3.rest() , client_method = cdolist_list_var_3.first()) {
+                        {
+                            SubLObject module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(client_method);
+                            SubLObject item_var = module;
+                            if (NIL == member(item_var, dependent_modules, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                dependent_modules = cons(item_var, dependent_modules);
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var_4 = com.cyc.cycjava.cycl.translator_utilities.td_modules_calling_method(method);
+                    SubLObject module = NIL;
+                    for (module = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , module = cdolist_list_var_4.first()) {
+                        {
+                            SubLObject item_var = module;
+                            if (NIL == member(item_var, dependent_modules, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                dependent_modules = cons(item_var, dependent_modules);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return dependent_modules;
+    }
+
+    @LispMethod(comment = "Methods includes both functions and macros.")
     public static SubLObject td_modules_dependent_on_module_methods(final SubLObject leaf_module, SubLObject dependent_modules) {
         if (dependent_modules == UNPROVIDED) {
             dependent_modules = NIL;
@@ -1011,6 +2035,44 @@ public final class translator_utilities extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             method = cdolist_list_var.first();
         } 
+        return dependent_modules;
+    }
+
+    public static final SubLObject td_modules_dependent_on_module_globals_alt(SubLObject leaf_module, SubLObject dependent_modules) {
+        if (dependent_modules == UNPROVIDED) {
+            dependent_modules = NIL;
+        }
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(leaf_module);
+            SubLObject global = NIL;
+            for (global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , global = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_5 = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_global(global);
+                    SubLObject client_method = NIL;
+                    for (client_method = cdolist_list_var_5.first(); NIL != cdolist_list_var_5; cdolist_list_var_5 = cdolist_list_var_5.rest() , client_method = cdolist_list_var_5.first()) {
+                        {
+                            SubLObject module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(client_method);
+                            SubLObject item_var = module;
+                            if (NIL == member(item_var, dependent_modules, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                dependent_modules = cons(item_var, dependent_modules);
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var_6 = com.cyc.cycjava.cycl.translator_utilities.td_modules_calling_global(global);
+                    SubLObject module = NIL;
+                    for (module = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , module = cdolist_list_var_6.first()) {
+                        {
+                            SubLObject item_var = module;
+                            if (NIL == member(item_var, dependent_modules, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                dependent_modules = cons(item_var, dependent_modules);
+                            }
+                        }
+                    }
+                }
+            }
+        }
         return dependent_modules;
     }
 
@@ -1049,6 +2111,54 @@ public final class translator_utilities extends SubLTranslatedFile {
             global = cdolist_list_var.first();
         } 
         return dependent_modules;
+    }
+
+    public static final SubLObject td_explain_how_module_depends_on_module_alt(SubLObject superior, SubLObject inferior) {
+        {
+            SubLObject v_methods = NIL;
+            SubLObject globals = NIL;
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(superior);
+                SubLObject method = NIL;
+                for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_7 = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_method(method);
+                        SubLObject client_method = NIL;
+                        for (client_method = cdolist_list_var_7.first(); NIL != cdolist_list_var_7; cdolist_list_var_7 = cdolist_list_var_7.rest() , client_method = cdolist_list_var_7.first()) {
+                            if (NIL != Strings.string_equal(inferior, com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(client_method), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                                {
+                                    SubLObject item_var = client_method;
+                                    if (NIL == member(item_var, v_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                        v_methods = cons(item_var, v_methods);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(superior);
+                SubLObject global = NIL;
+                for (global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , global = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_8 = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_global(global);
+                        SubLObject client_method = NIL;
+                        for (client_method = cdolist_list_var_8.first(); NIL != cdolist_list_var_8; cdolist_list_var_8 = cdolist_list_var_8.rest() , client_method = cdolist_list_var_8.first()) {
+                            if (NIL != Strings.string_equal(inferior, com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(client_method), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                                {
+                                    SubLObject item_var = client_method;
+                                    if (NIL == member(item_var, globals, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                        globals = cons(item_var, globals);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return values(v_methods, globals);
+        }
     }
 
     public static SubLObject td_explain_how_module_depends_on_module(final SubLObject superior, final SubLObject inferior) {
@@ -1097,6 +2207,41 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(v_methods, globals);
     }
 
+    public static final SubLObject td_explain_how_module_depends_on_modules_alt(SubLObject superiors, SubLObject inferior) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_methods = NIL;
+                SubLObject all_globals = NIL;
+                SubLObject cdolist_list_var = superiors;
+                SubLObject superior = NIL;
+                for (superior = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , superior = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_methods = com.cyc.cycjava.cycl.translator_utilities.td_explain_how_module_depends_on_module(superior, inferior);
+                        SubLObject globals = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != v_methods) {
+                            if (NIL == all_methods) {
+                                all_methods = v_methods;
+                            } else {
+                                all_methods = union(v_methods, all_methods, UNPROVIDED, UNPROVIDED);
+                            }
+                        }
+                        if (NIL != globals) {
+                            if (NIL == all_globals) {
+                                all_globals = globals;
+                            } else {
+                                all_globals = union(globals, all_globals, UNPROVIDED, UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+                return values(all_methods, all_globals);
+            }
+        }
+    }
+
     public static SubLObject td_explain_how_module_depends_on_modules(final SubLObject superiors, final SubLObject inferior) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject all_methods = NIL;
@@ -1129,6 +2274,51 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(all_methods, all_globals);
     }
 
+    /**
+     * Return the complete set of methods and globals transitively called by CALLING-METHOD.
+     */
+    @LispMethod(comment = "Return the complete set of methods and globals transitively called by CALLING-METHOD.")
+    public static final SubLObject td_method_calls_transitively_alt(SubLObject calling_method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject called_methods = NIL;
+                SubLObject called_globals = NIL;
+                {
+                    SubLObject _prev_bind_0 = $td_methods_called_transitively$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $td_globals_called_transitively$.currentBinding(thread);
+                    try {
+                        $td_methods_called_transitively$.bind(set.new_set(symbol_function(EQ), UNPROVIDED), thread);
+                        $td_globals_called_transitively$.bind(set.new_set(symbol_function(EQ), UNPROVIDED), thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(calling_method);
+                            SubLObject called_method = NIL;
+                            for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                                com.cyc.cycjava.cycl.translator_utilities.td_note_method_called_transitively(called_method);
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(calling_method);
+                            SubLObject called_global = NIL;
+                            for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                                com.cyc.cycjava.cycl.translator_utilities.td_note_global_called_transitively(called_global);
+                            }
+                        }
+                        called_methods = set.set_element_list($td_methods_called_transitively$.getDynamicValue(thread));
+                        called_globals = set.set_element_list($td_globals_called_transitively$.getDynamicValue(thread));
+                    } finally {
+                        $td_globals_called_transitively$.rebind(_prev_bind_1, thread);
+                        $td_methods_called_transitively$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                called_methods = Sort.sort(called_methods, symbol_function(STRING_LESSP), symbol_function(SYMBOL_NAME));
+                called_globals = Sort.sort(called_globals, symbol_function(STRING_LESSP), symbol_function(SYMBOL_NAME));
+                return values(called_methods, called_globals);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return the complete set of methods and globals transitively called by CALLING-METHOD.")
     public static SubLObject td_method_calls_transitively(final SubLObject calling_method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject called_methods = NIL;
@@ -1165,6 +2355,51 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(called_methods, called_globals);
     }
 
+    /**
+     * Return the complete set of methods and globals transitively called by CALLING-GLOBAL.
+     */
+    @LispMethod(comment = "Return the complete set of methods and globals transitively called by CALLING-GLOBAL.")
+    public static final SubLObject td_global_calls_transitively_alt(SubLObject calling_global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject called_methods = NIL;
+                SubLObject called_globals = NIL;
+                {
+                    SubLObject _prev_bind_0 = $td_methods_called_transitively$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $td_globals_called_transitively$.currentBinding(thread);
+                    try {
+                        $td_methods_called_transitively$.bind(set.new_set(symbol_function(EQ), UNPROVIDED), thread);
+                        $td_globals_called_transitively$.bind(set.new_set(symbol_function(EQ), UNPROVIDED), thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(calling_global);
+                            SubLObject called_method = NIL;
+                            for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                                com.cyc.cycjava.cycl.translator_utilities.td_note_method_called_transitively(called_method);
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(calling_global);
+                            SubLObject called_global = NIL;
+                            for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                                com.cyc.cycjava.cycl.translator_utilities.td_note_global_called_transitively(called_global);
+                            }
+                        }
+                        called_methods = set.set_element_list($td_methods_called_transitively$.getDynamicValue(thread));
+                        called_globals = set.set_element_list($td_globals_called_transitively$.getDynamicValue(thread));
+                    } finally {
+                        $td_globals_called_transitively$.rebind(_prev_bind_1, thread);
+                        $td_methods_called_transitively$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                called_methods = Sort.sort(called_methods, symbol_function(STRING_LESSP), symbol_function(SYMBOL_NAME));
+                called_globals = Sort.sort(called_globals, symbol_function(STRING_LESSP), symbol_function(SYMBOL_NAME));
+                return values(called_methods, called_globals);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return the complete set of methods and globals transitively called by CALLING-GLOBAL.")
     public static SubLObject td_global_calls_transitively(final SubLObject calling_global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject called_methods = NIL;
@@ -1201,6 +2436,30 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(called_methods, called_globals);
     }
 
+    public static final SubLObject td_note_method_called_transitively_alt(SubLObject method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == set.set_memberP(method, $td_methods_called_transitively$.getDynamicValue(thread))) {
+                set.set_add(method, $td_methods_called_transitively$.getDynamicValue(thread));
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(method);
+                    SubLObject called_method = NIL;
+                    for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.translator_utilities.td_note_method_called_transitively(called_method);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(method);
+                    SubLObject called_global = NIL;
+                    for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.translator_utilities.td_note_global_called_transitively(called_global);
+                    }
+                }
+            }
+            return method;
+        }
+    }
+
     public static SubLObject td_note_method_called_transitively(final SubLObject method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == set.set_memberP(method, $td_methods_called_transitively$.getDynamicValue(thread))) {
@@ -1223,6 +2482,30 @@ public final class translator_utilities extends SubLTranslatedFile {
             } 
         }
         return method;
+    }
+
+    public static final SubLObject td_note_global_called_transitively_alt(SubLObject global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == set.set_memberP(global, $td_globals_called_transitively$.getDynamicValue(thread))) {
+                set.set_add(global, $td_globals_called_transitively$.getDynamicValue(thread));
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(global);
+                    SubLObject called_method = NIL;
+                    for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.translator_utilities.td_note_method_called_transitively(called_method);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_global(global);
+                    SubLObject called_global = NIL;
+                    for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.translator_utilities.td_note_global_called_transitively(called_global);
+                    }
+                }
+            }
+            return global;
+        }
     }
 
     public static SubLObject td_note_global_called_transitively(final SubLObject global) {
@@ -1249,6 +2532,62 @@ public final class translator_utilities extends SubLTranslatedFile {
         return global;
     }
 
+    /**
+     * Return the complete set of modules transitively referenced by CALLING-METHOD.
+     */
+    @LispMethod(comment = "Return the complete set of modules transitively referenced by CALLING-METHOD.")
+    public static final SubLObject td_method_references_modules_transitively_alt(SubLObject calling_method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject called_methods = com.cyc.cycjava.cycl.translator_utilities.td_method_calls_transitively(calling_method);
+                SubLObject called_globals = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject referenced_modules = NIL;
+                    {
+                        SubLObject cdolist_list_var = called_methods;
+                        SubLObject called_method = NIL;
+                        for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(called_method);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject item_var = referenced_module;
+                                        if (NIL == member(item_var, referenced_modules, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                            referenced_modules = cons(item_var, referenced_modules);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = called_globals;
+                        SubLObject called_global = NIL;
+                        for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(called_global);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject item_var = referenced_module;
+                                        if (NIL == member(item_var, referenced_modules, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                            referenced_modules = cons(item_var, referenced_modules);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    referenced_modules = Sort.sort(referenced_modules, symbol_function(STRING_LESSP), UNPROVIDED);
+                    return referenced_modules;
+                }
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return the complete set of modules transitively referenced by CALLING-METHOD.")
     public static SubLObject td_method_references_modules_transitively(final SubLObject calling_method) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1288,14 +2627,57 @@ public final class translator_utilities extends SubLTranslatedFile {
         return referenced_modules;
     }
 
+    /**
+     * Return the latest modules transitively referenced by CALLING-METHOD.
+     */
+    @LispMethod(comment = "Return the latest modules transitively referenced by CALLING-METHOD.")
+    public static final SubLObject td_method_latest_transitively_referenced_module_alt(SubLObject calling_method) {
+        {
+            SubLObject referenced_modules = com.cyc.cycjava.cycl.translator_utilities.td_method_references_modules_transitively(calling_method);
+            SubLObject latest_module = list_utilities.extremal(referenced_modules, symbol_function(TD_MODULE_LATER), UNPROVIDED);
+            return latest_module;
+        }
+    }
+
+    @LispMethod(comment = "Return the latest modules transitively referenced by CALLING-METHOD.")
     public static SubLObject td_method_latest_transitively_referenced_module(final SubLObject calling_method) {
         final SubLObject referenced_modules = td_method_references_modules_transitively(calling_method);
         final SubLObject latest_module = list_utilities.extremal(referenced_modules, symbol_function(TD_MODULE_LATER), UNPROVIDED);
         return latest_module;
     }
 
+    public static final SubLObject td_method_latest_transitively_referenced_module_memoized_internal_alt(SubLObject referenced_method) {
+        return com.cyc.cycjava.cycl.translator_utilities.td_method_latest_transitively_referenced_module(referenced_method);
+    }
+
     public static SubLObject td_method_latest_transitively_referenced_module_memoized_internal(final SubLObject referenced_method) {
         return td_method_latest_transitively_referenced_module(referenced_method);
+    }
+
+    public static final SubLObject td_method_latest_transitively_referenced_module_memoized_alt(SubLObject referenced_method) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.translator_utilities.td_method_latest_transitively_referenced_module_memoized_internal(referenced_method);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, TD_METHOD_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), TD_METHOD_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, TD_METHOD_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, referenced_method, $kw2$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw2$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.translator_utilities.td_method_latest_transitively_referenced_module_memoized_internal(referenced_method)));
+                        memoization_state.caching_state_put(caching_state, referenced_method, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject td_method_latest_transitively_referenced_module_memoized(final SubLObject referenced_method) {
@@ -1318,6 +2700,47 @@ public final class translator_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    /**
+     * Return an explanation for why LATEST-MODULE is the latest transitively referenced module.
+     * Returns two values : a list of methods, and a list of globals that are referenced.
+     */
+    @LispMethod(comment = "Return an explanation for why LATEST-MODULE is the latest transitively referenced module.\r\nReturns two values : a list of methods, and a list of globals that are referenced.\nReturn an explanation for why LATEST-MODULE is the latest transitively referenced module.\nReturns two values : a list of methods, and a list of globals that are referenced.")
+    public static final SubLObject td_justify_method_latest_transitively_referenced_module_alt(SubLObject calling_method, SubLObject latest_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject called_methods = com.cyc.cycjava.cycl.translator_utilities.td_method_calls_transitively(calling_method);
+                SubLObject called_globals = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject justifying_methods = NIL;
+                    SubLObject justifying_globals = NIL;
+                    {
+                        SubLObject cdolist_list_var = called_methods;
+                        SubLObject called_method = NIL;
+                        for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                            if (latest_module.equal(com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(called_method))) {
+                                justifying_methods = cons(called_method, justifying_methods);
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = called_globals;
+                        SubLObject called_global = NIL;
+                        for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                            if (latest_module.equal(com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(called_global))) {
+                                justifying_globals = cons(called_global, justifying_globals);
+                            }
+                        }
+                    }
+                    return values(nreverse(justifying_methods), nreverse(justifying_globals));
+                }
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return an explanation for why LATEST-MODULE is the latest transitively referenced module.\r\nReturns two values : a list of methods, and a list of globals that are referenced.\nReturn an explanation for why LATEST-MODULE is the latest transitively referenced module.\nReturns two values : a list of methods, and a list of globals that are referenced.")
     public static SubLObject td_justify_method_latest_transitively_referenced_module(final SubLObject calling_method, final SubLObject latest_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1349,6 +2772,63 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(nreverse(justifying_methods), nreverse(justifying_globals));
     }
 
+    /**
+     * Return the shortest call path justifying how CLIENT-METHOD calls SERVER-METHOD.
+     *
+     * @return list of function-symbol-p ; the call path (CLIENT-METHOD ... SERVER-METHOD).
+     */
+    @LispMethod(comment = "Return the shortest call path justifying how CLIENT-METHOD calls SERVER-METHOD.\r\n\r\n@return list of function-symbol-p ; the call path (CLIENT-METHOD ... SERVER-METHOD).")
+    public static final SubLObject td_justify_method_calls_transitively_alt(SubLObject client_method, SubLObject server_method) {
+        {
+            SubLObject seen_table = dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED);
+            SubLObject unvisited_queue = queues.create_queue();
+            SubLObject foundP = NIL;
+            dictionary.dictionary_enter(seen_table, client_method, NIL);
+            queues.enqueue(client_method, unvisited_queue);
+            while (NIL == queues.queue_empty_p(unvisited_queue)) {
+                {
+                    SubLObject method = queues.dequeue(unvisited_queue);
+                    SubLObject called_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(method);
+                    if (NIL == foundP) {
+                        {
+                            SubLObject csome_list_var = called_methods;
+                            SubLObject called_method = NIL;
+                            for (called_method = csome_list_var.first(); !((NIL != foundP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , called_method = csome_list_var.first()) {
+                                if ($UNSEEN == dictionary.dictionary_lookup_without_values(seen_table, called_method, $UNSEEN)) {
+                                    dictionary.dictionary_enter(seen_table, called_method, method);
+                                    foundP = eq(called_method, server_method);
+                                    if (NIL != foundP) {
+                                        queues.clear_queue(unvisited_queue);
+                                    } else {
+                                        queues.enqueue(called_method, unvisited_queue);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } 
+            {
+                SubLObject call_path = NIL;
+                if (NIL != foundP) {
+                    {
+                        SubLObject method = NIL;
+                        for (method = server_method; NIL != method; method = dictionary.dictionary_lookup_without_values(seen_table, method, UNPROVIDED)) {
+                            call_path = cons(method, call_path);
+                        }
+                    }
+                }
+                return values(call_path, dictionary.dictionary_length(seen_table));
+            }
+        }
+    }
+
+    /**
+     * Return the shortest call path justifying how CLIENT-METHOD calls SERVER-METHOD.
+     *
+     * @return list of function-symbol-p ; the call path (CLIENT-METHOD ... SERVER-METHOD).
+     */
+    @LispMethod(comment = "Return the shortest call path justifying how CLIENT-METHOD calls SERVER-METHOD.\r\n\r\n@return list of function-symbol-p ; the call path (CLIENT-METHOD ... SERVER-METHOD).")
     public static SubLObject td_justify_method_calls_transitively(final SubLObject client_method, final SubLObject server_method) {
         final SubLObject seen_table = dictionary.new_dictionary(symbol_function(EQ), UNPROVIDED);
         final SubLObject unvisited_queue = queues.create_queue(UNPROVIDED);
@@ -1387,6 +2867,65 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(call_path, dictionary.dictionary_length(seen_table));
     }
 
+    /**
+     * Return the complete set of modules transitively referenced by CALLING-GLOBAL.
+     */
+    @LispMethod(comment = "Return the complete set of modules transitively referenced by CALLING-GLOBAL.")
+    public static final SubLObject td_global_references_modules_transitively_alt(SubLObject calling_global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject called_methods = com.cyc.cycjava.cycl.translator_utilities.td_global_calls_transitively(calling_global);
+                SubLObject called_globals = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject referenced_modules = NIL;
+                    {
+                        SubLObject cdolist_list_var = called_methods;
+                        SubLObject called_method = NIL;
+                        for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(called_method);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject item_var = referenced_module;
+                                        if (NIL == member(item_var, referenced_modules, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                            referenced_modules = cons(item_var, referenced_modules);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = called_globals;
+                        SubLObject called_global = NIL;
+                        for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(called_global);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject item_var = referenced_module;
+                                        if (NIL == member(item_var, referenced_modules, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                            referenced_modules = cons(item_var, referenced_modules);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    referenced_modules = Sort.sort(referenced_modules, symbol_function(STRING_LESSP), UNPROVIDED);
+                    return referenced_modules;
+                }
+            }
+        }
+    }
+
+    /**
+     * Return the complete set of modules transitively referenced by CALLING-GLOBAL.
+     */
+    @LispMethod(comment = "Return the complete set of modules transitively referenced by CALLING-GLOBAL.")
     public static SubLObject td_global_references_modules_transitively(final SubLObject calling_global) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1426,14 +2965,60 @@ public final class translator_utilities extends SubLTranslatedFile {
         return referenced_modules;
     }
 
+    /**
+     * Return the latest modules transitively referenced by CALLING-GLOBAL.
+     */
+    @LispMethod(comment = "Return the latest modules transitively referenced by CALLING-GLOBAL.")
+    public static final SubLObject td_global_latest_transitively_referenced_module_alt(SubLObject calling_global) {
+        {
+            SubLObject referenced_modules = com.cyc.cycjava.cycl.translator_utilities.td_global_references_modules_transitively(calling_global);
+            SubLObject latest_module = list_utilities.extremal(referenced_modules, symbol_function(TD_MODULE_LATER), UNPROVIDED);
+            return latest_module;
+        }
+    }
+
+    @LispMethod(comment = "Return the latest modules transitively referenced by CALLING-GLOBAL.")
     public static SubLObject td_global_latest_transitively_referenced_module(final SubLObject calling_global) {
         final SubLObject referenced_modules = td_global_references_modules_transitively(calling_global);
         final SubLObject latest_module = list_utilities.extremal(referenced_modules, symbol_function(TD_MODULE_LATER), UNPROVIDED);
         return latest_module;
+    }/**
+     * Return the latest modules transitively referenced by CALLING-GLOBAL.
+     */
+
+
+    public static final SubLObject td_global_latest_transitively_referenced_module_memoized_internal_alt(SubLObject referenced_global) {
+        return com.cyc.cycjava.cycl.translator_utilities.td_global_latest_transitively_referenced_module(referenced_global);
     }
 
     public static SubLObject td_global_latest_transitively_referenced_module_memoized_internal(final SubLObject referenced_global) {
         return td_global_latest_transitively_referenced_module(referenced_global);
+    }
+
+    public static final SubLObject td_global_latest_transitively_referenced_module_memoized_alt(SubLObject referenced_global) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.translator_utilities.td_global_latest_transitively_referenced_module_memoized_internal(referenced_global);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, TD_GLOBAL_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), TD_GLOBAL_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, TD_GLOBAL_LATEST_TRANSITIVELY_REFERENCED_MODULE_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, referenced_global, $kw2$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw2$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.translator_utilities.td_global_latest_transitively_referenced_module_memoized_internal(referenced_global)));
+                        memoization_state.caching_state_put(caching_state, referenced_global, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject td_global_latest_transitively_referenced_module_memoized(final SubLObject referenced_global) {
@@ -1456,6 +3041,47 @@ public final class translator_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    /**
+     * Return an explanation for why LATEST-MODULE is the latest transitively referenced module.
+     * Returns two values : a list of methods, and a list of globals that are referenced.
+     */
+    @LispMethod(comment = "Return an explanation for why LATEST-MODULE is the latest transitively referenced module.\r\nReturns two values : a list of methods, and a list of globals that are referenced.\nReturn an explanation for why LATEST-MODULE is the latest transitively referenced module.\nReturns two values : a list of methods, and a list of globals that are referenced.")
+    public static final SubLObject td_justify_global_latest_transitively_referenced_module_alt(SubLObject calling_global, SubLObject latest_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject called_methods = com.cyc.cycjava.cycl.translator_utilities.td_global_calls_transitively(calling_global);
+                SubLObject called_globals = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject justifying_methods = NIL;
+                    SubLObject justifying_globals = NIL;
+                    {
+                        SubLObject cdolist_list_var = called_methods;
+                        SubLObject called_method = NIL;
+                        for (called_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_method = cdolist_list_var.first()) {
+                            if (latest_module.equal(com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(called_method))) {
+                                justifying_methods = cons(called_method, justifying_methods);
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = called_globals;
+                        SubLObject called_global = NIL;
+                        for (called_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , called_global = cdolist_list_var.first()) {
+                            if (latest_module.equal(com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(called_global))) {
+                                justifying_globals = cons(called_global, justifying_globals);
+                            }
+                        }
+                    }
+                    return values(nreverse(justifying_methods), nreverse(justifying_globals));
+                }
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return an explanation for why LATEST-MODULE is the latest transitively referenced module.\r\nReturns two values : a list of methods, and a list of globals that are referenced.\nReturn an explanation for why LATEST-MODULE is the latest transitively referenced module.\nReturns two values : a list of methods, and a list of globals that are referenced.")
     public static SubLObject td_justify_global_latest_transitively_referenced_module(final SubLObject calling_global, final SubLObject latest_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1485,8 +3111,53 @@ public final class translator_utilities extends SubLTranslatedFile {
             called_global = cdolist_list_var.first();
         } 
         return values(nreverse(justifying_methods), nreverse(justifying_globals));
+    }/**
+     * Return an explanation for why LATEST-MODULE is the latest transitively referenced module.
+     * Returns two values : a list of methods, and a list of globals that are referenced.
+     */
+
+
+    /**
+     * Determine if it is incongruent for DEFINED-FEATURES to reference REFERENCED-FEATURES.
+     * Return a feature expression which would have problems, thus explaining the incongruence.
+     * Return NIL if they are not incongruent.
+     */
+    @LispMethod(comment = "Determine if it is incongruent for DEFINED-FEATURES to reference REFERENCED-FEATURES.\r\nReturn a feature expression which would have problems, thus explaining the incongruence.\r\nReturn NIL if they are not incongruent.\nDetermine if it is incongruent for DEFINED-FEATURES to reference REFERENCED-FEATURES.\nReturn a feature expression which would have problems, thus explaining the incongruence.\nReturn NIL if they are not incongruent.")
+    public static final SubLObject incongruent_features_alt(SubLObject defined_features, SubLObject referenced_features) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject defined_prop_sentence = com.cyc.cycjava.cycl.translator_utilities.feature_expression_transform(defined_features);
+                SubLObject referenced_prop_sentence = com.cyc.cycjava.cycl.translator_utilities.feature_expression_transform(referenced_features);
+                SubLObject implication = list($OR, list($NOT, defined_prop_sentence), referenced_prop_sentence);
+                SubLObject incongruence_explanation = NIL;
+                {
+                    SubLObject _prev_bind_0 = prop_sentence_clausifier.$prop_sentence_and$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = prop_sentence_clausifier.$prop_sentence_or$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = prop_sentence_clausifier.$prop_sentence_not$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = prop_sentence_clausifier.$prop_sentence_true$.currentBinding(thread);
+                    SubLObject _prev_bind_4 = prop_sentence_clausifier.$prop_sentence_false$.currentBinding(thread);
+                    try {
+                        prop_sentence_clausifier.$prop_sentence_and$.bind($AND, thread);
+                        prop_sentence_clausifier.$prop_sentence_or$.bind($OR, thread);
+                        prop_sentence_clausifier.$prop_sentence_not$.bind($NOT, thread);
+                        prop_sentence_clausifier.$prop_sentence_true$.bind(T, thread);
+                        prop_sentence_clausifier.$prop_sentence_false$.bind(NIL, thread);
+                        incongruence_explanation = prop_sentence_clausifier.prop_sentence_simplify(prop_sentence_clausifier.prop_sentence_to_dnf(prop_sentence_clausifier.prop_sentence_negate(prop_sentence_clausifier.prop_sentence_simplify(prop_sentence_clausifier.prop_sentence_to_cnf(implication)))));
+                    } finally {
+                        prop_sentence_clausifier.$prop_sentence_false$.rebind(_prev_bind_4, thread);
+                        prop_sentence_clausifier.$prop_sentence_true$.rebind(_prev_bind_3, thread);
+                        prop_sentence_clausifier.$prop_sentence_not$.rebind(_prev_bind_2, thread);
+                        prop_sentence_clausifier.$prop_sentence_or$.rebind(_prev_bind_1, thread);
+                        prop_sentence_clausifier.$prop_sentence_and$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return incongruence_explanation;
+            }
+        }
     }
 
+    @LispMethod(comment = "Determine if it is incongruent for DEFINED-FEATURES to reference REFERENCED-FEATURES.\r\nReturn a feature expression which would have problems, thus explaining the incongruence.\r\nReturn NIL if they are not incongruent.\nDetermine if it is incongruent for DEFINED-FEATURES to reference REFERENCED-FEATURES.\nReturn a feature expression which would have problems, thus explaining the incongruence.\nReturn NIL if they are not incongruent.")
     public static SubLObject incongruent_features(final SubLObject defined_features, final SubLObject referenced_features) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject defined_prop_sentence = feature_expression_transform(defined_features);
@@ -1513,20 +3184,144 @@ public final class translator_utilities extends SubLTranslatedFile {
             prop_sentence_clausifier.$prop_sentence_and$.rebind(_prev_bind_0, thread);
         }
         return incongruence_explanation;
+    }/**
+     * Determine if it is incongruent for DEFINED-FEATURES to reference REFERENCED-FEATURES.
+     * Return a feature expression which would have problems, thus explaining the incongruence.
+     * Return NIL if they are not incongruent.
+     */
+
+
+    public static final SubLObject feature_expression_transform_alt(SubLObject v_object) {
+        return transform_list_utilities.transform(v_object, symbol_function(NON_FEATURE_SYMBOL_P), symbol_function(TRANSFORM_NON_FEATURE_SYMBOL), UNPROVIDED);
     }
 
     public static SubLObject feature_expression_transform(final SubLObject v_object) {
         return transform_list_utilities.transform(v_object, symbol_function(NON_FEATURE_SYMBOL_P), symbol_function(TRANSFORM_NON_FEATURE_SYMBOL), UNPROVIDED);
     }
 
+    public static final SubLObject non_feature_symbol_p_alt(SubLObject v_object) {
+        return makeBoolean(((v_object.isSymbol() && (!v_object.isKeyword())) && (v_object != T)) && (v_object != NIL));
+    }
+
     public static SubLObject non_feature_symbol_p(final SubLObject v_object) {
         return makeBoolean(((v_object.isSymbol() && (!v_object.isKeyword())) && (v_object != T)) && (v_object != NIL));
+    }
+
+    public static final SubLObject transform_non_feature_symbol_alt(SubLObject symbol) {
+        return make_keyword(symbol_name(symbol));
     }
 
     public static SubLObject transform_non_feature_symbol(final SubLObject symbol) {
         return make_keyword(symbol_name(symbol));
     }
 
+    /**
+     * Analyze the definitions in all modules and return a list of all the potential module-level feature problems.
+     *
+     * @return a list of objects suitable for show-feature-reference-incongruences
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all the potential module-level feature problems.\r\n\r\n@return a list of objects suitable for show-feature-reference-incongruences")
+    public static final SubLObject all_module_level_feature_problems_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_feature_problems = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject list_var = v_modules;
+                                    $progress_note$.setDynamicValue($str_alt24$Identifying_module_level_feature_, thread);
+                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                                    $progress_total$.setDynamicValue(length(list_var), thread);
+                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                                    {
+                                        SubLObject _prev_bind_0_9 = $last_percent_progress_index$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                        try {
+                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                            $within_noting_percent_progress$.bind(T, thread);
+                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                            {
+                                                SubLObject csome_list_var = list_var;
+                                                SubLObject module = NIL;
+                                                for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                                    {
+                                                        SubLObject feature_problems = com.cyc.cycjava.cycl.translator_utilities.module_level_feature_problems(module);
+                                                        SubLObject cdolist_list_var = feature_problems;
+                                                        SubLObject feature_problem = NIL;
+                                                        for (feature_problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , feature_problem = cdolist_list_var.first()) {
+                                                            all_feature_problems = cons(feature_problem, all_feature_problems);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            noting_percent_progress_postamble();
+                                        } finally {
+                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                            $last_percent_progress_index$.rebind(_prev_bind_0_9, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_10 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_10, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_feature_problems);
+            }
+        }
+    }
+
+    /**
+     * Analyze the definitions in all modules and return a list of all the potential module-level feature problems.
+     *
+     * @return a list of objects suitable for show-feature-reference-incongruences
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all the potential module-level feature problems.\r\n\r\n@return a list of objects suitable for show-feature-reference-incongruences")
     public static SubLObject all_module_level_feature_problems(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -1616,6 +3411,152 @@ public final class translator_utilities extends SubLTranslatedFile {
         return nreverse(all_feature_problems);
     }
 
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of all the potential module-level feature problems.
+     *
+     * @return a list of objects suitable for show-feature-reference-incongruences
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of all the potential module-level feature problems.\r\n\r\n@return a list of objects suitable for show-feature-reference-incongruences")
+    public static final SubLObject module_level_feature_problems_alt(SubLObject defined_module) {
+        {
+            SubLObject defined_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(defined_module);
+            SubLObject feature_problems = NIL;
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                SubLObject defined_method = NIL;
+                for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(defined_method);
+                        SubLObject cdolist_list_var_11 = referenced_methods;
+                        SubLObject referenced_method = NIL;
+                        for (referenced_method = cdolist_list_var_11.first(); NIL != cdolist_list_var_11; cdolist_list_var_11 = cdolist_list_var_11.rest() , referenced_method = cdolist_list_var_11.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject referenced_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(referenced_module);
+                                        SubLObject incongruence = com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence(defined_features, referenced_features);
+                                        if (NIL != incongruence) {
+                                            feature_problems = cons(list(list($METHOD, defined_method, defined_module, defined_features), list($METHOD, referenced_method, referenced_module, referenced_features), incongruence), feature_problems);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(defined_method);
+                        SubLObject cdolist_list_var_12 = referenced_globals;
+                        SubLObject referenced_global = NIL;
+                        for (referenced_global = cdolist_list_var_12.first(); NIL != cdolist_list_var_12; cdolist_list_var_12 = cdolist_list_var_12.rest() , referenced_global = cdolist_list_var_12.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject referenced_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(referenced_module);
+                                        SubLObject incongruence = com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence(defined_features, referenced_features);
+                                        if (NIL != incongruence) {
+                                            feature_problems = cons(list(list($METHOD, defined_method, defined_module, defined_features), list($GLOBAL, referenced_global, referenced_module, referenced_features), incongruence), feature_problems);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                SubLObject defined_global = NIL;
+                for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(defined_global);
+                        SubLObject cdolist_list_var_13 = referenced_methods;
+                        SubLObject referenced_method = NIL;
+                        for (referenced_method = cdolist_list_var_13.first(); NIL != cdolist_list_var_13; cdolist_list_var_13 = cdolist_list_var_13.rest() , referenced_method = cdolist_list_var_13.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject referenced_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(referenced_module);
+                                        SubLObject incongruence = com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence(defined_features, referenced_features);
+                                        if (NIL != incongruence) {
+                                            feature_problems = cons(list(list($GLOBAL, defined_global, defined_module, defined_features), list($METHOD, referenced_method, referenced_module, referenced_features), incongruence), feature_problems);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_global(defined_global);
+                        SubLObject cdolist_list_var_14 = referenced_globals;
+                        SubLObject referenced_global = NIL;
+                        for (referenced_global = cdolist_list_var_14.first(); NIL != cdolist_list_var_14; cdolist_list_var_14 = cdolist_list_var_14.rest() , referenced_global = cdolist_list_var_14.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject referenced_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(referenced_module);
+                                        SubLObject incongruence = com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence(defined_features, referenced_features);
+                                        if (NIL != incongruence) {
+                                            feature_problems = cons(list(list($GLOBAL, defined_global, defined_module, defined_features), list($GLOBAL, referenced_global, referenced_module, referenced_features), incongruence), feature_problems);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_module(defined_module);
+                SubLObject cdolist_list_var = referenced_methods;
+                SubLObject referenced_method = NIL;
+                for (referenced_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_method = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                        if (NIL != referenced_module) {
+                            {
+                                SubLObject referenced_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(referenced_module);
+                                SubLObject incongruence = com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence(defined_features, referenced_features);
+                                if (NIL != incongruence) {
+                                    feature_problems = cons(list(list($MODULE, defined_module, defined_features), list($METHOD, referenced_method, referenced_module, referenced_features), incongruence), feature_problems);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_module(defined_module);
+                SubLObject cdolist_list_var = referenced_globals;
+                SubLObject referenced_global = NIL;
+                for (referenced_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_global = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                        if (NIL != referenced_module) {
+                            {
+                                SubLObject referenced_features = com.cyc.cycjava.cycl.translator_utilities.td_module_features(referenced_module);
+                                SubLObject incongruence = com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence(defined_features, referenced_features);
+                                if (NIL != incongruence) {
+                                    feature_problems = cons(list(list($MODULE, defined_module, defined_features), list($GLOBAL, referenced_global, referenced_module, referenced_features), incongruence), feature_problems);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(feature_problems);
+        }
+    }
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of all the potential module-level feature problems.
+     *
+     * @return a list of objects suitable for show-feature-reference-incongruences
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of all the potential module-level feature problems.\r\n\r\n@return a list of objects suitable for show-feature-reference-incongruences")
     public static SubLObject module_level_feature_problems(final SubLObject defined_module) {
         final SubLObject defined_features = td_module_features(defined_module);
         SubLObject feature_problems = NIL;
@@ -1731,8 +3672,57 @@ public final class translator_utilities extends SubLTranslatedFile {
         return nreverse(feature_problems);
     }
 
+    public static final SubLObject potential_module_level_feature_incongruence_internal_alt(SubLObject defined_features, SubLObject referenced_features) {
+        return com.cyc.cycjava.cycl.translator_utilities.incongruent_features(defined_features, referenced_features);
+    }
+
     public static SubLObject potential_module_level_feature_incongruence_internal(final SubLObject defined_features, final SubLObject referenced_features) {
         return incongruent_features(defined_features, referenced_features);
+    }
+
+    public static final SubLObject potential_module_level_feature_incongruence_alt(SubLObject defined_features, SubLObject referenced_features) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence_internal(defined_features, referenced_features);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, POTENTIAL_MODULE_LEVEL_FEATURE_INCONGRUENCE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), POTENTIAL_MODULE_LEVEL_FEATURE_INCONGRUENCE, TWO_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, POTENTIAL_MODULE_LEVEL_FEATURE_INCONGRUENCE, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(defined_features, referenced_features);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw2$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (defined_features.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && referenced_features.equal(cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.translator_utilities.potential_module_level_feature_incongruence_internal(defined_features, referenced_features)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(defined_features, referenced_features));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject potential_module_level_feature_incongruence(final SubLObject defined_features, final SubLObject referenced_features) {
@@ -1771,6 +3761,30 @@ public final class translator_utilities extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     * Show a list of feature problems described in FEATURE-PROBLEM-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of feature problems described in FEATURE-PROBLEM-SPECS to STREAM.")
+    public static final SubLObject show_feature_problems_alt(SubLObject feature_problem_specs, SubLObject stream) {
+        if (feature_problem_specs == UNPROVIDED) {
+            feature_problem_specs = com.cyc.cycjava.cycl.translator_utilities.all_module_level_feature_problems(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = feature_problem_specs;
+            SubLObject feature_problem_spec = NIL;
+            for (feature_problem_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , feature_problem_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_feature_problem(feature_problem_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
+    }
+
+    @LispMethod(comment = "Show a list of feature problems described in FEATURE-PROBLEM-SPECS to STREAM.")
     public static SubLObject show_feature_problems(SubLObject feature_problem_specs, SubLObject stream) {
         if (feature_problem_specs == UNPROVIDED) {
             feature_problem_specs = all_module_level_feature_problems(UNPROVIDED);
@@ -1789,6 +3803,187 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of feature problems described in FEATURE-PROBLEM-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_feature_problem_alt(SubLObject feature_problem_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = feature_problem_spec;
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt29);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject def_type = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt29);
+                    def_type = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject def_args = current;
+                        current = temp;
+                        destructuring_bind_must_consp(current, datum, $list_alt29);
+                        {
+                            SubLObject temp_15 = current.rest();
+                            current = current.first();
+                            {
+                                SubLObject ref_type = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt29);
+                                ref_type = current.first();
+                                current = current.rest();
+                                {
+                                    SubLObject ref_args = current;
+                                    current = temp_15;
+                                    {
+                                        SubLObject incongruence = NIL;
+                                        destructuring_bind_must_consp(current, datum, $list_alt29);
+                                        incongruence = current.first();
+                                        current = current.rest();
+                                        if (NIL == current) {
+                                            {
+                                                SubLObject pcase_var = def_type;
+                                                if (pcase_var.eql($MODULE)) {
+                                                    {
+                                                        SubLObject datum_16 = def_args;
+                                                        SubLObject current_17 = datum_16;
+                                                        SubLObject module = NIL;
+                                                        SubLObject def_features = NIL;
+                                                        destructuring_bind_must_consp(current_17, datum_16, $list_alt30);
+                                                        module = current_17.first();
+                                                        current_17 = current_17.rest();
+                                                        destructuring_bind_must_consp(current_17, datum_16, $list_alt30);
+                                                        def_features = current_17.first();
+                                                        current_17 = current_17.rest();
+                                                        if (NIL == current_17) {
+                                                            format(stream, $str_alt31$__Top_level_form_in__A__, module);
+                                                            com.cyc.cycjava.cycl.translator_utilities.show_one_feature_assumption(def_features, stream);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_16, $list_alt30);
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (pcase_var.eql($METHOD)) {
+                                                        {
+                                                            SubLObject datum_18 = def_args;
+                                                            SubLObject current_19 = datum_18;
+                                                            SubLObject def_object = NIL;
+                                                            SubLObject module = NIL;
+                                                            SubLObject def_features = NIL;
+                                                            destructuring_bind_must_consp(current_19, datum_18, $list_alt32);
+                                                            def_object = current_19.first();
+                                                            current_19 = current_19.rest();
+                                                            destructuring_bind_must_consp(current_19, datum_18, $list_alt32);
+                                                            module = current_19.first();
+                                                            current_19 = current_19.rest();
+                                                            destructuring_bind_must_consp(current_19, datum_18, $list_alt32);
+                                                            def_features = current_19.first();
+                                                            current_19 = current_19.rest();
+                                                            if (NIL == current_19) {
+                                                                format(stream, $str_alt33$__Method__A_in__A__, def_object, module);
+                                                                com.cyc.cycjava.cycl.translator_utilities.show_one_feature_assumption(def_features, stream);
+                                                            } else {
+                                                                cdestructuring_bind_error(datum_18, $list_alt32);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if (pcase_var.eql($GLOBAL)) {
+                                                            {
+                                                                SubLObject datum_20 = def_args;
+                                                                SubLObject current_21 = datum_20;
+                                                                SubLObject def_object = NIL;
+                                                                SubLObject module = NIL;
+                                                                SubLObject def_features = NIL;
+                                                                destructuring_bind_must_consp(current_21, datum_20, $list_alt32);
+                                                                def_object = current_21.first();
+                                                                current_21 = current_21.rest();
+                                                                destructuring_bind_must_consp(current_21, datum_20, $list_alt32);
+                                                                module = current_21.first();
+                                                                current_21 = current_21.rest();
+                                                                destructuring_bind_must_consp(current_21, datum_20, $list_alt32);
+                                                                def_features = current_21.first();
+                                                                current_21 = current_21.rest();
+                                                                if (NIL == current_21) {
+                                                                    format(stream, $str_alt34$__Global__A_in__A__, def_object, module);
+                                                                    com.cyc.cycjava.cycl.translator_utilities.show_one_feature_assumption(def_features, stream);
+                                                                } else {
+                                                                    cdestructuring_bind_error(datum_20, $list_alt32);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            format(stream, $str_alt35$_references);
+                                            {
+                                                SubLObject pcase_var = ref_type;
+                                                if (pcase_var.eql($METHOD)) {
+                                                    {
+                                                        SubLObject datum_22 = ref_args;
+                                                        SubLObject current_23 = datum_22;
+                                                        SubLObject ref_object = NIL;
+                                                        SubLObject module = NIL;
+                                                        SubLObject ref_features = NIL;
+                                                        destructuring_bind_must_consp(current_23, datum_22, $list_alt36);
+                                                        ref_object = current_23.first();
+                                                        current_23 = current_23.rest();
+                                                        destructuring_bind_must_consp(current_23, datum_22, $list_alt36);
+                                                        module = current_23.first();
+                                                        current_23 = current_23.rest();
+                                                        destructuring_bind_must_consp(current_23, datum_22, $list_alt36);
+                                                        ref_features = current_23.first();
+                                                        current_23 = current_23.rest();
+                                                        if (NIL == current_23) {
+                                                            format(stream, $str_alt37$__method__A_from__A__, ref_object, module);
+                                                            com.cyc.cycjava.cycl.translator_utilities.show_one_feature_assumption(ref_features, stream);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_22, $list_alt36);
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (pcase_var.eql($GLOBAL)) {
+                                                        {
+                                                            SubLObject datum_24 = ref_args;
+                                                            SubLObject current_25 = datum_24;
+                                                            SubLObject ref_object = NIL;
+                                                            SubLObject module = NIL;
+                                                            SubLObject ref_features = NIL;
+                                                            destructuring_bind_must_consp(current_25, datum_24, $list_alt36);
+                                                            ref_object = current_25.first();
+                                                            current_25 = current_25.rest();
+                                                            destructuring_bind_must_consp(current_25, datum_24, $list_alt36);
+                                                            module = current_25.first();
+                                                            current_25 = current_25.rest();
+                                                            destructuring_bind_must_consp(current_25, datum_24, $list_alt36);
+                                                            ref_features = current_25.first();
+                                                            current_25 = current_25.rest();
+                                                            if (NIL == current_25) {
+                                                                format(stream, $str_alt38$__global__A_from__A__, ref_object, module);
+                                                                com.cyc.cycjava.cycl.translator_utilities.show_one_feature_assumption(ref_features, stream);
+                                                            } else {
+                                                                cdestructuring_bind_error(datum_24, $list_alt36);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            format(stream, $str_alt39$__which_will_have_problems_when__, com.cyc.cycjava.cycl.translator_utilities.feature_explanation(incongruence));
+                                        } else {
+                                            cdestructuring_bind_error(datum, $list_alt29);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return feature_problem_spec;
     }
 
     public static SubLObject show_one_feature_problem(final SubLObject feature_problem_spec, SubLObject stream) {
@@ -1937,14 +4132,90 @@ public final class translator_utilities extends SubLTranslatedFile {
         return feature_problem_spec;
     }
 
+    public static final SubLObject show_one_feature_assumption_alt(SubLObject feature_expression, SubLObject stream) {
+        return format(stream, $str_alt40$assuming__A, com.cyc.cycjava.cycl.translator_utilities.feature_explanation(feature_expression));
+    }
+
     public static SubLObject show_one_feature_assumption(final SubLObject feature_expression, final SubLObject stream) {
         return format(stream, $str38$assuming__A, feature_explanation(feature_expression));
     }
 
-    public static SubLObject feature_explanation(final SubLObject feature_expression) {
-        return T == feature_expression ? $$$no_features : feature_expression;
+    /**
+     * Return a phrase to explain feature-expression.
+     */
+    @LispMethod(comment = "Return a phrase to explain feature-expression.")
+    public static final SubLObject feature_explanation_alt(SubLObject feature_expression) {
+        return T == feature_expression ? ((SubLObject) ($$$no_features)) : feature_expression;
     }
 
+    @LispMethod(comment = "Return a phrase to explain feature-expression.")
+    public static SubLObject feature_explanation(final SubLObject feature_expression) {
+        return T == feature_expression ? $$$no_features : feature_expression;
+    }/**
+     * Return a phrase to explain feature-expression.
+     */
+
+
+    /**
+     * Analyze the definitions in all modules and return a list of all privacy-violations.
+     *
+     * @return a list of objects suitable for show-privacy-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all privacy-violations.\r\n\r\n@return a list of objects suitable for show-privacy-violations.")
+    public static final SubLObject all_privacy_violations_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_privacy_violations = NIL;
+                SubLObject list_var = v_modules;
+                $progress_note$.setDynamicValue($$$Identifying_privacy_violations, thread);
+                $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                $progress_total$.setDynamicValue(length(list_var), thread);
+                $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                        {
+                            SubLObject csome_list_var = list_var;
+                            SubLObject module = NIL;
+                            for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                {
+                                    SubLObject privacy_violations = com.cyc.cycjava.cycl.translator_utilities.module_privacy_violations(module);
+                                    SubLObject cdolist_list_var = privacy_violations;
+                                    SubLObject privacy_violation = NIL;
+                                    for (privacy_violation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , privacy_violation = cdolist_list_var.first()) {
+                                        all_privacy_violations = cons(privacy_violation, all_privacy_violations);
+                                    }
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_privacy_violations);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all privacy-violations.\r\n\r\n@return a list of objects suitable for show-privacy-violations.")
     public static SubLObject all_privacy_violations(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -2011,8 +4282,141 @@ public final class translator_utilities extends SubLTranslatedFile {
             $progress_note$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_privacy_violations);
+    }/**
+     * Analyze the definitions in all modules and return a list of all privacy-violations.
+     *
+     * @return a list of objects suitable for show-privacy-violations.
+     */
+
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its privacy violations.
+     *
+     * @return a list of objects suitable for show-privacy-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its privacy violations.\r\n\r\n@return a list of objects suitable for show-privacy-violations.")
+    public static final SubLObject module_privacy_violations_alt(SubLObject defined_module) {
+        {
+            SubLObject privacy_violations = NIL;
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                SubLObject defined_method = NIL;
+                for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(defined_method);
+                        SubLObject cdolist_list_var_26 = referenced_methods;
+                        SubLObject referenced_method = NIL;
+                        for (referenced_method = cdolist_list_var_26.first(); NIL != cdolist_list_var_26; cdolist_list_var_26 = cdolist_list_var_26.rest() , referenced_method = cdolist_list_var_26.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                if (NIL != referenced_module) {
+                                    if (!defined_module.equal(referenced_module)) {
+                                        if (NIL != form_translation.private_method_p(referenced_method)) {
+                                            privacy_violations = cons(list(list($METHOD, defined_method, defined_module), list($METHOD, referenced_method, referenced_module)), privacy_violations);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(defined_method);
+                        SubLObject cdolist_list_var_27 = referenced_globals;
+                        SubLObject referenced_global = NIL;
+                        for (referenced_global = cdolist_list_var_27.first(); NIL != cdolist_list_var_27; cdolist_list_var_27 = cdolist_list_var_27.rest() , referenced_global = cdolist_list_var_27.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                if (NIL != referenced_module) {
+                                    if (!defined_module.equal(referenced_module)) {
+                                        if (NIL != form_translation.private_global_p(referenced_global)) {
+                                            privacy_violations = cons(list(list($METHOD, defined_method, defined_module), list($GLOBAL, referenced_global, referenced_module)), privacy_violations);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                SubLObject defined_global = NIL;
+                for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(defined_global);
+                        SubLObject cdolist_list_var_28 = referenced_methods;
+                        SubLObject referenced_method = NIL;
+                        for (referenced_method = cdolist_list_var_28.first(); NIL != cdolist_list_var_28; cdolist_list_var_28 = cdolist_list_var_28.rest() , referenced_method = cdolist_list_var_28.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                if (NIL != referenced_module) {
+                                    if (!defined_module.equal(referenced_module)) {
+                                        if (NIL != form_translation.private_method_p(referenced_method)) {
+                                            privacy_violations = cons(list(list($GLOBAL, defined_global, defined_module), list($METHOD, referenced_method, referenced_module)), privacy_violations);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_global(defined_global);
+                        SubLObject cdolist_list_var_29 = referenced_globals;
+                        SubLObject referenced_global = NIL;
+                        for (referenced_global = cdolist_list_var_29.first(); NIL != cdolist_list_var_29; cdolist_list_var_29 = cdolist_list_var_29.rest() , referenced_global = cdolist_list_var_29.first()) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                if (NIL != referenced_module) {
+                                    if (!defined_module.equal(referenced_module)) {
+                                        if (NIL != form_translation.private_global_p(referenced_global)) {
+                                            privacy_violations = cons(list(list($GLOBAL, defined_global, defined_module), list($GLOBAL, referenced_global, referenced_module)), privacy_violations);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_module(defined_module);
+                SubLObject cdolist_list_var = referenced_methods;
+                SubLObject referenced_method = NIL;
+                for (referenced_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_method = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                        if (NIL != referenced_module) {
+                            if (!defined_module.equal(referenced_module)) {
+                                if (NIL != form_translation.private_method_p(referenced_method)) {
+                                    privacy_violations = cons(list(list($MODULE, defined_module), list($METHOD, referenced_method, referenced_module)), privacy_violations);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_module(defined_module);
+                SubLObject cdolist_list_var = referenced_globals;
+                SubLObject referenced_global = NIL;
+                for (referenced_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_global = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                        if (NIL != referenced_module) {
+                            if (!defined_module.equal(referenced_module)) {
+                                if (NIL != form_translation.private_global_p(referenced_global)) {
+                                    privacy_violations = cons(list(list($MODULE, defined_module), list($GLOBAL, referenced_global, referenced_module)), privacy_violations);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(privacy_violations);
+        }
     }
 
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its privacy violations.\r\n\r\n@return a list of objects suitable for show-privacy-violations.")
     public static SubLObject module_privacy_violations(final SubLObject defined_module) {
         SubLObject privacy_violations = NIL;
         SubLObject cdolist_list_var = td_methods_defined_by_module(defined_module);
@@ -2101,8 +4505,37 @@ public final class translator_utilities extends SubLTranslatedFile {
             referenced_global2 = cdolist_list_var2.first();
         } 
         return nreverse(privacy_violations);
+    }/**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its privacy violations.
+     *
+     * @return a list of objects suitable for show-privacy-violations.
+     */
+
+
+    /**
+     * Show a list of privacy violations described in VIOLATION-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of privacy violations described in VIOLATION-SPECS to STREAM.")
+    public static final SubLObject show_privacy_violations_alt(SubLObject violation_specs, SubLObject stream) {
+        if (violation_specs == UNPROVIDED) {
+            violation_specs = com.cyc.cycjava.cycl.translator_utilities.all_privacy_violations(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = violation_specs;
+            SubLObject violation_spec = NIL;
+            for (violation_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , violation_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_privacy_violation(violation_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of privacy violations described in VIOLATION-SPECS to STREAM.")
     public static SubLObject show_privacy_violations(SubLObject violation_specs, SubLObject stream) {
         if (violation_specs == UNPROVIDED) {
             violation_specs = all_privacy_violations(UNPROVIDED);
@@ -2121,6 +4554,155 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of privacy violations described in VIOLATION-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_privacy_violation_alt(SubLObject violation_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = violation_spec;
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt43);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject def_type = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt43);
+                    def_type = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject def_args = current;
+                        current = temp;
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        {
+                            SubLObject temp_30 = current.rest();
+                            current = current.first();
+                            {
+                                SubLObject ref_type = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt43);
+                                ref_type = current.first();
+                                current = current.rest();
+                                {
+                                    SubLObject ref_args = current;
+                                    current = temp_30;
+                                    if (NIL == current) {
+                                        {
+                                            SubLObject pcase_var = def_type;
+                                            if (pcase_var.eql($MODULE)) {
+                                                {
+                                                    SubLObject datum_31 = def_args;
+                                                    SubLObject current_32 = datum_31;
+                                                    SubLObject module = NIL;
+                                                    destructuring_bind_must_consp(current_32, datum_31, $list_alt44);
+                                                    module = current_32.first();
+                                                    current_32 = current_32.rest();
+                                                    if (NIL == current_32) {
+                                                        format(stream, $str_alt31$__Top_level_form_in__A__, module);
+                                                    } else {
+                                                        cdestructuring_bind_error(datum_31, $list_alt44);
+                                                    }
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($METHOD)) {
+                                                    {
+                                                        SubLObject datum_33 = def_args;
+                                                        SubLObject current_34 = datum_33;
+                                                        SubLObject def_object = NIL;
+                                                        SubLObject module = NIL;
+                                                        destructuring_bind_must_consp(current_34, datum_33, $list_alt45);
+                                                        def_object = current_34.first();
+                                                        current_34 = current_34.rest();
+                                                        destructuring_bind_must_consp(current_34, datum_33, $list_alt45);
+                                                        module = current_34.first();
+                                                        current_34 = current_34.rest();
+                                                        if (NIL == current_34) {
+                                                            format(stream, $str_alt33$__Method__A_in__A__, def_object, module);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_33, $list_alt45);
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (pcase_var.eql($GLOBAL)) {
+                                                        {
+                                                            SubLObject datum_35 = def_args;
+                                                            SubLObject current_36 = datum_35;
+                                                            SubLObject def_object = NIL;
+                                                            SubLObject module = NIL;
+                                                            destructuring_bind_must_consp(current_36, datum_35, $list_alt45);
+                                                            def_object = current_36.first();
+                                                            current_36 = current_36.rest();
+                                                            destructuring_bind_must_consp(current_36, datum_35, $list_alt45);
+                                                            module = current_36.first();
+                                                            current_36 = current_36.rest();
+                                                            if (NIL == current_36) {
+                                                                format(stream, $str_alt34$__Global__A_in__A__, def_object, module);
+                                                            } else {
+                                                                cdestructuring_bind_error(datum_35, $list_alt45);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        format(stream, $str_alt46$_references_private);
+                                        {
+                                            SubLObject pcase_var = ref_type;
+                                            if (pcase_var.eql($METHOD)) {
+                                                {
+                                                    SubLObject datum_37 = ref_args;
+                                                    SubLObject current_38 = datum_37;
+                                                    SubLObject ref_object = NIL;
+                                                    SubLObject module = NIL;
+                                                    destructuring_bind_must_consp(current_38, datum_37, $list_alt47);
+                                                    ref_object = current_38.first();
+                                                    current_38 = current_38.rest();
+                                                    destructuring_bind_must_consp(current_38, datum_37, $list_alt47);
+                                                    module = current_38.first();
+                                                    current_38 = current_38.rest();
+                                                    if (NIL == current_38) {
+                                                        format(stream, $str_alt37$__method__A_from__A__, ref_object, module);
+                                                    } else {
+                                                        cdestructuring_bind_error(datum_37, $list_alt47);
+                                                    }
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($GLOBAL)) {
+                                                    {
+                                                        SubLObject datum_39 = ref_args;
+                                                        SubLObject current_40 = datum_39;
+                                                        SubLObject ref_object = NIL;
+                                                        SubLObject module = NIL;
+                                                        destructuring_bind_must_consp(current_40, datum_39, $list_alt47);
+                                                        ref_object = current_40.first();
+                                                        current_40 = current_40.rest();
+                                                        destructuring_bind_must_consp(current_40, datum_39, $list_alt47);
+                                                        module = current_40.first();
+                                                        current_40 = current_40.rest();
+                                                        if (NIL == current_40) {
+                                                            format(stream, $str_alt38$__global__A_from__A__, ref_object, module);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_39, $list_alt47);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        cdestructuring_bind_error(datum, $list_alt43);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return violation_spec;
     }
 
     public static SubLObject show_one_privacy_violation(final SubLObject violation_spec, SubLObject stream) {
@@ -2239,6 +4821,108 @@ public final class translator_utilities extends SubLTranslatedFile {
         return violation_spec;
     }
 
+    /**
+     * Analyze the definitions in all modules and return a list of all early rebinding violations.
+     *
+     * @return a list of objects suitable for show-early-rebinding-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all early rebinding violations.\r\n\r\n@return a list of objects suitable for show-early-rebinding-violations.")
+    public static final SubLObject all_early_rebinding_violations_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_early_rebinding_violations = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject list_var = v_modules;
+                                    $progress_note$.setDynamicValue($str_alt48$Identifying_early_rebinding_viola, thread);
+                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                                    $progress_total$.setDynamicValue(length(list_var), thread);
+                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                                    {
+                                        SubLObject _prev_bind_0_41 = $last_percent_progress_index$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                        try {
+                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                            $within_noting_percent_progress$.bind(T, thread);
+                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                            {
+                                                SubLObject csome_list_var = list_var;
+                                                SubLObject module = NIL;
+                                                for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                                    {
+                                                        SubLObject early_rebinding_violations = com.cyc.cycjava.cycl.translator_utilities.module_early_rebinding_violations(module);
+                                                        SubLObject cdolist_list_var = early_rebinding_violations;
+                                                        SubLObject early_rebinding_violation = NIL;
+                                                        for (early_rebinding_violation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , early_rebinding_violation = cdolist_list_var.first()) {
+                                                            all_early_rebinding_violations = cons(early_rebinding_violation, all_early_rebinding_violations);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            noting_percent_progress_postamble();
+                                        } finally {
+                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                            $last_percent_progress_index$.rebind(_prev_bind_0_41, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_42 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_42, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_early_rebinding_violations);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all early rebinding violations.\r\n\r\n@return a list of objects suitable for show-early-rebinding-violations.")
     public static SubLObject all_early_rebinding_violations(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -2326,8 +5010,50 @@ public final class translator_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_early_rebinding_violations);
+    }/**
+     * Analyze the definitions in all modules and return a list of all early rebinding violations.
+     *
+     * @return a list of objects suitable for show-early-rebinding-violations.
+     */
+
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its early rebinding violations.
+     *
+     * @return a list of objects suitable for show-early-rebinding-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its early rebinding violations.\r\n\r\n@return a list of objects suitable for show-early-rebinding-violations.")
+    public static final SubLObject module_early_rebinding_violations_alt(SubLObject defined_module) {
+        {
+            SubLObject early_rebinding_violations = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+            SubLObject defined_method = NIL;
+            for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                {
+                    SubLObject defined_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(defined_method);
+                    SubLObject rebound_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_rebound_by_method(defined_method);
+                    SubLObject cdolist_list_var_43 = rebound_globals;
+                    SubLObject rebound_global = NIL;
+                    for (rebound_global = cdolist_list_var_43.first(); NIL != cdolist_list_var_43; cdolist_list_var_43 = cdolist_list_var_43.rest() , rebound_global = cdolist_list_var_43.first()) {
+                        {
+                            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(rebound_global);
+                            if (NIL != referenced_module) {
+                                {
+                                    SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(rebound_global);
+                                    if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_early_evaluation_reference_p(defined_module, defined_position, referenced_module, referenced_position, $GLOBAL, rebound_global)) {
+                                        early_rebinding_violations = cons(list(list($METHOD, defined_method, defined_module), list($GLOBAL, rebound_global, referenced_module)), early_rebinding_violations);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(early_rebinding_violations);
+        }
     }
 
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its early rebinding violations.\r\n\r\n@return a list of objects suitable for show-early-rebinding-violations.")
     public static SubLObject module_early_rebinding_violations(final SubLObject defined_module) {
         SubLObject early_rebinding_violations = NIL;
         SubLObject cdolist_list_var = td_methods_defined_by_module(defined_module);
@@ -2354,8 +5080,37 @@ public final class translator_utilities extends SubLTranslatedFile {
             defined_method = cdolist_list_var.first();
         } 
         return nreverse(early_rebinding_violations);
+    }/**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its early rebinding violations.
+     *
+     * @return a list of objects suitable for show-early-rebinding-violations.
+     */
+
+
+    /**
+     * Show a list of early rebinding violations described in VIOLATION-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of early rebinding violations described in VIOLATION-SPECS to STREAM.")
+    public static final SubLObject show_early_rebinding_violations_alt(SubLObject violation_specs, SubLObject stream) {
+        if (violation_specs == UNPROVIDED) {
+            violation_specs = com.cyc.cycjava.cycl.translator_utilities.all_early_rebinding_violations(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = violation_specs;
+            SubLObject violation_spec = NIL;
+            for (violation_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , violation_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_early_rebinding_violation(violation_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of early rebinding violations described in VIOLATION-SPECS to STREAM.")
     public static SubLObject show_early_rebinding_violations(SubLObject violation_specs, SubLObject stream) {
         if (violation_specs == UNPROVIDED) {
             violation_specs = all_early_rebinding_violations(UNPROVIDED);
@@ -2374,6 +5129,116 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of early rebinding violations described in VIOLATION-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_early_rebinding_violation_alt(SubLObject violation_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = violation_spec;
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt43);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject def_type = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt43);
+                    def_type = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject def_args = current;
+                        current = temp;
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        {
+                            SubLObject temp_44 = current.rest();
+                            current = current.first();
+                            {
+                                SubLObject ref_type = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt43);
+                                ref_type = current.first();
+                                current = current.rest();
+                                {
+                                    SubLObject ref_args = current;
+                                    current = temp_44;
+                                    if (NIL == current) {
+                                        {
+                                            SubLObject pcase_var = def_type;
+                                            if (pcase_var.eql($MODULE)) {
+                                                {
+                                                    SubLObject datum_45 = def_args;
+                                                    SubLObject current_46 = datum_45;
+                                                    SubLObject module = NIL;
+                                                    destructuring_bind_must_consp(current_46, datum_45, $list_alt44);
+                                                    module = current_46.first();
+                                                    current_46 = current_46.rest();
+                                                    if (NIL == current_46) {
+                                                        format(stream, $str_alt31$__Top_level_form_in__A__, module);
+                                                    } else {
+                                                        cdestructuring_bind_error(datum_45, $list_alt44);
+                                                    }
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($METHOD)) {
+                                                    {
+                                                        SubLObject datum_47 = def_args;
+                                                        SubLObject current_48 = datum_47;
+                                                        SubLObject def_object = NIL;
+                                                        SubLObject module = NIL;
+                                                        destructuring_bind_must_consp(current_48, datum_47, $list_alt45);
+                                                        def_object = current_48.first();
+                                                        current_48 = current_48.rest();
+                                                        destructuring_bind_must_consp(current_48, datum_47, $list_alt45);
+                                                        module = current_48.first();
+                                                        current_48 = current_48.rest();
+                                                        if (NIL == current_48) {
+                                                            format(stream, $str_alt33$__Method__A_in__A__, def_object, module);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_47, $list_alt45);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        format(stream, $str_alt49$_rebinds);
+                                        {
+                                            SubLObject pcase_var = ref_type;
+                                            if (pcase_var.eql($GLOBAL)) {
+                                                {
+                                                    SubLObject datum_49 = ref_args;
+                                                    SubLObject current_50 = datum_49;
+                                                    SubLObject ref_object = NIL;
+                                                    SubLObject module = NIL;
+                                                    destructuring_bind_must_consp(current_50, datum_49, $list_alt47);
+                                                    ref_object = current_50.first();
+                                                    current_50 = current_50.rest();
+                                                    destructuring_bind_must_consp(current_50, datum_49, $list_alt47);
+                                                    module = current_50.first();
+                                                    current_50 = current_50.rest();
+                                                    if (NIL == current_50) {
+                                                        format(stream, $str_alt38$__global__A_from__A__, ref_object, module);
+                                                    } else {
+                                                        cdestructuring_bind_error(datum_49, $list_alt47);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        format(stream, $str_alt50$_before_it_is_defined__);
+                                    } else {
+                                        cdestructuring_bind_error(datum, $list_alt43);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return violation_spec;
     }
 
     public static SubLObject show_one_early_rebinding_violation(final SubLObject violation_spec, SubLObject stream) {
@@ -2457,6 +5322,108 @@ public final class translator_utilities extends SubLTranslatedFile {
         return violation_spec;
     }
 
+    /**
+     * Analyze the definitions in all modules and return a list of all early-reference violations.
+     *
+     * @return a list of objects suitable for show-early-reference-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all early-reference violations.\r\n\r\n@return a list of objects suitable for show-early-reference-violations.")
+    public static final SubLObject all_early_reference_violations_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_early_reference_violations = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject list_var = v_modules;
+                                    $progress_note$.setDynamicValue($str_alt51$Identifying_early_reference_viola, thread);
+                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                                    $progress_total$.setDynamicValue(length(list_var), thread);
+                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                                    {
+                                        SubLObject _prev_bind_0_51 = $last_percent_progress_index$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                        try {
+                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                            $within_noting_percent_progress$.bind(T, thread);
+                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                            {
+                                                SubLObject csome_list_var = list_var;
+                                                SubLObject module = NIL;
+                                                for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                                    {
+                                                        SubLObject early_reference_violations = com.cyc.cycjava.cycl.translator_utilities.module_early_reference_violations(module);
+                                                        SubLObject cdolist_list_var = early_reference_violations;
+                                                        SubLObject early_reference_violation = NIL;
+                                                        for (early_reference_violation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , early_reference_violation = cdolist_list_var.first()) {
+                                                            all_early_reference_violations = cons(early_reference_violation, all_early_reference_violations);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            noting_percent_progress_postamble();
+                                        } finally {
+                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                            $last_percent_progress_index$.rebind(_prev_bind_0_51, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_52 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_52, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_early_reference_violations);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all early-reference violations.\r\n\r\n@return a list of objects suitable for show-early-reference-violations.")
     public static SubLObject all_early_reference_violations(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -2544,8 +5511,178 @@ public final class translator_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_early_reference_violations);
+    }/**
+     * Analyze the definitions in all modules and return a list of all early-reference violations.
+     *
+     * @return a list of objects suitable for show-early-reference-violations.
+     */
+
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its early-reference violations.
+     *
+     * @return a list of objects suitable for show-early-reference-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its early-reference violations.\r\n\r\n@return a list of objects suitable for show-early-reference-violations.")
+    public static final SubLObject module_early_reference_violations_alt(SubLObject defined_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject early_reference_violations = NIL;
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                    SubLObject defined_method = NIL;
+                    for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                        {
+                            SubLObject defined_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(defined_method);
+                            SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(defined_method);
+                            SubLObject cdolist_list_var_53 = referenced_methods;
+                            SubLObject referenced_method = NIL;
+                            for (referenced_method = cdolist_list_var_53.first(); NIL != cdolist_list_var_53; cdolist_list_var_53 = cdolist_list_var_53.rest() , referenced_method = cdolist_list_var_53.first()) {
+                                if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_macro_p(referenced_method)) {
+                                    {
+                                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                        if (NIL != referenced_module) {
+                                            {
+                                                SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(referenced_method);
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_macro_use_p(defined_module, defined_position, referenced_module, referenced_position, referenced_method);
+                                                    SubLObject justifying_globals = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                        early_reference_violations = cons(list(list($METHOD, defined_method, defined_module), list($METHOD, referenced_method, referenced_module), justifying_methods, justifying_globals), early_reference_violations);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                    SubLObject defined_global = NIL;
+                    for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                        {
+                            SubLObject defined_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(defined_global);
+                            {
+                                SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(defined_global);
+                                SubLObject cdolist_list_var_54 = referenced_methods;
+                                SubLObject referenced_method = NIL;
+                                for (referenced_method = cdolist_list_var_54.first(); NIL != cdolist_list_var_54; cdolist_list_var_54 = cdolist_list_var_54.rest() , referenced_method = cdolist_list_var_54.first()) {
+                                    {
+                                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                        if (NIL != referenced_module) {
+                                            {
+                                                SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(referenced_method);
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_evaluation_reference_p(defined_module, defined_position, referenced_module, referenced_position, $METHOD, referenced_method);
+                                                    SubLObject justifying_globals = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                        early_reference_violations = cons(list(list($GLOBAL, defined_global, defined_module), list($METHOD, referenced_method, referenced_module), justifying_methods, justifying_globals), early_reference_violations);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_global(defined_global);
+                                SubLObject cdolist_list_var_55 = referenced_globals;
+                                SubLObject referenced_global = NIL;
+                                for (referenced_global = cdolist_list_var_55.first(); NIL != cdolist_list_var_55; cdolist_list_var_55 = cdolist_list_var_55.rest() , referenced_global = cdolist_list_var_55.first()) {
+                                    {
+                                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                        if (NIL != referenced_module) {
+                                            {
+                                                SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(referenced_global);
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_evaluation_reference_p(defined_module, defined_position, referenced_module, referenced_position, $GLOBAL, referenced_global);
+                                                    SubLObject justifying_globals = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                        early_reference_violations = cons(list(list($GLOBAL, defined_global, defined_module), list($GLOBAL, referenced_global, referenced_module), justifying_methods, justifying_globals), early_reference_violations);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_module(defined_module);
+                    SubLObject cdolist_list_var = referenced_methods;
+                    SubLObject referenced_method = NIL;
+                    for (referenced_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_method = cdolist_list_var.first()) {
+                        {
+                            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                            if (NIL != referenced_module) {
+                                {
+                                    SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(referenced_method);
+                                    SubLObject module_positions = com.cyc.cycjava.cycl.translator_utilities.td_module_positions_calling_method(defined_module, referenced_method);
+                                    SubLObject cdolist_list_var_56 = module_positions;
+                                    SubLObject module_position = NIL;
+                                    for (module_position = cdolist_list_var_56.first(); NIL != cdolist_list_var_56; cdolist_list_var_56 = cdolist_list_var_56.rest() , module_position = cdolist_list_var_56.first()) {
+                                        thread.resetMultipleValues();
+                                        {
+                                            SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_evaluation_reference_p(defined_module, module_position, referenced_module, referenced_position, $METHOD, referenced_method);
+                                            SubLObject justifying_globals = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                early_reference_violations = cons(list(list($MODULE, defined_module, module_position), list($METHOD, referenced_method, referenced_module), justifying_methods, justifying_globals), early_reference_violations);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_module(defined_module);
+                    SubLObject cdolist_list_var = referenced_globals;
+                    SubLObject referenced_global = NIL;
+                    for (referenced_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_global = cdolist_list_var.first()) {
+                        {
+                            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                            if (NIL != referenced_module) {
+                                {
+                                    SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(referenced_global);
+                                    SubLObject module_positions = com.cyc.cycjava.cycl.translator_utilities.td_module_positions_calling_global(defined_module, referenced_global);
+                                    SubLObject cdolist_list_var_57 = module_positions;
+                                    SubLObject module_position = NIL;
+                                    for (module_position = cdolist_list_var_57.first(); NIL != cdolist_list_var_57; cdolist_list_var_57 = cdolist_list_var_57.rest() , module_position = cdolist_list_var_57.first()) {
+                                        thread.resetMultipleValues();
+                                        {
+                                            SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_evaluation_reference_p(defined_module, module_position, referenced_module, referenced_position, $GLOBAL, referenced_global);
+                                            SubLObject justifying_globals = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                early_reference_violations = cons(list(list($MODULE, defined_module, module_position), list($GLOBAL, referenced_global, referenced_module), justifying_methods, justifying_globals), early_reference_violations);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return nreverse(early_reference_violations);
+            }
+        }
     }
 
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its early-reference violations.\r\n\r\n@return a list of objects suitable for show-early-reference-violations.")
     public static SubLObject module_early_reference_violations(final SubLObject defined_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject early_reference_violations = NIL;
@@ -2678,6 +5815,41 @@ public final class translator_utilities extends SubLTranslatedFile {
             referenced_global2 = cdolist_list_var2.first();
         } 
         return nreverse(early_reference_violations);
+    }/**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its early-reference violations.
+     *
+     * @return a list of objects suitable for show-early-reference-violations.
+     */
+
+
+    public static final SubLObject td_early_macro_use_p_alt(SubLObject referencing_module, SubLObject referencing_position, SubLObject macro_module, SubLObject macro_position, SubLObject referenced_macro) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject justifying_methods = NIL;
+                SubLObject justifying_globals = NIL;
+                SubLObject latest_module_referenced_by_macro = com.cyc.cycjava.cycl.translator_utilities.td_method_latest_transitively_referenced_module_memoized(referenced_macro);
+                if ((NIL != latest_module_referenced_by_macro) && (NIL == com.cyc.cycjava.cycl.translator_utilities.td_module_earlier(latest_module_referenced_by_macro, referencing_module))) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject justifying_methods_58 = com.cyc.cycjava.cycl.translator_utilities.td_justify_method_latest_transitively_referenced_module(referenced_macro, latest_module_referenced_by_macro);
+                        SubLObject justifying_globals_59 = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        justifying_methods = justifying_methods_58;
+                        justifying_globals = justifying_globals_59;
+                    }
+                }
+                if ((NIL != com.cyc.cycjava.cycl.translator_utilities.td_module_later(macro_module, referencing_module)) || (referencing_module.equal(macro_module) && macro_position.numG(referencing_position))) {
+                    {
+                        SubLObject item_var = referenced_macro;
+                        if (NIL == member(item_var, justifying_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
+                            justifying_methods = cons(item_var, justifying_methods);
+                        }
+                    }
+                }
+                return values(justifying_methods, justifying_globals);
+            }
+        }
     }
 
     public static SubLObject td_early_macro_use_p(final SubLObject referencing_module, final SubLObject referencing_position, final SubLObject macro_module, final SubLObject macro_position, final SubLObject referenced_macro) {
@@ -2699,6 +5871,86 @@ public final class translator_utilities extends SubLTranslatedFile {
         return values(justifying_methods, justifying_globals);
     }
 
+    /**
+     * Analyze the reference
+     * by REFERENCING-MODULE at REFERENCING-POSITION
+     * to REFERENCED-OBJECT of REFERENCE-TYPE
+     * defined in REFERENCED-MODULE at REFERENCED-POSITION
+     * to see if it is too early with respect to load-time evaluation.
+     */
+    @LispMethod(comment = "Analyze the reference\r\nby REFERENCING-MODULE at REFERENCING-POSITION\r\nto REFERENCED-OBJECT of REFERENCE-TYPE\r\ndefined in REFERENCED-MODULE at REFERENCED-POSITION\r\nto see if it is too early with respect to load-time evaluation.\nAnalyze the reference\nby REFERENCING-MODULE at REFERENCING-POSITION\nto REFERENCED-OBJECT of REFERENCE-TYPE\ndefined in REFERENCED-MODULE at REFERENCED-POSITION\nto see if it is too early with respect to load-time evaluation.")
+    public static final SubLObject td_early_evaluation_reference_p_alt(SubLObject referencing_module, SubLObject referencing_position, SubLObject referenced_module, SubLObject referenced_position, SubLObject reference_type, SubLObject referenced_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject justifying_methods = NIL;
+                SubLObject justifying_globals = NIL;
+                SubLObject latest_module_referenced_by_evaluation = ($METHOD == reference_type) ? ((SubLObject) (com.cyc.cycjava.cycl.translator_utilities.td_method_latest_transitively_referenced_module_memoized(referenced_object))) : com.cyc.cycjava.cycl.translator_utilities.td_global_latest_transitively_referenced_module_memoized(referenced_object);
+                if (NIL != latest_module_referenced_by_evaluation) {
+                    if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_module_earlier(latest_module_referenced_by_evaluation, referencing_module)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject candidate_methods = ($METHOD == reference_type) ? ((SubLObject) (com.cyc.cycjava.cycl.translator_utilities.td_justify_method_latest_transitively_referenced_module(referenced_object, latest_module_referenced_by_evaluation))) : com.cyc.cycjava.cycl.translator_utilities.td_justify_global_latest_transitively_referenced_module(referenced_object, latest_module_referenced_by_evaluation);
+                            SubLObject candidate_globals = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_module_later(latest_module_referenced_by_evaluation, referencing_module)) {
+                                justifying_methods = candidate_methods;
+                                justifying_globals = candidate_globals;
+                            } else {
+                                {
+                                    SubLObject cdolist_list_var = candidate_methods;
+                                    SubLObject candidate_method = NIL;
+                                    for (candidate_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate_method = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject definition_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(candidate_method);
+                                            if (definition_position.numG(referencing_position)) {
+                                                {
+                                                    SubLObject item_var = candidate_method;
+                                                    if (NIL == member(item_var, justifying_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                        justifying_methods = cons(item_var, justifying_methods);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                {
+                                    SubLObject cdolist_list_var = candidate_globals;
+                                    SubLObject candidate_global = NIL;
+                                    for (candidate_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , candidate_global = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject definition_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(candidate_global);
+                                            if (definition_position.numG(referencing_position)) {
+                                                {
+                                                    SubLObject item_var = candidate_global;
+                                                    if (NIL == member(item_var, justifying_globals, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                        justifying_globals = cons(item_var, justifying_globals);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                justifying_methods = nreverse(justifying_methods);
+                                justifying_globals = nreverse(justifying_globals);
+                            }
+                        }
+                    }
+                }
+                if ((NIL != com.cyc.cycjava.cycl.translator_utilities.td_module_later(referenced_module, referencing_module)) || (referencing_module.equal(referenced_module) && referenced_position.numG(referencing_position))) {
+                    {
+                        SubLObject item_var = referenced_object;
+                        if (NIL == member(item_var, justifying_methods, symbol_function(EQL), symbol_function(IDENTITY))) {
+                            justifying_methods = cons(item_var, justifying_methods);
+                        }
+                    }
+                }
+                return values(justifying_methods, justifying_globals);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the reference\r\nby REFERENCING-MODULE at REFERENCING-POSITION\r\nto REFERENCED-OBJECT of REFERENCE-TYPE\r\ndefined in REFERENCED-MODULE at REFERENCED-POSITION\r\nto see if it is too early with respect to load-time evaluation.\nAnalyze the reference\nby REFERENCING-MODULE at REFERENCING-POSITION\nto REFERENCED-OBJECT of REFERENCE-TYPE\ndefined in REFERENCED-MODULE at REFERENCED-POSITION\nto see if it is too early with respect to load-time evaluation.")
     public static SubLObject td_early_evaluation_reference_p(final SubLObject referencing_module, final SubLObject referencing_position, final SubLObject referenced_module, final SubLObject referenced_position, final SubLObject reference_type, final SubLObject referenced_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject justifying_methods = NIL;
@@ -2749,8 +6001,35 @@ public final class translator_utilities extends SubLTranslatedFile {
             justifying_methods = cons(referenced_object, justifying_methods);
         }
         return values(justifying_methods, justifying_globals);
+    }/**
+     * Analyze the reference
+     * by REFERENCING-MODULE at REFERENCING-POSITION
+     * to REFERENCED-OBJECT of REFERENCE-TYPE
+     * defined in REFERENCED-MODULE at REFERENCED-POSITION
+     * to see if it is too early with respect to load-time evaluation.
+     */
+
+
+    /**
+     * Analyze the global binding of REFERENCED-GLOBAL
+     * by REFERENCING-MODULE at REFERENCING-POSITION
+     * to see if it is too early with respect to load-time evaluation.
+     */
+    @LispMethod(comment = "Analyze the global binding of REFERENCED-GLOBAL\r\nby REFERENCING-MODULE at REFERENCING-POSITION\r\nto see if it is too early with respect to load-time evaluation.\nAnalyze the global binding of REFERENCED-GLOBAL\nby REFERENCING-MODULE at REFERENCING-POSITION\nto see if it is too early with respect to load-time evaluation.")
+    public static final SubLObject td_early_global_binding_p_alt(SubLObject referencing_module, SubLObject referencing_position, SubLObject referenced_global) {
+        {
+            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+            if (NIL != referenced_module) {
+                {
+                    SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(referenced_global);
+                    return makeBoolean((NIL != com.cyc.cycjava.cycl.translator_utilities.td_module_later(referenced_module, referencing_module)) || (referencing_module.equal(referenced_module) && referenced_position.numG(referencing_position)));
+                }
+            }
+        }
+        return NIL;
     }
 
+    @LispMethod(comment = "Analyze the global binding of REFERENCED-GLOBAL\r\nby REFERENCING-MODULE at REFERENCING-POSITION\r\nto see if it is too early with respect to load-time evaluation.\nAnalyze the global binding of REFERENCED-GLOBAL\nby REFERENCING-MODULE at REFERENCING-POSITION\nto see if it is too early with respect to load-time evaluation.")
     public static SubLObject td_early_global_binding_p(final SubLObject referencing_module, final SubLObject referencing_position, final SubLObject referenced_global) {
         final SubLObject referenced_module = td_global_defining_module(referenced_global);
         if (NIL != referenced_module) {
@@ -2758,8 +6037,37 @@ public final class translator_utilities extends SubLTranslatedFile {
             return makeBoolean((NIL != td_module_later(referenced_module, referencing_module)) || (referencing_module.equal(referenced_module) && referenced_position.numG(referencing_position)));
         }
         return NIL;
+    }/**
+     * Analyze the global binding of REFERENCED-GLOBAL
+     * by REFERENCING-MODULE at REFERENCING-POSITION
+     * to see if it is too early with respect to load-time evaluation.
+     */
+
+
+    /**
+     * Show a list of early-reference violations described in VIOLATION-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of early-reference violations described in VIOLATION-SPECS to STREAM.")
+    public static final SubLObject show_early_reference_violations_alt(SubLObject violation_specs, SubLObject stream) {
+        if (violation_specs == UNPROVIDED) {
+            violation_specs = com.cyc.cycjava.cycl.translator_utilities.all_early_reference_violations(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = violation_specs;
+            SubLObject violation_spec = NIL;
+            for (violation_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , violation_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_early_reference_violation(violation_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of early-reference violations described in VIOLATION-SPECS to STREAM.")
     public static SubLObject show_early_reference_violations(SubLObject violation_specs, SubLObject stream) {
         if (violation_specs == UNPROVIDED) {
             violation_specs = all_early_reference_violations(UNPROVIDED);
@@ -2778,6 +6086,166 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of early-reference violations described in VIOLATION-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_early_reference_violation_alt(SubLObject violation_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = violation_spec;
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt52);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject def_type = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt52);
+                    def_type = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject def_args = current;
+                        current = temp;
+                        destructuring_bind_must_consp(current, datum, $list_alt52);
+                        {
+                            SubLObject temp_60 = current.rest();
+                            current = current.first();
+                            {
+                                SubLObject ref_type = NIL;
+                                SubLObject ref_object = NIL;
+                                SubLObject module = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt52);
+                                ref_type = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt52);
+                                ref_object = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt52);
+                                module = current.first();
+                                current = current.rest();
+                                if (NIL == current) {
+                                    current = temp_60;
+                                    {
+                                        SubLObject justifying_methods = NIL;
+                                        SubLObject justifying_globals = NIL;
+                                        destructuring_bind_must_consp(current, datum, $list_alt52);
+                                        justifying_methods = current.first();
+                                        current = current.rest();
+                                        destructuring_bind_must_consp(current, datum, $list_alt52);
+                                        justifying_globals = current.first();
+                                        current = current.rest();
+                                        if (NIL == current) {
+                                            {
+                                                SubLObject pcase_var = def_type;
+                                                if (pcase_var.eql($MODULE)) {
+                                                    {
+                                                        SubLObject datum_61 = def_args;
+                                                        SubLObject current_62 = datum_61;
+                                                        SubLObject module_63 = NIL;
+                                                        SubLObject position = NIL;
+                                                        destructuring_bind_must_consp(current_62, datum_61, $list_alt53);
+                                                        module_63 = current_62.first();
+                                                        current_62 = current_62.rest();
+                                                        destructuring_bind_must_consp(current_62, datum_61, $list_alt53);
+                                                        position = current_62.first();
+                                                        current_62 = current_62.rest();
+                                                        if (NIL == current_62) {
+                                                            format(stream, $str_alt54$__Top_level_form_in__A_at__S__, module_63, position);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_61, $list_alt53);
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (pcase_var.eql($METHOD)) {
+                                                        {
+                                                            SubLObject datum_64 = def_args;
+                                                            SubLObject current_65 = datum_64;
+                                                            SubLObject def_object = NIL;
+                                                            SubLObject module_66 = NIL;
+                                                            destructuring_bind_must_consp(current_65, datum_64, $list_alt45);
+                                                            def_object = current_65.first();
+                                                            current_65 = current_65.rest();
+                                                            destructuring_bind_must_consp(current_65, datum_64, $list_alt45);
+                                                            module_66 = current_65.first();
+                                                            current_65 = current_65.rest();
+                                                            if (NIL == current_65) {
+                                                                format(stream, $str_alt33$__Method__A_in__A__, def_object, module_66);
+                                                            } else {
+                                                                cdestructuring_bind_error(datum_64, $list_alt45);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if (pcase_var.eql($GLOBAL)) {
+                                                            {
+                                                                SubLObject datum_67 = def_args;
+                                                                SubLObject current_68 = datum_67;
+                                                                SubLObject def_object = NIL;
+                                                                SubLObject module_69 = NIL;
+                                                                destructuring_bind_must_consp(current_68, datum_67, $list_alt45);
+                                                                def_object = current_68.first();
+                                                                current_68 = current_68.rest();
+                                                                destructuring_bind_must_consp(current_68, datum_67, $list_alt45);
+                                                                module_69 = current_68.first();
+                                                                current_68 = current_68.rest();
+                                                                if (NIL == current_68) {
+                                                                    format(stream, $str_alt34$__Global__A_in__A__, def_object, module_69);
+                                                                } else {
+                                                                    cdestructuring_bind_error(datum_67, $list_alt45);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            format(stream, $str_alt35$_references);
+                                            {
+                                                SubLObject pcase_var = ref_type;
+                                                if (pcase_var.eql($METHOD)) {
+                                                    format(stream, $str_alt37$__method__A_from__A__, ref_object, module);
+                                                } else {
+                                                    if (pcase_var.eql($GLOBAL)) {
+                                                        format(stream, $str_alt38$__global__A_from__A__, ref_object, module);
+                                                    }
+                                                }
+                                            }
+                                            format(stream, $str_alt55$_before_it_is);
+                                            if (((NIL == justifying_globals) && (NIL != list_utilities.singletonP(justifying_methods))) && (ref_object == justifying_methods.first())) {
+                                                format(stream, $str_alt56$_defined__);
+                                            } else {
+                                                format(stream, $str_alt57$_completely_defined_due_to__);
+                                                {
+                                                    SubLObject cdolist_list_var = justifying_methods;
+                                                    SubLObject justifying_method = NIL;
+                                                    for (justifying_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , justifying_method = cdolist_list_var.first()) {
+                                                        format(stream, $str_alt58$method__A__, justifying_method);
+                                                    }
+                                                }
+                                                {
+                                                    SubLObject cdolist_list_var = justifying_globals;
+                                                    SubLObject justifying_global = NIL;
+                                                    for (justifying_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , justifying_global = cdolist_list_var.first()) {
+                                                        format(stream, $str_alt59$global__A__, justifying_global);
+                                                    }
+                                                }
+                                            }
+                                        } else {
+                                            cdestructuring_bind_error(datum, $list_alt52);
+                                        }
+                                    }
+                                } else {
+                                    cdestructuring_bind_error(datum, $list_alt52);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return violation_spec;
     }
 
     public static SubLObject show_one_early_reference_violation(final SubLObject violation_spec, SubLObject stream) {
@@ -2913,6 +6381,108 @@ public final class translator_utilities extends SubLTranslatedFile {
         return violation_spec;
     }
 
+    /**
+     * Analyze the definitions in all modules and return a list of all early-macro-use violations.
+     *
+     * @return a list of objects suitable for show-early-macro-use-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all early-macro-use violations.\r\n\r\n@return a list of objects suitable for show-early-macro-use-violations.")
+    public static final SubLObject all_early_macro_use_violations_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_early_macro_use_violations = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject list_var = v_modules;
+                                    $progress_note$.setDynamicValue($str_alt60$Identifying_early_macro_use_viola, thread);
+                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                                    $progress_total$.setDynamicValue(length(list_var), thread);
+                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                                    {
+                                        SubLObject _prev_bind_0_70 = $last_percent_progress_index$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                        try {
+                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                            $within_noting_percent_progress$.bind(T, thread);
+                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                            {
+                                                SubLObject csome_list_var = list_var;
+                                                SubLObject module = NIL;
+                                                for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                                    {
+                                                        SubLObject early_macro_use_violations = com.cyc.cycjava.cycl.translator_utilities.module_early_macro_use_violations(module);
+                                                        SubLObject cdolist_list_var = early_macro_use_violations;
+                                                        SubLObject early_macro_use_violation = NIL;
+                                                        for (early_macro_use_violation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , early_macro_use_violation = cdolist_list_var.first()) {
+                                                            all_early_macro_use_violations = cons(early_macro_use_violation, all_early_macro_use_violations);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            noting_percent_progress_postamble();
+                                        } finally {
+                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                            $last_percent_progress_index$.rebind(_prev_bind_0_70, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_71 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_71, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_early_macro_use_violations);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all early-macro-use violations.\r\n\r\n@return a list of objects suitable for show-early-macro-use-violations.")
     public static SubLObject all_early_macro_use_violations(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -3000,8 +6570,127 @@ public final class translator_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_early_macro_use_violations);
+    }/**
+     * Analyze the definitions in all modules and return a list of all early-macro-use violations.
+     *
+     * @return a list of objects suitable for show-early-macro-use-violations.
+     */
+
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its early-macro-use violations.
+     *
+     * @return a list of objects suitable for show-early-macro-use-violations.
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its early-macro-use violations.\r\n\r\n@return a list of objects suitable for show-early-macro-use-violations.")
+    public static final SubLObject module_early_macro_use_violations_alt(SubLObject defined_module) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject early_macro_use_violations = NIL;
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                    SubLObject defined_method = NIL;
+                    for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                        {
+                            SubLObject defined_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(defined_method);
+                            SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(defined_method);
+                            SubLObject cdolist_list_var_72 = referenced_methods;
+                            SubLObject referenced_method = NIL;
+                            for (referenced_method = cdolist_list_var_72.first(); NIL != cdolist_list_var_72; cdolist_list_var_72 = cdolist_list_var_72.rest() , referenced_method = cdolist_list_var_72.first()) {
+                                if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_macro_p(referenced_method)) {
+                                    {
+                                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                        if (NIL != referenced_module) {
+                                            {
+                                                SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(referenced_method);
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_macro_use_p(defined_module, defined_position, referenced_module, referenced_position, referenced_method);
+                                                    SubLObject justifying_globals = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                        early_macro_use_violations = cons(list(list($METHOD, defined_method, defined_module), list($METHOD, referenced_method, referenced_module), justifying_methods, justifying_globals), early_macro_use_violations);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                    SubLObject defined_global = NIL;
+                    for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                        {
+                            SubLObject defined_position = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_position(defined_global);
+                            SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(defined_global);
+                            SubLObject cdolist_list_var_73 = referenced_methods;
+                            SubLObject referenced_method = NIL;
+                            for (referenced_method = cdolist_list_var_73.first(); NIL != cdolist_list_var_73; cdolist_list_var_73 = cdolist_list_var_73.rest() , referenced_method = cdolist_list_var_73.first()) {
+                                if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_macro_p(referenced_method)) {
+                                    {
+                                        SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                        if (NIL != referenced_module) {
+                                            {
+                                                SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(referenced_method);
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_macro_use_p(defined_module, defined_position, referenced_module, referenced_position, referenced_method);
+                                                    SubLObject justifying_globals = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                        early_macro_use_violations = cons(list(list($GLOBAL, defined_global, defined_module), list($METHOD, referenced_method, referenced_module), justifying_methods, justifying_globals), early_macro_use_violations);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_module(defined_module);
+                    SubLObject cdolist_list_var = referenced_methods;
+                    SubLObject referenced_method = NIL;
+                    for (referenced_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_method = cdolist_list_var.first()) {
+                        if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_macro_p(referenced_method)) {
+                            {
+                                SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                if (NIL != referenced_module) {
+                                    {
+                                        SubLObject referenced_position = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_position(referenced_method);
+                                        SubLObject module_positions = com.cyc.cycjava.cycl.translator_utilities.td_module_positions_calling_method(defined_module, referenced_method);
+                                        SubLObject cdolist_list_var_74 = module_positions;
+                                        SubLObject module_position = NIL;
+                                        for (module_position = cdolist_list_var_74.first(); NIL != cdolist_list_var_74; cdolist_list_var_74 = cdolist_list_var_74.rest() , module_position = cdolist_list_var_74.first()) {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject justifying_methods = com.cyc.cycjava.cycl.translator_utilities.td_early_macro_use_p(defined_module, module_position, referenced_module, referenced_position, referenced_method);
+                                                SubLObject justifying_globals = thread.secondMultipleValue();
+                                                thread.resetMultipleValues();
+                                                if ((NIL != justifying_methods) || (NIL != justifying_globals)) {
+                                                    early_macro_use_violations = cons(list(list($MODULE, defined_module, module_position), list($METHOD, referenced_method, referenced_module), justifying_methods, justifying_globals), early_macro_use_violations);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return nreverse(early_macro_use_violations);
+            }
+        }
     }
 
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its early-macro-use violations.\r\n\r\n@return a list of objects suitable for show-early-macro-use-violations.")
     public static SubLObject module_early_macro_use_violations(final SubLObject defined_module) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject early_macro_use_violations = NIL;
@@ -3093,8 +6782,28 @@ public final class translator_utilities extends SubLTranslatedFile {
             referenced_method2 = cdolist_list_var2.first();
         } 
         return nreverse(early_macro_use_violations);
+    }/**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its early-macro-use violations.
+     *
+     * @return a list of objects suitable for show-early-macro-use-violations.
+     */
+
+
+    /**
+     * Show a list of early-macro-use violations described in VIOLATION-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of early-macro-use violations described in VIOLATION-SPECS to STREAM.")
+    public static final SubLObject show_early_macro_use_violations_alt(SubLObject violation_specs, SubLObject stream) {
+        if (violation_specs == UNPROVIDED) {
+            violation_specs = com.cyc.cycjava.cycl.translator_utilities.all_early_macro_use_violations(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        return com.cyc.cycjava.cycl.translator_utilities.show_early_reference_violations(violation_specs, stream);
     }
 
+    @LispMethod(comment = "Show a list of early-macro-use violations described in VIOLATION-SPECS to STREAM.")
     public static SubLObject show_early_macro_use_violations(SubLObject violation_specs, SubLObject stream) {
         if (violation_specs == UNPROVIDED) {
             violation_specs = all_early_macro_use_violations(UNPROVIDED);
@@ -3103,6 +6812,16 @@ public final class translator_utilities extends SubLTranslatedFile {
             stream = StreamsLow.$standard_output$.getDynamicValue();
         }
         return show_early_reference_violations(violation_specs, stream);
+    }/**
+     * Show a list of early-macro-use violations described in VIOLATION-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_early_macro_use_violation_alt(SubLObject violation_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        return com.cyc.cycjava.cycl.translator_utilities.show_one_early_reference_violation(violation_spec, stream);
     }
 
     public static SubLObject show_one_early_macro_use_violation(final SubLObject violation_spec, SubLObject stream) {
@@ -3112,6 +6831,108 @@ public final class translator_utilities extends SubLTranslatedFile {
         return show_one_early_reference_violation(violation_spec, stream);
     }
 
+    /**
+     * Analyze the definitions in all modules and return a list of all undefined references.
+     *
+     * @return a list of objects suitable for show-undefined-references.
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all undefined references.\r\n\r\n@return a list of objects suitable for show-undefined-references.")
+    public static final SubLObject all_undefined_references_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_undefined_references = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject list_var = v_modules;
+                                    $progress_note$.setDynamicValue($$$Identifying_undefined_references, thread);
+                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                                    $progress_total$.setDynamicValue(length(list_var), thread);
+                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                                    {
+                                        SubLObject _prev_bind_0_75 = $last_percent_progress_index$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                        try {
+                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                            $within_noting_percent_progress$.bind(T, thread);
+                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                            {
+                                                SubLObject csome_list_var = list_var;
+                                                SubLObject module = NIL;
+                                                for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                                    {
+                                                        SubLObject undefined_references = com.cyc.cycjava.cycl.translator_utilities.module_undefined_references(module);
+                                                        SubLObject cdolist_list_var = undefined_references;
+                                                        SubLObject undefined_reference = NIL;
+                                                        for (undefined_reference = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , undefined_reference = cdolist_list_var.first()) {
+                                                            all_undefined_references = cons(undefined_reference, all_undefined_references);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            noting_percent_progress_postamble();
+                                        } finally {
+                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                            $last_percent_progress_index$.rebind(_prev_bind_0_75, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_76 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_76, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_undefined_references);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all undefined references.\r\n\r\n@return a list of objects suitable for show-undefined-references.")
     public static SubLObject all_undefined_references(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -3199,8 +7020,129 @@ public final class translator_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_undefined_references);
+    }/**
+     * Analyze the definitions in all modules and return a list of all undefined references.
+     *
+     * @return a list of objects suitable for show-undefined-references.
+     */
+
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its undefined references.
+     *
+     * @return a list of objects suitable for show-undefined-references.
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its undefined references.\r\n\r\n@return a list of objects suitable for show-undefined-references.")
+    public static final SubLObject module_undefined_references_alt(SubLObject defined_module) {
+        {
+            SubLObject undefined_references = NIL;
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                SubLObject defined_method = NIL;
+                for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(defined_method);
+                        SubLObject cdolist_list_var_77 = referenced_methods;
+                        SubLObject referenced_method = NIL;
+                        for (referenced_method = cdolist_list_var_77.first(); NIL != cdolist_list_var_77; cdolist_list_var_77 = cdolist_list_var_77.rest() , referenced_method = cdolist_list_var_77.first()) {
+                            if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_predefined_method_p(referenced_method)) {
+                                {
+                                    SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                    if (NIL == referenced_module) {
+                                        undefined_references = cons(list(list($METHOD, defined_method, defined_module), list($METHOD, referenced_method)), undefined_references);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(defined_method);
+                        SubLObject cdolist_list_var_78 = referenced_globals;
+                        SubLObject referenced_global = NIL;
+                        for (referenced_global = cdolist_list_var_78.first(); NIL != cdolist_list_var_78; cdolist_list_var_78 = cdolist_list_var_78.rest() , referenced_global = cdolist_list_var_78.first()) {
+                            if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_predefined_global_p(referenced_global)) {
+                                {
+                                    SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                    if (NIL == referenced_module) {
+                                        undefined_references = cons(list(list($METHOD, defined_method, defined_module), list($GLOBAL, referenced_global)), undefined_references);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                SubLObject defined_global = NIL;
+                for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                    {
+                        SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_global(defined_global);
+                        SubLObject cdolist_list_var_79 = referenced_methods;
+                        SubLObject referenced_method = NIL;
+                        for (referenced_method = cdolist_list_var_79.first(); NIL != cdolist_list_var_79; cdolist_list_var_79 = cdolist_list_var_79.rest() , referenced_method = cdolist_list_var_79.first()) {
+                            if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_predefined_method_p(referenced_method)) {
+                                {
+                                    SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                                    if (NIL == referenced_module) {
+                                        undefined_references = cons(list(list($GLOBAL, defined_global, defined_module), list($METHOD, referenced_method)), undefined_references);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_global(defined_global);
+                        SubLObject cdolist_list_var_80 = referenced_globals;
+                        SubLObject referenced_global = NIL;
+                        for (referenced_global = cdolist_list_var_80.first(); NIL != cdolist_list_var_80; cdolist_list_var_80 = cdolist_list_var_80.rest() , referenced_global = cdolist_list_var_80.first()) {
+                            if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_predefined_global_p(referenced_global)) {
+                                {
+                                    SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                                    if (NIL == referenced_module) {
+                                        undefined_references = cons(list(list($GLOBAL, defined_global, defined_module), list($GLOBAL, referenced_global)), undefined_references);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject referenced_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_module(defined_module);
+                SubLObject cdolist_list_var = referenced_methods;
+                SubLObject referenced_method = NIL;
+                for (referenced_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_method = cdolist_list_var.first()) {
+                    if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_predefined_method_p(referenced_method)) {
+                        {
+                            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+                            if (NIL == referenced_module) {
+                                undefined_references = cons(list(list($MODULE, defined_module), list($METHOD, referenced_method)), undefined_references);
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject referenced_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_module(defined_module);
+                SubLObject cdolist_list_var = referenced_globals;
+                SubLObject referenced_global = NIL;
+                for (referenced_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , referenced_global = cdolist_list_var.first()) {
+                    if (NIL == com.cyc.cycjava.cycl.translator_utilities.td_predefined_global_p(referenced_global)) {
+                        {
+                            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_global_defining_module(referenced_global);
+                            if (NIL == referenced_module) {
+                                undefined_references = cons(list(list($MODULE, defined_module), list($GLOBAL, referenced_global)), undefined_references);
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(undefined_references);
+        }
     }
 
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its undefined references.\r\n\r\n@return a list of objects suitable for show-undefined-references.")
     public static SubLObject module_undefined_references(final SubLObject defined_module) {
         SubLObject undefined_references = NIL;
         SubLObject cdolist_list_var = td_methods_defined_by_module(defined_module);
@@ -3301,8 +7243,37 @@ public final class translator_utilities extends SubLTranslatedFile {
             referenced_global2 = cdolist_list_var2.first();
         } 
         return nreverse(undefined_references);
+    }/**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its undefined references.
+     *
+     * @return a list of objects suitable for show-undefined-references.
+     */
+
+
+    /**
+     * Show a list of undefined references described in REFERENCE-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of undefined references described in REFERENCE-SPECS to STREAM.")
+    public static final SubLObject show_undefined_references_alt(SubLObject reference_specs, SubLObject stream) {
+        if (reference_specs == UNPROVIDED) {
+            reference_specs = com.cyc.cycjava.cycl.translator_utilities.all_undefined_references(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = reference_specs;
+            SubLObject reference_spec = NIL;
+            for (reference_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , reference_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_undefined_reference(reference_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of undefined references described in REFERENCE-SPECS to STREAM.")
     public static SubLObject show_undefined_references(SubLObject reference_specs, SubLObject stream) {
         if (reference_specs == UNPROVIDED) {
             reference_specs = all_undefined_references(UNPROVIDED);
@@ -3321,6 +7292,147 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of undefined references described in REFERENCE-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_undefined_reference_alt(SubLObject reference_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = reference_spec;
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt43);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject def_type = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt43);
+                    def_type = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject def_args = current;
+                        current = temp;
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        {
+                            SubLObject temp_81 = current.rest();
+                            current = current.first();
+                            {
+                                SubLObject ref_type = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt43);
+                                ref_type = current.first();
+                                current = current.rest();
+                                {
+                                    SubLObject ref_args = current;
+                                    current = temp_81;
+                                    if (NIL == current) {
+                                        {
+                                            SubLObject pcase_var = def_type;
+                                            if (pcase_var.eql($MODULE)) {
+                                                {
+                                                    SubLObject datum_82 = def_args;
+                                                    SubLObject current_83 = datum_82;
+                                                    SubLObject module = NIL;
+                                                    destructuring_bind_must_consp(current_83, datum_82, $list_alt44);
+                                                    module = current_83.first();
+                                                    current_83 = current_83.rest();
+                                                    if (NIL == current_83) {
+                                                        format(stream, $str_alt31$__Top_level_form_in__A__, module);
+                                                    } else {
+                                                        cdestructuring_bind_error(datum_82, $list_alt44);
+                                                    }
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($METHOD)) {
+                                                    {
+                                                        SubLObject datum_84 = def_args;
+                                                        SubLObject current_85 = datum_84;
+                                                        SubLObject def_object = NIL;
+                                                        SubLObject module = NIL;
+                                                        destructuring_bind_must_consp(current_85, datum_84, $list_alt45);
+                                                        def_object = current_85.first();
+                                                        current_85 = current_85.rest();
+                                                        destructuring_bind_must_consp(current_85, datum_84, $list_alt45);
+                                                        module = current_85.first();
+                                                        current_85 = current_85.rest();
+                                                        if (NIL == current_85) {
+                                                            format(stream, $str_alt33$__Method__A_in__A__, def_object, module);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_84, $list_alt45);
+                                                        }
+                                                    }
+                                                } else {
+                                                    if (pcase_var.eql($GLOBAL)) {
+                                                        {
+                                                            SubLObject datum_86 = def_args;
+                                                            SubLObject current_87 = datum_86;
+                                                            SubLObject def_object = NIL;
+                                                            SubLObject module = NIL;
+                                                            destructuring_bind_must_consp(current_87, datum_86, $list_alt45);
+                                                            def_object = current_87.first();
+                                                            current_87 = current_87.rest();
+                                                            destructuring_bind_must_consp(current_87, datum_86, $list_alt45);
+                                                            module = current_87.first();
+                                                            current_87 = current_87.rest();
+                                                            if (NIL == current_87) {
+                                                                format(stream, $str_alt34$__Global__A_in__A__, def_object, module);
+                                                            } else {
+                                                                cdestructuring_bind_error(datum_86, $list_alt45);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        format(stream, $str_alt62$_references_undefined);
+                                        {
+                                            SubLObject pcase_var = ref_type;
+                                            if (pcase_var.eql($METHOD)) {
+                                                {
+                                                    SubLObject datum_88 = ref_args;
+                                                    SubLObject current_89 = datum_88;
+                                                    SubLObject ref_object = NIL;
+                                                    destructuring_bind_must_consp(current_89, datum_88, $list_alt63);
+                                                    ref_object = current_89.first();
+                                                    current_89 = current_89.rest();
+                                                    if (NIL == current_89) {
+                                                        format(stream, $str_alt64$__method__A__, ref_object);
+                                                    } else {
+                                                        cdestructuring_bind_error(datum_88, $list_alt63);
+                                                    }
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($GLOBAL)) {
+                                                    {
+                                                        SubLObject datum_90 = ref_args;
+                                                        SubLObject current_91 = datum_90;
+                                                        SubLObject ref_object = NIL;
+                                                        destructuring_bind_must_consp(current_91, datum_90, $list_alt63);
+                                                        ref_object = current_91.first();
+                                                        current_91 = current_91.rest();
+                                                        if (NIL == current_91) {
+                                                            format(stream, $str_alt65$__global__A__, ref_object);
+                                                        } else {
+                                                            cdestructuring_bind_error(datum_90, $list_alt63);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        cdestructuring_bind_error(datum, $list_alt43);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return reference_spec;
     }
 
     public static SubLObject show_one_undefined_reference(final SubLObject reference_spec, SubLObject stream) {
@@ -3431,6 +7543,85 @@ public final class translator_utilities extends SubLTranslatedFile {
         return reference_spec;
     }
 
+    /**
+     * Analyze the definitions in all modules and return a list of all multiple-definitions.
+     *
+     * @return a list of objects suitable for show-multiple-definitions.
+     */
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all multiple-definitions.\r\n\r\n@return a list of objects suitable for show-multiple-definitions.")
+    public static final SubLObject all_multiple_definitions_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_multiple_definitions = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject cdolist_list_var = v_modules;
+                                    SubLObject module = NIL;
+                                    for (module = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject multiple_definitions = com.cyc.cycjava.cycl.translator_utilities.module_multiple_definitions(module);
+                                            SubLObject cdolist_list_var_92 = multiple_definitions;
+                                            SubLObject multiple_definition = NIL;
+                                            for (multiple_definition = cdolist_list_var_92.first(); NIL != cdolist_list_var_92; cdolist_list_var_92 = cdolist_list_var_92.rest() , multiple_definition = cdolist_list_var_92.first()) {
+                                                {
+                                                    SubLObject item_var = multiple_definition;
+                                                    if (NIL == member(item_var, all_multiple_definitions, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                        all_multiple_definitions = cons(item_var, all_multiple_definitions);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_93 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_93, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_multiple_definitions);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the definitions in all modules and return a list of all multiple-definitions.\r\n\r\n@return a list of objects suitable for show-multiple-definitions.")
     public static SubLObject all_multiple_definitions(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -3478,8 +7669,51 @@ public final class translator_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_multiple_definitions);
+    }/**
+     * Analyze the definitions in all modules and return a list of all multiple-definitions.
+     *
+     * @return a list of objects suitable for show-multiple-definitions.
+     */
+
+
+    /**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its multiple definitions
+     *
+     * @return a list of objects suitable for show-multiple-definitions.
+     */
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its multiple definitions\r\n\r\n@return a list of objects suitable for show-multiple-definitions.")
+    public static final SubLObject module_multiple_definitions_alt(SubLObject defined_module) {
+        {
+            SubLObject multiple_definitions = NIL;
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                SubLObject defined_method = NIL;
+                for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                    if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_has_multiple_definitionsP(defined_method)) {
+                        {
+                            SubLObject position_specs = com.cyc.cycjava.cycl.translator_utilities.td_method_definition_positions(defined_method);
+                            multiple_definitions = cons(list($METHOD, defined_method, position_specs), multiple_definitions);
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                SubLObject defined_global = NIL;
+                for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                    if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_global_has_multiple_definitionsP(defined_global)) {
+                        {
+                            SubLObject position_specs = com.cyc.cycjava.cycl.translator_utilities.td_global_definition_positions(defined_global);
+                            multiple_definitions = cons(list($GLOBAL, defined_global, position_specs), multiple_definitions);
+                        }
+                    }
+                }
+            }
+            return nreverse(multiple_definitions);
+        }
     }
 
+    @LispMethod(comment = "Analyze the definitions in DEFINED-MODULE and return a list of its multiple definitions\r\n\r\n@return a list of objects suitable for show-multiple-definitions.")
     public static SubLObject module_multiple_definitions(final SubLObject defined_module) {
         SubLObject multiple_definitions = NIL;
         SubLObject cdolist_list_var = td_methods_defined_by_module(defined_module);
@@ -3505,8 +7739,37 @@ public final class translator_utilities extends SubLTranslatedFile {
             defined_global = cdolist_list_var.first();
         } 
         return nreverse(multiple_definitions);
+    }/**
+     * Analyze the definitions in DEFINED-MODULE and return a list of its multiple definitions
+     *
+     * @return a list of objects suitable for show-multiple-definitions.
+     */
+
+
+    /**
+     * Show a list of multiple definitions described in DEFINITION-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of multiple definitions described in DEFINITION-SPECS to STREAM.")
+    public static final SubLObject show_multiple_definitions_alt(SubLObject definition_specs, SubLObject stream) {
+        if (definition_specs == UNPROVIDED) {
+            definition_specs = com.cyc.cycjava.cycl.translator_utilities.all_multiple_definitions(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = definition_specs;
+            SubLObject definition_spec = NIL;
+            for (definition_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , definition_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_multiple_definition(definition_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of multiple definitions described in DEFINITION-SPECS to STREAM.")
     public static SubLObject show_multiple_definitions(SubLObject definition_specs, SubLObject stream) {
         if (definition_specs == UNPROVIDED) {
             definition_specs = all_multiple_definitions(UNPROVIDED);
@@ -3525,6 +7788,64 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of multiple definitions described in DEFINITION-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_multiple_definition_alt(SubLObject definition_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = definition_spec;
+            SubLObject current = datum;
+            SubLObject def_type = NIL;
+            SubLObject def_object = NIL;
+            SubLObject definition_positions = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt66);
+            def_type = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt66);
+            def_object = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt66);
+            definition_positions = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject pcase_var = def_type;
+                    if (pcase_var.eql($METHOD)) {
+                        format(stream, $str_alt67$__Method__A_has_multiple_definiti, def_object);
+                    } else {
+                        if (pcase_var.eql($GLOBAL)) {
+                            format(stream, $str_alt68$__Global__A_has_multiple_definiti, def_object);
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = definition_positions;
+                    SubLObject definition_position = NIL;
+                    for (definition_position = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , definition_position = cdolist_list_var.first()) {
+                        {
+                            SubLObject datum_94 = definition_position;
+                            SubLObject current_95 = datum_94;
+                            SubLObject module = NIL;
+                            SubLObject file_position = NIL;
+                            destructuring_bind_must_consp(current_95, datum_94, $list_alt69);
+                            module = current_95.first();
+                            current_95 = current_95.rest();
+                            file_position = current_95;
+                            format(stream, $str_alt70$_____A_at_position__S, module, file_position);
+                        }
+                    }
+                }
+                terpri(stream);
+            } else {
+                cdestructuring_bind_error(datum, $list_alt66);
+            }
+        }
+        return definition_spec;
     }
 
     public static SubLObject show_one_multiple_definition(final SubLObject definition_spec, SubLObject stream) {
@@ -3574,6 +7895,85 @@ public final class translator_utilities extends SubLTranslatedFile {
         return definition_spec;
     }
 
+    /**
+     * Analyze the references in all modules and return a list of all early-constant-references.
+     *
+     * @return a list of objects suitable for show-early-constant-references.
+     */
+    @LispMethod(comment = "Analyze the references in all modules and return a list of all early-constant-references.\r\n\r\n@return a list of objects suitable for show-early-constant-references.")
+    public static final SubLObject all_early_constant_references_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_early_constant_references = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject cdolist_list_var = v_modules;
+                                    SubLObject module = NIL;
+                                    for (module = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject early_constant_references = com.cyc.cycjava.cycl.translator_utilities.module_early_constant_references(module);
+                                            SubLObject cdolist_list_var_96 = early_constant_references;
+                                            SubLObject early_constant_reference = NIL;
+                                            for (early_constant_reference = cdolist_list_var_96.first(); NIL != cdolist_list_var_96; cdolist_list_var_96 = cdolist_list_var_96.rest() , early_constant_reference = cdolist_list_var_96.first()) {
+                                                {
+                                                    SubLObject item_var = early_constant_reference;
+                                                    if (NIL == member(item_var, all_early_constant_references, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                        all_early_constant_references = cons(item_var, all_early_constant_references);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_97 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_97, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_early_constant_references);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze the references in all modules and return a list of all early-constant-references.\r\n\r\n@return a list of objects suitable for show-early-constant-references.")
     public static SubLObject all_early_constant_references(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -3621,8 +8021,55 @@ public final class translator_utilities extends SubLTranslatedFile {
             memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
         }
         return nreverse(all_early_constant_references);
+    }/**
+     * Analyze the references in all modules and return a list of all early-constant-references.
+     *
+     * @return a list of objects suitable for show-early-constant-references.
+     */
+
+
+    /**
+     * Analyze the references in DEFINED-MODULE and return a list of its early-constant references
+     *
+     * @return a list of objects suitable for show-early-constant-references.
+     */
+    @LispMethod(comment = "Analyze the references in DEFINED-MODULE and return a list of its early-constant references\r\n\r\n@return a list of objects suitable for show-early-constant-references.")
+    public static final SubLObject module_early_constant_references_alt(SubLObject defined_module) {
+        {
+            SubLObject referenced_method = READER_MAKE_CONSTANT_SHELL;
+            SubLObject referenced_module = com.cyc.cycjava.cycl.translator_utilities.td_method_defining_module(referenced_method);
+            if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_module_earlier(defined_module, referenced_module)) {
+                {
+                    SubLObject early_constant_references = NIL;
+                    {
+                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+                        SubLObject defined_method = NIL;
+                        for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                            if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_called_by_methodP(referenced_method, defined_method)) {
+                                early_constant_references = cons(list($METHOD, defined_method, defined_module), early_constant_references);
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_globals_defined_by_module(defined_module);
+                        SubLObject defined_global = NIL;
+                        for (defined_global = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_global = cdolist_list_var.first()) {
+                            if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_called_by_globalP(referenced_method, defined_global)) {
+                                early_constant_references = cons(list($GLOBAL, defined_global, defined_module), early_constant_references);
+                            }
+                        }
+                    }
+                    if (NIL != com.cyc.cycjava.cycl.translator_utilities.td_method_called_by_moduleP(referenced_method, defined_module)) {
+                        early_constant_references = cons(list($MODULE, defined_module), early_constant_references);
+                    }
+                    return nreverse(early_constant_references);
+                }
+            }
+        }
+        return NIL;
     }
 
+    @LispMethod(comment = "Analyze the references in DEFINED-MODULE and return a list of its early-constant references\r\n\r\n@return a list of objects suitable for show-early-constant-references.")
     public static SubLObject module_early_constant_references(final SubLObject defined_module) {
         final SubLObject referenced_method = READER_MAKE_CONSTANT_SHELL;
         final SubLObject referenced_module = td_method_defining_module(referenced_method);
@@ -3654,8 +8101,37 @@ public final class translator_utilities extends SubLTranslatedFile {
             return nreverse(early_constant_references);
         }
         return NIL;
+    }/**
+     * Analyze the references in DEFINED-MODULE and return a list of its early-constant references
+     *
+     * @return a list of objects suitable for show-early-constant-references.
+     */
+
+
+    /**
+     * Show a list of early-constant references described in REFERENCE-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of early-constant references described in REFERENCE-SPECS to STREAM.")
+    public static final SubLObject show_early_constant_references_alt(SubLObject reference_specs, SubLObject stream) {
+        if (reference_specs == UNPROVIDED) {
+            reference_specs = com.cyc.cycjava.cycl.translator_utilities.all_early_constant_references(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject cdolist_list_var = reference_specs;
+            SubLObject reference_spec = NIL;
+            for (reference_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , reference_spec = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.translator_utilities.show_one_early_constant_reference(reference_spec, stream);
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of early-constant references described in REFERENCE-SPECS to STREAM.")
     public static SubLObject show_early_constant_references(SubLObject reference_specs, SubLObject stream) {
         if (reference_specs == UNPROVIDED) {
             reference_specs = all_early_constant_references(UNPROVIDED);
@@ -3674,6 +8150,84 @@ public final class translator_utilities extends SubLTranslatedFile {
         terpri(stream);
         force_output(stream);
         return NIL;
+    }/**
+     * Show a list of early-constant references described in REFERENCE-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_early_constant_reference_alt(SubLObject reference_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = reference_spec;
+            SubLObject current = datum;
+            SubLObject ref_type = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt72);
+            ref_type = current.first();
+            current = current.rest();
+            {
+                SubLObject ref_args = current;
+                SubLObject pcase_var = ref_type;
+                if (pcase_var.eql($MODULE)) {
+                    {
+                        SubLObject datum_98 = ref_args;
+                        SubLObject current_99 = datum_98;
+                        SubLObject module = NIL;
+                        destructuring_bind_must_consp(current_99, datum_98, $list_alt44);
+                        module = current_99.first();
+                        current_99 = current_99.rest();
+                        if (NIL == current_99) {
+                            format(stream, $str_alt31$__Top_level_form_in__A__, module);
+                        } else {
+                            cdestructuring_bind_error(datum_98, $list_alt44);
+                        }
+                    }
+                } else {
+                    if (pcase_var.eql($METHOD)) {
+                        {
+                            SubLObject datum_100 = ref_args;
+                            SubLObject current_101 = datum_100;
+                            SubLObject ref_object = NIL;
+                            SubLObject module = NIL;
+                            destructuring_bind_must_consp(current_101, datum_100, $list_alt47);
+                            ref_object = current_101.first();
+                            current_101 = current_101.rest();
+                            destructuring_bind_must_consp(current_101, datum_100, $list_alt47);
+                            module = current_101.first();
+                            current_101 = current_101.rest();
+                            if (NIL == current_101) {
+                                format(stream, $str_alt33$__Method__A_in__A__, ref_object, module);
+                            } else {
+                                cdestructuring_bind_error(datum_100, $list_alt47);
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($GLOBAL)) {
+                            {
+                                SubLObject datum_102 = ref_args;
+                                SubLObject current_103 = datum_102;
+                                SubLObject ref_object = NIL;
+                                SubLObject module = NIL;
+                                destructuring_bind_must_consp(current_103, datum_102, $list_alt47);
+                                ref_object = current_103.first();
+                                current_103 = current_103.rest();
+                                destructuring_bind_must_consp(current_103, datum_102, $list_alt47);
+                                module = current_103.first();
+                                current_103 = current_103.rest();
+                                if (NIL == current_103) {
+                                    format(stream, $str_alt34$__Global__A_in__A__, ref_object, module);
+                                } else {
+                                    cdestructuring_bind_error(datum_102, $list_alt47);
+                                }
+                            }
+                        }
+                    }
+                }
+                format(stream, $str_alt73$references____before_it_is_comple);
+            }
+        }
+        return reference_spec;
     }
 
     public static SubLObject show_one_early_constant_reference(final SubLObject reference_spec, SubLObject stream) {
@@ -3739,6 +8293,47 @@ public final class translator_utilities extends SubLTranslatedFile {
         return reference_spec;
     }
 
+    /**
+     * Print to STREAM warnings about API macros that expand into non-API methods.
+     */
+    @LispMethod(comment = "Print to STREAM warnings about API macros that expand into non-API methods.")
+    public static final SubLObject show_api_macros_with_non_api_expansions_alt(SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject problems = NIL;
+            SubLObject macro = NIL;
+            SubLObject ignore = NIL;
+            {
+                final Iterator cdohash_iterator = getEntrySetIterator($api_predefined_macro_table$.getGlobalValue());
+                try {
+                    while (iteratorHasNext(cdohash_iterator)) {
+                        final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                        macro = getEntryKey(cdohash_entry);
+                        ignore = getEntryValue(cdohash_entry);
+                        {
+                            SubLObject non_api_expansions = com.cyc.cycjava.cycl.translator_utilities.non_api_expansions_for_api_macro(macro);
+                            if (NIL != non_api_expansions) {
+                                problems = cons(cons(macro, non_api_expansions), problems);
+                            }
+                        }
+                    } 
+                } finally {
+                    releaseEntrySetIterator(cdohash_iterator);
+                }
+            }
+            if (NIL != problems) {
+                {
+                    SubLObject build_problem_spec = list($API_MACRO_VISIBILITY, problems);
+                    com.cyc.cycjava.cycl.translator_utilities.show_one_build_problem(build_problem_spec, stream);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    @LispMethod(comment = "Print to STREAM warnings about API macros that expand into non-API methods.")
     public static SubLObject show_api_macros_with_non_api_expansions(SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -3765,6 +8360,27 @@ public final class translator_utilities extends SubLTranslatedFile {
             show_one_build_problem(build_problem_spec, stream);
         }
         return NIL;
+    }/**
+     * Print to STREAM warnings about API macros that expand into non-API methods.
+     */
+
+
+    public static final SubLObject show_one_api_macro_visibility_problem_alt(SubLObject violation_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = violation_spec;
+            SubLObject current = datum;
+            SubLObject macro = NIL;
+            SubLObject non_api_expansions = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt75);
+            macro = current.first();
+            current = current.rest();
+            non_api_expansions = current;
+            format(stream, $str_alt76$__API_macro__A_expands_to_non_API, macro, non_api_expansions);
+        }
+        return NIL;
     }
 
     public static SubLObject show_one_api_macro_visibility_problem(final SubLObject violation_spec, SubLObject stream) {
@@ -3780,8 +8396,37 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @return LISTP of methods in the expansion of MACRO that are not part of the API.
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return LISTP of methods in the expansion of MACRO that are not part of the API.\r\n@unknown baxter")
+    public static final SubLObject non_api_expansions_for_api_macro_alt(SubLObject macro) {
+        SubLTrampolineFile.checkType(macro, API_PREDEFINED_MACRO_P);
+        {
+            SubLObject non_api_expansions = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_macro_expansion_calls(macro);
+            SubLObject method = NIL;
+            for (method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , method = cdolist_list_var.first()) {
+                if (!((NIL != api_predefined_macro_p(method)) || (NIL != api_predefined_function_p(method)))) {
+                    non_api_expansions = cons(method, non_api_expansions);
+                }
+            }
+            return non_api_expansions;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of methods in the expansion of MACRO that are not part of the API.
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return LISTP of methods in the expansion of MACRO that are not part of the API.\r\n@unknown baxter")
     public static SubLObject non_api_expansions_for_api_macro(final SubLObject macro) {
-        assert NIL != api_predefined_macro_p(macro) : "utilities_macros.api_predefined_macro_p(macro) " + "CommonSymbols.NIL != utilities_macros.api_predefined_macro_p(macro) " + macro;
+        assert NIL != api_predefined_macro_p(macro) : "! utilities_macros.api_predefined_macro_p(macro) " + ("utilities_macros.api_predefined_macro_p(macro) " + "CommonSymbols.NIL != utilities_macros.api_predefined_macro_p(macro) ") + macro;
         SubLObject non_api_expansions = NIL;
         SubLObject cdolist_list_var = td_macro_expansion_calls(macro);
         SubLObject method = NIL;
@@ -3796,6 +8441,109 @@ public final class translator_utilities extends SubLTranslatedFile {
         return non_api_expansions;
     }
 
+    /**
+     * Analyze each module in MODULES and return a list of all build problems.
+     *
+     * @return a list of objects suitable for show-build-problems.
+     */
+    @LispMethod(comment = "Analyze each module in MODULES and return a list of all build problems.\r\n\r\n@return a list of objects suitable for show-build-problems.")
+    public static final SubLObject all_build_problems_alt(SubLObject v_modules) {
+        if (v_modules == UNPROVIDED) {
+            v_modules = com.cyc.cycjava.cycl.translator_utilities.td_translation_modules();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_build_problems = NIL;
+                SubLObject state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                    try {
+                        memoization_state.$memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt4$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject list_var = v_modules;
+                                    $progress_note$.setDynamicValue($$$Determining_build_problems, thread);
+                                    $progress_start_time$.setDynamicValue(get_universal_time(), thread);
+                                    $progress_total$.setDynamicValue(length(list_var), thread);
+                                    $progress_sofar$.setDynamicValue(ZERO_INTEGER, thread);
+                                    {
+                                        SubLObject _prev_bind_0_104 = $last_percent_progress_index$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                        try {
+                                            $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                            $last_percent_progress_prediction$.bind(NIL, thread);
+                                            $within_noting_percent_progress$.bind(T, thread);
+                                            $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                            noting_percent_progress_preamble($progress_note$.getDynamicValue(thread));
+                                            {
+                                                SubLObject csome_list_var = list_var;
+                                                SubLObject module = NIL;
+                                                for (module = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , module = csome_list_var.first()) {
+                                                    note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
+                                                    $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
+                                                    {
+                                                        SubLObject build_problems = com.cyc.cycjava.cycl.translator_utilities.module_build_problems(module);
+                                                        SubLObject cdolist_list_var = build_problems;
+                                                        SubLObject build_problem = NIL;
+                                                        for (build_problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , build_problem = cdolist_list_var.first()) {
+                                                            all_build_problems = cons(build_problem, all_build_problems);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            noting_percent_progress_postamble();
+                                        } finally {
+                                            $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                            $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                            $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                            $last_percent_progress_index$.rebind(_prev_bind_0_104, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_105 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_105, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                all_build_problems = nreverse(all_build_problems);
+                return all_build_problems;
+            }
+        }
+    }
+
+    @LispMethod(comment = "Analyze each module in MODULES and return a list of all build problems.\r\n\r\n@return a list of objects suitable for show-build-problems.")
     public static SubLObject all_build_problems(SubLObject v_modules) {
         if (v_modules == UNPROVIDED) {
             v_modules = td_translation_modules();
@@ -3884,8 +8632,61 @@ public final class translator_utilities extends SubLTranslatedFile {
         }
         all_build_problems = nreverse(all_build_problems);
         return all_build_problems;
+    }/**
+     * Analyze each module in MODULES and return a list of all build problems.
+     *
+     * @return a list of objects suitable for show-build-problems.
+     */
+
+
+    /**
+     * Analyze the references in DEFINED-MODULE and return a list of its build problems
+     *
+     * @return a list of objects suitable for show-build-problems.
+     */
+    @LispMethod(comment = "Analyze the references in DEFINED-MODULE and return a list of its build problems\r\n\r\n@return a list of objects suitable for show-build-problems.")
+    public static final SubLObject module_build_problems_alt(SubLObject defined_module) {
+        {
+            SubLObject build_problems = NIL;
+            SubLObject multiple_definitions = com.cyc.cycjava.cycl.translator_utilities.module_multiple_definitions(defined_module);
+            if (NIL != multiple_definitions) {
+                build_problems = cons(list($MULTIPLE_DEFINITIONS, multiple_definitions), build_problems);
+            }
+            {
+                SubLObject undefined_references = com.cyc.cycjava.cycl.translator_utilities.module_undefined_references(defined_module);
+                if (NIL != undefined_references) {
+                    build_problems = cons(list($UNDEFINED_REFERENCES, undefined_references), build_problems);
+                }
+            }
+            {
+                SubLObject privacy_violations = com.cyc.cycjava.cycl.translator_utilities.module_privacy_violations(defined_module);
+                if (NIL != privacy_violations) {
+                    build_problems = cons(list($PRIVACY_VIOLATIONS, privacy_violations), build_problems);
+                }
+            }
+            {
+                SubLObject early_constant_references = com.cyc.cycjava.cycl.translator_utilities.module_early_constant_references(defined_module);
+                if (NIL != early_constant_references) {
+                    build_problems = cons(list($EARLY_CONSTANT_REFERENCES, early_constant_references), build_problems);
+                }
+            }
+            {
+                SubLObject early_reference_violations = com.cyc.cycjava.cycl.translator_utilities.module_early_reference_violations(defined_module);
+                if (NIL != early_reference_violations) {
+                    build_problems = cons(list($EARLY_REFERENCE_VIOLATIONS, early_reference_violations), build_problems);
+                }
+            }
+            {
+                SubLObject early_rebinding_violations = com.cyc.cycjava.cycl.translator_utilities.module_early_rebinding_violations(defined_module);
+                if (NIL != early_rebinding_violations) {
+                    build_problems = cons(list($EARLY_REBINDING_VIOLATIONS, early_rebinding_violations), build_problems);
+                }
+            }
+            return nreverse(build_problems);
+        }
     }
 
+    @LispMethod(comment = "Analyze the references in DEFINED-MODULE and return a list of its build problems\r\n\r\n@return a list of objects suitable for show-build-problems.")
     public static SubLObject module_build_problems(final SubLObject defined_module) {
         SubLObject build_problems = NIL;
         final SubLObject multiple_definitions = module_multiple_definitions(defined_module);
@@ -3913,8 +8714,41 @@ public final class translator_utilities extends SubLTranslatedFile {
             build_problems = cons(list($EARLY_REBINDING_VIOLATIONS, early_rebinding_violations), build_problems);
         }
         return nreverse(build_problems);
+    }/**
+     * Analyze the references in DEFINED-MODULE and return a list of its build problems
+     *
+     * @return a list of objects suitable for show-build-problems.
+     */
+
+
+    /**
+     * Show a list of build-problems described in BUILD-PROBLEM-SPECS to STREAM.
+     */
+    @LispMethod(comment = "Show a list of build-problems described in BUILD-PROBLEM-SPECS to STREAM.")
+    public static final SubLObject show_build_problems_alt(SubLObject build_problem_specs, SubLObject stream) {
+        if (build_problem_specs == UNPROVIDED) {
+            build_problem_specs = com.cyc.cycjava.cycl.translator_utilities.all_build_problems(UNPROVIDED);
+        }
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        if (NIL == build_problem_specs) {
+            format(stream, $str_alt85$__No_build_problems_);
+        } else {
+            {
+                SubLObject cdolist_list_var = build_problem_specs;
+                SubLObject build_problem_spec = NIL;
+                for (build_problem_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , build_problem_spec = cdolist_list_var.first()) {
+                    com.cyc.cycjava.cycl.translator_utilities.show_one_build_problem(build_problem_spec, stream);
+                }
+            }
+        }
+        terpri(stream);
+        force_output(stream);
+        return NIL;
     }
 
+    @LispMethod(comment = "Show a list of build-problems described in BUILD-PROBLEM-SPECS to STREAM.")
     public static SubLObject show_build_problems(SubLObject build_problem_specs, SubLObject stream) {
         if (build_problem_specs == UNPROVIDED) {
             build_problem_specs = all_build_problems(UNPROVIDED);
@@ -3936,6 +8770,106 @@ public final class translator_utilities extends SubLTranslatedFile {
         }
         terpri(stream);
         force_output(stream);
+        return NIL;
+    }/**
+     * Show a list of build-problems described in BUILD-PROBLEM-SPECS to STREAM.
+     */
+
+
+    public static final SubLObject show_one_build_problem_alt(SubLObject build_problem_spec, SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            SubLObject datum = build_problem_spec;
+            SubLObject current = datum;
+            SubLObject problem_class = NIL;
+            SubLObject problems = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt86);
+            problem_class = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt86);
+            problems = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject pcase_var = problem_class;
+                    if (pcase_var.eql($MULTIPLE_DEFINITIONS)) {
+                        {
+                            SubLObject cdolist_list_var = problems;
+                            SubLObject problem = NIL;
+                            for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                com.cyc.cycjava.cycl.translator_utilities.show_one_multiple_definition(problem, stream);
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($UNDEFINED_REFERENCES)) {
+                            {
+                                SubLObject cdolist_list_var = problems;
+                                SubLObject problem = NIL;
+                                for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                    com.cyc.cycjava.cycl.translator_utilities.show_one_undefined_reference(problem, stream);
+                                }
+                            }
+                        } else {
+                            if (pcase_var.eql($PRIVACY_VIOLATIONS)) {
+                                {
+                                    SubLObject cdolist_list_var = problems;
+                                    SubLObject problem = NIL;
+                                    for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                        com.cyc.cycjava.cycl.translator_utilities.show_one_privacy_violation(problem, stream);
+                                    }
+                                }
+                            } else {
+                                if (pcase_var.eql($EARLY_CONSTANT_REFERENCES)) {
+                                    {
+                                        SubLObject cdolist_list_var = problems;
+                                        SubLObject problem = NIL;
+                                        for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                            com.cyc.cycjava.cycl.translator_utilities.show_one_early_constant_reference(problem, stream);
+                                        }
+                                    }
+                                } else {
+                                    if (pcase_var.eql($EARLY_REFERENCE_VIOLATIONS)) {
+                                        {
+                                            SubLObject cdolist_list_var = problems;
+                                            SubLObject problem = NIL;
+                                            for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                                com.cyc.cycjava.cycl.translator_utilities.show_one_early_reference_violation(problem, stream);
+                                            }
+                                        }
+                                    } else {
+                                        if (pcase_var.eql($EARLY_REBINDING_VIOLATIONS)) {
+                                            {
+                                                SubLObject cdolist_list_var = problems;
+                                                SubLObject problem = NIL;
+                                                for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                                    com.cyc.cycjava.cycl.translator_utilities.show_one_early_rebinding_violation(problem, stream);
+                                                }
+                                            }
+                                        } else {
+                                            if (pcase_var.eql($API_MACRO_VISIBILITY)) {
+                                                {
+                                                    SubLObject cdolist_list_var = problems;
+                                                    SubLObject problem = NIL;
+                                                    for (problem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , problem = cdolist_list_var.first()) {
+                                                        com.cyc.cycjava.cycl.translator_utilities.show_one_api_macro_visibility_problem(problem, stream);
+                                                    }
+                                                }
+                                            } else {
+                                                Errors.error($str_alt87$Unknown_build_problem_class__S, problem_class);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list_alt86);
+            }
+        }
         return NIL;
     }
 
@@ -4037,6 +8971,42 @@ public final class translator_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return the total number of build-problems described in BUILD-PROBLEM-SPECS
+     */
+    @LispMethod(comment = "Return the total number of build-problems described in BUILD-PROBLEM-SPECS")
+    public static final SubLObject count_build_problems_alt(SubLObject build_problem_specs) {
+        if (build_problem_specs == UNPROVIDED) {
+            build_problem_specs = com.cyc.cycjava.cycl.translator_utilities.all_build_problems(UNPROVIDED);
+        }
+        {
+            SubLObject total = ZERO_INTEGER;
+            SubLObject cdolist_list_var = build_problem_specs;
+            SubLObject build_problem_spec = NIL;
+            for (build_problem_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , build_problem_spec = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = build_problem_spec;
+                    SubLObject current = datum;
+                    SubLObject problem_class = NIL;
+                    SubLObject problems = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt86);
+                    problem_class = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt86);
+                    problems = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        total = add(total, length(problems));
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt86);
+                    }
+                }
+            }
+            return total;
+        }
+    }
+
+    @LispMethod(comment = "Return the total number of build-problems described in BUILD-PROBLEM-SPECS")
     public static SubLObject count_build_problems(SubLObject build_problem_specs) {
         if (build_problem_specs == UNPROVIDED) {
             build_problem_specs = all_build_problems(UNPROVIDED);
@@ -4065,6 +9035,50 @@ public final class translator_utilities extends SubLTranslatedFile {
             build_problem_spec = cdolist_list_var.first();
         } 
         return total;
+    }/**
+     * Return the total number of build-problems described in BUILD-PROBLEM-SPECS
+     */
+
+
+    public static final SubLObject build_problem_counts_by_module_alt(SubLObject build_problem_specs) {
+        if (build_problem_specs == UNPROVIDED) {
+            build_problem_specs = com.cyc.cycjava.cycl.translator_utilities.all_build_problems(UNPROVIDED);
+        }
+        {
+            SubLObject table = dictionary.new_dictionary(symbol_function(EQUAL), ZERO_INTEGER);
+            SubLObject cdolist_list_var = build_problem_specs;
+            SubLObject build_problem_spec = NIL;
+            for (build_problem_spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , build_problem_spec = cdolist_list_var.first()) {
+                {
+                    SubLObject datum = build_problem_spec;
+                    SubLObject current = datum;
+                    SubLObject problem_class = NIL;
+                    SubLObject problems = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt86);
+                    problem_class = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt86);
+                    problems = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        {
+                            SubLObject problem = problems.first();
+                            SubLObject module = list_utilities.tree_find_if(symbol_function(STRINGP), problem, UNPROVIDED);
+                            if (module.isString()) {
+                                dictionary_utilities.dictionary_increment(table, module, length(problems));
+                            }
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt86);
+                    }
+                }
+            }
+            {
+                SubLObject problem_counts = dictionary_utilities.dictionary_to_alist(table);
+                problem_counts = Sort.sort(problem_counts, symbol_function($sym89$_), symbol_function(CDR));
+                return problem_counts;
+            }
+        }
     }
 
     public static SubLObject build_problem_counts_by_module(SubLObject build_problem_specs) {
@@ -4103,6 +9117,33 @@ public final class translator_utilities extends SubLTranslatedFile {
         return problem_counts;
     }
 
+    /**
+     * Return the list of all other methods that are always called by all the callers of METHOD.
+     */
+    @LispMethod(comment = "Return the list of all other methods that are always called by all the callers of METHOD.")
+    public static final SubLObject td_method_co_called_methods_alt(SubLObject called_method) {
+        {
+            SubLObject all_co_called_methods = $UNINITIALIZED;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_method(called_method);
+            SubLObject calling_method = NIL;
+            for (calling_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , calling_method = cdolist_list_var.first()) {
+                {
+                    SubLObject co_called_methods = com.cyc.cycjava.cycl.translator_utilities.td_methods_called_by_method(calling_method);
+                    if ($UNINITIALIZED == all_co_called_methods) {
+                        all_co_called_methods = copy_list(co_called_methods);
+                    } else {
+                        all_co_called_methods = nintersection(all_co_called_methods, copy_list(co_called_methods), symbol_function(EQ), UNPROVIDED);
+                    }
+                }
+            }
+            if ($UNINITIALIZED != all_co_called_methods) {
+                return delete(called_method, all_co_called_methods, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
+    @LispMethod(comment = "Return the list of all other methods that are always called by all the callers of METHOD.")
     public static SubLObject td_method_co_called_methods(final SubLObject called_method) {
         SubLObject all_co_called_methods = $UNINITIALIZED;
         SubLObject cdolist_list_var = td_methods_calling_method(called_method);
@@ -4122,8 +9163,38 @@ public final class translator_utilities extends SubLTranslatedFile {
             return delete(called_method, all_co_called_methods, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return NIL;
+    }/**
+     * Return the list of all other methods that are always called by all the callers of METHOD.
+     */
+
+
+    /**
+     * Return the list of all globals that are always called by all the callers of METHOD.
+     */
+    @LispMethod(comment = "Return the list of all globals that are always called by all the callers of METHOD.")
+    public static final SubLObject td_method_co_called_globals_alt(SubLObject called_method) {
+        {
+            SubLObject all_co_called_globals = $UNINITIALIZED;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_method(called_method);
+            SubLObject calling_method = NIL;
+            for (calling_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , calling_method = cdolist_list_var.first()) {
+                {
+                    SubLObject co_called_globals = com.cyc.cycjava.cycl.translator_utilities.td_globals_called_by_method(calling_method);
+                    if ($UNINITIALIZED == all_co_called_globals) {
+                        all_co_called_globals = copy_list(co_called_globals);
+                    } else {
+                        all_co_called_globals = nintersection(all_co_called_globals, copy_list(co_called_globals), symbol_function(EQ), UNPROVIDED);
+                    }
+                }
+            }
+            if ($UNINITIALIZED != all_co_called_globals) {
+                return all_co_called_globals;
+            }
+        }
+        return NIL;
     }
 
+    @LispMethod(comment = "Return the list of all globals that are always called by all the callers of METHOD.")
     public static SubLObject td_method_co_called_globals(final SubLObject called_method) {
         SubLObject all_co_called_globals = $UNINITIALIZED;
         SubLObject cdolist_list_var = td_methods_calling_method(called_method);
@@ -4143,10 +9214,39 @@ public final class translator_utilities extends SubLTranslatedFile {
             return all_co_called_globals;
         }
         return NIL;
+    }/**
+     * Return the list of all globals that are always called by all the callers of METHOD.
+     */
+
+
+    /**
+     * Return two values, the methods and globals that expansions of MACRO end up calling.
+     */
+    @LispMethod(comment = "Return two values, the methods and globals that expansions of MACRO end up calling.")
+    public static final SubLObject td_macro_expansion_calls_alt(SubLObject macro) {
+        return values(com.cyc.cycjava.cycl.translator_utilities.td_method_co_called_methods(macro), com.cyc.cycjava.cycl.translator_utilities.td_method_co_called_globals(macro));
     }
 
+    @LispMethod(comment = "Return two values, the methods and globals that expansions of MACRO end up calling.")
     public static SubLObject td_macro_expansion_calls(final SubLObject macro) {
         return values(td_method_co_called_methods(macro), td_method_co_called_globals(macro));
+    }/**
+     * Return two values, the methods and globals that expansions of MACRO end up calling.
+     */
+
+
+    public static final SubLObject td_possible_orphan_methods_from_module_alt(SubLObject defined_module) {
+        {
+            SubLObject unused_methods = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.translator_utilities.td_methods_defined_by_module(defined_module);
+            SubLObject defined_method = NIL;
+            for (defined_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , defined_method = cdolist_list_var.first()) {
+                if (!((((((NIL != html_macros.html_handler_functionP(defined_method)) || (NIL != funcall_helper_functionP(defined_method))) || (NIL != external_function_p(defined_method))) || (NIL != com.cyc.cycjava.cycl.translator_utilities.td_methods_calling_method(defined_method))) || (NIL != string_utilities.starts_with(symbol_name(defined_method), $$$CLEAR))) || (NIL != string_utilities.starts_with(symbol_name(defined_method), $$$REMOVE)))) {
+                    unused_methods = cons(defined_method, unused_methods);
+                }
+            }
+            return unused_methods;
+        }
     }
 
     public static SubLObject td_possible_orphan_methods_from_module(final SubLObject defined_module) {
@@ -4164,148 +9264,444 @@ public final class translator_utilities extends SubLTranslatedFile {
         return unused_methods;
     }
 
+    public static final SubLObject declare_translator_utilities_file_alt() {
+        declareFunction("td_module_p", "TD-MODULE-P", 1, 0, false);
+        declareFunction("td_current_translation", "TD-CURRENT-TRANSLATION", 0, 0, false);
+        declareFunction("td_translation_modules", "TD-TRANSLATION-MODULES", 0, 0, false);
+        declareFunction("td_translation_modules_memoized_internal", "TD-TRANSLATION-MODULES-MEMOIZED-INTERNAL", 0, 0, false);
+        declareFunction("td_translation_modules_memoized", "TD-TRANSLATION-MODULES-MEMOIZED", 0, 0, false);
+        declareFunction("td_module_earlier", "TD-MODULE-EARLIER", 2, 0, false);
+        declareFunction("td_module_translation_position_internal", "TD-MODULE-TRANSLATION-POSITION-INTERNAL", 1, 0, false);
+        declareFunction("td_module_translation_position", "TD-MODULE-TRANSLATION-POSITION", 1, 0, false);
+        declareFunction("td_module_later", "TD-MODULE-LATER", 2, 0, false);
+        declareFunction("td_sort_modules_by_load_order", "TD-SORT-MODULES-BY-LOAD-ORDER", 1, 0, false);
+        declareFunction("td_module_earlier_memoized", "TD-MODULE-EARLIER-MEMOIZED", 2, 0, false);
+        declareFunction("td_module_later_memoized", "TD-MODULE-LATER-MEMOIZED", 2, 0, false);
+        declareFunction("td_module_features", "TD-MODULE-FEATURES", 1, 0, false);
+        declareFunction("td_translation_features", "TD-TRANSLATION-FEATURES", 0, 0, false);
+        declareFunction("td_module_pathname", "TD-MODULE-PATHNAME", 1, 0, false);
+        declareFunction("td_module_cvsweb_url", "TD-MODULE-CVSWEB-URL", 1, 0, false);
+        declareFunction("td_predefined_method_p", "TD-PREDEFINED-METHOD-P", 1, 0, false);
+        declareFunction("td_predefined_global_p", "TD-PREDEFINED-GLOBAL-P", 1, 0, false);
+        declareFunction("td_method_macro_p", "TD-METHOD-MACRO-P", 1, 0, false);
+        declareFunction("td_method_defining_module", "TD-METHOD-DEFINING-MODULE", 1, 0, false);
+        declareFunction("td_method_definition_position", "TD-METHOD-DEFINITION-POSITION", 1, 0, false);
+        declareFunction("td_method_has_multiple_definitionsP", "TD-METHOD-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
+        declareFunction("td_method_definition_positions", "TD-METHOD-DEFINITION-POSITIONS", 1, 0, false);
+        declareFunction("td_method_formal_arglist", "TD-METHOD-FORMAL-ARGLIST", 1, 0, false);
+        declareFunction("td_global_binding_type", "TD-GLOBAL-BINDING-TYPE", 1, 0, false);
+        declareFunction("td_global_defining_module", "TD-GLOBAL-DEFINING-MODULE", 1, 0, false);
+        declareFunction("td_global_definition_position", "TD-GLOBAL-DEFINITION-POSITION", 1, 0, false);
+        declareFunction("td_global_has_multiple_definitionsP", "TD-GLOBAL-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
+        declareFunction("td_global_definition_positions", "TD-GLOBAL-DEFINITION-POSITIONS", 1, 0, false);
+        declareFunction("td_methods_defined_by_module", "TD-METHODS-DEFINED-BY-MODULE", 1, 0, false);
+        declareFunction("td_globals_defined_by_module", "TD-GLOBALS-DEFINED-BY-MODULE", 1, 0, false);
+        declareFunction("td_globals_called_by_method", "TD-GLOBALS-CALLED-BY-METHOD", 1, 0, false);
+        declareFunction("td_globals_rebound_by_method", "TD-GLOBALS-REBOUND-BY-METHOD", 1, 0, false);
+        declareFunction("td_methods_called_by_method", "TD-METHODS-CALLED-BY-METHOD", 1, 0, false);
+        declareFunction("td_method_called_by_methodP", "TD-METHOD-CALLED-BY-METHOD?", 2, 0, false);
+        declareFunction("td_modules_referenced_by_method", "TD-MODULES-REFERENCED-BY-METHOD", 1, 0, false);
+        declareFunction("td_globals_called_by_global", "TD-GLOBALS-CALLED-BY-GLOBAL", 1, 0, false);
+        declareFunction("td_methods_called_by_global", "TD-METHODS-CALLED-BY-GLOBAL", 1, 0, false);
+        declareFunction("td_method_called_by_globalP", "TD-METHOD-CALLED-BY-GLOBAL?", 2, 0, false);
+        declareFunction("td_modules_referenced_by_global", "TD-MODULES-REFERENCED-BY-GLOBAL", 1, 0, false);
+        declareFunction("td_globals_called_by_module", "TD-GLOBALS-CALLED-BY-MODULE", 1, 0, false);
+        declareFunction("td_methods_called_by_module", "TD-METHODS-CALLED-BY-MODULE", 1, 0, false);
+        declareFunction("td_method_called_by_moduleP", "TD-METHOD-CALLED-BY-MODULE?", 2, 0, false);
+        declareFunction("td_module_positions_calling_global", "TD-MODULE-POSITIONS-CALLING-GLOBAL", 2, 0, false);
+        declareFunction("td_module_positions_calling_method", "TD-MODULE-POSITIONS-CALLING-METHOD", 2, 0, false);
+        declareFunction("td_method_unused_p", "TD-METHOD-UNUSED-P", 1, 0, false);
+        declareFunction("td_globals_calling_method", "TD-GLOBALS-CALLING-METHOD", 1, 0, false);
+        declareFunction("td_methods_calling_method", "TD-METHODS-CALLING-METHOD", 1, 0, false);
+        declareFunction("td_modules_calling_method", "TD-MODULES-CALLING-METHOD", 1, 0, false);
+        declareFunction("td_modules_referencing_method", "TD-MODULES-REFERENCING-METHOD", 1, 0, false);
+        declareFunction("td_global_unused_p", "TD-GLOBAL-UNUSED-P", 1, 0, false);
+        declareFunction("td_globals_calling_global", "TD-GLOBALS-CALLING-GLOBAL", 1, 0, false);
+        declareFunction("td_methods_calling_global", "TD-METHODS-CALLING-GLOBAL", 1, 0, false);
+        declareFunction("td_modules_calling_global", "TD-MODULES-CALLING-GLOBAL", 1, 0, false);
+        declareFunction("td_modules_referencing_global", "TD-MODULES-REFERENCING-GLOBAL", 1, 0, false);
+        declareFunction("td_method_potentially_private_p", "TD-METHOD-POTENTIALLY-PRIVATE-P", 1, 0, false);
+        declareFunction("td_global_potentially_private_p", "TD-GLOBAL-POTENTIALLY-PRIVATE-P", 1, 0, false);
+        declareFunction("td_modules_referencing_module", "TD-MODULES-REFERENCING-MODULE", 1, 0, false);
+        declareFunction("td_modules_referenced_by_module", "TD-MODULES-REFERENCED-BY-MODULE", 1, 0, false);
+        declareFunction("td_justify_module_referencing_module", "TD-JUSTIFY-MODULE-REFERENCING-MODULE", 2, 0, false);
+        declareFunction("td_modules_implied_by_methods", "TD-MODULES-IMPLIED-BY-METHODS", 1, 1, false);
+        declareFunction("td_modules_implied_by_globals", "TD-MODULES-IMPLIED-BY-GLOBALS", 1, 1, false);
+        declareFunction("td_modules_affected_by_arglist_change", "TD-MODULES-AFFECTED-BY-ARGLIST-CHANGE", 1, 0, false);
+        declareFunction("td_modules_cluster_containing_module", "TD-MODULES-CLUSTER-CONTAINING-MODULE", 1, 1, false);
+        declareFunction("td_modules_properly_dependent_on_modules", "TD-MODULES-PROPERLY-DEPENDENT-ON-MODULES", 1, 1, false);
+        declareFunction("td_modules_dependent_on_modules", "TD-MODULES-DEPENDENT-ON-MODULES", 1, 1, false);
+        declareFunction("td_modules_dependent_on_module", "TD-MODULES-DEPENDENT-ON-MODULE", 1, 1, false);
+        declareFunction("td_modules_dependent_on_module_methods", "TD-MODULES-DEPENDENT-ON-MODULE-METHODS", 1, 1, false);
+        declareFunction("td_modules_dependent_on_module_globals", "TD-MODULES-DEPENDENT-ON-MODULE-GLOBALS", 1, 1, false);
+        declareFunction("td_explain_how_module_depends_on_module", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULE", 2, 0, false);
+        declareFunction("td_explain_how_module_depends_on_modules", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULES", 2, 0, false);
+        declareFunction("td_method_calls_transitively", "TD-METHOD-CALLS-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_global_calls_transitively", "TD-GLOBAL-CALLS-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_note_method_called_transitively", "TD-NOTE-METHOD-CALLED-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_note_global_called_transitively", "TD-NOTE-GLOBAL-CALLED-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_method_references_modules_transitively", "TD-METHOD-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_method_latest_transitively_referenced_module", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
+        declareFunction("td_method_latest_transitively_referenced_module_memoized_internal", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("td_method_latest_transitively_referenced_module_memoized", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
+        declareFunction("td_justify_method_latest_transitively_referenced_module", "TD-JUSTIFY-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
+        declareFunction("td_justify_method_calls_transitively", "TD-JUSTIFY-METHOD-CALLS-TRANSITIVELY", 2, 0, false);
+        declareFunction("td_global_references_modules_transitively", "TD-GLOBAL-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_global_latest_transitively_referenced_module", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
+        declareFunction("td_global_latest_transitively_referenced_module_memoized_internal", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("td_global_latest_transitively_referenced_module_memoized", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
+        declareFunction("td_justify_global_latest_transitively_referenced_module", "TD-JUSTIFY-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
+        declareFunction("incongruent_features", "INCONGRUENT-FEATURES", 2, 0, false);
+        declareFunction("feature_expression_transform", "FEATURE-EXPRESSION-TRANSFORM", 1, 0, false);
+        declareFunction("non_feature_symbol_p", "NON-FEATURE-SYMBOL-P", 1, 0, false);
+        declareFunction("transform_non_feature_symbol", "TRANSFORM-NON-FEATURE-SYMBOL", 1, 0, false);
+        declareFunction("all_module_level_feature_problems", "ALL-MODULE-LEVEL-FEATURE-PROBLEMS", 0, 1, false);
+        declareFunction("module_level_feature_problems", "MODULE-LEVEL-FEATURE-PROBLEMS", 1, 0, false);
+        declareFunction("potential_module_level_feature_incongruence_internal", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE-INTERNAL", 2, 0, false);
+        declareFunction("potential_module_level_feature_incongruence", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE", 2, 0, false);
+        declareFunction("show_feature_problems", "SHOW-FEATURE-PROBLEMS", 0, 2, false);
+        declareFunction("show_one_feature_problem", "SHOW-ONE-FEATURE-PROBLEM", 1, 1, false);
+        declareFunction("show_one_feature_assumption", "SHOW-ONE-FEATURE-ASSUMPTION", 2, 0, false);
+        declareFunction("feature_explanation", "FEATURE-EXPLANATION", 1, 0, false);
+        declareFunction("all_privacy_violations", "ALL-PRIVACY-VIOLATIONS", 0, 1, false);
+        declareFunction("module_privacy_violations", "MODULE-PRIVACY-VIOLATIONS", 1, 0, false);
+        declareFunction("show_privacy_violations", "SHOW-PRIVACY-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_privacy_violation", "SHOW-ONE-PRIVACY-VIOLATION", 1, 1, false);
+        declareFunction("all_early_rebinding_violations", "ALL-EARLY-REBINDING-VIOLATIONS", 0, 1, false);
+        declareFunction("module_early_rebinding_violations", "MODULE-EARLY-REBINDING-VIOLATIONS", 1, 0, false);
+        declareFunction("show_early_rebinding_violations", "SHOW-EARLY-REBINDING-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_early_rebinding_violation", "SHOW-ONE-EARLY-REBINDING-VIOLATION", 1, 1, false);
+        declareFunction("all_early_reference_violations", "ALL-EARLY-REFERENCE-VIOLATIONS", 0, 1, false);
+        declareFunction("module_early_reference_violations", "MODULE-EARLY-REFERENCE-VIOLATIONS", 1, 0, false);
+        declareFunction("td_early_macro_use_p", "TD-EARLY-MACRO-USE-P", 5, 0, false);
+        declareFunction("td_early_evaluation_reference_p", "TD-EARLY-EVALUATION-REFERENCE-P", 6, 0, false);
+        declareFunction("td_early_global_binding_p", "TD-EARLY-GLOBAL-BINDING-P", 3, 0, false);
+        declareFunction("show_early_reference_violations", "SHOW-EARLY-REFERENCE-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_early_reference_violation", "SHOW-ONE-EARLY-REFERENCE-VIOLATION", 1, 1, false);
+        declareFunction("all_early_macro_use_violations", "ALL-EARLY-MACRO-USE-VIOLATIONS", 0, 1, false);
+        declareFunction("module_early_macro_use_violations", "MODULE-EARLY-MACRO-USE-VIOLATIONS", 1, 0, false);
+        declareFunction("show_early_macro_use_violations", "SHOW-EARLY-MACRO-USE-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_early_macro_use_violation", "SHOW-ONE-EARLY-MACRO-USE-VIOLATION", 1, 1, false);
+        declareFunction("all_undefined_references", "ALL-UNDEFINED-REFERENCES", 0, 1, false);
+        declareFunction("module_undefined_references", "MODULE-UNDEFINED-REFERENCES", 1, 0, false);
+        declareFunction("show_undefined_references", "SHOW-UNDEFINED-REFERENCES", 0, 2, false);
+        declareFunction("show_one_undefined_reference", "SHOW-ONE-UNDEFINED-REFERENCE", 1, 1, false);
+        declareFunction("all_multiple_definitions", "ALL-MULTIPLE-DEFINITIONS", 0, 1, false);
+        declareFunction("module_multiple_definitions", "MODULE-MULTIPLE-DEFINITIONS", 1, 0, false);
+        declareFunction("show_multiple_definitions", "SHOW-MULTIPLE-DEFINITIONS", 0, 2, false);
+        declareFunction("show_one_multiple_definition", "SHOW-ONE-MULTIPLE-DEFINITION", 1, 1, false);
+        declareFunction("all_early_constant_references", "ALL-EARLY-CONSTANT-REFERENCES", 0, 1, false);
+        declareFunction("module_early_constant_references", "MODULE-EARLY-CONSTANT-REFERENCES", 1, 0, false);
+        declareFunction("show_early_constant_references", "SHOW-EARLY-CONSTANT-REFERENCES", 0, 2, false);
+        declareFunction("show_one_early_constant_reference", "SHOW-ONE-EARLY-CONSTANT-REFERENCE", 1, 1, false);
+        declareFunction("show_api_macros_with_non_api_expansions", "SHOW-API-MACROS-WITH-NON-API-EXPANSIONS", 0, 1, false);
+        declareFunction("show_one_api_macro_visibility_problem", "SHOW-ONE-API-MACRO-VISIBILITY-PROBLEM", 1, 1, false);
+        declareFunction("non_api_expansions_for_api_macro", "NON-API-EXPANSIONS-FOR-API-MACRO", 1, 0, false);
+        declareFunction("all_build_problems", "ALL-BUILD-PROBLEMS", 0, 1, false);
+        declareFunction("module_build_problems", "MODULE-BUILD-PROBLEMS", 1, 0, false);
+        declareFunction("show_build_problems", "SHOW-BUILD-PROBLEMS", 0, 2, false);
+        declareFunction("show_one_build_problem", "SHOW-ONE-BUILD-PROBLEM", 1, 1, false);
+        declareFunction("count_build_problems", "COUNT-BUILD-PROBLEMS", 0, 1, false);
+        declareFunction("build_problem_counts_by_module", "BUILD-PROBLEM-COUNTS-BY-MODULE", 0, 1, false);
+        declareFunction("td_method_co_called_methods", "TD-METHOD-CO-CALLED-METHODS", 1, 0, false);
+        declareFunction("td_method_co_called_globals", "TD-METHOD-CO-CALLED-GLOBALS", 1, 0, false);
+        declareFunction("td_macro_expansion_calls", "TD-MACRO-EXPANSION-CALLS", 1, 0, false);
+        declareFunction("td_possible_orphan_methods_from_module", "TD-POSSIBLE-ORPHAN-METHODS-FROM-MODULE", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_translator_utilities_file() {
-        declareFunction(me, "td_module_p", "TD-MODULE-P", 1, 0, false);
-        declareFunction(me, "td_current_translation", "TD-CURRENT-TRANSLATION", 0, 0, false);
-        declareFunction(me, "td_translation_modules", "TD-TRANSLATION-MODULES", 0, 0, false);
-        declareFunction(me, "td_translation_modules_memoized_internal", "TD-TRANSLATION-MODULES-MEMOIZED-INTERNAL", 0, 0, false);
-        declareFunction(me, "td_translation_modules_memoized", "TD-TRANSLATION-MODULES-MEMOIZED", 0, 0, false);
-        declareFunction(me, "td_module_earlier", "TD-MODULE-EARLIER", 2, 0, false);
-        declareFunction(me, "td_module_translation_position_internal", "TD-MODULE-TRANSLATION-POSITION-INTERNAL", 1, 0, false);
-        declareFunction(me, "td_module_translation_position", "TD-MODULE-TRANSLATION-POSITION", 1, 0, false);
-        declareFunction(me, "td_module_later", "TD-MODULE-LATER", 2, 0, false);
-        declareFunction(me, "td_sort_modules_by_load_order", "TD-SORT-MODULES-BY-LOAD-ORDER", 1, 0, false);
-        declareFunction(me, "td_module_earlier_memoized", "TD-MODULE-EARLIER-MEMOIZED", 2, 0, false);
-        declareFunction(me, "td_module_later_memoized", "TD-MODULE-LATER-MEMOIZED", 2, 0, false);
-        declareFunction(me, "td_module_features", "TD-MODULE-FEATURES", 1, 0, false);
-        declareFunction(me, "td_translation_features", "TD-TRANSLATION-FEATURES", 0, 0, false);
-        declareFunction(me, "td_module_pathname", "TD-MODULE-PATHNAME", 1, 0, false);
-        declareFunction(me, "td_predefined_method_p", "TD-PREDEFINED-METHOD-P", 1, 0, false);
-        declareFunction(me, "td_predefined_global_p", "TD-PREDEFINED-GLOBAL-P", 1, 0, false);
-        declareFunction(me, "td_method_macro_p", "TD-METHOD-MACRO-P", 1, 0, false);
-        declareFunction(me, "td_method_defining_module", "TD-METHOD-DEFINING-MODULE", 1, 0, false);
-        declareFunction(me, "td_method_definition_position", "TD-METHOD-DEFINITION-POSITION", 1, 0, false);
-        declareFunction(me, "td_method_has_multiple_definitionsP", "TD-METHOD-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
-        declareFunction(me, "td_method_definition_positions", "TD-METHOD-DEFINITION-POSITIONS", 1, 0, false);
-        declareFunction(me, "td_method_formal_arglist", "TD-METHOD-FORMAL-ARGLIST", 1, 0, false);
-        declareFunction(me, "td_global_binding_type", "TD-GLOBAL-BINDING-TYPE", 1, 0, false);
-        declareFunction(me, "td_global_defining_module", "TD-GLOBAL-DEFINING-MODULE", 1, 0, false);
-        declareFunction(me, "td_global_definition_position", "TD-GLOBAL-DEFINITION-POSITION", 1, 0, false);
-        declareFunction(me, "td_global_has_multiple_definitionsP", "TD-GLOBAL-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
-        declareFunction(me, "td_global_definition_positions", "TD-GLOBAL-DEFINITION-POSITIONS", 1, 0, false);
-        declareFunction(me, "td_methods_defined_by_module", "TD-METHODS-DEFINED-BY-MODULE", 1, 0, false);
-        declareFunction(me, "td_globals_defined_by_module", "TD-GLOBALS-DEFINED-BY-MODULE", 1, 0, false);
-        declareFunction(me, "td_globals_called_by_method", "TD-GLOBALS-CALLED-BY-METHOD", 1, 0, false);
-        declareFunction(me, "td_globals_rebound_by_method", "TD-GLOBALS-REBOUND-BY-METHOD", 1, 0, false);
-        declareFunction(me, "td_methods_called_by_method", "TD-METHODS-CALLED-BY-METHOD", 1, 0, false);
-        declareFunction(me, "td_method_called_by_methodP", "TD-METHOD-CALLED-BY-METHOD?", 2, 0, false);
-        declareFunction(me, "td_modules_referenced_by_method", "TD-MODULES-REFERENCED-BY-METHOD", 1, 0, false);
-        declareFunction(me, "td_globals_called_by_global", "TD-GLOBALS-CALLED-BY-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_methods_called_by_global", "TD-METHODS-CALLED-BY-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_method_called_by_globalP", "TD-METHOD-CALLED-BY-GLOBAL?", 2, 0, false);
-        declareFunction(me, "td_modules_referenced_by_global", "TD-MODULES-REFERENCED-BY-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_globals_called_by_module", "TD-GLOBALS-CALLED-BY-MODULE", 1, 0, false);
-        declareFunction(me, "td_methods_called_by_module", "TD-METHODS-CALLED-BY-MODULE", 1, 0, false);
-        declareFunction(me, "td_method_called_by_moduleP", "TD-METHOD-CALLED-BY-MODULE?", 2, 0, false);
-        declareFunction(me, "td_module_positions_calling_global", "TD-MODULE-POSITIONS-CALLING-GLOBAL", 2, 0, false);
-        declareFunction(me, "td_module_positions_calling_method", "TD-MODULE-POSITIONS-CALLING-METHOD", 2, 0, false);
-        declareFunction(me, "td_method_unused_p", "TD-METHOD-UNUSED-P", 1, 0, false);
-        declareFunction(me, "td_globals_calling_method", "TD-GLOBALS-CALLING-METHOD", 1, 0, false);
-        declareFunction(me, "td_methods_calling_method", "TD-METHODS-CALLING-METHOD", 1, 0, false);
-        declareFunction(me, "td_modules_calling_method", "TD-MODULES-CALLING-METHOD", 1, 0, false);
-        declareFunction(me, "td_modules_referencing_method", "TD-MODULES-REFERENCING-METHOD", 1, 0, false);
-        declareFunction(me, "td_global_unused_p", "TD-GLOBAL-UNUSED-P", 1, 0, false);
-        declareFunction(me, "td_globals_calling_global", "TD-GLOBALS-CALLING-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_methods_calling_global", "TD-METHODS-CALLING-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_modules_calling_global", "TD-MODULES-CALLING-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_modules_referencing_global", "TD-MODULES-REFERENCING-GLOBAL", 1, 0, false);
-        declareFunction(me, "td_method_potentially_private_p", "TD-METHOD-POTENTIALLY-PRIVATE-P", 1, 0, false);
-        declareFunction(me, "td_global_potentially_private_p", "TD-GLOBAL-POTENTIALLY-PRIVATE-P", 1, 0, false);
-        declareFunction(me, "td_modules_referencing_module", "TD-MODULES-REFERENCING-MODULE", 1, 0, false);
-        declareFunction(me, "td_modules_referenced_by_module", "TD-MODULES-REFERENCED-BY-MODULE", 1, 0, false);
-        declareFunction(me, "td_justify_module_referencing_module", "TD-JUSTIFY-MODULE-REFERENCING-MODULE", 2, 0, false);
-        declareFunction(me, "td_modules_implied_by_methods", "TD-MODULES-IMPLIED-BY-METHODS", 1, 1, false);
-        declareFunction(me, "td_modules_implied_by_globals", "TD-MODULES-IMPLIED-BY-GLOBALS", 1, 1, false);
-        declareFunction(me, "td_modules_affected_by_arglist_change", "TD-MODULES-AFFECTED-BY-ARGLIST-CHANGE", 1, 0, false);
-        declareFunction(me, "td_modules_cluster_containing_module", "TD-MODULES-CLUSTER-CONTAINING-MODULE", 1, 1, false);
-        declareFunction(me, "td_modules_properly_dependent_on_modules", "TD-MODULES-PROPERLY-DEPENDENT-ON-MODULES", 1, 1, false);
-        declareFunction(me, "td_modules_dependent_on_modules", "TD-MODULES-DEPENDENT-ON-MODULES", 1, 1, false);
-        declareFunction(me, "td_modules_dependent_on_module", "TD-MODULES-DEPENDENT-ON-MODULE", 1, 1, false);
-        declareFunction(me, "td_modules_dependent_on_module_methods", "TD-MODULES-DEPENDENT-ON-MODULE-METHODS", 1, 1, false);
-        declareFunction(me, "td_modules_dependent_on_module_globals", "TD-MODULES-DEPENDENT-ON-MODULE-GLOBALS", 1, 1, false);
-        declareFunction(me, "td_explain_how_module_depends_on_module", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULE", 2, 0, false);
-        declareFunction(me, "td_explain_how_module_depends_on_modules", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULES", 2, 0, false);
-        declareFunction(me, "td_method_calls_transitively", "TD-METHOD-CALLS-TRANSITIVELY", 1, 0, false);
-        declareFunction(me, "td_global_calls_transitively", "TD-GLOBAL-CALLS-TRANSITIVELY", 1, 0, false);
-        declareFunction(me, "td_note_method_called_transitively", "TD-NOTE-METHOD-CALLED-TRANSITIVELY", 1, 0, false);
-        declareFunction(me, "td_note_global_called_transitively", "TD-NOTE-GLOBAL-CALLED-TRANSITIVELY", 1, 0, false);
-        declareFunction(me, "td_method_references_modules_transitively", "TD-METHOD-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
-        declareFunction(me, "td_method_latest_transitively_referenced_module", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
-        declareFunction(me, "td_method_latest_transitively_referenced_module_memoized_internal", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "td_method_latest_transitively_referenced_module_memoized", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
-        declareFunction(me, "td_justify_method_latest_transitively_referenced_module", "TD-JUSTIFY-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
-        declareFunction(me, "td_justify_method_calls_transitively", "TD-JUSTIFY-METHOD-CALLS-TRANSITIVELY", 2, 0, false);
-        declareFunction(me, "td_global_references_modules_transitively", "TD-GLOBAL-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
-        declareFunction(me, "td_global_latest_transitively_referenced_module", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
-        declareFunction(me, "td_global_latest_transitively_referenced_module_memoized_internal", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "td_global_latest_transitively_referenced_module_memoized", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
-        declareFunction(me, "td_justify_global_latest_transitively_referenced_module", "TD-JUSTIFY-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
-        declareFunction(me, "incongruent_features", "INCONGRUENT-FEATURES", 2, 0, false);
-        declareFunction(me, "feature_expression_transform", "FEATURE-EXPRESSION-TRANSFORM", 1, 0, false);
-        declareFunction(me, "non_feature_symbol_p", "NON-FEATURE-SYMBOL-P", 1, 0, false);
-        declareFunction(me, "transform_non_feature_symbol", "TRANSFORM-NON-FEATURE-SYMBOL", 1, 0, false);
-        declareFunction(me, "all_module_level_feature_problems", "ALL-MODULE-LEVEL-FEATURE-PROBLEMS", 0, 1, false);
-        declareFunction(me, "module_level_feature_problems", "MODULE-LEVEL-FEATURE-PROBLEMS", 1, 0, false);
-        declareFunction(me, "potential_module_level_feature_incongruence_internal", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE-INTERNAL", 2, 0, false);
-        declareFunction(me, "potential_module_level_feature_incongruence", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE", 2, 0, false);
-        declareFunction(me, "show_feature_problems", "SHOW-FEATURE-PROBLEMS", 0, 2, false);
-        declareFunction(me, "show_one_feature_problem", "SHOW-ONE-FEATURE-PROBLEM", 1, 1, false);
-        declareFunction(me, "show_one_feature_assumption", "SHOW-ONE-FEATURE-ASSUMPTION", 2, 0, false);
-        declareFunction(me, "feature_explanation", "FEATURE-EXPLANATION", 1, 0, false);
-        declareFunction(me, "all_privacy_violations", "ALL-PRIVACY-VIOLATIONS", 0, 1, false);
-        declareFunction(me, "module_privacy_violations", "MODULE-PRIVACY-VIOLATIONS", 1, 0, false);
-        declareFunction(me, "show_privacy_violations", "SHOW-PRIVACY-VIOLATIONS", 0, 2, false);
-        declareFunction(me, "show_one_privacy_violation", "SHOW-ONE-PRIVACY-VIOLATION", 1, 1, false);
-        declareFunction(me, "all_early_rebinding_violations", "ALL-EARLY-REBINDING-VIOLATIONS", 0, 1, false);
-        declareFunction(me, "module_early_rebinding_violations", "MODULE-EARLY-REBINDING-VIOLATIONS", 1, 0, false);
-        declareFunction(me, "show_early_rebinding_violations", "SHOW-EARLY-REBINDING-VIOLATIONS", 0, 2, false);
-        declareFunction(me, "show_one_early_rebinding_violation", "SHOW-ONE-EARLY-REBINDING-VIOLATION", 1, 1, false);
-        declareFunction(me, "all_early_reference_violations", "ALL-EARLY-REFERENCE-VIOLATIONS", 0, 1, false);
-        declareFunction(me, "module_early_reference_violations", "MODULE-EARLY-REFERENCE-VIOLATIONS", 1, 0, false);
-        declareFunction(me, "td_early_macro_use_p", "TD-EARLY-MACRO-USE-P", 5, 0, false);
-        declareFunction(me, "td_early_evaluation_reference_p", "TD-EARLY-EVALUATION-REFERENCE-P", 6, 0, false);
-        declareFunction(me, "td_early_global_binding_p", "TD-EARLY-GLOBAL-BINDING-P", 3, 0, false);
-        declareFunction(me, "show_early_reference_violations", "SHOW-EARLY-REFERENCE-VIOLATIONS", 0, 2, false);
-        declareFunction(me, "show_one_early_reference_violation", "SHOW-ONE-EARLY-REFERENCE-VIOLATION", 1, 1, false);
-        declareFunction(me, "all_early_macro_use_violations", "ALL-EARLY-MACRO-USE-VIOLATIONS", 0, 1, false);
-        declareFunction(me, "module_early_macro_use_violations", "MODULE-EARLY-MACRO-USE-VIOLATIONS", 1, 0, false);
-        declareFunction(me, "show_early_macro_use_violations", "SHOW-EARLY-MACRO-USE-VIOLATIONS", 0, 2, false);
-        declareFunction(me, "show_one_early_macro_use_violation", "SHOW-ONE-EARLY-MACRO-USE-VIOLATION", 1, 1, false);
-        declareFunction(me, "all_undefined_references", "ALL-UNDEFINED-REFERENCES", 0, 1, false);
-        declareFunction(me, "module_undefined_references", "MODULE-UNDEFINED-REFERENCES", 1, 0, false);
-        declareFunction(me, "show_undefined_references", "SHOW-UNDEFINED-REFERENCES", 0, 2, false);
-        declareFunction(me, "show_one_undefined_reference", "SHOW-ONE-UNDEFINED-REFERENCE", 1, 1, false);
-        declareFunction(me, "all_multiple_definitions", "ALL-MULTIPLE-DEFINITIONS", 0, 1, false);
-        declareFunction(me, "module_multiple_definitions", "MODULE-MULTIPLE-DEFINITIONS", 1, 0, false);
-        declareFunction(me, "show_multiple_definitions", "SHOW-MULTIPLE-DEFINITIONS", 0, 2, false);
-        declareFunction(me, "show_one_multiple_definition", "SHOW-ONE-MULTIPLE-DEFINITION", 1, 1, false);
-        declareFunction(me, "all_early_constant_references", "ALL-EARLY-CONSTANT-REFERENCES", 0, 1, false);
-        declareFunction(me, "module_early_constant_references", "MODULE-EARLY-CONSTANT-REFERENCES", 1, 0, false);
-        declareFunction(me, "show_early_constant_references", "SHOW-EARLY-CONSTANT-REFERENCES", 0, 2, false);
-        declareFunction(me, "show_one_early_constant_reference", "SHOW-ONE-EARLY-CONSTANT-REFERENCE", 1, 1, false);
-        declareFunction(me, "show_api_macros_with_non_api_expansions", "SHOW-API-MACROS-WITH-NON-API-EXPANSIONS", 0, 1, false);
-        declareFunction(me, "show_one_api_macro_visibility_problem", "SHOW-ONE-API-MACRO-VISIBILITY-PROBLEM", 1, 1, false);
-        declareFunction(me, "non_api_expansions_for_api_macro", "NON-API-EXPANSIONS-FOR-API-MACRO", 1, 0, false);
-        declareFunction(me, "all_build_problems", "ALL-BUILD-PROBLEMS", 0, 1, false);
-        declareFunction(me, "module_build_problems", "MODULE-BUILD-PROBLEMS", 1, 0, false);
-        declareFunction(me, "show_build_problems", "SHOW-BUILD-PROBLEMS", 0, 2, false);
-        declareFunction(me, "show_one_build_problem", "SHOW-ONE-BUILD-PROBLEM", 1, 1, false);
-        declareFunction(me, "count_build_problems", "COUNT-BUILD-PROBLEMS", 0, 1, false);
-        declareFunction(me, "build_problem_counts_by_module", "BUILD-PROBLEM-COUNTS-BY-MODULE", 0, 1, false);
-        declareFunction(me, "td_method_co_called_methods", "TD-METHOD-CO-CALLED-METHODS", 1, 0, false);
-        declareFunction(me, "td_method_co_called_globals", "TD-METHOD-CO-CALLED-GLOBALS", 1, 0, false);
-        declareFunction(me, "td_macro_expansion_calls", "TD-MACRO-EXPANSION-CALLS", 1, 0, false);
-        declareFunction(me, "td_possible_orphan_methods_from_module", "TD-POSSIBLE-ORPHAN-METHODS-FROM-MODULE", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("td_module_p", "TD-MODULE-P", 1, 0, false);
+            declareFunction("td_current_translation", "TD-CURRENT-TRANSLATION", 0, 0, false);
+            declareFunction("td_translation_modules", "TD-TRANSLATION-MODULES", 0, 0, false);
+            declareFunction("td_translation_modules_memoized_internal", "TD-TRANSLATION-MODULES-MEMOIZED-INTERNAL", 0, 0, false);
+            declareFunction("td_translation_modules_memoized", "TD-TRANSLATION-MODULES-MEMOIZED", 0, 0, false);
+            declareFunction("td_module_earlier", "TD-MODULE-EARLIER", 2, 0, false);
+            declareFunction("td_module_translation_position_internal", "TD-MODULE-TRANSLATION-POSITION-INTERNAL", 1, 0, false);
+            declareFunction("td_module_translation_position", "TD-MODULE-TRANSLATION-POSITION", 1, 0, false);
+            declareFunction("td_module_later", "TD-MODULE-LATER", 2, 0, false);
+            declareFunction("td_sort_modules_by_load_order", "TD-SORT-MODULES-BY-LOAD-ORDER", 1, 0, false);
+            declareFunction("td_module_earlier_memoized", "TD-MODULE-EARLIER-MEMOIZED", 2, 0, false);
+            declareFunction("td_module_later_memoized", "TD-MODULE-LATER-MEMOIZED", 2, 0, false);
+            declareFunction("td_module_features", "TD-MODULE-FEATURES", 1, 0, false);
+            declareFunction("td_translation_features", "TD-TRANSLATION-FEATURES", 0, 0, false);
+            declareFunction("td_module_pathname", "TD-MODULE-PATHNAME", 1, 0, false);
+            declareFunction("td_predefined_method_p", "TD-PREDEFINED-METHOD-P", 1, 0, false);
+            declareFunction("td_predefined_global_p", "TD-PREDEFINED-GLOBAL-P", 1, 0, false);
+            declareFunction("td_method_macro_p", "TD-METHOD-MACRO-P", 1, 0, false);
+            declareFunction("td_method_defining_module", "TD-METHOD-DEFINING-MODULE", 1, 0, false);
+            declareFunction("td_method_definition_position", "TD-METHOD-DEFINITION-POSITION", 1, 0, false);
+            declareFunction("td_method_has_multiple_definitionsP", "TD-METHOD-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
+            declareFunction("td_method_definition_positions", "TD-METHOD-DEFINITION-POSITIONS", 1, 0, false);
+            declareFunction("td_method_formal_arglist", "TD-METHOD-FORMAL-ARGLIST", 1, 0, false);
+            declareFunction("td_global_binding_type", "TD-GLOBAL-BINDING-TYPE", 1, 0, false);
+            declareFunction("td_global_defining_module", "TD-GLOBAL-DEFINING-MODULE", 1, 0, false);
+            declareFunction("td_global_definition_position", "TD-GLOBAL-DEFINITION-POSITION", 1, 0, false);
+            declareFunction("td_global_has_multiple_definitionsP", "TD-GLOBAL-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
+            declareFunction("td_global_definition_positions", "TD-GLOBAL-DEFINITION-POSITIONS", 1, 0, false);
+            declareFunction("td_methods_defined_by_module", "TD-METHODS-DEFINED-BY-MODULE", 1, 0, false);
+            declareFunction("td_globals_defined_by_module", "TD-GLOBALS-DEFINED-BY-MODULE", 1, 0, false);
+            declareFunction("td_globals_called_by_method", "TD-GLOBALS-CALLED-BY-METHOD", 1, 0, false);
+            declareFunction("td_globals_rebound_by_method", "TD-GLOBALS-REBOUND-BY-METHOD", 1, 0, false);
+            declareFunction("td_methods_called_by_method", "TD-METHODS-CALLED-BY-METHOD", 1, 0, false);
+            declareFunction("td_method_called_by_methodP", "TD-METHOD-CALLED-BY-METHOD?", 2, 0, false);
+            declareFunction("td_modules_referenced_by_method", "TD-MODULES-REFERENCED-BY-METHOD", 1, 0, false);
+            declareFunction("td_globals_called_by_global", "TD-GLOBALS-CALLED-BY-GLOBAL", 1, 0, false);
+            declareFunction("td_methods_called_by_global", "TD-METHODS-CALLED-BY-GLOBAL", 1, 0, false);
+            declareFunction("td_method_called_by_globalP", "TD-METHOD-CALLED-BY-GLOBAL?", 2, 0, false);
+            declareFunction("td_modules_referenced_by_global", "TD-MODULES-REFERENCED-BY-GLOBAL", 1, 0, false);
+            declareFunction("td_globals_called_by_module", "TD-GLOBALS-CALLED-BY-MODULE", 1, 0, false);
+            declareFunction("td_methods_called_by_module", "TD-METHODS-CALLED-BY-MODULE", 1, 0, false);
+            declareFunction("td_method_called_by_moduleP", "TD-METHOD-CALLED-BY-MODULE?", 2, 0, false);
+            declareFunction("td_module_positions_calling_global", "TD-MODULE-POSITIONS-CALLING-GLOBAL", 2, 0, false);
+            declareFunction("td_module_positions_calling_method", "TD-MODULE-POSITIONS-CALLING-METHOD", 2, 0, false);
+            declareFunction("td_method_unused_p", "TD-METHOD-UNUSED-P", 1, 0, false);
+            declareFunction("td_globals_calling_method", "TD-GLOBALS-CALLING-METHOD", 1, 0, false);
+            declareFunction("td_methods_calling_method", "TD-METHODS-CALLING-METHOD", 1, 0, false);
+            declareFunction("td_modules_calling_method", "TD-MODULES-CALLING-METHOD", 1, 0, false);
+            declareFunction("td_modules_referencing_method", "TD-MODULES-REFERENCING-METHOD", 1, 0, false);
+            declareFunction("td_global_unused_p", "TD-GLOBAL-UNUSED-P", 1, 0, false);
+            declareFunction("td_globals_calling_global", "TD-GLOBALS-CALLING-GLOBAL", 1, 0, false);
+            declareFunction("td_methods_calling_global", "TD-METHODS-CALLING-GLOBAL", 1, 0, false);
+            declareFunction("td_modules_calling_global", "TD-MODULES-CALLING-GLOBAL", 1, 0, false);
+            declareFunction("td_modules_referencing_global", "TD-MODULES-REFERENCING-GLOBAL", 1, 0, false);
+            declareFunction("td_method_potentially_private_p", "TD-METHOD-POTENTIALLY-PRIVATE-P", 1, 0, false);
+            declareFunction("td_global_potentially_private_p", "TD-GLOBAL-POTENTIALLY-PRIVATE-P", 1, 0, false);
+            declareFunction("td_modules_referencing_module", "TD-MODULES-REFERENCING-MODULE", 1, 0, false);
+            declareFunction("td_modules_referenced_by_module", "TD-MODULES-REFERENCED-BY-MODULE", 1, 0, false);
+            declareFunction("td_justify_module_referencing_module", "TD-JUSTIFY-MODULE-REFERENCING-MODULE", 2, 0, false);
+            declareFunction("td_modules_implied_by_methods", "TD-MODULES-IMPLIED-BY-METHODS", 1, 1, false);
+            declareFunction("td_modules_implied_by_globals", "TD-MODULES-IMPLIED-BY-GLOBALS", 1, 1, false);
+            declareFunction("td_modules_affected_by_arglist_change", "TD-MODULES-AFFECTED-BY-ARGLIST-CHANGE", 1, 0, false);
+            declareFunction("td_modules_cluster_containing_module", "TD-MODULES-CLUSTER-CONTAINING-MODULE", 1, 1, false);
+            declareFunction("td_modules_properly_dependent_on_modules", "TD-MODULES-PROPERLY-DEPENDENT-ON-MODULES", 1, 1, false);
+            declareFunction("td_modules_dependent_on_modules", "TD-MODULES-DEPENDENT-ON-MODULES", 1, 1, false);
+            declareFunction("td_modules_dependent_on_module", "TD-MODULES-DEPENDENT-ON-MODULE", 1, 1, false);
+            declareFunction("td_modules_dependent_on_module_methods", "TD-MODULES-DEPENDENT-ON-MODULE-METHODS", 1, 1, false);
+            declareFunction("td_modules_dependent_on_module_globals", "TD-MODULES-DEPENDENT-ON-MODULE-GLOBALS", 1, 1, false);
+            declareFunction("td_explain_how_module_depends_on_module", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULE", 2, 0, false);
+            declareFunction("td_explain_how_module_depends_on_modules", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULES", 2, 0, false);
+            declareFunction("td_method_calls_transitively", "TD-METHOD-CALLS-TRANSITIVELY", 1, 0, false);
+            declareFunction("td_global_calls_transitively", "TD-GLOBAL-CALLS-TRANSITIVELY", 1, 0, false);
+            declareFunction("td_note_method_called_transitively", "TD-NOTE-METHOD-CALLED-TRANSITIVELY", 1, 0, false);
+            declareFunction("td_note_global_called_transitively", "TD-NOTE-GLOBAL-CALLED-TRANSITIVELY", 1, 0, false);
+            declareFunction("td_method_references_modules_transitively", "TD-METHOD-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
+            declareFunction("td_method_latest_transitively_referenced_module", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
+            declareFunction("td_method_latest_transitively_referenced_module_memoized_internal", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
+            declareFunction("td_method_latest_transitively_referenced_module_memoized", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
+            declareFunction("td_justify_method_latest_transitively_referenced_module", "TD-JUSTIFY-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
+            declareFunction("td_justify_method_calls_transitively", "TD-JUSTIFY-METHOD-CALLS-TRANSITIVELY", 2, 0, false);
+            declareFunction("td_global_references_modules_transitively", "TD-GLOBAL-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
+            declareFunction("td_global_latest_transitively_referenced_module", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
+            declareFunction("td_global_latest_transitively_referenced_module_memoized_internal", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
+            declareFunction("td_global_latest_transitively_referenced_module_memoized", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
+            declareFunction("td_justify_global_latest_transitively_referenced_module", "TD-JUSTIFY-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
+            declareFunction("incongruent_features", "INCONGRUENT-FEATURES", 2, 0, false);
+            declareFunction("feature_expression_transform", "FEATURE-EXPRESSION-TRANSFORM", 1, 0, false);
+            declareFunction("non_feature_symbol_p", "NON-FEATURE-SYMBOL-P", 1, 0, false);
+            declareFunction("transform_non_feature_symbol", "TRANSFORM-NON-FEATURE-SYMBOL", 1, 0, false);
+            declareFunction("all_module_level_feature_problems", "ALL-MODULE-LEVEL-FEATURE-PROBLEMS", 0, 1, false);
+            declareFunction("module_level_feature_problems", "MODULE-LEVEL-FEATURE-PROBLEMS", 1, 0, false);
+            declareFunction("potential_module_level_feature_incongruence_internal", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE-INTERNAL", 2, 0, false);
+            declareFunction("potential_module_level_feature_incongruence", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE", 2, 0, false);
+            declareFunction("show_feature_problems", "SHOW-FEATURE-PROBLEMS", 0, 2, false);
+            declareFunction("show_one_feature_problem", "SHOW-ONE-FEATURE-PROBLEM", 1, 1, false);
+            declareFunction("show_one_feature_assumption", "SHOW-ONE-FEATURE-ASSUMPTION", 2, 0, false);
+            declareFunction("feature_explanation", "FEATURE-EXPLANATION", 1, 0, false);
+            declareFunction("all_privacy_violations", "ALL-PRIVACY-VIOLATIONS", 0, 1, false);
+            declareFunction("module_privacy_violations", "MODULE-PRIVACY-VIOLATIONS", 1, 0, false);
+            declareFunction("show_privacy_violations", "SHOW-PRIVACY-VIOLATIONS", 0, 2, false);
+            declareFunction("show_one_privacy_violation", "SHOW-ONE-PRIVACY-VIOLATION", 1, 1, false);
+            declareFunction("all_early_rebinding_violations", "ALL-EARLY-REBINDING-VIOLATIONS", 0, 1, false);
+            declareFunction("module_early_rebinding_violations", "MODULE-EARLY-REBINDING-VIOLATIONS", 1, 0, false);
+            declareFunction("show_early_rebinding_violations", "SHOW-EARLY-REBINDING-VIOLATIONS", 0, 2, false);
+            declareFunction("show_one_early_rebinding_violation", "SHOW-ONE-EARLY-REBINDING-VIOLATION", 1, 1, false);
+            declareFunction("all_early_reference_violations", "ALL-EARLY-REFERENCE-VIOLATIONS", 0, 1, false);
+            declareFunction("module_early_reference_violations", "MODULE-EARLY-REFERENCE-VIOLATIONS", 1, 0, false);
+            declareFunction("td_early_macro_use_p", "TD-EARLY-MACRO-USE-P", 5, 0, false);
+            declareFunction("td_early_evaluation_reference_p", "TD-EARLY-EVALUATION-REFERENCE-P", 6, 0, false);
+            declareFunction("td_early_global_binding_p", "TD-EARLY-GLOBAL-BINDING-P", 3, 0, false);
+            declareFunction("show_early_reference_violations", "SHOW-EARLY-REFERENCE-VIOLATIONS", 0, 2, false);
+            declareFunction("show_one_early_reference_violation", "SHOW-ONE-EARLY-REFERENCE-VIOLATION", 1, 1, false);
+            declareFunction("all_early_macro_use_violations", "ALL-EARLY-MACRO-USE-VIOLATIONS", 0, 1, false);
+            declareFunction("module_early_macro_use_violations", "MODULE-EARLY-MACRO-USE-VIOLATIONS", 1, 0, false);
+            declareFunction("show_early_macro_use_violations", "SHOW-EARLY-MACRO-USE-VIOLATIONS", 0, 2, false);
+            declareFunction("show_one_early_macro_use_violation", "SHOW-ONE-EARLY-MACRO-USE-VIOLATION", 1, 1, false);
+            declareFunction("all_undefined_references", "ALL-UNDEFINED-REFERENCES", 0, 1, false);
+            declareFunction("module_undefined_references", "MODULE-UNDEFINED-REFERENCES", 1, 0, false);
+            declareFunction("show_undefined_references", "SHOW-UNDEFINED-REFERENCES", 0, 2, false);
+            declareFunction("show_one_undefined_reference", "SHOW-ONE-UNDEFINED-REFERENCE", 1, 1, false);
+            declareFunction("all_multiple_definitions", "ALL-MULTIPLE-DEFINITIONS", 0, 1, false);
+            declareFunction("module_multiple_definitions", "MODULE-MULTIPLE-DEFINITIONS", 1, 0, false);
+            declareFunction("show_multiple_definitions", "SHOW-MULTIPLE-DEFINITIONS", 0, 2, false);
+            declareFunction("show_one_multiple_definition", "SHOW-ONE-MULTIPLE-DEFINITION", 1, 1, false);
+            declareFunction("all_early_constant_references", "ALL-EARLY-CONSTANT-REFERENCES", 0, 1, false);
+            declareFunction("module_early_constant_references", "MODULE-EARLY-CONSTANT-REFERENCES", 1, 0, false);
+            declareFunction("show_early_constant_references", "SHOW-EARLY-CONSTANT-REFERENCES", 0, 2, false);
+            declareFunction("show_one_early_constant_reference", "SHOW-ONE-EARLY-CONSTANT-REFERENCE", 1, 1, false);
+            declareFunction("show_api_macros_with_non_api_expansions", "SHOW-API-MACROS-WITH-NON-API-EXPANSIONS", 0, 1, false);
+            declareFunction("show_one_api_macro_visibility_problem", "SHOW-ONE-API-MACRO-VISIBILITY-PROBLEM", 1, 1, false);
+            declareFunction("non_api_expansions_for_api_macro", "NON-API-EXPANSIONS-FOR-API-MACRO", 1, 0, false);
+            declareFunction("all_build_problems", "ALL-BUILD-PROBLEMS", 0, 1, false);
+            declareFunction("module_build_problems", "MODULE-BUILD-PROBLEMS", 1, 0, false);
+            declareFunction("show_build_problems", "SHOW-BUILD-PROBLEMS", 0, 2, false);
+            declareFunction("show_one_build_problem", "SHOW-ONE-BUILD-PROBLEM", 1, 1, false);
+            declareFunction("count_build_problems", "COUNT-BUILD-PROBLEMS", 0, 1, false);
+            declareFunction("build_problem_counts_by_module", "BUILD-PROBLEM-COUNTS-BY-MODULE", 0, 1, false);
+            declareFunction("td_method_co_called_methods", "TD-METHOD-CO-CALLED-METHODS", 1, 0, false);
+            declareFunction("td_method_co_called_globals", "TD-METHOD-CO-CALLED-GLOBALS", 1, 0, false);
+            declareFunction("td_macro_expansion_calls", "TD-MACRO-EXPANSION-CALLS", 1, 0, false);
+            declareFunction("td_possible_orphan_methods_from_module", "TD-POSSIBLE-ORPHAN-METHODS-FROM-MODULE", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("td_module_cvsweb_url", "TD-MODULE-CVSWEB-URL", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_translator_utilities_file_Previous() {
+        declareFunction("td_module_p", "TD-MODULE-P", 1, 0, false);
+        declareFunction("td_current_translation", "TD-CURRENT-TRANSLATION", 0, 0, false);
+        declareFunction("td_translation_modules", "TD-TRANSLATION-MODULES", 0, 0, false);
+        declareFunction("td_translation_modules_memoized_internal", "TD-TRANSLATION-MODULES-MEMOIZED-INTERNAL", 0, 0, false);
+        declareFunction("td_translation_modules_memoized", "TD-TRANSLATION-MODULES-MEMOIZED", 0, 0, false);
+        declareFunction("td_module_earlier", "TD-MODULE-EARLIER", 2, 0, false);
+        declareFunction("td_module_translation_position_internal", "TD-MODULE-TRANSLATION-POSITION-INTERNAL", 1, 0, false);
+        declareFunction("td_module_translation_position", "TD-MODULE-TRANSLATION-POSITION", 1, 0, false);
+        declareFunction("td_module_later", "TD-MODULE-LATER", 2, 0, false);
+        declareFunction("td_sort_modules_by_load_order", "TD-SORT-MODULES-BY-LOAD-ORDER", 1, 0, false);
+        declareFunction("td_module_earlier_memoized", "TD-MODULE-EARLIER-MEMOIZED", 2, 0, false);
+        declareFunction("td_module_later_memoized", "TD-MODULE-LATER-MEMOIZED", 2, 0, false);
+        declareFunction("td_module_features", "TD-MODULE-FEATURES", 1, 0, false);
+        declareFunction("td_translation_features", "TD-TRANSLATION-FEATURES", 0, 0, false);
+        declareFunction("td_module_pathname", "TD-MODULE-PATHNAME", 1, 0, false);
+        declareFunction("td_predefined_method_p", "TD-PREDEFINED-METHOD-P", 1, 0, false);
+        declareFunction("td_predefined_global_p", "TD-PREDEFINED-GLOBAL-P", 1, 0, false);
+        declareFunction("td_method_macro_p", "TD-METHOD-MACRO-P", 1, 0, false);
+        declareFunction("td_method_defining_module", "TD-METHOD-DEFINING-MODULE", 1, 0, false);
+        declareFunction("td_method_definition_position", "TD-METHOD-DEFINITION-POSITION", 1, 0, false);
+        declareFunction("td_method_has_multiple_definitionsP", "TD-METHOD-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
+        declareFunction("td_method_definition_positions", "TD-METHOD-DEFINITION-POSITIONS", 1, 0, false);
+        declareFunction("td_method_formal_arglist", "TD-METHOD-FORMAL-ARGLIST", 1, 0, false);
+        declareFunction("td_global_binding_type", "TD-GLOBAL-BINDING-TYPE", 1, 0, false);
+        declareFunction("td_global_defining_module", "TD-GLOBAL-DEFINING-MODULE", 1, 0, false);
+        declareFunction("td_global_definition_position", "TD-GLOBAL-DEFINITION-POSITION", 1, 0, false);
+        declareFunction("td_global_has_multiple_definitionsP", "TD-GLOBAL-HAS-MULTIPLE-DEFINITIONS?", 1, 0, false);
+        declareFunction("td_global_definition_positions", "TD-GLOBAL-DEFINITION-POSITIONS", 1, 0, false);
+        declareFunction("td_methods_defined_by_module", "TD-METHODS-DEFINED-BY-MODULE", 1, 0, false);
+        declareFunction("td_globals_defined_by_module", "TD-GLOBALS-DEFINED-BY-MODULE", 1, 0, false);
+        declareFunction("td_globals_called_by_method", "TD-GLOBALS-CALLED-BY-METHOD", 1, 0, false);
+        declareFunction("td_globals_rebound_by_method", "TD-GLOBALS-REBOUND-BY-METHOD", 1, 0, false);
+        declareFunction("td_methods_called_by_method", "TD-METHODS-CALLED-BY-METHOD", 1, 0, false);
+        declareFunction("td_method_called_by_methodP", "TD-METHOD-CALLED-BY-METHOD?", 2, 0, false);
+        declareFunction("td_modules_referenced_by_method", "TD-MODULES-REFERENCED-BY-METHOD", 1, 0, false);
+        declareFunction("td_globals_called_by_global", "TD-GLOBALS-CALLED-BY-GLOBAL", 1, 0, false);
+        declareFunction("td_methods_called_by_global", "TD-METHODS-CALLED-BY-GLOBAL", 1, 0, false);
+        declareFunction("td_method_called_by_globalP", "TD-METHOD-CALLED-BY-GLOBAL?", 2, 0, false);
+        declareFunction("td_modules_referenced_by_global", "TD-MODULES-REFERENCED-BY-GLOBAL", 1, 0, false);
+        declareFunction("td_globals_called_by_module", "TD-GLOBALS-CALLED-BY-MODULE", 1, 0, false);
+        declareFunction("td_methods_called_by_module", "TD-METHODS-CALLED-BY-MODULE", 1, 0, false);
+        declareFunction("td_method_called_by_moduleP", "TD-METHOD-CALLED-BY-MODULE?", 2, 0, false);
+        declareFunction("td_module_positions_calling_global", "TD-MODULE-POSITIONS-CALLING-GLOBAL", 2, 0, false);
+        declareFunction("td_module_positions_calling_method", "TD-MODULE-POSITIONS-CALLING-METHOD", 2, 0, false);
+        declareFunction("td_method_unused_p", "TD-METHOD-UNUSED-P", 1, 0, false);
+        declareFunction("td_globals_calling_method", "TD-GLOBALS-CALLING-METHOD", 1, 0, false);
+        declareFunction("td_methods_calling_method", "TD-METHODS-CALLING-METHOD", 1, 0, false);
+        declareFunction("td_modules_calling_method", "TD-MODULES-CALLING-METHOD", 1, 0, false);
+        declareFunction("td_modules_referencing_method", "TD-MODULES-REFERENCING-METHOD", 1, 0, false);
+        declareFunction("td_global_unused_p", "TD-GLOBAL-UNUSED-P", 1, 0, false);
+        declareFunction("td_globals_calling_global", "TD-GLOBALS-CALLING-GLOBAL", 1, 0, false);
+        declareFunction("td_methods_calling_global", "TD-METHODS-CALLING-GLOBAL", 1, 0, false);
+        declareFunction("td_modules_calling_global", "TD-MODULES-CALLING-GLOBAL", 1, 0, false);
+        declareFunction("td_modules_referencing_global", "TD-MODULES-REFERENCING-GLOBAL", 1, 0, false);
+        declareFunction("td_method_potentially_private_p", "TD-METHOD-POTENTIALLY-PRIVATE-P", 1, 0, false);
+        declareFunction("td_global_potentially_private_p", "TD-GLOBAL-POTENTIALLY-PRIVATE-P", 1, 0, false);
+        declareFunction("td_modules_referencing_module", "TD-MODULES-REFERENCING-MODULE", 1, 0, false);
+        declareFunction("td_modules_referenced_by_module", "TD-MODULES-REFERENCED-BY-MODULE", 1, 0, false);
+        declareFunction("td_justify_module_referencing_module", "TD-JUSTIFY-MODULE-REFERENCING-MODULE", 2, 0, false);
+        declareFunction("td_modules_implied_by_methods", "TD-MODULES-IMPLIED-BY-METHODS", 1, 1, false);
+        declareFunction("td_modules_implied_by_globals", "TD-MODULES-IMPLIED-BY-GLOBALS", 1, 1, false);
+        declareFunction("td_modules_affected_by_arglist_change", "TD-MODULES-AFFECTED-BY-ARGLIST-CHANGE", 1, 0, false);
+        declareFunction("td_modules_cluster_containing_module", "TD-MODULES-CLUSTER-CONTAINING-MODULE", 1, 1, false);
+        declareFunction("td_modules_properly_dependent_on_modules", "TD-MODULES-PROPERLY-DEPENDENT-ON-MODULES", 1, 1, false);
+        declareFunction("td_modules_dependent_on_modules", "TD-MODULES-DEPENDENT-ON-MODULES", 1, 1, false);
+        declareFunction("td_modules_dependent_on_module", "TD-MODULES-DEPENDENT-ON-MODULE", 1, 1, false);
+        declareFunction("td_modules_dependent_on_module_methods", "TD-MODULES-DEPENDENT-ON-MODULE-METHODS", 1, 1, false);
+        declareFunction("td_modules_dependent_on_module_globals", "TD-MODULES-DEPENDENT-ON-MODULE-GLOBALS", 1, 1, false);
+        declareFunction("td_explain_how_module_depends_on_module", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULE", 2, 0, false);
+        declareFunction("td_explain_how_module_depends_on_modules", "TD-EXPLAIN-HOW-MODULE-DEPENDS-ON-MODULES", 2, 0, false);
+        declareFunction("td_method_calls_transitively", "TD-METHOD-CALLS-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_global_calls_transitively", "TD-GLOBAL-CALLS-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_note_method_called_transitively", "TD-NOTE-METHOD-CALLED-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_note_global_called_transitively", "TD-NOTE-GLOBAL-CALLED-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_method_references_modules_transitively", "TD-METHOD-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_method_latest_transitively_referenced_module", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
+        declareFunction("td_method_latest_transitively_referenced_module_memoized_internal", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("td_method_latest_transitively_referenced_module_memoized", "TD-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
+        declareFunction("td_justify_method_latest_transitively_referenced_module", "TD-JUSTIFY-METHOD-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
+        declareFunction("td_justify_method_calls_transitively", "TD-JUSTIFY-METHOD-CALLS-TRANSITIVELY", 2, 0, false);
+        declareFunction("td_global_references_modules_transitively", "TD-GLOBAL-REFERENCES-MODULES-TRANSITIVELY", 1, 0, false);
+        declareFunction("td_global_latest_transitively_referenced_module", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 1, 0, false);
+        declareFunction("td_global_latest_transitively_referenced_module_memoized_internal", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("td_global_latest_transitively_referenced_module_memoized", "TD-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE-MEMOIZED", 1, 0, false);
+        declareFunction("td_justify_global_latest_transitively_referenced_module", "TD-JUSTIFY-GLOBAL-LATEST-TRANSITIVELY-REFERENCED-MODULE", 2, 0, false);
+        declareFunction("incongruent_features", "INCONGRUENT-FEATURES", 2, 0, false);
+        declareFunction("feature_expression_transform", "FEATURE-EXPRESSION-TRANSFORM", 1, 0, false);
+        declareFunction("non_feature_symbol_p", "NON-FEATURE-SYMBOL-P", 1, 0, false);
+        declareFunction("transform_non_feature_symbol", "TRANSFORM-NON-FEATURE-SYMBOL", 1, 0, false);
+        declareFunction("all_module_level_feature_problems", "ALL-MODULE-LEVEL-FEATURE-PROBLEMS", 0, 1, false);
+        declareFunction("module_level_feature_problems", "MODULE-LEVEL-FEATURE-PROBLEMS", 1, 0, false);
+        declareFunction("potential_module_level_feature_incongruence_internal", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE-INTERNAL", 2, 0, false);
+        declareFunction("potential_module_level_feature_incongruence", "POTENTIAL-MODULE-LEVEL-FEATURE-INCONGRUENCE", 2, 0, false);
+        declareFunction("show_feature_problems", "SHOW-FEATURE-PROBLEMS", 0, 2, false);
+        declareFunction("show_one_feature_problem", "SHOW-ONE-FEATURE-PROBLEM", 1, 1, false);
+        declareFunction("show_one_feature_assumption", "SHOW-ONE-FEATURE-ASSUMPTION", 2, 0, false);
+        declareFunction("feature_explanation", "FEATURE-EXPLANATION", 1, 0, false);
+        declareFunction("all_privacy_violations", "ALL-PRIVACY-VIOLATIONS", 0, 1, false);
+        declareFunction("module_privacy_violations", "MODULE-PRIVACY-VIOLATIONS", 1, 0, false);
+        declareFunction("show_privacy_violations", "SHOW-PRIVACY-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_privacy_violation", "SHOW-ONE-PRIVACY-VIOLATION", 1, 1, false);
+        declareFunction("all_early_rebinding_violations", "ALL-EARLY-REBINDING-VIOLATIONS", 0, 1, false);
+        declareFunction("module_early_rebinding_violations", "MODULE-EARLY-REBINDING-VIOLATIONS", 1, 0, false);
+        declareFunction("show_early_rebinding_violations", "SHOW-EARLY-REBINDING-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_early_rebinding_violation", "SHOW-ONE-EARLY-REBINDING-VIOLATION", 1, 1, false);
+        declareFunction("all_early_reference_violations", "ALL-EARLY-REFERENCE-VIOLATIONS", 0, 1, false);
+        declareFunction("module_early_reference_violations", "MODULE-EARLY-REFERENCE-VIOLATIONS", 1, 0, false);
+        declareFunction("td_early_macro_use_p", "TD-EARLY-MACRO-USE-P", 5, 0, false);
+        declareFunction("td_early_evaluation_reference_p", "TD-EARLY-EVALUATION-REFERENCE-P", 6, 0, false);
+        declareFunction("td_early_global_binding_p", "TD-EARLY-GLOBAL-BINDING-P", 3, 0, false);
+        declareFunction("show_early_reference_violations", "SHOW-EARLY-REFERENCE-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_early_reference_violation", "SHOW-ONE-EARLY-REFERENCE-VIOLATION", 1, 1, false);
+        declareFunction("all_early_macro_use_violations", "ALL-EARLY-MACRO-USE-VIOLATIONS", 0, 1, false);
+        declareFunction("module_early_macro_use_violations", "MODULE-EARLY-MACRO-USE-VIOLATIONS", 1, 0, false);
+        declareFunction("show_early_macro_use_violations", "SHOW-EARLY-MACRO-USE-VIOLATIONS", 0, 2, false);
+        declareFunction("show_one_early_macro_use_violation", "SHOW-ONE-EARLY-MACRO-USE-VIOLATION", 1, 1, false);
+        declareFunction("all_undefined_references", "ALL-UNDEFINED-REFERENCES", 0, 1, false);
+        declareFunction("module_undefined_references", "MODULE-UNDEFINED-REFERENCES", 1, 0, false);
+        declareFunction("show_undefined_references", "SHOW-UNDEFINED-REFERENCES", 0, 2, false);
+        declareFunction("show_one_undefined_reference", "SHOW-ONE-UNDEFINED-REFERENCE", 1, 1, false);
+        declareFunction("all_multiple_definitions", "ALL-MULTIPLE-DEFINITIONS", 0, 1, false);
+        declareFunction("module_multiple_definitions", "MODULE-MULTIPLE-DEFINITIONS", 1, 0, false);
+        declareFunction("show_multiple_definitions", "SHOW-MULTIPLE-DEFINITIONS", 0, 2, false);
+        declareFunction("show_one_multiple_definition", "SHOW-ONE-MULTIPLE-DEFINITION", 1, 1, false);
+        declareFunction("all_early_constant_references", "ALL-EARLY-CONSTANT-REFERENCES", 0, 1, false);
+        declareFunction("module_early_constant_references", "MODULE-EARLY-CONSTANT-REFERENCES", 1, 0, false);
+        declareFunction("show_early_constant_references", "SHOW-EARLY-CONSTANT-REFERENCES", 0, 2, false);
+        declareFunction("show_one_early_constant_reference", "SHOW-ONE-EARLY-CONSTANT-REFERENCE", 1, 1, false);
+        declareFunction("show_api_macros_with_non_api_expansions", "SHOW-API-MACROS-WITH-NON-API-EXPANSIONS", 0, 1, false);
+        declareFunction("show_one_api_macro_visibility_problem", "SHOW-ONE-API-MACRO-VISIBILITY-PROBLEM", 1, 1, false);
+        declareFunction("non_api_expansions_for_api_macro", "NON-API-EXPANSIONS-FOR-API-MACRO", 1, 0, false);
+        declareFunction("all_build_problems", "ALL-BUILD-PROBLEMS", 0, 1, false);
+        declareFunction("module_build_problems", "MODULE-BUILD-PROBLEMS", 1, 0, false);
+        declareFunction("show_build_problems", "SHOW-BUILD-PROBLEMS", 0, 2, false);
+        declareFunction("show_one_build_problem", "SHOW-ONE-BUILD-PROBLEM", 1, 1, false);
+        declareFunction("count_build_problems", "COUNT-BUILD-PROBLEMS", 0, 1, false);
+        declareFunction("build_problem_counts_by_module", "BUILD-PROBLEM-COUNTS-BY-MODULE", 0, 1, false);
+        declareFunction("td_method_co_called_methods", "TD-METHOD-CO-CALLED-METHODS", 1, 0, false);
+        declareFunction("td_method_co_called_globals", "TD-METHOD-CO-CALLED-GLOBALS", 1, 0, false);
+        declareFunction("td_macro_expansion_calls", "TD-MACRO-EXPANSION-CALLS", 1, 0, false);
+        declareFunction("td_possible_orphan_methods_from_module", "TD-POSSIBLE-ORPHAN-METHODS-FROM-MODULE", 1, 0, false);
         return NIL;
     }
 
@@ -4341,103 +9737,111 @@ public final class translator_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    public static final SubLSymbol $kw2$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLString $str_alt4$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+
+    static private final SubLString $str_alt7$http___localhost_cgi_bin_cvsweb_c = makeString("http://localhost/cgi-bin/cvsweb/cycorp/cyc/~A");
+
+    static private final SubLString $str_alt12$Checking__A_for_dependencies___ = makeString("Checking ~A for dependencies.~%");
+
+    static private final SubLString $str_alt24$Identifying_module_level_feature_ = makeString("Identifying module-level feature problems");
+
+    static private final SubLList $list_alt29 = list(list(makeSymbol("DEF-TYPE"), makeSymbol("&REST"), makeSymbol("DEF-ARGS")), list(makeSymbol("REF-TYPE"), makeSymbol("&REST"), makeSymbol("REF-ARGS")), makeSymbol("INCONGRUENCE"));
+
+    static private final SubLList $list_alt30 = list(makeSymbol("MODULE"), makeSymbol("DEF-FEATURES"));
+
+    static private final SubLString $str_alt31$__Top_level_form_in__A__ = makeString("~%Top-level form in ~A~%");
+
+    static private final SubLList $list_alt32 = list(makeSymbol("DEF-OBJECT"), makeSymbol("MODULE"), makeSymbol("DEF-FEATURES"));
+
+    static private final SubLString $str_alt33$__Method__A_in__A__ = makeString("~%Method ~A in ~A~%");
+
+    static private final SubLString $str_alt34$__Global__A_in__A__ = makeString("~%Global ~A in ~A~%");
+
+    static private final SubLString $str_alt35$_references = makeString(" references");
+
+    static private final SubLList $list_alt36 = list(makeSymbol("REF-OBJECT"), makeSymbol("MODULE"), makeSymbol("REF-FEATURES"));
+
+    static private final SubLString $str_alt37$__method__A_from__A__ = makeString("~%method ~A from ~A~%");
+
+    static private final SubLString $str_alt38$__global__A_from__A__ = makeString("~%global ~A from ~A~%");
+
+    static private final SubLString $str_alt39$__which_will_have_problems_when__ = makeString("~%which will have problems when :~%  ~A~%");
+
+    static private final SubLString $str_alt40$assuming__A = makeString("assuming ~A");
+
+    static private final SubLList $list_alt43 = list(list(makeSymbol("DEF-TYPE"), makeSymbol("&REST"), makeSymbol("DEF-ARGS")), list(makeSymbol("REF-TYPE"), makeSymbol("&REST"), makeSymbol("REF-ARGS")));
+
+    static private final SubLList $list_alt44 = list(makeSymbol("MODULE"));
+
+    static private final SubLList $list_alt45 = list(makeSymbol("DEF-OBJECT"), makeSymbol("MODULE"));
+
+    static private final SubLString $str_alt46$_references_private = makeString(" references private");
+
+    static private final SubLList $list_alt47 = list(makeSymbol("REF-OBJECT"), makeSymbol("MODULE"));
+
+    static private final SubLString $str_alt48$Identifying_early_rebinding_viola = makeString("Identifying early rebinding violations");
+
+    static private final SubLString $str_alt49$_rebinds = makeString(" rebinds");
+
+    static private final SubLString $str_alt50$_before_it_is_defined__ = makeString(" before it is defined~%");
+
+    static private final SubLString $str_alt51$Identifying_early_reference_viola = makeString("Identifying early reference violations");
+
+    static private final SubLList $list_alt52 = list(list(makeSymbol("DEF-TYPE"), makeSymbol("&REST"), makeSymbol("DEF-ARGS")), list(makeSymbol("REF-TYPE"), makeSymbol("REF-OBJECT"), makeSymbol("MODULE")), makeSymbol("JUSTIFYING-METHODS"), makeSymbol("JUSTIFYING-GLOBALS"));
+
+    static private final SubLList $list_alt53 = list(makeSymbol("MODULE"), makeSymbol("POSITION"));
+
+    static private final SubLString $str_alt54$__Top_level_form_in__A_at__S__ = makeString("~%Top-level form in ~A at ~S~%");
+
+    static private final SubLString $str_alt55$_before_it_is = makeString(" before it is");
+
+    static private final SubLString $str_alt56$_defined__ = makeString(" defined~%");
+
+    static private final SubLString $str_alt57$_completely_defined_due_to__ = makeString(" completely defined due to~%");
+
+    static private final SubLString $str_alt58$method__A__ = makeString("method ~A~%");
+
+    static private final SubLString $str_alt59$global__A__ = makeString("global ~A~%");
+
+    static private final SubLString $str_alt60$Identifying_early_macro_use_viola = makeString("Identifying early macro use violations");
+
+    static private final SubLString $str_alt62$_references_undefined = makeString(" references undefined");
+
+    static private final SubLList $list_alt63 = list(makeSymbol("REF-OBJECT"));
+
+    static private final SubLString $str_alt64$__method__A__ = makeString("~%method ~A~%");
+
+    static private final SubLString $str_alt65$__global__A__ = makeString("~%global ~A~%");
+
+    static private final SubLList $list_alt66 = list(makeSymbol("DEF-TYPE"), makeSymbol("DEF-OBJECT"), makeSymbol("DEFINITION-POSITIONS"));
+
+    static private final SubLString $str_alt67$__Method__A_has_multiple_definiti = makeString("~%Method ~A has multiple definitions in");
+
+    static private final SubLString $str_alt68$__Global__A_has_multiple_definiti = makeString("~%Global ~A has multiple definitions in");
+
+    static private final SubLList $list_alt69 = cons(makeSymbol("MODULE"), makeSymbol("FILE-POSITION"));
+
+    static private final SubLString $str_alt70$_____A_at_position__S = makeString("~%  ~A at position ~S");
+
+    static private final SubLList $list_alt72 = list(makeSymbol("REF-TYPE"), makeSymbol("&REST"), makeSymbol("REF-ARGS"));
+
+    static private final SubLString $str_alt73$references____before_it_is_comple = makeString("references #$ before it is completely defined~%");
+
+    static private final SubLList $list_alt75 = cons(makeSymbol("MACRO"), makeSymbol("NON-API-EXPANSIONS"));
+
+    static private final SubLString $str_alt76$__API_macro__A_expands_to_non_API = makeString("~&API macro ~A expands to non-API methods~% ~S~%");
+
+    static private final SubLString $str_alt85$__No_build_problems_ = makeString("~%No build problems!");
+
+    static private final SubLList $list_alt86 = list(makeSymbol("PROBLEM-CLASS"), makeSymbol("PROBLEMS"));
+
+    static private final SubLString $str_alt87$Unknown_build_problem_class__S = makeString("Unknown build problem class ~S");
+
+    static private final SubLSymbol $sym89$_ = makeSymbol(">");
 }
 
 /**

@@ -665,8 +665,7 @@ public  final class czer_meta extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_czer_meta_file() {
-    // CVS_ID("Id: czer-meta.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_globally_cached_function($sym7$META_RELATION_SOMEWHERE_);
+        memoization_state.note_globally_cached_function($sym7$META_RELATION_SOMEWHERE_);
     memoization_state.note_globally_cached_function($sym13$POSSIBLY_META_RELATION_SOMEWHERE__CACHED);
     memoization_state.note_globally_cached_function($sym17$CACHED_FIND_ASSERTIONS_CYCL);
     return NIL;

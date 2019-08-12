@@ -98,7 +98,7 @@ public class JavaClassLoader extends URLClassLoader {
             String ext = Lisp._COMPILE_FILE_CLASS_EXTENSION_.symbolValue().getStringValue();
             InputStream is = getResourceAsStream(className.replace('.', '/') + "." + ext);
             if (is != null) {
-                byte[] imgDataBa = new byte[(int) is.available()];
+                byte[] imgDataBa = new byte[is.available()];
                 DataInputStream dataIs = new DataInputStream(is);
                 dataIs.readFully(imgDataBa);
                 return imgDataBa;
@@ -126,7 +126,7 @@ public class JavaClassLoader extends URLClassLoader {
     }
     
     public JavaClassLoader(JavaClassLoader parent) {
-        super(new URL[] {}, (ClassLoader)parent);
+        super(new URL[] {}, parent);
     }
 
     public JavaClassLoader(URL[] classpath, ClassLoader parent) {
@@ -214,7 +214,7 @@ public class JavaClassLoader extends URLClassLoader {
 
     public static final Symbol CLASSLOADER = PACKAGE_JAVA.intern("*CLASSLOADER*");
     static {
-    	CLASSLOADER.isTraced = true;
+	CLASSLOADER.isTraced = 1;
     }
 
     private static final Primitive GET_DEFAULT_CLASSLOADER = new pf_get_default_classloader();
@@ -340,7 +340,7 @@ public class JavaClassLoader extends URLClassLoader {
     public static LispObject dumpClassPath(ClassLoader o) {
         if(o instanceof URLClassLoader) {
             LispObject list = NIL;
-            for(URL u : Lisp.getURLs(((URLClassLoader) o))) {
+            for(URL u : Lisp.getURLs((o))) {
                 list = list.push(new Pathname(u));
             }
             return new Cons(new JavaObject(o), list.nreverse());

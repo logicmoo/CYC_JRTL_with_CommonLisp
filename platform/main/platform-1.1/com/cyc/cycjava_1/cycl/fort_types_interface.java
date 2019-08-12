@@ -793,8 +793,7 @@ public  final class fort_types_interface extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_fort_types_interface_file() {
-    // CVS_ID("Id: fort-types-interface.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    utilities_macros.register_cyc_api_function($sym25$COMMUTATIVE_RELATION_, $list26, $str27$Return_T_iff_RELATION_is_a_commut, NIL, $list28);
+        utilities_macros.register_cyc_api_function($sym25$COMMUTATIVE_RELATION_, $list26, $str27$Return_T_iff_RELATION_is_a_commut, NIL, $list28);
     memoization_state.note_globally_cached_function($sym68$PROPRIETARY_CONSTANT_);
     memoization_state.note_memoized_function($sym73$CITY_IN_ANY_MT_);
     memoization_state.note_memoized_function($sym75$GEOGRAPHICAL_REGION_IN_ANY_MT_);

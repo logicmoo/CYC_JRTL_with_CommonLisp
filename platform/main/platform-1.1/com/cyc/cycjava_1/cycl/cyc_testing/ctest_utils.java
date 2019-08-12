@@ -525,8 +525,7 @@ public  final class ctest_utils extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_ctest_utils_file() {
-    // CVS_ID("Id: ctest-utils.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_DEFAULT_EMAIL_NOTIFY_STYLE_ID_);
+        subl_macro_promotions.declare_defglobal($sym0$_DEFAULT_EMAIL_NOTIFY_STYLE_ID_);
     subl_macro_promotions.declare_defglobal($sym1$_DEFAULT_TEST_ID_);
     subl_macro_promotions.declare_defglobal($sym2$_DEFAULT_STRING_BINDING_SET_);
     subl_macro_promotions.declare_defglobal($sym3$_DEFAULT_BINDING_SET_);

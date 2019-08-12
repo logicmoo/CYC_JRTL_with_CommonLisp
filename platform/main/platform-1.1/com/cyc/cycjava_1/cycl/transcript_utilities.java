@@ -342,8 +342,7 @@ probed, touched, written to, or read from -- yet? */
   }
 
   public static final SubLObject setup_transcript_utilities_file() {
-    // CVS_ID("Id: transcript-utilities.lisp 128883 2009-10-02 19:45:21Z rck ");
-    subl_macro_promotions.declare_defglobal($sym3$_LOCAL_TRANSCRIPT_VERSION_);
+        subl_macro_promotions.declare_defglobal($sym3$_LOCAL_TRANSCRIPT_VERSION_);
     subl_macro_promotions.declare_defglobal($sym4$_LOCAL_TRANSCRIPT_HISTORY_);
     subl_macro_promotions.declare_defglobal($sym5$_LOCAL_HL_TRANSCRIPT_VERSION_);
     subl_macro_promotions.declare_defglobal($sym6$_LOCAL_HL_TRANSCRIPT_HISTORY_);

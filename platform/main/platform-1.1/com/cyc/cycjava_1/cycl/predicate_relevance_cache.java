@@ -243,8 +243,7 @@ public  final class predicate_relevance_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_predicate_relevance_cache_file() {
-    // CVS_ID("Id: predicate-relevance-cache.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym1$_SPEC_PRED_FORT_CACHE_);
+        subl_macro_promotions.declare_defglobal($sym1$_SPEC_PRED_FORT_CACHE_);
     subl_macro_promotions.declare_defglobal($sym2$_SPEC_INVERSE_FORT_CACHE_);
     subl_macro_promotions.declare_defglobal($sym3$_GENL_PRED_FORT_CACHE_);
     subl_macro_promotions.declare_defglobal($sym4$_GENL_INVERSE_FORT_CACHE_);

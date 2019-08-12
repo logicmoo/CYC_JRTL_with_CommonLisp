@@ -833,8 +833,7 @@ public  final class tva_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_tva_utilities_file() {
-    // CVS_ID("Id: tva-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym7$_TVA_PRECOMPUTES_SKSI_CLOSURES__);
+        subl_macro_promotions.declare_defglobal($sym7$_TVA_PRECOMPUTES_SKSI_CLOSURES__);
     subl_macro_promotions.declare_defglobal($sym8$_TVA_ITERATES_KB_PREDICATE_EXTENT__);
     subl_macro_promotions.declare_defglobal($sym9$_TVA_ITERATES_SKSI_PREDICATE_EXTENT__);
     memoization_state.note_globally_cached_function($sym24$CACHED_SOME_TVA_FOR_PREDICATE);

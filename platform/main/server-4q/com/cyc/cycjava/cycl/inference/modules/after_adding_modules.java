@@ -1,136 +1,19 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.arity;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.at_utilities;
-import com.cyc.cycjava.cycl.at_var_types;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.clausifier;
-import com.cyc.cycjava.cycl.constant_completion_high;
-import com.cyc.cycjava.cycl.constants_high;
-import com.cyc.cycjava.cycl.constants_low;
-import com.cyc.cycjava.cycl.cyc_kernel;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.cycl_variables;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.czer_vars;
-import com.cyc.cycjava.cycl.deduction_handles;
-import com.cyc.cycjava.cycl.deductions_high;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.encapsulation;
-import com.cyc.cycjava.cycl.fi;
-import com.cyc.cycjava.cycl.fi_edit;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.genl_mts;
-import com.cyc.cycjava.cycl.genl_predicates;
-import com.cyc.cycjava.cycl.hash_table_utilities;
-import com.cyc.cycjava.cycl.hl_macros;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.hl_transcript_tracing;
-import com.cyc.cycjava.cycl.hlmt;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.after_adding;
-import com.cyc.cycjava.cycl.inference.harness.forward;
-import com.cyc.cycjava.cycl.inference.harness.rule_after_adding;
-import com.cyc.cycjava.cycl.inference.modules.after_adding_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_known_antecedent_rule;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_accessors;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.kb_indexing;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_cache;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.mt_vars;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.operation_communication;
-import com.cyc.cycjava.cycl.operation_queues;
-import com.cyc.cycjava.cycl.pph_functions;
-import com.cyc.cycjava.cycl.pph_templates;
-import com.cyc.cycjava.cycl.predicate_relevance_cache;
-import com.cyc.cycjava.cycl.quantities;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.reformulator_datastructures;
-import com.cyc.cycjava.cycl.sdc;
-import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.cycjava.cycl.simplifier;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.subcollection_unwinder;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.tersifier;
-import com.cyc.cycjava.cycl.tms;
-import com.cyc.cycjava.cycl.transcript_utilities;
-import com.cyc.cycjava.cycl.tva_cache;
-import com.cyc.cycjava.cycl.tva_utilities;
-import com.cyc.cycjava.cycl.uncanonicalizer;
-import com.cyc.cycjava.cycl.virtual_indexing;
-import com.cyc.cycjava.cycl.wff;
-import com.cyc.cycjava.cycl.wff_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
+import static com.cyc.cycjava.cycl.arguments.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$use_transcriptP$;
 import static com.cyc.cycjava.cycl.control_vars.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.forts.*;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.inference.modules.after_adding_modules.*;
+import static com.cyc.cycjava.cycl.kb_macros.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
@@ -139,7 +22,6 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
@@ -150,190 +32,218 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.harness.after_adding;
+import com.cyc.cycjava.cycl.inference.harness.forward;
+import com.cyc.cycjava.cycl.inference.harness.rule_after_adding;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_known_antecedent_rule;
+import com.cyc.cycjava.cycl.rtp.rtp_datastructures;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class after_adding_modules extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      AFTER-ADDING-MODULES
+ * source file: /cyc/top/cycl/inference/modules/after-adding-modules.lisp
+ * created:     2019/07/03 17:37:37
+ */
+public final class after_adding_modules extends SubLTranslatedFile implements V12 {
+    public static final SubLObject add_gen_keyword(SubLObject argument, SubLObject assertion) {
+        pph_utilities.add_constant_key_pair(assertion);
+        return NIL;
+    }
+
     public static final SubLFile me = new after_adding_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.after_adding_modules";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.after_adding_modules";
 
-    public static final String myFingerPrint = "c970f052a455d7d122dfb380b7600b3d572585cb2eef92f653724136159aa181";
 
     // deflexical
     // Definitions
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cycl_functions_used_as_after_addings$ = makeSymbol("*CYCL-FUNCTIONS-USED-AS-AFTER-ADDINGS*");
 
     // defparameter
     // Protection against infinite recursion.
+    /**
+     * Protection against infinite recursion.
+     */
+    @LispMethod(comment = "Protection against infinite recursion.\ndefparameter")
     private static final SubLSymbol $inside_clear_genls_dependent_cachesP$ = makeSymbol("*INSIDE-CLEAR-GENLS-DEPENDENT-CACHES?*");
 
     // defparameter
     // Protection against infinite recursion.
+    /**
+     * Protection against infinite recursion.
+     */
+    @LispMethod(comment = "Protection against infinite recursion.\ndefparameter")
     private static final SubLSymbol $inside_clear_isa_dependent_cachesP$ = makeSymbol("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*");
 
     // defparameter
     // Protection against infinite recursion.
+    /**
+     * Protection against infinite recursion.
+     */
+    @LispMethod(comment = "Protection against infinite recursion.\ndefparameter")
     private static final SubLSymbol $inside_clear_quoted_isa_dependent_cachesP$ = makeSymbol("*INSIDE-CLEAR-QUOTED-ISA-DEPENDENT-CACHES?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $true_rule_template$ = makeSymbol("*TRUE-RULE-TEMPLATE*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $cyc_except_mt_repropagate_mt_contents_cutoff$ = makeSymbol("*CYC-EXCEPT-MT-REPROPAGATE-MT-CONTENTS-CUTOFF*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $debug_do_create_from_descriptionP$ = makeSymbol("*DEBUG-DO-CREATE-FROM-DESCRIPTION?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $instantiate_from_subcollection_expression_constant_prefix$ = makeSymbol("*INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION-CONSTANT-PREFIX*");
 
     // Internal Constants
-    public static final SubLList $list0 = list(makeSymbol("CLEAR-PARAPHRASE-CACHES"));
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(makeSymbol("CLEAR-PARAPHRASE-CACHES"));
+
+    private static final SubLSymbol DECACHE_AFTER_ADDINGS = makeSymbol("DECACHE-AFTER-ADDINGS");
+
+    private static final SubLSymbol DECACHE_AFTER_REMOVINGS = makeSymbol("DECACHE-AFTER-REMOVINGS");
+
+    private static final SubLSymbol DECACHE_RULE_AFTER_ADDINGS = makeSymbol("DECACHE-RULE-AFTER-ADDINGS");
+
+    private static final SubLSymbol DECACHE_RULE_AFTER_REMOVINGS = makeSymbol("DECACHE-RULE-AFTER-REMOVINGS");
+
+    private static final SubLSymbol CLEAR_MT_DEPENDENT_CACHES = makeSymbol("CLEAR-MT-DEPENDENT-CACHES");
+
+    private static final SubLSymbol CLEAR_GENLS_DEPENDENT_CACHES = makeSymbol("CLEAR-GENLS-DEPENDENT-CACHES");
+
+    private static final SubLSymbol CLEAR_ISA_DEPENDENT_CACHES = makeSymbol("CLEAR-ISA-DEPENDENT-CACHES");
+
+    private static final SubLSymbol CLEAR_QUOTED_ISA_DEPENDENT_CACHES = makeSymbol("CLEAR-QUOTED-ISA-DEPENDENT-CACHES");
+
+    private static final SubLSymbol CLEAR_GENL_PRED_DEPENDENT_CACHES = makeSymbol("CLEAR-GENL-PRED-DEPENDENT-CACHES");
+
+    private static final SubLSymbol ADD_TRANSITIVE_VIA_ARG = makeSymbol("ADD-TRANSITIVE-VIA-ARG");
+
+    private static final SubLSymbol REMOVE_TRANSITIVE_VIA_ARG = makeSymbol("REMOVE-TRANSITIVE-VIA-ARG");
+
+    private static final SubLSymbol ADD_TRANSITIVE_VIA_ARG_INVERSE = makeSymbol("ADD-TRANSITIVE-VIA-ARG-INVERSE");
+
+    private static final SubLSymbol REMOVE_TRANSITIVE_VIA_ARG_INVERSE = makeSymbol("REMOVE-TRANSITIVE-VIA-ARG-INVERSE");
+
+    private static final SubLSymbol CLEAR_CACHED_TVA_CHECKS = makeSymbol("CLEAR-CACHED-TVA-CHECKS");
+
+    private static final SubLSymbol CLEAR_CACHED_SOME_TVA_CHECKS = makeSymbol("CLEAR-CACHED-SOME-TVA-CHECKS");
+
+    private static final SubLSymbol CLEAR_CACHED_CVA_CHECKS = makeSymbol("CLEAR-CACHED-CVA-CHECKS");
+
+    private static final SubLSymbol CLEAR_CACHED_SOME_CVA_CHECKS = makeSymbol("CLEAR-CACHED-SOME-CVA-CHECKS");
+
+    private static final SubLSymbol SKOLEM_AFTER_REMOVING = makeSymbol("SKOLEM-AFTER-REMOVING");
+
+    private static final SubLSymbol ADD_OLD_CONSTANT_NAME = makeSymbol("ADD-OLD-CONSTANT-NAME");
+
+    private static final SubLSymbol REMOVE_OLD_CONSTANT_NAME = makeSymbol("REMOVE-OLD-CONSTANT-NAME");
 
 
 
-    public static final SubLSymbol DECACHE_AFTER_ADDINGS = makeSymbol("DECACHE-AFTER-ADDINGS");
-
-    public static final SubLSymbol DECACHE_AFTER_REMOVINGS = makeSymbol("DECACHE-AFTER-REMOVINGS");
-
-    public static final SubLSymbol DECACHE_RULE_AFTER_ADDINGS = makeSymbol("DECACHE-RULE-AFTER-ADDINGS");
-
-    public static final SubLSymbol DECACHE_RULE_AFTER_REMOVINGS = makeSymbol("DECACHE-RULE-AFTER-REMOVINGS");
-
-    public static final SubLSymbol CLEAR_MT_DEPENDENT_CACHES = makeSymbol("CLEAR-MT-DEPENDENT-CACHES");
-
-    public static final SubLSymbol CLEAR_GENLS_DEPENDENT_CACHES = makeSymbol("CLEAR-GENLS-DEPENDENT-CACHES");
-
-    public static final SubLSymbol CLEAR_ISA_DEPENDENT_CACHES = makeSymbol("CLEAR-ISA-DEPENDENT-CACHES");
-
-    public static final SubLSymbol CLEAR_QUOTED_ISA_DEPENDENT_CACHES = makeSymbol("CLEAR-QUOTED-ISA-DEPENDENT-CACHES");
-
-    public static final SubLSymbol CLEAR_GENL_PRED_DEPENDENT_CACHES = makeSymbol("CLEAR-GENL-PRED-DEPENDENT-CACHES");
-
-    public static final SubLSymbol ADD_TRANSITIVE_VIA_ARG = makeSymbol("ADD-TRANSITIVE-VIA-ARG");
-
-    public static final SubLSymbol REMOVE_TRANSITIVE_VIA_ARG = makeSymbol("REMOVE-TRANSITIVE-VIA-ARG");
-
-    public static final SubLSymbol ADD_TRANSITIVE_VIA_ARG_INVERSE = makeSymbol("ADD-TRANSITIVE-VIA-ARG-INVERSE");
-
-    public static final SubLSymbol REMOVE_TRANSITIVE_VIA_ARG_INVERSE = makeSymbol("REMOVE-TRANSITIVE-VIA-ARG-INVERSE");
-
-    public static final SubLSymbol CLEAR_CACHED_TVA_CHECKS = makeSymbol("CLEAR-CACHED-TVA-CHECKS");
-
-    public static final SubLSymbol CLEAR_CACHED_SOME_TVA_CHECKS = makeSymbol("CLEAR-CACHED-SOME-TVA-CHECKS");
-
-    public static final SubLSymbol CLEAR_CACHED_CVA_CHECKS = makeSymbol("CLEAR-CACHED-CVA-CHECKS");
-
-    public static final SubLSymbol CLEAR_CACHED_SOME_CVA_CHECKS = makeSymbol("CLEAR-CACHED-SOME-CVA-CHECKS");
-
-    public static final SubLSymbol SKOLEM_AFTER_REMOVING = makeSymbol("SKOLEM-AFTER-REMOVING");
-
-    public static final SubLSymbol ADD_OLD_CONSTANT_NAME = makeSymbol("ADD-OLD-CONSTANT-NAME");
-
-    public static final SubLSymbol REMOVE_OLD_CONSTANT_NAME = makeSymbol("REMOVE-OLD-CONSTANT-NAME");
-
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
-
-    public static final SubLSymbol PROPAGATE_TO_ISA = makeSymbol("PROPAGATE-TO-ISA");
-
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
-
-    public static final SubLSymbol PROPAGATE_TO_GENLS = makeSymbol("PROPAGATE-TO-GENLS");
-
-    private static final SubLObject $$disjointWith = reader_make_constant_shell(makeString("disjointWith"));
-
-    public static final SubLSymbol PROPAGATE_TO_DISJOINTWITH = makeSymbol("PROPAGATE-TO-DISJOINTWITH");
-
-    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
-
-    public static final SubLSymbol PROPAGATE_TO_GENLMT = makeSymbol("PROPAGATE-TO-GENLMT");
-
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
-
-    public static final SubLSymbol PROPAGATE_TO_GENLPREDS = makeSymbol("PROPAGATE-TO-GENLPREDS");
-
-    private static final SubLObject $$negationPreds = reader_make_constant_shell(makeString("negationPreds"));
-
-    public static final SubLSymbol PROPAGATE_TO_NEGATIONPREDS = makeSymbol("PROPAGATE-TO-NEGATIONPREDS");
-
-    private static final SubLObject $$genlInverse = reader_make_constant_shell(makeString("genlInverse"));
-
-    public static final SubLSymbol PROPAGATE_TO_GENLINVERSE = makeSymbol("PROPAGATE-TO-GENLINVERSE");
-
-    private static final SubLObject $$negationInverse = reader_make_constant_shell(makeString("negationInverse"));
-
-    public static final SubLSymbol PROPAGATE_TO_NEGATIONINVERSE = makeSymbol("PROPAGATE-TO-NEGATIONINVERSE");
-
-    public static final SubLSymbol PROPAGATE_INVERSE_TO_ISA = makeSymbol("PROPAGATE-INVERSE-TO-ISA");
-
-    public static final SubLSymbol PROPAGATE_INVERSE_TO_GENLS = makeSymbol("PROPAGATE-INVERSE-TO-GENLS");
-
-    public static final SubLSymbol PROPAGATE_INVERSE_TO_GENLMT = makeSymbol("PROPAGATE-INVERSE-TO-GENLMT");
-
-    public static final SubLSymbol PROPAGATE_INVERSE_TO_GENLPREDS = makeSymbol("PROPAGATE-INVERSE-TO-GENLPREDS");
-
-    public static final SubLSymbol PROPAGATE_INVERSE_TO_GENLINVERSE = makeSymbol("PROPAGATE-INVERSE-TO-GENLINVERSE");
-
-    public static final SubLList $list43 = list(makeSymbol("PRED"), makeSymbol("ARG1"), makeSymbol("ARG2"));
+    private static final SubLSymbol PROPAGATE_TO_ISA = makeSymbol("PROPAGATE-TO-ISA");
 
 
 
+    private static final SubLSymbol PROPAGATE_TO_GENLS = makeSymbol("PROPAGATE-TO-GENLS");
 
+
+
+    private static final SubLSymbol PROPAGATE_TO_DISJOINTWITH = makeSymbol("PROPAGATE-TO-DISJOINTWITH");
+
+
+
+    private static final SubLSymbol PROPAGATE_TO_GENLMT = makeSymbol("PROPAGATE-TO-GENLMT");
+
+
+
+    private static final SubLSymbol PROPAGATE_TO_GENLPREDS = makeSymbol("PROPAGATE-TO-GENLPREDS");
+
+
+
+    private static final SubLSymbol PROPAGATE_TO_NEGATIONPREDS = makeSymbol("PROPAGATE-TO-NEGATIONPREDS");
+
+
+
+    private static final SubLSymbol PROPAGATE_TO_GENLINVERSE = makeSymbol("PROPAGATE-TO-GENLINVERSE");
+
+
+
+    private static final SubLSymbol PROPAGATE_TO_NEGATIONINVERSE = makeSymbol("PROPAGATE-TO-NEGATIONINVERSE");
+
+    private static final SubLSymbol PROPAGATE_INVERSE_TO_ISA = makeSymbol("PROPAGATE-INVERSE-TO-ISA");
+
+    private static final SubLSymbol PROPAGATE_INVERSE_TO_GENLS = makeSymbol("PROPAGATE-INVERSE-TO-GENLS");
+
+    private static final SubLSymbol PROPAGATE_INVERSE_TO_GENLMT = makeSymbol("PROPAGATE-INVERSE-TO-GENLMT");
+
+    private static final SubLSymbol PROPAGATE_INVERSE_TO_GENLPREDS = makeSymbol("PROPAGATE-INVERSE-TO-GENLPREDS");
+
+    private static final SubLSymbol PROPAGATE_INVERSE_TO_GENLINVERSE = makeSymbol("PROPAGATE-INVERSE-TO-GENLINVERSE");
+
+    static private final SubLList $list43 = list(makeSymbol("PRED"), makeSymbol("ARG1"), makeSymbol("ARG2"));
 
     private static final SubLList $list46 = list(makeSymbol("IST"), makeSymbol("MT"), makeSymbol("FORMULA"));
 
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
+
 
     private static final SubLSymbol ADD_IST = makeSymbol("ADD-IST");
 
-    private static final SubLObject $$implies = reader_make_constant_shell(makeString("implies"));
+
 
     private static final SubLList $list50 = list(makeSymbol("?FORMULA"));
 
-
-
-
-
     private static final SubLSymbol ADD_TRUE_RULE = makeSymbol("ADD-TRUE-RULE");
 
-    private static final SubLList $list54 = list(reader_make_constant_shell(makeString("implies")), list(reader_make_constant_shell(makeString("trueRule")), makeSymbol("?TEMPLATE"), makeSymbol("?FORMULA")), makeSymbol("?FORMULA"));
+    private static final SubLList $list54 = list(reader_make_constant_shell("implies"), list(reader_make_constant_shell("trueRule"), makeSymbol("?TEMPLATE"), makeSymbol("?FORMULA")), makeSymbol("?FORMULA"));
 
     public static final SubLSymbol $true_rule_defining_mt$ = makeSymbol("*TRUE-RULE-DEFINING-MT*");
 
-    private static final SubLObject $$CoreCycLMt = reader_make_constant_shell(makeString("CoreCycLMt"));
-
-    private static final SubLObject $$trueRule = reader_make_constant_shell(makeString("trueRule"));
 
 
 
-    private static final SubLObject $$ruleTemplateDirection = reader_make_constant_shell(makeString("ruleTemplateDirection"));
-
-    private static final SubLObject $$Forward_AssertionDirection = reader_make_constant_shell(makeString("Forward-AssertionDirection"));
 
 
 
-    private static final SubLObject $$Backward_AssertionDirection = reader_make_constant_shell(makeString("Backward-AssertionDirection"));
+    private static final SubLObject $$Forward_AssertionDirection = reader_make_constant_shell("Forward-AssertionDirection");
 
-
+    private static final SubLObject $$Backward_AssertionDirection = reader_make_constant_shell("Backward-AssertionDirection");
 
     private static final SubLSymbol ADD_RULE_TEMPLATE_DIRECTION = makeSymbol("ADD-RULE-TEMPLATE-DIRECTION");
 
     private static final SubLSymbol REMOVE_RULE_TEMPLATE_DIRECTION = makeSymbol("REMOVE-RULE-TEMPLATE-DIRECTION");
 
-
-
-
-
-
-
     private static final SubLSymbol TRUE_RULE_SUPPORT_P = makeSymbol("TRUE-RULE-SUPPORT-P");
 
     private static final SubLSymbol REMOVE_DEPENDENT_TERM = makeSymbol("REMOVE-DEPENDENT-TERM");
 
-    private static final SubLObject $$arity = reader_make_constant_shell(makeString("arity"));
+
 
     private static final SubLSymbol PROPAGATE_TO_ARITY = makeSymbol("PROPAGATE-TO-ARITY");
 
@@ -341,7 +251,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol REMOVE_ARITY = makeSymbol("REMOVE-ARITY");
 
-    private static final SubLObject $$arityMin = reader_make_constant_shell(makeString("arityMin"));
+
 
     private static final SubLSymbol PROPAGATE_TO_ARITY_MIN = makeSymbol("PROPAGATE-TO-ARITY-MIN");
 
@@ -349,7 +259,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol REMOVE_ARITY_MIN = makeSymbol("REMOVE-ARITY-MIN");
 
-    private static final SubLObject $$arityMax = reader_make_constant_shell(makeString("arityMax"));
+
 
     private static final SubLSymbol PROPAGATE_TO_ARITY_MAX = makeSymbol("PROPAGATE-TO-ARITY-MAX");
 
@@ -373,19 +283,13 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol REMOVE_GEN_TEMPLATE_EXPANSION = makeSymbol("REMOVE-GEN-TEMPLATE-EXPANSION");
 
-    private static final SubLObject $$expansion = reader_make_constant_shell(makeString("expansion"));
 
-    private static final SubLList $list92 = list(reader_make_constant_shell(makeString("afterAdding")), reader_make_constant_shell(makeString("expansionAxiom")), makeSymbol("ADD-EXPANSION-AXIOM"));
 
-    private static final SubLObject $$expansionAxiom = reader_make_constant_shell(makeString("expansionAxiom"));
+    private static final SubLList $list92 = list(reader_make_constant_shell("afterAdding"), reader_make_constant_shell("expansionAxiom"), makeSymbol("ADD-EXPANSION-AXIOM"));
 
 
 
 
-
-
-
-    private static final SubLObject $$True = reader_make_constant_shell(makeString("True"));
 
     private static final SubLSymbol ADD_EXPANSION_AXIOM = makeSymbol("ADD-EXPANSION-AXIOM");
 
@@ -395,9 +299,9 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLList $list101 = list(makeSymbol("EO"), makeSymbol("TERM"), makeSymbol("SETEXPR"));
 
-    private static final SubLObject $$elementOf = reader_make_constant_shell(makeString("elementOf"));
 
-    private static final SubLObject $$TheSetOf = reader_make_constant_shell(makeString("TheSetOf"));
+
+
 
     private static final SubLList $list104 = list(makeSymbol("TSO"), makeSymbol("VAR"), makeSymbol("PROP"));
 
@@ -417,17 +321,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol REMOVE_MERGED_CONSTANT_GUID = makeSymbol("REMOVE-MERGED-CONSTANT-GUID");
 
-
-
-
-
-
-
     private static final SubLString $str116$do_broad_mt_index = makeString("do-broad-mt-index");
-
-
-
-
 
     private static final SubLSymbol CYC_EXCEPT_MT_ADDED = makeSymbol("CYC-EXCEPT-MT-ADDED");
 
@@ -438,8 +332,6 @@ public final class after_adding_modules extends SubLTranslatedFile {
     private static final SubLSymbol CYC_EXCEPT_ADDED = makeSymbol("CYC-EXCEPT-ADDED");
 
     private static final SubLSymbol CYC_EXCEPT_REMOVED = makeSymbol("CYC-EXCEPT-REMOVED");
-
-    private static final SubLObject $$except = reader_make_constant_shell(makeString("except"));
 
 
 
@@ -453,17 +345,13 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLString $str130$__do_create_from_description_mark = makeString("~&do-create-from-description marking as instantiated: ~S~%");
 
-    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
-
-    private static final SubLObject $$InstantiatedConstant = reader_make_constant_shell(makeString("InstantiatedConstant"));
-
-    private static final SubLObject $$BookkeepingMt = reader_make_constant_shell(makeString("BookkeepingMt"));
 
 
 
 
 
-    private static final SubLList $list136 = list(reader_make_constant_shell(makeString("BookkeepingMt")));
+
+    private static final SubLList $list136 = list(reader_make_constant_shell("BookkeepingMt"));
 
     private static final SubLString $str137$__do_create_from_description_crea = makeString("~&do-create-from-description creating new instantiated constant: ~A~%");
 
@@ -475,7 +363,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym141$_TERM = makeSymbol("?TERM");
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
+
 
     private static final SubLString $str143$__do_create_from_description_reus = makeString("~&do-create-from-description reusing instantiated constant: ~S~%");
 
@@ -487,13 +375,9 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLString $str147$__do_create_from_description_reus = makeString("~&do-create-from-description reusing bare instantiated constant: ~S~%");
 
-
-
     private static final SubLSymbol DO_CREATE_FROM_DESCRIPTION = makeSymbol("DO-CREATE-FROM-DESCRIPTION");
 
     private static final SubLSymbol INSTANTIATED_CONSTANT_P = makeSymbol("INSTANTIATED-CONSTANT-P");
-
-
 
     private static final SubLSymbol MAKE_VALID_CONSTANT_NAME = makeSymbol("MAKE-VALID-CONSTANT-NAME");
 
@@ -511,17 +395,11 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLString $$$INST = makeString("INST");
 
-
-
     private static final SubLSymbol NART_EL_FORMULA = makeSymbol("NART-EL-FORMULA");
 
     private static final SubLSymbol CONSTANT_INSTANTIATED_FROM_SUBCOLLECTION_EXPRESSION_P = makeSymbol("CONSTANT-INSTANTIATED-FROM-SUBCOLLECTION-EXPRESSION-P");
 
-
-
     private static final SubLString $str164$More_than_one_terms_match_found_f = makeString("More than one terms match found for ~S.  Using first of: ~S");
-
-
 
     private static final SubLList $list166 = list(makeString("undeterminableName"));
 
@@ -539,8 +417,6 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
     private static final SubLString $$$Gathering_instantiated_constants = makeString("Gathering instantiated constants");
 
     private static final SubLString $str176$Identifying_unused_instantiated_c = makeString("Identifying unused instantiated constants");
@@ -555,15 +431,15 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLString $$$s = makeString("s");
 
-    private static final SubLList $list182 = list(reader_make_constant_shell(makeString("MultiMediaAnalysisMt")), reader_make_constant_shell(makeString("SPRLAnnotationGenerationMt")), reader_make_constant_shell(makeString("DreamcatcherSKSIHelperMt")));
+    private static final SubLList $list182 = list(reader_make_constant_shell("MultiMediaAnalysisMt"), reader_make_constant_shell("SPRLAnnotationGenerationMt"), reader_make_constant_shell("DreamcatcherSKSIHelperMt"));
 
     private static final SubLSymbol DEDUCTION_SUPPORTED_OBJECT = makeSymbol("DEDUCTION-SUPPORTED-OBJECT");
 
     private static final SubLSymbol ASSERTION_EL_FORMULA = makeSymbol("ASSERTION-EL-FORMULA");
 
-    private static final SubLObject $$doCreateFromDescription = reader_make_constant_shell(makeString("doCreateFromDescription"));
 
-    private static final SubLObject $$doCreateFromDescription_Multiple = reader_make_constant_shell(makeString("doCreateFromDescription-Multiple"));
+
+    private static final SubLObject $$doCreateFromDescription_Multiple = reader_make_constant_shell("doCreateFromDescription-Multiple");
 
     private static final SubLString $str187$could_not_determine_created_const = makeString("could not determine created constants for ~A");
 
@@ -571,16 +447,25 @@ public final class after_adding_modules extends SubLTranslatedFile {
 
     private static final SubLString $str189$not_enough_instantiated_constant_ = makeString("not enough instantiated constant gafs for ~A");
 
-    private static final SubLList $list190 = list(reader_make_constant_shell(makeString("doCreateFromDescription")), reader_make_constant_shell(makeString("doCreateFromDescription-Multiple")));
-
-
+    private static final SubLList $list190 = list(reader_make_constant_shell("doCreateFromDescription"), reader_make_constant_shell("doCreateFromDescription-Multiple"));
 
     private static final SubLList $list192 = list(makeKeyword("CHECK-WFF?"), NIL);
 
     private static final SubLSymbol RETAIN_MT_CONTENTS = makeSymbol("RETAIN-MT-CONTENTS");
 
+    public static final SubLObject decache_after_addings_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
+                after_adding.recache_gaf_after_addings(pred);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject decache_after_addings(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
             after_adding.recache_gaf_after_addings(pred);
@@ -588,8 +473,19 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject decache_after_removings_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
+                after_adding.recache_gaf_after_removings(pred);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject decache_after_removings(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
             after_adding.recache_gaf_after_removings(pred);
@@ -597,8 +493,19 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject decache_rule_after_addings_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
+                rule_after_adding.recache_rule_after_addings(pred);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject decache_rule_after_addings(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
             rule_after_adding.recache_rule_after_addings(pred);
@@ -606,8 +513,19 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject decache_rule_after_removings_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
+                rule_after_adding.recache_rule_after_removings(pred);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject decache_rule_after_removings(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject pred = assertions_high.gaf_arg(assertion, ONE_INTEGER);
             rule_after_adding.recache_rule_after_removings(pred);
@@ -615,13 +533,52 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * possibly clear all mt dependent caches
+     */
+    @LispMethod(comment = "possibly clear all mt dependent caches")
+    public static final SubLObject clear_mt_dependent_caches_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.possibly_clear_mt_dependent_caches(argument, assertion);
+    }
+
+    /**
+     * possibly clear all mt dependent caches
+     */
+    @LispMethod(comment = "possibly clear all mt dependent caches")
     public static SubLObject clear_mt_dependent_caches(final SubLObject argument, final SubLObject assertion) {
         return possibly_clear_mt_dependent_caches(argument, assertion);
+    }
+
+    public static final SubLObject possibly_clear_mt_dependent_caches_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != memoization_state.clear_mt_dependent_cachesP()) {
+            com.cyc.cycjava.cycl.inference.modules.after_adding_modules.clear_mt_dependent_caches_int(argument, assertion);
+        }
+        return NIL;
     }
 
     public static SubLObject possibly_clear_mt_dependent_caches(final SubLObject argument, final SubLObject assertion) {
         if (NIL != memoization_state.clear_mt_dependent_cachesP()) {
             clear_mt_dependent_caches_int(argument, assertion);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject clear_mt_dependent_caches_int_alt(SubLObject argument, SubLObject assertion) {
+        genl_mts.clear_all_base_mts();
+        mt_relevance_cache.update_mt_relevance_cache(argument, assertion);
+        predicate_relevance_cache.clear_predicate_relevance_cache();
+        sdc.clear_cached_all_isa_sdct();
+        tva_utilities.clear_cached_some_tva_for_predicate();
+        lexicon_accessors.clear_genl_lexicon_mtP();
+        rtp_datastructures.clear_relevant_template_mts();
+        {
+            SubLObject cdolist_list_var = memoization_state.$mt_dependent_cache_clear_callbacks$.getGlobalValue();
+            SubLObject callback = NIL;
+            for (callback = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , callback = cdolist_list_var.first()) {
+                if (NIL != fboundp(callback)) {
+                    funcall(callback);
+                }
+            }
         }
         return NIL;
     }
@@ -645,6 +602,42 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * clear all genls dependent caches
+     */
+    @LispMethod(comment = "clear all genls dependent caches")
+    public static final SubLObject clear_genls_dependent_caches_alt(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == $inside_clear_genls_dependent_cachesP$.getDynamicValue(thread)) {
+                {
+                    SubLObject _prev_bind_0 = $inside_clear_genls_dependent_cachesP$.currentBinding(thread);
+                    try {
+                        $inside_clear_genls_dependent_cachesP$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = memoization_state.$genls_dependent_cache_clear_callbacks$.getGlobalValue();
+                            SubLObject callback = NIL;
+                            for (callback = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , callback = cdolist_list_var.first()) {
+                                if (NIL != fboundp(callback)) {
+                                    funcall(callback);
+                                }
+                            }
+                            com.cyc.cycjava.cycl.inference.modules.after_adding_modules.clear_isa_dependent_caches_internal();
+                            com.cyc.cycjava.cycl.inference.modules.after_adding_modules.clear_quoted_isa_dependent_caches_internal();
+                        }
+                    } finally {
+                        $inside_clear_genls_dependent_cachesP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * clear all genls dependent caches
+     */
+    @LispMethod(comment = "clear all genls dependent caches")
     public static SubLObject clear_genls_dependent_caches(final SubLObject argument, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == $inside_clear_genls_dependent_cachesP$.getDynamicValue(thread)) {
@@ -670,11 +663,60 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * clear all isa dependent caches
+     */
+    @LispMethod(comment = "clear all isa dependent caches")
+    public static final SubLObject clear_isa_dependent_caches_alt(SubLObject argument, SubLObject assertion) {
+        com.cyc.cycjava.cycl.inference.modules.after_adding_modules.clear_isa_dependent_caches_internal();
+        return NIL;
+    }
+
+    /**
+     * clear all isa dependent caches
+     */
+    @LispMethod(comment = "clear all isa dependent caches")
     public static SubLObject clear_isa_dependent_caches(final SubLObject argument, final SubLObject assertion) {
         clear_isa_dependent_caches_internal();
         return NIL;
     }
 
+    /**
+     * clear all isa dependent caches
+     */
+    @LispMethod(comment = "clear all isa dependent caches")
+    public static final SubLObject clear_isa_dependent_caches_internal_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == $inside_clear_isa_dependent_cachesP$.getDynamicValue(thread)) {
+                {
+                    SubLObject _prev_bind_0 = $inside_clear_isa_dependent_cachesP$.currentBinding(thread);
+                    try {
+                        $inside_clear_isa_dependent_cachesP$.bind(T, thread);
+                        sdc.clear_cached_all_isa_sdct();
+                        sksi_kb_accessors.clear_sksi_content_mts();
+                        {
+                            SubLObject cdolist_list_var = memoization_state.$isa_dependent_cache_clear_callbacks$.getGlobalValue();
+                            SubLObject callback = NIL;
+                            for (callback = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , callback = cdolist_list_var.first()) {
+                                if (NIL != fboundp(callback)) {
+                                    funcall(callback);
+                                }
+                            }
+                        }
+                    } finally {
+                        $inside_clear_isa_dependent_cachesP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * clear all isa dependent caches
+     */
+    @LispMethod(comment = "clear all isa dependent caches")
     public static SubLObject clear_isa_dependent_caches_internal() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == $inside_clear_isa_dependent_cachesP$.getDynamicValue(thread)) {
@@ -700,11 +742,58 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * clear all quotedIsa dependent caches
+     */
+    @LispMethod(comment = "clear all quotedIsa dependent caches")
+    public static final SubLObject clear_quoted_isa_dependent_caches_alt(SubLObject argument, SubLObject assertion) {
+        com.cyc.cycjava.cycl.inference.modules.after_adding_modules.clear_quoted_isa_dependent_caches_internal();
+        return NIL;
+    }
+
+    /**
+     * clear all quotedIsa dependent caches
+     */
+    @LispMethod(comment = "clear all quotedIsa dependent caches")
     public static SubLObject clear_quoted_isa_dependent_caches(final SubLObject argument, final SubLObject assertion) {
         clear_quoted_isa_dependent_caches_internal();
         return NIL;
     }
 
+    /**
+     * clear all quotedIsa dependent caches
+     */
+    @LispMethod(comment = "clear all quotedIsa dependent caches")
+    public static final SubLObject clear_quoted_isa_dependent_caches_internal_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == $inside_clear_quoted_isa_dependent_cachesP$.getDynamicValue(thread)) {
+                {
+                    SubLObject _prev_bind_0 = $inside_clear_quoted_isa_dependent_cachesP$.currentBinding(thread);
+                    try {
+                        $inside_clear_quoted_isa_dependent_cachesP$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = memoization_state.$quoted_isa_dependent_cache_clear_callbacks$.getGlobalValue();
+                            SubLObject callback = NIL;
+                            for (callback = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , callback = cdolist_list_var.first()) {
+                                if (NIL != fboundp(callback)) {
+                                    funcall(callback);
+                                }
+                            }
+                        }
+                    } finally {
+                        $inside_clear_quoted_isa_dependent_cachesP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * clear all quotedIsa dependent caches
+     */
+    @LispMethod(comment = "clear all quotedIsa dependent caches")
     public static SubLObject clear_quoted_isa_dependent_caches_internal() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == $inside_clear_quoted_isa_dependent_cachesP$.getDynamicValue(thread)) {
@@ -728,6 +817,29 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * clear all genlPreds and genlInverse dependent caches
+     */
+    @LispMethod(comment = "clear all genlPreds and genlInverse dependent caches")
+    public static final SubLObject clear_genl_pred_dependent_caches_alt(SubLObject argument, SubLObject assertion) {
+        predicate_relevance_cache.clear_predicate_relevance_cache();
+        tva_utilities.clear_cached_some_tva_for_predicate();
+        {
+            SubLObject cdolist_list_var = memoization_state.$genl_preds_dependent_cache_clear_callbacks$.getGlobalValue();
+            SubLObject callback = NIL;
+            for (callback = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , callback = cdolist_list_var.first()) {
+                if (NIL != fboundp(callback)) {
+                    funcall(callback);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * clear all genlPreds and genlInverse dependent caches
+     */
+    @LispMethod(comment = "clear all genlPreds and genlInverse dependent caches")
     public static SubLObject clear_genl_pred_dependent_caches(final SubLObject argument, final SubLObject assertion) {
         predicate_relevance_cache.clear_predicate_relevance_cache();
         tva_utilities.clear_cached_some_tva_for_predicate();
@@ -744,8 +856,18 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_transitive_via_arg_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_add_transitive_via_arg(assertion);
+        return NIL;
+    }
+
     public static SubLObject add_transitive_via_arg(final SubLObject argument, final SubLObject assertion) {
         tva_cache.tva_cache_add_transitive_via_arg(assertion);
+        return NIL;
+    }
+
+    public static final SubLObject remove_transitive_via_arg_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_remove_transitive_via_arg(assertion);
         return NIL;
     }
 
@@ -754,8 +876,18 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_transitive_via_arg_inverse_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_add_transitive_via_arg_inverse(assertion);
+        return NIL;
+    }
+
     public static SubLObject add_transitive_via_arg_inverse(final SubLObject argument, final SubLObject assertion) {
         tva_cache.tva_cache_add_transitive_via_arg_inverse(assertion);
+        return NIL;
+    }
+
+    public static final SubLObject remove_transitive_via_arg_inverse_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_remove_transitive_via_arg_inverse(assertion);
         return NIL;
     }
 
@@ -764,7 +896,17 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_cached_tva_checks_alt(SubLObject argument, SubLObject assertion) {
+        tva_utilities.clear_cached_some_tva_for_predicate();
+        return NIL;
+    }
+
     public static SubLObject clear_cached_tva_checks(final SubLObject argument, final SubLObject assertion) {
+        tva_utilities.clear_cached_some_tva_for_predicate();
+        return NIL;
+    }
+
+    public static final SubLObject clear_cached_some_tva_checks_alt(SubLObject argument, SubLObject assertion) {
         tva_utilities.clear_cached_some_tva_for_predicate();
         return NIL;
     }
@@ -774,7 +916,17 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_cached_cva_checks_alt(SubLObject argument, SubLObject assertion) {
+        tva_utilities.clear_cached_some_cva_for_predicate();
+        return NIL;
+    }
+
     public static SubLObject clear_cached_cva_checks(final SubLObject argument, final SubLObject assertion) {
+        tva_utilities.clear_cached_some_cva_for_predicate();
+        return NIL;
+    }
+
+    public static final SubLObject clear_cached_some_cva_checks_alt(SubLObject argument, SubLObject assertion) {
         tva_utilities.clear_cached_some_cva_for_predicate();
         return NIL;
     }
@@ -784,6 +936,24 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Kill a skolem function upon unassertion of any of its defining assertions.
+     */
+    @LispMethod(comment = "Kill a skolem function upon unassertion of any of its defining assertions.")
+    public static final SubLObject skolem_after_removing_alt(SubLObject argument, SubLObject assertion) {
+        {
+            SubLObject skolem_function = assertions_high.gaf_arg1(assertion);
+            if (NIL == fort_being_removedP(skolem_function)) {
+                cyc_kernel.cyc_kill(skolem_function);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Kill a skolem function upon unassertion of any of its defining assertions.
+     */
+    @LispMethod(comment = "Kill a skolem function upon unassertion of any of its defining assertions.")
     public static SubLObject skolem_after_removing(final SubLObject argument, final SubLObject assertion) {
         final SubLObject skolem_function = assertions_high.gaf_arg1(assertion);
         if (NIL == hl_macros.fort_being_removedP(skolem_function)) {
@@ -792,6 +962,26 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Update the cache after an oldConstantName assertion is added.
+     */
+    @LispMethod(comment = "Update the cache after an oldConstantName assertion is added.")
+    public static final SubLObject add_old_constant_name_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject constant = assertions_high.gaf_arg(assertion, ONE_INTEGER);
+                SubLObject string = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                ke.cache_old_constant_name(string, constant);
+                return NIL;
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Update the cache after an oldConstantName assertion is added.
+     */
+    @LispMethod(comment = "Update the cache after an oldConstantName assertion is added.")
     public static SubLObject add_old_constant_name(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject constant = assertions_high.gaf_arg(assertion, ONE_INTEGER);
@@ -804,6 +994,26 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Update the cache after an oldConstantName assertion is removed.
+     */
+    @LispMethod(comment = "Update the cache after an oldConstantName assertion is removed.")
+    public static final SubLObject remove_old_constant_name_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject constant = assertions_high.gaf_arg(assertion, ONE_INTEGER);
+                SubLObject string = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                ke.decache_old_constant_name(string, constant);
+                return NIL;
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Update the cache after an oldConstantName assertion is removed.
+     */
+    @LispMethod(comment = "Update the cache after an oldConstantName assertion is removed.")
     public static SubLObject remove_old_constant_name(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject constant = assertions_high.gaf_arg(assertion, ONE_INTEGER);
@@ -816,56 +1026,150 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject propagate_to_isa_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$isa, assertion);
+    }
+
     public static SubLObject propagate_to_isa(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$isa, assertion);
+    }
+
+    public static final SubLObject propagate_to_genls_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$genls, assertion);
     }
 
     public static SubLObject propagate_to_genls(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$genls, assertion);
     }
 
+    public static final SubLObject propagate_to_disjointwith_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$disjointWith, assertion);
+    }
+
     public static SubLObject propagate_to_disjointwith(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$disjointWith, assertion);
+    }
+
+    public static final SubLObject propagate_to_genlmt_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$genlMt, assertion);
     }
 
     public static SubLObject propagate_to_genlmt(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$genlMt, assertion);
     }
 
+    public static final SubLObject propagate_to_genlpreds_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$genlPreds, assertion);
+    }
+
     public static SubLObject propagate_to_genlpreds(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$genlPreds, assertion);
+    }
+
+    public static final SubLObject propagate_to_negationpreds_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$negationPreds, assertion);
     }
 
     public static SubLObject propagate_to_negationpreds(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$negationPreds, assertion);
     }
 
+    public static final SubLObject propagate_to_genlinverse_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$genlInverse, assertion);
+    }
+
     public static SubLObject propagate_to_genlinverse(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$genlInverse, assertion);
+    }
+
+    public static final SubLObject propagate_to_negationinverse_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_pred_uses($$negationInverse, assertion);
     }
 
     public static SubLObject propagate_to_negationinverse(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_pred_uses($$negationInverse, assertion);
     }
 
+    public static final SubLObject propagate_inverse_to_isa_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_inverse_uses($$isa, assertion);
+    }
+
     public static SubLObject propagate_inverse_to_isa(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_inverse_uses($$isa, assertion);
+    }
+
+    public static final SubLObject propagate_inverse_to_genls_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_inverse_uses($$genls, assertion);
     }
 
     public static SubLObject propagate_inverse_to_genls(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_inverse_uses($$genls, assertion);
     }
 
+    public static final SubLObject propagate_inverse_to_genlmt_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_inverse_uses($$genlMt, assertion);
+    }
+
     public static SubLObject propagate_inverse_to_genlmt(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_inverse_uses($$genlMt, assertion);
+    }
+
+    public static final SubLObject propagate_inverse_to_genlpreds_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_inverse_uses($$genlPreds, assertion);
     }
 
     public static SubLObject propagate_inverse_to_genlpreds(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_inverse_uses($$genlPreds, assertion);
     }
 
+    public static final SubLObject propagate_inverse_to_genlinverse_alt(SubLObject argument, SubLObject assertion) {
+        return com.cyc.cycjava.cycl.inference.modules.after_adding_modules.propagate_sbhl_spec_inverse_uses($$genlInverse, assertion);
+    }
+
     public static SubLObject propagate_inverse_to_genlinverse(final SubLObject argument, final SubLObject assertion) {
         return propagate_sbhl_spec_inverse_uses($$genlInverse, assertion);
+    }
+
+    public static final SubLObject propagate_sbhl_spec_pred_uses_alt(SubLObject sbhl_pred, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject formula = assertions_high.gaf_formula(assertion);
+                SubLObject mt = assertions_high.assertion_mt(assertion);
+                SubLObject direction = assertions_high.assertion_direction(assertion);
+                if (literal_arity(formula, UNPROVIDED).numE(TWO_INTEGER)) {
+                    {
+                        SubLObject datum = formula;
+                        SubLObject current = datum;
+                        SubLObject pred = NIL;
+                        SubLObject arg1 = NIL;
+                        SubLObject arg2 = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        pred = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        arg1 = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        arg2 = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            if (NIL != genl_predicates.genl_predP(pred, sbhl_pred, mt, UNPROVIDED)) {
+                                {
+                                    SubLObject result_formula = list(sbhl_pred, arg1, arg2);
+                                    SubLObject more_support_formula = list($$genlPreds, pred, sbhl_pred);
+                                    SubLObject more_support = fi.make_el_support($GENLPREDS, more_support_formula, mt, $MONOTONIC);
+                                    SubLObject supports = list(assertion, more_support);
+                                    fi.fi_add_argument_int(result_formula, mt, supports, direction, UNPROVIDED);
+                                }
+                            }
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt43);
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject propagate_sbhl_spec_pred_uses(final SubLObject sbhl_pred, final SubLObject assertion) {
@@ -897,6 +1201,48 @@ public final class after_adding_modules extends SubLTranslatedFile {
                     }
                 } else {
                     cdestructuring_bind_error(datum, $list43);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    public static final SubLObject propagate_sbhl_spec_inverse_uses_alt(SubLObject sbhl_pred, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject formula = assertions_high.gaf_formula(assertion);
+                SubLObject mt = assertions_high.assertion_mt(assertion);
+                SubLObject direction = assertions_high.assertion_direction(assertion);
+                if (literal_arity(formula, UNPROVIDED).numE(TWO_INTEGER)) {
+                    {
+                        SubLObject datum = formula;
+                        SubLObject current = datum;
+                        SubLObject pred = NIL;
+                        SubLObject arg1 = NIL;
+                        SubLObject arg2 = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        pred = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        arg1 = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        arg2 = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            if (NIL != genl_predicates.genl_inverseP(pred, sbhl_pred, mt, UNPROVIDED)) {
+                                {
+                                    SubLObject result_formula = list(sbhl_pred, arg2, arg1);
+                                    SubLObject more_support_formula = list($$genlInverse, pred, sbhl_pred);
+                                    SubLObject more_support = fi.make_el_support($GENLPREDS, more_support_formula, mt, $MONOTONIC);
+                                    SubLObject supports = list(assertion, more_support);
+                                    fi.fi_add_argument_int(result_formula, mt, supports, direction, UNPROVIDED);
+                                }
+                            }
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt43);
+                        }
+                    }
                 }
             }
         }
@@ -938,6 +1284,41 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_ist_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_assertionP(assertion)) {
+            {
+                SubLObject ist_formula = fi.assertion_fi_formula(assertion, UNPROVIDED);
+                SubLObject direction = assertions_high.assertion_direction(assertion);
+                SubLObject datum = ist_formula;
+                SubLObject current = datum;
+                SubLObject ist = NIL;
+                SubLObject mt = NIL;
+                SubLObject formula = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt47);
+                ist = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt47);
+                mt = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt47);
+                formula = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    if (ist == $$ist) {
+                        {
+                            SubLObject hl_rule_support = com.cyc.cycjava.cycl.inference.modules.after_adding_modules.add_ist_el_support(mt);
+                            SubLObject supports = list(hl_rule_support, assertion);
+                            fi.fi_add_argument_int(formula, mt, supports, direction, UNPROVIDED);
+                        }
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt47);
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject add_ist(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertion_utilities.true_assertionP(assertion)) {
             final SubLObject ist_formula = fi.assertion_fi_formula(assertion, UNPROVIDED);
@@ -969,11 +1350,54 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_ist_el_support_alt(SubLObject mt) {
+        {
+            SubLObject hl_rule = listS($$implies, listS($$ist, mt, $list_alt51), $list_alt51);
+            return fi.make_el_support($CODE, hl_rule, mt, $MONOTONIC);
+        }
+    }
+
     public static SubLObject add_ist_el_support(final SubLObject mt) {
         final SubLObject hl_rule = listS($$implies, listS($$ist, mt, $list50), $list50);
         return fi.make_el_support($CODE, hl_rule, mt, $MONOTONIC);
     }
 
+    /**
+     * #$afterAdding for #$trueRule
+     */
+    @LispMethod(comment = "#$afterAdding for #$trueRule")
+    public static final SubLObject add_true_rule_alt(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+                {
+                    SubLObject mt = assertions_high.assertion_mt(assertion);
+                    SubLObject template = assertions_high.gaf_arg1(assertion);
+                    SubLObject rule_formula = assertions_high.gaf_arg2(assertion);
+                    SubLObject direction = com.cyc.cycjava.cycl.inference.modules.after_adding_modules.rule_template_direction(template, mt);
+                    SubLObject true_rule_el_support = com.cyc.cycjava.cycl.inference.modules.after_adding_modules.true_rule_el_support();
+                    SubLObject supports = list(true_rule_el_support, assertion);
+                    SubLObject environment = forward.get_forward_inference_environment();
+                    SubLTrampolineFile.checkType(environment, QUEUE_P);
+                    {
+                        SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
+                        try {
+                            kb_control_vars.$forward_inference_environment$.bind(environment, thread);
+                            fi.fi_add_argument_int(rule_formula, mt, supports, direction, UNPROVIDED);
+                        } finally {
+                            kb_control_vars.$forward_inference_environment$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * #$afterAdding for #$trueRule
+     */
+    @LispMethod(comment = "#$afterAdding for #$trueRule")
     public static SubLObject add_true_rule(final SubLObject argument, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
@@ -984,7 +1408,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
             final SubLObject true_rule_el_support = true_rule_el_support();
             final SubLObject supports = list(true_rule_el_support, assertion);
             final SubLObject environment = forward.get_forward_inference_environment();
-            assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
+            assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
             final SubLObject _prev_bind_0 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
             try {
                 kb_control_vars.$forward_inference_environment$.bind(environment, thread);
@@ -996,10 +1420,27 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject true_rule_el_support_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject hl_rule = $true_rule_template$.getDynamicValue(thread);
+                return fi.make_el_support($CODE, hl_rule, $true_rule_defining_mt$.getGlobalValue(), $MONOTONIC);
+            }
+        }
+    }
+
     public static SubLObject true_rule_el_support() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject hl_rule = $true_rule_template$.getDynamicValue(thread);
         return fi.make_el_support($CODE, hl_rule, $true_rule_defining_mt$.getGlobalValue(), $MONOTONIC);
+    }
+
+    public static final SubLObject true_rule_support_p_alt(SubLObject support) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean((NIL == assertion_handles.assertion_p(support)) && $true_rule_template$.getDynamicValue(thread).equal(support_formula(support)));
+        }
     }
 
     public static SubLObject true_rule_support_p(final SubLObject support) {
@@ -1007,11 +1448,31 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return makeBoolean((NIL == assertion_handles.assertion_p(support)) && $true_rule_template$.getDynamicValue(thread).equal(arguments.support_formula(support)));
     }
 
+    public static final SubLObject rule_template_direction_alt(SubLObject rule_template, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        SubLTrampolineFile.checkType(rule_template, FORT_P);
+        {
+            SubLObject direction = kb_mapping_utilities.fpred_value_in_relevant_mts(rule_template, $$ruleTemplateDirection, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject pcase_var = direction;
+            if (pcase_var.eql($$Forward_AssertionDirection)) {
+                return $FORWARD;
+            } else {
+                if (pcase_var.eql($$Backward_AssertionDirection)) {
+                    return $BACKWARD;
+                } else {
+                    return $BACKWARD;
+                }
+            }
+        }
+    }
+
     public static SubLObject rule_template_direction(final SubLObject rule_template, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        assert NIL != forts.fort_p(rule_template) : "forts.fort_p(rule_template) " + "CommonSymbols.NIL != forts.fort_p(rule_template) " + rule_template;
+        assert NIL != forts.fort_p(rule_template) : "! forts.fort_p(rule_template) " + ("forts.fort_p(rule_template) " + "CommonSymbols.NIL != forts.fort_p(rule_template) ") + rule_template;
         final SubLObject pcase_var;
         final SubLObject direction = pcase_var = kb_mapping_utilities.fpred_value_in_relevant_mts(rule_template, $$ruleTemplateDirection, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         if (pcase_var.eql($$Forward_AssertionDirection)) {
@@ -1023,6 +1484,47 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return $BACKWARD;
     }
 
+    /**
+     * #$afterAdding for #$ruleTemplateDirection
+     */
+    @LispMethod(comment = "#$afterAdding for #$ruleTemplateDirection")
+    public static final SubLObject add_rule_template_direction_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject mt = assertions_high.assertion_mt(assertion);
+                SubLObject template = assertions_high.gaf_arg1(assertion);
+                SubLObject direction = assertions_high.gaf_arg2(assertion);
+                SubLObject template_instantiations = com.cyc.cycjava.cycl.inference.modules.after_adding_modules.rule_template_instantiations(template, mt);
+                SubLObject pcase_var = direction;
+                if (pcase_var.eql($$Forward_AssertionDirection)) {
+                    {
+                        SubLObject cdolist_list_var = template_instantiations;
+                        SubLObject template_instantiation = NIL;
+                        for (template_instantiation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , template_instantiation = cdolist_list_var.first()) {
+                            tms.tms_change_direction(template_instantiation, $FORWARD);
+                        }
+                    }
+                    forward.perform_forward_inference();
+                } else {
+                    if (pcase_var.eql($$Backward_AssertionDirection)) {
+                        {
+                            SubLObject cdolist_list_var = template_instantiations;
+                            SubLObject template_instantiation = NIL;
+                            for (template_instantiation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , template_instantiation = cdolist_list_var.first()) {
+                                tms.tms_change_direction(template_instantiation, $BACKWARD);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * #$afterAdding for #$ruleTemplateDirection
+     */
+    @LispMethod(comment = "#$afterAdding for #$ruleTemplateDirection")
     public static SubLObject add_rule_template_direction(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
             final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -1056,6 +1558,30 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * #$afterRemoving for #$ruleTemplateDirection
+     */
+    @LispMethod(comment = "#$afterRemoving for #$ruleTemplateDirection")
+    public static final SubLObject remove_rule_template_direction_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject mt = assertions_high.assertion_mt(assertion);
+                SubLObject template = assertions_high.gaf_arg1(assertion);
+                SubLObject template_instantiations = com.cyc.cycjava.cycl.inference.modules.after_adding_modules.rule_template_instantiations(template, mt);
+                SubLObject cdolist_list_var = template_instantiations;
+                SubLObject template_instantiation = NIL;
+                for (template_instantiation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , template_instantiation = cdolist_list_var.first()) {
+                    tms.tms_change_direction(template_instantiation, $BACKWARD);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * #$afterRemoving for #$ruleTemplateDirection
+     */
+    @LispMethod(comment = "#$afterRemoving for #$ruleTemplateDirection")
     public static SubLObject remove_rule_template_direction(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -1071,6 +1597,91 @@ public final class after_adding_modules extends SubLTranslatedFile {
             } 
         }
         return NIL;
+    }
+
+    public static final SubLObject rule_template_instantiations_alt(SubLObject template, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject instantiations = NIL;
+                SubLObject mt_var = mt;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
+                        {
+                            SubLObject pred_var = $$trueRule;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(template, ONE_INTEGER, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(template, ONE_INTEGER, pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                        {
+                                                            SubLObject done_var_1 = NIL;
+                                                            SubLObject token_var_2 = NIL;
+                                                            while (NIL == done_var_1) {
+                                                                {
+                                                                    SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_2);
+                                                                    SubLObject valid_3 = makeBoolean(token_var_2 != ass);
+                                                                    if (NIL != valid_3) {
+                                                                        {
+                                                                            SubLObject deductions = assertions_high.assertion_dependents(ass);
+                                                                            SubLObject cdolist_list_var = deductions;
+                                                                            SubLObject deduction = NIL;
+                                                                            for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                                                                                if (NIL != com.cyc.cycjava.cycl.inference.modules.after_adding_modules.rule_template_instantiation_deduction(deduction)) {
+                                                                                    instantiations = cons(deductions_high.deduction_assertion(deduction), instantiations);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var_1 = makeBoolean(NIL == valid_3);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0_4 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_4, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(instantiations);
+            }
+        }
     }
 
     public static SubLObject rule_template_instantiations(final SubLObject template, SubLObject mt) {
@@ -1140,11 +1751,43 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return nreverse(instantiations);
     }
 
-    public static SubLObject rule_template_instantiation_deduction(final SubLObject deduction) {
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+    public static final SubLObject rule_template_instantiation_deduction_alt(SubLObject deduction) {
+        SubLTrampolineFile.checkType(deduction, DEDUCTION_P);
         return find_if(symbol_function(TRUE_RULE_SUPPORT_P), deductions_high.deduction_supports(deduction), UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static SubLObject rule_template_instantiation_deduction(final SubLObject deduction) {
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
+        return find_if(symbol_function(TRUE_RULE_SUPPORT_P), deductions_high.deduction_supports(deduction), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     * #$afterRemoving for spec preds of #$termDependsOn
+     */
+    @LispMethod(comment = "#$afterRemoving for spec preds of #$termDependsOn")
+    public static final SubLObject remove_dependent_term_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject v_term = assertions_high.gaf_arg1(assertion);
+                if (NIL != fort_p(v_term)) {
+                    if (NIL == fort_being_removedP(v_term)) {
+                        {
+                            SubLObject defining_mt = assertions_high.gaf_arg2(assertion);
+                            if ((NIL != fort_p(defining_mt)) && (NIL != fort_being_removedP(defining_mt))) {
+                                return cyc_kernel.cyc_kill(v_term);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * #$afterRemoving for spec preds of #$termDependsOn
+     */
+    @LispMethod(comment = "#$afterRemoving for spec preds of #$termDependsOn")
     public static SubLObject remove_dependent_term(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
             final SubLObject dependent_term = assertions_high.gaf_arg1(assertion);
@@ -1162,11 +1805,33 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return propagate_sbhl_spec_pred_uses($$arity, assertion);
     }
 
+    public static final SubLObject add_arity_alt(SubLObject argument, SubLObject assertion) {
+        if ((NIL != assertion_utilities.true_assertionP(assertion)) && (NIL != assertions_high.only_argument_of_assertion_p(assertion, argument))) {
+            {
+                SubLObject relation = assertions_high.gaf_arg1(assertion);
+                SubLObject v_arity = assertions_high.gaf_arg2(assertion);
+                arity.maybe_add_arity_for_relation(relation, v_arity);
+            }
+        }
+        return assertion;
+    }
+
     public static SubLObject add_arity(final SubLObject argument, final SubLObject assertion) {
         if ((NIL != assertion_utilities.true_assertionP(assertion)) && (NIL != assertions_high.only_argument_of_assertion_p(assertion, argument))) {
             final SubLObject relation = assertions_high.gaf_arg1(assertion);
             final SubLObject v_arity = assertions_high.gaf_arg2(assertion);
             arity.maybe_add_arity_for_relation(relation, v_arity);
+        }
+        return assertion;
+    }
+
+    public static final SubLObject remove_arity_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL == kb_accessors.assertion_still_thereP(assertion, $TRUE)) {
+            {
+                SubLObject relation = assertions_high.gaf_arg1(assertion);
+                SubLObject v_arity = assertions_high.gaf_arg2(assertion);
+                arity.maybe_remove_arity_for_relation(relation, v_arity);
+            }
         }
         return assertion;
     }
@@ -1184,11 +1849,32 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return propagate_sbhl_spec_pred_uses($$arityMin, assertion);
     }
 
+    public static final SubLObject add_arity_min_alt(SubLObject argument, SubLObject assertion) {
+        if ((NIL != assertion_utilities.true_assertionP(assertion)) && (NIL != assertions_high.only_argument_of_assertion_p(assertion, argument))) {
+            {
+                SubLObject relation = assertions_high.gaf_arg1(assertion);
+                SubLObject arity_min = assertions_high.gaf_arg2(assertion);
+                arity.maybe_add_arity_min_for_relation(relation, arity_min);
+            }
+        }
+        return assertion;
+    }
+
     public static SubLObject add_arity_min(final SubLObject argument, final SubLObject assertion) {
         if ((NIL != assertion_utilities.true_assertionP(assertion)) && (NIL != assertions_high.only_argument_of_assertion_p(assertion, argument))) {
             final SubLObject relation = assertions_high.gaf_arg1(assertion);
             final SubLObject arity_min = assertions_high.gaf_arg2(assertion);
             arity.maybe_add_arity_min_for_relation(relation, arity_min);
+        }
+        return assertion;
+    }
+
+    public static final SubLObject remove_arity_min_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL == kb_accessors.assertion_still_thereP(assertion, $TRUE)) {
+            {
+                SubLObject relation = assertions_high.gaf_arg1(assertion);
+                arity.maybe_remove_arity_min_for_relation(relation);
+            }
         }
         return assertion;
     }
@@ -1205,11 +1891,32 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return propagate_sbhl_spec_pred_uses($$arityMax, assertion);
     }
 
+    public static final SubLObject add_arity_max_alt(SubLObject argument, SubLObject assertion) {
+        if ((NIL != assertion_utilities.true_assertionP(assertion)) && (NIL != assertions_high.only_argument_of_assertion_p(assertion, argument))) {
+            {
+                SubLObject relation = assertions_high.gaf_arg1(assertion);
+                SubLObject arity_max = assertions_high.gaf_arg2(assertion);
+                arity.maybe_add_arity_max_for_relation(relation, arity_max);
+            }
+        }
+        return assertion;
+    }
+
     public static SubLObject add_arity_max(final SubLObject argument, final SubLObject assertion) {
         if ((NIL != assertion_utilities.true_assertionP(assertion)) && (NIL != assertions_high.only_argument_of_assertion_p(assertion, argument))) {
             final SubLObject relation = assertions_high.gaf_arg1(assertion);
             final SubLObject arity_max = assertions_high.gaf_arg2(assertion);
             arity.maybe_add_arity_max_for_relation(relation, arity_max);
+        }
+        return assertion;
+    }
+
+    public static final SubLObject remove_arity_max_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL == kb_accessors.assertion_still_thereP(assertion, $TRUE)) {
+            {
+                SubLObject relation = assertions_high.gaf_arg1(assertion);
+                arity.maybe_remove_arity_max_for_relation(relation);
+            }
         }
         return assertion;
     }
@@ -1222,10 +1929,30 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return assertion;
     }
 
+    public static final SubLObject inter_arg_isa_after_adding_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject reln = assertions_high.gaf_arg1(assertion);
+                at_utilities.some_inter_arg_isa_assertion_somewhere_cache_add(reln);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject inter_arg_isa_after_adding(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
             final SubLObject reln = assertions_high.gaf_arg1(assertion);
             at_utilities.some_inter_arg_isa_assertion_somewhere_cache_add(reln);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject inter_arg_isa_after_removing_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject reln = assertions_high.gaf_arg1(assertion);
+                at_utilities.some_inter_arg_isa_assertion_somewhere_cache_maybe_remove(reln);
+            }
         }
         return NIL;
     }
@@ -1238,10 +1965,30 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject inter_arg_format_after_adding_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject reln = assertions_high.gaf_arg1(assertion);
+                at_utilities.some_inter_arg_format_assertion_somewhere_cache_add(reln);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject inter_arg_format_after_adding(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
             final SubLObject reln = assertions_high.gaf_arg1(assertion);
             at_utilities.some_inter_arg_format_assertion_somewhere_cache_add(reln);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject inter_arg_format_after_removing_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_gaf_assertionP(assertion)) {
+            {
+                SubLObject reln = assertions_high.gaf_arg1(assertion);
+                at_utilities.some_inter_arg_format_assertion_somewhere_cache_maybe_remove(reln);
+            }
         }
         return NIL;
     }
@@ -1254,14 +2001,58 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Just like @xref add-assertion-to-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.
+     */
+    @LispMethod(comment = "Just like @xref add-assertion-to-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.")
+    public static final SubLObject add_to_contraction_ht_alt(SubLObject argument, SubLObject assertion) {
+        return tersifier.add_assertion_to_contraction_ht(assertion);
+    }
+
+    /**
+     * Just like @xref add-assertion-to-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.
+     */
+    @LispMethod(comment = "Just like @xref add-assertion-to-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.")
     public static SubLObject add_to_contraction_ht(final SubLObject argument, final SubLObject assertion) {
         return tersifier.add_assertion_to_contraction_ht(assertion);
     }
 
+    /**
+     * Just like @xref remove-assertion-from-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.
+     */
+    @LispMethod(comment = "Just like @xref remove-assertion-from-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.")
+    public static final SubLObject remove_from_contraction_ht_alt(SubLObject argument, SubLObject assertion) {
+        return tersifier.remove_assertion_from_contraction_ht(assertion);
+    }
+
+    /**
+     * Just like @xref remove-assertion-from-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.
+     */
+    @LispMethod(comment = "Just like @xref remove-assertion-from-contraction-ht but with a silly extra first argument, because after-addings like that kind of thing.")
     public static SubLObject remove_from_contraction_ht(final SubLObject argument, final SubLObject assertion) {
         return tersifier.remove_assertion_from_contraction_ht(assertion);
     }
 
+    /**
+     * For #$expansion assertions on functions used in generation templates.
+     */
+    @LispMethod(comment = "For #$expansion assertions on functions used in generation templates.")
+    public static final SubLObject add_gen_template_expansion_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject reln = assertions_high.gaf_arg1(assertion);
+                if (NIL != pph_types.pph_phrase_fnP(reln, UNPROVIDED)) {
+                    pph_templates.reinitialize_gen_templates_referencing_phrase_fn(reln);
+                }
+            }
+        }
+        return assertion;
+    }
+
+    /**
+     * For #$expansion assertions on functions used in generation templates.
+     */
+    @LispMethod(comment = "For #$expansion assertions on functions used in generation templates.")
     public static SubLObject add_gen_template_expansion(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject reln = assertions_high.gaf_arg1(assertion);
@@ -1272,6 +2063,26 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return assertion;
     }
 
+    /**
+     * For #$expansion assertions on functions used in generation templates.
+     */
+    @LispMethod(comment = "For #$expansion assertions on functions used in generation templates.")
+    public static final SubLObject remove_gen_template_expansion_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertions_high.gaf_assertionP(assertion)) {
+            {
+                SubLObject reln = assertions_high.gaf_arg1(assertion);
+                if (NIL != pph_types.pph_phrase_fnP(reln, UNPROVIDED)) {
+                    pph_templates.reinitialize_gen_templates_referencing_phrase_fn(reln);
+                }
+            }
+        }
+        return assertion;
+    }
+
+    /**
+     * For #$expansion assertions on functions used in generation templates.
+     */
+    @LispMethod(comment = "For #$expansion assertions on functions used in generation templates.")
     public static SubLObject remove_gen_template_expansion(final SubLObject argument, final SubLObject assertion) {
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject reln = assertions_high.gaf_arg1(assertion);
@@ -1280,6 +2091,132 @@ public final class after_adding_modules extends SubLTranslatedFile {
             }
         }
         return assertion;
+    }
+
+    public static final SubLObject add_expansion_axiom_alt(SubLObject argument, SubLObject meta_assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == subl_promotions.memberP(argument, assertions_high.assertion_arguments(meta_assertion), NOT_EQ, UNPROVIDED)) {
+                if (NIL != assertion_utilities.true_assertionP(meta_assertion)) {
+                    {
+                        SubLObject rm_pred = assertions_high.gaf_arg1(meta_assertion);
+                        SubLObject assertion = assertions_high.gaf_arg2(meta_assertion);
+                        SubLObject mt = assertions_high.assertion_mt(assertion);
+                        if (NIL == kb_mapping_utilities.fpred_value_in_relevant_mts(rm_pred, $$expansion, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                            {
+                                SubLObject add_expansion_axiom_assertion = czer_utilities.safe_find_gaf_genl_mts($list_alt88, mt);
+                                SubLObject validP = T;
+                                if (NIL != add_expansion_axiom_assertion) {
+                                    {
+                                        SubLObject formula = uncanonicalizer.assertion_el_formula(assertion);
+                                        SubLObject sibling_expansion_axioms = remove(assertion, kb_mapping_utilities.pred_values_in_relevant_mts(rm_pred, $$expansionAxiom, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                        SubLObject cnfs = NIL;
+                                        SubLObject expansion = NIL;
+                                        if (NIL != sibling_expansion_axioms) {
+                                            {
+                                                SubLObject invalidP = NIL;
+                                                if (NIL == invalidP) {
+                                                    {
+                                                        SubLObject csome_list_var = sibling_expansion_axioms;
+                                                        SubLObject sibling_expansion_axiom = NIL;
+                                                        for (sibling_expansion_axiom = csome_list_var.first(); !((NIL != invalidP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , sibling_expansion_axiom = csome_list_var.first()) {
+                                                            invalidP = makeBoolean(!formula.equal(uncanonicalizer.assertion_el_formula(sibling_expansion_axiom)));
+                                                        }
+                                                    }
+                                                }
+                                                validP = makeBoolean(NIL == invalidP);
+                                            }
+                                        }
+                                        if (NIL != validP) {
+                                            {
+                                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                try {
+                                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
+                                                    mt_relevance_macros.$mt$.bind(mt, thread);
+                                                    wff.reset_wff_state();
+                                                    cnfs = clausifier.clausal_form(formula, mt, $CNF);
+                                                } finally {
+                                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                                                }
+                                            }
+                                            if (cnfs.isList() && (NIL != list_utilities.singletonP(remove_duplicates(Mapping.mapcar(symbol_function(NEG_LITS), cnfs), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED)))) {
+                                                {
+                                                    SubLObject pred_neg_lit = NIL;
+                                                    SubLObject blist = NIL;
+                                                    SubLObject cnf = cnfs.first();
+                                                    SubLObject neg_lits = clauses.neg_lits(cnf);
+                                                    if (NIL == pred_neg_lit) {
+                                                        {
+                                                            SubLObject csome_list_var = neg_lits;
+                                                            SubLObject neg_lit = NIL;
+                                                            for (neg_lit = csome_list_var.first(); !((NIL != pred_neg_lit) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , neg_lit = csome_list_var.first()) {
+                                                                if (rm_pred.eql(literal_arg0(neg_lit, UNPROVIDED))) {
+                                                                    {
+                                                                        SubLObject argnum = ZERO_INTEGER;
+                                                                        SubLObject non_varP = NIL;
+                                                                        if (NIL == non_varP) {
+                                                                            {
+                                                                                SubLObject csome_list_var_5 = literal_args(neg_lit, UNPROVIDED);
+                                                                                SubLObject arg = NIL;
+                                                                                for (arg = csome_list_var_5.first(); !((NIL != non_varP) || (NIL == csome_list_var_5)); csome_list_var_5 = csome_list_var_5.rest() , arg = csome_list_var_5.first()) {
+                                                                                    argnum = add(argnum, ONE_INTEGER);
+                                                                                    if (NIL != cycl_variables.el_varP(arg)) {
+                                                                                        blist = cons(cons(arg, at_utilities.get_generic_arg(argnum)), blist);
+                                                                                    } else {
+                                                                                        non_varP = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        if (NIL == non_varP) {
+                                                                            pred_neg_lit = neg_lit;
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if ((NIL != pred_neg_lit) && (NIL != blist)) {
+                                                        {
+                                                            SubLObject _prev_bind_0 = wff_vars.$permit_generic_arg_variablesP$.currentBinding(thread);
+                                                            try {
+                                                                wff_vars.$permit_generic_arg_variablesP$.bind(T, thread);
+                                                                {
+                                                                    SubLObject _prev_bind_0_6 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                                    try {
+                                                                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
+                                                                        mt_relevance_macros.$mt$.bind(mt, thread);
+                                                                        expansion = simplifier.simplify_cycl_sentence(sublis(blist, subst($$True, pred_neg_lit, formula, symbol_function(EQUAL), UNPROVIDED), UNPROVIDED, UNPROVIDED), UNPROVIDED);
+                                                                    } finally {
+                                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0_6, thread);
+                                                                    }
+                                                                }
+                                                                if ((NIL != el_formula_p(expansion)) && (NIL != wff.el_wffP(expansion, mt, UNPROVIDED))) {
+                                                                    if (NIL == list_utilities.tree_find(rm_pred, expansion, UNPROVIDED, UNPROVIDED)) {
+                                                                        fi.fi_add_argument_int(list($$expansion, rm_pred, expansion), mt, list(meta_assertion, add_expansion_axiom_assertion), $FORWARD, T);
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                wff_vars.$permit_generic_arg_variablesP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject add_expansion_axiom(final SubLObject argument, final SubLObject meta_assertion) {
@@ -1383,6 +2320,13 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cyc_add_reformulation_assertion_alt(SubLObject argument, SubLObject assertion) {
+        if ((NIL != reformulator_datastructures.reformulator_initializedP()) && (NIL != reformulator_datastructures.reformulator_relevant_assertionP(assertion))) {
+            reformulator_datastructures.add_reformulation_assertion(assertion);
+        }
+        return NIL;
+    }
+
     public static SubLObject cyc_add_reformulation_assertion(final SubLObject argument, final SubLObject assertion) {
         if (((NIL != after_adding.initial_assertion_argumentP(argument, assertion)) && (NIL != reformulator_datastructures.reformulator_initializedP())) && (NIL != reformulator_datastructures.reformulator_relevant_assertionP(assertion))) {
             reformulator_datastructures.add_reformulation_assertion(assertion);
@@ -1390,9 +2334,70 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cyc_remove_reformulation_assertion_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != reformulator_datastructures.reformulator_initializedP()) {
+            reformulator_datastructures.remove_reformulation_assertion(assertion);
+        }
+        return NIL;
+    }
+
     public static SubLObject cyc_remove_reformulation_assertion(final SubLObject argument, final SubLObject assertion) {
         if ((NIL != after_adding.final_assertion_argumentP(argument, assertion)) && (NIL != reformulator_datastructures.reformulator_initializedP())) {
             reformulator_datastructures.remove_reformulation_assertion(assertion);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject cyc_add_element_of_alt(SubLObject argument, SubLObject assertion) {
+        if (NIL != assertion_utilities.true_assertionP(assertion)) {
+            {
+                SubLObject eo_formula = fi.assertion_fi_formula(assertion, UNPROVIDED);
+                SubLObject mt = assertions_high.assertion_mt(assertion);
+                SubLObject datum = eo_formula;
+                SubLObject current = datum;
+                SubLObject eo = NIL;
+                SubLObject v_term = NIL;
+                SubLObject setexpr = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt97);
+                eo = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt97);
+                v_term = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt97);
+                setexpr = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    if ((eo == $$elementOf) && (NIL != el_formula_with_operator_p(setexpr, $$TheSetOf))) {
+                        {
+                            SubLObject datum_7 = setexpr;
+                            SubLObject current_8 = datum_7;
+                            SubLObject tso = NIL;
+                            SubLObject var = NIL;
+                            SubLObject prop = NIL;
+                            destructuring_bind_must_consp(current_8, datum_7, $list_alt100);
+                            tso = current_8.first();
+                            current_8 = current_8.rest();
+                            destructuring_bind_must_consp(current_8, datum_7, $list_alt100);
+                            var = current_8.first();
+                            current_8 = current_8.rest();
+                            destructuring_bind_must_consp(current_8, datum_7, $list_alt100);
+                            prop = current_8.first();
+                            current_8 = current_8.rest();
+                            if (NIL == current_8) {
+                                {
+                                    SubLObject transformed_conclusion = cycl_utilities.expression_subst(v_term, var, prop, UNPROVIDED, UNPROVIDED);
+                                    fi.fi_add_argument_int(transformed_conclusion, mt, list(assertion), $FORWARD, T);
+                                }
+                            } else {
+                                cdestructuring_bind_error(datum_7, $list_alt100);
+                            }
+                        }
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt97);
+                }
+            }
         }
         return NIL;
     }
@@ -1445,29 +2450,91 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_unit_multiplication_factor_caches_alt(SubLObject argument, SubLObject assertion) {
+        quantities.clear_get_definitional_unit_multiplication_factor();
+        return NIL;
+    }
+
     public static SubLObject clear_unit_multiplication_factor_caches(final SubLObject argument, final SubLObject assertion) {
         quantities.clear_get_definitional_unit_multiplication_factor();
         return NIL;
     }
 
+    /**
+     * Declare a removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).
+     */
+    @LispMethod(comment = "Declare a removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).")
+    public static final SubLObject cyc_add_known_antecedent_rule_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, $sym103$GAF_ASSERTION_);
+        {
+            SubLObject rule = assertions_high.gaf_arg1(assertion);
+            SubLTrampolineFile.checkType(rule, $sym104$RULE_ASSERTION_);
+            removal_modules_known_antecedent_rule.declare_known_antecedent_rule_removal_module_for_rule(rule, T);
+        }
+        return NIL;
+    }
+
+    /**
+     * Declare a removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).
+     */
+    @LispMethod(comment = "Declare a removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).")
     public static SubLObject cyc_add_known_antecedent_rule(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != assertions_high.gaf_assertionP(assertion) : "assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) " + assertion;
+        assert NIL != assertions_high.gaf_assertionP(assertion) : "! assertions_high.gaf_assertionP(assertion) " + ("assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) ") + assertion;
         final SubLObject rule = assertions_high.gaf_arg1(assertion);
-        assert NIL != assertions_high.rule_assertionP(rule) : "assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) " + rule;
+        assert NIL != assertions_high.rule_assertionP(rule) : "! assertions_high.rule_assertionP(rule) " + ("assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) ") + rule;
         removal_modules_known_antecedent_rule.declare_known_antecedent_rule_removal_module_for_rule(rule, T);
         return NIL;
     }
 
+    /**
+     * Undeclare the removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).
+     */
+    @LispMethod(comment = "Undeclare the removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).")
+    public static final SubLObject cyc_remove_known_antecedent_rule_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, $sym103$GAF_ASSERTION_);
+        {
+            SubLObject rule = assertions_high.gaf_arg1(assertion);
+            SubLTrampolineFile.checkType(rule, $sym104$RULE_ASSERTION_);
+            removal_modules_known_antecedent_rule.undeclare_known_antecedent_rule_removal_module_for_rule(rule, T);
+        }
+        return NIL;
+    }
+
+    /**
+     * Undeclare the removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).
+     */
+    @LispMethod(comment = "Undeclare the removal module for RULE, given ASSERTION of the form (#$knownAntecedentRule RULE).")
     public static SubLObject cyc_remove_known_antecedent_rule(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != assertions_high.gaf_assertionP(assertion) : "assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) " + assertion;
+        assert NIL != assertions_high.gaf_assertionP(assertion) : "! assertions_high.gaf_assertionP(assertion) " + ("assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) ") + assertion;
         final SubLObject rule = assertions_high.gaf_arg1(assertion);
-        assert NIL != assertions_high.rule_assertionP(rule) : "assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) " + rule;
+        assert NIL != assertions_high.rule_assertionP(rule) : "! assertions_high.rule_assertionP(rule) " + ("assertions_high.rule_assertionP(rule) " + "CommonSymbols.NIL != assertions_high.rule_assertionP(rule) ") + rule;
         removal_modules_known_antecedent_rule.undeclare_known_antecedent_rule_removal_module_for_rule(rule, T);
         return NIL;
     }
 
+    /**
+     * Add the merged constant guid to the guid-to-constant and constant-merged-guid tables.
+     */
+    @LispMethod(comment = "Add the merged constant guid to the guid-to-constant and constant-merged-guid tables.")
+    public static final SubLObject add_merged_constant_guid_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, $sym103$GAF_ASSERTION_);
+        {
+            SubLObject constant = assertions_high.gaf_arg1(assertion);
+            SubLObject guid_string = assertions_high.gaf_arg2(assertion);
+            SubLObject guid = Guids.string_to_guid(guid_string);
+            if (NIL != constant_p(constant)) {
+                constants_low.install_constant_merged_guid(constant, guid);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Add the merged constant guid to the guid-to-constant and constant-merged-guid tables.
+     */
+    @LispMethod(comment = "Add the merged constant guid to the guid-to-constant and constant-merged-guid tables.")
     public static SubLObject add_merged_constant_guid(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != assertions_high.gaf_assertionP(assertion) : "assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) " + assertion;
+        assert NIL != assertions_high.gaf_assertionP(assertion) : "! assertions_high.gaf_assertionP(assertion) " + ("assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) ") + assertion;
         final SubLObject constant = assertions_high.gaf_arg1(assertion);
         final SubLObject guid_string = assertions_high.gaf_arg2(assertion);
         final SubLObject guid = Guids.string_to_guid(guid_string);
@@ -1477,8 +2544,29 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Remove the merged constant guid from the guid-to-constant and constant-merged-guid tables.
+     */
+    @LispMethod(comment = "Remove the merged constant guid from the guid-to-constant and constant-merged-guid tables.")
+    public static final SubLObject remove_merged_constant_guid_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, $sym103$GAF_ASSERTION_);
+        {
+            SubLObject constant = assertions_high.gaf_arg1(assertion);
+            SubLObject guid_string = assertions_high.gaf_arg2(assertion);
+            SubLObject guid = Guids.string_to_guid(guid_string);
+            if (NIL != constant_p(constant)) {
+                constants_low.uninstall_constant_merged_guid(constant, guid);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Remove the merged constant guid from the guid-to-constant and constant-merged-guid tables.
+     */
+    @LispMethod(comment = "Remove the merged constant guid from the guid-to-constant and constant-merged-guid tables.")
     public static SubLObject remove_merged_constant_guid(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != assertions_high.gaf_assertionP(assertion) : "assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) " + assertion;
+        assert NIL != assertions_high.gaf_assertionP(assertion) : "! assertions_high.gaf_assertionP(assertion) " + ("assertions_high.gaf_assertionP(assertion) " + "CommonSymbols.NIL != assertions_high.gaf_assertionP(assertion) ") + assertion;
         final SubLObject constant = assertions_high.gaf_arg1(assertion);
         final SubLObject guid_string = assertions_high.gaf_arg2(assertion);
         final SubLObject guid = Guids.string_to_guid(guid_string);
@@ -1533,7 +2621,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
                         final SubLObject mess = $str116$do_broad_mt_index;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
                         final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1617,6 +2705,10 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(makeSymbol("CLEAR-PARAPHRASE-CACHES"));
+
     public static SubLObject cyc_except_mt_removed(final SubLObject argument, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != after_adding.final_assertion_argumentP(argument, assertion)) && (NIL != assertion_utilities.true_assertionP(assertion))) {
@@ -1662,7 +2754,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
                         final SubLObject mess = $str116$do_broad_mt_index;
                         final SubLObject total = id_index_count(idx);
                         SubLObject sofar = ZERO_INTEGER;
-                        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+                        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
                         final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
                         final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
                         final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1747,6 +2839,88 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt43 = list(makeSymbol("PRED"), makeSymbol("ARG1"), makeSymbol("ARG2"));
+
+    private static final SubLSymbol ADD_GEN_KEYWORD = makeSymbol("ADD-GEN-KEYWORD");
+
+    static private final SubLList $list_alt47 = list(makeSymbol("IST"), makeSymbol("MT"), makeSymbol("FORMULA"));
+
+    static private final SubLList $list_alt51 = list(makeSymbol("?FORMULA"));
+
+    static private final SubLList $list_alt55 = list(reader_make_constant_shell("implies"), list(reader_make_constant_shell("trueRule"), makeSymbol("?TEMPLATE"), makeSymbol("?FORMULA")), makeSymbol("?FORMULA"));
+
+    static private final SubLList $list_alt88 = list(reader_make_constant_shell("afterAdding"), reader_make_constant_shell("expansionAxiom"), makeSymbol("ADD-EXPANSION-AXIOM"));
+
+    static private final SubLList $list_alt97 = list(makeSymbol("EO"), makeSymbol("TERM"), makeSymbol("SETEXPR"));
+
+    static private final SubLList $list_alt100 = list(makeSymbol("TSO"), makeSymbol("VAR"), makeSymbol("PROP"));
+
+    static private final SubLSymbol $sym103$GAF_ASSERTION_ = makeSymbol("GAF-ASSERTION?");
+
+    static private final SubLSymbol $sym104$RULE_ASSERTION_ = makeSymbol("RULE-ASSERTION?");
+
+    /**
+     * For the assertion (#$except SUB-ASSERTION) in MT, reconsider existing deductions of SUB-ASSERTION and remove those in mts that see MT, then repropagate SUB-ASSERTION.
+     */
+    @LispMethod(comment = "For the assertion (#$except SUB-ASSERTION) in MT, reconsider existing deductions of SUB-ASSERTION and remove those in mts that see MT, then repropagate SUB-ASSERTION.")
+    public static final SubLObject cyc_except_added_alt(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sub_assertion = assertions_high.gaf_arg1(assertion);
+                SubLObject cdolist_list_var = assertions_high.assertion_dependents(sub_assertion);
+                SubLObject deduction = NIL;
+                for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                    tms.tms_reconsider_deduction(deduction);
+                }
+                {
+                    SubLObject _prev_bind_0 = kb_control_vars.$within_assertion_forward_propagationP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $prefer_forward_skolemization$.currentBinding(thread);
+                    try {
+                        kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
+                        $prefer_forward_skolemization$.bind(NIL, thread);
+                        {
+                            SubLObject environment = forward.get_forward_inference_environment();
+                            SubLTrampolineFile.checkType(environment, QUEUE_P);
+                            {
+                                SubLObject _prev_bind_0_9 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
+                                SubLObject _prev_bind_1_10 = $current_forward_problem_store$.currentBinding(thread);
+                                try {
+                                    kb_control_vars.$forward_inference_environment$.bind(environment, thread);
+                                    $current_forward_problem_store$.bind(NIL, thread);
+                                    try {
+                                        forward.forward_propagate_assertion(sub_assertion, UNPROVIDED);
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0_11 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                            try {
+                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                forward.clear_current_forward_problem_store();
+                                            } finally {
+                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_11, thread);
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    $current_forward_problem_store$.rebind(_prev_bind_1_10, thread);
+                                    kb_control_vars.$forward_inference_environment$.rebind(_prev_bind_0_9, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        $prefer_forward_skolemization$.rebind(_prev_bind_1, thread);
+                        kb_control_vars.$within_assertion_forward_propagationP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * For the assertion (#$except SUB-ASSERTION) in MT, reconsider existing deductions of SUB-ASSERTION and remove those in mts that see MT, then repropagate SUB-ASSERTION.
+     */
+    @LispMethod(comment = "For the assertion (#$except SUB-ASSERTION) in MT, reconsider existing deductions of SUB-ASSERTION and remove those in mts that see MT, then repropagate SUB-ASSERTION.")
     public static SubLObject cyc_except_added(final SubLObject argument, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != after_adding.initial_assertion_argumentP(argument, assertion)) && (NIL != assertion_utilities.true_assertionP(assertion))) {
@@ -1762,6 +2936,55 @@ public final class after_adding_modules extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject cyc_except_removed_alt(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sub_assertion = assertions_high.gaf_arg1(assertion);
+                {
+                    SubLObject _prev_bind_0 = kb_control_vars.$within_assertion_forward_propagationP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $prefer_forward_skolemization$.currentBinding(thread);
+                    try {
+                        kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
+                        $prefer_forward_skolemization$.bind(NIL, thread);
+                        {
+                            SubLObject environment = forward.get_forward_inference_environment();
+                            SubLTrampolineFile.checkType(environment, QUEUE_P);
+                            {
+                                SubLObject _prev_bind_0_12 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
+                                SubLObject _prev_bind_1_13 = $current_forward_problem_store$.currentBinding(thread);
+                                try {
+                                    kb_control_vars.$forward_inference_environment$.bind(environment, thread);
+                                    $current_forward_problem_store$.bind(NIL, thread);
+                                    try {
+                                        forward.forward_propagate_assertion(sub_assertion, UNPROVIDED);
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0_14 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                            try {
+                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                forward.clear_current_forward_problem_store();
+                                            } finally {
+                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_14, thread);
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    $current_forward_problem_store$.rebind(_prev_bind_1_13, thread);
+                                    kb_control_vars.$forward_inference_environment$.rebind(_prev_bind_0_12, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        $prefer_forward_skolemization$.rebind(_prev_bind_1, thread);
+                        kb_control_vars.$within_assertion_forward_propagationP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cyc_except_removed(final SubLObject argument, final SubLObject assertion) {
@@ -1808,10 +3031,20 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_relation_instance_all_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_add_relation_instance_all_gaf(assertion);
+        return NIL;
+    }
+
     public static SubLObject add_relation_instance_all(final SubLObject argument, final SubLObject assertion) {
         if (NIL != after_adding.initial_assertion_argumentP(argument, assertion)) {
             tva_cache.tva_cache_add_relation_instance_all_gaf(assertion);
         }
+        return NIL;
+    }
+
+    public static final SubLObject remove_relation_instance_all_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_remove_relation_instance_all_gaf(assertion);
         return NIL;
     }
 
@@ -1822,10 +3055,20 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject add_relation_all_instance_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_add_relation_all_instance_gaf(assertion);
+        return NIL;
+    }
+
     public static SubLObject add_relation_all_instance(final SubLObject argument, final SubLObject assertion) {
         if (NIL != after_adding.initial_assertion_argumentP(argument, assertion)) {
             tva_cache.tva_cache_add_relation_all_instance_gaf(assertion);
         }
+        return NIL;
+    }
+
+    public static final SubLObject remove_relation_all_instance_alt(SubLObject argument, SubLObject assertion) {
+        tva_cache.tva_cache_remove_relation_all_instance_gaf(assertion);
         return NIL;
     }
 
@@ -2213,7 +3456,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
         final SubLObject mess = $str168$Finding_constants_with_no_asserti;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -2297,7 +3540,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
         final SubLObject mess = cconcatenate($str169$Killing_constants_with_no_asserti, format_nil.format_nil_s_no_copy(prefixes));
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -2418,7 +3661,7 @@ public final class after_adding_modules extends SubLTranslatedFile {
         final SubLObject mess = $str172$Finding_instantiated_constants_wi;
         final SubLObject total = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -2834,120 +4077,352 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject declare_after_adding_modules_file_alt() {
+        declareFunction("decache_after_addings", "DECACHE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("decache_after_removings", "DECACHE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("decache_rule_after_addings", "DECACHE-RULE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("decache_rule_after_removings", "DECACHE-RULE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("clear_mt_dependent_caches", "CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("possibly_clear_mt_dependent_caches", "POSSIBLY-CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("clear_mt_dependent_caches_int", "CLEAR-MT-DEPENDENT-CACHES-INT", 2, 0, false);
+        declareFunction("clear_genls_dependent_caches", "CLEAR-GENLS-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("clear_isa_dependent_caches", "CLEAR-ISA-DEPENDENT-CACHES", 2, 0, false);
+        new com.cyc.cycjava.cycl.inference.modules.after_adding_modules.$clear_isa_dependent_caches$BinaryFunction();
+        declareFunction("clear_isa_dependent_caches_internal", "CLEAR-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
+        declareFunction("clear_quoted_isa_dependent_caches", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("clear_quoted_isa_dependent_caches_internal", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
+        declareFunction("clear_genl_pred_dependent_caches", "CLEAR-GENL-PRED-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("add_transitive_via_arg", "ADD-TRANSITIVE-VIA-ARG", 2, 0, false);
+        declareFunction("remove_transitive_via_arg", "REMOVE-TRANSITIVE-VIA-ARG", 2, 0, false);
+        declareFunction("add_transitive_via_arg_inverse", "ADD-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
+        declareFunction("remove_transitive_via_arg_inverse", "REMOVE-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
+        declareFunction("clear_cached_tva_checks", "CLEAR-CACHED-TVA-CHECKS", 2, 0, false);
+        declareFunction("clear_cached_some_tva_checks", "CLEAR-CACHED-SOME-TVA-CHECKS", 2, 0, false);
+        declareFunction("clear_cached_cva_checks", "CLEAR-CACHED-CVA-CHECKS", 2, 0, false);
+        declareFunction("clear_cached_some_cva_checks", "CLEAR-CACHED-SOME-CVA-CHECKS", 2, 0, false);
+        declareFunction("skolem_after_removing", "SKOLEM-AFTER-REMOVING", 2, 0, false);
+        declareFunction("add_old_constant_name", "ADD-OLD-CONSTANT-NAME", 2, 0, false);
+        declareFunction("remove_old_constant_name", "REMOVE-OLD-CONSTANT-NAME", 2, 0, false);
+        declareFunction("propagate_to_isa", "PROPAGATE-TO-ISA", 2, 0, false);
+        declareFunction("propagate_to_genls", "PROPAGATE-TO-GENLS", 2, 0, false);
+        declareFunction("propagate_to_disjointwith", "PROPAGATE-TO-DISJOINTWITH", 2, 0, false);
+        declareFunction("propagate_to_genlmt", "PROPAGATE-TO-GENLMT", 2, 0, false);
+        declareFunction("propagate_to_genlpreds", "PROPAGATE-TO-GENLPREDS", 2, 0, false);
+        declareFunction("propagate_to_negationpreds", "PROPAGATE-TO-NEGATIONPREDS", 2, 0, false);
+        declareFunction("propagate_to_genlinverse", "PROPAGATE-TO-GENLINVERSE", 2, 0, false);
+        declareFunction("propagate_to_negationinverse", "PROPAGATE-TO-NEGATIONINVERSE", 2, 0, false);
+        declareFunction("propagate_inverse_to_isa", "PROPAGATE-INVERSE-TO-ISA", 2, 0, false);
+        declareFunction("propagate_inverse_to_genls", "PROPAGATE-INVERSE-TO-GENLS", 2, 0, false);
+        declareFunction("propagate_inverse_to_genlmt", "PROPAGATE-INVERSE-TO-GENLMT", 2, 0, false);
+        declareFunction("propagate_inverse_to_genlpreds", "PROPAGATE-INVERSE-TO-GENLPREDS", 2, 0, false);
+        declareFunction("propagate_inverse_to_genlinverse", "PROPAGATE-INVERSE-TO-GENLINVERSE", 2, 0, false);
+        declareFunction("propagate_sbhl_spec_pred_uses", "PROPAGATE-SBHL-SPEC-PRED-USES", 2, 0, false);
+        declareFunction("propagate_sbhl_spec_inverse_uses", "PROPAGATE-SBHL-SPEC-INVERSE-USES", 2, 0, false);
+        declareFunction("add_gen_keyword", "ADD-GEN-KEYWORD", 2, 0, false);
+        declareFunction("add_ist", "ADD-IST", 2, 0, false);
+        declareFunction("add_ist_el_support", "ADD-IST-EL-SUPPORT", 1, 0, false);
+        declareFunction("add_true_rule", "ADD-TRUE-RULE", 2, 0, false);
+        declareFunction("true_rule_el_support", "TRUE-RULE-EL-SUPPORT", 0, 0, false);
+        declareFunction("true_rule_support_p", "TRUE-RULE-SUPPORT-P", 1, 0, false);
+        declareFunction("rule_template_direction", "RULE-TEMPLATE-DIRECTION", 1, 1, false);
+        declareFunction("add_rule_template_direction", "ADD-RULE-TEMPLATE-DIRECTION", 2, 0, false);
+        declareFunction("remove_rule_template_direction", "REMOVE-RULE-TEMPLATE-DIRECTION", 2, 0, false);
+        declareFunction("rule_template_instantiations", "RULE-TEMPLATE-INSTANTIATIONS", 1, 1, false);
+        declareFunction("rule_template_instantiation_deduction", "RULE-TEMPLATE-INSTANTIATION-DEDUCTION", 1, 0, false);
+        declareFunction("remove_dependent_term", "REMOVE-DEPENDENT-TERM", 2, 0, false);
+        declareFunction("add_arity", "ADD-ARITY", 2, 0, false);
+        declareFunction("remove_arity", "REMOVE-ARITY", 2, 0, false);
+        declareFunction("add_arity_min", "ADD-ARITY-MIN", 2, 0, false);
+        declareFunction("remove_arity_min", "REMOVE-ARITY-MIN", 2, 0, false);
+        declareFunction("add_arity_max", "ADD-ARITY-MAX", 2, 0, false);
+        declareFunction("remove_arity_max", "REMOVE-ARITY-MAX", 2, 0, false);
+        declareFunction("inter_arg_isa_after_adding", "INTER-ARG-ISA-AFTER-ADDING", 2, 0, false);
+        declareFunction("inter_arg_isa_after_removing", "INTER-ARG-ISA-AFTER-REMOVING", 2, 0, false);
+        declareFunction("inter_arg_format_after_adding", "INTER-ARG-FORMAT-AFTER-ADDING", 2, 0, false);
+        declareFunction("inter_arg_format_after_removing", "INTER-ARG-FORMAT-AFTER-REMOVING", 2, 0, false);
+        declareFunction("add_to_contraction_ht", "ADD-TO-CONTRACTION-HT", 2, 0, false);
+        declareFunction("remove_from_contraction_ht", "REMOVE-FROM-CONTRACTION-HT", 2, 0, false);
+        declareFunction("add_gen_template_expansion", "ADD-GEN-TEMPLATE-EXPANSION", 2, 0, false);
+        declareFunction("remove_gen_template_expansion", "REMOVE-GEN-TEMPLATE-EXPANSION", 2, 0, false);
+        declareFunction("add_expansion_axiom", "ADD-EXPANSION-AXIOM", 2, 0, false);
+        declareFunction("cyc_add_reformulation_assertion", "CYC-ADD-REFORMULATION-ASSERTION", 2, 0, false);
+        declareFunction("cyc_remove_reformulation_assertion", "CYC-REMOVE-REFORMULATION-ASSERTION", 2, 0, false);
+        declareFunction("cyc_add_element_of", "CYC-ADD-ELEMENT-OF", 2, 0, false);
+        declareFunction("clear_unit_multiplication_factor_caches", "CLEAR-UNIT-MULTIPLICATION-FACTOR-CACHES", 2, 0, false);
+        declareFunction("cyc_add_known_antecedent_rule", "CYC-ADD-KNOWN-ANTECEDENT-RULE", 2, 0, false);
+        declareFunction("cyc_remove_known_antecedent_rule", "CYC-REMOVE-KNOWN-ANTECEDENT-RULE", 2, 0, false);
+        declareFunction("add_merged_constant_guid", "ADD-MERGED-CONSTANT-GUID", 2, 0, false);
+        declareFunction("remove_merged_constant_guid", "REMOVE-MERGED-CONSTANT-GUID", 2, 0, false);
+        declareFunction("cyc_except_added", "CYC-EXCEPT-ADDED", 2, 0, false);
+        declareFunction("cyc_except_removed", "CYC-EXCEPT-REMOVED", 2, 0, false);
+        declareFunction("add_relation_instance_all", "ADD-RELATION-INSTANCE-ALL", 2, 0, false);
+        declareFunction("remove_relation_instance_all", "REMOVE-RELATION-INSTANCE-ALL", 2, 0, false);
+        declareFunction("add_relation_all_instance", "ADD-RELATION-ALL-INSTANCE", 2, 0, false);
+        declareFunction("remove_relation_all_instance", "REMOVE-RELATION-ALL-INSTANCE", 2, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_after_adding_modules_file() {
-        declareFunction(me, "decache_after_addings", "DECACHE-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(me, "decache_after_removings", "DECACHE-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(me, "decache_rule_after_addings", "DECACHE-RULE-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(me, "decache_rule_after_removings", "DECACHE-RULE-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(me, "clear_mt_dependent_caches", "CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
-        declareFunction(me, "possibly_clear_mt_dependent_caches", "POSSIBLY-CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
-        declareFunction(me, "clear_mt_dependent_caches_int", "CLEAR-MT-DEPENDENT-CACHES-INT", 2, 0, false);
-        declareFunction(me, "clear_genls_dependent_caches", "CLEAR-GENLS-DEPENDENT-CACHES", 2, 0, false);
-        declareFunction(me, "clear_isa_dependent_caches", "CLEAR-ISA-DEPENDENT-CACHES", 2, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("decache_after_addings", "DECACHE-AFTER-ADDINGS", 2, 0, false);
+            declareFunction("decache_after_removings", "DECACHE-AFTER-REMOVINGS", 2, 0, false);
+            declareFunction("decache_rule_after_addings", "DECACHE-RULE-AFTER-ADDINGS", 2, 0, false);
+            declareFunction("decache_rule_after_removings", "DECACHE-RULE-AFTER-REMOVINGS", 2, 0, false);
+            declareFunction("clear_mt_dependent_caches", "CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
+            declareFunction("possibly_clear_mt_dependent_caches", "POSSIBLY-CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
+            declareFunction("clear_mt_dependent_caches_int", "CLEAR-MT-DEPENDENT-CACHES-INT", 2, 0, false);
+            declareFunction("clear_genls_dependent_caches", "CLEAR-GENLS-DEPENDENT-CACHES", 2, 0, false);
+            declareFunction("clear_isa_dependent_caches", "CLEAR-ISA-DEPENDENT-CACHES", 2, 0, false);
+            new after_adding_modules.$clear_isa_dependent_caches$BinaryFunction();
+            declareFunction("clear_isa_dependent_caches_internal", "CLEAR-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
+            declareFunction("clear_quoted_isa_dependent_caches", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES", 2, 0, false);
+            declareFunction("clear_quoted_isa_dependent_caches_internal", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
+            declareFunction("clear_genl_pred_dependent_caches", "CLEAR-GENL-PRED-DEPENDENT-CACHES", 2, 0, false);
+            declareFunction("add_transitive_via_arg", "ADD-TRANSITIVE-VIA-ARG", 2, 0, false);
+            declareFunction("remove_transitive_via_arg", "REMOVE-TRANSITIVE-VIA-ARG", 2, 0, false);
+            declareFunction("add_transitive_via_arg_inverse", "ADD-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
+            declareFunction("remove_transitive_via_arg_inverse", "REMOVE-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
+            declareFunction("clear_cached_tva_checks", "CLEAR-CACHED-TVA-CHECKS", 2, 0, false);
+            declareFunction("clear_cached_some_tva_checks", "CLEAR-CACHED-SOME-TVA-CHECKS", 2, 0, false);
+            declareFunction("clear_cached_cva_checks", "CLEAR-CACHED-CVA-CHECKS", 2, 0, false);
+            declareFunction("clear_cached_some_cva_checks", "CLEAR-CACHED-SOME-CVA-CHECKS", 2, 0, false);
+            declareFunction("skolem_after_removing", "SKOLEM-AFTER-REMOVING", 2, 0, false);
+            declareFunction("add_old_constant_name", "ADD-OLD-CONSTANT-NAME", 2, 0, false);
+            declareFunction("remove_old_constant_name", "REMOVE-OLD-CONSTANT-NAME", 2, 0, false);
+            declareFunction("propagate_to_isa", "PROPAGATE-TO-ISA", 2, 0, false);
+            declareFunction("propagate_to_genls", "PROPAGATE-TO-GENLS", 2, 0, false);
+            declareFunction("propagate_to_disjointwith", "PROPAGATE-TO-DISJOINTWITH", 2, 0, false);
+            declareFunction("propagate_to_genlmt", "PROPAGATE-TO-GENLMT", 2, 0, false);
+            declareFunction("propagate_to_genlpreds", "PROPAGATE-TO-GENLPREDS", 2, 0, false);
+            declareFunction("propagate_to_negationpreds", "PROPAGATE-TO-NEGATIONPREDS", 2, 0, false);
+            declareFunction("propagate_to_genlinverse", "PROPAGATE-TO-GENLINVERSE", 2, 0, false);
+            declareFunction("propagate_to_negationinverse", "PROPAGATE-TO-NEGATIONINVERSE", 2, 0, false);
+            declareFunction("propagate_inverse_to_isa", "PROPAGATE-INVERSE-TO-ISA", 2, 0, false);
+            declareFunction("propagate_inverse_to_genls", "PROPAGATE-INVERSE-TO-GENLS", 2, 0, false);
+            declareFunction("propagate_inverse_to_genlmt", "PROPAGATE-INVERSE-TO-GENLMT", 2, 0, false);
+            declareFunction("propagate_inverse_to_genlpreds", "PROPAGATE-INVERSE-TO-GENLPREDS", 2, 0, false);
+            declareFunction("propagate_inverse_to_genlinverse", "PROPAGATE-INVERSE-TO-GENLINVERSE", 2, 0, false);
+            declareFunction("propagate_sbhl_spec_pred_uses", "PROPAGATE-SBHL-SPEC-PRED-USES", 2, 0, false);
+            declareFunction("propagate_sbhl_spec_inverse_uses", "PROPAGATE-SBHL-SPEC-INVERSE-USES", 2, 0, false);
+            declareFunction("add_ist", "ADD-IST", 2, 0, false);
+            declareFunction("add_ist_el_support", "ADD-IST-EL-SUPPORT", 1, 0, false);
+            declareFunction("add_true_rule", "ADD-TRUE-RULE", 2, 0, false);
+            declareFunction("true_rule_el_support", "TRUE-RULE-EL-SUPPORT", 0, 0, false);
+            declareFunction("true_rule_support_p", "TRUE-RULE-SUPPORT-P", 1, 0, false);
+            declareFunction("rule_template_direction", "RULE-TEMPLATE-DIRECTION", 1, 1, false);
+            declareFunction("add_rule_template_direction", "ADD-RULE-TEMPLATE-DIRECTION", 2, 0, false);
+            declareFunction("remove_rule_template_direction", "REMOVE-RULE-TEMPLATE-DIRECTION", 2, 0, false);
+            declareFunction("rule_template_instantiations", "RULE-TEMPLATE-INSTANTIATIONS", 1, 1, false);
+            declareFunction("rule_template_instantiation_deduction", "RULE-TEMPLATE-INSTANTIATION-DEDUCTION", 1, 0, false);
+            declareFunction("remove_dependent_term", "REMOVE-DEPENDENT-TERM", 2, 0, false);
+            declareFunction("propagate_to_arity", "PROPAGATE-TO-ARITY", 2, 0, false);
+            declareFunction("add_arity", "ADD-ARITY", 2, 0, false);
+            declareFunction("remove_arity", "REMOVE-ARITY", 2, 0, false);
+            declareFunction("propagate_to_arity_min", "PROPAGATE-TO-ARITY-MIN", 2, 0, false);
+            declareFunction("add_arity_min", "ADD-ARITY-MIN", 2, 0, false);
+            declareFunction("remove_arity_min", "REMOVE-ARITY-MIN", 2, 0, false);
+            declareFunction("propagate_to_arity_max", "PROPAGATE-TO-ARITY-MAX", 2, 0, false);
+            declareFunction("add_arity_max", "ADD-ARITY-MAX", 2, 0, false);
+            declareFunction("remove_arity_max", "REMOVE-ARITY-MAX", 2, 0, false);
+            declareFunction("inter_arg_isa_after_adding", "INTER-ARG-ISA-AFTER-ADDING", 2, 0, false);
+            declareFunction("inter_arg_isa_after_removing", "INTER-ARG-ISA-AFTER-REMOVING", 2, 0, false);
+            declareFunction("inter_arg_format_after_adding", "INTER-ARG-FORMAT-AFTER-ADDING", 2, 0, false);
+            declareFunction("inter_arg_format_after_removing", "INTER-ARG-FORMAT-AFTER-REMOVING", 2, 0, false);
+            declareFunction("add_to_contraction_ht", "ADD-TO-CONTRACTION-HT", 2, 0, false);
+            declareFunction("remove_from_contraction_ht", "REMOVE-FROM-CONTRACTION-HT", 2, 0, false);
+            declareFunction("add_gen_template_expansion", "ADD-GEN-TEMPLATE-EXPANSION", 2, 0, false);
+            declareFunction("remove_gen_template_expansion", "REMOVE-GEN-TEMPLATE-EXPANSION", 2, 0, false);
+            declareFunction("add_expansion_axiom", "ADD-EXPANSION-AXIOM", 2, 0, false);
+            declareFunction("cyc_add_reformulation_assertion", "CYC-ADD-REFORMULATION-ASSERTION", 2, 0, false);
+            declareFunction("cyc_remove_reformulation_assertion", "CYC-REMOVE-REFORMULATION-ASSERTION", 2, 0, false);
+            declareFunction("cyc_add_element_of", "CYC-ADD-ELEMENT-OF", 2, 0, false);
+            declareFunction("clear_unit_multiplication_factor_caches", "CLEAR-UNIT-MULTIPLICATION-FACTOR-CACHES", 2, 0, false);
+            declareFunction("cyc_add_known_antecedent_rule", "CYC-ADD-KNOWN-ANTECEDENT-RULE", 2, 0, false);
+            declareFunction("cyc_remove_known_antecedent_rule", "CYC-REMOVE-KNOWN-ANTECEDENT-RULE", 2, 0, false);
+            declareFunction("add_merged_constant_guid", "ADD-MERGED-CONSTANT-GUID", 2, 0, false);
+            declareFunction("remove_merged_constant_guid", "REMOVE-MERGED-CONSTANT-GUID", 2, 0, false);
+            declareFunction("cyc_except_mt_added", "CYC-EXCEPT-MT-ADDED", 2, 0, false);
+            declareFunction("cyc_except_mt_removed", "CYC-EXCEPT-MT-REMOVED", 2, 0, false);
+            declareFunction("cyc_except_added", "CYC-EXCEPT-ADDED", 2, 0, false);
+            declareFunction("cyc_except_removed", "CYC-EXCEPT-REMOVED", 2, 0, false);
+            declareFunction("hl_gaf_p", "HL-GAF-P", 1, 0, false);
+            declareFunction("except_of_hl_gaf_p", "EXCEPT-OF-HL-GAF-P", 1, 0, false);
+            declareFunction("add_hl_gaf_denial", "ADD-HL-GAF-DENIAL", 2, 0, false);
+            declareFunction("rem_hl_gaf_denial", "REM-HL-GAF-DENIAL", 2, 0, false);
+            declareFunction("add_relation_instance_all", "ADD-RELATION-INSTANCE-ALL", 2, 0, false);
+            declareFunction("remove_relation_instance_all", "REMOVE-RELATION-INSTANCE-ALL", 2, 0, false);
+            declareFunction("add_relation_all_instance", "ADD-RELATION-ALL-INSTANCE", 2, 0, false);
+            declareFunction("remove_relation_all_instance", "REMOVE-RELATION-ALL-INSTANCE", 2, 0, false);
+            declareFunction("mark_constant_as_instantiated", "MARK-CONSTANT-AS-INSTANTIATED", 2, 0, false);
+            declareFunction("cyc_create_new_instantiated_permanent", "CYC-CREATE-NEW-INSTANTIATED-PERMANENT", 2, 0, false);
+            declareFunction("instantiated_constant_p", "INSTANTIATED-CONSTANT-P", 1, 0, false);
+            declareFunction("possible_instantiated_constant_with_no_assertionsP", "POSSIBLE-INSTANTIATED-CONSTANT-WITH-NO-ASSERTIONS?", 1, 0, false);
+            declareFunction("instantiated_constant_with_one_assertionP", "INSTANTIATED-CONSTANT-WITH-ONE-ASSERTION?", 1, 0, false);
+            declareFunction("possible_instantiated_constant_to_reuseP", "POSSIBLE-INSTANTIATED-CONSTANT-TO-REUSE?", 1, 0, false);
+            declareFunction("do_create_from_description", "DO-CREATE-FROM-DESCRIPTION", 2, 0, false);
+            declareFunction("expression_instantiated_constant_count", "EXPRESSION-INSTANTIATED-CONSTANT-COUNT", 1, 0, false);
+            declareFunction("expression_has_instantiated_constantP", "EXPRESSION-HAS-INSTANTIATED-CONSTANT?", 1, 0, false);
+            declareFunction("do_create_from_description_multiple", "DO-CREATE-FROM-DESCRIPTION-MULTIPLE", 2, 0, false);
+            declareFunction("make_do_create_from_description_query", "MAKE-DO-CREATE-FROM-DESCRIPTION-QUERY", 2, 0, false);
+            declareFunction("constant_instantiated_from_subcollection_expression_p", "CONSTANT-INSTANTIATED-FROM-SUBCOLLECTION-EXPRESSION-P", 1, 0, false);
+            declareFunction("instantiate_from_subcollection_expression", "INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION", 2, 0, false);
+            declareFunction("show_constants_with_no_assertions", "SHOW-CONSTANTS-WITH-NO-ASSERTIONS", 0, 0, false);
+            declareFunction("kill_constants_with_no_assertions_by_prefix", "KILL-CONSTANTS-WITH-NO-ASSERTIONS-BY-PREFIX", 1, 0, false);
+            declareFunction("show_unused_instantiated_constants", "SHOW-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
+            declareFunction("forget_unused_instantiated_constants", "FORGET-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
+            declareFunction("kill_unused_instantiated_constants", "KILL-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
+            declareFunction("assert_missing_quoted_isa_instantiated_constant_assertions", "ASSERT-MISSING-QUOTED-ISA-INSTANTIATED-CONSTANT-ASSERTIONS", 0, 0, false);
+            declareFunction("retain_mt_contents", "RETAIN-MT-CONTENTS", 2, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("add_gen_keyword", "ADD-GEN-KEYWORD", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_after_adding_modules_file_Previous() {
+        declareFunction("decache_after_addings", "DECACHE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("decache_after_removings", "DECACHE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("decache_rule_after_addings", "DECACHE-RULE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("decache_rule_after_removings", "DECACHE-RULE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("clear_mt_dependent_caches", "CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("possibly_clear_mt_dependent_caches", "POSSIBLY-CLEAR-MT-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("clear_mt_dependent_caches_int", "CLEAR-MT-DEPENDENT-CACHES-INT", 2, 0, false);
+        declareFunction("clear_genls_dependent_caches", "CLEAR-GENLS-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("clear_isa_dependent_caches", "CLEAR-ISA-DEPENDENT-CACHES", 2, 0, false);
         new after_adding_modules.$clear_isa_dependent_caches$BinaryFunction();
-        declareFunction(me, "clear_isa_dependent_caches_internal", "CLEAR-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
-        declareFunction(me, "clear_quoted_isa_dependent_caches", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES", 2, 0, false);
-        declareFunction(me, "clear_quoted_isa_dependent_caches_internal", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
-        declareFunction(me, "clear_genl_pred_dependent_caches", "CLEAR-GENL-PRED-DEPENDENT-CACHES", 2, 0, false);
-        declareFunction(me, "add_transitive_via_arg", "ADD-TRANSITIVE-VIA-ARG", 2, 0, false);
-        declareFunction(me, "remove_transitive_via_arg", "REMOVE-TRANSITIVE-VIA-ARG", 2, 0, false);
-        declareFunction(me, "add_transitive_via_arg_inverse", "ADD-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
-        declareFunction(me, "remove_transitive_via_arg_inverse", "REMOVE-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
-        declareFunction(me, "clear_cached_tva_checks", "CLEAR-CACHED-TVA-CHECKS", 2, 0, false);
-        declareFunction(me, "clear_cached_some_tva_checks", "CLEAR-CACHED-SOME-TVA-CHECKS", 2, 0, false);
-        declareFunction(me, "clear_cached_cva_checks", "CLEAR-CACHED-CVA-CHECKS", 2, 0, false);
-        declareFunction(me, "clear_cached_some_cva_checks", "CLEAR-CACHED-SOME-CVA-CHECKS", 2, 0, false);
-        declareFunction(me, "skolem_after_removing", "SKOLEM-AFTER-REMOVING", 2, 0, false);
-        declareFunction(me, "add_old_constant_name", "ADD-OLD-CONSTANT-NAME", 2, 0, false);
-        declareFunction(me, "remove_old_constant_name", "REMOVE-OLD-CONSTANT-NAME", 2, 0, false);
-        declareFunction(me, "propagate_to_isa", "PROPAGATE-TO-ISA", 2, 0, false);
-        declareFunction(me, "propagate_to_genls", "PROPAGATE-TO-GENLS", 2, 0, false);
-        declareFunction(me, "propagate_to_disjointwith", "PROPAGATE-TO-DISJOINTWITH", 2, 0, false);
-        declareFunction(me, "propagate_to_genlmt", "PROPAGATE-TO-GENLMT", 2, 0, false);
-        declareFunction(me, "propagate_to_genlpreds", "PROPAGATE-TO-GENLPREDS", 2, 0, false);
-        declareFunction(me, "propagate_to_negationpreds", "PROPAGATE-TO-NEGATIONPREDS", 2, 0, false);
-        declareFunction(me, "propagate_to_genlinverse", "PROPAGATE-TO-GENLINVERSE", 2, 0, false);
-        declareFunction(me, "propagate_to_negationinverse", "PROPAGATE-TO-NEGATIONINVERSE", 2, 0, false);
-        declareFunction(me, "propagate_inverse_to_isa", "PROPAGATE-INVERSE-TO-ISA", 2, 0, false);
-        declareFunction(me, "propagate_inverse_to_genls", "PROPAGATE-INVERSE-TO-GENLS", 2, 0, false);
-        declareFunction(me, "propagate_inverse_to_genlmt", "PROPAGATE-INVERSE-TO-GENLMT", 2, 0, false);
-        declareFunction(me, "propagate_inverse_to_genlpreds", "PROPAGATE-INVERSE-TO-GENLPREDS", 2, 0, false);
-        declareFunction(me, "propagate_inverse_to_genlinverse", "PROPAGATE-INVERSE-TO-GENLINVERSE", 2, 0, false);
-        declareFunction(me, "propagate_sbhl_spec_pred_uses", "PROPAGATE-SBHL-SPEC-PRED-USES", 2, 0, false);
-        declareFunction(me, "propagate_sbhl_spec_inverse_uses", "PROPAGATE-SBHL-SPEC-INVERSE-USES", 2, 0, false);
-        declareFunction(me, "add_ist", "ADD-IST", 2, 0, false);
-        declareFunction(me, "add_ist_el_support", "ADD-IST-EL-SUPPORT", 1, 0, false);
-        declareFunction(me, "add_true_rule", "ADD-TRUE-RULE", 2, 0, false);
-        declareFunction(me, "true_rule_el_support", "TRUE-RULE-EL-SUPPORT", 0, 0, false);
-        declareFunction(me, "true_rule_support_p", "TRUE-RULE-SUPPORT-P", 1, 0, false);
-        declareFunction(me, "rule_template_direction", "RULE-TEMPLATE-DIRECTION", 1, 1, false);
-        declareFunction(me, "add_rule_template_direction", "ADD-RULE-TEMPLATE-DIRECTION", 2, 0, false);
-        declareFunction(me, "remove_rule_template_direction", "REMOVE-RULE-TEMPLATE-DIRECTION", 2, 0, false);
-        declareFunction(me, "rule_template_instantiations", "RULE-TEMPLATE-INSTANTIATIONS", 1, 1, false);
-        declareFunction(me, "rule_template_instantiation_deduction", "RULE-TEMPLATE-INSTANTIATION-DEDUCTION", 1, 0, false);
-        declareFunction(me, "remove_dependent_term", "REMOVE-DEPENDENT-TERM", 2, 0, false);
-        declareFunction(me, "propagate_to_arity", "PROPAGATE-TO-ARITY", 2, 0, false);
-        declareFunction(me, "add_arity", "ADD-ARITY", 2, 0, false);
-        declareFunction(me, "remove_arity", "REMOVE-ARITY", 2, 0, false);
-        declareFunction(me, "propagate_to_arity_min", "PROPAGATE-TO-ARITY-MIN", 2, 0, false);
-        declareFunction(me, "add_arity_min", "ADD-ARITY-MIN", 2, 0, false);
-        declareFunction(me, "remove_arity_min", "REMOVE-ARITY-MIN", 2, 0, false);
-        declareFunction(me, "propagate_to_arity_max", "PROPAGATE-TO-ARITY-MAX", 2, 0, false);
-        declareFunction(me, "add_arity_max", "ADD-ARITY-MAX", 2, 0, false);
-        declareFunction(me, "remove_arity_max", "REMOVE-ARITY-MAX", 2, 0, false);
-        declareFunction(me, "inter_arg_isa_after_adding", "INTER-ARG-ISA-AFTER-ADDING", 2, 0, false);
-        declareFunction(me, "inter_arg_isa_after_removing", "INTER-ARG-ISA-AFTER-REMOVING", 2, 0, false);
-        declareFunction(me, "inter_arg_format_after_adding", "INTER-ARG-FORMAT-AFTER-ADDING", 2, 0, false);
-        declareFunction(me, "inter_arg_format_after_removing", "INTER-ARG-FORMAT-AFTER-REMOVING", 2, 0, false);
-        declareFunction(me, "add_to_contraction_ht", "ADD-TO-CONTRACTION-HT", 2, 0, false);
-        declareFunction(me, "remove_from_contraction_ht", "REMOVE-FROM-CONTRACTION-HT", 2, 0, false);
-        declareFunction(me, "add_gen_template_expansion", "ADD-GEN-TEMPLATE-EXPANSION", 2, 0, false);
-        declareFunction(me, "remove_gen_template_expansion", "REMOVE-GEN-TEMPLATE-EXPANSION", 2, 0, false);
-        declareFunction(me, "add_expansion_axiom", "ADD-EXPANSION-AXIOM", 2, 0, false);
-        declareFunction(me, "cyc_add_reformulation_assertion", "CYC-ADD-REFORMULATION-ASSERTION", 2, 0, false);
-        declareFunction(me, "cyc_remove_reformulation_assertion", "CYC-REMOVE-REFORMULATION-ASSERTION", 2, 0, false);
-        declareFunction(me, "cyc_add_element_of", "CYC-ADD-ELEMENT-OF", 2, 0, false);
-        declareFunction(me, "clear_unit_multiplication_factor_caches", "CLEAR-UNIT-MULTIPLICATION-FACTOR-CACHES", 2, 0, false);
-        declareFunction(me, "cyc_add_known_antecedent_rule", "CYC-ADD-KNOWN-ANTECEDENT-RULE", 2, 0, false);
-        declareFunction(me, "cyc_remove_known_antecedent_rule", "CYC-REMOVE-KNOWN-ANTECEDENT-RULE", 2, 0, false);
-        declareFunction(me, "add_merged_constant_guid", "ADD-MERGED-CONSTANT-GUID", 2, 0, false);
-        declareFunction(me, "remove_merged_constant_guid", "REMOVE-MERGED-CONSTANT-GUID", 2, 0, false);
-        declareFunction(me, "cyc_except_mt_added", "CYC-EXCEPT-MT-ADDED", 2, 0, false);
-        declareFunction(me, "cyc_except_mt_removed", "CYC-EXCEPT-MT-REMOVED", 2, 0, false);
-        declareFunction(me, "cyc_except_added", "CYC-EXCEPT-ADDED", 2, 0, false);
-        declareFunction(me, "cyc_except_removed", "CYC-EXCEPT-REMOVED", 2, 0, false);
-        declareFunction(me, "hl_gaf_p", "HL-GAF-P", 1, 0, false);
-        declareFunction(me, "except_of_hl_gaf_p", "EXCEPT-OF-HL-GAF-P", 1, 0, false);
-        declareFunction(me, "add_hl_gaf_denial", "ADD-HL-GAF-DENIAL", 2, 0, false);
-        declareFunction(me, "rem_hl_gaf_denial", "REM-HL-GAF-DENIAL", 2, 0, false);
-        declareFunction(me, "add_relation_instance_all", "ADD-RELATION-INSTANCE-ALL", 2, 0, false);
-        declareFunction(me, "remove_relation_instance_all", "REMOVE-RELATION-INSTANCE-ALL", 2, 0, false);
-        declareFunction(me, "add_relation_all_instance", "ADD-RELATION-ALL-INSTANCE", 2, 0, false);
-        declareFunction(me, "remove_relation_all_instance", "REMOVE-RELATION-ALL-INSTANCE", 2, 0, false);
-        declareFunction(me, "mark_constant_as_instantiated", "MARK-CONSTANT-AS-INSTANTIATED", 2, 0, false);
-        declareFunction(me, "cyc_create_new_instantiated_permanent", "CYC-CREATE-NEW-INSTANTIATED-PERMANENT", 2, 0, false);
-        declareFunction(me, "instantiated_constant_p", "INSTANTIATED-CONSTANT-P", 1, 0, false);
-        declareFunction(me, "possible_instantiated_constant_with_no_assertionsP", "POSSIBLE-INSTANTIATED-CONSTANT-WITH-NO-ASSERTIONS?", 1, 0, false);
-        declareFunction(me, "instantiated_constant_with_one_assertionP", "INSTANTIATED-CONSTANT-WITH-ONE-ASSERTION?", 1, 0, false);
-        declareFunction(me, "possible_instantiated_constant_to_reuseP", "POSSIBLE-INSTANTIATED-CONSTANT-TO-REUSE?", 1, 0, false);
-        declareFunction(me, "do_create_from_description", "DO-CREATE-FROM-DESCRIPTION", 2, 0, false);
-        declareFunction(me, "expression_instantiated_constant_count", "EXPRESSION-INSTANTIATED-CONSTANT-COUNT", 1, 0, false);
-        declareFunction(me, "expression_has_instantiated_constantP", "EXPRESSION-HAS-INSTANTIATED-CONSTANT?", 1, 0, false);
-        declareFunction(me, "do_create_from_description_multiple", "DO-CREATE-FROM-DESCRIPTION-MULTIPLE", 2, 0, false);
-        declareFunction(me, "make_do_create_from_description_query", "MAKE-DO-CREATE-FROM-DESCRIPTION-QUERY", 2, 0, false);
-        declareFunction(me, "constant_instantiated_from_subcollection_expression_p", "CONSTANT-INSTANTIATED-FROM-SUBCOLLECTION-EXPRESSION-P", 1, 0, false);
-        declareFunction(me, "instantiate_from_subcollection_expression", "INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION", 2, 0, false);
-        declareFunction(me, "show_constants_with_no_assertions", "SHOW-CONSTANTS-WITH-NO-ASSERTIONS", 0, 0, false);
-        declareFunction(me, "kill_constants_with_no_assertions_by_prefix", "KILL-CONSTANTS-WITH-NO-ASSERTIONS-BY-PREFIX", 1, 0, false);
-        declareFunction(me, "show_unused_instantiated_constants", "SHOW-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
-        declareFunction(me, "forget_unused_instantiated_constants", "FORGET-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
-        declareFunction(me, "kill_unused_instantiated_constants", "KILL-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
-        declareFunction(me, "assert_missing_quoted_isa_instantiated_constant_assertions", "ASSERT-MISSING-QUOTED-ISA-INSTANTIATED-CONSTANT-ASSERTIONS", 0, 0, false);
-        declareFunction(me, "retain_mt_contents", "RETAIN-MT-CONTENTS", 2, 0, false);
+        declareFunction("clear_isa_dependent_caches_internal", "CLEAR-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
+        declareFunction("clear_quoted_isa_dependent_caches", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("clear_quoted_isa_dependent_caches_internal", "CLEAR-QUOTED-ISA-DEPENDENT-CACHES-INTERNAL", 0, 0, false);
+        declareFunction("clear_genl_pred_dependent_caches", "CLEAR-GENL-PRED-DEPENDENT-CACHES", 2, 0, false);
+        declareFunction("add_transitive_via_arg", "ADD-TRANSITIVE-VIA-ARG", 2, 0, false);
+        declareFunction("remove_transitive_via_arg", "REMOVE-TRANSITIVE-VIA-ARG", 2, 0, false);
+        declareFunction("add_transitive_via_arg_inverse", "ADD-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
+        declareFunction("remove_transitive_via_arg_inverse", "REMOVE-TRANSITIVE-VIA-ARG-INVERSE", 2, 0, false);
+        declareFunction("clear_cached_tva_checks", "CLEAR-CACHED-TVA-CHECKS", 2, 0, false);
+        declareFunction("clear_cached_some_tva_checks", "CLEAR-CACHED-SOME-TVA-CHECKS", 2, 0, false);
+        declareFunction("clear_cached_cva_checks", "CLEAR-CACHED-CVA-CHECKS", 2, 0, false);
+        declareFunction("clear_cached_some_cva_checks", "CLEAR-CACHED-SOME-CVA-CHECKS", 2, 0, false);
+        declareFunction("skolem_after_removing", "SKOLEM-AFTER-REMOVING", 2, 0, false);
+        declareFunction("add_old_constant_name", "ADD-OLD-CONSTANT-NAME", 2, 0, false);
+        declareFunction("remove_old_constant_name", "REMOVE-OLD-CONSTANT-NAME", 2, 0, false);
+        declareFunction("propagate_to_isa", "PROPAGATE-TO-ISA", 2, 0, false);
+        declareFunction("propagate_to_genls", "PROPAGATE-TO-GENLS", 2, 0, false);
+        declareFunction("propagate_to_disjointwith", "PROPAGATE-TO-DISJOINTWITH", 2, 0, false);
+        declareFunction("propagate_to_genlmt", "PROPAGATE-TO-GENLMT", 2, 0, false);
+        declareFunction("propagate_to_genlpreds", "PROPAGATE-TO-GENLPREDS", 2, 0, false);
+        declareFunction("propagate_to_negationpreds", "PROPAGATE-TO-NEGATIONPREDS", 2, 0, false);
+        declareFunction("propagate_to_genlinverse", "PROPAGATE-TO-GENLINVERSE", 2, 0, false);
+        declareFunction("propagate_to_negationinverse", "PROPAGATE-TO-NEGATIONINVERSE", 2, 0, false);
+        declareFunction("propagate_inverse_to_isa", "PROPAGATE-INVERSE-TO-ISA", 2, 0, false);
+        declareFunction("propagate_inverse_to_genls", "PROPAGATE-INVERSE-TO-GENLS", 2, 0, false);
+        declareFunction("propagate_inverse_to_genlmt", "PROPAGATE-INVERSE-TO-GENLMT", 2, 0, false);
+        declareFunction("propagate_inverse_to_genlpreds", "PROPAGATE-INVERSE-TO-GENLPREDS", 2, 0, false);
+        declareFunction("propagate_inverse_to_genlinverse", "PROPAGATE-INVERSE-TO-GENLINVERSE", 2, 0, false);
+        declareFunction("propagate_sbhl_spec_pred_uses", "PROPAGATE-SBHL-SPEC-PRED-USES", 2, 0, false);
+        declareFunction("propagate_sbhl_spec_inverse_uses", "PROPAGATE-SBHL-SPEC-INVERSE-USES", 2, 0, false);
+        declareFunction("add_ist", "ADD-IST", 2, 0, false);
+        declareFunction("add_ist_el_support", "ADD-IST-EL-SUPPORT", 1, 0, false);
+        declareFunction("add_true_rule", "ADD-TRUE-RULE", 2, 0, false);
+        declareFunction("true_rule_el_support", "TRUE-RULE-EL-SUPPORT", 0, 0, false);
+        declareFunction("true_rule_support_p", "TRUE-RULE-SUPPORT-P", 1, 0, false);
+        declareFunction("rule_template_direction", "RULE-TEMPLATE-DIRECTION", 1, 1, false);
+        declareFunction("add_rule_template_direction", "ADD-RULE-TEMPLATE-DIRECTION", 2, 0, false);
+        declareFunction("remove_rule_template_direction", "REMOVE-RULE-TEMPLATE-DIRECTION", 2, 0, false);
+        declareFunction("rule_template_instantiations", "RULE-TEMPLATE-INSTANTIATIONS", 1, 1, false);
+        declareFunction("rule_template_instantiation_deduction", "RULE-TEMPLATE-INSTANTIATION-DEDUCTION", 1, 0, false);
+        declareFunction("remove_dependent_term", "REMOVE-DEPENDENT-TERM", 2, 0, false);
+        declareFunction("propagate_to_arity", "PROPAGATE-TO-ARITY", 2, 0, false);
+        declareFunction("add_arity", "ADD-ARITY", 2, 0, false);
+        declareFunction("remove_arity", "REMOVE-ARITY", 2, 0, false);
+        declareFunction("propagate_to_arity_min", "PROPAGATE-TO-ARITY-MIN", 2, 0, false);
+        declareFunction("add_arity_min", "ADD-ARITY-MIN", 2, 0, false);
+        declareFunction("remove_arity_min", "REMOVE-ARITY-MIN", 2, 0, false);
+        declareFunction("propagate_to_arity_max", "PROPAGATE-TO-ARITY-MAX", 2, 0, false);
+        declareFunction("add_arity_max", "ADD-ARITY-MAX", 2, 0, false);
+        declareFunction("remove_arity_max", "REMOVE-ARITY-MAX", 2, 0, false);
+        declareFunction("inter_arg_isa_after_adding", "INTER-ARG-ISA-AFTER-ADDING", 2, 0, false);
+        declareFunction("inter_arg_isa_after_removing", "INTER-ARG-ISA-AFTER-REMOVING", 2, 0, false);
+        declareFunction("inter_arg_format_after_adding", "INTER-ARG-FORMAT-AFTER-ADDING", 2, 0, false);
+        declareFunction("inter_arg_format_after_removing", "INTER-ARG-FORMAT-AFTER-REMOVING", 2, 0, false);
+        declareFunction("add_to_contraction_ht", "ADD-TO-CONTRACTION-HT", 2, 0, false);
+        declareFunction("remove_from_contraction_ht", "REMOVE-FROM-CONTRACTION-HT", 2, 0, false);
+        declareFunction("add_gen_template_expansion", "ADD-GEN-TEMPLATE-EXPANSION", 2, 0, false);
+        declareFunction("remove_gen_template_expansion", "REMOVE-GEN-TEMPLATE-EXPANSION", 2, 0, false);
+        declareFunction("add_expansion_axiom", "ADD-EXPANSION-AXIOM", 2, 0, false);
+        declareFunction("cyc_add_reformulation_assertion", "CYC-ADD-REFORMULATION-ASSERTION", 2, 0, false);
+        declareFunction("cyc_remove_reformulation_assertion", "CYC-REMOVE-REFORMULATION-ASSERTION", 2, 0, false);
+        declareFunction("cyc_add_element_of", "CYC-ADD-ELEMENT-OF", 2, 0, false);
+        declareFunction("clear_unit_multiplication_factor_caches", "CLEAR-UNIT-MULTIPLICATION-FACTOR-CACHES", 2, 0, false);
+        declareFunction("cyc_add_known_antecedent_rule", "CYC-ADD-KNOWN-ANTECEDENT-RULE", 2, 0, false);
+        declareFunction("cyc_remove_known_antecedent_rule", "CYC-REMOVE-KNOWN-ANTECEDENT-RULE", 2, 0, false);
+        declareFunction("add_merged_constant_guid", "ADD-MERGED-CONSTANT-GUID", 2, 0, false);
+        declareFunction("remove_merged_constant_guid", "REMOVE-MERGED-CONSTANT-GUID", 2, 0, false);
+        declareFunction("cyc_except_mt_added", "CYC-EXCEPT-MT-ADDED", 2, 0, false);
+        declareFunction("cyc_except_mt_removed", "CYC-EXCEPT-MT-REMOVED", 2, 0, false);
+        declareFunction("cyc_except_added", "CYC-EXCEPT-ADDED", 2, 0, false);
+        declareFunction("cyc_except_removed", "CYC-EXCEPT-REMOVED", 2, 0, false);
+        declareFunction("hl_gaf_p", "HL-GAF-P", 1, 0, false);
+        declareFunction("except_of_hl_gaf_p", "EXCEPT-OF-HL-GAF-P", 1, 0, false);
+        declareFunction("add_hl_gaf_denial", "ADD-HL-GAF-DENIAL", 2, 0, false);
+        declareFunction("rem_hl_gaf_denial", "REM-HL-GAF-DENIAL", 2, 0, false);
+        declareFunction("add_relation_instance_all", "ADD-RELATION-INSTANCE-ALL", 2, 0, false);
+        declareFunction("remove_relation_instance_all", "REMOVE-RELATION-INSTANCE-ALL", 2, 0, false);
+        declareFunction("add_relation_all_instance", "ADD-RELATION-ALL-INSTANCE", 2, 0, false);
+        declareFunction("remove_relation_all_instance", "REMOVE-RELATION-ALL-INSTANCE", 2, 0, false);
+        declareFunction("mark_constant_as_instantiated", "MARK-CONSTANT-AS-INSTANTIATED", 2, 0, false);
+        declareFunction("cyc_create_new_instantiated_permanent", "CYC-CREATE-NEW-INSTANTIATED-PERMANENT", 2, 0, false);
+        declareFunction("instantiated_constant_p", "INSTANTIATED-CONSTANT-P", 1, 0, false);
+        declareFunction("possible_instantiated_constant_with_no_assertionsP", "POSSIBLE-INSTANTIATED-CONSTANT-WITH-NO-ASSERTIONS?", 1, 0, false);
+        declareFunction("instantiated_constant_with_one_assertionP", "INSTANTIATED-CONSTANT-WITH-ONE-ASSERTION?", 1, 0, false);
+        declareFunction("possible_instantiated_constant_to_reuseP", "POSSIBLE-INSTANTIATED-CONSTANT-TO-REUSE?", 1, 0, false);
+        declareFunction("do_create_from_description", "DO-CREATE-FROM-DESCRIPTION", 2, 0, false);
+        declareFunction("expression_instantiated_constant_count", "EXPRESSION-INSTANTIATED-CONSTANT-COUNT", 1, 0, false);
+        declareFunction("expression_has_instantiated_constantP", "EXPRESSION-HAS-INSTANTIATED-CONSTANT?", 1, 0, false);
+        declareFunction("do_create_from_description_multiple", "DO-CREATE-FROM-DESCRIPTION-MULTIPLE", 2, 0, false);
+        declareFunction("make_do_create_from_description_query", "MAKE-DO-CREATE-FROM-DESCRIPTION-QUERY", 2, 0, false);
+        declareFunction("constant_instantiated_from_subcollection_expression_p", "CONSTANT-INSTANTIATED-FROM-SUBCOLLECTION-EXPRESSION-P", 1, 0, false);
+        declareFunction("instantiate_from_subcollection_expression", "INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION", 2, 0, false);
+        declareFunction("show_constants_with_no_assertions", "SHOW-CONSTANTS-WITH-NO-ASSERTIONS", 0, 0, false);
+        declareFunction("kill_constants_with_no_assertions_by_prefix", "KILL-CONSTANTS-WITH-NO-ASSERTIONS-BY-PREFIX", 1, 0, false);
+        declareFunction("show_unused_instantiated_constants", "SHOW-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
+        declareFunction("forget_unused_instantiated_constants", "FORGET-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
+        declareFunction("kill_unused_instantiated_constants", "KILL-UNUSED-INSTANTIATED-CONSTANTS", 0, 0, false);
+        declareFunction("assert_missing_quoted_isa_instantiated_constant_assertions", "ASSERT-MISSING-QUOTED-ISA-INSTANTIATED-CONSTANT-ASSERTIONS", 0, 0, false);
+        declareFunction("retain_mt_contents", "RETAIN-MT-CONTENTS", 2, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_after_adding_modules_file_alt() {
+        deflexical("*CYCL-FUNCTIONS-USED-AS-AFTER-ADDINGS*", $list_alt0);
+        defparameter("*INSIDE-CLEAR-GENLS-DEPENDENT-CACHES?*", NIL);
+        defparameter("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*", NIL);
+        defparameter("*INSIDE-CLEAR-QUOTED-ISA-DEPENDENT-CACHES?*", NIL);
+        defparameter("*TRUE-RULE-TEMPLATE*", $list_alt55);
+        deflexical("*TRUE-RULE-DEFINING-MT*", NIL != boundp($true_rule_defining_mt$) ? ((SubLObject) ($true_rule_defining_mt$.getGlobalValue())) : $$CoreCycLMt);
         return NIL;
     }
 
     public static SubLObject init_after_adding_modules_file() {
+        if (SubLFiles.USE_V1) {
+            deflexical("*CYCL-FUNCTIONS-USED-AS-AFTER-ADDINGS*", $list0);
+            defparameter("*INSIDE-CLEAR-GENLS-DEPENDENT-CACHES?*", NIL);
+            defparameter("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*", NIL);
+            defparameter("*INSIDE-CLEAR-QUOTED-ISA-DEPENDENT-CACHES?*", NIL);
+            defparameter("*TRUE-RULE-TEMPLATE*", $list54);
+            deflexical("*TRUE-RULE-DEFINING-MT*", SubLTrampolineFile.maybeDefault($true_rule_defining_mt$, $true_rule_defining_mt$, $$CoreCycLMt));
+            defparameter("*CYC-EXCEPT-MT-REPROPAGATE-MT-CONTENTS-CUTOFF*", $int$256);
+            defparameter("*DEBUG-DO-CREATE-FROM-DESCRIPTION?*", NIL);
+            defparameter("*INSTANTIATE-FROM-SUBCOLLECTION-EXPRESSION-CONSTANT-PREFIX*", $$$INST);
+        }
+        if (SubLFiles.USE_V2) {
+            defparameter("*TRUE-RULE-TEMPLATE*", $list_alt55);
+            deflexical("*TRUE-RULE-DEFINING-MT*", NIL != boundp($true_rule_defining_mt$) ? ((SubLObject) ($true_rule_defining_mt$.getGlobalValue())) : $$CoreCycLMt);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_after_adding_modules_file_Previous() {
         deflexical("*CYCL-FUNCTIONS-USED-AS-AFTER-ADDINGS*", $list0);
         defparameter("*INSIDE-CLEAR-GENLS-DEPENDENT-CACHES?*", NIL);
         defparameter("*INSIDE-CLEAR-ISA-DEPENDENT-CACHES?*", NIL);
@@ -2960,7 +4435,190 @@ public final class after_adding_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_after_adding_modules_file_alt() {
+        {
+            SubLObject cdolist_list_var = $cycl_functions_used_as_after_addings$.getGlobalValue();
+            SubLObject symbol = NIL;
+            for (symbol = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , symbol = cdolist_list_var.first()) {
+                register_kb_function(symbol);
+            }
+        }
+        register_kb_function(DECACHE_AFTER_ADDINGS);
+        register_kb_function(DECACHE_AFTER_REMOVINGS);
+        register_kb_function(DECACHE_RULE_AFTER_ADDINGS);
+        register_kb_function(DECACHE_RULE_AFTER_REMOVINGS);
+        register_kb_function(CLEAR_MT_DEPENDENT_CACHES);
+        register_kb_function(CLEAR_GENLS_DEPENDENT_CACHES);
+        register_kb_function(CLEAR_ISA_DEPENDENT_CACHES);
+        register_kb_function(CLEAR_QUOTED_ISA_DEPENDENT_CACHES);
+        register_kb_function(CLEAR_GENL_PRED_DEPENDENT_CACHES);
+        register_kb_function(ADD_TRANSITIVE_VIA_ARG);
+        register_kb_function(REMOVE_TRANSITIVE_VIA_ARG);
+        register_kb_function(ADD_TRANSITIVE_VIA_ARG_INVERSE);
+        register_kb_function(REMOVE_TRANSITIVE_VIA_ARG_INVERSE);
+        register_kb_function(CLEAR_CACHED_TVA_CHECKS);
+        register_kb_function(CLEAR_CACHED_SOME_TVA_CHECKS);
+        register_kb_function(CLEAR_CACHED_CVA_CHECKS);
+        register_kb_function(CLEAR_CACHED_SOME_CVA_CHECKS);
+        register_kb_function(SKOLEM_AFTER_REMOVING);
+        register_kb_function(ADD_OLD_CONSTANT_NAME);
+        register_kb_function(REMOVE_OLD_CONSTANT_NAME);
+        register_kb_function(PROPAGATE_TO_ISA);
+        register_kb_function(PROPAGATE_TO_GENLS);
+        register_kb_function(PROPAGATE_TO_DISJOINTWITH);
+        register_kb_function(PROPAGATE_TO_GENLMT);
+        register_kb_function(PROPAGATE_TO_GENLPREDS);
+        register_kb_function(PROPAGATE_TO_NEGATIONPREDS);
+        register_kb_function(PROPAGATE_TO_GENLINVERSE);
+        register_kb_function(PROPAGATE_TO_NEGATIONINVERSE);
+        register_kb_function(PROPAGATE_INVERSE_TO_ISA);
+        register_kb_function(PROPAGATE_INVERSE_TO_GENLS);
+        register_kb_function(PROPAGATE_INVERSE_TO_GENLMT);
+        register_kb_function(PROPAGATE_INVERSE_TO_GENLPREDS);
+        register_kb_function(PROPAGATE_INVERSE_TO_GENLINVERSE);
+        register_kb_function(ADD_GEN_KEYWORD);
+        register_kb_function(ADD_IST);
+        register_kb_function(ADD_TRUE_RULE);
+        declare_defglobal($true_rule_defining_mt$);
+        mt_vars.note_mt_var($true_rule_defining_mt$, $$trueRule);
+        register_kb_function(ADD_RULE_TEMPLATE_DIRECTION);
+        register_kb_function(REMOVE_RULE_TEMPLATE_DIRECTION);
+        register_kb_function(REMOVE_DEPENDENT_TERM);
+        register_kb_function(ADD_ARITY);
+        register_kb_function(REMOVE_ARITY);
+        register_kb_function(ADD_ARITY_MIN);
+        register_kb_function(REMOVE_ARITY_MIN);
+        register_kb_function(ADD_ARITY_MAX);
+        register_kb_function(REMOVE_ARITY_MAX);
+        register_kb_function(INTER_ARG_ISA_AFTER_ADDING);
+        register_kb_function(INTER_ARG_ISA_AFTER_REMOVING);
+        register_kb_function(INTER_ARG_FORMAT_AFTER_ADDING);
+        register_kb_function(INTER_ARG_FORMAT_AFTER_REMOVING);
+        register_kb_function(ADD_TO_CONTRACTION_HT);
+        register_kb_function(REMOVE_FROM_CONTRACTION_HT);
+        register_kb_function(ADD_GEN_TEMPLATE_EXPANSION);
+        register_kb_function(REMOVE_GEN_TEMPLATE_EXPANSION);
+        register_kb_function(ADD_EXPANSION_AXIOM);
+        register_kb_function(CYC_ADD_REFORMULATION_ASSERTION);
+        register_kb_function(CYC_REMOVE_REFORMULATION_ASSERTION);
+        register_kb_function(CYC_ADD_ELEMENT_OF);
+        register_kb_function(CLEAR_UNIT_MULTIPLICATION_FACTOR_CACHES);
+        register_kb_function(CYC_ADD_KNOWN_ANTECEDENT_RULE);
+        register_kb_function(CYC_REMOVE_KNOWN_ANTECEDENT_RULE);
+        register_kb_function(ADD_MERGED_CONSTANT_GUID);
+        register_kb_function(REMOVE_MERGED_CONSTANT_GUID);
+        register_kb_function(CYC_EXCEPT_ADDED);
+        register_kb_function(CYC_EXCEPT_REMOVED);
+        register_kb_function(ADD_RELATION_INSTANCE_ALL);
+        register_kb_function(REMOVE_RELATION_INSTANCE_ALL);
+        register_kb_function(ADD_RELATION_ALL_INSTANCE);
+        register_kb_function(REMOVE_RELATION_ALL_INSTANCE);
+        return NIL;
+    }
+
     public static SubLObject setup_after_adding_modules_file() {
+        if (SubLFiles.USE_V1) {
+            SubLObject cdolist_list_var = $cycl_functions_used_as_after_addings$.getGlobalValue();
+            SubLObject symbol = NIL;
+            symbol = cdolist_list_var.first();
+            while (NIL != cdolist_list_var) {
+                register_kb_function(symbol);
+                cdolist_list_var = cdolist_list_var.rest();
+                symbol = cdolist_list_var.first();
+            } 
+            register_kb_function(DECACHE_AFTER_ADDINGS);
+            register_kb_function(DECACHE_AFTER_REMOVINGS);
+            register_kb_function(DECACHE_RULE_AFTER_ADDINGS);
+            register_kb_function(DECACHE_RULE_AFTER_REMOVINGS);
+            register_kb_function(CLEAR_MT_DEPENDENT_CACHES);
+            register_kb_function(CLEAR_GENLS_DEPENDENT_CACHES);
+            register_kb_function(CLEAR_ISA_DEPENDENT_CACHES);
+            register_kb_function(CLEAR_QUOTED_ISA_DEPENDENT_CACHES);
+            register_kb_function(CLEAR_GENL_PRED_DEPENDENT_CACHES);
+            register_kb_function(ADD_TRANSITIVE_VIA_ARG);
+            register_kb_function(REMOVE_TRANSITIVE_VIA_ARG);
+            register_kb_function(ADD_TRANSITIVE_VIA_ARG_INVERSE);
+            register_kb_function(REMOVE_TRANSITIVE_VIA_ARG_INVERSE);
+            register_kb_function(CLEAR_CACHED_TVA_CHECKS);
+            register_kb_function(CLEAR_CACHED_SOME_TVA_CHECKS);
+            register_kb_function(CLEAR_CACHED_CVA_CHECKS);
+            register_kb_function(CLEAR_CACHED_SOME_CVA_CHECKS);
+            register_kb_function(SKOLEM_AFTER_REMOVING);
+            register_kb_function(ADD_OLD_CONSTANT_NAME);
+            register_kb_function(REMOVE_OLD_CONSTANT_NAME);
+            register_kb_function(PROPAGATE_TO_ISA);
+            register_kb_function(PROPAGATE_TO_GENLS);
+            register_kb_function(PROPAGATE_TO_DISJOINTWITH);
+            register_kb_function(PROPAGATE_TO_GENLMT);
+            register_kb_function(PROPAGATE_TO_GENLPREDS);
+            register_kb_function(PROPAGATE_TO_NEGATIONPREDS);
+            register_kb_function(PROPAGATE_TO_GENLINVERSE);
+            register_kb_function(PROPAGATE_TO_NEGATIONINVERSE);
+            register_kb_function(PROPAGATE_INVERSE_TO_ISA);
+            register_kb_function(PROPAGATE_INVERSE_TO_GENLS);
+            register_kb_function(PROPAGATE_INVERSE_TO_GENLMT);
+            register_kb_function(PROPAGATE_INVERSE_TO_GENLPREDS);
+            register_kb_function(PROPAGATE_INVERSE_TO_GENLINVERSE);
+            register_kb_function(ADD_IST);
+            register_kb_function(ADD_TRUE_RULE);
+            declare_defglobal($true_rule_defining_mt$);
+            mt_vars.note_mt_var($true_rule_defining_mt$, $$trueRule);
+            register_kb_function(ADD_RULE_TEMPLATE_DIRECTION);
+            register_kb_function(REMOVE_RULE_TEMPLATE_DIRECTION);
+            register_kb_function(REMOVE_DEPENDENT_TERM);
+            register_kb_function(PROPAGATE_TO_ARITY);
+            register_kb_function(ADD_ARITY);
+            register_kb_function(REMOVE_ARITY);
+            register_kb_function(PROPAGATE_TO_ARITY_MIN);
+            register_kb_function(ADD_ARITY_MIN);
+            register_kb_function(REMOVE_ARITY_MIN);
+            register_kb_function(PROPAGATE_TO_ARITY_MAX);
+            register_kb_function(ADD_ARITY_MAX);
+            register_kb_function(REMOVE_ARITY_MAX);
+            register_kb_function(INTER_ARG_ISA_AFTER_ADDING);
+            register_kb_function(INTER_ARG_ISA_AFTER_REMOVING);
+            register_kb_function(INTER_ARG_FORMAT_AFTER_ADDING);
+            register_kb_function(INTER_ARG_FORMAT_AFTER_REMOVING);
+            register_kb_function(ADD_TO_CONTRACTION_HT);
+            register_kb_function(REMOVE_FROM_CONTRACTION_HT);
+            register_kb_function(ADD_GEN_TEMPLATE_EXPANSION);
+            register_kb_function(REMOVE_GEN_TEMPLATE_EXPANSION);
+            register_kb_function(ADD_EXPANSION_AXIOM);
+            register_kb_function(CYC_ADD_REFORMULATION_ASSERTION);
+            register_kb_function(CYC_REMOVE_REFORMULATION_ASSERTION);
+            register_kb_function(CYC_ADD_ELEMENT_OF);
+            register_kb_function(CLEAR_UNIT_MULTIPLICATION_FACTOR_CACHES);
+            register_kb_function(CYC_ADD_KNOWN_ANTECEDENT_RULE);
+            register_kb_function(CYC_REMOVE_KNOWN_ANTECEDENT_RULE);
+            register_kb_function(ADD_MERGED_CONSTANT_GUID);
+            register_kb_function(REMOVE_MERGED_CONSTANT_GUID);
+            register_kb_function(CYC_EXCEPT_MT_ADDED);
+            register_kb_function(CYC_EXCEPT_MT_REMOVED);
+            register_kb_function(CYC_EXCEPT_ADDED);
+            register_kb_function(CYC_EXCEPT_REMOVED);
+            register_kb_function(ADD_RELATION_INSTANCE_ALL);
+            register_kb_function(REMOVE_RELATION_INSTANCE_ALL);
+            register_kb_function(ADD_RELATION_ALL_INSTANCE);
+            register_kb_function(REMOVE_RELATION_ALL_INSTANCE);
+            register_kb_function(DO_CREATE_FROM_DESCRIPTION);
+            register_kb_function(DO_CREATE_FROM_DESCRIPTION_MULTIPLE);
+            register_kb_function(INSTANTIATE_FROM_SUBCOLLECTION_EXPRESSION);
+            register_kb_function(RETAIN_MT_CONTENTS);
+        }
+        if (SubLFiles.USE_V2) {
+            {
+                SubLObject cdolist_list_var = $cycl_functions_used_as_after_addings$.getGlobalValue();
+                SubLObject symbol = NIL;
+                for (symbol = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , symbol = cdolist_list_var.first()) {
+                    register_kb_function(symbol);
+                }
+            }
+            register_kb_function(ADD_GEN_KEYWORD);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_after_adding_modules_file_Previous() {
         SubLObject cdolist_list_var = $cycl_functions_used_as_after_addings$.getGlobalValue();
         SubLObject symbol = NIL;
         symbol = cdolist_list_var.first();
@@ -3066,210 +4724,6 @@ public final class after_adding_modules extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $clear_isa_dependent_caches$BinaryFunction extends BinaryFunction {

@@ -74,8 +74,7 @@ public  final class kb_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_macros_file() {
-    // CVS_ID("Id: kb-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

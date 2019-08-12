@@ -137,8 +137,7 @@ public  final class constant_completion_interface extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_constant_completion_interface_file() {
-    // CVS_ID("Id: constant-completion-interface.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym2$KB_CONSTANT_COMPLETE_EXACT, $list4, $str5$Return_a_valid_constant_whose_nam, $list6, $list7);
+        utilities_macros.register_cyc_api_function($sym2$KB_CONSTANT_COMPLETE_EXACT, $list4, $str5$Return_a_valid_constant_whose_nam, $list6, $list7);
     utilities_macros.register_cyc_api_function($sym9$KB_CONSTANT_COMPLETE, $list10, $str11$Return_all_valid_constants_with_P, $list12, $list13);
     utilities_macros.register_cyc_api_function($sym14$KB_CONSTANT_APROPOS, $list15, $str16$Return_all_valid_constants_with_S, $list17, $list13);
     utilities_macros.register_cyc_api_function($sym18$KB_CONSTANT_POSTFIX, $list19, $str20$Return_all_valid_constants_with_P, $list21, $list13);

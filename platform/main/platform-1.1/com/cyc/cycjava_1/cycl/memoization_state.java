@@ -1272,8 +1272,7 @@ These are intended to clear mt-dependent caches. */
   }
 
   public static final SubLObject setup_memoization_state_file() {
-    // CVS_ID("Id: memoization-state.lisp 128460 2009-07-31 21:24:24Z tbrussea ");
-    subl_macro_promotions.declare_defglobal($sym1$_CACHING_MODE_SHOULD_MONITOR_);
+        subl_macro_promotions.declare_defglobal($sym1$_CACHING_MODE_SHOULD_MONITOR_);
     subl_macro_promotions.declare_defglobal($sym2$_CACHE_MONITOR_HASH_);
     subl_macro_promotions.declare_defglobal($sym3$_CACHE_MONITOR_FAILURE_HASH_);
     subl_macro_promotions.declare_defglobal($sym8$_ALLOW_FUNCTION_CACHING_TO_BE_DISABLED_);

@@ -196,8 +196,7 @@ to avoid infinite recursion. */
   }
 
   public static final SubLObject setup_inference_abduction_utilities_file() {
-    // CVS_ID("Id: inference-abduction-utilities.lisp 128006 2009-06-16 15:51:35Z pace ");
-    inference_tactician.inference_strategy_type($kw20$ABDUCTIVE, $list21);
+        inference_tactician.inference_strategy_type($kw20$ABDUCTIVE, $list21);
     utilities_macros.note_funcall_helper_function($sym22$ABDUCTIVE_STRATEGY_NO_STRATEGEMS_ACTIVE_WRT_REMOVAL_);
     utilities_macros.note_funcall_helper_function($sym23$ABDUCTIVE_STRATEGY_PEEK_STRATEGEM_WRT_REMOVAL);
     utilities_macros.note_funcall_helper_function($sym24$ABDUCTIVE_STRATEGY_NO_NEW_ROOTS_);

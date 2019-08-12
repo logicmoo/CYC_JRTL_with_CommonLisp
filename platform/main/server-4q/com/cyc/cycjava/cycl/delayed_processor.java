@@ -1,8 +1,27 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.delayed_processor;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -20,44 +39,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
 
-import static com.cyc.cycjava.cycl.delayed_processor.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class delayed_processor extends SubLTranslatedFile {
+ 
+ public final class delayed_processor extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new delayed_processor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.delayed_processor";
+    public static final String myName = "com.cyc.cycjava_2.cycl.delayed_processor";
 
-    public static final String myFingerPrint = "ef30ecb6653331a2e85edce23c0bd2dea1b46db0684387290983627bbd911f4e";
 
     // defconstant
     public static final SubLSymbol $dtp_delayed_processor$ = makeSymbol("*DTP-DELAYED-PROCESSOR*");
@@ -176,66 +164,66 @@ public final class delayed_processor extends SubLTranslatedFile {
     }
 
     public static SubLObject delayed_processor_p(final SubLObject v_object) {
-        return v_object.getClass() == delayed_processor.$delayed_processor_native.class ? T : NIL;
+        return v_object.getClass() == $delayed_processor_native.class ? T : NIL;
     }
 
     public static SubLObject processor_daemon_process(final SubLObject v_object) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject processor_queue(final SubLObject v_object) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject processor_delay_seconds(final SubLObject v_object) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject processor_validity_test(final SubLObject v_object) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject processor_process_fn(final SubLObject v_object) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject processor_special_instruction(final SubLObject v_object) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.getField7();
     }
 
     public static SubLObject _csetf_processor_daemon_process(final SubLObject v_object, final SubLObject value) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_processor_queue(final SubLObject v_object, final SubLObject value) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_processor_delay_seconds(final SubLObject v_object, final SubLObject value) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_processor_validity_test(final SubLObject v_object, final SubLObject value) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_processor_process_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_processor_special_instruction(final SubLObject v_object, final SubLObject value) {
-        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p(v_object) " + "CommonSymbols.NIL != delayed_processor.delayed_processor_p(v_object) " + v_object;
+        assert NIL != delayed_processor_p(v_object) : "delayed_processor.delayed_processor_p error :" + v_object;
         return v_object.setField7(value);
     }
 
@@ -243,7 +231,7 @@ public final class delayed_processor extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new delayed_processor.$delayed_processor_native();
+        final SubLObject v_new = new $delayed_processor_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -555,55 +543,55 @@ public final class delayed_processor extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_delayed_processor_file() {
-        declareFunction(me, "delayed_processor_print_function_trampoline", "DELAYED-PROCESSOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "delayed_processor_p", "DELAYED-PROCESSOR-P", 1, 0, false);
+        declareFunction("delayed_processor_print_function_trampoline", "DELAYED-PROCESSOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("delayed_processor_p", "DELAYED-PROCESSOR-P", 1, 0, false);
         new delayed_processor.$delayed_processor_p$UnaryFunction();
-        declareFunction(me, "processor_daemon_process", "PROCESSOR-DAEMON-PROCESS", 1, 0, false);
-        declareFunction(me, "processor_queue", "PROCESSOR-QUEUE", 1, 0, false);
-        declareFunction(me, "processor_delay_seconds", "PROCESSOR-DELAY-SECONDS", 1, 0, false);
-        declareFunction(me, "processor_validity_test", "PROCESSOR-VALIDITY-TEST", 1, 0, false);
-        declareFunction(me, "processor_process_fn", "PROCESSOR-PROCESS-FN", 1, 0, false);
-        declareFunction(me, "processor_special_instruction", "PROCESSOR-SPECIAL-INSTRUCTION", 1, 0, false);
-        declareFunction(me, "_csetf_processor_daemon_process", "_CSETF-PROCESSOR-DAEMON-PROCESS", 2, 0, false);
-        declareFunction(me, "_csetf_processor_queue", "_CSETF-PROCESSOR-QUEUE", 2, 0, false);
-        declareFunction(me, "_csetf_processor_delay_seconds", "_CSETF-PROCESSOR-DELAY-SECONDS", 2, 0, false);
-        declareFunction(me, "_csetf_processor_validity_test", "_CSETF-PROCESSOR-VALIDITY-TEST", 2, 0, false);
-        declareFunction(me, "_csetf_processor_process_fn", "_CSETF-PROCESSOR-PROCESS-FN", 2, 0, false);
-        declareFunction(me, "_csetf_processor_special_instruction", "_CSETF-PROCESSOR-SPECIAL-INSTRUCTION", 2, 0, false);
-        declareFunction(me, "make_delayed_processor", "MAKE-DELAYED-PROCESSOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_delayed_processor", "VISIT-DEFSTRUCT-DELAYED-PROCESSOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_delayed_processor_method", "VISIT-DEFSTRUCT-OBJECT-DELAYED-PROCESSOR-METHOD", 2, 0, false);
-        declareFunction(me, "print_delayed_processor", "PRINT-DELAYED-PROCESSOR", 3, 0, false);
-        declareFunction(me, "new_delayed_processor", "NEW-DELAYED-PROCESSOR", 3, 0, false);
-        declareFunction(me, "reset_delayed_processor", "RESET-DELAYED-PROCESSOR", 1, 0, false);
-        declareFunction(me, "schedule", "SCHEDULE", 2, 0, false);
-        declareFunction(me, "delayed_processor_set_delay_seconds", "DELAYED-PROCESSOR-SET-DELAY-SECONDS", 2, 0, false);
-        declareFunction(me, "delayed_processor_get_delay_seconds", "DELAYED-PROCESSOR-GET-DELAY-SECONDS", 1, 0, false);
-        declareFunction(me, "delayed_processor_cancel", "DELAYED-PROCESSOR-CANCEL", 1, 0, false);
-        declareFunction(me, "delayed_processor_flush_next_time_around", "DELAYED-PROCESSOR-FLUSH-NEXT-TIME-AROUND", 1, 0, false);
-        declareFunction(me, "delayed_processor_flush", "DELAYED-PROCESSOR-FLUSH", 1, 0, false);
-        declareFunction(me, "delayed_processor_queue_size", "DELAYED-PROCESSOR-QUEUE-SIZE", 1, 0, false);
-        declareFunction(me, "delayed_processor_daemon_process", "DELAYED-PROCESSOR-DAEMON-PROCESS", 1, 0, false);
-        declareFunction(me, "delayed_processor_queue", "DELAYED-PROCESSOR-QUEUE", 1, 0, false);
-        declareFunction(me, "delayed_processor_delay_seconds", "DELAYED-PROCESSOR-DELAY-SECONDS", 1, 0, false);
-        declareFunction(me, "delayed_processor_validity_test", "DELAYED-PROCESSOR-VALIDITY-TEST", 1, 0, false);
-        declareFunction(me, "delayed_processor_process_fn", "DELAYED-PROCESSOR-PROCESS-FN", 1, 0, false);
-        declareFunction(me, "delayed_processor_special_instruction", "DELAYED-PROCESSOR-SPECIAL-INSTRUCTION", 1, 0, false);
-        declareFunction(me, "delayed_processor_abortP", "DELAYED-PROCESSOR-ABORT?", 1, 0, false);
-        declareFunction(me, "delayed_processor_flushP", "DELAYED-PROCESSOR-FLUSH?", 1, 0, false);
-        declareFunction(me, "delayed_processor_set_special_instruction", "DELAYED-PROCESSOR-SET-SPECIAL-INSTRUCTION", 2, 0, false);
-        declareFunction(me, "delayed_processor_cancel_special_instruction", "DELAYED-PROCESSOR-CANCEL-SPECIAL-INSTRUCTION", 1, 0, false);
-        declareFunction(me, "process_scheduled_items", "PROCESS-SCHEDULED-ITEMS", 1, 0, false);
-        declareFunction(me, "compute_delayed_processor_time_to_wait", "COMPUTE-DELAYED-PROCESSOR-TIME-TO-WAIT", 2, 0, false);
-        declareFunction(me, "process", "PROCESS", 2, 0, false);
-        declareFunction(me, "initialize_delayed_processor_daemon", "INITIALIZE-DELAYED-PROCESSOR-DAEMON", 1, 0, false);
-        declareFunction(me, "ensure_delayed_processor_daemon_running", "ENSURE-DELAYED-PROCESSOR-DAEMON-RUNNING", 1, 0, false);
-        declareFunction(me, "note_active_delayed_processor", "NOTE-ACTIVE-DELAYED-PROCESSOR", 1, 0, false);
-        declareFunction(me, "note_inactive_delayed_processor", "NOTE-INACTIVE-DELAYED-PROCESSOR", 1, 0, false);
-        declareFunction(me, "ensure_delayed_processor_meta_daemon_running", "ENSURE-DELAYED-PROCESSOR-META-DAEMON-RUNNING", 0, 0, false);
-        declareFunction(me, "delayed_processor_meta_daemon_run", "DELAYED-PROCESSOR-META-DAEMON-RUN", 0, 0, false);
-        declareFunction(me, "sxhash_delayed_processor_method", "SXHASH-DELAYED-PROCESSOR-METHOD", 1, 0, false);
-        declareFunction(me, "sxhash_delayed_processor", "SXHASH-DELAYED-PROCESSOR", 1, 0, false);
+        declareFunction("processor_daemon_process", "PROCESSOR-DAEMON-PROCESS", 1, 0, false);
+        declareFunction("processor_queue", "PROCESSOR-QUEUE", 1, 0, false);
+        declareFunction("processor_delay_seconds", "PROCESSOR-DELAY-SECONDS", 1, 0, false);
+        declareFunction("processor_validity_test", "PROCESSOR-VALIDITY-TEST", 1, 0, false);
+        declareFunction("processor_process_fn", "PROCESSOR-PROCESS-FN", 1, 0, false);
+        declareFunction("processor_special_instruction", "PROCESSOR-SPECIAL-INSTRUCTION", 1, 0, false);
+        declareFunction("_csetf_processor_daemon_process", "_CSETF-PROCESSOR-DAEMON-PROCESS", 2, 0, false);
+        declareFunction("_csetf_processor_queue", "_CSETF-PROCESSOR-QUEUE", 2, 0, false);
+        declareFunction("_csetf_processor_delay_seconds", "_CSETF-PROCESSOR-DELAY-SECONDS", 2, 0, false);
+        declareFunction("_csetf_processor_validity_test", "_CSETF-PROCESSOR-VALIDITY-TEST", 2, 0, false);
+        declareFunction("_csetf_processor_process_fn", "_CSETF-PROCESSOR-PROCESS-FN", 2, 0, false);
+        declareFunction("_csetf_processor_special_instruction", "_CSETF-PROCESSOR-SPECIAL-INSTRUCTION", 2, 0, false);
+        declareFunction("make_delayed_processor", "MAKE-DELAYED-PROCESSOR", 0, 1, false);
+        declareFunction("visit_defstruct_delayed_processor", "VISIT-DEFSTRUCT-DELAYED-PROCESSOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_delayed_processor_method", "VISIT-DEFSTRUCT-OBJECT-DELAYED-PROCESSOR-METHOD", 2, 0, false);
+        declareFunction("print_delayed_processor", "PRINT-DELAYED-PROCESSOR", 3, 0, false);
+        declareFunction("new_delayed_processor", "NEW-DELAYED-PROCESSOR", 3, 0, false);
+        declareFunction("reset_delayed_processor", "RESET-DELAYED-PROCESSOR", 1, 0, false);
+        declareFunction("schedule", "SCHEDULE", 2, 0, false);
+        declareFunction("delayed_processor_set_delay_seconds", "DELAYED-PROCESSOR-SET-DELAY-SECONDS", 2, 0, false);
+        declareFunction("delayed_processor_get_delay_seconds", "DELAYED-PROCESSOR-GET-DELAY-SECONDS", 1, 0, false);
+        declareFunction("delayed_processor_cancel", "DELAYED-PROCESSOR-CANCEL", 1, 0, false);
+        declareFunction("delayed_processor_flush_next_time_around", "DELAYED-PROCESSOR-FLUSH-NEXT-TIME-AROUND", 1, 0, false);
+        declareFunction("delayed_processor_flush", "DELAYED-PROCESSOR-FLUSH", 1, 0, false);
+        declareFunction("delayed_processor_queue_size", "DELAYED-PROCESSOR-QUEUE-SIZE", 1, 0, false);
+        declareFunction("delayed_processor_daemon_process", "DELAYED-PROCESSOR-DAEMON-PROCESS", 1, 0, false);
+        declareFunction("delayed_processor_queue", "DELAYED-PROCESSOR-QUEUE", 1, 0, false);
+        declareFunction("delayed_processor_delay_seconds", "DELAYED-PROCESSOR-DELAY-SECONDS", 1, 0, false);
+        declareFunction("delayed_processor_validity_test", "DELAYED-PROCESSOR-VALIDITY-TEST", 1, 0, false);
+        declareFunction("delayed_processor_process_fn", "DELAYED-PROCESSOR-PROCESS-FN", 1, 0, false);
+        declareFunction("delayed_processor_special_instruction", "DELAYED-PROCESSOR-SPECIAL-INSTRUCTION", 1, 0, false);
+        declareFunction("delayed_processor_abortP", "DELAYED-PROCESSOR-ABORT?", 1, 0, false);
+        declareFunction("delayed_processor_flushP", "DELAYED-PROCESSOR-FLUSH?", 1, 0, false);
+        declareFunction("delayed_processor_set_special_instruction", "DELAYED-PROCESSOR-SET-SPECIAL-INSTRUCTION", 2, 0, false);
+        declareFunction("delayed_processor_cancel_special_instruction", "DELAYED-PROCESSOR-CANCEL-SPECIAL-INSTRUCTION", 1, 0, false);
+        declareFunction("process_scheduled_items", "PROCESS-SCHEDULED-ITEMS", 1, 0, false);
+        declareFunction("compute_delayed_processor_time_to_wait", "COMPUTE-DELAYED-PROCESSOR-TIME-TO-WAIT", 2, 0, false);
+        declareFunction("process", "PROCESS", 2, 0, false);
+        declareFunction("initialize_delayed_processor_daemon", "INITIALIZE-DELAYED-PROCESSOR-DAEMON", 1, 0, false);
+        declareFunction("ensure_delayed_processor_daemon_running", "ENSURE-DELAYED-PROCESSOR-DAEMON-RUNNING", 1, 0, false);
+        declareFunction("note_active_delayed_processor", "NOTE-ACTIVE-DELAYED-PROCESSOR", 1, 0, false);
+        declareFunction("note_inactive_delayed_processor", "NOTE-INACTIVE-DELAYED-PROCESSOR", 1, 0, false);
+        declareFunction("ensure_delayed_processor_meta_daemon_running", "ENSURE-DELAYED-PROCESSOR-META-DAEMON-RUNNING", 0, 0, false);
+        declareFunction("delayed_processor_meta_daemon_run", "DELAYED-PROCESSOR-META-DAEMON-RUN", 0, 0, false);
+        declareFunction("sxhash_delayed_processor_method", "SXHASH-DELAYED-PROCESSOR-METHOD", 1, 0, false);
+        declareFunction("sxhash_delayed_processor", "SXHASH-DELAYED-PROCESSOR", 1, 0, false);
         return NIL;
     }
 
@@ -718,7 +706,7 @@ public final class delayed_processor extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $delayed_processor_native() {
+        private $delayed_processor_native() {
             this.$daemon_process = Lisp.NIL;
             this.$queue = Lisp.NIL;
             this.$delay_seconds = Lisp.NIL;
@@ -793,7 +781,7 @@ public final class delayed_processor extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(delayed_processor.$delayed_processor_native.class, DELAYED_PROCESSOR, DELAYED_PROCESSOR_P, $list2, $list3, new String[]{ "$daemon_process", "$queue", "$delay_seconds", "$validity_test", "$process_fn", "$special_instruction" }, $list4, $list5, PRINT_DELAYED_PROCESSOR);
+            structDecl = makeStructDeclNative($delayed_processor_native.class, DELAYED_PROCESSOR, DELAYED_PROCESSOR_P, $list2, $list3, new String[]{ "$daemon_process", "$queue", "$delay_seconds", "$validity_test", "$process_fn", "$special_instruction" }, $list4, $list5, PRINT_DELAYED_PROCESSOR);
         }
     }
 

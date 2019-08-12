@@ -1145,8 +1145,7 @@ string-trigraph-match-p, which is defined below. */
   }
 
   public static final SubLObject setup_string_utilities_file() {
-    // CVS_ID("Id: string-utilities.lisp 128760 2009-09-15 04:40:33Z pace ");
-    memoization_state.note_globally_cached_function($sym13$OBJECT_TO_STRING);
+        memoization_state.note_globally_cached_function($sym13$OBJECT_TO_STRING);
     generic_testing.define_test_case_table_int($sym38$ENDS_WITH_START_OF, list(new SubLObject[] {$kw39$TEST, EQUAL, $kw40$OWNER, NIL, $kw41$CLASSES, NIL, $kw42$KB, $kw43$TINY, $kw44$WORKING_, T}), $list45);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cyclify_status$.getGlobalValue(), Symbols.symbol_function($sym124$CYCLIFY_STATUS_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym125$CYCLIFY_STATUS_OUT_STRING_LIST, $sym126$_CSETF_CYCLIFY_STATUS_OUT_STRING_LIST);

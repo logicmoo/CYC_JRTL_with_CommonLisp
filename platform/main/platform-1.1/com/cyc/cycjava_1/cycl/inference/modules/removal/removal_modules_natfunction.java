@@ -230,8 +230,7 @@ public final class removal_modules_natfunction
 
   public static final SubLObject setup_removal_modules_natfunction_file()
   {
-    // CVS_ID("Id: removal-modules-natfunction.lisp 126640 2008-12-04 13:39:36Z
-    // builder ");
+        // builder ");
     inference_modules.register_solely_specific_removal_module_predicate( $const0$natFunction );
     preference_modules.inference_preference_module( $kw1$NAT_FUNCTION_LOOKUP_POS, $list2 );
     inference_modules.inference_removal_module( $kw3$REMOVAL_NAT_FUNCTION_CHECK_POS, $list4 );

@@ -1,39 +1,11 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_regular_expressions;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_vars;
-import com.cyc.cycjava.cycl.regular_expression_utilities;
-import com.cyc.cycjava.cycl.regular_expressions;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$cheap_hl_module_check_cost$;
 import static com.cyc.cycjava.cycl.control_vars.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_regular_expressions.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
@@ -41,15 +13,23 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_regular_expressions extends SubLTranslatedFile {
+public final class removal_modules_regular_expressions extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_regular_expressions();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_regular_expressions";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_regular_expressions";
 
-    public static final String myFingerPrint = "fdb2f380e66a8821ff611aa2ca888c386f7a9488894f7861d7788024e017f286";
 
 
 
@@ -71,11 +51,11 @@ public final class removal_modules_regular_expressions extends SubLTranslatedFil
 
     private static final SubLSymbol $REMOVAL_REGEX_STRING_MATCH_POS = makeKeyword("REMOVAL-REGEX-STRING-MATCH-POS");
 
-    private static final SubLList $list5 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("REQUIRED"), makeSymbol("REMOVAL-REGEX-STRING-MATCH-REQUIRED"), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch")), list(makeKeyword("BIND"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("BIND"), makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REGEX-STRING-MATCH"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA"))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$regexStringMatch <regular-expression string> <data string>)\n    when <data string> matches the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$regexStringMatch \"[FD]og\" \"Dog\")") });
+    private static final SubLList $list5 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("REQUIRED"), makeSymbol("REMOVAL-REGEX-STRING-MATCH-REQUIRED"), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch")), list($BIND, makeSymbol("REGULAR-EXPRESSION")), list($BIND, makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list($CALL, makeSymbol("REGEX-STRING-MATCH"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA"))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$regexStringMatch <regular-expression string> <data string>)\n    when <data string> matches the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$regexStringMatch \"[FD]og\" \"Dog\")") });
 
     private static final SubLSymbol $REMOVAL_REGEX_STRING_MATCH_NEG = makeKeyword("REMOVAL-REGEX-STRING-MATCH-NEG");
 
-    private static final SubLList $list7 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch")), list(makeKeyword("BIND"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("BIND"), makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("CALL"), makeSymbol("INVERT-BOOLEAN-ANSWER"), list(makeKeyword("CALL"), makeSymbol("REGEX-STRING-MATCH"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$regexStringMatch <regular-expression string> <data string>))\n    when <data string> doesn\'t match the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$not (#$regexStringMatch \"[FD]og\" \"Log\"))") });
+    private static final SubLList $list7 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch")), list($BIND, makeSymbol("REGULAR-EXPRESSION")), list($BIND, makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list($CALL, makeSymbol("INVERT-BOOLEAN-ANSWER"), list($CALL, makeSymbol("REGEX-STRING-MATCH"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$regexStringMatch <regular-expression string> <data string>))\n    when <data string> doesn\'t match the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$not (#$regexStringMatch \"[FD]og\" \"Log\"))") });
 
 
 
@@ -95,11 +75,11 @@ public final class removal_modules_regular_expressions extends SubLTranslatedFil
 
     private static final SubLSymbol $REMOVAL_REGEX_STRING_MATCH_CASE_INSENSITIVE_POS = makeKeyword("REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-POS");
 
-    private static final SubLList $list17 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("REQUIRED"), makeSymbol("REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-REQUIRED"), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-CASE-INSENSITIVE-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), list(makeKeyword("BIND"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("BIND"), makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REGEX-STRING-MATCH-CASE-INSENSITIVE"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA"))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-CASE-INSENSITIVE-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$regexStringMatch-CaseInsensitive <regular-expression string> <data string>)\n    when <data string> matches the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$regexStringMatch-CaseInsensitive \"[fd]OG\" \"Dog\")") });
+    private static final SubLList $list17 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("REQUIRED"), makeSymbol("REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-REQUIRED"), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-CASE-INSENSITIVE-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), list($BIND, makeSymbol("REGULAR-EXPRESSION")), list($BIND, makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list($CALL, makeSymbol("REGEX-STRING-MATCH-CASE-INSENSITIVE"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA"))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-CASE-INSENSITIVE-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$regexStringMatch-CaseInsensitive <regular-expression string> <data string>)\n    when <data string> matches the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$regexStringMatch-CaseInsensitive \"[fd]OG\" \"Dog\")") });
 
     private static final SubLSymbol $REMOVAL_REGEX_STRING_MATCH_CASE_INSENSITIVE_NEG = makeKeyword("REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-NEG");
 
-    private static final SubLList $list19 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-CASE-INSENSITIVE-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), list(makeKeyword("BIND"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("BIND"), makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("CALL"), makeSymbol("INVERT-BOOLEAN-ANSWER"), list(makeKeyword("CALL"), makeSymbol("REGEX-STRING-MATCH-CASE-INSENSITIVE"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-CASE-INSENSITIVE-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$regexStringMatch-CaseInsensitive <regular-expression string> <data string>))\n    when <data string> doesn\'t match the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$not (#$regexStringMatch-CaseInsensitive \"[fd]OG\" \"Log\"))") });
+    private static final SubLList $list19 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), makeKeyword("STRING"), makeKeyword("STRING")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-CASE-INSENSITIVE-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("CHECK"), T, makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexStringMatch-CaseInsensitive")), list($BIND, makeSymbol("REGULAR-EXPRESSION")), list($BIND, makeSymbol("DATA"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list($CALL, makeSymbol("INVERT-BOOLEAN-ANSWER"), list($CALL, makeSymbol("REGEX-STRING-MATCH-CASE-INSENSITIVE"), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-CASE-INSENSITIVE-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$regexStringMatch-CaseInsensitive <regular-expression string> <data string>))\n    when <data string> doesn\'t match the regular expression in <regular-expression string>"), makeKeyword("EXAMPLE"), makeString("(#$not (#$regexStringMatch-CaseInsensitive \"[fd]OG\" \"Log\"))") });
 
     private static final SubLList $list20 = list(makeKeyword("CASELESS"));
 
@@ -117,7 +97,7 @@ public final class removal_modules_regular_expressions extends SubLTranslatedFil
 
     private static final SubLSymbol $REMOVAL_REGEX_SUBSTRING_MATCH_POS = makeKeyword("REMOVAL-REGEX-SUBSTRING-MATCH-POS");
 
-    private static final SubLList $list28 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexSubstringMatch")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexSubstringMatch")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("REQUIRED"), makeSymbol("REMOVAL-REGEX-STRING-MATCH-REQUIRED"), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexSubstringMatch")), list(makeKeyword("BIND"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("BIND"), makeSymbol("DATA")), list(makeKeyword("BIND"), makeSymbol("INDEX")), list(makeKeyword("BIND"), makeSymbol("SPAN"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")), list(makeKeyword("VALUE"), makeSymbol("INDEX")), list(makeKeyword("VALUE"), makeSymbol("SPAN")))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list(makeKeyword("BIND"), makeSymbol("BINDINGS")), list(makeKeyword("VALUE"), makeSymbol("BINDINGS"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(makeKeyword("CALL"), makeSymbol("SUBST-BINDINGS"), list(makeKeyword("VALUE"), makeSymbol("BINDINGS")), list(reader_make_constant_shell(makeString("regexSubstringMatch")), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")), list(makeKeyword("VALUE"), makeSymbol("INDEX")), list(makeKeyword("VALUE"), makeSymbol("SPAN")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$regexSubstringMatch <regular-expression string> <data string> <data index> <data span>)\n    when <data string> matches the regular expression in <regular-expression string> starting\n    at index and continuing for span characters"), makeKeyword("EXAMPLE"), makeString("(#$regexSubstringMatch \"[FD]og\" \"Dog\" 0 3)") });
+    private static final SubLList $list28 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("regexSubstringMatch")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("regexSubstringMatch")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("REQUIRED"), makeSymbol("REMOVAL-REGEX-STRING-MATCH-REQUIRED"), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REGEX-STRING-MATCH-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("regexSubstringMatch")), list($BIND, makeSymbol("REGULAR-EXPRESSION")), list($BIND, makeSymbol("DATA")), list($BIND, makeSymbol("INDEX")), list($BIND, makeSymbol("SPAN"))), list(list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")), list(makeKeyword("VALUE"), makeSymbol("INDEX")), list(makeKeyword("VALUE"), makeSymbol("SPAN")))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR"), makeKeyword("INPUT")), makeKeyword("OUTPUT-DECODE-PATTERN"), list(makeKeyword("TEMPLATE"), list($BIND, makeSymbol("BINDINGS")), list(makeKeyword("VALUE"), makeSymbol("BINDINGS"))), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list($CALL, makeSymbol("SUBST-BINDINGS"), list(makeKeyword("VALUE"), makeSymbol("BINDINGS")), list(reader_make_constant_shell(makeString("regexSubstringMatch")), list(makeKeyword("VALUE"), makeSymbol("REGULAR-EXPRESSION")), list(makeKeyword("VALUE"), makeSymbol("DATA")), list(makeKeyword("VALUE"), makeSymbol("INDEX")), list(makeKeyword("VALUE"), makeSymbol("SPAN")))), makeKeyword("SUPPORT-MODULE"), makeKeyword("OPAQUE"), makeKeyword("SUPPORT-MT"), makeSymbol("*REGEX-STRING-MATCH-MT*"), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("DOCUMENTATION"), makeString("(#$regexSubstringMatch <regular-expression string> <data string> <data index> <data span>)\n    when <data string> matches the regular expression in <regular-expression string> starting\n    at index and continuing for span characters"), makeKeyword("EXAMPLE"), makeString("(#$regexSubstringMatch \"[FD]og\" \"Dog\" 0 3)") });
 
     private static final SubLSymbol REMOVAL_REGEX_SUBSTRING_MATCH_ITERATOR = makeSymbol("REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR");
 
@@ -231,15 +211,15 @@ public final class removal_modules_regular_expressions extends SubLTranslatedFil
     }
 
     public static SubLObject declare_removal_modules_regular_expressions_file() {
-        declareFunction(me, "removal_regex_string_match_required", "REMOVAL-REGEX-STRING-MATCH-REQUIRED", 1, 1, false);
-        declareFunction(me, "regex_string_match", "REGEX-STRING-MATCH", 2, 0, false);
-        declareFunction(me, "regex_string_match_with_bindings", "REGEX-STRING-MATCH-WITH-BINDINGS", 2, 0, false);
-        declareFunction(me, "regex_string_match_with_bindings_int", "REGEX-STRING-MATCH-WITH-BINDINGS-INT", 3, 0, false);
-        declareFunction(me, "removal_regex_string_match_case_insensitive_required", "REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-REQUIRED", 1, 1, false);
-        declareFunction(me, "regex_string_match_case_insensitive", "REGEX-STRING-MATCH-CASE-INSENSITIVE", 2, 0, false);
-        declareFunction(me, "regex_string_match_with_bindings_case_insensitive", "REGEX-STRING-MATCH-WITH-BINDINGS-CASE-INSENSITIVE", 2, 0, false);
-        declareFunction(me, "removal_regex_substring_match_iterator", "REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR", 1, 0, false);
-        declareFunction(me, "removal_regex_substring_match_iterator_int", "REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR-INT", 1, 1, false);
+        declareFunction("removal_regex_string_match_required", "REMOVAL-REGEX-STRING-MATCH-REQUIRED", 1, 1, false);
+        declareFunction("regex_string_match", "REGEX-STRING-MATCH", 2, 0, false);
+        declareFunction("regex_string_match_with_bindings", "REGEX-STRING-MATCH-WITH-BINDINGS", 2, 0, false);
+        declareFunction("regex_string_match_with_bindings_int", "REGEX-STRING-MATCH-WITH-BINDINGS-INT", 3, 0, false);
+        declareFunction("removal_regex_string_match_case_insensitive_required", "REMOVAL-REGEX-STRING-MATCH-CASE-INSENSITIVE-REQUIRED", 1, 1, false);
+        declareFunction("regex_string_match_case_insensitive", "REGEX-STRING-MATCH-CASE-INSENSITIVE", 2, 0, false);
+        declareFunction("regex_string_match_with_bindings_case_insensitive", "REGEX-STRING-MATCH-WITH-BINDINGS-CASE-INSENSITIVE", 2, 0, false);
+        declareFunction("removal_regex_substring_match_iterator", "REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR", 1, 0, false);
+        declareFunction("removal_regex_substring_match_iterator_int", "REMOVAL-REGEX-SUBSTRING-MATCH-ITERATOR-INT", 1, 1, false);
         return NIL;
     }
 

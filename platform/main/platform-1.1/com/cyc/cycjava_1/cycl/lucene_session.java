@@ -173,8 +173,7 @@ public  final class lucene_session extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_lucene_session_file() {
-    // CVS_ID("Id: lucene-session.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_lucene_session$.getGlobalValue(), Symbols.symbol_function($sym17$LUCENE_SESSION_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_lucene_session$.getGlobalValue(), Symbols.symbol_function($sym17$LUCENE_SESSION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym18$LUCENE_HOST, $sym19$_CSETF_LUCENE_HOST);
     Structures.def_csetf($sym20$LUCENE_PORT, $sym21$_CSETF_LUCENE_PORT);
     Structures.def_csetf($sym22$LUCENE_CONNECTION, $sym23$_CSETF_LUCENE_CONNECTION);

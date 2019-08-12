@@ -1,10 +1,24 @@
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava.cycl.sources;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -16,44 +30,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.sources.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class sources extends SubLTranslatedFile {
+public final class sources extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sources();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sources";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sources";
 
-    public static final String myFingerPrint = "2cebc32fa1525f16832dbc92a64c46bd63ea45ebf6f63b90b9f2bafcec39035c";
 
     // deflexical
     private static final SubLSymbol $non_assertion_source_citation_preds$ = makeSymbol("*NON-ASSERTION-SOURCE-CITATION-PREDS*");
@@ -994,47 +976,47 @@ public final class sources extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_sources_file() {
-        declareFunction(me, "assertion_sourcedP", "ASSERTION-SOURCED?", 1, 0, false);
-        declareFunction(me, "assertion_sources", "ASSERTION-SOURCES", 1, 0, false);
-        declareFunction(me, "assertion_sources_int", "ASSERTION-SOURCES-INT", 2, 0, false);
-        declareFunction(me, "possible_source_attribution_assertionP", "POSSIBLE-SOURCE-ATTRIBUTION-ASSERTION?", 1, 0, false);
-        declareFunction(me, "hlmt_sources", "HLMT-SOURCES", 1, 0, false);
-        declareFunction(me, "inference_answer_sources_from_signature", "INFERENCE-ANSWER-SOURCES-FROM-SIGNATURE", 1, 0, false);
-        declareFunction(me, "inference_answer_sources_internal", "INFERENCE-ANSWER-SOURCES-INTERNAL", 1, 0, false);
-        declareFunction(me, "inference_answer_sources", "INFERENCE-ANSWER-SOURCES", 1, 0, false);
-        declareFunction(me, "inference_answer_justification_sources_int", "INFERENCE-ANSWER-JUSTIFICATION-SOURCES-INT", 1, 0, false);
-        declareFunction(me, "support_sources_recursive_int", "SUPPORT-SOURCES-RECURSIVE-INT", 1, 0, false);
-        declareFunction(me, "sksi_support_sources", "SKSI-SUPPORT-SOURCES", 1, 0, false);
-        declareFunction(me, "assertion_sources_recursive_int", "ASSERTION-SOURCES-RECURSIVE-INT", 1, 0, false);
-        declareFunction(me, "deduction_sources_recursive_int", "DEDUCTION-SOURCES-RECURSIVE-INT", 1, 0, false);
-        declareFunction(me, "assertion_corroborating_sources", "ASSERTION-CORROBORATING-SOURCES", 2, 0, false);
-        declareFunction(me, "mt_sources_internal", "MT-SOURCES-INTERNAL", 1, 0, false);
-        declareFunction(me, "mt_sources", "MT-SOURCES", 1, 0, false);
-        declareFunction(me, "assertion_sources_via_inference_internal", "ASSERTION-SOURCES-VIA-INFERENCE-INTERNAL", 1, 0, false);
-        declareFunction(me, "assertion_sources_via_inference", "ASSERTION-SOURCES-VIA-INFERENCE", 1, 0, false);
-        declareFunction(me, "possibly_combine_assertion_sources", "POSSIBLY-COMBINE-ASSERTION-SOURCES", 2, 0, false);
-        declareFunction(me, "cde_document_pattern", "CDE-DOCUMENT-PATTERN", 0, 0, false);
-        declareFunction(me, "cde_document_p", "CDE-DOCUMENT-P", 1, 0, false);
-        declareFunction(me, "source_from_cde_document_and_string", "SOURCE-FROM-CDE-DOCUMENT-AND-STRING", 1, 0, false);
-        declareFunction(me, "source_icon_domain_mt", "SOURCE-ICON-DOMAIN-MT", 0, 0, false);
-        declareFunction(me, "icon_path_for_source", "ICON-PATH-FOR-SOURCE", 1, 1, false);
-        declareFunction(me, "add_tiny_icon", "ADD-TINY-ICON", 2, 0, false);
-        declareFunction(me, "remove_tiny_icon", "REMOVE-TINY-ICON", 2, 0, false);
-        declareFunction(me, "clear_icon_relative_path_for_source", "CLEAR-ICON-RELATIVE-PATH-FOR-SOURCE", 0, 0, false);
-        declareFunction(me, "remove_icon_relative_path_for_source", "REMOVE-ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
-        declareFunction(me, "icon_relative_path_for_source_internal", "ICON-RELATIVE-PATH-FOR-SOURCE-INTERNAL", 2, 0, false);
-        declareFunction(me, "icon_relative_path_for_source", "ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
-        declareFunction(me, "non_default_icon_relative_path_for_source", "NON-DEFAULT-ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
-        declareFunction(me, "default_icon_relative_path_for_source", "DEFAULT-ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
-        declareFunction(me, "more_specific_typeP", "MORE-SPECIFIC-TYPE?", 2, 1, false);
-        declareFunction(me, "really_min_isa_among_specs_of", "REALLY-MIN-ISA-AMONG-SPECS-OF", 3, 0, false);
-        declareMacro(me, "with_tkb_image_root_placeholder", "WITH-TKB-IMAGE-ROOT-PLACEHOLDER");
-        declareFunction(me, "get_tkb_image_root", "GET-TKB-IMAGE-ROOT", 0, 0, false);
-        declareFunction(me, "get_tkb_image_root_no_placeholder", "GET-TKB-IMAGE-ROOT-NO-PLACEHOLDER", 0, 0, false);
-        declareFunction(me, "source_icon_paths_for_answer", "SOURCE-ICON-PATHS-FOR-ANSWER", 3, 0, false);
-        declareFunction(me, "source_icon_paths_for_inference_answer", "SOURCE-ICON-PATHS-FOR-INFERENCE-ANSWER", 1, 0, false);
-        declareFunction(me, "tooltip_rendering_for_source", "TOOLTIP-RENDERING-FOR-SOURCE", 3, 0, false);
-        declareFunction(me, "source_citation_string", "SOURCE-CITATION-STRING", 1, 2, false);
+        declareFunction("assertion_sourcedP", "ASSERTION-SOURCED?", 1, 0, false);
+        declareFunction("assertion_sources", "ASSERTION-SOURCES", 1, 0, false);
+        declareFunction("assertion_sources_int", "ASSERTION-SOURCES-INT", 2, 0, false);
+        declareFunction("possible_source_attribution_assertionP", "POSSIBLE-SOURCE-ATTRIBUTION-ASSERTION?", 1, 0, false);
+        declareFunction("hlmt_sources", "HLMT-SOURCES", 1, 0, false);
+        declareFunction("inference_answer_sources_from_signature", "INFERENCE-ANSWER-SOURCES-FROM-SIGNATURE", 1, 0, false);
+        declareFunction("inference_answer_sources_internal", "INFERENCE-ANSWER-SOURCES-INTERNAL", 1, 0, false);
+        declareFunction("inference_answer_sources", "INFERENCE-ANSWER-SOURCES", 1, 0, false);
+        declareFunction("inference_answer_justification_sources_int", "INFERENCE-ANSWER-JUSTIFICATION-SOURCES-INT", 1, 0, false);
+        declareFunction("support_sources_recursive_int", "SUPPORT-SOURCES-RECURSIVE-INT", 1, 0, false);
+        declareFunction("sksi_support_sources", "SKSI-SUPPORT-SOURCES", 1, 0, false);
+        declareFunction("assertion_sources_recursive_int", "ASSERTION-SOURCES-RECURSIVE-INT", 1, 0, false);
+        declareFunction("deduction_sources_recursive_int", "DEDUCTION-SOURCES-RECURSIVE-INT", 1, 0, false);
+        declareFunction("assertion_corroborating_sources", "ASSERTION-CORROBORATING-SOURCES", 2, 0, false);
+        declareFunction("mt_sources_internal", "MT-SOURCES-INTERNAL", 1, 0, false);
+        declareFunction("mt_sources", "MT-SOURCES", 1, 0, false);
+        declareFunction("assertion_sources_via_inference_internal", "ASSERTION-SOURCES-VIA-INFERENCE-INTERNAL", 1, 0, false);
+        declareFunction("assertion_sources_via_inference", "ASSERTION-SOURCES-VIA-INFERENCE", 1, 0, false);
+        declareFunction("possibly_combine_assertion_sources", "POSSIBLY-COMBINE-ASSERTION-SOURCES", 2, 0, false);
+        declareFunction("cde_document_pattern", "CDE-DOCUMENT-PATTERN", 0, 0, false);
+        declareFunction("cde_document_p", "CDE-DOCUMENT-P", 1, 0, false);
+        declareFunction("source_from_cde_document_and_string", "SOURCE-FROM-CDE-DOCUMENT-AND-STRING", 1, 0, false);
+        declareFunction("source_icon_domain_mt", "SOURCE-ICON-DOMAIN-MT", 0, 0, false);
+        declareFunction("icon_path_for_source", "ICON-PATH-FOR-SOURCE", 1, 1, false);
+        declareFunction("add_tiny_icon", "ADD-TINY-ICON", 2, 0, false);
+        declareFunction("remove_tiny_icon", "REMOVE-TINY-ICON", 2, 0, false);
+        declareFunction("clear_icon_relative_path_for_source", "CLEAR-ICON-RELATIVE-PATH-FOR-SOURCE", 0, 0, false);
+        declareFunction("remove_icon_relative_path_for_source", "REMOVE-ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
+        declareFunction("icon_relative_path_for_source_internal", "ICON-RELATIVE-PATH-FOR-SOURCE-INTERNAL", 2, 0, false);
+        declareFunction("icon_relative_path_for_source", "ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
+        declareFunction("non_default_icon_relative_path_for_source", "NON-DEFAULT-ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
+        declareFunction("default_icon_relative_path_for_source", "DEFAULT-ICON-RELATIVE-PATH-FOR-SOURCE", 1, 1, false);
+        declareFunction("more_specific_typeP", "MORE-SPECIFIC-TYPE?", 2, 1, false);
+        declareFunction("really_min_isa_among_specs_of", "REALLY-MIN-ISA-AMONG-SPECS-OF", 3, 0, false);
+        declareMacro("with_tkb_image_root_placeholder", "WITH-TKB-IMAGE-ROOT-PLACEHOLDER");
+        declareFunction("get_tkb_image_root", "GET-TKB-IMAGE-ROOT", 0, 0, false);
+        declareFunction("get_tkb_image_root_no_placeholder", "GET-TKB-IMAGE-ROOT-NO-PLACEHOLDER", 0, 0, false);
+        declareFunction("source_icon_paths_for_answer", "SOURCE-ICON-PATHS-FOR-ANSWER", 3, 0, false);
+        declareFunction("source_icon_paths_for_inference_answer", "SOURCE-ICON-PATHS-FOR-INFERENCE-ANSWER", 1, 0, false);
+        declareFunction("tooltip_rendering_for_source", "TOOLTIP-RENDERING-FOR-SOURCE", 3, 0, false);
+        declareFunction("source_citation_string", "SOURCE-CITATION-STRING", 1, 2, false);
         return NIL;
     }
 

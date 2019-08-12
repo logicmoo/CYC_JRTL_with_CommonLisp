@@ -201,8 +201,7 @@ public  final class disjoint_with extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_disjoint_with_file() {
-    // CVS_ID("Id: disjoint-with.lisp 127566 2009-04-09 16:27:05Z goolsbey ");
-    utilities_macros.register_cyc_api_function($sym2$ANY_DISJOINT_COLLECTION_PAIR, $list3, $str4$Returns_a_pair_of_disjoint_elemen, $list5, $list6);
+        utilities_macros.register_cyc_api_function($sym2$ANY_DISJOINT_COLLECTION_PAIR, $list3, $str4$Returns_a_pair_of_disjoint_elemen, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym11$ANY_DISJOINT_COLLECTION_PAIR_, $list3, $str12$Are_any_two_collections_in_COLS_d, $list5, $list13);
     utilities_macros.register_obsolete_cyc_api_function($sym15$COLLECTIONS_DISJOINT_, $list16, $list17, $str18$_see_disjoint_with_, $list19, $list13);
     utilities_macros.register_obsolete_cyc_api_function($sym20$WHY_COLLECTIONS_DISJOINT_, $list21, $list22, $str23$_see_why_disjoint_with_, $list24, $list25);

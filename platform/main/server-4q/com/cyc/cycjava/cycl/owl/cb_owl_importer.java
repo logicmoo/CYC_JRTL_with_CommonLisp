@@ -1,22 +1,20 @@
 package com.cyc.cycjava.cycl.owl;
 
 
-import com.cyc.cycjava.cycl.cyc_file_dependencies;
-import com.cyc.cycjava.cycl.cyc_navigator_internals;
-import com.cyc.cycjava.cycl.dhtml_macros;
-import com.cyc.cycjava.cycl.file_utilities;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.html_arghash;
-import com.cyc.cycjava.cycl.html_complete;
-import com.cyc.cycjava.cycl.html_macros;
-import com.cyc.cycjava.cycl.html_script_utilities;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.browser.cb_query;
-import com.cyc.cycjava.cycl.integer_sequence_generator;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.owl.cb_owl_importer;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.system_parameters;
-import com.cyc.cycjava.cycl.web_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -28,40 +26,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.owl.cb_owl_importer.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cb_owl_importer extends SubLTranslatedFile {
+public final class cb_owl_importer extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_owl_importer();
 
-    public static final String myName = "com.cyc.cycjava.cycl.owl.cb_owl_importer";
+    public static final String myName = "com.cyc.cycjava_2.cycl.owl.cb_owl_importer";
 
-    public static final String myFingerPrint = "0b5699993fe7cf96a7865f643b04eaa0fc6904660e81e6a0008f43ecc4f41f18";
 
     private static final SubLString $$$OWL_Importer = makeString("OWL Importer");
 
@@ -786,9 +756,9 @@ public final class cb_owl_importer extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_owl_importer_file() {
-        declareFunction(me, "cb_owl_import", "CB-OWL-IMPORT", 0, 1, false);
-        declareFunction(me, "cb_owl_import_internal", "CB-OWL-IMPORT-INTERNAL", 1, 0, false);
-        declareFunction(me, "cb_owl_perform_import", "CB-OWL-PERFORM-IMPORT", 1, 0, false);
+        declareFunction("cb_owl_import", "CB-OWL-IMPORT", 0, 1, false);
+        declareFunction("cb_owl_import_internal", "CB-OWL-IMPORT-INTERNAL", 1, 0, false);
+        declareFunction("cb_owl_perform_import", "CB-OWL-PERFORM-IMPORT", 1, 0, false);
         return NIL;
     }
 

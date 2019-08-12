@@ -120,8 +120,7 @@ public  final class ghl_link_iterators extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_ghl_link_iterators_file() {
-    // CVS_ID("Id: ghl-link-iterators.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym18$GHL_MAKE_SBHL_SUPPORT, $sym24$DO_GHL_ACCESSIBLE_LINK_NODES);
+        access_macros.register_macro_helper($sym18$GHL_MAKE_SBHL_SUPPORT, $sym24$DO_GHL_ACCESSIBLE_LINK_NODES);
     return NIL;
   }
 

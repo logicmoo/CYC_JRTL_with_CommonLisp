@@ -1,7 +1,12 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.opencyc_api_widgets;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -10,24 +15,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.opencyc_api_widgets.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class opencyc_api_widgets extends SubLTranslatedFile {
+public final class opencyc_api_widgets extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new opencyc_api_widgets();
 
-    public static final String myName = "com.cyc.cycjava.cycl.opencyc_api_widgets";
+    public static final String myName = "com.cyc.cycjava_2.cycl.opencyc_api_widgets";
 
-    public static final String myFingerPrint = "f1c4b962d02df577b7c50620ca05715a576374ffde6fcf1c77611b114b5bee9d";
 
     private static final SubLObject $const0$CurrentWorldDataCollectorMt_NonHo = reader_make_constant_shell(makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
 
@@ -68,8 +61,8 @@ public final class opencyc_api_widgets extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_opencyc_api_widgets_file() {
-        declareFunction(me, "opencyc_explanation_of_why_not_wff_assert", "OPENCYC-EXPLANATION-OF-WHY-NOT-WFF-ASSERT", 1, 1, false);
-        declareFunction(me, "opencyc_explanation_of_why_not_wff", "OPENCYC-EXPLANATION-OF-WHY-NOT-WFF", 1, 1, false);
+        declareFunction("opencyc_explanation_of_why_not_wff_assert", "OPENCYC-EXPLANATION-OF-WHY-NOT-WFF-ASSERT", 1, 1, false);
+        declareFunction("opencyc_explanation_of_why_not_wff", "OPENCYC-EXPLANATION-OF-WHY-NOT-WFF", 1, 1, false);
         return NIL;
     }
 

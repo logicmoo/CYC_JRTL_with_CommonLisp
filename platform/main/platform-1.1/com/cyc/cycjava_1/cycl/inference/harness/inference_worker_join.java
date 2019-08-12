@@ -1007,8 +1007,7 @@ lumping it into productivity. */
   }
 
   public static final SubLObject setup_inference_worker_join_file() {
-    // CVS_ID("Id: inference-worker-join.lisp 128648 2009-08-27 17:23:55Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_join_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$JOIN_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_join_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$JOIN_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$J_LINK_DATA_JOIN_VARS, $sym9$_CSETF_J_LINK_DATA_JOIN_VARS);
     Structures.def_csetf($sym10$J_LINK_DATA_FIRST_PROOF_INDEX, $sym11$_CSETF_J_LINK_DATA_FIRST_PROOF_INDEX);
     Structures.def_csetf($sym12$J_LINK_DATA_SECOND_PROOF_INDEX, $sym13$_CSETF_J_LINK_DATA_SECOND_PROOF_INDEX);

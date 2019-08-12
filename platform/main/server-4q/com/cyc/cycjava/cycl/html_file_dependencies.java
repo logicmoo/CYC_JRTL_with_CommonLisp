@@ -1,7 +1,10 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.html_file_dependencies;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -10,21 +13,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.html_file_dependencies.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class html_file_dependencies extends SubLTranslatedFile {
+public final class html_file_dependencies extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new html_file_dependencies();
 
-    public static final String myName = "com.cyc.cycjava.cycl.html_file_dependencies";
+    public static final String myName = "com.cyc.cycjava_2.cycl.html_file_dependencies";
 
-    public static final String myFingerPrint = "2c1968627449c8e649d591c9130d09e98702e5ac15f2aafc56a072bf186795cc";
 
     private static final SubLString $str0$cb_cyc_css = makeString("cb-cyc.css");
 

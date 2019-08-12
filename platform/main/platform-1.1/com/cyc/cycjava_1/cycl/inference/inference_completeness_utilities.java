@@ -1151,8 +1151,7 @@ and only look for universally true completeness assertions. */
   }
 
   public static final SubLObject setup_inference_completeness_utilities_file() {
-    // CVS_ID("Id: inference-completeness-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_memoized_function($sym0$INFERENCE_MINIMIZE_EXTENT_);
+        memoization_state.note_memoized_function($sym0$INFERENCE_MINIMIZE_EXTENT_);
     memoization_state.note_memoized_function($sym2$INFERENCE_COMPLETE_EXTENT_ASSERTED_FOR_VALUE_IN_ARG_GAFS);
     memoization_state.note_memoized_function($sym3$INFERENCE_COMPLETE_EXTENT_ENUMERABLE_GAFS);
     memoization_state.note_memoized_function($sym4$INFERENCE_COMPLETE_EXTENT_DECIDABLE_GAFS);

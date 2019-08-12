@@ -2992,8 +2992,7 @@ without even trying to prune. */
   }
 
   public static final SubLObject setup_inference_datastructures_problem_store_file() {
-    // CVS_ID("Id: inference-datastructures-problem-store.lisp 128760 2009-09-15 04:40:33Z pace ");
-    subl_macro_promotions.declare_defglobal($sym0$_PROBLEM_STORE_ID_INDEX_);
+        subl_macro_promotions.declare_defglobal($sym0$_PROBLEM_STORE_ID_INDEX_);
     access_macros.register_macro_helper($sym9$PROBLEM_STORE_ID_INDEX, $sym10$DO_ALL_PROBLEM_STORES);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_problem_store$.getGlobalValue(), Symbols.symbol_function($sym47$PROBLEM_STORE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym48$PROB_STORE_GUID, $sym49$_CSETF_PROB_STORE_GUID);

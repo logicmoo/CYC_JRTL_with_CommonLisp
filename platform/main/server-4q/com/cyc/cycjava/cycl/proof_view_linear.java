@@ -1,7 +1,15 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.proof_view_linear;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -13,32 +21,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.proof_view_linear.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class proof_view_linear extends SubLTranslatedFile {
+public final class proof_view_linear extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new proof_view_linear();
 
-    public static final String myName = "com.cyc.cycjava.cycl.proof_view_linear";
+    public static final String myName = "com.cyc.cycjava_2.cycl.proof_view_linear";
 
-    public static final String myFingerPrint = "73b3cac0f879ed3081d63f51f60bb91c4ae832c234b7bd8375334dcccf09169c";
 
     // defparameter
     private static final SubLSymbol $proof_view_linear_section_max_depth$ = makeSymbol("*PROOF-VIEW-LINEAR-SECTION-MAX-DEPTH*");
@@ -245,14 +233,14 @@ public final class proof_view_linear extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_proof_view_linear_file() {
-        declareFunction(me, "proof_view_add_linear_section", "PROOF-VIEW-ADD-LINEAR-SECTION", 1, 0, false);
-        declareFunction(me, "proof_view_get_include_linear_sectionP", "PROOF-VIEW-GET-INCLUDE-LINEAR-SECTION?", 1, 0, false);
-        declareFunction(me, "proof_view_set_include_linear_sectionP", "PROOF-VIEW-SET-INCLUDE-LINEAR-SECTION?", 2, 0, false);
-        declareFunction(me, "proof_view_has_linear_sectionP", "PROOF-VIEW-HAS-LINEAR-SECTION?", 1, 0, false);
-        declareFunction(me, "proof_view_build_linear_section", "PROOF-VIEW-BUILD-LINEAR-SECTION", 3, 3, false);
-        declareFunction(me, "add_linear_entry", "ADD-LINEAR-ENTRY", 7, 0, false);
-        declareFunction(me, "proof_view_linear_section_show_supportsP", "PROOF-VIEW-LINEAR-SECTION-SHOW-SUPPORTS?", 1, 0, false);
-        declareFunction(me, "proof_view_linear_section_valid_object_type_p", "PROOF-VIEW-LINEAR-SECTION-VALID-OBJECT-TYPE-P", 1, 0, false);
+        declareFunction("proof_view_add_linear_section", "PROOF-VIEW-ADD-LINEAR-SECTION", 1, 0, false);
+        declareFunction("proof_view_get_include_linear_sectionP", "PROOF-VIEW-GET-INCLUDE-LINEAR-SECTION?", 1, 0, false);
+        declareFunction("proof_view_set_include_linear_sectionP", "PROOF-VIEW-SET-INCLUDE-LINEAR-SECTION?", 2, 0, false);
+        declareFunction("proof_view_has_linear_sectionP", "PROOF-VIEW-HAS-LINEAR-SECTION?", 1, 0, false);
+        declareFunction("proof_view_build_linear_section", "PROOF-VIEW-BUILD-LINEAR-SECTION", 3, 3, false);
+        declareFunction("add_linear_entry", "ADD-LINEAR-ENTRY", 7, 0, false);
+        declareFunction("proof_view_linear_section_show_supportsP", "PROOF-VIEW-LINEAR-SECTION-SHOW-SUPPORTS?", 1, 0, false);
+        declareFunction("proof_view_linear_section_valid_object_type_p", "PROOF-VIEW-LINEAR-SECTION-VALID-OBJECT-TYPE-P", 1, 0, false);
         return NIL;
     }
 

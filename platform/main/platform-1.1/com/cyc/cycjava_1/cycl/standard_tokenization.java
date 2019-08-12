@@ -145,8 +145,7 @@ public  final class standard_tokenization extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_standard_tokenization_file() {
-    // CVS_ID("Id: standard-tokenization.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_dot_analysis$.getGlobalValue(), Symbols.symbol_function($sym16$DOT_ANALYSIS_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_dot_analysis$.getGlobalValue(), Symbols.symbol_function($sym16$DOT_ANALYSIS_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym17$DOT_ANALYSIS_FOUND, $sym18$_CSETF_DOT_ANALYSIS_FOUND);
     Structures.def_csetf($sym19$DOT_ANALYSIS_REMAINS, $sym20$_CSETF_DOT_ANALYSIS_REMAINS);
     Structures.def_csetf($sym21$DOT_ANALYSIS_ACCUMULATOR, $sym22$_CSETF_DOT_ANALYSIS_ACCUMULATOR);

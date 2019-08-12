@@ -67,8 +67,7 @@ public  final class removal_tactician extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_tactician_file() {
-    // CVS_ID("Id: inference-heuristic-removal-tactician.lisp 127024 2009-02-04 16:53:03Z goolsbey ");
-    inference_tactician.inference_strategy_type($kw0$REMOVAL, $list1);
+        inference_tactician.inference_strategy_type($kw0$REMOVAL, $list1);
     utilities_macros.note_funcall_helper_function($sym2$REMOVAL_STRATEGY_INITIALIZE);
     return NIL;
   }

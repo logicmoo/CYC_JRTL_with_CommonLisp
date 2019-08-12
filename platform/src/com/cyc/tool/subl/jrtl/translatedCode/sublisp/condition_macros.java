@@ -32,14 +32,14 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class condition_macros extends SubLTranslatedFile {
     public static SubLObject declare_condition_macros_file() {
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "with_simple_restart", "WITH-SIMPLE-RESTART");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "with_simple_restart_internal", "WITH-SIMPLE-RESTART-INTERNAL", 4, 0, false);
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "with_sublisp_error_handling", "WITH-SUBLISP-ERROR-HANDLING");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "with_sublisp_error_handling_internal", "WITH-SUBLISP-ERROR-HANDLING-INTERNAL", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "with_error_handler_internal", "WITH-ERROR-HANDLER-INTERNAL", 2, 0, false);
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "ignore_errors", "IGNORE-ERRORS");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "ignore_errors_internal", "IGNORE-ERRORS-INTERNAL", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.condition_macros", "ignore_errors_handler", "IGNORE-ERRORS-HANDLER", 0, 0, false);
+        declareMacro("with_simple_restart", "WITH-SIMPLE-RESTART");
+        declareFunction("with_simple_restart_internal", "WITH-SIMPLE-RESTART-INTERNAL", 4, 0, false);
+        declareMacro("with_sublisp_error_handling", "WITH-SUBLISP-ERROR-HANDLING");
+        declareFunction("with_sublisp_error_handling_internal", "WITH-SUBLISP-ERROR-HANDLING-INTERNAL", 1, 0, false);
+        declareFunction("with_error_handler_internal", "WITH-ERROR-HANDLER-INTERNAL", 2, 0, false);
+        declareMacro("ignore_errors", "IGNORE-ERRORS");
+        declareFunction("ignore_errors_internal", "IGNORE-ERRORS-INTERNAL", 1, 0, false);
+        declareFunction("ignore_errors_handler", "IGNORE-ERRORS-HANDLER", 0, 0, false);
         return SubLNil.NIL;
     }
 

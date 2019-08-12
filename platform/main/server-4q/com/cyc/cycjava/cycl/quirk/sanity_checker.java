@@ -1,66 +1,16 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.quirk;
 
 
-import com.cyc.cycjava.cycl.classes;
-import com.cyc.cycjava.cycl.constants_high;
-import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.instances;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.methods;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.object;
-import com.cyc.cycjava.cycl.pph_main;
-import com.cyc.cycjava.cycl.psp_main;
-import com.cyc.cycjava.cycl.quantities;
-import com.cyc.cycjava.cycl.quirk.sanity_checker;
-import com.cyc.cycjava.cycl.reformulator_hub;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.term;
-import com.cyc.cycjava.cycl.wff;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.quirk.sanity_checker.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
@@ -68,552 +18,501 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class sanity_checker extends SubLTranslatedFile {
+public final class sanity_checker extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sanity_checker();
 
-    public static final String myName = "com.cyc.cycjava.cycl.quirk.sanity_checker";
+ public static final String myName = "com.cyc.cycjava.cycl.quirk.sanity_checker";
 
-    public static final String myFingerPrint = "3d57d79ef335aa0dc516f83c9c7da25a37caad135271772735a98db0b2192535";
 
     // defvar
     // Definitions
+    @LispMethod(comment = "defvar")
     private static final SubLSymbol $sanity_checker$ = makeSymbol("*SANITY-CHECKER*");
 
     // defvar
+    @LispMethod(comment = "defvar")
     private static final SubLSymbol $piquant_sanity_checkers$ = makeSymbol("*PIQUANT-SANITY-CHECKERS*");
 
     // defvar
+    @LispMethod(comment = "defvar")
     private static final SubLSymbol $scalar_checker_backchain$ = makeSymbol("*SCALAR-CHECKER-BACKCHAIN*");
 
     // Internal Constants
-    public static final SubLSymbol SANITY_CHECKER = makeSymbol("SANITY-CHECKER");
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol SANITY_CHECKER = makeSymbol("SANITY-CHECKER");
 
+    private static final SubLSymbol PIQUANT_SANITY_CHECKER = makeSymbol("PIQUANT-SANITY-CHECKER");
 
+    private static final SubLSymbol CHECK = makeSymbol("CHECK");
 
-    public static final SubLSymbol PIQUANT_SANITY_CHECKER = makeSymbol("PIQUANT-SANITY-CHECKER");
+    private static final SubLSymbol CHECK_CYC_INTERPRETATIONS = makeSymbol("CHECK-CYC-INTERPRETATIONS");
 
+    private static final SubLSymbol PROPOSED_VALUE = makeSymbol("PROPOSED-VALUE");
 
+    static private final SubLList $list10 = list(list(makeSymbol("CACHE"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("SCRATCHPAD"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("FUDGE-FACTOR"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("SHOW-DEBUG-INFO"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK-LISTIFIED"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")));
 
-    public static final SubLSymbol CHECK = makeSymbol("CHECK");
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-CLASS");
 
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-INSTANCE");
 
+    static private final SubLList $list20 = list(makeKeyword("PROTECTED"));
 
-    public static final SubLSymbol CHECK_CYC_INTERPRETATIONS = makeSymbol("CHECK-CYC-INTERPRETATIONS");
+    static private final SubLList $list21 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("FUDGE-FACTOR"), ZERO_INTEGER), list(RET, makeSymbol("SELF")));
 
+    static private final SubLSymbol $sym22$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_INITIALIZE_METHOD = makeSymbol("SANITY-CHECKER-INITIALIZE-METHOD");
 
-    public static final SubLSymbol PROPOSED_VALUE = makeSymbol("PROPOSED-VALUE");
+    static private final SubLList $list24 = list(list(makeSymbol("CSETQ"), makeSymbol("SHOW-DEBUG-INFO"), T), list(RET, makeSymbol("SELF")));
 
+    static private final SubLSymbol $sym25$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_SHOW_DEBUG_INFO_METHOD = makeSymbol("SANITY-CHECKER-SHOW-DEBUG-INFO-METHOD");
 
-    public static final SubLList $list10 = list(list(makeSymbol("CACHE"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("SCRATCHPAD"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("FUDGE-FACTOR"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("SHOW-DEBUG-INFO"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK-LISTIFIED"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")));
+    private static final SubLSymbol HIDE_DEBUG_INFO = makeSymbol("HIDE-DEBUG-INFO");
 
+    static private final SubLList $list28 = list(list(makeSymbol("CSETQ"), makeSymbol("SHOW-DEBUG-INFO"), NIL), list(RET, makeSymbol("SELF")));
 
+    static private final SubLSymbol $sym29$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_HIDE_DEBUG_INFO_METHOD = makeSymbol("SANITY-CHECKER-HIDE-DEBUG-INFO-METHOD");
 
+    static private final SubLList $list31 = list(makeKeyword("PUBLIC"));
 
+    static private final SubLList $list32 = list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER"));
 
+    static private final SubLList $list33 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-FOCUS")), makeSymbol("FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-ANSWER")), makeSymbol("ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY")))))), list(RET, makeSymbol("RESULT"))));
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-CLASS");
+    static private final SubLSymbol $sym34$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD = makeSymbol("SANITY-CHECKER-SCRATCHPAD");
 
+    private static final SubLSymbol SET_PREDICATE = makeSymbol("SET-PREDICATE");
 
+    private static final SubLSymbol SET_FOCUS = makeSymbol("SET-FOCUS");
 
+    private static final SubLSymbol COMPUTE_DEGENERATE_DIAGNOSIS = makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS");
 
+    private static final SubLSymbol INITIALIZE_CHECKERS = makeSymbol("INITIALIZE-CHECKERS");
 
+    private static final SubLSymbol OUTPUT_DIAGNOSES = makeSymbol("OUTPUT-DIAGNOSES");
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-INSTANCE");
+    static private final SubLString $str44$___S = makeString("~%~S");
 
+    private static final SubLSymbol SANITY_CHECKER_CHECK_METHOD = makeSymbol("SANITY-CHECKER-CHECK-METHOD");
 
+    static private final SubLList $list47 = list(makeSymbol("PREDICATE"), makeSymbol("CYC-INTERPRETATIONS"), makeSymbol("CYC-ANSWERS"));
 
-    public static final SubLList $list20 = list(makeKeyword("PROTECTED"));
+    static private final SubLList $list48 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("CYC-FOCUSES")), makeSymbol("CYC-INTERPRETATIONS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-CYC-ANSWERS")), makeSymbol("CYC-ANSWERS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY")))))), list(RET, makeSymbol("RESULT"))));
 
-    public static final SubLList $list21 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("FUDGE-FACTOR"), ZERO_INTEGER), list(makeSymbol("RET"), makeSymbol("SELF")));
+    static private final SubLSymbol $sym49$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
 
-    public static final SubLSymbol $sym22$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
+    private static final SubLSymbol SET_CYC_ANSWERS = makeSymbol("SET-CYC-ANSWERS");
 
-    public static final SubLSymbol SANITY_CHECKER_INITIALIZE_METHOD = makeSymbol("SANITY-CHECKER-INITIALIZE-METHOD");
+    private static final SubLSymbol SANITY_CHECKER_CHECK_CYC_INTERPRETATIONS_METHOD = makeSymbol("SANITY-CHECKER-CHECK-CYC-INTERPRETATIONS-METHOD");
 
-    public static final SubLList $list24 = list(list(makeSymbol("CSETQ"), makeSymbol("SHOW-DEBUG-INFO"), T), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLSymbol CHECK_LISTIFIED = makeSymbol("CHECK-LISTIFIED");
 
-    public static final SubLSymbol $sym25$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
+    static private final SubLList $list54 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-ANSWER")), makeSymbol("ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES")))), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("CPUSH"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY"))), makeSymbol("LISTIFIED-RESULT"))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), makeSymbol("ITEM")))), list(RET, makeSymbol("LISTIFIED-RESULT"))));
 
-    public static final SubLSymbol SANITY_CHECKER_SHOW_DEBUG_INFO_METHOD = makeSymbol("SANITY-CHECKER-SHOW-DEBUG-INFO-METHOD");
+    static private final SubLSymbol $sym55$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
 
-    public static final SubLSymbol HIDE_DEBUG_INFO = makeSymbol("HIDE-DEBUG-INFO");
+    private static final SubLSymbol SET_PIQUANT_FOCUS = makeSymbol("SET-PIQUANT-FOCUS");
 
-    public static final SubLList $list28 = list(list(makeSymbol("CSETQ"), makeSymbol("SHOW-DEBUG-INFO"), NIL), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLSymbol SET_PIQUANT_ANSWER = makeSymbol("SET-PIQUANT-ANSWER");
 
-    public static final SubLSymbol $sym29$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
+    private static final SubLSymbol SANITY_CHECKER_CHECK_LISTIFIED_METHOD = makeSymbol("SANITY-CHECKER-CHECK-LISTIFIED-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_HIDE_DEBUG_INFO_METHOD = makeSymbol("SANITY-CHECKER-HIDE-DEBUG-INFO-METHOD");
+    static private final SubLList $list60 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK"), list(makeSymbol("PIQUANT-PREDICATE"), makeSymbol("PIQUANT-FOCUS"), makeSymbol("PIQUANT-ANSWER")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK-LISTIFIED"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")));
 
-    public static final SubLList $list31 = list(makeKeyword("PUBLIC"));
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_PIQUANT_SANITY_CHECKER_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-CLASS");
 
-    public static final SubLList $list32 = list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER"));
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_PIQUANT_SANITY_CHECKER_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-INSTANCE");
 
-    public static final SubLList $list33 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-FOCUS")), makeSymbol("FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-ANSWER")), makeSymbol("ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(makeSymbol("QUOTE"), makeSymbol("PLISTIFY")))))), list(makeSymbol("RET"), makeSymbol("RESULT"))));
+    static private final SubLList $list63 = list(makeSymbol("PIQUANT-PREDICATE"), makeSymbol("PIQUANT-FOCUS"), makeSymbol("PIQUANT-ANSWER"));
 
-    public static final SubLSymbol $sym34$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
+    static private final SubLList $list64 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-PREDICATE")), makeSymbol("PIQUANT-PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("PIQUANT-FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-ANSWER")), makeSymbol("PIQUANT-ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY")))))), list(RET, makeSymbol("RESULT"))));
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD = makeSymbol("SANITY-CHECKER-SCRATCHPAD");
+    static private final SubLSymbol $sym65$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-PIQUANT-SANITY-CHECKER-METHOD");
 
-    public static final SubLSymbol SET_PREDICATE = makeSymbol("SET-PREDICATE");
+    private static final SubLSymbol SET_PIQUANT_PREDICATE = makeSymbol("SET-PIQUANT-PREDICATE");
 
-    public static final SubLSymbol SET_FOCUS = makeSymbol("SET-FOCUS");
+    private static final SubLSymbol PIQUANT_SANITY_CHECKER_CHECK_METHOD = makeSymbol("PIQUANT-SANITY-CHECKER-CHECK-METHOD");
 
+    static private final SubLList $list68 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-PREDICATE")), makeSymbol("PIQUANT-PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("PIQUANT-FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-ANSWER")), makeSymbol("PIQUANT-ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES")))), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("CPUSH"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY"))), makeSymbol("LISTIFIED-RESULT"))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), makeSymbol("ITEM")))), list(RET, makeSymbol("LISTIFIED-RESULT"))));
 
+    static private final SubLSymbol $sym69$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-PIQUANT-SANITY-CHECKER-METHOD");
 
-    public static final SubLSymbol COMPUTE_DEGENERATE_DIAGNOSIS = makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS");
+    private static final SubLSymbol PIQUANT_SANITY_CHECKER_CHECK_LISTIFIED_METHOD = makeSymbol("PIQUANT-SANITY-CHECKER-CHECK-LISTIFIED-METHOD");
 
+    static private final SubLList $list71 = list(new SubLObject[]{ list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("FOCUS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CYC-FOCUSES"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ANSWER"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CYC-ANSWERS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CHECKERS-POOL"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEGENERATE-DIAGNOSIS"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEF-CLASS-METHOD"), makeSymbol("INITIALIZE-CHECKERS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-FOCUS"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PIQUANT-FOCUS"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PREDICATE"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PIQUANT-PREDICATE"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-ANSWER"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("DIAGNOSE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("OUTPUT-DIAGNOSES"), NIL, makeKeyword("PUBLIC")) });
 
+    private static final SubLSymbol CHECKERS_POOL = makeSymbol("CHECKERS-POOL");
 
-    public static final SubLSymbol INITIALIZE_CHECKERS = makeSymbol("INITIALIZE-CHECKERS");
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_SCRATCHPAD_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-CLASS");
 
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_SCRATCHPAD_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-INSTANCE");
 
+    static private final SubLList $list79 = list(list(makeSymbol("PIF"), makeSymbol("DEGENERATE-DIAGNOSIS"), list(RET, list(makeSymbol("LIST"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("CLET"), list(makeSymbol("DIAGNOSES")), list(makeSymbol("CDOLIST"), list(makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL")), list(makeSymbol("CPUSH"), list(makeSymbol("GET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("DIAGNOSIS"))), makeSymbol("DIAGNOSES"))), list(RET, makeSymbol("DIAGNOSES")))));
 
-    public static final SubLSymbol OUTPUT_DIAGNOSES = makeSymbol("OUTPUT-DIAGNOSES");
+    static private final SubLSymbol $sym80$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLString $str44$___S = makeString("~%~S");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_OUTPUT_DIAGNOSES_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-OUTPUT-DIAGNOSES-METHOD");
 
+    static private final SubLList $list83 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(RET, makeSymbol("SELF")));
 
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_INITIALIZE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-INITIALIZE-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_CHECK_METHOD = makeSymbol("SANITY-CHECKER-CHECK-METHOD");
+    static private final SubLList $list85 = list(makeSymbol("STRING"));
 
-    public static final SubLList $list47 = list(makeSymbol("PREDICATE"), makeSymbol("CYC-INTERPRETATIONS"), makeSymbol("CYC-ANSWERS"));
+    static private final SubLList $list86 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("STRING"), makeSymbol("STRINGP")), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("STRING")), list(makeSymbol("CDOLIST"), list(makeSymbol("DENOT"), list(makeSymbol("PS-GET-CYCLS-FOR-NP"), makeSymbol("STRING"))), list(makeSymbol("CLET"), list(list(makeSymbol("REFORMULATED"), list(makeSymbol("REFORMULATE-CYCL"), makeSymbol("DENOT")))), list(makeSymbol("PWHEN"), makeSymbol("REFORMULATED"), list(makeSymbol("CPUSHNEW"), makeSymbol("REFORMULATED"), makeSymbol("CYC-FOCUSES"), list(makeSymbol("FUNCTION"), EQUAL))))), list(RET, makeSymbol("SELF")));
 
-    public static final SubLList $list48 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("CYC-FOCUSES")), makeSymbol("CYC-INTERPRETATIONS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-CYC-ANSWERS")), makeSymbol("CYC-ANSWERS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(makeSymbol("QUOTE"), makeSymbol("PLISTIFY")))))), list(makeSymbol("RET"), makeSymbol("RESULT"))));
+    static private final SubLSymbol $sym87$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol $sym49$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_FOCUS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-FOCUS-METHOD");
 
+    static private final SubLList $list89 = list(makeSymbol("FOCUS-STRING"));
 
+    static private final SubLList $list90 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("FOCUS-STRING"), makeSymbol("STRINGP")), list(makeSymbol("CLET"), list(list(makeSymbol("DENOTATIONS"), list(makeSymbol("FWHEN"), list(makeSymbol("STARTS-WITH"), makeSymbol("FOCUS-STRING"), makeString("#$")), list(makeSymbol("LIST"), list(makeSymbol("FIND-CONSTANT"), list(makeSymbol("PRE-REMOVE"), makeSymbol("FOCUS-STRING"), makeString("#$"))))))), list(makeSymbol("PWHEN"), makeSymbol("DENOTATIONS"), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("FOCUS-STRING")), list(makeSymbol("CSETQ"), makeSymbol("CYC-FOCUSES"), makeSymbol("DENOTATIONS")), list(RET, makeSymbol("SELF")))), list(makeSymbol("CLET"), list(list(makeSymbol("GURUQA-OBJECT"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(QUOTE, makeSymbol("GURUQA-OBJECT")), list(QUOTE, makeSymbol("GURUQA-PARSE-PRECISE")), makeSymbol("FOCUS-STRING")))), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("GURUQA-OBJECT")), list(makeSymbol("PWHEN"), makeSymbol("GURUQA-OBJECT"), list(makeSymbol("CSETQ"), makeSymbol("CYC-FOCUSES"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("GURUQA-OBJECT"), list(QUOTE, makeSymbol("DENOTATIONS"))))), list(RET, makeSymbol("SELF"))));
 
-    public static final SubLSymbol SET_CYC_ANSWERS = makeSymbol("SET-CYC-ANSWERS");
+    static private final SubLSymbol $sym91$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_CHECK_CYC_INTERPRETATIONS_METHOD = makeSymbol("SANITY-CHECKER-CHECK-CYC-INTERPRETATIONS-METHOD");
+    static private final SubLString $str92$__ = makeString("#$");
 
-    public static final SubLSymbol CHECK_LISTIFIED = makeSymbol("CHECK-LISTIFIED");
+    private static final SubLSymbol GURUQA_OBJECT = makeSymbol("GURUQA-OBJECT");
 
-    public static final SubLList $list54 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PIQUANT-ANSWER")), makeSymbol("ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("OUTPUT-DIAGNOSES")))), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("CPUSH"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(makeSymbol("QUOTE"), makeSymbol("PLISTIFY"))), makeSymbol("LISTIFIED-RESULT"))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), makeSymbol("ITEM")))), list(makeSymbol("RET"), makeSymbol("LISTIFIED-RESULT"))));
+    private static final SubLSymbol GURUQA_PARSE_PRECISE = makeSymbol("GURUQA-PARSE-PRECISE");
 
-    public static final SubLSymbol $sym55$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-METHOD");
+    private static final SubLSymbol DENOTATIONS = makeSymbol("DENOTATIONS");
 
-    public static final SubLSymbol SET_PIQUANT_FOCUS = makeSymbol("SET-PIQUANT-FOCUS");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_PIQUANT_FOCUS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-FOCUS-METHOD");
 
-    public static final SubLSymbol SET_PIQUANT_ANSWER = makeSymbol("SET-PIQUANT-ANSWER");
+    static private final SubLList $list97 = list(makeSymbol("CYC-PREDICATE"));
 
-    public static final SubLSymbol SANITY_CHECKER_CHECK_LISTIFIED_METHOD = makeSymbol("SANITY-CHECKER-CHECK-LISTIFIED-METHOD");
+    static private final SubLList $list98 = list(list(makeSymbol("PIF"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CYC-PREDICATE"), reader_make_constant_shell("BinaryPredicate")), list(makeSymbol("CSETQ"), makeSymbol("PREDICATE"), makeSymbol("CYC-PREDICATE")), list(makeSymbol("WARN"), makeString("~%~S is not a binary predicate."), makeSymbol("CYC-PREDICATE"))), list(RET, makeSymbol("SELF")));
 
+    static private final SubLSymbol $sym99$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
 
-    public static final SubLList $list60 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK"), list(makeSymbol("PIQUANT-PREDICATE"), makeSymbol("PIQUANT-FOCUS"), makeSymbol("PIQUANT-ANSWER")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK-LISTIFIED"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")));
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_PIQUANT_SANITY_CHECKER_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-CLASS");
+    static private final SubLString $str101$___S_is_not_a_binary_predicate_ = makeString("~%~S is not a binary predicate.");
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_PIQUANT_SANITY_CHECKER_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-INSTANCE");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_PREDICATE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-PREDICATE-METHOD");
 
-    public static final SubLList $list63 = list(makeSymbol("PIQUANT-PREDICATE"), makeSymbol("PIQUANT-FOCUS"), makeSymbol("PIQUANT-ANSWER"));
+    static private final SubLList $list103 = list(makeSymbol("PIQUANT-PREDICATE"));
 
-    public static final SubLList $list64 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PIQUANT-PREDICATE")), makeSymbol("PIQUANT-PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("PIQUANT-FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-ANSWER")), makeSymbol("PIQUANT-ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(makeSymbol("QUOTE"), makeSymbol("PLISTIFY")))))), list(makeSymbol("RET"), makeSymbol("RESULT"))));
+    static private final SubLList $list104 = list(list(makeSymbol("CLET"), list(list(makeSymbol("CYC-PREDICATE"), list(makeSymbol("FIND-CONSTANT"), makeSymbol("PIQUANT-PREDICATE")))), list(makeSymbol("PIF"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CYC-PREDICATE"), reader_make_constant_shell("BinaryPredicate")), list(makeSymbol("CSETQ"), makeSymbol("PREDICATE"), makeSymbol("CYC-PREDICATE")), list(makeSymbol("WARN"), makeString("~%~S is not a binary predicate."), makeSymbol("PIQUANT-PREDICATE"))), list(RET, makeSymbol("SELF"))));
 
-    public static final SubLSymbol $sym65$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-PIQUANT-SANITY-CHECKER-METHOD");
+    static private final SubLSymbol $sym105$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol SET_PIQUANT_PREDICATE = makeSymbol("SET-PIQUANT-PREDICATE");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_PIQUANT_PREDICATE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-PREDICATE-METHOD");
 
-    public static final SubLSymbol PIQUANT_SANITY_CHECKER_CHECK_METHOD = makeSymbol("PIQUANT-SANITY-CHECKER-CHECK-METHOD");
+    static private final SubLList $list107 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("STRING"), makeSymbol("STRINGP")), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), makeSymbol("STRING")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(QUOTE, makeSymbol("COMPUTE-CYC-ANSWERS")), makeSymbol("STRING")), list(RET, makeSymbol("SELF")));
 
-    public static final SubLList $list68 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PIQUANT-PREDICATE")), makeSymbol("PIQUANT-PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("PIQUANT-FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("SET-ANSWER")), makeSymbol("PIQUANT-ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(makeSymbol("QUOTE"), makeSymbol("OUTPUT-DIAGNOSES")))), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("CPUSH"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(makeSymbol("QUOTE"), makeSymbol("PLISTIFY"))), makeSymbol("LISTIFIED-RESULT"))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), makeSymbol("ITEM")))), list(makeSymbol("RET"), makeSymbol("LISTIFIED-RESULT"))));
+    static private final SubLSymbol $sym108$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol $sym69$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-PIQUANT-SANITY-CHECKER-METHOD");
+    private static final SubLSymbol COMPUTE_CYC_ANSWERS = makeSymbol("COMPUTE-CYC-ANSWERS");
 
-    public static final SubLSymbol PIQUANT_SANITY_CHECKER_CHECK_LISTIFIED_METHOD = makeSymbol("PIQUANT-SANITY-CHECKER-CHECK-LISTIFIED-METHOD");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_ANSWER_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-ANSWER-METHOD");
 
-    public static final SubLList $list71 = list(new SubLObject[]{ list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("FOCUS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CYC-FOCUSES"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ANSWER"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CYC-ANSWERS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CHECKERS-POOL"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEGENERATE-DIAGNOSIS"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEF-CLASS-METHOD"), makeSymbol("INITIALIZE-CHECKERS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-FOCUS"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PIQUANT-FOCUS"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PREDICATE"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PIQUANT-PREDICATE"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-ANSWER"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("DIAGNOSE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("OUTPUT-DIAGNOSES"), NIL, makeKeyword("PUBLIC")) });
+    static private final SubLList $list111 = list(makeSymbol("CYC-CANDIDATE-ANSWERS"));
 
-    public static final SubLSymbol CHECKERS_POOL = makeSymbol("CHECKERS-POOL");
+    static private final SubLList $list112 = list(list(makeSymbol("CDOLIST"), list(makeSymbol("ANSWER"), makeSymbol("CYC-CANDIDATE-ANSWERS")), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("ANSWER")), list(makeSymbol("CPUSH"), makeSymbol("ANSWER"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("ANSWER")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("Unity"), makeSymbol("ANSWER")), makeSymbol("CYC-ANSWERS"))))), list(RET, makeSymbol("SELF")));
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_SCRATCHPAD_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-CLASS");
+    static private final SubLSymbol $sym113$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
 
 
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_CYC_ANSWERS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-CYC-ANSWERS-METHOD");
 
+    static private final SubLList $list116 = list(makeKeyword("PRIVATE"));
 
+    static private final SubLList $list117 = list(list(makeSymbol("CLET"), list(list(makeSymbol("ALL-DENOTS"), list(makeSymbol("PS-GET-CYCLS-FOR-NP"), makeSymbol("STRING"))), makeSymbol("GOOD-DENOTS")), list(makeSymbol("CDOLIST"), list(makeSymbol("DENOT"), makeSymbol("ALL-DENOTS")), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("DENOT")), list(makeSymbol("CLET"), list(list(makeSymbol("REFORMULATED"), list(makeSymbol("REFORMULATE-CYCL"), makeSymbol("DENOT"))), makeSymbol("WFT")), list(makeSymbol("WITH-ALL-MTS"), list(makeSymbol("CSETQ"), makeSymbol("WFT"), list(makeSymbol("EL-WFT?"), makeSymbol("DENOT")))), list(makeSymbol("PWHEN"), makeSymbol("WFT"), list(makeSymbol("CPUSHNEW"), makeSymbol("REFORMULATED"), makeSymbol("GOOD-DENOTS"), list(makeSymbol("FUNCTION"), EQUAL)))), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("DENOT")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("Unity"), makeSymbol("DENOT")), makeSymbol("GOOD-DENOTS"))))), list(makeSymbol("CSETQ"), makeSymbol("CYC-ANSWERS"), makeSymbol("GOOD-DENOTS")), list(RET, makeSymbol("SELF"))));
 
+    static private final SubLSymbol $sym118$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
 
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_SCRATCHPAD_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-INSTANCE");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_COMPUTE_CYC_ANSWERS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-COMPUTE-CYC-ANSWERS-METHOD");
 
-    public static final SubLList $list79 = list(list(makeSymbol("PIF"), makeSymbol("DEGENERATE-DIAGNOSIS"), list(makeSymbol("RET"), list(makeSymbol("LIST"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("CLET"), list(makeSymbol("DIAGNOSES")), list(makeSymbol("CDOLIST"), list(makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL")), list(makeSymbol("CPUSH"), list(makeSymbol("GET-SLOT"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSIS"))), makeSymbol("DIAGNOSES"))), list(makeSymbol("RET"), makeSymbol("DIAGNOSES")))));
+    static private final SubLList $list122 = list(list(makeSymbol("CLET"), list(list(makeSymbol("DIAGNOSIS"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-DIAGNOSIS")))), list(makeSymbol("BASIS"), ZERO_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("PREDICATE")), list(makeSymbol("CINC"), makeSymbol("BASIS"), makeInteger(100))), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("CYC-FOCUSES")), list(makeSymbol("CINC"), makeSymbol("BASIS"), TEN_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("CINC"), makeSymbol("BASIS"), ONE_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol(">"), makeSymbol("BASIS"), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGNOSIS"), list(QUOTE, makeSymbol("FAILURE-CODE")), makeSymbol("BASIS")), list(makeSymbol("CSETQ"), makeSymbol("DEGENERATE-DIAGNOSIS"), makeSymbol("DIAGNOSIS"))), list(RET, makeSymbol("SELF"))));
 
-    public static final SubLSymbol $sym80$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    static private final SubLSymbol $sym123$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_DIAGNOSIS = makeSymbol("SANITY-CHECKER-DIAGNOSIS");
 
+    private static final SubLSymbol FAILURE_CODE = makeSymbol("FAILURE-CODE");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_OUTPUT_DIAGNOSES_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-OUTPUT-DIAGNOSES-METHOD");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_COMPUTE_DEGENERATE_DIAGNOSIS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-COMPUTE-DEGENERATE-DIAGNOSIS-METHOD");
 
-    public static final SubLList $list83 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("RET"), makeSymbol("SELF")));
+    static private final SubLList $list128 = list(makeSymbol("FUDGE-FACTOR"));
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_INITIALIZE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-INITIALIZE-METHOD");
+    static private final SubLList $list129 = list(list(makeSymbol("CLET"), list(list(makeSymbol("PRED-ARG1-SET"), list(makeSymbol("PRED-VALUES-IN-ANY-MT"), makeSymbol("PREDICATE"), reader_make_constant_shell("arg1Isa"), ONE_INTEGER, TWO_INTEGER)), list(makeSymbol("PRED-ARG2-SET"), list(makeSymbol("PRED-VALUES-IN-ANY-MT"), makeSymbol("PREDICATE"), reader_make_constant_shell("arg2Isa"), ONE_INTEGER, TWO_INTEGER)), makeSymbol("GOOD-ARG1S"), makeSymbol("GOOD-ARG2S")), list(makeSymbol("CDOLIST"), list(makeSymbol("ARG"), makeSymbol("CYC-FOCUSES")), list(makeSymbol("CLET"), list(makeSymbol("FAIL")), list(makeSymbol("CSOME"), list(makeSymbol("ARG1"), makeSymbol("PRED-ARG1-SET"), makeSymbol("FAIL")), list(makeSymbol("PUNLESS"), list(makeSymbol("COR"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG1")), list(makeSymbol("GENL-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG1"))), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), T))), list(makeSymbol("PUNLESS"), makeSymbol("FAIL"), list(makeSymbol("CPUSHNEW"), makeSymbol("ARG"), makeSymbol("GOOD-ARG1S"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("CDOLIST"), list(makeSymbol("ARG"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("CLET"), list(makeSymbol("FAIL"), makeSymbol("CAST")), list(makeSymbol("CSOME"), list(makeSymbol("ARG2"), makeSymbol("PRED-ARG2-SET"), makeSymbol("FAIL")), list(makeSymbol("CSETQ"), makeSymbol("CAST"), list(makeSymbol("HEURISTICALLY-CAST-UNITY"), makeSymbol("PREDICATE"), makeSymbol("ARG"))), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("CAST")), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), list(makeSymbol("CNOT"), list(makeSymbol("COR"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CAST"), makeSymbol("ARG2")), list(makeSymbol("GENL-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG2"))))), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), list(makeSymbol("CNOT"), list(makeSymbol("CAND"), list(makeSymbol("NUMBERP"), makeSymbol("CAST")), list(makeSymbol("PLUSP"), makeSymbol("CAST"))))))), list(makeSymbol("PUNLESS"), makeSymbol("FAIL"), list(makeSymbol("CPUSHNEW"), makeSymbol("CAST"), makeSymbol("GOOD-ARG2S"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("CDOLIST"), list(makeSymbol("GOOD-ARG1"), makeSymbol("GOOD-ARG1S")), list(makeSymbol("CDOLIST"), list(makeSymbol("GOOD-ARG2"), makeSymbol("GOOD-ARG2S")), list(makeSymbol("CLET"), list(list(makeSymbol("CHECKER"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-CHECKER"))))), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("FUDGE-FACTOR")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("ARG1")), makeSymbol("GOOD-ARG1")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("ARG2")), makeSymbol("GOOD-ARG2")), list(makeSymbol("CPUSH"), makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL"))))), list(makeSymbol("PUNLESS"), makeSymbol("CHECKERS-POOL"), list(makeSymbol("CLET"), list(list(makeSymbol("DIAGNOSIS"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-DIAGNOSIS"))))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGNOSIS"), list(QUOTE, makeSymbol("FAILURE-CODE")), makeInteger(1000)), list(makeSymbol("CSETQ"), makeSymbol("DEGENERATE-DIAGNOSIS"), makeSymbol("DIAGNOSIS")))), list(RET, makeSymbol("SELF"))));
 
-    public static final SubLList $list85 = list(makeSymbol("STRING"));
+    static private final SubLSymbol $sym130$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLList $list86 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("STRING"), makeSymbol("STRINGP")), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("STRING")), list(makeSymbol("CDOLIST"), list(makeSymbol("DENOT"), list(makeSymbol("PS-GET-CYCLS-FOR-NP"), makeSymbol("STRING"))), list(makeSymbol("CLET"), list(list(makeSymbol("REFORMULATED"), list(makeSymbol("REFORMULATE-CYCL"), makeSymbol("DENOT")))), list(makeSymbol("PWHEN"), makeSymbol("REFORMULATED"), list(makeSymbol("CPUSHNEW"), makeSymbol("REFORMULATED"), makeSymbol("CYC-FOCUSES"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("RET"), makeSymbol("SELF")));
 
-    public static final SubLSymbol $sym87$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_FOCUS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-FOCUS-METHOD");
 
-    public static final SubLList $list89 = list(makeSymbol("FOCUS-STRING"));
 
-    public static final SubLList $list90 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("FOCUS-STRING"), makeSymbol("STRINGP")), list(makeSymbol("CLET"), list(list(makeSymbol("DENOTATIONS"), list(makeSymbol("FWHEN"), list(makeSymbol("STARTS-WITH"), makeSymbol("FOCUS-STRING"), makeString("#$")), list(makeSymbol("LIST"), list(makeSymbol("FIND-CONSTANT"), list(makeSymbol("PRE-REMOVE"), makeSymbol("FOCUS-STRING"), makeString("#$"))))))), list(makeSymbol("PWHEN"), makeSymbol("DENOTATIONS"), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("FOCUS-STRING")), list(makeSymbol("CSETQ"), makeSymbol("CYC-FOCUSES"), makeSymbol("DENOTATIONS")), list(makeSymbol("RET"), makeSymbol("SELF")))), list(makeSymbol("CLET"), list(list(makeSymbol("GURUQA-OBJECT"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(makeSymbol("QUOTE"), makeSymbol("GURUQA-OBJECT")), list(makeSymbol("QUOTE"), makeSymbol("GURUQA-PARSE-PRECISE")), makeSymbol("FOCUS-STRING")))), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("GURUQA-OBJECT")), list(makeSymbol("PWHEN"), makeSymbol("GURUQA-OBJECT"), list(makeSymbol("CSETQ"), makeSymbol("CYC-FOCUSES"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("GURUQA-OBJECT"), list(makeSymbol("QUOTE"), makeSymbol("DENOTATIONS"))))), list(makeSymbol("RET"), makeSymbol("SELF"))));
+    private static final SubLSymbol SCALAR_CHECKER = makeSymbol("SCALAR-CHECKER");
 
-    public static final SubLSymbol $sym91$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_INITIALIZE_CHECKERS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-INITIALIZE-CHECKERS-METHOD");
 
-    public static final SubLString $str92$__ = makeString("#$");
+    static private final SubLList $list138 = list(list(makeSymbol("CDOLIST"), list(makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("COMPUTE-RANGE"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(RET, makeSymbol("SELF")));
 
-    public static final SubLSymbol GURUQA_OBJECT = makeSymbol("GURUQA-OBJECT");
+    static private final SubLSymbol $sym139$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol GURUQA_PARSE_PRECISE = makeSymbol("GURUQA-PARSE-PRECISE");
+    private static final SubLSymbol COMPUTE_RANGE = makeSymbol("COMPUTE-RANGE");
 
-    public static final SubLSymbol DENOTATIONS = makeSymbol("DENOTATIONS");
+    private static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_DIAGNOSE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-DIAGNOSE-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_PIQUANT_FOCUS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-FOCUS-METHOD");
+    static private final SubLList $list143 = list(new SubLObject[]{ list(makeSymbol("FUDGE-FACTOR"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("DIAGNOSIS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("BACKCHAIN"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG1"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG2"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG2RANGE"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("COMPUTE-RANGE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")) });
 
-    public static final SubLList $list97 = list(makeSymbol("CYC-PREDICATE"));
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_CHECKER_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-CLASS");
 
-    public static final SubLList $list98 = list(list(makeSymbol("PIF"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CYC-PREDICATE"), reader_make_constant_shell(makeString("BinaryPredicate"))), list(makeSymbol("CSETQ"), makeSymbol("PREDICATE"), makeSymbol("CYC-PREDICATE")), list(makeSymbol("WARN"), makeString("~%~S is not a binary predicate."), makeSymbol("CYC-PREDICATE"))), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_CHECKER_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-INSTANCE");
 
-    public static final SubLSymbol $sym99$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    static private final SubLList $list148 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("BACKCHAIN"), makeSymbol("*SCALAR-CHECKER-BACKCHAIN*")), list(RET, makeSymbol("SELF")));
 
-    private static final SubLObject $$BinaryPredicate = reader_make_constant_shell(makeString("BinaryPredicate"));
+    static private final SubLSymbol $sym149$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-CHECKER-METHOD");
 
-    public static final SubLString $str101$___S_is_not_a_binary_predicate_ = makeString("~%~S is not a binary predicate.");
+    private static final SubLSymbol SCALAR_CHECKER_INITIALIZE_METHOD = makeSymbol("SCALAR-CHECKER-INITIALIZE-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_PREDICATE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-PREDICATE-METHOD");
+    static private final SubLList $list151 = list(list(makeSymbol("CLET"), list(list(makeSymbol("ARG"), list(makeSymbol("TYPESHIFT-ARGUMENT"), makeSymbol("ARG1"))), list(makeSymbol("QUERY"), list(makeSymbol("BQ-LIST*"), makeSymbol("PREDICATE"), makeSymbol("ARG"), list(QUOTE, list(makeSymbol("?RANGE"))))), list(makeSymbol("ANSWERS"), list(makeSymbol("ASK-TEMPLATE"), list(QUOTE, makeSymbol("?RANGE")), makeSymbol("QUERY"), reader_make_constant_shell("EverythingPSC"), makeSymbol("BACKCHAIN"))), list(makeSymbol("TO-MERGE"), makeSymbol("ANSWERS")), makeSymbol("RANGE")), list(makeSymbol("CSOME"), list(makeSymbol("ANSWER"), makeSymbol("ANSWERS"), makeSymbol("RANGE")), list(makeSymbol("CLET"), list(list(makeSymbol("CANDIDATE-RANGE"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("CANDIDATE-RANGE"), list(QUOTE, makeSymbol("FILL")), makeSymbol("ANSWER")), list(makeSymbol("CSETQ"), makeSymbol("TO-MERGE"), list(makeSymbol("CDR"), makeSymbol("TO-MERGE"))), list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("CANDIDATE-RANGE"), list(QUOTE, makeSymbol("EMPTY-P"))), list(makeSymbol("CSETQ"), makeSymbol("RANGE"), makeSymbol("CANDIDATE-RANGE"))))), list(makeSymbol("CDOLIST"), list(makeSymbol("ANSWER"), makeSymbol("TO-MERGE")), list(makeSymbol("PWHEN"), makeSymbol("RANGE"), list(makeSymbol("CLET"), list(list(makeSymbol("NEW-RANGE"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("NEW-RANGE"), list(QUOTE, makeSymbol("FILL")), makeSymbol("ANSWER")), list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("NEW-RANGE"), list(QUOTE, makeSymbol("EMPTY-P"))), list(makeSymbol("CSETQ"), makeSymbol("RANGE"), list(makeSymbol("FIM"), makeSymbol("RANGE"), list(QUOTE, makeSymbol("MERGE")), makeSymbol("NEW-RANGE"))))))), list(makeSymbol("PWHEN"), makeSymbol("RANGE"), list(makeSymbol("FIM"), makeSymbol("RANGE"), list(QUOTE, makeSymbol("FUDGE")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("CSETQ"), makeSymbol("ARG2RANGE"), makeSymbol("RANGE"))), list(RET, makeSymbol("SELF"))));
 
-    public static final SubLList $list103 = list(makeSymbol("PIQUANT-PREDICATE"));
+    static private final SubLSymbol $sym152$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-CHECKER-METHOD");
 
-    public static final SubLList $list104 = list(list(makeSymbol("CLET"), list(list(makeSymbol("CYC-PREDICATE"), list(makeSymbol("FIND-CONSTANT"), makeSymbol("PIQUANT-PREDICATE")))), list(makeSymbol("PIF"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CYC-PREDICATE"), reader_make_constant_shell(makeString("BinaryPredicate"))), list(makeSymbol("CSETQ"), makeSymbol("PREDICATE"), makeSymbol("CYC-PREDICATE")), list(makeSymbol("WARN"), makeString("~%~S is not a binary predicate."), makeSymbol("PIQUANT-PREDICATE"))), list(makeSymbol("RET"), makeSymbol("SELF"))));
+    static private final SubLList $list153 = list(makeSymbol("?RANGE"));
 
-    public static final SubLSymbol $sym105$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    static private final SubLSymbol $sym154$_RANGE = makeSymbol("?RANGE");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_PIQUANT_PREDICATE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-PREDICATE-METHOD");
+    private static final SubLSymbol SCALAR_RANGE = makeSymbol("SCALAR-RANGE");
 
-    public static final SubLList $list107 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("STRING"), makeSymbol("STRINGP")), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), makeSymbol("STRING")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-CYC-ANSWERS")), makeSymbol("STRING")), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLSymbol MERGE = makeSymbol("MERGE");
 
-    public static final SubLSymbol $sym108$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    private static final SubLSymbol FUDGE = makeSymbol("FUDGE");
 
-    public static final SubLSymbol COMPUTE_CYC_ANSWERS = makeSymbol("COMPUTE-CYC-ANSWERS");
+    private static final SubLSymbol SCALAR_CHECKER_COMPUTE_RANGE_METHOD = makeSymbol("SCALAR-CHECKER-COMPUTE-RANGE-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_ANSWER_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-ANSWER-METHOD");
 
-    public static final SubLList $list111 = list(makeSymbol("CYC-CANDIDATE-ANSWERS"));
 
-    public static final SubLList $list112 = list(list(makeSymbol("CDOLIST"), list(makeSymbol("ANSWER"), makeSymbol("CYC-CANDIDATE-ANSWERS")), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("ANSWER")), list(makeSymbol("CPUSH"), makeSymbol("ANSWER"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("ANSWER")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("Unity")), makeSymbol("ANSWER")), makeSymbol("CYC-ANSWERS"))))), list(makeSymbol("RET"), makeSymbol("SELF")));
 
-    public static final SubLSymbol $sym113$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    private static final SubLObject $$Unity = reader_make_constant_shell(makeString("Unity"));
+    static private final SubLList $list163 = list(list(makeSymbol("CLET"), list(list(makeSymbol("DIAGN"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-DIAGNOSIS")))), list(makeSymbol("CAST"), list(makeSymbol("HEURISTICALLY-CAST-UNITY"), makeSymbol("PREDICATE"), makeSymbol("ARG2"))), list(makeSymbol("ARG2MIN"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(QUOTE, makeSymbol("GET-MIN"))))), list(makeSymbol("ARG2MAX"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(QUOTE, makeSymbol("GET-MAX"))))), list(makeSymbol("RANGE"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(QUOTE, makeSymbol("LISTIFY"))))), makeSymbol("CYCL-EXPLANATION")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("PROPOSED-ARG")), makeSymbol("ARG1")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("PROPOSED-VALUE")), makeSymbol("ARG2")), list(makeSymbol("PCOND"), list(list(makeSymbol("CAND"), makeSymbol("ARG2MIN"), makeSymbol("ARG2MAX")), list(makeSymbol("CLET"), list(list(makeSymbol("NEGATIVE-TEST-MIN"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("CAST"), makeSymbol("ARG2MIN"))), list(makeSymbol("NEGATIVE-TEST-MAX"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("greaterThan"), makeSymbol("CAST"), makeSymbol("ARG2MAX"))), list(makeSymbol("POSITIVE-TEST"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("quantitySubsumes"), makeSymbol("RANGE"), makeSymbol("CAST")))), list(makeSymbol("PCOND"), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("NEGATIVE-TEST-MIN"), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("NEGATIVE-TEST-MIN")))), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("NEGATIVE-TEST-MAX"), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("NEGATIVE-TEST-MAX")))), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("POSITIVE-TEST"), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ONE_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("POSITIVE-TEST")))))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("JUSTIFICATION")), list(makeSymbol("GENERATE-PHRASE"), makeSymbol("CYCL-EXPLANATION")))), list(T, list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("JUSTIFICATION")), makeString("No information available")))), list(makeSymbol("CSETQ"), makeSymbol("DIAGNOSIS"), makeSymbol("DIAGN")), list(RET, makeSymbol("SELF"))));
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_SET_CYC_ANSWERS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-SET-CYC-ANSWERS-METHOD");
+    static private final SubLSymbol $sym164$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-CHECKER-METHOD");
 
-    public static final SubLList $list116 = list(makeKeyword("PRIVATE"));
+    private static final SubLSymbol GET_MIN = makeSymbol("GET-MIN");
 
-    public static final SubLList $list117 = list(list(makeSymbol("CLET"), list(list(makeSymbol("ALL-DENOTS"), list(makeSymbol("PS-GET-CYCLS-FOR-NP"), makeSymbol("STRING"))), makeSymbol("GOOD-DENOTS")), list(makeSymbol("CDOLIST"), list(makeSymbol("DENOT"), makeSymbol("ALL-DENOTS")), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("DENOT")), list(makeSymbol("CLET"), list(list(makeSymbol("REFORMULATED"), list(makeSymbol("REFORMULATE-CYCL"), makeSymbol("DENOT"))), makeSymbol("WFT")), list(makeSymbol("WITH-ALL-MTS"), list(makeSymbol("CSETQ"), makeSymbol("WFT"), list(makeSymbol("EL-WFT?"), makeSymbol("DENOT")))), list(makeSymbol("PWHEN"), makeSymbol("WFT"), list(makeSymbol("CPUSHNEW"), makeSymbol("REFORMULATED"), makeSymbol("GOOD-DENOTS"), list(makeSymbol("FUNCTION"), EQUAL)))), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("DENOT")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("Unity")), makeSymbol("DENOT")), makeSymbol("GOOD-DENOTS"))))), list(makeSymbol("CSETQ"), makeSymbol("CYC-ANSWERS"), makeSymbol("GOOD-DENOTS")), list(makeSymbol("RET"), makeSymbol("SELF"))));
+    private static final SubLSymbol GET_MAX = makeSymbol("GET-MAX");
 
-    public static final SubLSymbol $sym118$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    private static final SubLSymbol PROPOSED_ARG = makeSymbol("PROPOSED-ARG");
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_COMPUTE_CYC_ANSWERS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-COMPUTE-CYC-ANSWERS-METHOD");
 
-    public static final SubLList $list122 = list(list(makeSymbol("CLET"), list(list(makeSymbol("DIAGNOSIS"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-DIAGNOSIS")))), list(makeSymbol("BASIS"), ZERO_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("PREDICATE")), list(makeSymbol("CINC"), makeSymbol("BASIS"), makeInteger(100))), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("CYC-FOCUSES")), list(makeSymbol("CINC"), makeSymbol("BASIS"), TEN_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("CINC"), makeSymbol("BASIS"), ONE_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol(">"), makeSymbol("BASIS"), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGNOSIS"), list(makeSymbol("QUOTE"), makeSymbol("FAILURE-CODE")), makeSymbol("BASIS")), list(makeSymbol("CSETQ"), makeSymbol("DEGENERATE-DIAGNOSIS"), makeSymbol("DIAGNOSIS"))), list(makeSymbol("RET"), makeSymbol("SELF"))));
 
-    public static final SubLSymbol $sym123$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_DIAGNOSIS = makeSymbol("SANITY-CHECKER-DIAGNOSIS");
+    private static final SubLSymbol COMPLETE = makeSymbol("COMPLETE");
 
+    private static final SubLSymbol ANSWER_KNOWN = makeSymbol("ANSWER-KNOWN");
 
 
-    public static final SubLSymbol FAILURE_CODE = makeSymbol("FAILURE-CODE");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_COMPUTE_DEGENERATE_DIAGNOSIS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-COMPUTE-DEGENERATE-DIAGNOSIS-METHOD");
+    static private final SubLString $$$No_information_available = makeString("No information available");
 
-    public static final SubLList $list128 = list(makeSymbol("FUDGE-FACTOR"));
+    private static final SubLSymbol SCALAR_CHECKER_DIAGNOSE_METHOD = makeSymbol("SCALAR-CHECKER-DIAGNOSE-METHOD");
 
-    public static final SubLList $list129 = list(list(makeSymbol("CLET"), list(list(makeSymbol("PRED-ARG1-SET"), list(makeSymbol("PRED-VALUES-IN-ANY-MT"), makeSymbol("PREDICATE"), reader_make_constant_shell(makeString("arg1Isa")), ONE_INTEGER, TWO_INTEGER)), list(makeSymbol("PRED-ARG2-SET"), list(makeSymbol("PRED-VALUES-IN-ANY-MT"), makeSymbol("PREDICATE"), reader_make_constant_shell(makeString("arg2Isa")), ONE_INTEGER, TWO_INTEGER)), makeSymbol("GOOD-ARG1S"), makeSymbol("GOOD-ARG2S")), list(makeSymbol("CDOLIST"), list(makeSymbol("ARG"), makeSymbol("CYC-FOCUSES")), list(makeSymbol("CLET"), list(makeSymbol("FAIL")), list(makeSymbol("CSOME"), list(makeSymbol("ARG1"), makeSymbol("PRED-ARG1-SET"), makeSymbol("FAIL")), list(makeSymbol("PUNLESS"), list(makeSymbol("COR"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG1")), list(makeSymbol("GENL-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG1"))), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), T))), list(makeSymbol("PUNLESS"), makeSymbol("FAIL"), list(makeSymbol("CPUSHNEW"), makeSymbol("ARG"), makeSymbol("GOOD-ARG1S"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("CDOLIST"), list(makeSymbol("ARG"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("CLET"), list(makeSymbol("FAIL"), makeSymbol("CAST")), list(makeSymbol("CSOME"), list(makeSymbol("ARG2"), makeSymbol("PRED-ARG2-SET"), makeSymbol("FAIL")), list(makeSymbol("CSETQ"), makeSymbol("CAST"), list(makeSymbol("HEURISTICALLY-CAST-UNITY"), makeSymbol("PREDICATE"), makeSymbol("ARG"))), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("CAST")), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), list(makeSymbol("CNOT"), list(makeSymbol("COR"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CAST"), makeSymbol("ARG2")), list(makeSymbol("GENL-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG2"))))), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), list(makeSymbol("CNOT"), list(makeSymbol("CAND"), list(makeSymbol("NUMBERP"), makeSymbol("CAST")), list(makeSymbol("PLUSP"), makeSymbol("CAST"))))))), list(makeSymbol("PUNLESS"), makeSymbol("FAIL"), list(makeSymbol("CPUSHNEW"), makeSymbol("CAST"), makeSymbol("GOOD-ARG2S"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("CDOLIST"), list(makeSymbol("GOOD-ARG1"), makeSymbol("GOOD-ARG1S")), list(makeSymbol("CDOLIST"), list(makeSymbol("GOOD-ARG2"), makeSymbol("GOOD-ARG2S")), list(makeSymbol("CLET"), list(list(makeSymbol("CHECKER"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SCALAR-CHECKER"))))), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("FUDGE-FACTOR")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("ARG1")), makeSymbol("GOOD-ARG1")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("ARG2")), makeSymbol("GOOD-ARG2")), list(makeSymbol("CPUSH"), makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL"))))), list(makeSymbol("PUNLESS"), makeSymbol("CHECKERS-POOL"), list(makeSymbol("CLET"), list(list(makeSymbol("DIAGNOSIS"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-DIAGNOSIS"))))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGNOSIS"), list(makeSymbol("QUOTE"), makeSymbol("FAILURE-CODE")), makeInteger(1000)), list(makeSymbol("CSETQ"), makeSymbol("DEGENERATE-DIAGNOSIS"), makeSymbol("DIAGNOSIS")))), list(makeSymbol("RET"), makeSymbol("SELF"))));
+    static private final SubLList $list178 = list(new SubLObject[]{ list(makeSymbol("FAILURE-CODE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("COMPLETE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("ANSWER-KNOWN"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("ANSWER"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("JUSTIFICATION"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PROPOSED-VALUE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PROPOSED-ARG"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("BOOLEAN"), NIL, makeKeyword("PROTECTED")) });
 
-    public static final SubLSymbol $sym130$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_DIAGNOSIS_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-CLASS");
 
-    private static final SubLObject $$arg1Isa = reader_make_constant_shell(makeString("arg1Isa"));
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_DIAGNOSIS_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-INSTANCE");
 
-    private static final SubLObject $$arg2Isa = reader_make_constant_shell(makeString("arg2Isa"));
+    static private final SubLList $list181 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("FAILURE-CODE"), ZERO_INTEGER), list(RET, makeSymbol("SELF")));
 
-    public static final SubLSymbol SCALAR_CHECKER = makeSymbol("SCALAR-CHECKER");
+    static private final SubLSymbol $sym182$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-DIAGNOSIS-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_DIAGNOSIS_INITIALIZE_METHOD = makeSymbol("SANITY-CHECKER-DIAGNOSIS-INITIALIZE-METHOD");
 
+    static private final SubLList $list184 = list(makeString("A yes-or-no answer as to whether the diagnosis is favorable (T) or\n   unfavorable (NIL)."), list(makeSymbol("PUNLESS"), list(makeSymbol("INTEGERP"), makeSymbol("ANSWER")), list(RET, NIL)), list(RET, list(makeSymbol(">"), makeSymbol("ANSWER"), ZERO_INTEGER)));
 
+    static private final SubLSymbol $sym185$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-DIAGNOSIS-METHOD");
 
+    private static final SubLSymbol SANITY_CHECKER_DIAGNOSIS_BOOLEAN_METHOD = makeSymbol("SANITY-CHECKER-DIAGNOSIS-BOOLEAN-METHOD");
 
+    static private final SubLList $list187 = list(new SubLObject[]{ list(makeSymbol("UNIT"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("MIN"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("MAX"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("POINT-INFO"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FILL"), list(makeSymbol("VALUE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("EMPTY-P"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-UNIT"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MIN"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MAX"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MIN-VALUE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MAX-VALUE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("LISTIFY"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE-LOOSE"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE-STRICT"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FUDGE"), list(makeSymbol("FUDGE-FACTOR")), makeKeyword("PUBLIC")) });
 
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_RANGE_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-CLASS");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_INITIALIZE_CHECKERS_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-INITIALIZE-CHECKERS-METHOD");
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_RANGE_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-INSTANCE");
 
-    public static final SubLList $list138 = list(list(makeSymbol("CDOLIST"), list(makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("COMPUTE-RANGE"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CHECKER"), list(makeSymbol("QUOTE"), makeSymbol("DIAGNOSE")))), list(makeSymbol("RET"), makeSymbol("SELF")));
+    static private final SubLList $list195 = list(makeSymbol("STREAM"), makeSymbol("DEPTH"));
 
-    public static final SubLSymbol $sym139$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-SCRATCHPAD-METHOD");
+    static private final SubLList $list196 = list(makeString("Prints SCALAR-RANGE to STREAM, ignoring depth"), list(makeSymbol("IGNORE"), makeSymbol("DEPTH")), list(makeSymbol("PRINC"), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN"), makeSymbol("MAX"), makeSymbol("POINT-INFO")), makeSymbol("STREAM")), list(RET, makeSymbol("SELF")));
 
-    public static final SubLSymbol COMPUTE_RANGE = makeSymbol("COMPUTE-RANGE");
+    static private final SubLSymbol $sym197$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_SCRATCHPAD_DIAGNOSE_METHOD = makeSymbol("SANITY-CHECKER-SCRATCHPAD-DIAGNOSE-METHOD");
+    private static final SubLSymbol SCALAR_RANGE_PRINT_METHOD = makeSymbol("SCALAR-RANGE-PRINT-METHOD");
 
+    static private final SubLList $list199 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("UNIT"), reader_make_constant_shell("Unity")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("MAX"), ZERO_INTEGER), list(RET, makeSymbol("SELF")));
 
+    static private final SubLSymbol $sym200$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLList $list143 = list(new SubLObject[]{ list(makeSymbol("FUDGE-FACTOR"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("DIAGNOSIS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("BACKCHAIN"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG1"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG2"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG2RANGE"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("COMPUTE-RANGE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")) });
+    private static final SubLSymbol SCALAR_RANGE_INITIALIZE_METHOD = makeSymbol("SCALAR-RANGE-INITIALIZE-METHOD");
 
+    static private final SubLList $list202 = list(list(RET, list(makeSymbol("CAND"), list(EQL, makeSymbol("UNIT"), reader_make_constant_shell("Unity")), list(makeSymbol("="), makeSymbol("MIN"), ZERO_INTEGER), list(makeSymbol("="), makeSymbol("MAX"), ZERO_INTEGER))));
 
+    static private final SubLSymbol $sym203$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_CHECKER_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-CLASS");
+    private static final SubLSymbol SCALAR_RANGE_EMPTY_P_METHOD = makeSymbol("SCALAR-RANGE-EMPTY-P-METHOD");
 
+    static private final SubLList $list205 = list(makeSymbol("VALUE"));
 
+    static private final SubLList $list206 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("isa"), makeSymbol("VALUE"), list(QUOTE, list(reader_make_constant_shell("NonNegativeScalarInterval")))), reader_make_constant_shell("BaseKB")), list(RET, makeSymbol("SELF"))), list(makeSymbol("PCOND"), list(list(makeSymbol("NUMBERP"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("MAX"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("POINT-INFO"), T)), list(list(makeSymbol("CONSP"), makeSymbol("VALUE")), list(makeSymbol("CLET"), list(list(makeSymbol("VALUE-UNIT"), list(makeSymbol("FIRST"), makeSymbol("VALUE"))), list(makeSymbol("VALUE-MIN"), list(makeSymbol("SECOND"), makeSymbol("VALUE"))), list(makeSymbol("VALUE-MAX"), list(makeSymbol("THIRD"), makeSymbol("VALUE"))), makeSymbol("NEW-UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("PWHEN"), list(makeSymbol("ISA?"), makeSymbol("VALUE-UNIT"), reader_make_constant_shell("UnitOfMeasure")), list(makeSymbol("CSETQ"), makeSymbol("NEW-UNIT"), makeSymbol("VALUE-UNIT"))), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("VALUE-MIN")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MIN"), makeSymbol("VALUE-MIN"))), list(makeSymbol("PIF"), list(makeSymbol("NUMBERP"), makeSymbol("VALUE-MAX")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MAX"), makeSymbol("VALUE-MAX")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MAX"), makeSymbol("NEW-MIN"))), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("NEW-UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("CSETQ"), makeSymbol("UNIT"), makeSymbol("NEW-UNIT")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), makeSymbol("NEW-MIN")), list(makeSymbol("CSETQ"), makeSymbol("MAX"), makeSymbol("NEW-MAX"))), list(makeSymbol("PWHEN"), list(EQ, makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("CSETQ"), makeSymbol("POINT-INFO"), T))))), list(RET, makeSymbol("SELF")));
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_CHECKER_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-INSTANCE");
+    static private final SubLSymbol $sym207$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLList $list148 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("BACKCHAIN"), makeSymbol("*SCALAR-CHECKER-BACKCHAIN*")), list(makeSymbol("RET"), makeSymbol("SELF")));
 
-    public static final SubLSymbol $sym149$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-CHECKER-METHOD");
 
-    public static final SubLSymbol SCALAR_CHECKER_INITIALIZE_METHOD = makeSymbol("SCALAR-CHECKER-INITIALIZE-METHOD");
+    static private final SubLList $list209 = list(reader_make_constant_shell("NonNegativeScalarInterval"));
 
-    public static final SubLList $list151 = list(list(makeSymbol("CLET"), list(list(makeSymbol("ARG"), list(makeSymbol("TYPESHIFT-ARGUMENT"), makeSymbol("ARG1"))), list(makeSymbol("QUERY"), list(makeSymbol("BQ-LIST*"), makeSymbol("PREDICATE"), makeSymbol("ARG"), list(makeSymbol("QUOTE"), list(makeSymbol("?RANGE"))))), list(makeSymbol("ANSWERS"), list(makeSymbol("ASK-TEMPLATE"), list(makeSymbol("QUOTE"), makeSymbol("?RANGE")), makeSymbol("QUERY"), reader_make_constant_shell(makeString("EverythingPSC")), makeSymbol("BACKCHAIN"))), list(makeSymbol("TO-MERGE"), makeSymbol("ANSWERS")), makeSymbol("RANGE")), list(makeSymbol("CSOME"), list(makeSymbol("ANSWER"), makeSymbol("ANSWERS"), makeSymbol("RANGE")), list(makeSymbol("CLET"), list(list(makeSymbol("CANDIDATE-RANGE"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("CANDIDATE-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("FILL")), makeSymbol("ANSWER")), list(makeSymbol("CSETQ"), makeSymbol("TO-MERGE"), list(makeSymbol("CDR"), makeSymbol("TO-MERGE"))), list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("CANDIDATE-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("EMPTY-P"))), list(makeSymbol("CSETQ"), makeSymbol("RANGE"), makeSymbol("CANDIDATE-RANGE"))))), list(makeSymbol("CDOLIST"), list(makeSymbol("ANSWER"), makeSymbol("TO-MERGE")), list(makeSymbol("PWHEN"), makeSymbol("RANGE"), list(makeSymbol("CLET"), list(list(makeSymbol("NEW-RANGE"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("NEW-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("FILL")), makeSymbol("ANSWER")), list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("NEW-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("EMPTY-P"))), list(makeSymbol("CSETQ"), makeSymbol("RANGE"), list(makeSymbol("FIM"), makeSymbol("RANGE"), list(makeSymbol("QUOTE"), makeSymbol("MERGE")), makeSymbol("NEW-RANGE"))))))), list(makeSymbol("PWHEN"), makeSymbol("RANGE"), list(makeSymbol("FIM"), makeSymbol("RANGE"), list(makeSymbol("QUOTE"), makeSymbol("FUDGE")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("CSETQ"), makeSymbol("ARG2RANGE"), makeSymbol("RANGE"))), list(makeSymbol("RET"), makeSymbol("SELF"))));
 
-    public static final SubLSymbol $sym152$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-CHECKER-METHOD");
 
-    public static final SubLList $list153 = list(makeSymbol("?RANGE"));
 
-    public static final SubLSymbol $sym154$_RANGE = makeSymbol("?RANGE");
 
-    public static final SubLSymbol SCALAR_RANGE = makeSymbol("SCALAR-RANGE");
+    private static final SubLSymbol SCALAR_RANGE_FILL_METHOD = makeSymbol("SCALAR-RANGE-FILL-METHOD");
 
+    private static final SubLSymbol GET_UNIT = makeSymbol("GET-UNIT");
 
+    static private final SubLList $list214 = list(list(RET, makeSymbol("UNIT")));
 
+    static private final SubLSymbol $sym215$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
+    private static final SubLSymbol SCALAR_RANGE_GET_UNIT_METHOD = makeSymbol("SCALAR-RANGE-GET-UNIT-METHOD");
 
-    public static final SubLSymbol MERGE = makeSymbol("MERGE");
+    static private final SubLList $list217 = list(list(makeSymbol("PIF"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("EMPTY-P"))), list(RET, NIL), list(RET, list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN")))));
 
-    public static final SubLSymbol FUDGE = makeSymbol("FUDGE");
+    static private final SubLSymbol $sym218$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SCALAR_CHECKER_COMPUTE_RANGE_METHOD = makeSymbol("SCALAR-CHECKER-COMPUTE-RANGE-METHOD");
+    private static final SubLSymbol SCALAR_RANGE_GET_MIN_METHOD = makeSymbol("SCALAR-RANGE-GET-MIN-METHOD");
 
-    private static final SubLObject $$Collection = reader_make_constant_shell(makeString("Collection"));
+    private static final SubLSymbol GET_MIN_VALUE = makeSymbol("GET-MIN-VALUE");
 
-    private static final SubLObject $$SomeFn = reader_make_constant_shell(makeString("SomeFn"));
+    static private final SubLList $list221 = list(list(RET, makeSymbol("MIN")));
 
-    public static final SubLList $list163 = list(list(makeSymbol("CLET"), list(list(makeSymbol("DIAGN"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SANITY-CHECKER-DIAGNOSIS")))), list(makeSymbol("CAST"), list(makeSymbol("HEURISTICALLY-CAST-UNITY"), makeSymbol("PREDICATE"), makeSymbol("ARG2"))), list(makeSymbol("ARG2MIN"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN"))))), list(makeSymbol("ARG2MAX"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX"))))), list(makeSymbol("RANGE"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(makeSymbol("QUOTE"), makeSymbol("LISTIFY"))))), makeSymbol("CYCL-EXPLANATION")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("PROPOSED-ARG")), makeSymbol("ARG1")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("PROPOSED-VALUE")), makeSymbol("ARG2")), list(makeSymbol("PCOND"), list(list(makeSymbol("CAND"), makeSymbol("ARG2MIN"), makeSymbol("ARG2MAX")), list(makeSymbol("CLET"), list(list(makeSymbol("NEGATIVE-TEST-MIN"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThan")), makeSymbol("CAST"), makeSymbol("ARG2MIN"))), list(makeSymbol("NEGATIVE-TEST-MAX"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("greaterThan")), makeSymbol("CAST"), makeSymbol("ARG2MAX"))), list(makeSymbol("POSITIVE-TEST"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("quantitySubsumes")), makeSymbol("RANGE"), makeSymbol("CAST")))), list(makeSymbol("PCOND"), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("NEGATIVE-TEST-MIN"), reader_make_constant_shell(makeString("EverythingPSC"))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("and")), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("NEGATIVE-TEST-MIN")))), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("NEGATIVE-TEST-MAX"), reader_make_constant_shell(makeString("EverythingPSC"))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("and")), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("NEGATIVE-TEST-MAX")))), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("POSITIVE-TEST"), reader_make_constant_shell(makeString("EverythingPSC"))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER")), ONE_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("and")), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("POSITIVE-TEST")))))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("JUSTIFICATION")), list(makeSymbol("GENERATE-PHRASE"), makeSymbol("CYCL-EXPLANATION")))), list(T, list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER-KNOWN")), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(makeSymbol("QUOTE"), makeSymbol("JUSTIFICATION")), makeString("No information available")))), list(makeSymbol("CSETQ"), makeSymbol("DIAGNOSIS"), makeSymbol("DIAGN")), list(makeSymbol("RET"), makeSymbol("SELF"))));
+    static private final SubLSymbol $sym222$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol $sym164$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-CHECKER-METHOD");
+    private static final SubLSymbol SCALAR_RANGE_GET_MIN_VALUE_METHOD = makeSymbol("SCALAR-RANGE-GET-MIN-VALUE-METHOD");
 
-    public static final SubLSymbol GET_MIN = makeSymbol("GET-MIN");
+    static private final SubLList $list224 = list(list(makeSymbol("PIF"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("EMPTY-P"))), list(RET, NIL), list(RET, list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MAX")))));
 
-    public static final SubLSymbol GET_MAX = makeSymbol("GET-MAX");
+    static private final SubLSymbol $sym225$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
+    private static final SubLSymbol SCALAR_RANGE_GET_MAX_METHOD = makeSymbol("SCALAR-RANGE-GET-MAX-METHOD");
 
+    private static final SubLSymbol GET_MAX_VALUE = makeSymbol("GET-MAX-VALUE");
 
-    public static final SubLSymbol PROPOSED_ARG = makeSymbol("PROPOSED-ARG");
+    static private final SubLList $list228 = list(list(RET, makeSymbol("MAX")));
 
-    private static final SubLObject $$lessThan = reader_make_constant_shell(makeString("lessThan"));
+    static private final SubLSymbol $sym229$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    private static final SubLObject $$greaterThan = reader_make_constant_shell(makeString("greaterThan"));
+    private static final SubLSymbol SCALAR_RANGE_GET_MAX_VALUE_METHOD = makeSymbol("SCALAR-RANGE-GET-MAX-VALUE-METHOD");
 
-    private static final SubLObject $$quantitySubsumes = reader_make_constant_shell(makeString("quantitySubsumes"));
+    static private final SubLList $list231 = list(list(RET, list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN"), makeSymbol("MAX"))));
 
-    public static final SubLSymbol COMPLETE = makeSymbol("COMPLETE");
+    static private final SubLSymbol $sym232$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol ANSWER_KNOWN = makeSymbol("ANSWER-KNOWN");
+    private static final SubLSymbol SCALAR_RANGE_LISTIFY_METHOD = makeSymbol("SCALAR-RANGE-LISTIFY-METHOD");
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
+    static private final SubLList $list234 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("FUDGE-FACTOR"), makeSymbol("NUMBERP")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), list(makeSymbol("-"), makeSymbol("MIN"), list(makeSymbol("*"), makeSymbol("MIN"), makeSymbol("FUDGE-FACTOR")))), list(makeSymbol("CSETQ"), makeSymbol("MAX"), list(makeSymbol("+"), makeSymbol("MAX"), list(makeSymbol("*"), makeSymbol("MAX"), makeSymbol("FUDGE-FACTOR")))), list(RET, makeSymbol("SELF")));
 
+    static private final SubLSymbol $sym235$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
+    private static final SubLSymbol SCALAR_RANGE_FUDGE_METHOD = makeSymbol("SCALAR-RANGE-FUDGE-METHOD");
 
-    public static final SubLString $$$No_information_available = makeString("No information available");
+    private static final SubLSymbol CONVERTIBLE_P = makeSymbol("CONVERTIBLE-P");
 
-    public static final SubLSymbol SCALAR_CHECKER_DIAGNOSE_METHOD = makeSymbol("SCALAR-CHECKER-DIAGNOSE-METHOD");
+    static private final SubLList $list238 = list(makeSymbol("OTHER-RANGE"));
 
-    public static final SubLList $list178 = list(new SubLObject[]{ list(makeSymbol("FAILURE-CODE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("COMPLETE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("ANSWER-KNOWN"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("ANSWER"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("JUSTIFICATION"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PROPOSED-VALUE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PROPOSED-ARG"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("BOOLEAN"), NIL, makeKeyword("PROTECTED")) });
+    static private final SubLList $list239 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("OTHER-RANGE"), makeSymbol("SCALAR-RANGE-P")), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-UNIT")))), list(makeSymbol("QUERY"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("isa"), makeSymbol("UNIT"), list(QUOTE, list(makeSymbol("?TYPE")))), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("isa"), makeSymbol("OTHER-UNIT"), list(QUOTE, list(makeSymbol("?TYPE")))), list(QUOTE, list(list(reader_make_constant_shell("isa"), makeSymbol("?TYPE"), reader_make_constant_shell("InterconvertibleUnitType"))))))), list(RET, list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("QUERY"), reader_make_constant_shell("EverythingPSC")))));
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_DIAGNOSIS_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-CLASS");
+    static private final SubLSymbol $sym240$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SANITY_CHECKER_DIAGNOSIS_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-INSTANCE");
+    private static final SubLSymbol SCALAR_RANGE_P = makeSymbol("SCALAR-RANGE-P");
 
-    public static final SubLList $list181 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("FAILURE-CODE"), ZERO_INTEGER), list(makeSymbol("RET"), makeSymbol("SELF")));
+    static private final SubLList $list242 = list(makeSymbol("?TYPE"));
 
-    public static final SubLSymbol $sym182$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-DIAGNOSIS-METHOD");
+    static private final SubLList $list243 = list(list(reader_make_constant_shell("isa"), makeSymbol("?TYPE"), reader_make_constant_shell("InterconvertibleUnitType")));
 
-    public static final SubLSymbol SANITY_CHECKER_DIAGNOSIS_INITIALIZE_METHOD = makeSymbol("SANITY-CHECKER-DIAGNOSIS-INITIALIZE-METHOD");
+    private static final SubLSymbol SCALAR_RANGE_CONVERTIBLE_P_METHOD = makeSymbol("SCALAR-RANGE-CONVERTIBLE-P-METHOD");
 
-    public static final SubLList $list184 = list(makeString("A yes-or-no answer as to whether the diagnosis is favorable (T) or\n   unfavorable (NIL)."), list(makeSymbol("PUNLESS"), list(makeSymbol("INTEGERP"), makeSymbol("ANSWER")), list(makeSymbol("RET"), NIL)), list(makeSymbol("RET"), list(makeSymbol(">"), makeSymbol("ANSWER"), ZERO_INTEGER)));
+    static private final SubLList $list245 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-POINT"), list(makeSymbol("GET-SLOT"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("POINT-INFO"))))), list(makeSymbol("PCOND"), list(list(makeSymbol("CAND"), makeSymbol("POINT-INFO"), makeSymbol("OTHER-POINT")), list(RET, list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("MERGE-LOOSE")), makeSymbol("OTHER-RANGE")))), list(makeSymbol("POINT-INFO"), list(RET, makeSymbol("SELF"))), list(makeSymbol("OTHER-POINT"), list(RET, makeSymbol("OTHER-RANGE"))), list(T, list(RET, list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("MERGE-STRICT")), makeSymbol("OTHER-RANGE")))))));
 
-    public static final SubLSymbol $sym185$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SANITY-CHECKER-DIAGNOSIS-METHOD");
+    static private final SubLSymbol $sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SANITY_CHECKER_DIAGNOSIS_BOOLEAN_METHOD = makeSymbol("SANITY-CHECKER-DIAGNOSIS-BOOLEAN-METHOD");
+    private static final SubLSymbol MERGE_LOOSE = makeSymbol("MERGE-LOOSE");
 
-    public static final SubLList $list187 = list(new SubLObject[]{ list(makeSymbol("UNIT"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("MIN"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("MAX"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("POINT-INFO"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FILL"), list(makeSymbol("VALUE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("EMPTY-P"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-UNIT"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MIN"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MAX"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MIN-VALUE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MAX-VALUE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("LISTIFY"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE-LOOSE"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE-STRICT"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FUDGE"), list(makeSymbol("FUDGE-FACTOR")), makeKeyword("PUBLIC")) });
+    private static final SubLSymbol MERGE_STRICT = makeSymbol("MERGE-STRICT");
 
+    private static final SubLSymbol SCALAR_RANGE_MERGE_METHOD = makeSymbol("SCALAR-RANGE-MERGE-METHOD");
 
+    static private final SubLList $list250 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(new SubLObject[]{ list(makeSymbol("MERGED"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE")))), list(makeSymbol("THIS-MIN"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("OTHER-MIN"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("THIS-MAX"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MAX")))), list(makeSymbol("OTHER-MAX"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX")))), list(makeSymbol("MIN-TEST"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThanOrEqualTo"), makeSymbol("THIS-MIN"), makeSymbol("OTHER-MIN")), reader_make_constant_shell("EverythingPSC"))), list(makeSymbol("MAX-TEST"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThanOrEqualTo"), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MAX")), reader_make_constant_shell("EverythingPSC"))), list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-UNIT")))), list(makeSymbol("NEW-MIN"), list(makeSymbol("FIF"), makeSymbol("MIN-TEST"), makeSymbol("MIN"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN-VALUE")))))), list(makeSymbol("NEW-MAX"), list(makeSymbol("FIF"), makeSymbol("MAX-TEST"), makeSymbol("MAX"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX-VALUE")))))) }), list(makeSymbol("FIM"), makeSymbol("MERGED"), list(QUOTE, makeSymbol("FILL")), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX"))), list(RET, makeSymbol("MERGED"))));
 
+    static private final SubLSymbol $sym251$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
 
 
+    private static final SubLSymbol SCALAR_RANGE_MERGE_LOOSE_METHOD = makeSymbol("SCALAR-RANGE-MERGE-LOOSE-METHOD");
 
+    static private final SubLList $list254 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("THIS-MIN"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("OTHER-MIN"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("THIS-MAX"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MAX")))), list(makeSymbol("OTHER-MAX"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX"))))), list(makeSymbol("PWHEN"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("THIS-MAX"), makeSymbol("OTHER-MIN")), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("WARN"), makeString("~%Inconsistent ranges: ~S ~S"), makeSymbol("SELF"), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("PWHEN"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MIN")), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("WARN"), makeString("~%Inconsistent ranges: ~S ~S"), makeSymbol("SELF"), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-UNIT")))), list(makeSymbol("NEW-MAX"), list(makeSymbol("FIF"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MAX")), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX-VALUE")))), makeSymbol("MAX"))), list(makeSymbol("NEW-MIN"), list(makeSymbol("FIF"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("OTHER-MIN"), makeSymbol("THIS-MIN")), reader_make_constant_shell("EverythingPSC")), makeSymbol("MIN"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN-VALUE")))))), list(makeSymbol("MERGED"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("MERGED"), list(QUOTE, makeSymbol("FILL")), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX"))), list(RET, makeSymbol("MERGED")))));
 
+    static private final SubLSymbol $sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_RANGE_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-CLASS");
+    static private final SubLString $str256$__Inconsistent_ranges___S__S = makeString("~%Inconsistent ranges: ~S ~S");
 
-    public static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_SCALAR_RANGE_INSTANCE = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-INSTANCE");
+    private static final SubLSymbol SCALAR_RANGE_MERGE_STRICT_METHOD = makeSymbol("SCALAR-RANGE-MERGE-STRICT-METHOD");
 
 
 
-    public static final SubLList $list195 = list(makeSymbol("STREAM"), makeSymbol("DEPTH"));
 
-    public static final SubLList $list196 = list(makeString("Prints SCALAR-RANGE to STREAM, ignoring depth"), list(makeSymbol("IGNORE"), makeSymbol("DEPTH")), list(makeSymbol("PRINC"), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN"), makeSymbol("MAX"), makeSymbol("POINT-INFO")), makeSymbol("STREAM")), list(makeSymbol("RET"), makeSymbol("SELF")));
 
-    public static final SubLSymbol $sym197$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SCALAR_RANGE_PRINT_METHOD = makeSymbol("SCALAR-RANGE-PRINT-METHOD");
 
-    public static final SubLList $list199 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("UNIT"), reader_make_constant_shell(makeString("Unity"))), list(makeSymbol("CSETQ"), makeSymbol("MIN"), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("MAX"), ZERO_INTEGER), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLObject $$NumericalQuant_NLAttrFn = reader_make_constant_shell("NumericalQuant-NLAttrFn");
 
-    public static final SubLSymbol $sym200$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
 
-    public static final SubLSymbol SCALAR_RANGE_INITIALIZE_METHOD = makeSymbol("SCALAR-RANGE-INITIALIZE-METHOD");
 
-    public static final SubLList $list202 = list(list(makeSymbol("RET"), list(makeSymbol("CAND"), list(EQL, makeSymbol("UNIT"), reader_make_constant_shell(makeString("Unity"))), list(makeSymbol("="), makeSymbol("MIN"), ZERO_INTEGER), list(makeSymbol("="), makeSymbol("MAX"), ZERO_INTEGER))));
-
-    public static final SubLSymbol $sym203$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_EMPTY_P_METHOD = makeSymbol("SCALAR-RANGE-EMPTY-P-METHOD");
-
-    public static final SubLList $list205 = list(makeSymbol("VALUE"));
-
-    public static final SubLList $list206 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell(makeString("isa")), makeSymbol("VALUE"), list(makeSymbol("QUOTE"), list(reader_make_constant_shell(makeString("NonNegativeScalarInterval"))))), reader_make_constant_shell(makeString("BaseKB"))), list(makeSymbol("RET"), makeSymbol("SELF"))), list(makeSymbol("PCOND"), list(list(makeSymbol("NUMBERP"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("MAX"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("POINT-INFO"), T)), list(list(makeSymbol("CONSP"), makeSymbol("VALUE")), list(makeSymbol("CLET"), list(list(makeSymbol("VALUE-UNIT"), list(makeSymbol("FIRST"), makeSymbol("VALUE"))), list(makeSymbol("VALUE-MIN"), list(makeSymbol("SECOND"), makeSymbol("VALUE"))), list(makeSymbol("VALUE-MAX"), list(makeSymbol("THIRD"), makeSymbol("VALUE"))), makeSymbol("NEW-UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("PWHEN"), list(makeSymbol("ISA?"), makeSymbol("VALUE-UNIT"), reader_make_constant_shell(makeString("UnitOfMeasure"))), list(makeSymbol("CSETQ"), makeSymbol("NEW-UNIT"), makeSymbol("VALUE-UNIT"))), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("VALUE-MIN")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MIN"), makeSymbol("VALUE-MIN"))), list(makeSymbol("PIF"), list(makeSymbol("NUMBERP"), makeSymbol("VALUE-MAX")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MAX"), makeSymbol("VALUE-MAX")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MAX"), makeSymbol("NEW-MIN"))), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("NEW-UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("CSETQ"), makeSymbol("UNIT"), makeSymbol("NEW-UNIT")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), makeSymbol("NEW-MIN")), list(makeSymbol("CSETQ"), makeSymbol("MAX"), makeSymbol("NEW-MAX"))), list(makeSymbol("PWHEN"), list(EQ, makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("CSETQ"), makeSymbol("POINT-INFO"), T))))), list(makeSymbol("RET"), makeSymbol("SELF")));
-
-    public static final SubLSymbol $sym207$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
-
-    public static final SubLList $list209 = list(reader_make_constant_shell(makeString("NonNegativeScalarInterval")));
-
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
-
-    private static final SubLObject $$UnitOfMeasure = reader_make_constant_shell(makeString("UnitOfMeasure"));
-
-    public static final SubLSymbol SCALAR_RANGE_FILL_METHOD = makeSymbol("SCALAR-RANGE-FILL-METHOD");
-
-    public static final SubLSymbol GET_UNIT = makeSymbol("GET-UNIT");
-
-    public static final SubLList $list214 = list(list(makeSymbol("RET"), makeSymbol("UNIT")));
-
-    public static final SubLSymbol $sym215$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_GET_UNIT_METHOD = makeSymbol("SCALAR-RANGE-GET-UNIT-METHOD");
-
-    public static final SubLList $list217 = list(list(makeSymbol("PIF"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("EMPTY-P"))), list(makeSymbol("RET"), NIL), list(makeSymbol("RET"), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN")))));
-
-    public static final SubLSymbol $sym218$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_GET_MIN_METHOD = makeSymbol("SCALAR-RANGE-GET-MIN-METHOD");
-
-    public static final SubLSymbol GET_MIN_VALUE = makeSymbol("GET-MIN-VALUE");
-
-    public static final SubLList $list221 = list(list(makeSymbol("RET"), makeSymbol("MIN")));
-
-    public static final SubLSymbol $sym222$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_GET_MIN_VALUE_METHOD = makeSymbol("SCALAR-RANGE-GET-MIN-VALUE-METHOD");
-
-    public static final SubLList $list224 = list(list(makeSymbol("PIF"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("EMPTY-P"))), list(makeSymbol("RET"), NIL), list(makeSymbol("RET"), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MAX")))));
-
-    public static final SubLSymbol $sym225$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_GET_MAX_METHOD = makeSymbol("SCALAR-RANGE-GET-MAX-METHOD");
-
-    public static final SubLSymbol GET_MAX_VALUE = makeSymbol("GET-MAX-VALUE");
-
-    public static final SubLList $list228 = list(list(makeSymbol("RET"), makeSymbol("MAX")));
-
-    public static final SubLSymbol $sym229$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_GET_MAX_VALUE_METHOD = makeSymbol("SCALAR-RANGE-GET-MAX-VALUE-METHOD");
-
-    public static final SubLList $list231 = list(list(makeSymbol("RET"), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN"), makeSymbol("MAX"))));
-
-    public static final SubLSymbol $sym232$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_LISTIFY_METHOD = makeSymbol("SCALAR-RANGE-LISTIFY-METHOD");
-
-    public static final SubLList $list234 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("FUDGE-FACTOR"), makeSymbol("NUMBERP")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), list(makeSymbol("-"), makeSymbol("MIN"), list(makeSymbol("*"), makeSymbol("MIN"), makeSymbol("FUDGE-FACTOR")))), list(makeSymbol("CSETQ"), makeSymbol("MAX"), list(makeSymbol("+"), makeSymbol("MAX"), list(makeSymbol("*"), makeSymbol("MAX"), makeSymbol("FUDGE-FACTOR")))), list(makeSymbol("RET"), makeSymbol("SELF")));
-
-    public static final SubLSymbol $sym235$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_FUDGE_METHOD = makeSymbol("SCALAR-RANGE-FUDGE-METHOD");
-
-    public static final SubLSymbol CONVERTIBLE_P = makeSymbol("CONVERTIBLE-P");
-
-    public static final SubLList $list238 = list(makeSymbol("OTHER-RANGE"));
-
-    public static final SubLList $list239 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("OTHER-RANGE"), makeSymbol("SCALAR-RANGE-P")), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-UNIT")))), list(makeSymbol("QUERY"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell(makeString("and")), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell(makeString("isa")), makeSymbol("UNIT"), list(makeSymbol("QUOTE"), list(makeSymbol("?TYPE")))), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell(makeString("isa")), makeSymbol("OTHER-UNIT"), list(makeSymbol("QUOTE"), list(makeSymbol("?TYPE")))), list(makeSymbol("QUOTE"), list(list(reader_make_constant_shell(makeString("isa")), makeSymbol("?TYPE"), reader_make_constant_shell(makeString("InterconvertibleUnitType")))))))), list(makeSymbol("RET"), list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("QUERY"), reader_make_constant_shell(makeString("EverythingPSC"))))));
-
-    public static final SubLSymbol $sym240$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol SCALAR_RANGE_P = makeSymbol("SCALAR-RANGE-P");
-
-    public static final SubLList $list242 = list(makeSymbol("?TYPE"));
-
-    public static final SubLList $list243 = list(list(reader_make_constant_shell(makeString("isa")), makeSymbol("?TYPE"), reader_make_constant_shell(makeString("InterconvertibleUnitType"))));
-
-    public static final SubLSymbol SCALAR_RANGE_CONVERTIBLE_P_METHOD = makeSymbol("SCALAR-RANGE-CONVERTIBLE-P-METHOD");
-
-    public static final SubLList $list245 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(makeSymbol("RET"), NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-POINT"), list(makeSymbol("GET-SLOT"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("POINT-INFO"))))), list(makeSymbol("PCOND"), list(list(makeSymbol("CAND"), makeSymbol("POINT-INFO"), makeSymbol("OTHER-POINT")), list(makeSymbol("RET"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("MERGE-LOOSE")), makeSymbol("OTHER-RANGE")))), list(makeSymbol("POINT-INFO"), list(makeSymbol("RET"), makeSymbol("SELF"))), list(makeSymbol("OTHER-POINT"), list(makeSymbol("RET"), makeSymbol("OTHER-RANGE"))), list(T, list(makeSymbol("RET"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("MERGE-STRICT")), makeSymbol("OTHER-RANGE")))))));
-
-    public static final SubLSymbol $sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLSymbol MERGE_LOOSE = makeSymbol("MERGE-LOOSE");
-
-    public static final SubLSymbol MERGE_STRICT = makeSymbol("MERGE-STRICT");
-
-    public static final SubLSymbol SCALAR_RANGE_MERGE_METHOD = makeSymbol("SCALAR-RANGE-MERGE-METHOD");
-
-    public static final SubLList $list250 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(makeSymbol("RET"), NIL)), list(makeSymbol("CLET"), list(new SubLObject[]{ list(makeSymbol("MERGED"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SCALAR-RANGE")))), list(makeSymbol("THIS-MIN"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN")))), list(makeSymbol("OTHER-MIN"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN")))), list(makeSymbol("THIS-MAX"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX")))), list(makeSymbol("OTHER-MAX"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX")))), list(makeSymbol("MIN-TEST"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThanOrEqualTo")), makeSymbol("THIS-MIN"), makeSymbol("OTHER-MIN")), reader_make_constant_shell(makeString("EverythingPSC")))), list(makeSymbol("MAX-TEST"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThanOrEqualTo")), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MAX")), reader_make_constant_shell(makeString("EverythingPSC")))), list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-UNIT")))), list(makeSymbol("NEW-MIN"), list(makeSymbol("FIF"), makeSymbol("MIN-TEST"), makeSymbol("MIN"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN-VALUE")))))), list(makeSymbol("NEW-MAX"), list(makeSymbol("FIF"), makeSymbol("MAX-TEST"), makeSymbol("MAX"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX-VALUE")))))) }), list(makeSymbol("FIM"), makeSymbol("MERGED"), list(makeSymbol("QUOTE"), makeSymbol("FILL")), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX"))), list(makeSymbol("RET"), makeSymbol("MERGED"))));
-
-    public static final SubLSymbol $sym251$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    private static final SubLObject $$lessThanOrEqualTo = reader_make_constant_shell(makeString("lessThanOrEqualTo"));
-
-    public static final SubLSymbol SCALAR_RANGE_MERGE_LOOSE_METHOD = makeSymbol("SCALAR-RANGE-MERGE-LOOSE-METHOD");
-
-    public static final SubLList $list254 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(makeSymbol("RET"), NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("THIS-MIN"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN")))), list(makeSymbol("OTHER-MIN"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN")))), list(makeSymbol("THIS-MAX"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX")))), list(makeSymbol("OTHER-MAX"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX"))))), list(makeSymbol("PWHEN"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThan")), makeSymbol("THIS-MAX"), makeSymbol("OTHER-MIN")), reader_make_constant_shell(makeString("EverythingPSC"))), list(makeSymbol("WARN"), makeString("~%Inconsistent ranges: ~S ~S"), makeSymbol("SELF"), makeSymbol("OTHER-RANGE")), list(makeSymbol("RET"), NIL)), list(makeSymbol("PWHEN"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThan")), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MIN")), reader_make_constant_shell(makeString("EverythingPSC"))), list(makeSymbol("WARN"), makeString("~%Inconsistent ranges: ~S ~S"), makeSymbol("SELF"), makeSymbol("OTHER-RANGE")), list(makeSymbol("RET"), NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-UNIT")))), list(makeSymbol("NEW-MAX"), list(makeSymbol("FIF"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThan")), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MAX")), reader_make_constant_shell(makeString("EverythingPSC"))), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MAX-VALUE")))), makeSymbol("MAX"))), list(makeSymbol("NEW-MIN"), list(makeSymbol("FIF"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell(makeString("lessThan")), makeSymbol("OTHER-MIN"), makeSymbol("THIS-MIN")), reader_make_constant_shell(makeString("EverythingPSC"))), makeSymbol("MIN"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(makeSymbol("QUOTE"), makeSymbol("GET-MIN-VALUE")))))), list(makeSymbol("MERGED"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(makeSymbol("QUOTE"), makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("MERGED"), list(makeSymbol("QUOTE"), makeSymbol("FILL")), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX"))), list(makeSymbol("RET"), makeSymbol("MERGED")))));
-
-    public static final SubLSymbol $sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SCALAR-RANGE-METHOD");
-
-    public static final SubLString $str256$__Inconsistent_ranges___S__S = makeString("~%Inconsistent ranges: ~S ~S");
-
-    public static final SubLSymbol SCALAR_RANGE_MERGE_STRICT_METHOD = makeSymbol("SCALAR-RANGE-MERGE-STRICT-METHOD");
-
-    private static final SubLObject $$age = reader_make_constant_shell(makeString("age"));
-
-    private static final SubLObject $$numberOfInhabitants = reader_make_constant_shell(makeString("numberOfInhabitants"));
-
-    private static final SubLObject $$YearsDuration = reader_make_constant_shell(makeString("YearsDuration"));
-
-    private static final SubLObject $$NumericalQuant_NLAttrFn = reader_make_constant_shell(makeString("NumericalQuant-NLAttrFn"));
-
-    private static final SubLObject $$HomoSapiens = reader_make_constant_shell(makeString("HomoSapiens"));
+    public static final SubLObject get_sanity_checker_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == $sanity_checker$.getDynamicValue(thread)) {
+                $sanity_checker$.setDynamicValue(object.new_class_instance(SANITY_CHECKER), thread);
+            }
+            return $sanity_checker$.getDynamicValue(thread);
+        }
+    }
 
     public static SubLObject get_sanity_checker() {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -623,9 +522,28 @@ public final class sanity_checker extends SubLTranslatedFile {
         return $sanity_checker$.getDynamicValue(thread);
     }
 
+    public static final SubLObject get_piquant_sanity_checker_alt(SubLObject guid_string) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(guid_string, STRINGP);
+            if (!$piquant_sanity_checkers$.getDynamicValue(thread).isHashtable()) {
+                $piquant_sanity_checkers$.setDynamicValue(make_hash_table(EIGHT_INTEGER, symbol_function(EQUALP), UNPROVIDED), thread);
+            }
+            {
+                SubLObject checker = gethash(guid_string, $piquant_sanity_checkers$.getDynamicValue(thread), UNPROVIDED);
+                if (NIL == checker) {
+                    checker = object.new_class_instance(PIQUANT_SANITY_CHECKER);
+                    methods.funcall_instance_method_with_0_args(checker, SHOW_DEBUG_INFO);
+                    sethash(guid_string, $piquant_sanity_checkers$.getDynamicValue(thread), checker);
+                }
+                return checker;
+            }
+        }
+    }
+
     public static SubLObject get_piquant_sanity_checker(final SubLObject guid_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(guid_string) : "Types.stringp(guid_string) " + "CommonSymbols.NIL != Types.stringp(guid_string) " + guid_string;
+        assert NIL != stringp(guid_string) : "! stringp(guid_string) " + ("Types.stringp(guid_string) " + "CommonSymbols.NIL != Types.stringp(guid_string) ") + guid_string;
         if (!$piquant_sanity_checkers$.getDynamicValue(thread).isHashtable()) {
             $piquant_sanity_checkers$.setDynamicValue(make_hash_table(EIGHT_INTEGER, symbol_function(EQUALP), UNPROVIDED), thread);
         }
@@ -638,19 +556,46 @@ public final class sanity_checker extends SubLTranslatedFile {
         return checker;
     }
 
+    public static final SubLObject sanity_check_alt(SubLObject cyc_predicate, SubLObject focus, SubLObject v_answer) {
+        return methods.funcall_instance_method_with_3_args(com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker(), CHECK, cyc_predicate, focus, v_answer);
+    }
+
     public static SubLObject sanity_check(final SubLObject cyc_predicate, final SubLObject focus, final SubLObject v_answer) {
         return methods.funcall_instance_method_with_3_args(get_sanity_checker(), CHECK, cyc_predicate, focus, v_answer);
     }
 
+    public static final SubLObject cyc_sanity_check_alt(SubLObject cyc_predicate, SubLObject cyc_focuses, SubLObject cyc_answers) {
+        SubLTrampolineFile.checkType(cyc_focuses, LISTP);
+        SubLTrampolineFile.checkType(cyc_focuses, LISTP);
+        return methods.funcall_instance_method_with_3_args(com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker(), CHECK_CYC_INTERPRETATIONS, cyc_predicate, cyc_focuses, cyc_answers);
+    }
+
     public static SubLObject cyc_sanity_check(final SubLObject cyc_predicate, final SubLObject cyc_focuses, final SubLObject cyc_answers) {
-        assert NIL != listp(cyc_focuses) : "Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) " + cyc_focuses;
-        assert NIL != listp(cyc_focuses) : "Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) " + cyc_focuses;
+        assert NIL != listp(cyc_focuses) : "! listp(cyc_focuses) " + ("Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) ") + cyc_focuses;
+        assert NIL != listp(cyc_focuses) : "! listp(cyc_focuses) " + ("Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) ") + cyc_focuses;
         return methods.funcall_instance_method_with_3_args(get_sanity_checker(), CHECK_CYC_INTERPRETATIONS, cyc_predicate, cyc_focuses, cyc_answers);
     }
 
+    public static final SubLObject cyc_sanity_filter_alt(SubLObject cyc_predicate, SubLObject cyc_focuses, SubLObject cyc_answers) {
+        SubLTrampolineFile.checkType(cyc_focuses, LISTP);
+        SubLTrampolineFile.checkType(cyc_focuses, LISTP);
+        {
+            SubLObject diagnoses = com.cyc.cycjava.cycl.quirk.sanity_checker.cyc_sanity_check(cyc_predicate, cyc_focuses, cyc_answers);
+            SubLObject sane_answers = NIL;
+            SubLObject cdolist_list_var = diagnoses;
+            SubLObject diagnosis = NIL;
+            for (diagnosis = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , diagnosis = cdolist_list_var.first()) {
+                if (NIL != methods.funcall_instance_method_with_0_args(diagnosis, BOOLEAN)) {
+                    sane_answers = cons(instances.get_slot(diagnosis, PROPOSED_VALUE), sane_answers);
+                }
+            }
+            return sane_answers;
+        }
+    }
+
     public static SubLObject cyc_sanity_filter(final SubLObject cyc_predicate, final SubLObject cyc_focuses, final SubLObject cyc_answers) {
-        assert NIL != listp(cyc_focuses) : "Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) " + cyc_focuses;
-        assert NIL != listp(cyc_focuses) : "Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) " + cyc_focuses;
+        assert NIL != listp(cyc_focuses) : "! listp(cyc_focuses) " + ("Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) ") + cyc_focuses;
+        assert NIL != listp(cyc_focuses) : "! listp(cyc_focuses) " + ("Types.listp(cyc_focuses) " + "CommonSymbols.NIL != Types.listp(cyc_focuses) ") + cyc_focuses;
         final SubLObject diagnoses = cyc_sanity_check(cyc_predicate, cyc_focuses, cyc_answers);
         SubLObject sane_answers = NIL;
         SubLObject cdolist_list_var = diagnoses;
@@ -666,40 +611,87 @@ public final class sanity_checker extends SubLTranslatedFile {
         return sane_answers;
     }
 
+    public static final SubLObject get_sanity_checker_show_debug_info_alt(SubLObject v_sanity_checker) {
+        return classes.subloop_get_access_protected_instance_slot(v_sanity_checker, FOUR_INTEGER, SHOW_DEBUG_INFO);
+    }
+
     public static SubLObject get_sanity_checker_show_debug_info(final SubLObject v_sanity_checker) {
         return classes.subloop_get_access_protected_instance_slot(v_sanity_checker, FOUR_INTEGER, SHOW_DEBUG_INFO);
+    }
+
+    public static final SubLObject set_sanity_checker_show_debug_info_alt(SubLObject v_sanity_checker, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(v_sanity_checker, value, FOUR_INTEGER, SHOW_DEBUG_INFO);
     }
 
     public static SubLObject set_sanity_checker_show_debug_info(final SubLObject v_sanity_checker, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(v_sanity_checker, value, FOUR_INTEGER, SHOW_DEBUG_INFO);
     }
 
+    public static final SubLObject get_sanity_checker_fudge_factor_alt(SubLObject v_sanity_checker) {
+        return classes.subloop_get_instance_slot(v_sanity_checker, THREE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_fudge_factor(final SubLObject v_sanity_checker) {
         return classes.subloop_get_instance_slot(v_sanity_checker, THREE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_fudge_factor_alt(SubLObject v_sanity_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(v_sanity_checker, value, THREE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_fudge_factor(final SubLObject v_sanity_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(v_sanity_checker, value, THREE_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_alt(SubLObject v_sanity_checker) {
+        return classes.subloop_get_access_protected_instance_slot(v_sanity_checker, TWO_INTEGER, SCRATCHPAD);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad(final SubLObject v_sanity_checker) {
         return classes.subloop_get_access_protected_instance_slot(v_sanity_checker, TWO_INTEGER, SCRATCHPAD);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_alt(SubLObject v_sanity_checker, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(v_sanity_checker, value, TWO_INTEGER, SCRATCHPAD);
     }
 
     public static SubLObject set_sanity_checker_scratchpad(final SubLObject v_sanity_checker, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(v_sanity_checker, value, TWO_INTEGER, SCRATCHPAD);
     }
 
+    public static final SubLObject get_sanity_checker_cache_alt(SubLObject v_sanity_checker) {
+        return classes.subloop_get_access_protected_instance_slot(v_sanity_checker, ONE_INTEGER, CACHE);
+    }
+
     public static SubLObject get_sanity_checker_cache(final SubLObject v_sanity_checker) {
         return classes.subloop_get_access_protected_instance_slot(v_sanity_checker, ONE_INTEGER, CACHE);
+    }
+
+    public static final SubLObject set_sanity_checker_cache_alt(SubLObject v_sanity_checker, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(v_sanity_checker, value, ONE_INTEGER, CACHE);
     }
 
     public static SubLObject set_sanity_checker_cache(final SubLObject v_sanity_checker, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(v_sanity_checker, value, ONE_INTEGER, CACHE);
     }
 
+    public static final SubLObject subloop_reserved_initialize_sanity_checker_class_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject subloop_reserved_initialize_sanity_checker_class(final SubLObject new_instance) {
         classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_sanity_checker_instance_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, CACHE, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, SCRATCHPAD, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, FUDGE_FACTOR, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, SHOW_DEBUG_INFO, NIL);
         return NIL;
     }
 
@@ -713,8 +705,39 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject sanity_checker_p_alt(SubLObject v_sanity_checker) {
+        return classes.subloop_instanceof_class(v_sanity_checker, SANITY_CHECKER);
+    }
+
     public static SubLObject sanity_checker_p(final SubLObject v_sanity_checker) {
         return classes.subloop_instanceof_class(v_sanity_checker, SANITY_CHECKER);
+    }
+
+    public static final SubLObject sanity_checker_initialize_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_method = NIL;
+            SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_fudge_factor(self);
+            try {
+                try {
+                    object.object_initialize_method(self);
+                    fudge_factor = ZERO_INTEGER;
+                    sublisp_throw($sym22$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_fudge_factor(self, fudge_factor);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym22$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD);
+            }
+            return catch_var_for_sanity_checker_method;
+        }
     }
 
     public static SubLObject sanity_checker_initialize_method(final SubLObject self) {
@@ -746,6 +769,32 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_method;
     }
 
+    public static final SubLObject sanity_checker_show_debug_info_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_method = NIL;
+            SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+            try {
+                try {
+                    show_debug_info = T;
+                    sublisp_throw($sym25$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym25$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD);
+            }
+            return catch_var_for_sanity_checker_method;
+        }
+    }
+
     public static SubLObject sanity_checker_show_debug_info_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_method = NIL;
@@ -774,6 +823,32 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_method;
     }
 
+    public static final SubLObject sanity_checker_hide_debug_info_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_method = NIL;
+            SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+            try {
+                try {
+                    show_debug_info = NIL;
+                    sublisp_throw($sym29$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym29$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD);
+            }
+            return catch_var_for_sanity_checker_method;
+        }
+    }
+
     public static SubLObject sanity_checker_hide_debug_info_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_method = NIL;
@@ -800,6 +875,59 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_method;
+    }
+
+    public static final SubLObject sanity_checker_check_method_alt(SubLObject self, SubLObject predicate, SubLObject focus, SubLObject v_answer) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_sanity_checker_method = NIL;
+                SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+                SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_fudge_factor(self);
+                SubLObject scratchpad = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad(self);
+                try {
+                    try {
+                        scratchpad = object.new_class_instance(SANITY_CHECKER_SCRATCHPAD);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PREDICATE, predicate);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_FOCUS, focus);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_ANSWER, v_answer);
+                        methods.funcall_instance_method_with_0_args(scratchpad, COMPUTE_DEGENERATE_DIAGNOSIS);
+                        if (NIL == instances.get_slot(scratchpad, DEGENERATE_DIAGNOSIS)) {
+                            methods.funcall_instance_method_with_1_args(scratchpad, INITIALIZE_CHECKERS, fudge_factor);
+                            methods.funcall_instance_method_with_0_args(scratchpad, DIAGNOSE);
+                        }
+                        {
+                            SubLObject result = methods.funcall_instance_method_with_0_args(scratchpad, OUTPUT_DIAGNOSES);
+                            if (NIL != show_debug_info) {
+                                {
+                                    SubLObject cdolist_list_var = result;
+                                    SubLObject item = NIL;
+                                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                        format(StreamsLow.$standard_output$.getDynamicValue(thread), $str_alt44$___S, methods.funcall_instance_method_with_0_args(item, PLISTIFY));
+                                    }
+                                }
+                            }
+                            sublisp_throw($sym34$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD, result);
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_fudge_factor(self, fudge_factor);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad(self, scratchpad);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym34$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD);
+                }
+                return catch_var_for_sanity_checker_method;
+            }
+        }
     }
 
     public static SubLObject sanity_checker_check_method(final SubLObject self, final SubLObject predicate, final SubLObject focus, final SubLObject v_answer) {
@@ -853,6 +981,59 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_method;
     }
 
+    public static final SubLObject sanity_checker_check_cyc_interpretations_method_alt(SubLObject self, SubLObject predicate, SubLObject cyc_interpretations, SubLObject cyc_answers) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_sanity_checker_method = NIL;
+                SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+                SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_fudge_factor(self);
+                SubLObject scratchpad = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad(self);
+                try {
+                    try {
+                        scratchpad = object.new_class_instance(SANITY_CHECKER_SCRATCHPAD);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PREDICATE, predicate);
+                        instances.set_slot(scratchpad, CYC_FOCUSES, cyc_interpretations);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_CYC_ANSWERS, cyc_answers);
+                        methods.funcall_instance_method_with_0_args(scratchpad, COMPUTE_DEGENERATE_DIAGNOSIS);
+                        if (NIL == instances.get_slot(scratchpad, DEGENERATE_DIAGNOSIS)) {
+                            methods.funcall_instance_method_with_1_args(scratchpad, INITIALIZE_CHECKERS, fudge_factor);
+                            methods.funcall_instance_method_with_0_args(scratchpad, DIAGNOSE);
+                        }
+                        {
+                            SubLObject result = methods.funcall_instance_method_with_0_args(scratchpad, OUTPUT_DIAGNOSES);
+                            if (NIL != show_debug_info) {
+                                {
+                                    SubLObject cdolist_list_var = result;
+                                    SubLObject item = NIL;
+                                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                        format(StreamsLow.$standard_output$.getDynamicValue(thread), $str_alt44$___S, methods.funcall_instance_method_with_0_args(item, PLISTIFY));
+                                    }
+                                }
+                            }
+                            sublisp_throw($sym49$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD, result);
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_fudge_factor(self, fudge_factor);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad(self, scratchpad);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym49$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD);
+                }
+                return catch_var_for_sanity_checker_method;
+            }
+        }
+    }
+
     public static SubLObject sanity_checker_check_cyc_interpretations_method(final SubLObject self, final SubLObject predicate, final SubLObject cyc_interpretations, final SubLObject cyc_answers) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_method = NIL;
@@ -902,6 +1083,67 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_method;
+    }
+
+    public static final SubLObject sanity_checker_check_listified_method_alt(SubLObject self, SubLObject predicate, SubLObject focus, SubLObject v_answer) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_sanity_checker_method = NIL;
+                SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+                SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_fudge_factor(self);
+                SubLObject scratchpad = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad(self);
+                try {
+                    try {
+                        scratchpad = object.new_class_instance(SANITY_CHECKER_SCRATCHPAD);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PREDICATE, predicate);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PIQUANT_FOCUS, focus);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PIQUANT_ANSWER, v_answer);
+                        methods.funcall_instance_method_with_0_args(scratchpad, COMPUTE_DEGENERATE_DIAGNOSIS);
+                        if (NIL == instances.get_slot(scratchpad, DEGENERATE_DIAGNOSIS)) {
+                            methods.funcall_instance_method_with_1_args(scratchpad, INITIALIZE_CHECKERS, fudge_factor);
+                            methods.funcall_instance_method_with_0_args(scratchpad, DIAGNOSE);
+                        }
+                        {
+                            SubLObject result = methods.funcall_instance_method_with_0_args(scratchpad, OUTPUT_DIAGNOSES);
+                            SubLObject listified_result = NIL;
+                            {
+                                SubLObject cdolist_list_var = result;
+                                SubLObject item = NIL;
+                                for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                    listified_result = cons(methods.funcall_instance_method_with_0_args(item, PLISTIFY), listified_result);
+                                }
+                            }
+                            if (NIL != show_debug_info) {
+                                {
+                                    SubLObject cdolist_list_var = listified_result;
+                                    SubLObject item = NIL;
+                                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                        format(StreamsLow.$standard_output$.getDynamicValue(thread), $str_alt44$___S, item);
+                                    }
+                                }
+                            }
+                            sublisp_throw($sym55$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD, listified_result);
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_fudge_factor(self, fudge_factor);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad(self, scratchpad);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym55$OUTER_CATCH_FOR_SANITY_CHECKER_METHOD);
+                }
+                return catch_var_for_sanity_checker_method;
+            }
+        }
     }
 
     public static SubLObject sanity_checker_check_listified_method(final SubLObject self, final SubLObject predicate, final SubLObject focus, final SubLObject v_answer) {
@@ -964,11 +1206,25 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_method;
     }
 
+    public static final SubLObject piquant_sanity_check_alt(SubLObject pred_string, SubLObject focus_string, SubLObject answer_string, SubLObject guid_string, SubLObject fudge_factor) {
+        if (fudge_factor == UNPROVIDED) {
+            fudge_factor = NIL;
+        }
+        SubLTrampolineFile.checkType(guid_string, STRINGP);
+        if (NIL != fudge_factor) {
+            SubLTrampolineFile.checkType(fudge_factor, NUMBERP);
+        }
+        if (NIL != fudge_factor) {
+            instances.set_slot(com.cyc.cycjava.cycl.quirk.sanity_checker.get_piquant_sanity_checker(guid_string), FUDGE_FACTOR, fudge_factor);
+        }
+        return methods.funcall_instance_method_with_3_args(com.cyc.cycjava.cycl.quirk.sanity_checker.get_piquant_sanity_checker(guid_string), CHECK_LISTIFIED, pred_string, focus_string, answer_string);
+    }
+
     public static SubLObject piquant_sanity_check(final SubLObject pred_string, final SubLObject focus_string, final SubLObject answer_string, final SubLObject guid_string, SubLObject fudge_factor) {
         if (fudge_factor == UNPROVIDED) {
             fudge_factor = NIL;
         }
-        assert NIL != stringp(guid_string) : "Types.stringp(guid_string) " + "CommonSymbols.NIL != Types.stringp(guid_string) " + guid_string;
+        assert NIL != stringp(guid_string) : "! stringp(guid_string) " + ("Types.stringp(guid_string) " + "CommonSymbols.NIL != Types.stringp(guid_string) ") + guid_string;
         if (((NIL != fudge_factor) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == numberp(fudge_factor))) {
             throw new AssertionError(fudge_factor);
         }
@@ -978,8 +1234,23 @@ public final class sanity_checker extends SubLTranslatedFile {
         return methods.funcall_instance_method_with_3_args(get_piquant_sanity_checker(guid_string), CHECK_LISTIFIED, pred_string, focus_string, answer_string);
     }
 
+    public static final SubLObject subloop_reserved_initialize_piquant_sanity_checker_class_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject subloop_reserved_initialize_piquant_sanity_checker_class(final SubLObject new_instance) {
         classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_piquant_sanity_checker_instance_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, CACHE, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, SCRATCHPAD, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, FUDGE_FACTOR, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER, SHOW_DEBUG_INFO, NIL);
         return NIL;
     }
 
@@ -993,8 +1264,65 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject piquant_sanity_checker_p_alt(SubLObject piquant_sanity_checker) {
+        return classes.subloop_instanceof_class(piquant_sanity_checker, PIQUANT_SANITY_CHECKER);
+    }
+
     public static SubLObject piquant_sanity_checker_p(final SubLObject piquant_sanity_checker) {
         return classes.subloop_instanceof_class(piquant_sanity_checker, PIQUANT_SANITY_CHECKER);
+    }
+
+    public static final SubLObject piquant_sanity_checker_check_method_alt(SubLObject self, SubLObject piquant_predicate, SubLObject piquant_focus, SubLObject piquant_answer) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_piquant_sanity_checker_method = NIL;
+                SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+                SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_fudge_factor(self);
+                SubLObject scratchpad = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad(self);
+                try {
+                    try {
+                        scratchpad = object.new_class_instance(SANITY_CHECKER_SCRATCHPAD);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PIQUANT_PREDICATE, piquant_predicate);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PIQUANT_FOCUS, piquant_focus);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_ANSWER, piquant_answer);
+                        methods.funcall_instance_method_with_0_args(scratchpad, COMPUTE_DEGENERATE_DIAGNOSIS);
+                        if (NIL == instances.get_slot(scratchpad, DEGENERATE_DIAGNOSIS)) {
+                            methods.funcall_instance_method_with_1_args(scratchpad, INITIALIZE_CHECKERS, fudge_factor);
+                            methods.funcall_instance_method_with_0_args(scratchpad, DIAGNOSE);
+                        }
+                        {
+                            SubLObject result = methods.funcall_instance_method_with_0_args(scratchpad, OUTPUT_DIAGNOSES);
+                            if (NIL != show_debug_info) {
+                                {
+                                    SubLObject cdolist_list_var = result;
+                                    SubLObject item = NIL;
+                                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                        format(StreamsLow.$standard_output$.getDynamicValue(thread), $str_alt44$___S, methods.funcall_instance_method_with_0_args(item, PLISTIFY));
+                                    }
+                                }
+                            }
+                            sublisp_throw($sym65$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD, result);
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_fudge_factor(self, fudge_factor);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad(self, scratchpad);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_piquant_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym65$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD);
+                }
+                return catch_var_for_piquant_sanity_checker_method;
+            }
+        }
     }
 
     public static SubLObject piquant_sanity_checker_check_method(final SubLObject self, final SubLObject piquant_predicate, final SubLObject piquant_focus, final SubLObject piquant_answer) {
@@ -1046,6 +1374,67 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_piquant_sanity_checker_method;
+    }
+
+    public static final SubLObject piquant_sanity_checker_check_listified_method_alt(SubLObject self, SubLObject piquant_predicate, SubLObject piquant_focus, SubLObject piquant_answer) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_piquant_sanity_checker_method = NIL;
+                SubLObject show_debug_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_show_debug_info(self);
+                SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_fudge_factor(self);
+                SubLObject scratchpad = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad(self);
+                try {
+                    try {
+                        scratchpad = object.new_class_instance(SANITY_CHECKER_SCRATCHPAD);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PIQUANT_PREDICATE, piquant_predicate);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_PIQUANT_FOCUS, piquant_focus);
+                        methods.funcall_instance_method_with_1_args(scratchpad, SET_ANSWER, piquant_answer);
+                        methods.funcall_instance_method_with_0_args(scratchpad, COMPUTE_DEGENERATE_DIAGNOSIS);
+                        if (NIL == instances.get_slot(scratchpad, DEGENERATE_DIAGNOSIS)) {
+                            methods.funcall_instance_method_with_1_args(scratchpad, INITIALIZE_CHECKERS, fudge_factor);
+                            methods.funcall_instance_method_with_0_args(scratchpad, DIAGNOSE);
+                        }
+                        {
+                            SubLObject result = methods.funcall_instance_method_with_0_args(scratchpad, OUTPUT_DIAGNOSES);
+                            SubLObject listified_result = NIL;
+                            {
+                                SubLObject cdolist_list_var = result;
+                                SubLObject item = NIL;
+                                for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                    listified_result = cons(methods.funcall_instance_method_with_0_args(item, PLISTIFY), listified_result);
+                                }
+                            }
+                            if (NIL != show_debug_info) {
+                                {
+                                    SubLObject cdolist_list_var = listified_result;
+                                    SubLObject item = NIL;
+                                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                                        format(StreamsLow.$standard_output$.getDynamicValue(thread), $str_alt44$___S, item);
+                                    }
+                                }
+                            }
+                            sublisp_throw($sym69$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD, listified_result);
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_show_debug_info(self, show_debug_info);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_fudge_factor(self, fudge_factor);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad(self, scratchpad);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_piquant_sanity_checker_method = Errors.handleThrowable(ccatch_env_var, $sym69$OUTER_CATCH_FOR_PIQUANT_SANITY_CHECKER_METHOD);
+                }
+                return catch_var_for_piquant_sanity_checker_method;
+            }
+        }
     }
 
     public static SubLObject piquant_sanity_checker_check_listified_method(final SubLObject self, final SubLObject piquant_predicate, final SubLObject piquant_focus, final SubLObject piquant_answer) {
@@ -1108,64 +1497,138 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_piquant_sanity_checker_method;
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_degenerate_diagnosis_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_access_protected_instance_slot(sanity_checker_scratchpad, SEVEN_INTEGER, DEGENERATE_DIAGNOSIS);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_degenerate_diagnosis(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_access_protected_instance_slot(sanity_checker_scratchpad, SEVEN_INTEGER, DEGENERATE_DIAGNOSIS);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_degenerate_diagnosis_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(sanity_checker_scratchpad, value, SEVEN_INTEGER, DEGENERATE_DIAGNOSIS);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_degenerate_diagnosis(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(sanity_checker_scratchpad, value, SEVEN_INTEGER, DEGENERATE_DIAGNOSIS);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_checkers_pool_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_access_protected_instance_slot(sanity_checker_scratchpad, SIX_INTEGER, CHECKERS_POOL);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_checkers_pool(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_access_protected_instance_slot(sanity_checker_scratchpad, SIX_INTEGER, CHECKERS_POOL);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_checkers_pool_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(sanity_checker_scratchpad, value, SIX_INTEGER, CHECKERS_POOL);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_checkers_pool(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(sanity_checker_scratchpad, value, SIX_INTEGER, CHECKERS_POOL);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_cyc_answers_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_instance_slot(sanity_checker_scratchpad, FIVE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_cyc_answers(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_instance_slot(sanity_checker_scratchpad, FIVE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_cyc_answers_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, FIVE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_cyc_answers(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, FIVE_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_answer_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_instance_slot(sanity_checker_scratchpad, FOUR_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_answer(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_instance_slot(sanity_checker_scratchpad, FOUR_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_answer_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, FOUR_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_answer(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, FOUR_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_cyc_focuses_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_instance_slot(sanity_checker_scratchpad, THREE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_cyc_focuses(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_instance_slot(sanity_checker_scratchpad, THREE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_cyc_focuses_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, THREE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_cyc_focuses(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, THREE_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_focus_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_instance_slot(sanity_checker_scratchpad, TWO_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_focus(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_instance_slot(sanity_checker_scratchpad, TWO_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_focus_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, TWO_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_focus(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, TWO_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_scratchpad_predicate_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_get_instance_slot(sanity_checker_scratchpad, ONE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_scratchpad_predicate(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_get_instance_slot(sanity_checker_scratchpad, ONE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_scratchpad_predicate_alt(SubLObject sanity_checker_scratchpad, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, ONE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_scratchpad_predicate(final SubLObject sanity_checker_scratchpad, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_scratchpad, value, ONE_INTEGER);
     }
 
+    public static final SubLObject subloop_reserved_initialize_sanity_checker_scratchpad_class_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject subloop_reserved_initialize_sanity_checker_scratchpad_class(final SubLObject new_instance) {
         classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_sanity_checker_scratchpad_instance_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, PREDICATE, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, FOCUS, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, CYC_FOCUSES, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, ANSWER, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, CYC_ANSWERS, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, CHECKERS_POOL, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_SCRATCHPAD, DEGENERATE_DIAGNOSIS, NIL);
         return NIL;
     }
 
@@ -1182,8 +1645,51 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject sanity_checker_scratchpad_p_alt(SubLObject sanity_checker_scratchpad) {
+        return classes.subloop_instanceof_class(sanity_checker_scratchpad, SANITY_CHECKER_SCRATCHPAD);
+    }
+
     public static SubLObject sanity_checker_scratchpad_p(final SubLObject sanity_checker_scratchpad) {
         return classes.subloop_instanceof_class(sanity_checker_scratchpad, SANITY_CHECKER_SCRATCHPAD);
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_output_diagnoses_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject degenerate_diagnosis = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_degenerate_diagnosis(self);
+            SubLObject checkers_pool = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_checkers_pool(self);
+            try {
+                try {
+                    if (NIL != degenerate_diagnosis) {
+                        sublisp_throw($sym80$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, list(degenerate_diagnosis));
+                    } else {
+                        {
+                            SubLObject diagnoses = NIL;
+                            SubLObject cdolist_list_var = checkers_pool;
+                            SubLObject checker = NIL;
+                            for (checker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , checker = cdolist_list_var.first()) {
+                                diagnoses = cons(instances.get_slot(checker, DIAGNOSIS), diagnoses);
+                            }
+                            sublisp_throw($sym80$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, diagnoses);
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_degenerate_diagnosis(self, degenerate_diagnosis);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_checkers_pool(self, checkers_pool);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym80$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_output_diagnoses_method(final SubLObject self) {
@@ -1228,9 +1734,60 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_scratchpad_method;
     }
 
+    public static final SubLObject sanity_checker_scratchpad_initialize_method_alt(SubLObject self) {
+        object.object_initialize_method(self);
+        return self;
+    }
+
     public static SubLObject sanity_checker_scratchpad_initialize_method(final SubLObject self) {
         object.object_initialize_method(self);
         return self;
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_set_focus_method_alt(SubLObject self, SubLObject string) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject cyc_focuses = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_focuses(self);
+            SubLObject focus = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_focus(self);
+            try {
+                try {
+                    SubLTrampolineFile.checkType(string, STRINGP);
+                    focus = string;
+                    {
+                        SubLObject cdolist_list_var = psp_main.ps_get_cycls_for_np(string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject denot = NIL;
+                        for (denot = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , denot = cdolist_list_var.first()) {
+                            {
+                                SubLObject reformulated = reformulator_hub.reformulate_cycl(denot, UNPROVIDED, UNPROVIDED);
+                                if (NIL != reformulated) {
+                                    {
+                                        SubLObject item_var = reformulated;
+                                        if (NIL == member(item_var, cyc_focuses, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                            cyc_focuses = cons(item_var, cyc_focuses);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    sublisp_throw($sym87$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_focuses(self, cyc_focuses);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_focus(self, focus);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym87$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_set_focus_method(final SubLObject self, final SubLObject string) {
@@ -1241,7 +1798,7 @@ public final class sanity_checker extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym87$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
             try {
-                assert NIL != stringp(string) : "Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) " + string;
+                assert NIL != stringp(string) : "! stringp(string) " + ("Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) ") + string;
                 focus = string;
                 SubLObject cdolist_list_var = psp_main.ps_get_cycls_for_np(string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
                 SubLObject denot = NIL;
@@ -1278,6 +1835,49 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_scratchpad_method;
     }
 
+    public static final SubLObject sanity_checker_scratchpad_set_piquant_focus_method_alt(SubLObject self, SubLObject focus_string) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject cyc_focuses = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_focuses(self);
+            SubLObject focus = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_focus(self);
+            try {
+                try {
+                    SubLTrampolineFile.checkType(focus_string, STRINGP);
+                    {
+                        SubLObject denotations = (NIL != string_utilities.starts_with(focus_string, $str_alt92$__)) ? ((SubLObject) (list(constants_high.find_constant(string_utilities.pre_remove(focus_string, $str_alt92$__, UNPROVIDED))))) : NIL;
+                        if (NIL != denotations) {
+                            focus = focus_string;
+                            cyc_focuses = denotations;
+                            sublisp_throw($sym91$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                        }
+                    }
+                    {
+                        SubLObject guruqa_object = methods.funcall_class_method_with_1_args(GURUQA_OBJECT, GURUQA_PARSE_PRECISE, focus_string);
+                        focus = guruqa_object;
+                        if (NIL != guruqa_object) {
+                            cyc_focuses = methods.funcall_instance_method_with_0_args(guruqa_object, DENOTATIONS);
+                        }
+                        sublisp_throw($sym91$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_focuses(self, cyc_focuses);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_focus(self, focus);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym91$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
+    }
+
     public static SubLObject sanity_checker_scratchpad_set_piquant_focus_method(final SubLObject self, final SubLObject focus_string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
@@ -1286,7 +1886,7 @@ public final class sanity_checker extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym91$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
             try {
-                assert NIL != stringp(focus_string) : "Types.stringp(focus_string) " + "CommonSymbols.NIL != Types.stringp(focus_string) " + focus_string;
+                assert NIL != stringp(focus_string) : "! stringp(focus_string) " + ("Types.stringp(focus_string) " + "CommonSymbols.NIL != Types.stringp(focus_string) ") + focus_string;
                 final SubLObject denotations = (NIL != string_utilities.starts_with(focus_string, $str92$__)) ? list(constants_high.find_constant(string_utilities.pre_remove(focus_string, $str92$__, UNPROVIDED))) : NIL;
                 if (NIL != denotations) {
                     focus = focus_string;
@@ -1316,6 +1916,36 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_scratchpad_method;
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_set_predicate_method_alt(SubLObject self, SubLObject cyc_predicate) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject predicate = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_predicate(self);
+            try {
+                try {
+                    if (NIL != isa.isa_in_any_mtP(cyc_predicate, $$BinaryPredicate)) {
+                        predicate = cyc_predicate;
+                    } else {
+                        Errors.warn($str_alt101$___S_is_not_a_binary_predicate_, cyc_predicate);
+                    }
+                    sublisp_throw($sym99$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_predicate(self, predicate);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym99$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_set_predicate_method(final SubLObject self, final SubLObject cyc_predicate) {
@@ -1348,6 +1978,39 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_scratchpad_method;
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_set_piquant_predicate_method_alt(SubLObject self, SubLObject piquant_predicate) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject predicate = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_predicate(self);
+            try {
+                try {
+                    {
+                        SubLObject cyc_predicate = constants_high.find_constant(piquant_predicate);
+                        if (NIL != isa.isa_in_any_mtP(cyc_predicate, $$BinaryPredicate)) {
+                            predicate = cyc_predicate;
+                        } else {
+                            Errors.warn($str_alt101$___S_is_not_a_binary_predicate_, piquant_predicate);
+                        }
+                        sublisp_throw($sym105$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_predicate(self, predicate);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym105$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_set_piquant_predicate_method(final SubLObject self, final SubLObject piquant_predicate) {
@@ -1383,6 +2046,34 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_scratchpad_method;
     }
 
+    public static final SubLObject sanity_checker_scratchpad_set_answer_method_alt(SubLObject self, SubLObject string) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject v_answer = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_answer(self);
+            try {
+                try {
+                    SubLTrampolineFile.checkType(string, STRINGP);
+                    v_answer = string;
+                    methods.funcall_instance_method_with_1_args(self, COMPUTE_CYC_ANSWERS, string);
+                    sublisp_throw($sym108$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_answer(self, v_answer);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym108$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
+    }
+
     public static SubLObject sanity_checker_scratchpad_set_answer_method(final SubLObject self, final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
@@ -1390,7 +2081,7 @@ public final class sanity_checker extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym108$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
             try {
-                assert NIL != stringp(string) : "Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) " + string;
+                assert NIL != stringp(string) : "! stringp(string) " + ("Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) ") + string;
                 v_answer = string;
                 methods.funcall_instance_method_with_1_args(self, COMPUTE_CYC_ANSWERS, string);
                 sublisp_throw($sym108$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
@@ -1411,6 +2102,46 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_scratchpad_method;
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_set_cyc_answers_method_alt(SubLObject self, SubLObject cyc_candidate_answers) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject cyc_answers = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_answers(self);
+            SubLObject v_answer = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_answer(self);
+            try {
+                try {
+                    {
+                        SubLObject cdolist_list_var = cyc_candidate_answers;
+                        SubLObject v_answer_1 = NIL;
+                        for (v_answer_1 = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_answer_1 = cdolist_list_var.first()) {
+                            if (NIL != term.el_fort_p(v_answer_1)) {
+                                cyc_answers = cons(v_answer_1, cyc_answers);
+                            } else {
+                                if (v_answer_1.isNumber()) {
+                                    cyc_answers = cons(list($$Unity, v_answer_1), cyc_answers);
+                                }
+                            }
+                        }
+                        sublisp_throw($sym113$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_answers(self, cyc_answers);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_answer(self, v_answer);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym113$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_set_cyc_answers_method(final SubLObject self, final SubLObject cyc_candidate_answers) {
@@ -1454,6 +2185,73 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_scratchpad_method;
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_compute_cyc_answers_method_alt(SubLObject self, SubLObject string) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+                SubLObject cyc_answers = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_answers(self);
+                try {
+                    try {
+                        {
+                            SubLObject all_denots = psp_main.ps_get_cycls_for_np(string, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            SubLObject good_denots = NIL;
+                            SubLObject cdolist_list_var = all_denots;
+                            SubLObject denot = NIL;
+                            for (denot = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , denot = cdolist_list_var.first()) {
+                                if (NIL != term.el_fort_p(denot)) {
+                                    {
+                                        SubLObject reformulated = reformulator_hub.reformulate_cycl(denot, UNPROVIDED, UNPROVIDED);
+                                        SubLObject wft = NIL;
+                                        {
+                                            SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                            SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                            try {
+                                                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                                wft = wff.el_wftP(denot, UNPROVIDED, UNPROVIDED);
+                                            } finally {
+                                                mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                                            }
+                                        }
+                                        if (NIL != wft) {
+                                            {
+                                                SubLObject item_var = reformulated;
+                                                if (NIL == member(item_var, good_denots, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                    good_denots = cons(item_var, good_denots);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (denot.isNumber()) {
+                                        good_denots = cons(list($$Unity, denot), good_denots);
+                                    }
+                                }
+                            }
+                            cyc_answers = good_denots;
+                            sublisp_throw($sym118$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                        }
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_answers(self, cyc_answers);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym118$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+                }
+                return catch_var_for_sanity_checker_scratchpad_method;
+            }
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_compute_cyc_answers_method(final SubLObject self, final SubLObject string) {
@@ -1517,6 +2315,54 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_scratchpad_method;
     }
 
+    public static final SubLObject sanity_checker_scratchpad_compute_degenerate_diagnosis_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject degenerate_diagnosis = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_degenerate_diagnosis(self);
+            SubLObject cyc_answers = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_answers(self);
+            SubLObject cyc_focuses = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_focuses(self);
+            SubLObject predicate = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_predicate(self);
+            try {
+                try {
+                    {
+                        SubLObject diagnosis = object.new_class_instance(SANITY_CHECKER_DIAGNOSIS);
+                        SubLObject basis = ZERO_INTEGER;
+                        if (NIL == predicate) {
+                            basis = add(basis, $int$100);
+                        }
+                        if (NIL == cyc_focuses) {
+                            basis = add(basis, TEN_INTEGER);
+                        }
+                        if (NIL == cyc_answers) {
+                            basis = add(basis, ONE_INTEGER);
+                        }
+                        if (basis.numG(ZERO_INTEGER)) {
+                            instances.set_slot(diagnosis, FAILURE_CODE, basis);
+                            degenerate_diagnosis = diagnosis;
+                        }
+                        sublisp_throw($sym123$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_degenerate_diagnosis(self, degenerate_diagnosis);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_answers(self, cyc_answers);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_focuses(self, cyc_focuses);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_predicate(self, predicate);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym123$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
+    }
+
     public static SubLObject sanity_checker_scratchpad_compute_degenerate_diagnosis_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
@@ -1563,6 +2409,132 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_sanity_checker_scratchpad_method;
+    }
+
+    public static final SubLObject sanity_checker_scratchpad_initialize_checkers_method_alt(SubLObject self, SubLObject fudge_factor) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject degenerate_diagnosis = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_degenerate_diagnosis(self);
+            SubLObject checkers_pool = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_checkers_pool(self);
+            SubLObject cyc_answers = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_answers(self);
+            SubLObject cyc_focuses = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_cyc_focuses(self);
+            SubLObject predicate = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_predicate(self);
+            try {
+                try {
+                    {
+                        SubLObject pred_arg1_set = kb_mapping_utilities.pred_values_in_any_mt(predicate, $$arg1Isa, ONE_INTEGER, TWO_INTEGER, UNPROVIDED);
+                        SubLObject pred_arg2_set = kb_mapping_utilities.pred_values_in_any_mt(predicate, $$arg2Isa, ONE_INTEGER, TWO_INTEGER, UNPROVIDED);
+                        SubLObject good_arg1s = NIL;
+                        SubLObject good_arg2s = NIL;
+                        {
+                            SubLObject cdolist_list_var = cyc_focuses;
+                            SubLObject arg = NIL;
+                            for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                                {
+                                    SubLObject fail = NIL;
+                                    if (NIL == fail) {
+                                        {
+                                            SubLObject csome_list_var = pred_arg1_set;
+                                            SubLObject arg1 = NIL;
+                                            for (arg1 = csome_list_var.first(); !((NIL != fail) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , arg1 = csome_list_var.first()) {
+                                                if (!((NIL != isa.isa_in_any_mtP(arg, arg1)) || (NIL != genls.genl_in_any_mtP(arg, arg1)))) {
+                                                    fail = T;
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (NIL == fail) {
+                                        {
+                                            SubLObject item_var = arg;
+                                            if (NIL == member(item_var, good_arg1s, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                good_arg1s = cons(item_var, good_arg1s);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var = cyc_answers;
+                            SubLObject arg = NIL;
+                            for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                                {
+                                    SubLObject fail = NIL;
+                                    SubLObject cast = NIL;
+                                    if (NIL == fail) {
+                                        {
+                                            SubLObject csome_list_var = pred_arg2_set;
+                                            SubLObject arg2 = NIL;
+                                            for (arg2 = csome_list_var.first(); !((NIL != fail) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , arg2 = csome_list_var.first()) {
+                                                cast = com.cyc.cycjava.cycl.quirk.sanity_checker.heuristically_cast_unity(predicate, arg);
+                                                if (NIL != term.el_fort_p(cast)) {
+                                                    fail = makeBoolean(!((NIL != isa.isa_in_any_mtP(cast, arg2)) || (NIL != genls.genl_in_any_mtP(arg, arg2))));
+                                                } else {
+                                                    fail = makeBoolean(!(cast.isNumber() && cast.isPositive()));
+                                                }
+                                            }
+                                        }
+                                    }
+                                    if (NIL == fail) {
+                                        {
+                                            SubLObject item_var = cast;
+                                            if (NIL == member(item_var, good_arg2s, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                good_arg2s = cons(item_var, good_arg2s);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var = good_arg1s;
+                            SubLObject good_arg1 = NIL;
+                            for (good_arg1 = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , good_arg1 = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cdolist_list_var_2 = good_arg2s;
+                                    SubLObject good_arg2 = NIL;
+                                    for (good_arg2 = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , good_arg2 = cdolist_list_var_2.first()) {
+                                        {
+                                            SubLObject checker = object.new_class_instance(SCALAR_CHECKER);
+                                            instances.set_slot(checker, FUDGE_FACTOR, fudge_factor);
+                                            instances.set_slot(checker, PREDICATE, predicate);
+                                            instances.set_slot(checker, ARG1, good_arg1);
+                                            instances.set_slot(checker, ARG2, good_arg2);
+                                            checkers_pool = cons(checker, checkers_pool);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (NIL == checkers_pool) {
+                            {
+                                SubLObject diagnosis = object.new_class_instance(SANITY_CHECKER_DIAGNOSIS);
+                                instances.set_slot(diagnosis, FAILURE_CODE, $int$1000);
+                                degenerate_diagnosis = diagnosis;
+                            }
+                        }
+                        sublisp_throw($sym130$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_degenerate_diagnosis(self, degenerate_diagnosis);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_checkers_pool(self, checkers_pool);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_answers(self, cyc_answers);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_cyc_focuses(self, cyc_focuses);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_predicate(self, predicate);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym130$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
     }
 
     public static SubLObject sanity_checker_scratchpad_initialize_checkers_method(final SubLObject self, final SubLObject fudge_factor) {
@@ -1685,6 +2657,39 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_scratchpad_method;
     }
 
+    public static final SubLObject sanity_checker_scratchpad_diagnose_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
+            SubLObject checkers_pool = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_scratchpad_checkers_pool(self);
+            try {
+                try {
+                    {
+                        SubLObject cdolist_list_var = checkers_pool;
+                        SubLObject checker = NIL;
+                        for (checker = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , checker = cdolist_list_var.first()) {
+                            methods.funcall_instance_method_with_0_args(checker, COMPUTE_RANGE);
+                            methods.funcall_instance_method_with_0_args(checker, DIAGNOSE);
+                        }
+                        sublisp_throw($sym139$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_scratchpad_checkers_pool(self, checkers_pool);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_scratchpad_method = Errors.handleThrowable(ccatch_env_var, $sym139$OUTER_CATCH_FOR_SANITY_CHECKER_SCRATCHPAD_METHOD);
+            }
+            return catch_var_for_sanity_checker_scratchpad_method;
+        }
+    }
+
     public static SubLObject sanity_checker_scratchpad_diagnose_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_scratchpad_method = NIL;
@@ -1721,73 +2726,158 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_scratchpad_method;
     }
 
+    public static final SubLObject set_scalar_checker_backchain_parameter_alt(SubLObject number) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(number, INTEGERP);
+            if (!ZERO_INTEGER.numG(number)) {
+                $scalar_checker_backchain$.setDynamicValue(number, thread);
+            }
+            return $scalar_checker_backchain$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject set_scalar_checker_backchain_parameter(final SubLObject number) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != integerp(number) : "Types.integerp(number) " + "CommonSymbols.NIL != Types.integerp(number) " + number;
+        assert NIL != integerp(number) : "! integerp(number) " + ("Types.integerp(number) " + "CommonSymbols.NIL != Types.integerp(number) ") + number;
         if (!ZERO_INTEGER.numG(number)) {
             $scalar_checker_backchain$.setDynamicValue(number, thread);
         }
         return $scalar_checker_backchain$.getDynamicValue(thread);
     }
 
+    public static final SubLObject get_scalar_checker_arg2range_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_access_protected_instance_slot(scalar_checker, SEVEN_INTEGER, ARG2RANGE);
+    }
+
     public static SubLObject get_scalar_checker_arg2range(final SubLObject scalar_checker) {
         return classes.subloop_get_access_protected_instance_slot(scalar_checker, SEVEN_INTEGER, ARG2RANGE);
+    }
+
+    public static final SubLObject set_scalar_checker_arg2range_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(scalar_checker, value, SEVEN_INTEGER, ARG2RANGE);
     }
 
     public static SubLObject set_scalar_checker_arg2range(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(scalar_checker, value, SEVEN_INTEGER, ARG2RANGE);
     }
 
+    public static final SubLObject get_scalar_checker_arg2_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_instance_slot(scalar_checker, SIX_INTEGER);
+    }
+
     public static SubLObject get_scalar_checker_arg2(final SubLObject scalar_checker) {
         return classes.subloop_get_instance_slot(scalar_checker, SIX_INTEGER);
+    }
+
+    public static final SubLObject set_scalar_checker_arg2_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(scalar_checker, value, SIX_INTEGER);
     }
 
     public static SubLObject set_scalar_checker_arg2(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(scalar_checker, value, SIX_INTEGER);
     }
 
+    public static final SubLObject get_scalar_checker_arg1_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_instance_slot(scalar_checker, FIVE_INTEGER);
+    }
+
     public static SubLObject get_scalar_checker_arg1(final SubLObject scalar_checker) {
         return classes.subloop_get_instance_slot(scalar_checker, FIVE_INTEGER);
+    }
+
+    public static final SubLObject set_scalar_checker_arg1_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(scalar_checker, value, FIVE_INTEGER);
     }
 
     public static SubLObject set_scalar_checker_arg1(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(scalar_checker, value, FIVE_INTEGER);
     }
 
+    public static final SubLObject get_scalar_checker_backchain_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_instance_slot(scalar_checker, FOUR_INTEGER);
+    }
+
     public static SubLObject get_scalar_checker_backchain(final SubLObject scalar_checker) {
         return classes.subloop_get_instance_slot(scalar_checker, FOUR_INTEGER);
+    }
+
+    public static final SubLObject set_scalar_checker_backchain_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(scalar_checker, value, FOUR_INTEGER);
     }
 
     public static SubLObject set_scalar_checker_backchain(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(scalar_checker, value, FOUR_INTEGER);
     }
 
+    public static final SubLObject get_scalar_checker_diagnosis_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_instance_slot(scalar_checker, THREE_INTEGER);
+    }
+
     public static SubLObject get_scalar_checker_diagnosis(final SubLObject scalar_checker) {
         return classes.subloop_get_instance_slot(scalar_checker, THREE_INTEGER);
+    }
+
+    public static final SubLObject set_scalar_checker_diagnosis_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(scalar_checker, value, THREE_INTEGER);
     }
 
     public static SubLObject set_scalar_checker_diagnosis(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(scalar_checker, value, THREE_INTEGER);
     }
 
+    public static final SubLObject get_scalar_checker_predicate_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_instance_slot(scalar_checker, TWO_INTEGER);
+    }
+
     public static SubLObject get_scalar_checker_predicate(final SubLObject scalar_checker) {
         return classes.subloop_get_instance_slot(scalar_checker, TWO_INTEGER);
+    }
+
+    public static final SubLObject set_scalar_checker_predicate_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(scalar_checker, value, TWO_INTEGER);
     }
 
     public static SubLObject set_scalar_checker_predicate(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(scalar_checker, value, TWO_INTEGER);
     }
 
+    public static final SubLObject get_scalar_checker_fudge_factor_alt(SubLObject scalar_checker) {
+        return classes.subloop_get_instance_slot(scalar_checker, ONE_INTEGER);
+    }
+
     public static SubLObject get_scalar_checker_fudge_factor(final SubLObject scalar_checker) {
         return classes.subloop_get_instance_slot(scalar_checker, ONE_INTEGER);
+    }
+
+    public static final SubLObject set_scalar_checker_fudge_factor_alt(SubLObject scalar_checker, SubLObject value) {
+        return classes.subloop_set_instance_slot(scalar_checker, value, ONE_INTEGER);
     }
 
     public static SubLObject set_scalar_checker_fudge_factor(final SubLObject scalar_checker, final SubLObject value) {
         return classes.subloop_set_instance_slot(scalar_checker, value, ONE_INTEGER);
     }
 
+    public static final SubLObject subloop_reserved_initialize_scalar_checker_class_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject subloop_reserved_initialize_scalar_checker_class(final SubLObject new_instance) {
         classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_scalar_checker_instance_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, FUDGE_FACTOR, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, PREDICATE, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, DIAGNOSIS, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, BACKCHAIN, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, ARG1, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, ARG2, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_CHECKER, ARG2RANGE, NIL);
         return NIL;
     }
 
@@ -1804,8 +2894,42 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject scalar_checker_p_alt(SubLObject scalar_checker) {
+        return classes.subloop_instanceof_class(scalar_checker, SCALAR_CHECKER);
+    }
+
     public static SubLObject scalar_checker_p(final SubLObject scalar_checker) {
         return classes.subloop_instanceof_class(scalar_checker, SCALAR_CHECKER);
+    }
+
+    public static final SubLObject scalar_checker_initialize_method_alt(SubLObject self) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject catch_var_for_scalar_checker_method = NIL;
+                SubLObject backchain = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_backchain(self);
+                try {
+                    try {
+                        object.object_initialize_method(self);
+                        backchain = $scalar_checker_backchain$.getDynamicValue(thread);
+                        sublisp_throw($sym149$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD, self);
+                    } finally {
+                        {
+                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                            try {
+                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_backchain(self, backchain);
+                            } finally {
+                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } catch (Throwable ccatch_env_var) {
+                    catch_var_for_scalar_checker_method = Errors.handleThrowable(ccatch_env_var, $sym149$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD);
+                }
+                return catch_var_for_scalar_checker_method;
+            }
+        }
     }
 
     public static SubLObject scalar_checker_initialize_method(final SubLObject self) {
@@ -1835,6 +2959,81 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_checker_method;
+    }
+
+    public static final SubLObject scalar_checker_compute_range_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_checker_method = NIL;
+            SubLObject arg2range = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_arg2range(self);
+            SubLObject arg1 = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_arg1(self);
+            SubLObject backchain = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_backchain(self);
+            SubLObject predicate = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_predicate(self);
+            SubLObject fudge_factor = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_fudge_factor(self);
+            try {
+                try {
+                    {
+                        SubLObject arg = com.cyc.cycjava.cycl.quirk.sanity_checker.typeshift_argument(arg1);
+                        SubLObject query = listS(predicate, arg, $list_alt153);
+                        SubLObject answers = ask_utilities.ask_template($sym154$_RANGE, query, $$EverythingPSC, backchain, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject to_merge = answers;
+                        SubLObject range = NIL;
+                        if (NIL == range) {
+                            {
+                                SubLObject csome_list_var = answers;
+                                SubLObject v_answer = NIL;
+                                for (v_answer = csome_list_var.first(); !((NIL != range) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , v_answer = csome_list_var.first()) {
+                                    {
+                                        SubLObject candidate_range = object.new_class_instance(SCALAR_RANGE);
+                                        methods.funcall_instance_method_with_1_args(candidate_range, FILL, v_answer);
+                                        to_merge = to_merge.rest();
+                                        if (NIL == methods.funcall_instance_method_with_0_args(candidate_range, EMPTY_P)) {
+                                            range = candidate_range;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var = to_merge;
+                            SubLObject v_answer = NIL;
+                            for (v_answer = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_answer = cdolist_list_var.first()) {
+                                if (NIL != range) {
+                                    {
+                                        SubLObject new_range = object.new_class_instance(SCALAR_RANGE);
+                                        methods.funcall_instance_method_with_1_args(new_range, FILL, v_answer);
+                                        if (NIL == methods.funcall_instance_method_with_0_args(new_range, EMPTY_P)) {
+                                            range = methods.funcall_instance_method_with_1_args(range, MERGE, new_range);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (NIL != range) {
+                            methods.funcall_instance_method_with_1_args(range, FUDGE, fudge_factor);
+                            arg2range = range;
+                        }
+                        sublisp_throw($sym152$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_arg2range(self, arg2range);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_arg1(self, arg1);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_backchain(self, backchain);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_predicate(self, predicate);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_fudge_factor(self, fudge_factor);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_checker_method = Errors.handleThrowable(ccatch_env_var, $sym152$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD);
+            }
+            return catch_var_for_scalar_checker_method;
+        }
     }
 
     public static SubLObject scalar_checker_compute_range_method(final SubLObject self) {
@@ -1910,11 +3109,97 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_checker_method;
     }
 
+    public static final SubLObject typeshift_argument_alt(SubLObject arg) {
+        if (NIL != isa.isa_in_any_mtP(arg, $$Collection)) {
+            return list($$SomeFn, arg);
+        } else {
+            return arg;
+        }
+    }
+
     public static SubLObject typeshift_argument(final SubLObject arg) {
         if (NIL != isa.isa_in_any_mtP(arg, $$Collection)) {
             return list($$SomeFn, arg);
         }
         return arg;
+    }
+
+    public static final SubLObject scalar_checker_diagnose_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_checker_method = NIL;
+            SubLObject arg2range = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_arg2range(self);
+            SubLObject arg2 = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_arg2(self);
+            SubLObject arg1 = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_arg1(self);
+            SubLObject diagnosis = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_diagnosis(self);
+            SubLObject predicate = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_checker_predicate(self);
+            try {
+                try {
+                    {
+                        SubLObject diagn = object.new_class_instance(SANITY_CHECKER_DIAGNOSIS);
+                        SubLObject cast = com.cyc.cycjava.cycl.quirk.sanity_checker.heuristically_cast_unity(predicate, arg2);
+                        SubLObject arg2min = (NIL != arg2range) ? ((SubLObject) (methods.funcall_instance_method_with_0_args(arg2range, GET_MIN))) : NIL;
+                        SubLObject arg2max = (NIL != arg2range) ? ((SubLObject) (methods.funcall_instance_method_with_0_args(arg2range, GET_MAX))) : NIL;
+                        SubLObject range = (NIL != arg2range) ? ((SubLObject) (methods.funcall_instance_method_with_0_args(arg2range, LISTIFY))) : NIL;
+                        SubLObject cycl_explanation = NIL;
+                        instances.set_slot(diagn, PREDICATE, predicate);
+                        instances.set_slot(diagn, PROPOSED_ARG, arg1);
+                        instances.set_slot(diagn, PROPOSED_VALUE, arg2);
+                        if ((NIL != arg2min) && (NIL != arg2max)) {
+                            {
+                                SubLObject negative_test_min = list($$lessThan, cast, arg2min);
+                                SubLObject negative_test_max = list($$greaterThan, cast, arg2max);
+                                SubLObject positive_test = list($$quantitySubsumes, range, cast);
+                                if (NIL != inference_kernel.new_cyc_query(negative_test_min, $$EverythingPSC, UNPROVIDED)) {
+                                    instances.set_slot(diagn, COMPLETE, ONE_INTEGER);
+                                    instances.set_slot(diagn, ANSWER_KNOWN, ONE_INTEGER);
+                                    instances.set_slot(diagn, ANSWER, ZERO_INTEGER);
+                                    cycl_explanation = list($$and, list(predicate, arg1, range), negative_test_min);
+                                } else {
+                                    if (NIL != inference_kernel.new_cyc_query(negative_test_max, $$EverythingPSC, UNPROVIDED)) {
+                                        instances.set_slot(diagn, COMPLETE, ONE_INTEGER);
+                                        instances.set_slot(diagn, ANSWER_KNOWN, ONE_INTEGER);
+                                        instances.set_slot(diagn, ANSWER, ZERO_INTEGER);
+                                        cycl_explanation = list($$and, list(predicate, arg1, range), negative_test_max);
+                                    } else {
+                                        if (NIL != inference_kernel.new_cyc_query(positive_test, $$EverythingPSC, UNPROVIDED)) {
+                                            instances.set_slot(diagn, COMPLETE, ONE_INTEGER);
+                                            instances.set_slot(diagn, ANSWER_KNOWN, ONE_INTEGER);
+                                            instances.set_slot(diagn, ANSWER, ONE_INTEGER);
+                                            cycl_explanation = list($$and, list(predicate, arg1, range), positive_test);
+                                        }
+                                    }
+                                }
+                            }
+                            instances.set_slot(diagn, JUSTIFICATION, pph_main.generate_phrase(cycl_explanation, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                        } else {
+                            instances.set_slot(diagn, COMPLETE, ONE_INTEGER);
+                            instances.set_slot(diagn, ANSWER_KNOWN, ZERO_INTEGER);
+                            instances.set_slot(diagn, ANSWER, ZERO_INTEGER);
+                            instances.set_slot(diagn, JUSTIFICATION, $$$No_information_available);
+                        }
+                        diagnosis = diagn;
+                        sublisp_throw($sym164$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD, self);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_arg2range(self, arg2range);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_arg2(self, arg2);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_arg1(self, arg1);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_diagnosis(self, diagnosis);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_checker_predicate(self, predicate);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_checker_method = Errors.handleThrowable(ccatch_env_var, $sym164$OUTER_CATCH_FOR_SCALAR_CHECKER_METHOD);
+            }
+            return catch_var_for_scalar_checker_method;
+        }
     }
 
     public static SubLObject scalar_checker_diagnose_method(final SubLObject self) {
@@ -1993,72 +3278,157 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_checker_method;
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_predicate_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, EIGHT_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_predicate(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, EIGHT_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_predicate_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, EIGHT_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_predicate(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, EIGHT_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_proposed_arg_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, SEVEN_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_proposed_arg(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, SEVEN_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_proposed_arg_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, SEVEN_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_proposed_arg(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, SEVEN_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_proposed_value_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, SIX_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_proposed_value(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, SIX_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_proposed_value_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, SIX_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_proposed_value(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, SIX_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_justification_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, FIVE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_justification(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, FIVE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_justification_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, FIVE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_justification(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, FIVE_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_answer_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, FOUR_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_answer(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, FOUR_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_answer_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, FOUR_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_answer(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, FOUR_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_answer_known_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, THREE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_answer_known(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, THREE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_answer_known_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, THREE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_answer_known(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, THREE_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_complete_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, TWO_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_complete(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, TWO_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_complete_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, TWO_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_complete(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, TWO_INTEGER);
     }
 
+    public static final SubLObject get_sanity_checker_diagnosis_failure_code_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_get_instance_slot(sanity_checker_diagnosis, ONE_INTEGER);
+    }
+
     public static SubLObject get_sanity_checker_diagnosis_failure_code(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_get_instance_slot(sanity_checker_diagnosis, ONE_INTEGER);
+    }
+
+    public static final SubLObject set_sanity_checker_diagnosis_failure_code_alt(SubLObject sanity_checker_diagnosis, SubLObject value) {
+        return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, ONE_INTEGER);
     }
 
     public static SubLObject set_sanity_checker_diagnosis_failure_code(final SubLObject sanity_checker_diagnosis, final SubLObject value) {
         return classes.subloop_set_instance_slot(sanity_checker_diagnosis, value, ONE_INTEGER);
     }
 
+    public static final SubLObject subloop_reserved_initialize_sanity_checker_diagnosis_class_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject subloop_reserved_initialize_sanity_checker_diagnosis_class(final SubLObject new_instance) {
         classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
+    static private final SubLList $list_alt10 = list(list(makeSymbol("CACHE"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("SCRATCHPAD"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("FUDGE-FACTOR"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("SHOW-DEBUG-INFO"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK-LISTIFIED"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")));
+
+    public static final SubLObject subloop_reserved_initialize_sanity_checker_diagnosis_instance_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, FAILURE_CODE, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, COMPLETE, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, ANSWER_KNOWN, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, ANSWER, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, JUSTIFICATION, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, PROPOSED_VALUE, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, PROPOSED_ARG, NIL);
+        classes.subloop_initialize_slot(new_instance, SANITY_CHECKER_DIAGNOSIS, PREDICATE, NIL);
         return NIL;
     }
 
@@ -2076,8 +3446,43 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt20 = list(makeKeyword("PROTECTED"));
+
+    public static final SubLObject sanity_checker_diagnosis_p_alt(SubLObject sanity_checker_diagnosis) {
+        return classes.subloop_instanceof_class(sanity_checker_diagnosis, SANITY_CHECKER_DIAGNOSIS);
+    }
+
     public static SubLObject sanity_checker_diagnosis_p(final SubLObject sanity_checker_diagnosis) {
         return classes.subloop_instanceof_class(sanity_checker_diagnosis, SANITY_CHECKER_DIAGNOSIS);
+    }
+
+    static private final SubLList $list_alt21 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("FUDGE-FACTOR"), ZERO_INTEGER), list(RET, makeSymbol("SELF")));
+
+    public static final SubLObject sanity_checker_diagnosis_initialize_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_diagnosis_method = NIL;
+            SubLObject failure_code = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_diagnosis_failure_code(self);
+            try {
+                try {
+                    object.object_initialize_method(self);
+                    failure_code = ZERO_INTEGER;
+                    sublisp_throw($sym182$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_diagnosis_failure_code(self, failure_code);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_diagnosis_method = Errors.handleThrowable(ccatch_env_var, $sym182$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD);
+            }
+            return catch_var_for_sanity_checker_diagnosis_method;
+        }
     }
 
     public static SubLObject sanity_checker_diagnosis_initialize_method(final SubLObject self) {
@@ -2109,6 +3514,54 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_diagnosis_method;
     }
 
+    static private final SubLList $list_alt24 = list(list(makeSymbol("CSETQ"), makeSymbol("SHOW-DEBUG-INFO"), T), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt28 = list(list(makeSymbol("CSETQ"), makeSymbol("SHOW-DEBUG-INFO"), NIL), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt31 = list(makeKeyword("PUBLIC"));
+
+    static private final SubLList $list_alt32 = list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER"));
+
+    static private final SubLList $list_alt33 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-FOCUS")), makeSymbol("FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-ANSWER")), makeSymbol("ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY")))))), list(RET, makeSymbol("RESULT"))));
+
+    /**
+     * A yes-or-no answer as to whether the diagnosis is favorable (T) or
+     * unfavorable (NIL).
+     */
+    @LispMethod(comment = "A yes-or-no answer as to whether the diagnosis is favorable (T) or\r\nunfavorable (NIL).\nA yes-or-no answer as to whether the diagnosis is favorable (T) or\nunfavorable (NIL).")
+    public static final SubLObject sanity_checker_diagnosis_boolean_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_sanity_checker_diagnosis_method = NIL;
+            SubLObject v_answer = com.cyc.cycjava.cycl.quirk.sanity_checker.get_sanity_checker_diagnosis_answer(self);
+            try {
+                try {
+                    if (!v_answer.isInteger()) {
+                        sublisp_throw($sym185$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD, NIL);
+                    }
+                    sublisp_throw($sym185$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD, numG(v_answer, ZERO_INTEGER));
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_sanity_checker_diagnosis_answer(self, v_answer);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_sanity_checker_diagnosis_method = Errors.handleThrowable(ccatch_env_var, $sym185$OUTER_CATCH_FOR_SANITY_CHECKER_DIAGNOSIS_METHOD);
+            }
+            return catch_var_for_sanity_checker_diagnosis_method;
+        }
+    }
+
+    /**
+     * A yes-or-no answer as to whether the diagnosis is favorable (T) or
+     * unfavorable (NIL).
+     */
+    @LispMethod(comment = "A yes-or-no answer as to whether the diagnosis is favorable (T) or\r\nunfavorable (NIL).\nA yes-or-no answer as to whether the diagnosis is favorable (T) or\nunfavorable (NIL).")
     public static SubLObject sanity_checker_diagnosis_boolean_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_sanity_checker_diagnosis_method = NIL;
@@ -2139,40 +3592,93 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_sanity_checker_diagnosis_method;
     }
 
+    public static final SubLObject get_scalar_range_point_info_alt(SubLObject scalar_range) {
+        return classes.subloop_get_access_protected_instance_slot(scalar_range, FOUR_INTEGER, POINT_INFO);
+    }
+
     public static SubLObject get_scalar_range_point_info(final SubLObject scalar_range) {
         return classes.subloop_get_access_protected_instance_slot(scalar_range, FOUR_INTEGER, POINT_INFO);
+    }
+
+    public static final SubLObject set_scalar_range_point_info_alt(SubLObject scalar_range, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(scalar_range, value, FOUR_INTEGER, POINT_INFO);
     }
 
     public static SubLObject set_scalar_range_point_info(final SubLObject scalar_range, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(scalar_range, value, FOUR_INTEGER, POINT_INFO);
     }
 
+    public static final SubLObject get_scalar_range_max_alt(SubLObject scalar_range) {
+        return classes.subloop_get_access_protected_instance_slot(scalar_range, THREE_INTEGER, MAX);
+    }
+
     public static SubLObject get_scalar_range_max(final SubLObject scalar_range) {
         return classes.subloop_get_access_protected_instance_slot(scalar_range, THREE_INTEGER, MAX);
+    }
+
+    public static final SubLObject set_scalar_range_max_alt(SubLObject scalar_range, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(scalar_range, value, THREE_INTEGER, MAX);
     }
 
     public static SubLObject set_scalar_range_max(final SubLObject scalar_range, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(scalar_range, value, THREE_INTEGER, MAX);
     }
 
+    static private final SubLString $str_alt44$___S = makeString("~%~S");
+
+    public static final SubLObject get_scalar_range_min_alt(SubLObject scalar_range) {
+        return classes.subloop_get_access_protected_instance_slot(scalar_range, TWO_INTEGER, MIN);
+    }
+
     public static SubLObject get_scalar_range_min(final SubLObject scalar_range) {
         return classes.subloop_get_access_protected_instance_slot(scalar_range, TWO_INTEGER, MIN);
+    }
+
+    static private final SubLList $list_alt47 = list(makeSymbol("PREDICATE"), makeSymbol("CYC-INTERPRETATIONS"), makeSymbol("CYC-ANSWERS"));
+
+    public static final SubLObject set_scalar_range_min_alt(SubLObject scalar_range, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(scalar_range, value, TWO_INTEGER, MIN);
     }
 
     public static SubLObject set_scalar_range_min(final SubLObject scalar_range, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(scalar_range, value, TWO_INTEGER, MIN);
     }
 
+    static private final SubLList $list_alt48 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("CYC-FOCUSES")), makeSymbol("CYC-INTERPRETATIONS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-CYC-ANSWERS")), makeSymbol("CYC-ANSWERS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY")))))), list(RET, makeSymbol("RESULT"))));
+
+    public static final SubLObject get_scalar_range_unit_alt(SubLObject scalar_range) {
+        return classes.subloop_get_access_protected_instance_slot(scalar_range, ONE_INTEGER, UNIT);
+    }
+
     public static SubLObject get_scalar_range_unit(final SubLObject scalar_range) {
         return classes.subloop_get_access_protected_instance_slot(scalar_range, ONE_INTEGER, UNIT);
+    }
+
+    public static final SubLObject set_scalar_range_unit_alt(SubLObject scalar_range, SubLObject value) {
+        return classes.subloop_set_access_protected_instance_slot(scalar_range, value, ONE_INTEGER, UNIT);
     }
 
     public static SubLObject set_scalar_range_unit(final SubLObject scalar_range, final SubLObject value) {
         return classes.subloop_set_access_protected_instance_slot(scalar_range, value, ONE_INTEGER, UNIT);
     }
 
+    public static final SubLObject subloop_reserved_initialize_scalar_range_class_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject subloop_reserved_initialize_scalar_range_class(final SubLObject new_instance) {
         classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_scalar_range_instance_alt(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_RANGE, UNIT, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_RANGE, MIN, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_RANGE, MAX, NIL);
+        classes.subloop_initialize_slot(new_instance, SCALAR_RANGE, POINT_INFO, NIL);
         return NIL;
     }
 
@@ -2186,10 +3692,54 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject scalar_range_p_alt(SubLObject scalar_range) {
+        return classes.subloop_instanceof_class(scalar_range, SCALAR_RANGE);
+    }
+
     public static SubLObject scalar_range_p(final SubLObject scalar_range) {
         return classes.subloop_instanceof_class(scalar_range, SCALAR_RANGE);
     }
 
+    /**
+     * Prints SCALAR-RANGE to STREAM, ignoring depth
+     */
+    @LispMethod(comment = "Prints SCALAR-RANGE to STREAM, ignoring depth")
+    public static final SubLObject scalar_range_print_method_alt(SubLObject self, SubLObject stream, SubLObject depth) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject point_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_point_info(self);
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    princ(list(unit, min, max, point_info), stream);
+                    sublisp_throw($sym197$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_point_info(self, point_info);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym197$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
+    /**
+     * Prints SCALAR-RANGE to STREAM, ignoring depth
+     */
+    @LispMethod(comment = "Prints SCALAR-RANGE to STREAM, ignoring depth")
     public static SubLObject scalar_range_print_method(final SubLObject self, final SubLObject stream, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2222,6 +3772,41 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLList $list_alt54 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-ANSWER")), makeSymbol("ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES")))), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("CPUSH"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY"))), makeSymbol("LISTIFIED-RESULT"))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), makeSymbol("ITEM")))), list(RET, makeSymbol("LISTIFIED-RESULT"))));
+
+    public static final SubLObject scalar_range_initialize_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    object.object_initialize_method(self);
+                    unit = $$Unity;
+                    min = ZERO_INTEGER;
+                    max = ZERO_INTEGER;
+                    sublisp_throw($sym200$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym200$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_initialize_method(final SubLObject self) {
@@ -2259,6 +3844,37 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt60 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK"), list(makeSymbol("PIQUANT-PREDICATE"), makeSymbol("PIQUANT-FOCUS"), makeSymbol("PIQUANT-ANSWER")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CHECK-LISTIFIED"), list(makeSymbol("PREDICATE"), makeSymbol("FOCUS"), makeSymbol("ANSWER")), makeKeyword("PUBLIC")));
+
+    public static final SubLObject scalar_range_empty_p_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    sublisp_throw($sym203$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, makeBoolean((unit.eql($$Unity) && min.numE(ZERO_INTEGER)) && max.numE(ZERO_INTEGER)));
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym203$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_empty_p_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2288,6 +3904,79 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLList $list_alt63 = list(makeSymbol("PIQUANT-PREDICATE"), makeSymbol("PIQUANT-FOCUS"), makeSymbol("PIQUANT-ANSWER"));
+
+    static private final SubLList $list_alt64 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-PREDICATE")), makeSymbol("PIQUANT-PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("PIQUANT-FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-ANSWER")), makeSymbol("PIQUANT-ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES"))))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY")))))), list(RET, makeSymbol("RESULT"))));
+
+    public static final SubLObject scalar_range_fill_method_alt(SubLObject self, SubLObject value) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject point_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_point_info(self);
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    if (NIL == inference_kernel.new_cyc_query(listS($$isa, value, $list_alt209), $$BaseKB, UNPROVIDED)) {
+                        sublisp_throw($sym207$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
+                    }
+                    if (value.isNumber()) {
+                        min = value;
+                        max = value;
+                        point_info = T;
+                    } else {
+                        if (value.isCons()) {
+                            {
+                                SubLObject value_unit = value.first();
+                                SubLObject value_min = second(value);
+                                SubLObject value_max = third(value);
+                                SubLObject new_unit = NIL;
+                                SubLObject new_min = NIL;
+                                SubLObject new_max = NIL;
+                                if (NIL != isa.isaP(value_unit, $$UnitOfMeasure, UNPROVIDED, UNPROVIDED)) {
+                                    new_unit = value_unit;
+                                }
+                                if (value_min.isNumber()) {
+                                    new_min = value_min;
+                                }
+                                if (value_max.isNumber()) {
+                                    new_max = value_max;
+                                } else {
+                                    new_max = new_min;
+                                }
+                                if (((NIL != new_unit) && (NIL != new_min)) && (NIL != new_max)) {
+                                    unit = new_unit;
+                                    min = new_min;
+                                    max = new_max;
+                                }
+                                if (new_min == new_max) {
+                                    point_info = T;
+                                }
+                            }
+                        }
+                    }
+                    sublisp_throw($sym207$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_point_info(self, point_info);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym207$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_fill_method(final SubLObject self, final SubLObject value) {
@@ -2359,6 +4048,33 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt68 = list(list(makeSymbol("CSETQ"), makeSymbol("SCRATCHPAD"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-SCRATCHPAD")))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-PREDICATE")), makeSymbol("PIQUANT-PREDICATE")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-PIQUANT-FOCUS")), makeSymbol("PIQUANT-FOCUS")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("SET-ANSWER")), makeSymbol("PIQUANT-ANSWER")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"))), list(makeSymbol("PUNLESS"), list(makeSymbol("GET-SLOT"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("INITIALIZE-CHECKERS")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(makeSymbol("CLET"), list(list(makeSymbol("RESULT"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SCRATCHPAD"), list(QUOTE, makeSymbol("OUTPUT-DIAGNOSES")))), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("RESULT")), list(makeSymbol("CPUSH"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("ITEM"), list(QUOTE, makeSymbol("PLISTIFY"))), makeSymbol("LISTIFIED-RESULT"))), list(makeSymbol("PWHEN"), makeSymbol("SHOW-DEBUG-INFO"), list(makeSymbol("CDOLIST"), list(makeSymbol("ITEM"), makeSymbol("LISTIFIED-RESULT")), list(makeSymbol("FORMAT"), makeSymbol("*STANDARD-OUTPUT*"), makeString("~%~S"), makeSymbol("ITEM")))), list(RET, makeSymbol("LISTIFIED-RESULT"))));
+
+    public static final SubLObject scalar_range_get_unit_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    sublisp_throw($sym215$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, unit);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym215$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_get_unit_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2384,6 +4100,39 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLList $list_alt71 = list(new SubLObject[]{ list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("FOCUS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CYC-FOCUSES"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ANSWER"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CYC-ANSWERS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("CHECKERS-POOL"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEGENERATE-DIAGNOSIS"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEF-CLASS-METHOD"), makeSymbol("INITIALIZE-CHECKERS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-FOCUS"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PIQUANT-FOCUS"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PREDICATE"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-PIQUANT-PREDICATE"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SET-ANSWER"), list(makeSymbol("STRING")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("COMPUTE-DEGENERATE-DIAGNOSIS"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("DIAGNOSE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("OUTPUT-DIAGNOSES"), NIL, makeKeyword("PUBLIC")) });
+
+    public static final SubLObject scalar_range_get_min_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    if (NIL != methods.funcall_instance_method_with_0_args(self, EMPTY_P)) {
+                        sublisp_throw($sym218$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                    } else {
+                        sublisp_throw($sym218$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, list(unit, min));
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym218$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_get_min_method(final SubLObject self) {
@@ -2419,6 +4168,33 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt79 = list(list(makeSymbol("PIF"), makeSymbol("DEGENERATE-DIAGNOSIS"), list(RET, list(makeSymbol("LIST"), makeSymbol("DEGENERATE-DIAGNOSIS"))), list(makeSymbol("CLET"), list(makeSymbol("DIAGNOSES")), list(makeSymbol("CDOLIST"), list(makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL")), list(makeSymbol("CPUSH"), list(makeSymbol("GET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("DIAGNOSIS"))), makeSymbol("DIAGNOSES"))), list(RET, makeSymbol("DIAGNOSES")))));
+
+    public static final SubLObject scalar_range_get_min_value_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            try {
+                try {
+                    sublisp_throw($sym222$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, min);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym222$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_get_min_value_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2444,6 +4220,43 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLList $list_alt83 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt85 = list(makeSymbol("STRING"));
+
+    static private final SubLList $list_alt86 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("STRING"), makeSymbol("STRINGP")), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("STRING")), list(makeSymbol("CDOLIST"), list(makeSymbol("DENOT"), list(makeSymbol("PS-GET-CYCLS-FOR-NP"), makeSymbol("STRING"))), list(makeSymbol("CLET"), list(list(makeSymbol("REFORMULATED"), list(makeSymbol("REFORMULATE-CYCL"), makeSymbol("DENOT")))), list(makeSymbol("PWHEN"), makeSymbol("REFORMULATED"), list(makeSymbol("CPUSHNEW"), makeSymbol("REFORMULATED"), makeSymbol("CYC-FOCUSES"), list(makeSymbol("FUNCTION"), EQUAL))))), list(RET, makeSymbol("SELF")));
+
+    public static final SubLObject scalar_range_get_max_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    if (NIL != methods.funcall_instance_method_with_0_args(self, EMPTY_P)) {
+                        sublisp_throw($sym225$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                    } else {
+                        sublisp_throw($sym225$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, list(unit, max));
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym225$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_get_max_method(final SubLObject self) {
@@ -2479,6 +4292,35 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt89 = list(makeSymbol("FOCUS-STRING"));
+
+    static private final SubLList $list_alt90 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("FOCUS-STRING"), makeSymbol("STRINGP")), list(makeSymbol("CLET"), list(list(makeSymbol("DENOTATIONS"), list(makeSymbol("FWHEN"), list(makeSymbol("STARTS-WITH"), makeSymbol("FOCUS-STRING"), makeString("#$")), list(makeSymbol("LIST"), list(makeSymbol("FIND-CONSTANT"), list(makeSymbol("PRE-REMOVE"), makeSymbol("FOCUS-STRING"), makeString("#$"))))))), list(makeSymbol("PWHEN"), makeSymbol("DENOTATIONS"), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("FOCUS-STRING")), list(makeSymbol("CSETQ"), makeSymbol("CYC-FOCUSES"), makeSymbol("DENOTATIONS")), list(RET, makeSymbol("SELF")))), list(makeSymbol("CLET"), list(list(makeSymbol("GURUQA-OBJECT"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(QUOTE, makeSymbol("GURUQA-OBJECT")), list(QUOTE, makeSymbol("GURUQA-PARSE-PRECISE")), makeSymbol("FOCUS-STRING")))), list(makeSymbol("CSETQ"), makeSymbol("FOCUS"), makeSymbol("GURUQA-OBJECT")), list(makeSymbol("PWHEN"), makeSymbol("GURUQA-OBJECT"), list(makeSymbol("CSETQ"), makeSymbol("CYC-FOCUSES"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("GURUQA-OBJECT"), list(QUOTE, makeSymbol("DENOTATIONS"))))), list(RET, makeSymbol("SELF"))));
+
+    public static final SubLObject scalar_range_get_max_value_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            try {
+                try {
+                    sublisp_throw($sym229$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, max);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym229$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_get_max_value_method(final SubLObject self) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2504,6 +4346,43 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLString $str_alt92$__ = makeString("#$");
+
+    static private final SubLList $list_alt97 = list(makeSymbol("CYC-PREDICATE"));
+
+    static private final SubLList $list_alt98 = list(list(makeSymbol("PIF"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CYC-PREDICATE"), reader_make_constant_shell("BinaryPredicate")), list(makeSymbol("CSETQ"), makeSymbol("PREDICATE"), makeSymbol("CYC-PREDICATE")), list(makeSymbol("WARN"), makeString("~%~S is not a binary predicate."), makeSymbol("CYC-PREDICATE"))), list(RET, makeSymbol("SELF")));
+
+    static private final SubLString $str_alt101$___S_is_not_a_binary_predicate_ = makeString("~%~S is not a binary predicate.");
+
+    public static final SubLObject scalar_range_listify_method_alt(SubLObject self) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    sublisp_throw($sym232$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, list(unit, min, max));
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym232$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_listify_method(final SubLObject self) {
@@ -2537,6 +4416,42 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt103 = list(makeSymbol("PIQUANT-PREDICATE"));
+
+    static private final SubLList $list_alt104 = list(list(makeSymbol("CLET"), list(list(makeSymbol("CYC-PREDICATE"), list(makeSymbol("FIND-CONSTANT"), makeSymbol("PIQUANT-PREDICATE")))), list(makeSymbol("PIF"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CYC-PREDICATE"), reader_make_constant_shell("BinaryPredicate")), list(makeSymbol("CSETQ"), makeSymbol("PREDICATE"), makeSymbol("CYC-PREDICATE")), list(makeSymbol("WARN"), makeString("~%~S is not a binary predicate."), makeSymbol("PIQUANT-PREDICATE"))), list(RET, makeSymbol("SELF"))));
+
+    static private final SubLList $list_alt107 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("STRING"), makeSymbol("STRINGP")), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), makeSymbol("STRING")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(QUOTE, makeSymbol("COMPUTE-CYC-ANSWERS")), makeSymbol("STRING")), list(RET, makeSymbol("SELF")));
+
+    public static final SubLObject scalar_range_fudge_method_alt(SubLObject self, SubLObject fudge_factor) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            try {
+                try {
+                    SubLTrampolineFile.checkType(fudge_factor, NUMBERP);
+                    min = subtract(min, multiply(min, fudge_factor));
+                    max = add(max, multiply(max, fudge_factor));
+                    sublisp_throw($sym235$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym235$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_fudge_method(final SubLObject self, final SubLObject fudge_factor) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2545,7 +4460,7 @@ public final class sanity_checker extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym235$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
             try {
-                assert NIL != numberp(fudge_factor) : "Types.numberp(fudge_factor) " + "CommonSymbols.NIL != Types.numberp(fudge_factor) " + fudge_factor;
+                assert NIL != numberp(fudge_factor) : "! numberp(fudge_factor) " + ("Types.numberp(fudge_factor) " + "CommonSymbols.NIL != Types.numberp(fudge_factor) ") + fudge_factor;
                 min = subtract(min, multiply(min, fudge_factor));
                 max = add(max, multiply(max, fudge_factor));
                 sublisp_throw($sym235$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
@@ -2569,6 +4484,44 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt111 = list(makeSymbol("CYC-CANDIDATE-ANSWERS"));
+
+    static private final SubLList $list_alt112 = list(list(makeSymbol("CDOLIST"), list(makeSymbol("ANSWER"), makeSymbol("CYC-CANDIDATE-ANSWERS")), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("ANSWER")), list(makeSymbol("CPUSH"), makeSymbol("ANSWER"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("ANSWER")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("Unity"), makeSymbol("ANSWER")), makeSymbol("CYC-ANSWERS"))))), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt116 = list(makeKeyword("PRIVATE"));
+
+    static private final SubLList $list_alt117 = list(list(makeSymbol("CLET"), list(list(makeSymbol("ALL-DENOTS"), list(makeSymbol("PS-GET-CYCLS-FOR-NP"), makeSymbol("STRING"))), makeSymbol("GOOD-DENOTS")), list(makeSymbol("CDOLIST"), list(makeSymbol("DENOT"), makeSymbol("ALL-DENOTS")), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("DENOT")), list(makeSymbol("CLET"), list(list(makeSymbol("REFORMULATED"), list(makeSymbol("REFORMULATE-CYCL"), makeSymbol("DENOT"))), makeSymbol("WFT")), list(makeSymbol("WITH-ALL-MTS"), list(makeSymbol("CSETQ"), makeSymbol("WFT"), list(makeSymbol("EL-WFT?"), makeSymbol("DENOT")))), list(makeSymbol("PWHEN"), makeSymbol("WFT"), list(makeSymbol("CPUSHNEW"), makeSymbol("REFORMULATED"), makeSymbol("GOOD-DENOTS"), list(makeSymbol("FUNCTION"), EQUAL)))), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("DENOT")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("Unity"), makeSymbol("DENOT")), makeSymbol("GOOD-DENOTS"))))), list(makeSymbol("CSETQ"), makeSymbol("CYC-ANSWERS"), makeSymbol("GOOD-DENOTS")), list(RET, makeSymbol("SELF"))));
+
+    public static final SubLObject scalar_range_convertible_p_method_alt(SubLObject self, SubLObject other_range) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    SubLTrampolineFile.checkType(other_range, SCALAR_RANGE_P);
+                    {
+                        SubLObject other_unit = methods.funcall_instance_method_with_0_args(other_range, GET_UNIT);
+                        SubLObject query = listS($$and, listS($$isa, unit, $list_alt242), listS($$isa, other_unit, $list_alt242), $list_alt243);
+                        sublisp_throw($sym240$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, inference_kernel.new_cyc_query(query, $$EverythingPSC, UNPROVIDED));
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym240$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_convertible_p_method(final SubLObject self, final SubLObject other_range) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2576,7 +4529,7 @@ public final class sanity_checker extends SubLTranslatedFile {
         try {
             thread.throwStack.push($sym240$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
             try {
-                assert NIL != scalar_range_p(other_range) : "sanity_checker.scalar_range_p(other_range) " + "CommonSymbols.NIL != sanity_checker.scalar_range_p(other_range) " + other_range;
+                assert NIL != scalar_range_p(other_range) : "! sanity_checker.scalar_range_p(other_range) " + ("sanity_checker.scalar_range_p(other_range) " + "CommonSymbols.NIL != sanity_checker.scalar_range_p(other_range) ") + other_range;
                 final SubLObject other_unit = methods.funcall_instance_method_with_0_args(other_range, GET_UNIT);
                 final SubLObject query = listS($$and, listS($$isa, unit, $list242), listS($$isa, other_unit, $list242), $list243);
                 sublisp_throw($sym240$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, inference_kernel.new_cyc_query(query, $$EverythingPSC, UNPROVIDED));
@@ -2597,6 +4550,51 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLList $list_alt122 = list(list(makeSymbol("CLET"), list(list(makeSymbol("DIAGNOSIS"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-DIAGNOSIS")))), list(makeSymbol("BASIS"), ZERO_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("PREDICATE")), list(makeSymbol("CINC"), makeSymbol("BASIS"), makeInteger(100))), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("CYC-FOCUSES")), list(makeSymbol("CINC"), makeSymbol("BASIS"), TEN_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol("NULL"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("CINC"), makeSymbol("BASIS"), ONE_INTEGER)), list(makeSymbol("PWHEN"), list(makeSymbol(">"), makeSymbol("BASIS"), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGNOSIS"), list(QUOTE, makeSymbol("FAILURE-CODE")), makeSymbol("BASIS")), list(makeSymbol("CSETQ"), makeSymbol("DEGENERATE-DIAGNOSIS"), makeSymbol("DIAGNOSIS"))), list(RET, makeSymbol("SELF"))));
+
+    public static final SubLObject scalar_range_merge_method_alt(SubLObject self, SubLObject other_range) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject point_info = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_point_info(self);
+            try {
+                try {
+                    if (NIL == methods.funcall_instance_method_with_1_args(self, CONVERTIBLE_P, other_range)) {
+                        sublisp_throw($sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                    }
+                    {
+                        SubLObject other_point = instances.get_slot(other_range, POINT_INFO);
+                        if ((NIL != point_info) && (NIL != other_point)) {
+                            sublisp_throw($sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, methods.funcall_instance_method_with_1_args(self, MERGE_LOOSE, other_range));
+                        } else {
+                            if (NIL != point_info) {
+                                sublisp_throw($sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, self);
+                            } else {
+                                if (NIL != other_point) {
+                                    sublisp_throw($sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, other_range);
+                                } else {
+                                    sublisp_throw($sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, methods.funcall_instance_method_with_1_args(self, MERGE_STRICT, other_range));
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_point_info(self, point_info);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym246$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_merge_method(final SubLObject self, final SubLObject other_range) {
@@ -2642,6 +4640,55 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt128 = list(makeSymbol("FUDGE-FACTOR"));
+
+    static private final SubLList $list_alt129 = list(list(makeSymbol("CLET"), list(list(makeSymbol("PRED-ARG1-SET"), list(makeSymbol("PRED-VALUES-IN-ANY-MT"), makeSymbol("PREDICATE"), reader_make_constant_shell("arg1Isa"), ONE_INTEGER, TWO_INTEGER)), list(makeSymbol("PRED-ARG2-SET"), list(makeSymbol("PRED-VALUES-IN-ANY-MT"), makeSymbol("PREDICATE"), reader_make_constant_shell("arg2Isa"), ONE_INTEGER, TWO_INTEGER)), makeSymbol("GOOD-ARG1S"), makeSymbol("GOOD-ARG2S")), list(makeSymbol("CDOLIST"), list(makeSymbol("ARG"), makeSymbol("CYC-FOCUSES")), list(makeSymbol("CLET"), list(makeSymbol("FAIL")), list(makeSymbol("CSOME"), list(makeSymbol("ARG1"), makeSymbol("PRED-ARG1-SET"), makeSymbol("FAIL")), list(makeSymbol("PUNLESS"), list(makeSymbol("COR"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG1")), list(makeSymbol("GENL-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG1"))), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), T))), list(makeSymbol("PUNLESS"), makeSymbol("FAIL"), list(makeSymbol("CPUSHNEW"), makeSymbol("ARG"), makeSymbol("GOOD-ARG1S"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("CDOLIST"), list(makeSymbol("ARG"), makeSymbol("CYC-ANSWERS")), list(makeSymbol("CLET"), list(makeSymbol("FAIL"), makeSymbol("CAST")), list(makeSymbol("CSOME"), list(makeSymbol("ARG2"), makeSymbol("PRED-ARG2-SET"), makeSymbol("FAIL")), list(makeSymbol("CSETQ"), makeSymbol("CAST"), list(makeSymbol("HEURISTICALLY-CAST-UNITY"), makeSymbol("PREDICATE"), makeSymbol("ARG"))), list(makeSymbol("PIF"), list(makeSymbol("EL-FORT-P"), makeSymbol("CAST")), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), list(makeSymbol("CNOT"), list(makeSymbol("COR"), list(makeSymbol("ISA-IN-ANY-MT?"), makeSymbol("CAST"), makeSymbol("ARG2")), list(makeSymbol("GENL-IN-ANY-MT?"), makeSymbol("ARG"), makeSymbol("ARG2"))))), list(makeSymbol("CSETQ"), makeSymbol("FAIL"), list(makeSymbol("CNOT"), list(makeSymbol("CAND"), list(makeSymbol("NUMBERP"), makeSymbol("CAST")), list(makeSymbol("PLUSP"), makeSymbol("CAST"))))))), list(makeSymbol("PUNLESS"), makeSymbol("FAIL"), list(makeSymbol("CPUSHNEW"), makeSymbol("CAST"), makeSymbol("GOOD-ARG2S"), list(makeSymbol("FUNCTION"), EQUAL))))), list(makeSymbol("CDOLIST"), list(makeSymbol("GOOD-ARG1"), makeSymbol("GOOD-ARG1S")), list(makeSymbol("CDOLIST"), list(makeSymbol("GOOD-ARG2"), makeSymbol("GOOD-ARG2S")), list(makeSymbol("CLET"), list(list(makeSymbol("CHECKER"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-CHECKER"))))), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("FUDGE-FACTOR")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("ARG1")), makeSymbol("GOOD-ARG1")), list(makeSymbol("SET-SLOT"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("ARG2")), makeSymbol("GOOD-ARG2")), list(makeSymbol("CPUSH"), makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL"))))), list(makeSymbol("PUNLESS"), makeSymbol("CHECKERS-POOL"), list(makeSymbol("CLET"), list(list(makeSymbol("DIAGNOSIS"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-DIAGNOSIS"))))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGNOSIS"), list(QUOTE, makeSymbol("FAILURE-CODE")), makeInteger(1000)), list(makeSymbol("CSETQ"), makeSymbol("DEGENERATE-DIAGNOSIS"), makeSymbol("DIAGNOSIS")))), list(RET, makeSymbol("SELF"))));
+
+    public static final SubLObject scalar_range_merge_loose_method_alt(SubLObject self, SubLObject other_range) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    if (NIL == methods.funcall_instance_method_with_1_args(self, CONVERTIBLE_P, other_range)) {
+                        sublisp_throw($sym251$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                    }
+                    {
+                        SubLObject merged = object.new_class_instance(SCALAR_RANGE);
+                        SubLObject this_min = methods.funcall_instance_method_with_0_args(self, GET_MIN);
+                        SubLObject other_min = methods.funcall_instance_method_with_0_args(other_range, GET_MIN);
+                        SubLObject this_max = methods.funcall_instance_method_with_0_args(self, GET_MAX);
+                        SubLObject other_max = methods.funcall_instance_method_with_0_args(other_range, GET_MAX);
+                        SubLObject min_test = inference_kernel.new_cyc_query(list($$lessThanOrEqualTo, this_min, other_min), $$EverythingPSC, UNPROVIDED);
+                        SubLObject max_test = inference_kernel.new_cyc_query(list($$lessThanOrEqualTo, other_max, this_max), $$EverythingPSC, UNPROVIDED);
+                        SubLObject other_unit = methods.funcall_instance_method_with_0_args(other_range, GET_UNIT);
+                        SubLObject new_min = (NIL != min_test) ? ((SubLObject) (min)) : quantities.convert_to_units(unit, other_unit, methods.funcall_instance_method_with_0_args(other_range, GET_MIN_VALUE), UNPROVIDED);
+                        SubLObject new_max = (NIL != max_test) ? ((SubLObject) (max)) : quantities.convert_to_units(unit, other_unit, methods.funcall_instance_method_with_0_args(other_range, GET_MAX_VALUE), UNPROVIDED);
+                        methods.funcall_instance_method_with_1_args(merged, FILL, list(unit, new_min, new_max));
+                        sublisp_throw($sym251$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, merged);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym251$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
+    }
+
     public static SubLObject scalar_range_merge_loose_method(final SubLObject self, final SubLObject other_range) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject catch_var_for_scalar_range_method = NIL;
@@ -2685,6 +4732,61 @@ public final class sanity_checker extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         return catch_var_for_scalar_range_method;
+    }
+
+    static private final SubLList $list_alt138 = list(list(makeSymbol("CDOLIST"), list(makeSymbol("CHECKER"), makeSymbol("CHECKERS-POOL")), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("COMPUTE-RANGE"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CHECKER"), list(QUOTE, makeSymbol("DIAGNOSE")))), list(RET, makeSymbol("SELF")));
+
+    public static final SubLObject scalar_range_merge_strict_method_alt(SubLObject self, SubLObject other_range) {
+        {
+            SubLObject catch_var_for_scalar_range_method = NIL;
+            SubLObject max = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_max(self);
+            SubLObject min = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_min(self);
+            SubLObject unit = com.cyc.cycjava.cycl.quirk.sanity_checker.get_scalar_range_unit(self);
+            try {
+                try {
+                    if (NIL == methods.funcall_instance_method_with_1_args(self, CONVERTIBLE_P, other_range)) {
+                        sublisp_throw($sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                    }
+                    {
+                        SubLObject this_min = methods.funcall_instance_method_with_0_args(self, GET_MIN);
+                        SubLObject other_min = methods.funcall_instance_method_with_0_args(other_range, GET_MIN);
+                        SubLObject this_max = methods.funcall_instance_method_with_0_args(self, GET_MAX);
+                        SubLObject other_max = methods.funcall_instance_method_with_0_args(other_range, GET_MAX);
+                        if (NIL != inference_kernel.new_cyc_query(list($$lessThan, this_max, other_min), $$EverythingPSC, UNPROVIDED)) {
+                            Errors.warn($str_alt256$__Inconsistent_ranges___S__S, self, other_range);
+                            sublisp_throw($sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                        }
+                        if (NIL != inference_kernel.new_cyc_query(list($$lessThan, other_max, this_min), $$EverythingPSC, UNPROVIDED)) {
+                            Errors.warn($str_alt256$__Inconsistent_ranges___S__S, self, other_range);
+                            sublisp_throw($sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, NIL);
+                        }
+                        {
+                            SubLObject other_unit = methods.funcall_instance_method_with_0_args(other_range, GET_UNIT);
+                            SubLObject new_max = (NIL != inference_kernel.new_cyc_query(list($$lessThan, other_max, this_max), $$EverythingPSC, UNPROVIDED)) ? ((SubLObject) (quantities.convert_to_units(unit, other_unit, methods.funcall_instance_method_with_0_args(other_range, GET_MAX_VALUE), UNPROVIDED))) : max;
+                            SubLObject new_min = (NIL != inference_kernel.new_cyc_query(list($$lessThan, other_min, this_min), $$EverythingPSC, UNPROVIDED)) ? ((SubLObject) (min)) : quantities.convert_to_units(unit, other_unit, methods.funcall_instance_method_with_0_args(other_range, GET_MIN_VALUE), UNPROVIDED);
+                            SubLObject merged = object.new_class_instance(SCALAR_RANGE);
+                            methods.funcall_instance_method_with_1_args(merged, FILL, list(unit, new_min, new_max));
+                            sublisp_throw($sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD, merged);
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_max(self, max);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_min(self, min);
+                            com.cyc.cycjava.cycl.quirk.sanity_checker.set_scalar_range_unit(self, unit);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                catch_var_for_scalar_range_method = Errors.handleThrowable(ccatch_env_var, $sym255$OUTER_CATCH_FOR_SCALAR_RANGE_METHOD);
+            }
+            return catch_var_for_scalar_range_method;
+        }
     }
 
     public static SubLObject scalar_range_merge_strict_method(final SubLObject self, final SubLObject other_range) {
@@ -2738,6 +4840,24 @@ public final class sanity_checker extends SubLTranslatedFile {
         return catch_var_for_scalar_range_method;
     }
 
+    static private final SubLList $list_alt143 = list(new SubLObject[]{ list(makeSymbol("FUDGE-FACTOR"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("DIAGNOSIS"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("BACKCHAIN"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG1"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG2"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC")), list(makeSymbol("ARG2RANGE"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("COMPUTE-RANGE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")) });
+
+    static private final SubLList $list_alt148 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("BACKCHAIN"), makeSymbol("*SCALAR-CHECKER-BACKCHAIN*")), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt151 = list(list(makeSymbol("CLET"), list(list(makeSymbol("ARG"), list(makeSymbol("TYPESHIFT-ARGUMENT"), makeSymbol("ARG1"))), list(makeSymbol("QUERY"), list(makeSymbol("BQ-LIST*"), makeSymbol("PREDICATE"), makeSymbol("ARG"), list(QUOTE, list(makeSymbol("?RANGE"))))), list(makeSymbol("ANSWERS"), list(makeSymbol("ASK-TEMPLATE"), list(QUOTE, makeSymbol("?RANGE")), makeSymbol("QUERY"), reader_make_constant_shell("EverythingPSC"), makeSymbol("BACKCHAIN"))), list(makeSymbol("TO-MERGE"), makeSymbol("ANSWERS")), makeSymbol("RANGE")), list(makeSymbol("CSOME"), list(makeSymbol("ANSWER"), makeSymbol("ANSWERS"), makeSymbol("RANGE")), list(makeSymbol("CLET"), list(list(makeSymbol("CANDIDATE-RANGE"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("CANDIDATE-RANGE"), list(QUOTE, makeSymbol("FILL")), makeSymbol("ANSWER")), list(makeSymbol("CSETQ"), makeSymbol("TO-MERGE"), list(makeSymbol("CDR"), makeSymbol("TO-MERGE"))), list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("CANDIDATE-RANGE"), list(QUOTE, makeSymbol("EMPTY-P"))), list(makeSymbol("CSETQ"), makeSymbol("RANGE"), makeSymbol("CANDIDATE-RANGE"))))), list(makeSymbol("CDOLIST"), list(makeSymbol("ANSWER"), makeSymbol("TO-MERGE")), list(makeSymbol("PWHEN"), makeSymbol("RANGE"), list(makeSymbol("CLET"), list(list(makeSymbol("NEW-RANGE"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("NEW-RANGE"), list(QUOTE, makeSymbol("FILL")), makeSymbol("ANSWER")), list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("NEW-RANGE"), list(QUOTE, makeSymbol("EMPTY-P"))), list(makeSymbol("CSETQ"), makeSymbol("RANGE"), list(makeSymbol("FIM"), makeSymbol("RANGE"), list(QUOTE, makeSymbol("MERGE")), makeSymbol("NEW-RANGE"))))))), list(makeSymbol("PWHEN"), makeSymbol("RANGE"), list(makeSymbol("FIM"), makeSymbol("RANGE"), list(QUOTE, makeSymbol("FUDGE")), makeSymbol("FUDGE-FACTOR")), list(makeSymbol("CSETQ"), makeSymbol("ARG2RANGE"), makeSymbol("RANGE"))), list(RET, makeSymbol("SELF"))));
+
+    public static final SubLObject heuristically_cast_unity_alt(SubLObject predicate, SubLObject unity_term) {
+        if (predicate.eql($$age)) {
+            return com.cyc.cycjava.cycl.quirk.sanity_checker.cast_age(unity_term);
+        } else {
+            if (predicate.eql($$numberOfInhabitants)) {
+                return com.cyc.cycjava.cycl.quirk.sanity_checker.cast_population(unity_term);
+            } else {
+                return unity_term;
+            }
+        }
+    }
+
     public static SubLObject heuristically_cast_unity(final SubLObject predicate, final SubLObject unity_term) {
         if (predicate.eql($$age)) {
             return cast_age(unity_term);
@@ -2746,6 +4866,25 @@ public final class sanity_checker extends SubLTranslatedFile {
             return cast_population(unity_term);
         }
         return unity_term;
+    }
+
+    public static final SubLObject cast_age_alt(SubLObject unity_term) {
+        if (!unity_term.isCons()) {
+            return unity_term;
+        }
+        {
+            SubLObject old_unit = unity_term.first();
+            SubLObject old_min = second(unity_term);
+            SubLObject old_max = third(unity_term);
+            if (!$$Unity.eql(old_unit)) {
+                return unity_term;
+            }
+            if (NIL != old_max) {
+                return list($$YearsDuration, old_min, old_max);
+            } else {
+                return list($$YearsDuration, old_min);
+            }
+        }
     }
 
     public static SubLObject cast_age(final SubLObject unity_term) {
@@ -2762,6 +4901,32 @@ public final class sanity_checker extends SubLTranslatedFile {
             return list($$YearsDuration, old_min, old_max);
         }
         return list($$YearsDuration, old_min);
+    }
+
+    public static final SubLObject cast_population_alt(SubLObject unity_term) {
+        if (!unity_term.isCons()) {
+            return unity_term;
+        }
+        if ($$Unity.eql(unity_term.first())) {
+            return second(unity_term);
+        }
+        {
+            SubLObject quant = second(unity_term);
+            SubLObject quant_fn = (quant.isCons()) ? ((SubLObject) (quant.first())) : NIL;
+            SubLObject quant_head = (quant.isCons()) ? ((SubLObject) (second(quant))) : NIL;
+            SubLObject head = third(unity_term);
+            SubLObject head_head = (head.isCons()) ? ((SubLObject) (third(head))) : NIL;
+            if (!$$NumericalQuant_NLAttrFn.eql(quant_fn)) {
+                return unity_term;
+            }
+            if (NIL == term.el_fort_p(head_head)) {
+                return unity_term;
+            }
+            if (NIL == genls.genl_in_any_mtP(head_head, $$HomoSapiens)) {
+                return unity_term;
+            }
+            return quant_head;
+        }
     }
 
     public static SubLObject cast_population(final SubLObject unity_term) {
@@ -2788,138 +4953,162 @@ public final class sanity_checker extends SubLTranslatedFile {
         return quant_head;
     }
 
+    static private final SubLList $list_alt153 = list(makeSymbol("?RANGE"));
+
     public static SubLObject declare_sanity_checker_file() {
-        declareFunction(me, "get_sanity_checker", "GET-SANITY-CHECKER", 0, 0, false);
-        declareFunction(me, "get_piquant_sanity_checker", "GET-PIQUANT-SANITY-CHECKER", 1, 0, false);
-        declareFunction(me, "sanity_check", "SANITY-CHECK", 3, 0, false);
-        declareFunction(me, "cyc_sanity_check", "CYC-SANITY-CHECK", 3, 0, false);
-        declareFunction(me, "cyc_sanity_filter", "CYC-SANITY-FILTER", 3, 0, false);
-        declareFunction(me, "get_sanity_checker_show_debug_info", "GET-SANITY-CHECKER-SHOW-DEBUG-INFO", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_show_debug_info", "SET-SANITY-CHECKER-SHOW-DEBUG-INFO", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_fudge_factor", "GET-SANITY-CHECKER-FUDGE-FACTOR", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_fudge_factor", "SET-SANITY-CHECKER-FUDGE-FACTOR", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad", "GET-SANITY-CHECKER-SCRATCHPAD", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad", "SET-SANITY-CHECKER-SCRATCHPAD", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_cache", "GET-SANITY-CHECKER-CACHE", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_cache", "SET-SANITY-CHECKER-CACHE", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sanity_checker_class", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sanity_checker_instance", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-INSTANCE", 1, 0, false);
-        declareFunction(me, "sanity_checker_p", "SANITY-CHECKER-P", 1, 0, false);
-        declareFunction(me, "sanity_checker_initialize_method", "SANITY-CHECKER-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_show_debug_info_method", "SANITY-CHECKER-SHOW-DEBUG-INFO-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_hide_debug_info_method", "SANITY-CHECKER-HIDE-DEBUG-INFO-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_check_method", "SANITY-CHECKER-CHECK-METHOD", 4, 0, false);
-        declareFunction(me, "sanity_checker_check_cyc_interpretations_method", "SANITY-CHECKER-CHECK-CYC-INTERPRETATIONS-METHOD", 4, 0, false);
-        declareFunction(me, "sanity_checker_check_listified_method", "SANITY-CHECKER-CHECK-LISTIFIED-METHOD", 4, 0, false);
-        declareFunction(me, "piquant_sanity_check", "PIQUANT-SANITY-CHECK", 4, 1, false);
-        declareFunction(me, "subloop_reserved_initialize_piquant_sanity_checker_class", "SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_piquant_sanity_checker_instance", "SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-INSTANCE", 1, 0, false);
-        declareFunction(me, "piquant_sanity_checker_p", "PIQUANT-SANITY-CHECKER-P", 1, 0, false);
-        declareFunction(me, "piquant_sanity_checker_check_method", "PIQUANT-SANITY-CHECKER-CHECK-METHOD", 4, 0, false);
-        declareFunction(me, "piquant_sanity_checker_check_listified_method", "PIQUANT-SANITY-CHECKER-CHECK-LISTIFIED-METHOD", 4, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_degenerate_diagnosis", "GET-SANITY-CHECKER-SCRATCHPAD-DEGENERATE-DIAGNOSIS", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_degenerate_diagnosis", "SET-SANITY-CHECKER-SCRATCHPAD-DEGENERATE-DIAGNOSIS", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_checkers_pool", "GET-SANITY-CHECKER-SCRATCHPAD-CHECKERS-POOL", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_checkers_pool", "SET-SANITY-CHECKER-SCRATCHPAD-CHECKERS-POOL", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_cyc_answers", "GET-SANITY-CHECKER-SCRATCHPAD-CYC-ANSWERS", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_cyc_answers", "SET-SANITY-CHECKER-SCRATCHPAD-CYC-ANSWERS", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_answer", "GET-SANITY-CHECKER-SCRATCHPAD-ANSWER", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_answer", "SET-SANITY-CHECKER-SCRATCHPAD-ANSWER", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_cyc_focuses", "GET-SANITY-CHECKER-SCRATCHPAD-CYC-FOCUSES", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_cyc_focuses", "SET-SANITY-CHECKER-SCRATCHPAD-CYC-FOCUSES", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_focus", "GET-SANITY-CHECKER-SCRATCHPAD-FOCUS", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_focus", "SET-SANITY-CHECKER-SCRATCHPAD-FOCUS", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_scratchpad_predicate", "GET-SANITY-CHECKER-SCRATCHPAD-PREDICATE", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_scratchpad_predicate", "SET-SANITY-CHECKER-SCRATCHPAD-PREDICATE", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sanity_checker_scratchpad_class", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sanity_checker_scratchpad_instance", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-INSTANCE", 1, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_p", "SANITY-CHECKER-SCRATCHPAD-P", 1, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_output_diagnoses_method", "SANITY-CHECKER-SCRATCHPAD-OUTPUT-DIAGNOSES-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_initialize_method", "SANITY-CHECKER-SCRATCHPAD-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_set_focus_method", "SANITY-CHECKER-SCRATCHPAD-SET-FOCUS-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_set_piquant_focus_method", "SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-FOCUS-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_set_predicate_method", "SANITY-CHECKER-SCRATCHPAD-SET-PREDICATE-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_set_piquant_predicate_method", "SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-PREDICATE-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_set_answer_method", "SANITY-CHECKER-SCRATCHPAD-SET-ANSWER-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_set_cyc_answers_method", "SANITY-CHECKER-SCRATCHPAD-SET-CYC-ANSWERS-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_compute_cyc_answers_method", "SANITY-CHECKER-SCRATCHPAD-COMPUTE-CYC-ANSWERS-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_compute_degenerate_diagnosis_method", "SANITY-CHECKER-SCRATCHPAD-COMPUTE-DEGENERATE-DIAGNOSIS-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_initialize_checkers_method", "SANITY-CHECKER-SCRATCHPAD-INITIALIZE-CHECKERS-METHOD", 2, 0, false);
-        declareFunction(me, "sanity_checker_scratchpad_diagnose_method", "SANITY-CHECKER-SCRATCHPAD-DIAGNOSE-METHOD", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_backchain_parameter", "SET-SCALAR-CHECKER-BACKCHAIN-PARAMETER", 1, 0, false);
-        declareFunction(me, "get_scalar_checker_arg2range", "GET-SCALAR-CHECKER-ARG2RANGE", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_arg2range", "SET-SCALAR-CHECKER-ARG2RANGE", 2, 0, false);
-        declareFunction(me, "get_scalar_checker_arg2", "GET-SCALAR-CHECKER-ARG2", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_arg2", "SET-SCALAR-CHECKER-ARG2", 2, 0, false);
-        declareFunction(me, "get_scalar_checker_arg1", "GET-SCALAR-CHECKER-ARG1", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_arg1", "SET-SCALAR-CHECKER-ARG1", 2, 0, false);
-        declareFunction(me, "get_scalar_checker_backchain", "GET-SCALAR-CHECKER-BACKCHAIN", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_backchain", "SET-SCALAR-CHECKER-BACKCHAIN", 2, 0, false);
-        declareFunction(me, "get_scalar_checker_diagnosis", "GET-SCALAR-CHECKER-DIAGNOSIS", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_diagnosis", "SET-SCALAR-CHECKER-DIAGNOSIS", 2, 0, false);
-        declareFunction(me, "get_scalar_checker_predicate", "GET-SCALAR-CHECKER-PREDICATE", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_predicate", "SET-SCALAR-CHECKER-PREDICATE", 2, 0, false);
-        declareFunction(me, "get_scalar_checker_fudge_factor", "GET-SCALAR-CHECKER-FUDGE-FACTOR", 1, 0, false);
-        declareFunction(me, "set_scalar_checker_fudge_factor", "SET-SCALAR-CHECKER-FUDGE-FACTOR", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_scalar_checker_class", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_scalar_checker_instance", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-INSTANCE", 1, 0, false);
-        declareFunction(me, "scalar_checker_p", "SCALAR-CHECKER-P", 1, 0, false);
-        declareFunction(me, "scalar_checker_initialize_method", "SCALAR-CHECKER-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_checker_compute_range_method", "SCALAR-CHECKER-COMPUTE-RANGE-METHOD", 1, 0, false);
-        declareFunction(me, "typeshift_argument", "TYPESHIFT-ARGUMENT", 1, 0, false);
-        declareFunction(me, "scalar_checker_diagnose_method", "SCALAR-CHECKER-DIAGNOSE-METHOD", 1, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_predicate", "GET-SANITY-CHECKER-DIAGNOSIS-PREDICATE", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_predicate", "SET-SANITY-CHECKER-DIAGNOSIS-PREDICATE", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_proposed_arg", "GET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-ARG", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_proposed_arg", "SET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-ARG", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_proposed_value", "GET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-VALUE", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_proposed_value", "SET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-VALUE", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_justification", "GET-SANITY-CHECKER-DIAGNOSIS-JUSTIFICATION", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_justification", "SET-SANITY-CHECKER-DIAGNOSIS-JUSTIFICATION", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_answer", "GET-SANITY-CHECKER-DIAGNOSIS-ANSWER", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_answer", "SET-SANITY-CHECKER-DIAGNOSIS-ANSWER", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_answer_known", "GET-SANITY-CHECKER-DIAGNOSIS-ANSWER-KNOWN", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_answer_known", "SET-SANITY-CHECKER-DIAGNOSIS-ANSWER-KNOWN", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_complete", "GET-SANITY-CHECKER-DIAGNOSIS-COMPLETE", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_complete", "SET-SANITY-CHECKER-DIAGNOSIS-COMPLETE", 2, 0, false);
-        declareFunction(me, "get_sanity_checker_diagnosis_failure_code", "GET-SANITY-CHECKER-DIAGNOSIS-FAILURE-CODE", 1, 0, false);
-        declareFunction(me, "set_sanity_checker_diagnosis_failure_code", "SET-SANITY-CHECKER-DIAGNOSIS-FAILURE-CODE", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sanity_checker_diagnosis_class", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sanity_checker_diagnosis_instance", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-INSTANCE", 1, 0, false);
-        declareFunction(me, "sanity_checker_diagnosis_p", "SANITY-CHECKER-DIAGNOSIS-P", 1, 0, false);
-        declareFunction(me, "sanity_checker_diagnosis_initialize_method", "SANITY-CHECKER-DIAGNOSIS-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "sanity_checker_diagnosis_boolean_method", "SANITY-CHECKER-DIAGNOSIS-BOOLEAN-METHOD", 1, 0, false);
-        declareFunction(me, "get_scalar_range_point_info", "GET-SCALAR-RANGE-POINT-INFO", 1, 0, false);
-        declareFunction(me, "set_scalar_range_point_info", "SET-SCALAR-RANGE-POINT-INFO", 2, 0, false);
-        declareFunction(me, "get_scalar_range_max", "GET-SCALAR-RANGE-MAX", 1, 0, false);
-        declareFunction(me, "set_scalar_range_max", "SET-SCALAR-RANGE-MAX", 2, 0, false);
-        declareFunction(me, "get_scalar_range_min", "GET-SCALAR-RANGE-MIN", 1, 0, false);
-        declareFunction(me, "set_scalar_range_min", "SET-SCALAR-RANGE-MIN", 2, 0, false);
-        declareFunction(me, "get_scalar_range_unit", "GET-SCALAR-RANGE-UNIT", 1, 0, false);
-        declareFunction(me, "set_scalar_range_unit", "SET-SCALAR-RANGE-UNIT", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_scalar_range_class", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_scalar_range_instance", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-INSTANCE", 1, 0, false);
-        declareFunction(me, "scalar_range_p", "SCALAR-RANGE-P", 1, 0, false);
-        declareFunction(me, "scalar_range_print_method", "SCALAR-RANGE-PRINT-METHOD", 3, 0, false);
-        declareFunction(me, "scalar_range_initialize_method", "SCALAR-RANGE-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_empty_p_method", "SCALAR-RANGE-EMPTY-P-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_fill_method", "SCALAR-RANGE-FILL-METHOD", 2, 0, false);
-        declareFunction(me, "scalar_range_get_unit_method", "SCALAR-RANGE-GET-UNIT-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_get_min_method", "SCALAR-RANGE-GET-MIN-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_get_min_value_method", "SCALAR-RANGE-GET-MIN-VALUE-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_get_max_method", "SCALAR-RANGE-GET-MAX-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_get_max_value_method", "SCALAR-RANGE-GET-MAX-VALUE-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_listify_method", "SCALAR-RANGE-LISTIFY-METHOD", 1, 0, false);
-        declareFunction(me, "scalar_range_fudge_method", "SCALAR-RANGE-FUDGE-METHOD", 2, 0, false);
-        declareFunction(me, "scalar_range_convertible_p_method", "SCALAR-RANGE-CONVERTIBLE-P-METHOD", 2, 0, false);
-        declareFunction(me, "scalar_range_merge_method", "SCALAR-RANGE-MERGE-METHOD", 2, 0, false);
-        declareFunction(me, "scalar_range_merge_loose_method", "SCALAR-RANGE-MERGE-LOOSE-METHOD", 2, 0, false);
-        declareFunction(me, "scalar_range_merge_strict_method", "SCALAR-RANGE-MERGE-STRICT-METHOD", 2, 0, false);
-        declareFunction(me, "heuristically_cast_unity", "HEURISTICALLY-CAST-UNITY", 2, 0, false);
-        declareFunction(me, "cast_age", "CAST-AGE", 1, 0, false);
-        declareFunction(me, "cast_population", "CAST-POPULATION", 1, 0, false);
+        declareFunction("get_sanity_checker", "GET-SANITY-CHECKER", 0, 0, false);
+        declareFunction("get_piquant_sanity_checker", "GET-PIQUANT-SANITY-CHECKER", 1, 0, false);
+        declareFunction("sanity_check", "SANITY-CHECK", 3, 0, false);
+        declareFunction("cyc_sanity_check", "CYC-SANITY-CHECK", 3, 0, false);
+        declareFunction("cyc_sanity_filter", "CYC-SANITY-FILTER", 3, 0, false);
+        declareFunction("get_sanity_checker_show_debug_info", "GET-SANITY-CHECKER-SHOW-DEBUG-INFO", 1, 0, false);
+        declareFunction("set_sanity_checker_show_debug_info", "SET-SANITY-CHECKER-SHOW-DEBUG-INFO", 2, 0, false);
+        declareFunction("get_sanity_checker_fudge_factor", "GET-SANITY-CHECKER-FUDGE-FACTOR", 1, 0, false);
+        declareFunction("set_sanity_checker_fudge_factor", "SET-SANITY-CHECKER-FUDGE-FACTOR", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad", "GET-SANITY-CHECKER-SCRATCHPAD", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad", "SET-SANITY-CHECKER-SCRATCHPAD", 2, 0, false);
+        declareFunction("get_sanity_checker_cache", "GET-SANITY-CHECKER-CACHE", 1, 0, false);
+        declareFunction("set_sanity_checker_cache", "SET-SANITY-CHECKER-CACHE", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_sanity_checker_class", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_sanity_checker_instance", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-INSTANCE", 1, 0, false);
+        declareFunction("sanity_checker_p", "SANITY-CHECKER-P", 1, 0, false);
+        declareFunction("sanity_checker_initialize_method", "SANITY-CHECKER-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_show_debug_info_method", "SANITY-CHECKER-SHOW-DEBUG-INFO-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_hide_debug_info_method", "SANITY-CHECKER-HIDE-DEBUG-INFO-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_check_method", "SANITY-CHECKER-CHECK-METHOD", 4, 0, false);
+        declareFunction("sanity_checker_check_cyc_interpretations_method", "SANITY-CHECKER-CHECK-CYC-INTERPRETATIONS-METHOD", 4, 0, false);
+        declareFunction("sanity_checker_check_listified_method", "SANITY-CHECKER-CHECK-LISTIFIED-METHOD", 4, 0, false);
+        declareFunction("piquant_sanity_check", "PIQUANT-SANITY-CHECK", 4, 1, false);
+        declareFunction("subloop_reserved_initialize_piquant_sanity_checker_class", "SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_piquant_sanity_checker_instance", "SUBLOOP-RESERVED-INITIALIZE-PIQUANT-SANITY-CHECKER-INSTANCE", 1, 0, false);
+        declareFunction("piquant_sanity_checker_p", "PIQUANT-SANITY-CHECKER-P", 1, 0, false);
+        declareFunction("piquant_sanity_checker_check_method", "PIQUANT-SANITY-CHECKER-CHECK-METHOD", 4, 0, false);
+        declareFunction("piquant_sanity_checker_check_listified_method", "PIQUANT-SANITY-CHECKER-CHECK-LISTIFIED-METHOD", 4, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_degenerate_diagnosis", "GET-SANITY-CHECKER-SCRATCHPAD-DEGENERATE-DIAGNOSIS", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_degenerate_diagnosis", "SET-SANITY-CHECKER-SCRATCHPAD-DEGENERATE-DIAGNOSIS", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_checkers_pool", "GET-SANITY-CHECKER-SCRATCHPAD-CHECKERS-POOL", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_checkers_pool", "SET-SANITY-CHECKER-SCRATCHPAD-CHECKERS-POOL", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_cyc_answers", "GET-SANITY-CHECKER-SCRATCHPAD-CYC-ANSWERS", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_cyc_answers", "SET-SANITY-CHECKER-SCRATCHPAD-CYC-ANSWERS", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_answer", "GET-SANITY-CHECKER-SCRATCHPAD-ANSWER", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_answer", "SET-SANITY-CHECKER-SCRATCHPAD-ANSWER", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_cyc_focuses", "GET-SANITY-CHECKER-SCRATCHPAD-CYC-FOCUSES", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_cyc_focuses", "SET-SANITY-CHECKER-SCRATCHPAD-CYC-FOCUSES", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_focus", "GET-SANITY-CHECKER-SCRATCHPAD-FOCUS", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_focus", "SET-SANITY-CHECKER-SCRATCHPAD-FOCUS", 2, 0, false);
+        declareFunction("get_sanity_checker_scratchpad_predicate", "GET-SANITY-CHECKER-SCRATCHPAD-PREDICATE", 1, 0, false);
+        declareFunction("set_sanity_checker_scratchpad_predicate", "SET-SANITY-CHECKER-SCRATCHPAD-PREDICATE", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_sanity_checker_scratchpad_class", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_sanity_checker_scratchpad_instance", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-SCRATCHPAD-INSTANCE", 1, 0, false);
+        declareFunction("sanity_checker_scratchpad_p", "SANITY-CHECKER-SCRATCHPAD-P", 1, 0, false);
+        declareFunction("sanity_checker_scratchpad_output_diagnoses_method", "SANITY-CHECKER-SCRATCHPAD-OUTPUT-DIAGNOSES-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_scratchpad_initialize_method", "SANITY-CHECKER-SCRATCHPAD-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_scratchpad_set_focus_method", "SANITY-CHECKER-SCRATCHPAD-SET-FOCUS-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_set_piquant_focus_method", "SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-FOCUS-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_set_predicate_method", "SANITY-CHECKER-SCRATCHPAD-SET-PREDICATE-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_set_piquant_predicate_method", "SANITY-CHECKER-SCRATCHPAD-SET-PIQUANT-PREDICATE-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_set_answer_method", "SANITY-CHECKER-SCRATCHPAD-SET-ANSWER-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_set_cyc_answers_method", "SANITY-CHECKER-SCRATCHPAD-SET-CYC-ANSWERS-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_compute_cyc_answers_method", "SANITY-CHECKER-SCRATCHPAD-COMPUTE-CYC-ANSWERS-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_compute_degenerate_diagnosis_method", "SANITY-CHECKER-SCRATCHPAD-COMPUTE-DEGENERATE-DIAGNOSIS-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_scratchpad_initialize_checkers_method", "SANITY-CHECKER-SCRATCHPAD-INITIALIZE-CHECKERS-METHOD", 2, 0, false);
+        declareFunction("sanity_checker_scratchpad_diagnose_method", "SANITY-CHECKER-SCRATCHPAD-DIAGNOSE-METHOD", 1, 0, false);
+        declareFunction("set_scalar_checker_backchain_parameter", "SET-SCALAR-CHECKER-BACKCHAIN-PARAMETER", 1, 0, false);
+        declareFunction("get_scalar_checker_arg2range", "GET-SCALAR-CHECKER-ARG2RANGE", 1, 0, false);
+        declareFunction("set_scalar_checker_arg2range", "SET-SCALAR-CHECKER-ARG2RANGE", 2, 0, false);
+        declareFunction("get_scalar_checker_arg2", "GET-SCALAR-CHECKER-ARG2", 1, 0, false);
+        declareFunction("set_scalar_checker_arg2", "SET-SCALAR-CHECKER-ARG2", 2, 0, false);
+        declareFunction("get_scalar_checker_arg1", "GET-SCALAR-CHECKER-ARG1", 1, 0, false);
+        declareFunction("set_scalar_checker_arg1", "SET-SCALAR-CHECKER-ARG1", 2, 0, false);
+        declareFunction("get_scalar_checker_backchain", "GET-SCALAR-CHECKER-BACKCHAIN", 1, 0, false);
+        declareFunction("set_scalar_checker_backchain", "SET-SCALAR-CHECKER-BACKCHAIN", 2, 0, false);
+        declareFunction("get_scalar_checker_diagnosis", "GET-SCALAR-CHECKER-DIAGNOSIS", 1, 0, false);
+        declareFunction("set_scalar_checker_diagnosis", "SET-SCALAR-CHECKER-DIAGNOSIS", 2, 0, false);
+        declareFunction("get_scalar_checker_predicate", "GET-SCALAR-CHECKER-PREDICATE", 1, 0, false);
+        declareFunction("set_scalar_checker_predicate", "SET-SCALAR-CHECKER-PREDICATE", 2, 0, false);
+        declareFunction("get_scalar_checker_fudge_factor", "GET-SCALAR-CHECKER-FUDGE-FACTOR", 1, 0, false);
+        declareFunction("set_scalar_checker_fudge_factor", "SET-SCALAR-CHECKER-FUDGE-FACTOR", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_scalar_checker_class", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_scalar_checker_instance", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-CHECKER-INSTANCE", 1, 0, false);
+        declareFunction("scalar_checker_p", "SCALAR-CHECKER-P", 1, 0, false);
+        declareFunction("scalar_checker_initialize_method", "SCALAR-CHECKER-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("scalar_checker_compute_range_method", "SCALAR-CHECKER-COMPUTE-RANGE-METHOD", 1, 0, false);
+        declareFunction("typeshift_argument", "TYPESHIFT-ARGUMENT", 1, 0, false);
+        declareFunction("scalar_checker_diagnose_method", "SCALAR-CHECKER-DIAGNOSE-METHOD", 1, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_predicate", "GET-SANITY-CHECKER-DIAGNOSIS-PREDICATE", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_predicate", "SET-SANITY-CHECKER-DIAGNOSIS-PREDICATE", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_proposed_arg", "GET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-ARG", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_proposed_arg", "SET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-ARG", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_proposed_value", "GET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-VALUE", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_proposed_value", "SET-SANITY-CHECKER-DIAGNOSIS-PROPOSED-VALUE", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_justification", "GET-SANITY-CHECKER-DIAGNOSIS-JUSTIFICATION", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_justification", "SET-SANITY-CHECKER-DIAGNOSIS-JUSTIFICATION", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_answer", "GET-SANITY-CHECKER-DIAGNOSIS-ANSWER", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_answer", "SET-SANITY-CHECKER-DIAGNOSIS-ANSWER", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_answer_known", "GET-SANITY-CHECKER-DIAGNOSIS-ANSWER-KNOWN", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_answer_known", "SET-SANITY-CHECKER-DIAGNOSIS-ANSWER-KNOWN", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_complete", "GET-SANITY-CHECKER-DIAGNOSIS-COMPLETE", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_complete", "SET-SANITY-CHECKER-DIAGNOSIS-COMPLETE", 2, 0, false);
+        declareFunction("get_sanity_checker_diagnosis_failure_code", "GET-SANITY-CHECKER-DIAGNOSIS-FAILURE-CODE", 1, 0, false);
+        declareFunction("set_sanity_checker_diagnosis_failure_code", "SET-SANITY-CHECKER-DIAGNOSIS-FAILURE-CODE", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_sanity_checker_diagnosis_class", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_sanity_checker_diagnosis_instance", "SUBLOOP-RESERVED-INITIALIZE-SANITY-CHECKER-DIAGNOSIS-INSTANCE", 1, 0, false);
+        declareFunction("sanity_checker_diagnosis_p", "SANITY-CHECKER-DIAGNOSIS-P", 1, 0, false);
+        declareFunction("sanity_checker_diagnosis_initialize_method", "SANITY-CHECKER-DIAGNOSIS-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("sanity_checker_diagnosis_boolean_method", "SANITY-CHECKER-DIAGNOSIS-BOOLEAN-METHOD", 1, 0, false);
+        declareFunction("get_scalar_range_point_info", "GET-SCALAR-RANGE-POINT-INFO", 1, 0, false);
+        declareFunction("set_scalar_range_point_info", "SET-SCALAR-RANGE-POINT-INFO", 2, 0, false);
+        declareFunction("get_scalar_range_max", "GET-SCALAR-RANGE-MAX", 1, 0, false);
+        declareFunction("set_scalar_range_max", "SET-SCALAR-RANGE-MAX", 2, 0, false);
+        declareFunction("get_scalar_range_min", "GET-SCALAR-RANGE-MIN", 1, 0, false);
+        declareFunction("set_scalar_range_min", "SET-SCALAR-RANGE-MIN", 2, 0, false);
+        declareFunction("get_scalar_range_unit", "GET-SCALAR-RANGE-UNIT", 1, 0, false);
+        declareFunction("set_scalar_range_unit", "SET-SCALAR-RANGE-UNIT", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_scalar_range_class", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_scalar_range_instance", "SUBLOOP-RESERVED-INITIALIZE-SCALAR-RANGE-INSTANCE", 1, 0, false);
+        declareFunction("scalar_range_p", "SCALAR-RANGE-P", 1, 0, false);
+        declareFunction("scalar_range_print_method", "SCALAR-RANGE-PRINT-METHOD", 3, 0, false);
+        declareFunction("scalar_range_initialize_method", "SCALAR-RANGE-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("scalar_range_empty_p_method", "SCALAR-RANGE-EMPTY-P-METHOD", 1, 0, false);
+        declareFunction("scalar_range_fill_method", "SCALAR-RANGE-FILL-METHOD", 2, 0, false);
+        declareFunction("scalar_range_get_unit_method", "SCALAR-RANGE-GET-UNIT-METHOD", 1, 0, false);
+        declareFunction("scalar_range_get_min_method", "SCALAR-RANGE-GET-MIN-METHOD", 1, 0, false);
+        declareFunction("scalar_range_get_min_value_method", "SCALAR-RANGE-GET-MIN-VALUE-METHOD", 1, 0, false);
+        declareFunction("scalar_range_get_max_method", "SCALAR-RANGE-GET-MAX-METHOD", 1, 0, false);
+        declareFunction("scalar_range_get_max_value_method", "SCALAR-RANGE-GET-MAX-VALUE-METHOD", 1, 0, false);
+        declareFunction("scalar_range_listify_method", "SCALAR-RANGE-LISTIFY-METHOD", 1, 0, false);
+        declareFunction("scalar_range_fudge_method", "SCALAR-RANGE-FUDGE-METHOD", 2, 0, false);
+        declareFunction("scalar_range_convertible_p_method", "SCALAR-RANGE-CONVERTIBLE-P-METHOD", 2, 0, false);
+        declareFunction("scalar_range_merge_method", "SCALAR-RANGE-MERGE-METHOD", 2, 0, false);
+        declareFunction("scalar_range_merge_loose_method", "SCALAR-RANGE-MERGE-LOOSE-METHOD", 2, 0, false);
+        declareFunction("scalar_range_merge_strict_method", "SCALAR-RANGE-MERGE-STRICT-METHOD", 2, 0, false);
+        declareFunction("heuristically_cast_unity", "HEURISTICALLY-CAST-UNITY", 2, 0, false);
+        declareFunction("cast_age", "CAST-AGE", 1, 0, false);
+        declareFunction("cast_population", "CAST-POPULATION", 1, 0, false);
         return NIL;
     }
+
+    static private final SubLList $list_alt163 = list(list(makeSymbol("CLET"), list(list(makeSymbol("DIAGN"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SANITY-CHECKER-DIAGNOSIS")))), list(makeSymbol("CAST"), list(makeSymbol("HEURISTICALLY-CAST-UNITY"), makeSymbol("PREDICATE"), makeSymbol("ARG2"))), list(makeSymbol("ARG2MIN"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(QUOTE, makeSymbol("GET-MIN"))))), list(makeSymbol("ARG2MAX"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(QUOTE, makeSymbol("GET-MAX"))))), list(makeSymbol("RANGE"), list(makeSymbol("FWHEN"), makeSymbol("ARG2RANGE"), list(makeSymbol("FIM"), makeSymbol("ARG2RANGE"), list(QUOTE, makeSymbol("LISTIFY"))))), makeSymbol("CYCL-EXPLANATION")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("PREDICATE")), makeSymbol("PREDICATE")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("PROPOSED-ARG")), makeSymbol("ARG1")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("PROPOSED-VALUE")), makeSymbol("ARG2")), list(makeSymbol("PCOND"), list(list(makeSymbol("CAND"), makeSymbol("ARG2MIN"), makeSymbol("ARG2MAX")), list(makeSymbol("CLET"), list(list(makeSymbol("NEGATIVE-TEST-MIN"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("CAST"), makeSymbol("ARG2MIN"))), list(makeSymbol("NEGATIVE-TEST-MAX"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("greaterThan"), makeSymbol("CAST"), makeSymbol("ARG2MAX"))), list(makeSymbol("POSITIVE-TEST"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("quantitySubsumes"), makeSymbol("RANGE"), makeSymbol("CAST")))), list(makeSymbol("PCOND"), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("NEGATIVE-TEST-MIN"), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("NEGATIVE-TEST-MIN")))), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("NEGATIVE-TEST-MAX"), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("NEGATIVE-TEST-MAX")))), list(list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("POSITIVE-TEST"), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ONE_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("CYCL-EXPLANATION"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST"), makeSymbol("PREDICATE"), makeSymbol("ARG1"), makeSymbol("RANGE")), makeSymbol("POSITIVE-TEST")))))), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("JUSTIFICATION")), list(makeSymbol("GENERATE-PHRASE"), makeSymbol("CYCL-EXPLANATION")))), list(T, list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("COMPLETE")), ONE_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER-KNOWN")), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("ANSWER")), ZERO_INTEGER), list(makeSymbol("SET-SLOT"), makeSymbol("DIAGN"), list(QUOTE, makeSymbol("JUSTIFICATION")), makeString("No information available")))), list(makeSymbol("CSETQ"), makeSymbol("DIAGNOSIS"), makeSymbol("DIAGN")), list(RET, makeSymbol("SELF"))));
+
+    static private final SubLList $list_alt178 = list(new SubLObject[]{ list(makeSymbol("FAILURE-CODE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("COMPLETE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("ANSWER-KNOWN"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("ANSWER"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("JUSTIFICATION"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PROPOSED-VALUE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PROPOSED-ARG"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("PREDICATE"), makeKeyword("INSTANCE"), makeKeyword("PUBLIC"), makeKeyword("ESSENTIAL")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("BOOLEAN"), NIL, makeKeyword("PROTECTED")) });
+
+    static private final SubLList $list_alt181 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("FAILURE-CODE"), ZERO_INTEGER), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt184 = list(makeString("A yes-or-no answer as to whether the diagnosis is favorable (T) or\n   unfavorable (NIL)."), list(makeSymbol("PUNLESS"), list(makeSymbol("INTEGERP"), makeSymbol("ANSWER")), list(RET, NIL)), list(RET, list(makeSymbol(">"), makeSymbol("ANSWER"), ZERO_INTEGER)));
+
+    static private final SubLList $list_alt187 = list(new SubLObject[]{ list(makeSymbol("UNIT"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("MIN"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("MAX"), makeKeyword("INSTANCE"), makeKeyword("PRIVATE")), list(makeSymbol("POINT-INFO"), makeKeyword("INSTANCE"), makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("INITIALIZE"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FILL"), list(makeSymbol("VALUE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("EMPTY-P"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-UNIT"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MIN"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MAX"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MIN-VALUE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("GET-MAX-VALUE"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("LISTIFY"), NIL, makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE-LOOSE"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("MERGE-STRICT"), list(makeSymbol("OTHER-RANGE")), makeKeyword("PUBLIC")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("FUDGE"), list(makeSymbol("FUDGE-FACTOR")), makeKeyword("PUBLIC")) });
+
+    static private final SubLList $list_alt195 = list(makeSymbol("STREAM"), makeSymbol("DEPTH"));
+
+    static private final SubLList $list_alt196 = list(makeString("Prints SCALAR-RANGE to STREAM, ignoring depth"), list(makeSymbol("IGNORE"), makeSymbol("DEPTH")), list(makeSymbol("PRINC"), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN"), makeSymbol("MAX"), makeSymbol("POINT-INFO")), makeSymbol("STREAM")), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt199 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("UNIT"), reader_make_constant_shell("Unity")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), ZERO_INTEGER), list(makeSymbol("CSETQ"), makeSymbol("MAX"), ZERO_INTEGER), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt202 = list(list(RET, list(makeSymbol("CAND"), list(EQL, makeSymbol("UNIT"), reader_make_constant_shell("Unity")), list(makeSymbol("="), makeSymbol("MIN"), ZERO_INTEGER), list(makeSymbol("="), makeSymbol("MAX"), ZERO_INTEGER))));
+
+    static private final SubLList $list_alt205 = list(makeSymbol("VALUE"));
+
+    static private final SubLList $list_alt206 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("isa"), makeSymbol("VALUE"), list(QUOTE, list(reader_make_constant_shell("NonNegativeScalarInterval")))), reader_make_constant_shell("BaseKB")), list(RET, makeSymbol("SELF"))), list(makeSymbol("PCOND"), list(list(makeSymbol("NUMBERP"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("MAX"), makeSymbol("VALUE")), list(makeSymbol("CSETQ"), makeSymbol("POINT-INFO"), T)), list(list(makeSymbol("CONSP"), makeSymbol("VALUE")), list(makeSymbol("CLET"), list(list(makeSymbol("VALUE-UNIT"), list(makeSymbol("FIRST"), makeSymbol("VALUE"))), list(makeSymbol("VALUE-MIN"), list(makeSymbol("SECOND"), makeSymbol("VALUE"))), list(makeSymbol("VALUE-MAX"), list(makeSymbol("THIRD"), makeSymbol("VALUE"))), makeSymbol("NEW-UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("PWHEN"), list(makeSymbol("ISA?"), makeSymbol("VALUE-UNIT"), reader_make_constant_shell("UnitOfMeasure")), list(makeSymbol("CSETQ"), makeSymbol("NEW-UNIT"), makeSymbol("VALUE-UNIT"))), list(makeSymbol("PWHEN"), list(makeSymbol("NUMBERP"), makeSymbol("VALUE-MIN")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MIN"), makeSymbol("VALUE-MIN"))), list(makeSymbol("PIF"), list(makeSymbol("NUMBERP"), makeSymbol("VALUE-MAX")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MAX"), makeSymbol("VALUE-MAX")), list(makeSymbol("CSETQ"), makeSymbol("NEW-MAX"), makeSymbol("NEW-MIN"))), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("NEW-UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("CSETQ"), makeSymbol("UNIT"), makeSymbol("NEW-UNIT")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), makeSymbol("NEW-MIN")), list(makeSymbol("CSETQ"), makeSymbol("MAX"), makeSymbol("NEW-MAX"))), list(makeSymbol("PWHEN"), list(EQ, makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX")), list(makeSymbol("CSETQ"), makeSymbol("POINT-INFO"), T))))), list(RET, makeSymbol("SELF")));
 
     public static SubLObject init_sanity_checker_file() {
         defvar("*SANITY-CHECKER*", NIL);
@@ -3042,6 +5231,36 @@ public final class sanity_checker extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt209 = list(reader_make_constant_shell("NonNegativeScalarInterval"));
+
+    static private final SubLList $list_alt214 = list(list(RET, makeSymbol("UNIT")));
+
+    static private final SubLList $list_alt217 = list(list(makeSymbol("PIF"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("EMPTY-P"))), list(RET, NIL), list(RET, list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN")))));
+
+    static private final SubLList $list_alt221 = list(list(RET, makeSymbol("MIN")));
+
+    static private final SubLList $list_alt224 = list(list(makeSymbol("PIF"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("EMPTY-P"))), list(RET, NIL), list(RET, list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MAX")))));
+
+    static private final SubLList $list_alt228 = list(list(RET, makeSymbol("MAX")));
+
+    static private final SubLList $list_alt231 = list(list(RET, list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("MIN"), makeSymbol("MAX"))));
+
+    static private final SubLList $list_alt234 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("FUDGE-FACTOR"), makeSymbol("NUMBERP")), list(makeSymbol("CSETQ"), makeSymbol("MIN"), list(makeSymbol("-"), makeSymbol("MIN"), list(makeSymbol("*"), makeSymbol("MIN"), makeSymbol("FUDGE-FACTOR")))), list(makeSymbol("CSETQ"), makeSymbol("MAX"), list(makeSymbol("+"), makeSymbol("MAX"), list(makeSymbol("*"), makeSymbol("MAX"), makeSymbol("FUDGE-FACTOR")))), list(RET, makeSymbol("SELF")));
+
+    static private final SubLList $list_alt238 = list(makeSymbol("OTHER-RANGE"));
+
+    static private final SubLList $list_alt239 = list(list(makeSymbol("CHECK-TYPE"), makeSymbol("OTHER-RANGE"), makeSymbol("SCALAR-RANGE-P")), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-UNIT")))), list(makeSymbol("QUERY"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("and"), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("isa"), makeSymbol("UNIT"), list(QUOTE, list(makeSymbol("?TYPE")))), list(makeSymbol("BQ-LIST*"), reader_make_constant_shell("isa"), makeSymbol("OTHER-UNIT"), list(QUOTE, list(makeSymbol("?TYPE")))), list(QUOTE, list(list(reader_make_constant_shell("isa"), makeSymbol("?TYPE"), reader_make_constant_shell("InterconvertibleUnitType"))))))), list(RET, list(makeSymbol("NEW-CYC-QUERY"), makeSymbol("QUERY"), reader_make_constant_shell("EverythingPSC")))));
+
+    static private final SubLList $list_alt242 = list(makeSymbol("?TYPE"));
+
+    static private final SubLList $list_alt243 = list(list(reader_make_constant_shell("isa"), makeSymbol("?TYPE"), reader_make_constant_shell("InterconvertibleUnitType")));
+
+    static private final SubLList $list_alt245 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-POINT"), list(makeSymbol("GET-SLOT"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("POINT-INFO"))))), list(makeSymbol("PCOND"), list(list(makeSymbol("CAND"), makeSymbol("POINT-INFO"), makeSymbol("OTHER-POINT")), list(RET, list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("MERGE-LOOSE")), makeSymbol("OTHER-RANGE")))), list(makeSymbol("POINT-INFO"), list(RET, makeSymbol("SELF"))), list(makeSymbol("OTHER-POINT"), list(RET, makeSymbol("OTHER-RANGE"))), list(T, list(RET, list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("MERGE-STRICT")), makeSymbol("OTHER-RANGE")))))));
+
+    static private final SubLList $list_alt250 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(new SubLObject[]{ list(makeSymbol("MERGED"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE")))), list(makeSymbol("THIS-MIN"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("OTHER-MIN"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("THIS-MAX"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MAX")))), list(makeSymbol("OTHER-MAX"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX")))), list(makeSymbol("MIN-TEST"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThanOrEqualTo"), makeSymbol("THIS-MIN"), makeSymbol("OTHER-MIN")), reader_make_constant_shell("EverythingPSC"))), list(makeSymbol("MAX-TEST"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThanOrEqualTo"), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MAX")), reader_make_constant_shell("EverythingPSC"))), list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-UNIT")))), list(makeSymbol("NEW-MIN"), list(makeSymbol("FIF"), makeSymbol("MIN-TEST"), makeSymbol("MIN"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN-VALUE")))))), list(makeSymbol("NEW-MAX"), list(makeSymbol("FIF"), makeSymbol("MAX-TEST"), makeSymbol("MAX"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX-VALUE")))))) }), list(makeSymbol("FIM"), makeSymbol("MERGED"), list(QUOTE, makeSymbol("FILL")), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX"))), list(RET, makeSymbol("MERGED"))));
+
+    static private final SubLList $list_alt254 = list(list(makeSymbol("PUNLESS"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("CONVERTIBLE-P")), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("THIS-MIN"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("OTHER-MIN"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN")))), list(makeSymbol("THIS-MAX"), list(makeSymbol("FIM"), makeSymbol("SELF"), list(QUOTE, makeSymbol("GET-MAX")))), list(makeSymbol("OTHER-MAX"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX"))))), list(makeSymbol("PWHEN"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("THIS-MAX"), makeSymbol("OTHER-MIN")), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("WARN"), makeString("~%Inconsistent ranges: ~S ~S"), makeSymbol("SELF"), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("PWHEN"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MIN")), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("WARN"), makeString("~%Inconsistent ranges: ~S ~S"), makeSymbol("SELF"), makeSymbol("OTHER-RANGE")), list(RET, NIL)), list(makeSymbol("CLET"), list(list(makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-UNIT")))), list(makeSymbol("NEW-MAX"), list(makeSymbol("FIF"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("OTHER-MAX"), makeSymbol("THIS-MAX")), reader_make_constant_shell("EverythingPSC")), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MAX-VALUE")))), makeSymbol("MAX"))), list(makeSymbol("NEW-MIN"), list(makeSymbol("FIF"), list(makeSymbol("NEW-CYC-QUERY"), list(makeSymbol("BQ-LIST"), reader_make_constant_shell("lessThan"), makeSymbol("OTHER-MIN"), makeSymbol("THIS-MIN")), reader_make_constant_shell("EverythingPSC")), makeSymbol("MIN"), list(makeSymbol("CONVERT-TO-UNITS"), makeSymbol("UNIT"), makeSymbol("OTHER-UNIT"), list(makeSymbol("FIM"), makeSymbol("OTHER-RANGE"), list(QUOTE, makeSymbol("GET-MIN-VALUE")))))), list(makeSymbol("MERGED"), list(makeSymbol("NEW-CLASS-INSTANCE"), list(QUOTE, makeSymbol("SCALAR-RANGE"))))), list(makeSymbol("FIM"), makeSymbol("MERGED"), list(QUOTE, makeSymbol("FILL")), list(makeSymbol("LIST"), makeSymbol("UNIT"), makeSymbol("NEW-MIN"), makeSymbol("NEW-MAX"))), list(RET, makeSymbol("MERGED")))));
+
     @Override
     public void declareFunctions() {
         declare_sanity_checker_file();
@@ -3058,274 +5277,9 @@ public final class sanity_checker extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLString $str_alt256$__Inconsistent_ranges___S__S = makeString("~%Inconsistent ranges: ~S ~S");
 }
 
 /**

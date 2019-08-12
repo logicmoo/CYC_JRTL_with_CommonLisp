@@ -1,26 +1,23 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.assertions_interface;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.format_cycl_expression;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.inference.harness.forward_rule_propagation;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_accessors;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.kb_hl_support_handles;
-import com.cyc.cycjava.cycl.kb_hl_supports_high;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.variables;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -28,63 +25,16 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.harness.forward_rule_propagation.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$current_forward_problem_store$;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$noting_progress_delayed_mode_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$noting_progress_delayed_mode_string$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class forward_rule_propagation extends SubLTranslatedFile {
+public final class forward_rule_propagation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new forward_rule_propagation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.forward_rule_propagation";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.forward_rule_propagation";
 
-    public static final String myFingerPrint = "4645cb8f47c66914087d89fa25a4bad6224917b2991e9cdd25ec7882bcb9b431";
 
     // deflexical
     public static final SubLSymbol $forward_trigger_lazy_iteration_threshold$ = makeSymbol("*FORWARD-TRIGGER-LAZY-ITERATION-THRESHOLD*");
@@ -129,7 +79,7 @@ public final class forward_rule_propagation extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list20 = list(makeKeyword("BROWSABLE?"), T, makeKeyword("MAX-STEP"), FIVE_INTEGER, makeKeyword("PRODUCTIVITY-LIMIT"), makeKeyword("POSITIVE-INFINITY"), makeKeyword("ALLOWED-MODULES"), list(makeKeyword("NOT"), list(makeKeyword("OR"), list(makeKeyword("MODULE-TYPE"), makeKeyword("REMOVAL-CONJUNCTIVE")), makeKeyword("JOIN"), makeKeyword("REMOVAL-PRED-UNBOUND"))));
+    private static final SubLList $list20 = list(makeKeyword("BROWSABLE?"), T, makeKeyword("MAX-STEP"), FIVE_INTEGER, makeKeyword("PRODUCTIVITY-LIMIT"), makeKeyword("POSITIVE-INFINITY"), makeKeyword("ALLOWED-MODULES"), list(makeKeyword("NOT"), list(makeKeyword("OR"), list(makeKeyword("MODULE-TYPE"), makeKeyword("REMOVAL-CONJUNCTIVE")), $JOIN, makeKeyword("REMOVAL-PRED-UNBOUND"))));
 
 
 
@@ -561,16 +511,16 @@ public final class forward_rule_propagation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_forward_rule_propagation_file() {
-        declareFunction(me, "forward_propagate_rule_via_trigger_gafs", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS", 1, 1, false);
-        declareFunction(me, "possibly_change_assertion_direction_to_forward_without_repropagation", "POSSIBLY-CHANGE-ASSERTION-DIRECTION-TO-FORWARD-WITHOUT-REPROPAGATION", 1, 0, false);
-        declareFunction(me, "repropagate_trigger_gaf_against_rule", "REPROPAGATE-TRIGGER-GAF-AGAINST-RULE", 2, 0, false);
-        declareFunction(me, "forward_rule_trigger_gafs", "FORWARD-RULE-TRIGGER-GAFS", 1, 1, false);
-        declareFunction(me, "new_forward_rule_trigger_gaf_iterator", "NEW-FORWARD-RULE-TRIGGER-GAF-ITERATOR", 1, 1, false);
-        declareFunction(me, "forward_rule_trigger_gafs_int", "FORWARD-RULE-TRIGGER-GAFS-INT", 2, 0, false);
-        declareFunction(me, "forward_rule_trigger_asent", "FORWARD-RULE-TRIGGER-ASENT", 1, 1, false);
-        declareFunction(me, "obfuscate_non_trigger_literal_lits", "OBFUSCATE-NON-TRIGGER-LITERAL-LITS", 3, 0, false);
-        declareFunction(me, "forward_rule_initial_fanout", "FORWARD-RULE-INITIAL-FANOUT", 1, 1, false);
-        declareFunction(me, "first_gaf_in_supports", "FIRST-GAF-IN-SUPPORTS", 1, 0, false);
+        declareFunction("forward_propagate_rule_via_trigger_gafs", "FORWARD-PROPAGATE-RULE-VIA-TRIGGER-GAFS", 1, 1, false);
+        declareFunction("possibly_change_assertion_direction_to_forward_without_repropagation", "POSSIBLY-CHANGE-ASSERTION-DIRECTION-TO-FORWARD-WITHOUT-REPROPAGATION", 1, 0, false);
+        declareFunction("repropagate_trigger_gaf_against_rule", "REPROPAGATE-TRIGGER-GAF-AGAINST-RULE", 2, 0, false);
+        declareFunction("forward_rule_trigger_gafs", "FORWARD-RULE-TRIGGER-GAFS", 1, 1, false);
+        declareFunction("new_forward_rule_trigger_gaf_iterator", "NEW-FORWARD-RULE-TRIGGER-GAF-ITERATOR", 1, 1, false);
+        declareFunction("forward_rule_trigger_gafs_int", "FORWARD-RULE-TRIGGER-GAFS-INT", 2, 0, false);
+        declareFunction("forward_rule_trigger_asent", "FORWARD-RULE-TRIGGER-ASENT", 1, 1, false);
+        declareFunction("obfuscate_non_trigger_literal_lits", "OBFUSCATE-NON-TRIGGER-LITERAL-LITS", 3, 0, false);
+        declareFunction("forward_rule_initial_fanout", "FORWARD-RULE-INITIAL-FANOUT", 1, 1, false);
+        declareFunction("first_gaf_in_supports", "FIRST-GAF-IN-SUPPORTS", 1, 0, false);
         return NIL;
     }
 

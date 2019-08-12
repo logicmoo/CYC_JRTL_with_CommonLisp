@@ -1,54 +1,208 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.kb_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.kb_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class kb_macros extends SubLTranslatedFile {
+public final class kb_macros extends SubLTranslatedFile implements V12 {
+    /**
+     * Return T iff we are in the process of removing some fort.
+     */
+    @LispMethod(comment = "Return T iff we are in the process of removing some fort.")
+    public static final SubLObject some_fort_being_removedP() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return list_utilities.sublisp_boolean($forts_being_removed$.getDynamicValue(thread));
+        }
+    }
+
+    public static final SubLObject note_fort_being_removed(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt0);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject fort = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt0);
+                    fort = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return listS(CLET, list(list($forts_being_removed$, listS(CONS, fort, $list_alt4))), append(body, NIL));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt0);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Return T iff we are in the process of removing FORT.
+     */
+    @LispMethod(comment = "Return T iff we are in the process of removing FORT.")
+    public static final SubLObject fort_being_removedP(SubLObject fort) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return subl_promotions.memberP(fort, $forts_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
+        }
+    }
+
+    public static final SubLObject do_kb_suid_table_old_objects(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt5);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject table = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt5);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt5);
+                    table = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_2 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt5);
+                            current_2 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt5);
+                            if (NIL == member(current_2, $list_alt6, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_2 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt5);
+                        }
+                        {
+                            SubLObject progress_message_tail = property_list_member($PROGRESS_MESSAGE, current);
+                            SubLObject progress_message = (NIL != progress_message_tail) ? ((SubLObject) (cadr(progress_message_tail))) : NIL;
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym14$ID;
+                                return listS(DO_ID_INDEX_OLD_OBJECTS, list(id, var, table, $PROGRESS_MESSAGE, progress_message, $DONE, done), list(IGNORE, id), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static final SubLObject do_kb_suid_table_new_objects(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt16);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject table = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt16);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt16);
+                    table = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_3 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt16);
+                            current_3 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt16);
+                            if (NIL == member(current_3, $list_alt17, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_3 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt16);
+                        }
+                        {
+                            SubLObject ordered_tail = property_list_member($ORDERED, current);
+                            SubLObject ordered = (NIL != ordered_tail) ? ((SubLObject) (cadr(ordered_tail))) : NIL;
+                            SubLObject progress_message_tail = property_list_member($PROGRESS_MESSAGE, current);
+                            SubLObject progress_message = (NIL != progress_message_tail) ? ((SubLObject) (cadr(progress_message_tail))) : NIL;
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym18$ID;
+                                return listS(DO_ID_INDEX_NEW_OBJECTS, list(new SubLObject[]{ id, var, table, $ORDERED, ordered, $PROGRESS_MESSAGE, progress_message, $DONE, done }), list(IGNORE, id), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public static final SubLSymbol $forts_being_removed$ = makeSymbol("*FORTS-BEING-REMOVED*");
+
     public static final SubLFile me = new kb_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_macros";
+ public static final String myName = "com.cyc.cycjava.cycl.kb_macros";
 
-    public static final String myFingerPrint = "55aece63e0105bd6f3e1aa4e4b8677e58df21100db93bdd27b005c9f8158ae47";
 
     // Internal Constants
-    public static final SubLList $list0 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("&KEY"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("&KEY"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list1 = list(makeKeyword("PROGRESS-MESSAGE"), makeKeyword("DONE"));
+    private static final SubLList $list1 = list(makeKeyword("PROGRESS-MESSAGE"), $DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-
-
-
-
     private static final SubLSymbol $sym5$ID = makeUninternedSymbol("ID");
-
-
-
-
-
-
 
     private static final SubLSymbol $sym9$ID = makeUninternedSymbol("ID");
 
@@ -56,7 +210,7 @@ public final class kb_macros extends SubLTranslatedFile {
 
     private static final SubLList $list11 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("&KEY"), makeSymbol("ORDERED"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list12 = list(makeKeyword("ORDERED"), makeKeyword("PROGRESS-MESSAGE"), makeKeyword("DONE"));
+    private static final SubLList $list12 = list(makeKeyword("ORDERED"), makeKeyword("PROGRESS-MESSAGE"), $DONE);
 
     private static final SubLSymbol $sym13$ID = makeUninternedSymbol("ID");
 
@@ -70,15 +224,7 @@ public final class kb_macros extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym18$MY_DONE = makeUninternedSymbol("MY-DONE");
 
-
-
     private static final SubLSymbol $sym20$_ = makeSymbol("<");
-
-
-
-
-
-
 
     private static final SubLList $list24 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("FIRST-ID"), makeSymbol("&KEY"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -100,29 +246,71 @@ public final class kb_macros extends SubLTranslatedFile {
 
     private static final SubLList $list33 = list(ZERO_INTEGER);
 
-
-
-
-
-
-
     private static final SubLSymbol $sym37$END = makeUninternedSymbol("END");
 
     private static final SubLSymbol $sym38$ID = makeUninternedSymbol("ID");
 
     private static final SubLSymbol DO_NUMBERS = makeSymbol("DO-NUMBERS");
 
-
-
-
-
-
-
     private static final SubLSymbol ID_INDEX_LOOKUP = makeSymbol("ID-INDEX-LOOKUP");
 
-
-
     private static final SubLList $list45 = list(list(makeSymbol("*CFASL-CONSTANT-HANDLE-LOOKUP-FUNC*")), list(makeSymbol("*CFASL-NART-HANDLE-LOOKUP-FUNC*")), list(makeSymbol("*CFASL-ASSERTION-HANDLE-LOOKUP-FUNC*")), list(makeSymbol("*CFASL-DEDUCTION-HANDLE-LOOKUP-FUNC*")), list(makeSymbol("*CFASL-KB-HL-SUPPORT-HANDLE-LOOKUP-FUNC*")), list(makeSymbol("*CFASL-CLAUSE-STRUC-HANDLE-LOOKUP-FUNC*")));
+
+    public static final SubLObject do_kb_suid_table_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt5);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject table = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt5);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt5);
+                    table = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_1 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt5);
+                            current_1 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt5);
+                            if (NIL == member(current_1, $list_alt6, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_1 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt5);
+                        }
+                        {
+                            SubLObject progress_message_tail = property_list_member($PROGRESS_MESSAGE, current);
+                            SubLObject progress_message = (NIL != progress_message_tail) ? ((SubLObject) (cadr(progress_message_tail))) : NIL;
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym10$ID;
+                                return listS(DO_ID_INDEX, list(new SubLObject[]{ id, var, table, $ORDERED, T, $PROGRESS_MESSAGE, progress_message, $DONE, done }), list(IGNORE, id), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     public static SubLObject do_kb_suid_table(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
@@ -258,6 +446,68 @@ public final class kb_macros extends SubLTranslatedFile {
         return listS(DO_ID_INDEX_SPARSE_OBJECTS, list(new SubLObject[]{ id, var, table, $ORDERED, ordered, $PROGRESS_MESSAGE, progress_message, $DONE, done }), list(IGNORE, id), append(body, NIL));
     }
 
+    public static final SubLObject do_kb_suid_table_upto_excluding_id_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt20);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject table = NIL;
+                    SubLObject threshold_id = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt20);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt20);
+                    table = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt20);
+                    threshold_id = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_4 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt20);
+                            current_4 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt20);
+                            if (NIL == member(current_4, $list_alt6, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_4 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt20);
+                        }
+                        {
+                            SubLObject progress_message_tail = property_list_member($PROGRESS_MESSAGE, current);
+                            SubLObject progress_message = (NIL != progress_message_tail) ? ((SubLObject) (cadr(progress_message_tail))) : NIL;
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym21$ID;
+                                SubLObject past_ids = $sym22$PAST_IDS;
+                                SubLObject my_done = $sym23$MY_DONE;
+                                return list(CLET, list(past_ids, my_done), list(DO_ID_INDEX, list(new SubLObject[]{ id, var, table, $ORDERED, T, $PROGRESS_MESSAGE, progress_message, $DONE, my_done }), list(CLET, list(list(past_ids, list($sym24$_, threshold_id, id))), listS(PUNLESS, past_ids, append(body, NIL)), list(CSETQ, my_done, list(COR, done, past_ids)))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject do_kb_suid_table_upto_excluding_id(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -306,6 +556,66 @@ public final class kb_macros extends SubLTranslatedFile {
         final SubLObject past_ids = $sym17$PAST_IDS;
         final SubLObject my_done = $sym18$MY_DONE;
         return list(CLET, list(past_ids, my_done), list(DO_ID_INDEX, list(new SubLObject[]{ id, var, table, $ORDERED, T, $PROGRESS_MESSAGE, progress_message, $DONE, my_done }), list(CLET, list(list(past_ids, list($sym20$_, threshold_id, id))), listS(PUNLESS, past_ids, append(body, NIL)), list(CSETQ, my_done, list(COR, done, past_ids)))));
+    }
+
+    public static final SubLObject do_kb_suid_table_starting_at_id_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt28);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject table = NIL;
+                    SubLObject first_id = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt28);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt28);
+                    table = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt28);
+                    first_id = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_5 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt28);
+                            current_5 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt28);
+                            if (NIL == member(current_5, $list_alt6, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_5 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt28);
+                        }
+                        {
+                            SubLObject progress_message_tail = property_list_member($PROGRESS_MESSAGE, current);
+                            SubLObject progress_message = (NIL != progress_message_tail) ? ((SubLObject) (cadr(progress_message_tail))) : NIL;
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym29$ID;
+                                return list(DO_ID_INDEX, list(new SubLObject[]{ id, var, table, $ORDERED, T, $PROGRESS_MESSAGE, progress_message, $DONE, done }), listS(PUNLESS, list($sym24$_, id, first_id), append(body, NIL)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_kb_suid_table_starting_at_id(final SubLObject macroform, final SubLObject environment) {
@@ -381,17 +691,62 @@ public final class kb_macros extends SubLTranslatedFile {
         return listS(CLET, $list45, append(body, NIL));
     }
 
+    public static final SubLObject declare_kb_macros_file_alt() {
+        declareMacro("note_fort_being_removed", "NOTE-FORT-BEING-REMOVED");
+        declareFunction("some_fort_being_removedP", "SOME-FORT-BEING-REMOVED?", 0, 0, false);
+        declareFunction("fort_being_removedP", "FORT-BEING-REMOVED?", 1, 0, false);
+        declareMacro("do_kb_suid_table", "DO-KB-SUID-TABLE");
+        declareMacro("do_kb_suid_table_old_objects", "DO-KB-SUID-TABLE-OLD-OBJECTS");
+        declareMacro("do_kb_suid_table_new_objects", "DO-KB-SUID-TABLE-NEW-OBJECTS");
+        declareMacro("do_kb_suid_table_upto_excluding_id", "DO-KB-SUID-TABLE-UPTO-EXCLUDING-ID");
+        declareMacro("do_kb_suid_table_starting_at_id", "DO-KB-SUID-TABLE-STARTING-AT-ID");
+        return NIL;
+    }
+
     public static SubLObject declare_kb_macros_file() {
-        declareMacro(me, "do_kb_suid_table", "DO-KB-SUID-TABLE");
-        declareMacro(me, "do_kb_suid_table_dense_objects", "DO-KB-SUID-TABLE-DENSE-OBJECTS");
-        declareMacro(me, "do_kb_suid_table_sparse_objects", "DO-KB-SUID-TABLE-SPARSE-OBJECTS");
-        declareMacro(me, "do_kb_suid_table_upto_excluding_id", "DO-KB-SUID-TABLE-UPTO-EXCLUDING-ID");
-        declareMacro(me, "do_kb_suid_table_starting_at_id", "DO-KB-SUID-TABLE-STARTING-AT-ID");
-        declareMacro(me, "with_normal_kb_object_lookup_assumptions", "WITH-NORMAL-KB-OBJECT-LOOKUP-ASSUMPTIONS");
+        if (SubLFiles.USE_V1) {
+            declareMacro("do_kb_suid_table", "DO-KB-SUID-TABLE");
+            declareMacro("do_kb_suid_table_dense_objects", "DO-KB-SUID-TABLE-DENSE-OBJECTS");
+            declareMacro("do_kb_suid_table_sparse_objects", "DO-KB-SUID-TABLE-SPARSE-OBJECTS");
+            declareMacro("do_kb_suid_table_upto_excluding_id", "DO-KB-SUID-TABLE-UPTO-EXCLUDING-ID");
+            declareMacro("do_kb_suid_table_starting_at_id", "DO-KB-SUID-TABLE-STARTING-AT-ID");
+            declareMacro("with_normal_kb_object_lookup_assumptions", "WITH-NORMAL-KB-OBJECT-LOOKUP-ASSUMPTIONS");
+        }
+        if (SubLFiles.USE_V2) {
+            declareMacro("note_fort_being_removed", "NOTE-FORT-BEING-REMOVED");
+            declareFunction("some_fort_being_removedP", "SOME-FORT-BEING-REMOVED?", 0, 0, false);
+            declareFunction("fort_being_removedP", "FORT-BEING-REMOVED?", 1, 0, false);
+            declareMacro("do_kb_suid_table_old_objects", "DO-KB-SUID-TABLE-OLD-OBJECTS");
+            declareMacro("do_kb_suid_table_new_objects", "DO-KB-SUID-TABLE-NEW-OBJECTS");
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_kb_macros_file_Previous() {
+        declareMacro("do_kb_suid_table", "DO-KB-SUID-TABLE");
+        declareMacro("do_kb_suid_table_dense_objects", "DO-KB-SUID-TABLE-DENSE-OBJECTS");
+        declareMacro("do_kb_suid_table_sparse_objects", "DO-KB-SUID-TABLE-SPARSE-OBJECTS");
+        declareMacro("do_kb_suid_table_upto_excluding_id", "DO-KB-SUID-TABLE-UPTO-EXCLUDING-ID");
+        declareMacro("do_kb_suid_table_starting_at_id", "DO-KB-SUID-TABLE-STARTING-AT-ID");
+        declareMacro("with_normal_kb_object_lookup_assumptions", "WITH-NORMAL-KB-OBJECT-LOOKUP-ASSUMPTIONS");
+        return NIL;
+    }
+
+    public static final SubLObject init_kb_macros_file_alt() {
+        defparameter("*FORTS-BEING-REMOVED*", NIL);
         return NIL;
     }
 
     public static SubLObject init_kb_macros_file() {
+        if (SubLFiles.USE_V1) {
+        }
+        if (SubLFiles.USE_V2) {
+            defparameter("*FORTS-BEING-REMOVED*", NIL);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_kb_macros_file_Previous() {
         return NIL;
     }
 
@@ -415,54 +770,45 @@ public final class kb_macros extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(list(makeSymbol("FORT")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt4 = list(makeSymbol("*FORTS-BEING-REMOVED*"));
+
+    static private final SubLList $list_alt5 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("&KEY"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt6 = list(makeKeyword("PROGRESS-MESSAGE"), $DONE);
+
+    static private final SubLSymbol $sym10$ID = makeUninternedSymbol("ID");
+
+    static private final SubLSymbol $sym14$ID = makeUninternedSymbol("ID");
+
+    private static final SubLSymbol DO_ID_INDEX_OLD_OBJECTS = makeSymbol("DO-ID-INDEX-OLD-OBJECTS");
+
+    static private final SubLList $list_alt16 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("&KEY"), makeSymbol("ORDERED"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt17 = list(makeKeyword("ORDERED"), makeKeyword("PROGRESS-MESSAGE"), $DONE);
+
+    static private final SubLSymbol $sym18$ID = makeUninternedSymbol("ID");
+
+    private static final SubLSymbol DO_ID_INDEX_NEW_OBJECTS = makeSymbol("DO-ID-INDEX-NEW-OBJECTS");
+
+    static private final SubLList $list_alt20 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("THRESHOLD-ID"), makeSymbol("&KEY"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym21$ID = makeUninternedSymbol("ID");
+
+    static private final SubLSymbol $sym22$PAST_IDS = makeUninternedSymbol("PAST-IDS");
+
+    static private final SubLSymbol $sym23$MY_DONE = makeUninternedSymbol("MY-DONE");
+
+    static private final SubLSymbol $sym24$_ = makeSymbol("<");
+
+    static private final SubLList $list_alt28 = list(list(makeSymbol("VAR"), makeSymbol("TABLE"), makeSymbol("FIRST-ID"), makeSymbol("&KEY"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym29$ID = makeUninternedSymbol("ID");
 }
 
 /**

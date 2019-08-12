@@ -458,8 +458,7 @@ DIRECTORY-STRING should include the appropriate directory separator character at
   }
 
   public static final SubLObject setup_file_utilities_file() {
-    // CVS_ID("Id: file-utilities.lisp 128822 2009-09-22 17:25:29Z pace ");
-    access_macros.define_obsolete_register($sym35$OPEN_TMP_FILE, $list47);
+        access_macros.define_obsolete_register($sym35$OPEN_TMP_FILE, $list47);
     return NIL;
   }
 

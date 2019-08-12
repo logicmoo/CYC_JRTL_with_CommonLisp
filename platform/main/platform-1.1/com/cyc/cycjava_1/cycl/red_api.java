@@ -244,8 +244,7 @@ public  final class red_api extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_red_api_file() {
-    // CVS_ID("Id");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_red_struct$.getGlobalValue(), Symbols.symbol_function($sym7$RED_STRUCT_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_red_struct$.getGlobalValue(), Symbols.symbol_function($sym7$RED_STRUCT_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$RED_STRUCT_COBJ, $sym9$_CSETF_RED_STRUCT_COBJ);
     Equality.identity($sym0$RED_STRUCT);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_red_repository_struct$.getGlobalValue(), Symbols.symbol_function($sym19$RED_REPOSITORY_STRUCT_PRINT_FUNCTION_TRAMPOLINE));

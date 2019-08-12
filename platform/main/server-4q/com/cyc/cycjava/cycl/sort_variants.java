@@ -1,30 +1,6 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.sort_variants;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.sort_variants.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -37,15 +13,24 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class sort_variants extends SubLTranslatedFile {
+public final class sort_variants extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sort_variants();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sort_variants";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sort_variants";
 
-    public static final String myFingerPrint = "28d0e7ab55a1654ad41e911f3a0d0f25f18d48a6d7213693d1f251250d812e2b";
 
     // deflexical
     private static final SubLSymbol $quick_sort_recursion_limit$ = makeSymbol("*QUICK-SORT-RECURSION-LIMIT*");
@@ -58,7 +43,7 @@ public final class sort_variants extends SubLTranslatedFile {
 
     private static final SubLList $list3 = list(list(makeSymbol("FUNCTION"), IDENTITY));
 
-    private static final SubLList $list4 = list(list(makeSymbol("QUOTE"), IDENTITY));
+    private static final SubLList $list4 = list(list(QUOTE, IDENTITY));
 
 
 
@@ -730,35 +715,35 @@ public final class sort_variants extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_sort_variants_file() {
-        declareMacro(me, "funcall_key", "FUNCALL-KEY");
-        declareFunction(me, "sort_new", "SORT-NEW", 2, 1, false);
-        declareFunction(me, "nsort_new", "NSORT-NEW", 2, 1, false);
-        declareFunction(me, "stable_sort_new", "STABLE-SORT-NEW", 2, 1, false);
-        declareFunction(me, "nstable_sort_new", "NSTABLE-SORT-NEW", 2, 1, false);
-        declareFunction(me, "sequence_order_status", "SEQUENCE-ORDER-STATUS", 2, 1, false);
-        declareFunction(me, "compute_sequence_order_status", "COMPUTE-SEQUENCE-ORDER-STATUS", 2, 1, false);
-        declareFunction(me, "sort_new_internal", "SORT-NEW-INTERNAL", 5, 0, false);
-        declareFunction(me, "sort_new_internal_guts", "SORT-NEW-INTERNAL-GUTS", 5, 0, false);
-        declareFunction(me, "merge_sort_list", "MERGE-SORT-LIST", 2, 1, false);
-        declareFunction(me, "merge_sort_list_recursive", "MERGE-SORT-LIST-RECURSIVE", 5, 0, false);
-        declareFunction(me, "merge_sort_list_splice", "MERGE-SORT-LIST-SPLICE", 3, 0, false);
-        declareFunction(me, "merge_sort_list_merge", "MERGE-SORT-LIST-MERGE", 4, 0, false);
-        declareFunction(me, "merge_sort_vector", "MERGE-SORT-VECTOR", 2, 1, false);
-        declareFunction(me, "merge_sort_vector_recursive", "MERGE-SORT-VECTOR-RECURSIVE", 6, 0, false);
-        declareFunction(me, "merge_sort_vector_merge", "MERGE-SORT-VECTOR-MERGE", 8, 0, false);
-        declareFunction(me, "quick_sort_list", "QUICK-SORT-LIST", 2, 1, false);
-        declareFunction(me, "quick_sort_list_pivot_item", "QUICK-SORT-LIST-PIVOT-ITEM", 2, 1, false);
-        declareFunction(me, "quick_sort_list_partition", "QUICK-SORT-LIST-PARTITION", 3, 1, false);
-        declareFunction(me, "quick_sort_vector", "QUICK-SORT-VECTOR", 2, 1, false);
-        declareFunction(me, "quick_sort_vector_recursive", "QUICK-SORT-VECTOR-RECURSIVE", 5, 0, false);
-        declareFunction(me, "quick_sort_vector_pivot_item", "QUICK-SORT-VECTOR-PIVOT-ITEM", 5, 0, false);
-        declareFunction(me, "quick_sort_vector_partition", "QUICK-SORT-VECTOR-PARTITION", 6, 0, false);
-        declareFunction(me, "f_2expt", "2EXPT", 1, 0, false);
-        declareFunction(me, "copy_sequence", "COPY-SEQUENCE", 1, 0, false);
-        declareFunction(me, "sequence_swap", "SEQUENCE-SWAP", 3, 0, false);
-        declareFunction(me, "csetf_elt", "CSETF-ELT", 3, 0, false);
-        declareFunction(me, "split_by_item", "SPLIT-BY-ITEM", 2, 2, false);
-        declareFunction(me, "nsplit_by_item", "NSPLIT-BY-ITEM", 2, 2, false);
+        declareMacro("funcall_key", "FUNCALL-KEY");
+        declareFunction("sort_new", "SORT-NEW", 2, 1, false);
+        declareFunction("nsort_new", "NSORT-NEW", 2, 1, false);
+        declareFunction("stable_sort_new", "STABLE-SORT-NEW", 2, 1, false);
+        declareFunction("nstable_sort_new", "NSTABLE-SORT-NEW", 2, 1, false);
+        declareFunction("sequence_order_status", "SEQUENCE-ORDER-STATUS", 2, 1, false);
+        declareFunction("compute_sequence_order_status", "COMPUTE-SEQUENCE-ORDER-STATUS", 2, 1, false);
+        declareFunction("sort_new_internal", "SORT-NEW-INTERNAL", 5, 0, false);
+        declareFunction("sort_new_internal_guts", "SORT-NEW-INTERNAL-GUTS", 5, 0, false);
+        declareFunction("merge_sort_list", "MERGE-SORT-LIST", 2, 1, false);
+        declareFunction("merge_sort_list_recursive", "MERGE-SORT-LIST-RECURSIVE", 5, 0, false);
+        declareFunction("merge_sort_list_splice", "MERGE-SORT-LIST-SPLICE", 3, 0, false);
+        declareFunction("merge_sort_list_merge", "MERGE-SORT-LIST-MERGE", 4, 0, false);
+        declareFunction("merge_sort_vector", "MERGE-SORT-VECTOR", 2, 1, false);
+        declareFunction("merge_sort_vector_recursive", "MERGE-SORT-VECTOR-RECURSIVE", 6, 0, false);
+        declareFunction("merge_sort_vector_merge", "MERGE-SORT-VECTOR-MERGE", 8, 0, false);
+        declareFunction("quick_sort_list", "QUICK-SORT-LIST", 2, 1, false);
+        declareFunction("quick_sort_list_pivot_item", "QUICK-SORT-LIST-PIVOT-ITEM", 2, 1, false);
+        declareFunction("quick_sort_list_partition", "QUICK-SORT-LIST-PARTITION", 3, 1, false);
+        declareFunction("quick_sort_vector", "QUICK-SORT-VECTOR", 2, 1, false);
+        declareFunction("quick_sort_vector_recursive", "QUICK-SORT-VECTOR-RECURSIVE", 5, 0, false);
+        declareFunction("quick_sort_vector_pivot_item", "QUICK-SORT-VECTOR-PIVOT-ITEM", 5, 0, false);
+        declareFunction("quick_sort_vector_partition", "QUICK-SORT-VECTOR-PARTITION", 6, 0, false);
+        declareFunction("f_2expt", "2EXPT", 1, 0, false);
+        declareFunction("copy_sequence", "COPY-SEQUENCE", 1, 0, false);
+        declareFunction("sequence_swap", "SEQUENCE-SWAP", 3, 0, false);
+        declareFunction("csetf_elt", "CSETF-ELT", 3, 0, false);
+        declareFunction("split_by_item", "SPLIT-BY-ITEM", 2, 2, false);
+        declareFunction("nsplit_by_item", "NSPLIT-BY-ITEM", 2, 2, false);
         return NIL;
     }
 

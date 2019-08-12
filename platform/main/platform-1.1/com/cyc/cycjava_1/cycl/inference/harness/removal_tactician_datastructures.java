@@ -500,8 +500,7 @@ public  final class removal_tactician_datastructures extends SubLTranslatedFile 
   }
 
   public static final SubLObject setup_removal_tactician_datastructures_file() {
-    // CVS_ID("Id: inference-removal-tactician-datastructures.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$REM_STRAT_DATA_LINK_HEADS_MOTIVATED, $sym9$_CSETF_REM_STRAT_DATA_LINK_HEADS_MOTIVATED);
     Structures.def_csetf($sym10$REM_STRAT_DATA_PROBLEMS_PENDING, $sym11$_CSETF_REM_STRAT_DATA_PROBLEMS_PENDING);
     Structures.def_csetf($sym12$REM_STRAT_DATA_REMOVAL_STRATEGEM_INDEX, $sym13$_CSETF_REM_STRAT_DATA_REMOVAL_STRATEGEM_INDEX);

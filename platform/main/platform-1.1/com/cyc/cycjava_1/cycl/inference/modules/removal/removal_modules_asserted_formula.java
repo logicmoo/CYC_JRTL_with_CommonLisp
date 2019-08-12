@@ -581,8 +581,7 @@ public  final class removal_modules_asserted_formula extends SubLTranslatedFile 
   }
 
   public static final SubLObject setup_removal_modules_asserted_formula_file() {
-    // CVS_ID("Id: removal-modules-asserted-formula.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.register_solely_specific_removal_module_predicate($const0$assertedSentence);
+        inference_modules.register_solely_specific_removal_module_predicate($const0$assertedSentence);
     inference_modules.inference_removal_module($kw6$REMOVAL_ASSERTED_SENTENCE_LOOKUP_POS, $list7);
     inference_modules.inference_removal_module($kw8$REMOVAL_ASSERTED_SENTENCE_UNBOUND_LOOKUP_POS, $list9);
     inference_modules.inference_removal_module($kw11$REMOVAL_ASSERTED_SENTENCE_LOOKUP_NEG, $list12);

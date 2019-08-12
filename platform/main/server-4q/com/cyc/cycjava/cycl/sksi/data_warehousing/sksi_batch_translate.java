@@ -1,93 +1,15 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.sksi.data_warehousing;
 
-
-import com.cyc.cycjava.cycl.api_control_vars;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.at_admitted;
-import com.cyc.cycjava.cycl.at_vars;
-import com.cyc.cycjava.cycl.cyc_kernel;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_meta;
-import com.cyc.cycjava.cycl.deck;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.fi;
-import com.cyc.cycjava.cycl.format_cycl_expression;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.formula_pattern_match;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.function_terms;
-import com.cyc.cycjava.cycl.hash_table_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_utilities;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.misc_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.numeric_date_utilities;
-import com.cyc.cycjava.cycl.obsolete;
-import com.cyc.cycjava.cycl.pattern_match;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.cycjava.cycl.simplifier;
-import com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_csql_generation;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_debugging;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_meaning_sentence_utilities;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_reformulate;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_accessors;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_interaction;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.wff;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 import static com.cyc.cycjava.cycl.access_macros.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.*;
+import static com.cyc.cycjava.cycl.simplifier.*;
+import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
@@ -98,89 +20,126 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_pretty$;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.$read_default_float_format$;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_utilities;
+import com.cyc.cycjava.cycl.sbhl.*;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_csql_generation;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_debugging;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_meaning_sentence_utilities;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_reformulate;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_accessors;
+import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_interaction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class sksi_batch_translate extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      SKSI-BATCH-TRANSLATE
+ * source file: /cyc/top/cycl/sksi/data-warehousing/sksi-batch-translate.lisp
+ * created:     2019/07/03 17:38:34
+ */
+public final class sksi_batch_translate extends SubLTranslatedFile implements V12 {
+    public static final SubLObject sksi_external_sentence_wffP(SubLObject raw_tuple, SubLObject physical_schema, SubLObject logical_schema, SubLObject sentence, SubLObject content_mt) {
+        {
+            SubLObject why_not_wff_explanation = wff.explanation_of_why_not_wff(sentence, content_mt, UNPROVIDED);
+            if (NIL != why_not_wff_explanation) {
+                format(T, $str_alt38$__The_following_CycL_translation_, new SubLObject[]{ raw_tuple, physical_schema, logical_schema, content_mt, sentence, why_not_wff_explanation });
+                return NIL;
+            }
+            return T;
+        }
+    }
+
     public static final SubLFile me = new sksi_batch_translate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate";
+ public static final String myName = "com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate";
 
-    public static final String myFingerPrint = "561a5c1d0811c0954b649502da00991fed369abdeb8eb71aadf70f6bfcf0eb96";
 
     // defvar
+    @LispMethod(comment = "defvar")
     public static final SubLSymbol $sksi_batch_translate_only_asserted_meaning_sentencesP$ = makeSymbol("*SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES?*");
 
     // defvar
+    @LispMethod(comment = "defvar")
     public static final SubLSymbol $sksi_batch_translate_coerce_typesP$ = makeSymbol("*SKSI-BATCH-TRANSLATE-COERCE-TYPES?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $sksi_batch_translate_type_coercion_successfulP$ = makeSymbol("*SKSI-BATCH-TRANSLATE-TYPE-COERCION-SUCCESSFUL?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $sksi_batch_assert_justification_table$ = makeSymbol("*SKSI-BATCH-ASSERT-JUSTIFICATION-TABLE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $sksi_batch_primary_key_columns$ = makeSymbol("*SKSI-BATCH-PRIMARY-KEY-COLUMNS*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $sksi_batch_sql_order_by_primary_keyP$ = makeSymbol("*SKSI-BATCH-SQL-ORDER-BY-PRIMARY-KEY?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $sksi_batch_add_operations_to_transcriptP$ = makeSymbol("*SKSI-BATCH-ADD-OPERATIONS-TO-TRANSCRIPT?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $current_sksi_batch_template$ = makeSymbol("*CURRENT-SKSI-BATCH-TEMPLATE*");
 
     // defvar
+    @LispMethod(comment = "defvar")
     public static final SubLSymbol $sksi_batch_templates$ = makeSymbol("*SKSI-BATCH-TEMPLATES*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $sksi_batch_translate_add_argument_callback$ = makeSymbol("*SKSI-BATCH-TRANSLATE-ADD-ARGUMENT-CALLBACK*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $sksi_batch_translate_unassert_callback$ = makeSymbol("*SKSI-BATCH-TRANSLATE-UNASSERT-CALLBACK*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $sksi_batch_asserting_translations_of_this_table$ = makeSymbol("*SKSI-BATCH-ASSERTING-TRANSLATIONS-OF-THIS-TABLE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $sksi_row_iterator_overrides$ = makeSymbol("*SKSI-ROW-ITERATOR-OVERRIDES*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $sksi_schema_translation_lifting_rule_sentence$ = makeSymbol("*SKSI-SCHEMA-TRANSLATION-LIFTING-RULE-SENTENCE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $sksi_schema_translation_lifting_rule_mt$ = makeSymbol("*SKSI-SCHEMA-TRANSLATION-LIFTING-RULE-MT*");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLList $list3 = list(list(makeSymbol("*SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES?*"), T));
 
@@ -194,39 +153,19 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
 
     public static final SubLSymbol $sksi_batch_sql_select_statement$ = makeSymbol("*SKSI-BATCH-SQL-SELECT-STATEMENT*");
 
-
-
     private static final SubLString $str10$in_mt___S___ = makeString("in mt: ~S.~%");
 
     private static final SubLString $str11$f___S___ = makeString("f: ~S.~%");
 
-
-
     private static final SubLString $str13$Unable_to_open__S = makeString("Unable to open ~S");
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLString $str19$_A_is_not_a__A = makeString("~A is not a ~A");
 
-
-
-
-
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
-
-
 
     private static final SubLString $str24$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
-    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+
 
     private static final SubLString $str26$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
@@ -254,15 +193,11 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
 
     private static final SubLSymbol SKSI_TRANSLATE_ITERATE_NEXT = makeSymbol("SKSI-TRANSLATE-ITERATE-NEXT");
 
-
-
-    public static final SubLList $list40 = list(makeSymbol("TUPLE-ITERATOR"), makeSymbol("&REST"), makeSymbol("REST"));
-
-
+    static private final SubLList $list40 = list(makeSymbol("TUPLE-ITERATOR"), makeSymbol("&REST"), makeSymbol("REST"));
 
     private static final SubLList $list42 = list(makeSymbol("TUPLE-ITERATOR"), makeSymbol("MEMOIZATION-STATE"), makeSymbol("PHYSICAL-SCHEMA"), makeSymbol("LOGICAL-SCHEMA"), makeSymbol("CONTENT-MT"), makeSymbol("META-MT"), makeSymbol("CHECK-WFF-NESS?"));
 
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
+
 
     private static final SubLString $str44$__SKSI__A_ = makeString("~&SKSI-~A ");
 
@@ -278,7 +213,7 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
 
     private static final SubLString $str50$Skipped_due_to_wholly_untranslata = makeString("Skipped due to wholly untranslatable.");
 
-    private static final SubLObject $$True = reader_make_constant_shell(makeString("True"));
+
 
     private static final SubLString $str52$Skipped_due_to_tautology_ = makeString("Skipped due to tautology.");
 
@@ -304,77 +239,45 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
 
     private static final SubLString $str63$skipped_due_to_an_invalid_predica = makeString("skipped due to an invalid predicate: ~a");
 
-
-
-
-
-
-
-
-
-    private static final SubLList $list68 = list(list(reader_make_constant_shell(makeString("IMDB-MovieActors-KS")), list(makeString("Unforgiven (1992)"), makeString("Eastwood, Clint")), list(makeString("Unforgiven (1992)"), makeString("Hackman, Gene"))));
-
-
+    private static final SubLList $list68 = list(list(reader_make_constant_shell("IMDB-MovieActors-KS"), list(makeString("Unforgiven (1992)"), makeString("Eastwood, Clint")), list(makeString("Unforgiven (1992)"), makeString("Hackman, Gene"))));
 
     private static final SubLSymbol SKSI_RAW_TUPLE_TRANSLATION_PATTERN = makeSymbol("SKSI-RAW-TUPLE-TRANSLATION-PATTERN");
-
-    private static final SubLObject $$fieldValue = reader_make_constant_shell(makeString("fieldValue"));
-
-
 
 
 
     private static final SubLSymbol SKSI_RAW_SENTENCE_TRANSLATION_PATTERN = makeSymbol("SKSI-RAW-SENTENCE-TRANSLATION-PATTERN");
 
-    private static final SubLObject $$IMDB_MovieActors_PS = reader_make_constant_shell(makeString("IMDB-MovieActors-PS"));
+    private static final SubLObject $$IMDB_MovieActors_PS = reader_make_constant_shell("IMDB-MovieActors-PS");
 
-    private static final SubLObject $$IMDB_MovieActors_LS = reader_make_constant_shell(makeString("IMDB-MovieActors-LS"));
+    private static final SubLObject $$IMDB_MovieActors_LS = reader_make_constant_shell("IMDB-MovieActors-LS");
 
-    private static final SubLList $list77 = list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("fieldValue")), makeKeyword("ANYTHING"), list(makeKeyword("BIND"), makeSymbol("RAW-1"))), list(reader_make_constant_shell(makeString("fieldValue")), makeKeyword("ANYTHING"), list(makeKeyword("BIND"), makeSymbol("RAW-2")))), list(makeKeyword("CALL"), makeSymbol("SKSI-SIMPLIFY-DECODED-SENTENCE"), list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("indexicalReferent")), list(reader_make_constant_shell(makeString("TheFn")), reader_make_constant_shell(makeString("Movie-CW"))), list(makeKeyword("CALL"), makeSymbol("SKSI-BATCH-REFORMULATE"), list(reader_make_constant_shell(makeString("MovieNamedFn")), list(makeKeyword("VALUE"), makeSymbol("RAW-1")))), makeSymbol("CONTENT-MT")), list(reader_make_constant_shell(makeString("indexicalReferent")), list(reader_make_constant_shell(makeString("TheFn")), reader_make_constant_shell(makeString("Person"))), list(makeKeyword("CALL"), makeSymbol("SKSI-BATCH-REFORMULATE"), list(reader_make_constant_shell(makeString("PersonNamedFn")), list(makeKeyword("VALUE"), makeSymbol("RAW-2")))), makeSymbol("CONTENT-MT")))));
+    private static final SubLList $list77 = list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("fieldValue"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("RAW-1"))), list(reader_make_constant_shell("fieldValue"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("RAW-2")))), list($CALL, makeSymbol("SKSI-SIMPLIFY-DECODED-SENTENCE"), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("indexicalReferent"), list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Movie-CW")), list($CALL, makeSymbol("SKSI-BATCH-REFORMULATE"), list(reader_make_constant_shell("MovieNamedFn"), list(makeKeyword("VALUE"), makeSymbol("RAW-1")))), makeSymbol("CONTENT-MT")), list(reader_make_constant_shell("indexicalReferent"), list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Person")), list($CALL, makeSymbol("SKSI-BATCH-REFORMULATE"), list(reader_make_constant_shell("PersonNamedFn"), list(makeKeyword("VALUE"), makeSymbol("RAW-2")))), makeSymbol("CONTENT-MT")))));
 
-    private static final SubLList $list78 = list(list(reader_make_constant_shell(makeString("TheFn")), reader_make_constant_shell(makeString("Movie-CW"))), list(reader_make_constant_shell(makeString("TheFn")), reader_make_constant_shell(makeString("Person"))));
-
-
-
-
-
-
+    private static final SubLList $list78 = list(list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Movie-CW")), list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Person")));
 
     private static final SubLSymbol POSSIBLY_OVERRIDE_PHYSICAL_FIELD_VALUE = makeSymbol("POSSIBLY-OVERRIDE-PHYSICAL-FIELD-VALUE");
 
     private static final SubLSymbol PHYSICAL_FIELD_FOR_INDEXICAL = makeSymbol("PHYSICAL-FIELD-FOR-INDEXICAL");
 
-    private static final SubLObject $$indexicalReferent = reader_make_constant_shell(makeString("indexicalReferent"));
+
 
     private static final SubLSymbol SKSI_BATCH_REFORMULATE = makeSymbol("SKSI-BATCH-REFORMULATE");
 
-
-
     private static final SubLSymbol SKSI_SIMPLIFY_DECODED_SENTENCE = makeSymbol("SKSI-SIMPLIFY-DECODED-SENTENCE");
 
-    private static final SubLObject $const88$fieldWithPhysicalValueMapsToPhysi = reader_make_constant_shell(makeString("fieldWithPhysicalValueMapsToPhysicalValue"));
-
-
-
-
+    private static final SubLObject $const88$fieldWithPhysicalValueMapsToPhysi = reader_make_constant_shell("fieldWithPhysicalValueMapsToPhysicalValue");
 
     private static final SubLString $str91$Failed_to_compute_a_justification = makeString("Failed to compute a justification for ~a in ~a: this assertion will not be retractable");
 
-    private static final SubLObject $$tablePrimaryKeyValues = reader_make_constant_shell(makeString("tablePrimaryKeyValues"));
 
 
 
-    private static final SubLObject $$schemaTranslation = reader_make_constant_shell(makeString("schemaTranslation"));
 
     private static final SubLList $list95 = list(list(makeSymbol("*SKSI-BATCH-TEMPLATES*"), list(makeSymbol("INITIALIZE-SKSI-BATCH-TEMPLATES"))));
-
-
 
     private static final SubLList $list97 = list(list(makeSymbol("CLEAR-SKSI-BATCH-TEMPLATES")));
 
     private static final SubLList $list98 = list(makeSymbol("USE-THEM?"), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-
 
     private static final SubLSymbol WITH_SKSI_BATCH_TEMPLATES = makeSymbol("WITH-SKSI-BATCH-TEMPLATES");
 
@@ -388,17 +291,13 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
 
     private static final SubLSymbol LOGICAL_FIELD_INDEXICAL_P = makeSymbol("LOGICAL-FIELD-INDEXICAL-P");
 
-
-
     private static final SubLSymbol SKSI_BATCH_TEMPLATE_P = makeSymbol("SKSI-BATCH-TEMPLATE-P");
 
     private static final SubLSymbol CONVERT_SQL_DATUM_TO_STRING = makeSymbol("CONVERT-SQL-DATUM-TO-STRING");
 
+    private static final SubLList $list110 = list(reader_make_constant_shell("implies"), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("schemaTranslation"), makeSymbol("?SOURCE"), makeSymbol("?CONTENT-MT")), list(reader_make_constant_shell("rowInSourceClaims"), makeSymbol("?SOURCE"), makeSymbol("?SENTENCE"))), list(reader_make_constant_shell("ist"), makeSymbol("?CONTENT-MT"), makeSymbol("?SENTENCE")));
 
 
-    private static final SubLList $list110 = list(reader_make_constant_shell(makeString("implies")), list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("schemaTranslation")), makeSymbol("?SOURCE"), makeSymbol("?CONTENT-MT")), list(reader_make_constant_shell(makeString("rowInSourceClaims")), makeSymbol("?SOURCE"), makeSymbol("?SENTENCE"))), list(reader_make_constant_shell(makeString("ist")), makeSymbol("?CONTENT-MT"), makeSymbol("?SENTENCE")));
-
-    private static final SubLObject $$SKSIMt = reader_make_constant_shell(makeString("SKSIMt"));
 
     private static final SubLSymbol SKSI_SCHEMA_TRANSLATION_LIFTING_RULE = makeSymbol("SKSI-SCHEMA-TRANSLATION-LIFTING-RULE");
 
@@ -437,13 +336,13 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
     private static final SubLSymbol TEST_SKSI_WFF_CHECK_BATCH_TRANSLATED_SENTENCE = makeSymbol("TEST-SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE");
 
     public static SubLObject set_sksi_batch_translate_only_asserted_meaning_sentences(final SubLObject v_boolean) {
-        assert NIL != booleanp(v_boolean) : "Types.booleanp(v_boolean) " + "CommonSymbols.NIL != Types.booleanp(v_boolean) " + v_boolean;
+        assert NIL != booleanp(v_boolean) : "! booleanp(v_boolean) " + ("Types.booleanp(v_boolean) " + "CommonSymbols.NIL != Types.booleanp(v_boolean) ") + v_boolean;
         $sksi_batch_translate_only_asserted_meaning_sentencesP$.setDynamicValue(v_boolean);
         return v_boolean;
     }
 
     public static SubLObject set_sksi_batch_translate_coerce_types(final SubLObject v_boolean) {
-        assert NIL != booleanp(v_boolean) : "Types.booleanp(v_boolean) " + "CommonSymbols.NIL != Types.booleanp(v_boolean) " + v_boolean;
+        assert NIL != booleanp(v_boolean) : "! booleanp(v_boolean) " + ("Types.booleanp(v_boolean) " + "CommonSymbols.NIL != Types.booleanp(v_boolean) ") + v_boolean;
         $sksi_batch_translate_coerce_typesP$.setDynamicValue(v_boolean);
         return v_boolean;
     }
@@ -520,6 +419,55 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return count;
     }
 
+    // Definitions
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    		fort-p
+     * 		
+     * @param META-MT;
+    		fort-p
+     * 		
+     * @param TARGET-MT;
+    		fort-p
+     * 		
+     * @param START-ROW;
+    		non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of
+     * 		all spec knowledge sources of all knowledge sources of all content mts
+     * 		that are visible from CONTENT-MT and asserts the results into target-mt.
+     * 		META-MT is used to set the mt-relevance for much of the KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\n\t\tfort-p\r\n\t\t\r\n@param META-MT;\n\t\tfort-p\r\n\t\t\r\n@param TARGET-MT;\n\t\tfort-p\r\n\t\t\r\n@param START-ROW;\n\t\tnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of\r\n\t\tall spec knowledge sources of all knowledge sources of all content mts\r\n\t\tthat are visible from CONTENT-MT and asserts the results into target-mt.\r\n\t\tMETA-MT is used to set the mt-relevance for much of the KB look-up during translation.")
+    public static final SubLObject sksi_batch_assert_all_sk_sources_in_mt(SubLObject content_mt, SubLObject meta_mt, SubLObject check_wffnessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wffnessP == UNPROVIDED) {
+            check_wffnessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_sk_sources_in_mt(content_mt, meta_mt, check_wffnessP, start_row, end_row);
+            SubLObject cdolist_list_var = sentences;
+            SubLObject current_sentence = NIL;
+            for (current_sentence = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , current_sentence = cdolist_list_var.first()) {
+                {
+                    SubLObject target_mt = cycl_utilities.sentence_arg1(current_sentence, UNPROVIDED);
+                    SubLObject sentence_to_be_asserted = cycl_utilities.sentence_arg2(current_sentence, UNPROVIDED);
+                    ke.ke_assert(sentence_to_be_asserted, target_mt, UNPROVIDED, UNPROVIDED);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject sksi_batch_assert_all_sk_sources_in_mt(final SubLObject content_mt, final SubLObject meta_mt, SubLObject check_wffnessP, SubLObject start_row, SubLObject end_row, SubLObject nowP) {
         if (check_wffnessP == UNPROVIDED) {
             check_wffnessP = NIL;
@@ -559,6 +507,80 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param STREAM;
+    streamp
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to STREAM as a valid KE file. META-MT is used to set the mt-relevance
+     * 		for much of the KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param STREAM;\nstreamp\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to STREAM as a valid KE file. META-MT is used to set the mt-relevance\r\n\t\tfor much of the KB look-up during translation.")
+    public static final SubLObject sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream_alt(SubLObject content_mt, SubLObject meta_mt, SubLObject target_mt, SubLObject stream, SubLObject check_wffnessP, SubLObject start_row, SubLObject end_row) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        if (check_wffnessP == UNPROVIDED) {
+            check_wffnessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_sk_sources_in_mt(content_mt, meta_mt, check_wffnessP, start_row, end_row);
+            SubLObject cdolist_list_var = sentences;
+            SubLObject current_sentence = NIL;
+            for (current_sentence = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , current_sentence = cdolist_list_var.first()) {
+                {
+                    SubLObject sentence_to_be_asserted = cycl_utilities.sentence_arg2(current_sentence, UNPROVIDED);
+                    format(stream, $str_alt0$in_mt___S___, target_mt);
+                    format(stream, $str_alt1$f___S___, sentence_to_be_asserted);
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param STREAM;
+    streamp
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to STREAM as a valid KE file. META-MT is used to set the mt-relevance
+     * 		for much of the KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param STREAM;\nstreamp\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to STREAM as a valid KE file. META-MT is used to set the mt-relevance\r\n\t\tfor much of the KB look-up during translation.")
     public static SubLObject sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream(final SubLObject content_mt, final SubLObject meta_mt, final SubLObject target_mt, SubLObject stream, SubLObject check_wffnessP, SubLObject start_row, SubLObject end_row) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -616,6 +638,90 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return result_string;
     }
 
+    /**
+     *
+     *
+     * @param FILENAME;
+    stringp
+     * 		
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param FILENAME;\nstringp\r\n\t\t\r\n@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
+    public static final SubLObject sksi_batch_assert_all_sk_sources_in_mt_to_ke_file_alt(SubLObject filename, SubLObject target_mt, SubLObject content_mt, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject stream = NIL;
+            try {
+                stream = compatibility.open_text(filename, $OUTPUT, NIL);
+                if (!stream.isStream()) {
+                    Errors.error($str_alt3$Unable_to_open__S, filename);
+                }
+                {
+                    SubLObject stream_1 = stream;
+                    com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream(content_mt, meta_mt, target_mt, stream_1, check_wff_nessP, start_row, end_row);
+                }
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        if (stream.isStream()) {
+                            close(stream, UNPROVIDED);
+                        }
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param FILENAME;
+    stringp
+     * 		
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param FILENAME;\nstringp\r\n\t\t\r\n@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
     public static SubLObject sksi_batch_assert_all_sk_sources_in_mt_to_ke_file(final SubLObject filename, final SubLObject target_mt, final SubLObject content_mt, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -648,6 +754,264 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    		fort-p
+     * 		
+     * @param META-MT;
+    		fort-p
+     * 		
+     * @param START-ROW;
+    		non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * @return listp : list of CycL sentences
+    Batch translates all logical interpretations of all rows of
+    all spec knowledge sources of all knowledge sources of all content mts
+    that are visible from CONTENT-MT. META-MT is used to set the mt-relevance
+    for much of the KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\n\t\tfort-p\r\n\t\t\r\n@param META-MT;\n\t\tfort-p\r\n\t\t\r\n@param START-ROW;\n\t\tnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n@return listp : list of CycL sentences\r\nBatch translates all logical interpretations of all rows of\r\nall spec knowledge sources of all knowledge sources of all content mts\r\nthat are visible from CONTENT-MT. META-MT is used to set the mt-relevance\r\nfor much of the KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_sk_sources_in_mt(SubLObject content_mt, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sentences = NIL;
+                SubLObject node_var = content_mt;
+                SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                SubLObject recur_deck = deck.create_deck(deck_type);
+                {
+                    SubLObject _prev_bind_0 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                    try {
+                        sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                        {
+                            SubLObject tv_var = NIL;
+                            {
+                                SubLObject _prev_bind_0_2 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                try {
+                                    sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                    sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                    if (NIL != tv_var) {
+                                        if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                            if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                {
+                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                    if (pcase_var.eql($ERROR)) {
+                                                        sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    } else {
+                                                        if (pcase_var.eql($CERROR)) {
+                                                            sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        } else {
+                                                            if (pcase_var.eql($WARN)) {
+                                                                Errors.warn($str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                            } else {
+                                                                Errors.warn($str_alt14$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                Errors.cerror($$$continue_anyway, $str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject _prev_bind_0_3 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_4 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                        try {
+                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genlMt), thread);
+                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genlMt)), thread);
+                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genlMt)), thread);
+                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genlMt), thread);
+                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(content_mt, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                {
+                                                    SubLObject _prev_bind_0_5 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_6 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2_7 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                        sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_forward_search_direction(), sbhl_module_vars.get_sbhl_module($$genlMt)), thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_var, UNPROVIDED);
+                                                        while (NIL != node_var) {
+                                                            {
+                                                                SubLObject genl_mt = node_var;
+                                                                SubLObject new_sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_sk_source_in_just_mt(genl_mt, meta_mt, check_wff_nessP, start_row, end_row);
+                                                                sentences = nconc(nreverse(new_sentences), sentences);
+                                                            }
+                                                            {
+                                                                SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genlMt));
+                                                                SubLObject cdolist_list_var = accessible_modules;
+                                                                SubLObject module_var = NIL;
+                                                                for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_8 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                        SubLObject _prev_bind_1_9 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                        try {
+                                                                            sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                            {
+                                                                                SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                    {
+                                                                                        SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                        if (NIL != d_link) {
+                                                                                            {
+                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                if (NIL != mt_links) {
+                                                                                                    {
+                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                            thread.resetMultipleValues();
+                                                                                                            {
+                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                thread.resetMultipleValues();
+                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_10 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                            {
+                                                                                                                                SubLObject iteration_state_11 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_11)) {
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_11);
+                                                                                                                                        SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_12 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                        SubLObject cdolist_list_var_13 = new_list;
+                                                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                                                        for (node_vars_link_node = cdolist_list_var_13.first(); NIL != cdolist_list_var_13; cdolist_list_var_13 = cdolist_list_var_13.rest() , node_vars_link_node = cdolist_list_var_13.first()) {
+                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_12, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        iteration_state_11 = dictionary_contents.do_dictionary_contents_next(iteration_state_11);
+                                                                                                                                    }
+                                                                                                                                } 
+                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_11);
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_10, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                            }
+                                                                                                        } 
+                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } else {
+                                                                                            sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt16$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                        }
+                                                                                    }
+                                                                                } else {
+                                                                                    if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                        {
+                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                            SubLObject cdolist_list_var_14 = new_list;
+                                                                                            SubLObject generating_fn = NIL;
+                                                                                            for (generating_fn = cdolist_list_var_14.first(); NIL != cdolist_list_var_14; cdolist_list_var_14 = cdolist_list_var_14.rest() , generating_fn = cdolist_list_var_14.first()) {
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_15 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                        {
+                                                                                                            SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                            SubLObject new_list_16 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                            SubLObject cdolist_list_var_17 = new_list_16;
+                                                                                                            SubLObject node_vars_link_node = NIL;
+                                                                                                            for (node_vars_link_node = cdolist_list_var_17.first(); NIL != cdolist_list_var_17; cdolist_list_var_17 = cdolist_list_var_17.rest() , node_vars_link_node = cdolist_list_var_17.first()) {
+                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                    deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_15, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_9, thread);
+                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_8, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            node_var = deck.deck_pop(recur_deck);
+                                                        } 
+                                                    } finally {
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_7, thread);
+                                                        sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_6, thread);
+                                                        sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_5, thread);
+                                                    }
+                                                }
+                                            } else {
+                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt17$Node__a_does_not_pass_sbhl_type_t, content_mt, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                            }
+                                        } finally {
+                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_4, thread);
+                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_3, thread);
+                                        }
+                                    }
+                                } finally {
+                                    sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1, thread);
+                                    sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_2, thread);
+                                }
+                            }
+                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                        }
+                    } finally {
+                        sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(sentences);
+            }
+        }
     }
 
     public static SubLObject sksi_translate_all_sk_sources_in_mt(final SubLObject content_mt, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row, SubLObject assert_as_you_goP) {
@@ -895,6 +1259,66 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return nreverse(sentences);
     }
 
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    		hlmt-p
+     * 		
+     * @param META-MT;
+    		fort-p
+     * 		
+     * @param START-ROW;
+    		non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * @return listp : list of CycL sentences
+    Batch translates all logical interpretations of all rows of
+    all spec knowledge sources of the knowledge source whose content-mt is CONTENT-MT.
+    META-MT is used to set the mt-relevance for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\n\t\thlmt-p\r\n\t\t\r\n@param META-MT;\n\t\tfort-p\r\n\t\t\r\n@param START-ROW;\n\t\tnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n@return listp : list of CycL sentences\r\nBatch translates all logical interpretations of all rows of\r\nall spec knowledge sources of the knowledge source whose content-mt is CONTENT-MT.\r\nMETA-MT is used to set the mt-relevance for KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_sk_source_in_just_mt(SubLObject content_mt, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sentences = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject sk_source = content_mt_sk_source(content_mt, UNPROVIDED);
+                            if (NIL != sk_source) {
+                                sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_spec_sk_sources(sk_source, meta_mt, check_wff_nessP, start_row, end_row);
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return sentences;
+            }
+        }
+    }
+
     public static SubLObject sksi_translate_all_sk_source_in_just_mt(final SubLObject content_mt, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row, SubLObject assert_as_you_goP) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -930,6 +1354,310 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return sentences;
     }
 
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param STREAM;
+    streamp
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to STREAM. META-MT is used to set the mt-relevance
+     * 		for much of the KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param STREAM;\nstreamp\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to STREAM. META-MT is used to set the mt-relevance\r\n\t\tfor much of the KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_sk_sources_in_mt_to_stream_alt(SubLObject content_mt, SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject node_var = content_mt;
+                SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                SubLObject recur_deck = deck.create_deck(deck_type);
+                {
+                    SubLObject _prev_bind_0 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                    try {
+                        sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                        {
+                            SubLObject tv_var = NIL;
+                            {
+                                SubLObject _prev_bind_0_18 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                try {
+                                    sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                    sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                    if (NIL != tv_var) {
+                                        if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                            if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                {
+                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                    if (pcase_var.eql($ERROR)) {
+                                                        sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    } else {
+                                                        if (pcase_var.eql($CERROR)) {
+                                                            sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        } else {
+                                                            if (pcase_var.eql($WARN)) {
+                                                                Errors.warn($str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                            } else {
+                                                                Errors.warn($str_alt14$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                Errors.cerror($$$continue_anyway, $str_alt9$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject _prev_bind_0_19 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_20 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                        try {
+                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genlMt), thread);
+                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genlMt)), thread);
+                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genlMt)), thread);
+                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genlMt), thread);
+                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(content_mt, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                {
+                                                    SubLObject _prev_bind_0_21 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_22 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2_23 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_forward_search_direction(), thread);
+                                                        sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_forward_search_direction(), sbhl_module_vars.get_sbhl_module($$genlMt)), thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_var, UNPROVIDED);
+                                                        while (NIL != node_var) {
+                                                            {
+                                                                SubLObject genl_mt = node_var;
+                                                                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                                                                {
+                                                                    SubLObject _prev_bind_0_24 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_25 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_2_26 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                                                    try {
+                                                                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                                                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                                                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                                                        {
+                                                                            SubLObject sk_source = content_mt_sk_source(genl_mt, UNPROVIDED);
+                                                                            if (NIL != sk_source) {
+                                                                                com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_spec_sk_sources_to_stream(sk_source, meta_mt, stream, check_wff_nessP, start_row, end_row);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2_26, thread);
+                                                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1_25, thread);
+                                                                        mt_relevance_macros.$mt$.rebind(_prev_bind_0_24, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                            {
+                                                                SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genlMt));
+                                                                SubLObject cdolist_list_var = accessible_modules;
+                                                                SubLObject module_var = NIL;
+                                                                for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_27 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                        SubLObject _prev_bind_1_28 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                        try {
+                                                                            sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                            {
+                                                                                SubLObject node = function_terms.naut_to_nart(node_var);
+                                                                                if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                    {
+                                                                                        SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                        if (NIL != d_link) {
+                                                                                            {
+                                                                                                SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                if (NIL != mt_links) {
+                                                                                                    {
+                                                                                                        SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                        while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                            thread.resetMultipleValues();
+                                                                                                            {
+                                                                                                                SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                thread.resetMultipleValues();
+                                                                                                                if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_29 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                            {
+                                                                                                                                SubLObject iteration_state_30 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_30)) {
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_30);
+                                                                                                                                        SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_31 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                        SubLObject cdolist_list_var_32 = new_list;
+                                                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                                                        for (node_vars_link_node = cdolist_list_var_32.first(); NIL != cdolist_list_var_32; cdolist_list_var_32 = cdolist_list_var_32.rest() , node_vars_link_node = cdolist_list_var_32.first()) {
+                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_31, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        iteration_state_30 = dictionary_contents.do_dictionary_contents_next(iteration_state_30);
+                                                                                                                                    }
+                                                                                                                                } 
+                                                                                                                                dictionary_contents.do_dictionary_contents_finalize(iteration_state_30);
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_29, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                            }
+                                                                                                        } 
+                                                                                                        dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } else {
+                                                                                            sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt16$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                        }
+                                                                                    }
+                                                                                } else {
+                                                                                    if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                        {
+                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                            SubLObject cdolist_list_var_33 = new_list;
+                                                                                            SubLObject generating_fn = NIL;
+                                                                                            for (generating_fn = cdolist_list_var_33.first(); NIL != cdolist_list_var_33; cdolist_list_var_33 = cdolist_list_var_33.rest() , generating_fn = cdolist_list_var_33.first()) {
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_34 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                        {
+                                                                                                            SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                            SubLObject new_list_35 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                            SubLObject cdolist_list_var_36 = new_list_35;
+                                                                                                            SubLObject node_vars_link_node = NIL;
+                                                                                                            for (node_vars_link_node = cdolist_list_var_36.first(); NIL != cdolist_list_var_36; cdolist_list_var_36 = cdolist_list_var_36.rest() , node_vars_link_node = cdolist_list_var_36.first()) {
+                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                    deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_34, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_28, thread);
+                                                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_27, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            node_var = deck.deck_pop(recur_deck);
+                                                        } 
+                                                    } finally {
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_23, thread);
+                                                        sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_22, thread);
+                                                        sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_21, thread);
+                                                    }
+                                                }
+                                            } else {
+                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt17$Node__a_does_not_pass_sbhl_type_t, content_mt, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                            }
+                                        } finally {
+                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_20, thread);
+                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_19, thread);
+                                        }
+                                    }
+                                } finally {
+                                    sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1, thread);
+                                    sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_18, thread);
+                                }
+                            }
+                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                        }
+                    } finally {
+                        sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param STREAM;
+    streamp
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to STREAM. META-MT is used to set the mt-relevance
+     * 		for much of the KB look-up during translation.
+     */
+    @LispMethod(comment = "@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param STREAM;\nstreamp\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to STREAM. META-MT is used to set the mt-relevance\r\n\t\tfor much of the KB look-up during translation.")
     public static SubLObject sksi_translate_all_sk_sources_in_mt_to_stream(final SubLObject content_mt, final SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -1189,6 +1917,90 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @param FILENAME;
+    stringp
+     * 		
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param FILENAME;\nstringp\r\n\t\t\r\n@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_sk_sources_in_mt_to_file_alt(SubLObject filename, SubLObject content_mt, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject stream = NIL;
+            try {
+                stream = compatibility.open_text(filename, $OUTPUT, NIL);
+                if (!stream.isStream()) {
+                    Errors.error($str_alt3$Unable_to_open__S, filename);
+                }
+                {
+                    SubLObject stream_37 = stream;
+                    com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_sk_sources_in_mt_to_stream(content_mt, meta_mt, stream_37, check_wff_nessP, start_row, end_row);
+                }
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        if (stream.isStream()) {
+                            close(stream, UNPROVIDED);
+                        }
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param FILENAME;
+    stringp
+     * 		
+     * @param CONTENT-MT;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of of all knowledge sources of all content mts that are visible from CONTENT-MT, and
+     * 		outputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param FILENAME;\nstringp\r\n\t\t\r\n@param CONTENT-MT;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof of all knowledge sources of all content mts that are visible from CONTENT-MT, and\r\n\t\toutputs the result to the text file by name FILENAME. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
     public static SubLObject sksi_translate_all_sk_sources_in_mt_to_file(final SubLObject filename, final SubLObject content_mt, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1223,6 +2035,57 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @param SK-SOURCE;
+    		fort-p
+     * 		
+     * @param META-MT;
+    		fort-p
+     * 		
+     * @param START-ROW;
+    		non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * @return listp : list of CycL sentences
+    Batch translates all logical interpretations of all rows of
+    all spec knowledge sources of SK-SOURCE. META-MT is used to set the
+    mt-relevance for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param SK-SOURCE;\n\t\tfort-p\r\n\t\t\r\n@param META-MT;\n\t\tfort-p\r\n\t\t\r\n@param START-ROW;\n\t\tnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n@return listp : list of CycL sentences\r\nBatch translates all logical interpretations of all rows of\r\nall spec knowledge sources of SK-SOURCE. META-MT is used to set the\r\nmt-relevance for KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_spec_sk_sources(SubLObject sk_source, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject all_sentences = NIL;
+            {
+                SubLObject sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_simple_sk_source(sk_source, meta_mt, check_wff_nessP, start_row, end_row);
+                all_sentences = nconc(nreverse(sentences), all_sentences);
+            }
+            {
+                SubLObject spec_sk_sources = sk_source_immediate_spec_sk_sources(sk_source, meta_mt);
+                SubLObject cdolist_list_var = spec_sk_sources;
+                SubLObject spec_sk_source = NIL;
+                for (spec_sk_source = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec_sk_source = cdolist_list_var.first()) {
+                    {
+                        SubLObject sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_simple_sk_source(spec_sk_source, meta_mt, check_wff_nessP, start_row, end_row);
+                        all_sentences = nconc(nreverse(sentences), all_sentences);
+                    }
+                }
+            }
+            return nreverse(all_sentences);
+        }
+    }
+
     public static SubLObject sksi_translate_all_spec_sk_sources(final SubLObject sk_source, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row, SubLObject assert_as_you_goP) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1252,6 +2115,75 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return nreverse(all_sentences);
     }
 
+    /**
+     *
+     *
+     * @param SK-SOURCE;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param STREAM;
+    streamp
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param SK-SOURCE;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param STREAM;\nstreamp\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_spec_sk_sources_to_stream_alt(SubLObject sk_source, SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_simple_sk_source_to_stream(sk_source, meta_mt, stream, check_wff_nessP, start_row, end_row);
+        {
+            SubLObject spec_sk_sources = sk_source_immediate_spec_sk_sources(sk_source, meta_mt);
+            SubLObject cdolist_list_var = spec_sk_sources;
+            SubLObject spec_sk_source = NIL;
+            for (spec_sk_source = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec_sk_source = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_simple_sk_source_to_stream(spec_sk_source, meta_mt, stream, check_wff_nessP, start_row, end_row);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param SK-SOURCE;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param STREAM;
+    streamp
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of all spec knowledge sources
+     * 		of SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param SK-SOURCE;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param STREAM;\nstreamp\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of all spec knowledge sources\r\n\t\tof SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
     public static SubLObject sksi_translate_all_spec_sk_sources_to_stream(final SubLObject sk_source, final SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -1278,6 +2210,90 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @param FILENAME;
+    stringp
+     * 		
+     * @param SK-SOURCE;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of
+     * 		all spec knowledge sources of SK-SOURCE and outputs the result
+     * 		to the text file by name FILENAME. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param FILENAME;\nstringp\r\n\t\t\r\n@param SK-SOURCE;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of\r\n\t\tall spec knowledge sources of SK-SOURCE and outputs the result\r\n\t\tto the text file by name FILENAME. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_spec_sk_sources_to_file_alt(SubLObject filename, SubLObject sk_source, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject stream = NIL;
+            try {
+                stream = compatibility.open_text(filename, $OUTPUT, NIL);
+                if (!stream.isStream()) {
+                    Errors.error($str_alt3$Unable_to_open__S, filename);
+                }
+                {
+                    SubLObject stream_38 = stream;
+                    com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_all_spec_sk_sources_to_stream(sk_source, meta_mt, stream_38, check_wff_nessP, start_row, end_row);
+                }
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        if (stream.isStream()) {
+                            close(stream, UNPROVIDED);
+                        }
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param FILENAME;
+    stringp
+     * 		
+     * @param SK-SOURCE;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * 		Batch translates all logical interpretations of all rows of
+     * 		all spec knowledge sources of SK-SOURCE and outputs the result
+     * 		to the text file by name FILENAME. META-MT is used to set the mt-relevance
+     * 		for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param FILENAME;\nstringp\r\n\t\t\r\n@param SK-SOURCE;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n\t\tBatch translates all logical interpretations of all rows of\r\n\t\tall spec knowledge sources of SK-SOURCE and outputs the result\r\n\t\tto the text file by name FILENAME. META-MT is used to set the mt-relevance\r\n\t\tfor KB look-up during translation.")
     public static SubLObject sksi_translate_all_spec_sk_sources_to_file(final SubLObject filename, final SubLObject sk_source, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1310,6 +2326,86 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param SIMPLE-SK-SOURCE;
+    		fort-p
+     * 		
+     * @param META-MT;
+    		fort-p
+     * 		
+     * @param START-ROW;
+    		non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * @return listp : list of CycL sentences which express the intended meaning of a row
+    in the content mt of SIMPLE-SK-SOURCE
+    Batch translates all logical interpretations of all rows of the knowledge source
+    SIMPLE-SK-SOURCE. META-MT is used to set the mt-relevance for KB look-up
+    during translation.
+     */
+    @LispMethod(comment = "@param SIMPLE-SK-SOURCE;\n\t\tfort-p\r\n\t\t\r\n@param META-MT;\n\t\tfort-p\r\n\t\t\r\n@param START-ROW;\n\t\tnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n@return listp : list of CycL sentences which express the intended meaning of a row\r\nin the content mt of SIMPLE-SK-SOURCE\r\nBatch translates all logical interpretations of all rows of the knowledge source\r\nSIMPLE-SK-SOURCE. META-MT is used to set the mt-relevance for KB look-up\r\nduring translation.")
+    public static final SubLObject sksi_translate_all_simple_sk_source(SubLObject simple_sk_source, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject all_sentences = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject content_mt = sk_source_content_mt(simple_sk_source);
+                            if (NIL != content_mt) {
+                                {
+                                    SubLObject physical_schemata = sk_source_physical_schemata(simple_sk_source);
+                                    SubLObject cdolist_list_var = physical_schemata;
+                                    SubLObject physical_schema = NIL;
+                                    for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                                        if (NIL != physical_schema_enumerableP(physical_schema)) {
+                                            {
+                                                SubLObject logical_schemata = physical_schema_logical_schemata(physical_schema);
+                                                SubLObject cdolist_list_var_39 = logical_schemata;
+                                                SubLObject logical_schema = NIL;
+                                                for (logical_schema = cdolist_list_var_39.first(); NIL != cdolist_list_var_39; cdolist_list_var_39 = cdolist_list_var_39.rest() , logical_schema = cdolist_list_var_39.first()) {
+                                                    {
+                                                        SubLObject sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_simple_sk_source(simple_sk_source, physical_schema, logical_schema, meta_mt, check_wff_nessP, start_row, end_row);
+                                                        all_sentences = nconc(nreverse(sentences), all_sentences);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(all_sentences);
+            }
+        }
     }
 
     public static SubLObject sksi_translate_all_simple_sk_source(final SubLObject simple_sk_source, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row, SubLObject assert_as_you_goP) {
@@ -1366,6 +2462,106 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return nreverse(all_sentences);
     }
 
+    /**
+     *
+     *
+     * @param SIMPLE-SK-SOURCE;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * @return listp : list of CycL sentences which express the intended meaning of a row
+    in the content mt of SIMPLE-SK-SOURCE
+    Batch translates all logical interpretations of all rows of the knowledge source
+    SIMPLE-SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance
+    for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param SIMPLE-SK-SOURCE;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n@return listp : list of CycL sentences which express the intended meaning of a row\r\nin the content mt of SIMPLE-SK-SOURCE\r\nBatch translates all logical interpretations of all rows of the knowledge source\r\nSIMPLE-SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance\r\nfor KB look-up during translation.")
+    public static final SubLObject sksi_translate_all_simple_sk_source_to_stream_alt(SubLObject simple_sk_source, SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject content_mt = sk_source_content_mt(simple_sk_source);
+                            if (NIL != content_mt) {
+                                {
+                                    SubLObject physical_schemata = sk_source_physical_schemata(simple_sk_source);
+                                    SubLObject cdolist_list_var = physical_schemata;
+                                    SubLObject physical_schema = NIL;
+                                    for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                                        if (NIL != physical_schema_enumerableP(physical_schema)) {
+                                            {
+                                                SubLObject logical_schemata = physical_schema_logical_schemata(physical_schema);
+                                                SubLObject cdolist_list_var_40 = logical_schemata;
+                                                SubLObject logical_schema = NIL;
+                                                for (logical_schema = cdolist_list_var_40.first(); NIL != cdolist_list_var_40; cdolist_list_var_40 = cdolist_list_var_40.rest() , logical_schema = cdolist_list_var_40.first()) {
+                                                    com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_simple_sk_source_to_stream(simple_sk_source, physical_schema, logical_schema, meta_mt, stream, check_wff_nessP, start_row, end_row);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param SIMPLE-SK-SOURCE;
+    fort-p
+     * 		
+     * @param META-MT;
+    fort-p
+     * 		
+     * @param START-ROW;
+    non-negative-integer-p
+     * 		
+     * @param END-ROW;
+     * 		non-negative-integer-p or NIL
+     * @return listp : list of CycL sentences which express the intended meaning of a row
+    in the content mt of SIMPLE-SK-SOURCE
+    Batch translates all logical interpretations of all rows of the knowledge source
+    SIMPLE-SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance
+    for KB look-up during translation.
+     */
+    @LispMethod(comment = "@param SIMPLE-SK-SOURCE;\nfort-p\r\n\t\t\r\n@param META-MT;\nfort-p\r\n\t\t\r\n@param START-ROW;\nnon-negative-integer-p\r\n\t\t\r\n@param END-ROW;\r\n\t\tnon-negative-integer-p or NIL\r\n@return listp : list of CycL sentences which express the intended meaning of a row\r\nin the content mt of SIMPLE-SK-SOURCE\r\nBatch translates all logical interpretations of all rows of the knowledge source\r\nSIMPLE-SK-SOURCE and outputs the result to STREAM. META-MT is used to set the mt-relevance\r\nfor KB look-up during translation.")
     public static SubLObject sksi_translate_all_simple_sk_source_to_stream(final SubLObject simple_sk_source, final SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -1416,6 +2612,123 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return NIL;
+    }
+
+    /**
+     * Translate all rows in SIMPLE-SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * Return a list of cycl-sentences which express the intended meaning
+     * of a row in the content mt of SIMPLE-SK-SOURCE.
+     */
+    @LispMethod(comment = "Translate all rows in SIMPLE-SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nReturn a list of cycl-sentences which express the intended meaning\r\nof a row in the content mt of SIMPLE-SK-SOURCE.\nTranslate all rows in SIMPLE-SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nReturn a list of cycl-sentences which express the intended meaning\nof a row in the content mt of SIMPLE-SK-SOURCE.")
+    public static final SubLObject sksi_translate_simple_sk_source(SubLObject simple_sk_source, SubLObject physical_schema, SubLObject logical_schema, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sentences = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject content_mt = sk_source_content_mt(simple_sk_source);
+                            if (NIL != content_mt) {
+                                {
+                                    SubLObject raw_iterator = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.new_sk_source_row_iterator(simple_sk_source, physical_schema, meta_mt, start_row, end_row);
+                                    if (NIL != iteration.iterator_p(raw_iterator)) {
+                                        {
+                                            SubLObject state = memoization_state.possibly_new_memoization_state();
+                                            SubLObject local_state = state;
+                                            {
+                                                SubLObject _prev_bind_0_41 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                try {
+                                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                                    {
+                                                        SubLObject original_memoization_process = NIL;
+                                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                            {
+                                                                SubLObject current_proc = current_process();
+                                                                if (NIL == original_memoization_process) {
+                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                } else {
+                                                                    if (original_memoization_process != current_proc) {
+                                                                        Errors.error($str_alt18$Invalid_attempt_to_reuse_memoizat);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        try {
+                                                            {
+                                                                SubLObject done_var = NIL;
+                                                                while (NIL == done_var) {
+                                                                    thread.resetMultipleValues();
+                                                                    {
+                                                                        SubLObject raw_tuple = iteration.iteration_next(raw_iterator);
+                                                                        SubLObject valid = thread.secondMultipleValue();
+                                                                        thread.resetMultipleValues();
+                                                                        if (NIL != valid) {
+                                                                            {
+                                                                                SubLObject ist_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_one_raw_tuple_to_ist_logical_sentence(raw_tuple, content_mt, physical_schema, logical_schema, meta_mt, check_wff_nessP);
+                                                                                if (NIL != ist_sentence) {
+                                                                                    sentences = cons(ist_sentence, sentences);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        done_var = makeBoolean(NIL == valid);
+                                                                    }
+                                                                } 
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_42 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_42, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_41, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(sentences);
+            }
+        }
     }
 
     public static SubLObject sksi_translate_simple_sk_source(final SubLObject simple_sk_source, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row, SubLObject assert_as_you_goP) {
@@ -1489,6 +2802,152 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return nreverse(sentences);
     }
 
+    /**
+     * Translate all rows in SIMPLE-SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * Output the translated cycl-sentences to STREAM.
+     */
+    @LispMethod(comment = "Translate all rows in SIMPLE-SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nOutput the translated cycl-sentences to STREAM.\nTranslate all rows in SIMPLE-SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nOutput the translated cycl-sentences to STREAM.")
+    public static final SubLObject sksi_translate_simple_sk_source_to_stream_alt(SubLObject simple_sk_source, SubLObject physical_schema, SubLObject logical_schema, SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject content_mt = sk_source_content_mt(simple_sk_source);
+                            if (NIL != content_mt) {
+                                {
+                                    SubLObject raw_iterator = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.new_sk_source_row_iterator(simple_sk_source, physical_schema, meta_mt, start_row, end_row);
+                                    if (NIL != iteration.iterator_p(raw_iterator)) {
+                                        {
+                                            SubLObject state = memoization_state.possibly_new_memoization_state();
+                                            SubLObject local_state = state;
+                                            {
+                                                SubLObject _prev_bind_0_43 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                try {
+                                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                                    {
+                                                        SubLObject original_memoization_process = NIL;
+                                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                            {
+                                                                SubLObject current_proc = current_process();
+                                                                if (NIL == original_memoization_process) {
+                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                } else {
+                                                                    if (original_memoization_process != current_proc) {
+                                                                        Errors.error($str_alt18$Invalid_attempt_to_reuse_memoizat);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        try {
+                                                            format(stream, $str_alt19$____Translation_Time____A__, numeric_date_utilities.timestring(UNPROVIDED));
+                                                            format(stream, $str_alt20$_____);
+                                                            format(stream, $str_alt21$___Meta_Mt_____________S__, meta_mt);
+                                                            format(stream, $str_alt22$___Source______________S__, simple_sk_source);
+                                                            format(stream, $str_alt23$___Physical_Schema_____S__, physical_schema);
+                                                            format(stream, $str_alt24$___Logical_Schema______S__, logical_schema);
+                                                            format(stream, $str_alt20$_____);
+                                                            format(stream, $str_alt25$___Content_Mt__________S, content_mt);
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_44 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    {
+                                                                        SubLObject done_var = NIL;
+                                                                        while (NIL == done_var) {
+                                                                            thread.resetMultipleValues();
+                                                                            {
+                                                                                SubLObject raw_tuple = iteration.iteration_next(raw_iterator);
+                                                                                SubLObject valid = thread.secondMultipleValue();
+                                                                                thread.resetMultipleValues();
+                                                                                if (NIL != valid) {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_45 = $print_pretty$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $print_pretty$.bind(NIL, thread);
+                                                                                            format(stream, $str_alt26$________S_, raw_tuple);
+                                                                                        } finally {
+                                                                                            $print_pretty$.rebind(_prev_bind_0_45, thread);
+                                                                                        }
+                                                                                    }
+                                                                                    {
+                                                                                        SubLObject ist_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_one_raw_tuple_to_ist_logical_sentence(raw_tuple, content_mt, physical_schema, logical_schema, meta_mt, check_wff_nessP);
+                                                                                        if (NIL != ist_sentence) {
+                                                                                            format_cycl_expression.format_cycl_expression(ist_sentence, stream, UNPROVIDED);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                done_var = makeBoolean(NIL == valid);
+                                                                            }
+                                                                        } 
+                                                                    }
+                                                                    terpri(stream);
+                                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_44, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_43, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Translate all rows in SIMPLE-SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * Output the translated cycl-sentences to STREAM.
+     */
+    @LispMethod(comment = "Translate all rows in SIMPLE-SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nOutput the translated cycl-sentences to STREAM.\nTranslate all rows in SIMPLE-SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nOutput the translated cycl-sentences to STREAM.")
     public static SubLObject sksi_translate_simple_sk_source_to_stream(final SubLObject simple_sk_source, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject meta_mt, SubLObject stream, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -1575,6 +3034,64 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Translate all rows in SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * Output the translated cycl-sentences to FILENAME.
+     */
+    @LispMethod(comment = "Translate all rows in SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nOutput the translated cycl-sentences to FILENAME.\nTranslate all rows in SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nOutput the translated cycl-sentences to FILENAME.")
+    public static final SubLObject sksi_translate_simple_sk_source_to_file_alt(SubLObject filename, SubLObject sk_source, SubLObject physical_schema, SubLObject logical_schema, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            SubLObject stream = NIL;
+            try {
+                stream = compatibility.open_text(filename, $OUTPUT, NIL);
+                if (!stream.isStream()) {
+                    Errors.error($str_alt3$Unable_to_open__S, filename);
+                }
+                {
+                    SubLObject stream_46 = stream;
+                    com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_simple_sk_source_to_stream(sk_source, physical_schema, logical_schema, meta_mt, stream_46, check_wff_nessP, start_row, end_row);
+                }
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        if (stream.isStream()) {
+                            close(stream, UNPROVIDED);
+                        }
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Translate all rows in SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * Output the translated cycl-sentences to FILENAME.
+     */
+    @LispMethod(comment = "Translate all rows in SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nOutput the translated cycl-sentences to FILENAME.\nTranslate all rows in SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nOutput the translated cycl-sentences to FILENAME.")
     public static SubLObject sksi_translate_simple_sk_source_to_file(final SubLObject filename, final SubLObject sk_source, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1607,8 +3124,98 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }/**
+     * Translate all rows in SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * Output the translated cycl-sentences to FILENAME.
+     */
+
+
+    /**
+     * Return an iterator for translating all rows in SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * The iterator returns cycl-sentences one at a time,
+     * each of which expresses the intended meaning of
+     * one row in the content mt of SK-SOURCE.
+     */
+    @LispMethod(comment = "Return an iterator for translating all rows in SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nThe iterator returns cycl-sentences one at a time,\r\neach of which expresses the intended meaning of\r\none row in the content mt of SK-SOURCE.\nReturn an iterator for translating all rows in SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nThe iterator returns cycl-sentences one at a time,\neach of which expresses the intended meaning of\none row in the content mt of SK-SOURCE.")
+    public static final SubLObject new_sksi_translate_iterator_alt(SubLObject sk_source, SubLObject physical_schema, SubLObject logical_schema, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject enumerable_schemaP = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        enumerable_schemaP = physical_schema_enumerableP(physical_schema);
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL == enumerable_schemaP) {
+                    return NIL;
+                }
+            }
+            {
+                SubLObject content_mt = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        content_mt = sk_source_content_mt(sk_source);
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return iteration.new_iterator(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.make_sksi_translate_iterator_state(sk_source, physical_schema, logical_schema, content_mt, meta_mt, check_wff_nessP, start_row, end_row), SKSI_TRANSLATE_ITERATE_DONE, SKSI_TRANSLATE_ITERATE_NEXT, BOOLEAN);
+            }
+        }
     }
 
+    /**
+     * Return an iterator for translating all rows in SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * The iterator returns cycl-sentences one at a time,
+     * each of which expresses the intended meaning of
+     * one row in the content mt of SK-SOURCE.
+     */
+    @LispMethod(comment = "Return an iterator for translating all rows in SK-SOURCE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nStart translation at row number START-ROW.\r\nIf END-ROW is specified, then end translation at row number END-ROW.\r\nThe iterator returns cycl-sentences one at a time,\r\neach of which expresses the intended meaning of\r\none row in the content mt of SK-SOURCE.\nReturn an iterator for translating all rows in SK-SOURCE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nStart translation at row number START-ROW.\nIf END-ROW is specified, then end translation at row number END-ROW.\nThe iterator returns cycl-sentences one at a time,\neach of which expresses the intended meaning of\none row in the content mt of SK-SOURCE.")
     public static SubLObject new_sksi_translate_iterator(final SubLObject sk_source, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1654,12 +3261,46 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return iteration.new_iterator(make_sksi_translate_iterator_state(sk_source, physical_schema, logical_schema, content_mt, meta_mt, check_wff_nessP, start_row, end_row), SKSI_TRANSLATE_ITERATE_DONE, SKSI_TRANSLATE_ITERATE_NEXT, BOOLEAN);
+    }/**
+     * Return an iterator for translating all rows in SK-SOURCE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Start translation at row number START-ROW.
+     * If END-ROW is specified, then end translation at row number END-ROW.
+     * The iterator returns cycl-sentences one at a time,
+     * each of which expresses the intended meaning of
+     * one row in the content mt of SK-SOURCE.
+     */
+
+
+    public static final SubLObject make_sksi_translate_iterator_state_alt(SubLObject sk_source, SubLObject physical_schema, SubLObject logical_schema, SubLObject content_mt, SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject start_row, SubLObject end_row) {
+        {
+            SubLObject tuple_iterator = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.new_sk_source_row_iterator(sk_source, physical_schema, meta_mt, start_row, end_row);
+            SubLObject v_memoization_state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return list(tuple_iterator, v_memoization_state, physical_schema, logical_schema, content_mt, meta_mt, check_wff_nessP);
+        }
     }
 
     public static SubLObject make_sksi_translate_iterator_state(final SubLObject sk_source, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject content_mt, final SubLObject meta_mt, final SubLObject check_wff_nessP, final SubLObject start_row, final SubLObject end_row) {
         final SubLObject tuple_iterator = new_sk_source_row_iterator(sk_source, physical_schema, meta_mt, start_row, end_row, UNPROVIDED);
         final SubLObject v_memoization_state = memoization_state.new_memoization_state(UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return list(tuple_iterator, v_memoization_state, physical_schema, logical_schema, content_mt, meta_mt, check_wff_nessP);
+    }
+
+    public static final SubLObject sksi_translate_iterate_done_alt(SubLObject state) {
+        {
+            SubLObject datum = state;
+            SubLObject current = datum;
+            SubLObject tuple_iterator = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt30);
+            tuple_iterator = current.first();
+            current = current.rest();
+            {
+                SubLObject rest = current;
+                return eq($DONE, tuple_iterator);
+            }
+        }
     }
 
     public static SubLObject sksi_translate_iterate_done(final SubLObject state) {
@@ -1669,6 +3310,107 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         final SubLObject rest;
         final SubLObject current = rest = state.rest();
         return eq($DONE, tuple_iterator);
+    }
+
+    public static final SubLObject sksi_translate_iterate_next_alt(SubLObject state) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject datum = state;
+                SubLObject current = datum;
+                SubLObject tuple_iterator = NIL;
+                SubLObject v_memoization_state = NIL;
+                SubLObject physical_schema = NIL;
+                SubLObject logical_schema = NIL;
+                SubLObject content_mt = NIL;
+                SubLObject meta_mt = NIL;
+                SubLObject check_wff_nessP = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                tuple_iterator = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                v_memoization_state = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                physical_schema = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                logical_schema = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                content_mt = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                meta_mt = current.first();
+                current = current.rest();
+                destructuring_bind_must_consp(current, datum, $list_alt32);
+                check_wff_nessP = current.first();
+                current = current.rest();
+                if (NIL == current) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject raw_tuple = iteration.iteration_next(tuple_iterator);
+                        SubLObject valid = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL == valid) {
+                            {
+                                SubLObject update = $DONE;
+                                rplaca(state, update);
+                                rplacd(state, NIL);
+                                return values(NIL, state, T);
+                            }
+                        }
+                        {
+                            SubLObject logical_sentence = NIL;
+                            SubLObject local_state = v_memoization_state;
+                            {
+                                SubLObject _prev_bind_0 = memoization_state.$memoization_state$.currentBinding(thread);
+                                try {
+                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                    {
+                                        SubLObject original_memoization_process = NIL;
+                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                            {
+                                                SubLObject current_proc = current_process();
+                                                if (NIL == original_memoization_process) {
+                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                } else {
+                                                    if (original_memoization_process != current_proc) {
+                                                        Errors.error($str_alt18$Invalid_attempt_to_reuse_memoizat);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        try {
+                                            logical_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_one_raw_tuple_to_logical_sentence(raw_tuple, physical_schema, logical_schema, content_mt, meta_mt, check_wff_nessP);
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0_47 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                try {
+                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                    }
+                                                } finally {
+                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_47, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    memoization_state.$memoization_state$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                            return values(logical_sentence, state, NIL);
+                        }
+                    }
+                } else {
+                    cdestructuring_bind_error(datum, $list_alt32);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject sksi_translate_iterate_next(final SubLObject state) {
@@ -1740,6 +3482,33 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return values(logical_sentence, state, NIL);
     }
 
+    /**
+     * Translate RAW-TUPLE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Return a cycl-sentence of the form
+     * (#$ist CONTENT-MT EL-LOGICAL-SENTENCE)
+     * which expresses the intended meaning of RAW-TUPLE.
+     */
+    @LispMethod(comment = "Translate RAW-TUPLE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nReturn a cycl-sentence of the form\r\n(#$ist CONTENT-MT EL-LOGICAL-SENTENCE)\r\nwhich expresses the intended meaning of RAW-TUPLE.\nTranslate RAW-TUPLE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nReturn a cycl-sentence of the form\n(#$ist CONTENT-MT EL-LOGICAL-SENTENCE)\nwhich expresses the intended meaning of RAW-TUPLE.")
+    public static final SubLObject sksi_translate_one_raw_tuple_to_ist_logical_sentence(SubLObject raw_tuple, SubLObject content_mt, SubLObject physical_schema, SubLObject logical_schema, SubLObject meta_mt, SubLObject check_wff_nessP) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        {
+            SubLObject logical_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_one_raw_tuple_to_logical_sentence(raw_tuple, physical_schema, logical_schema, content_mt, meta_mt, check_wff_nessP);
+            if (NIL != logical_sentence) {
+                {
+                    SubLObject el_sentence = fi.perform_fi_substitutions(logical_sentence, UNPROVIDED);
+                    SubLObject ist_sentence = make_binary_formula($$ist, content_mt, el_sentence);
+                    return ist_sentence;
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject sksi_translate_one_raw_tuple_to_ist_logical_sentence(final SubLObject raw_tuple, final SubLObject content_mt, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject meta_mt, SubLObject check_wff_nessP, SubLObject assert_as_you_goP) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1762,6 +3531,75 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Translate RAW-TUPLE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Return a cycl-sentence which expresses the intended meaning
+     * of RAW-TUPLE in the content mt of SK-SOURCE.
+     */
+    @LispMethod(comment = "Translate RAW-TUPLE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nReturn a cycl-sentence which expresses the intended meaning\r\nof RAW-TUPLE in the content mt of SK-SOURCE.\nTranslate RAW-TUPLE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nReturn a cycl-sentence which expresses the intended meaning\nof RAW-TUPLE in the content mt of SK-SOURCE.")
+    public static final SubLObject sksi_translate_one_raw_tuple_to_logical_sentence_alt(SubLObject raw_tuple, SubLObject physical_schema, SubLObject logical_schema, SubLObject content_mt, SubLObject meta_mt, SubLObject check_wff_nessP) {
+        if (check_wff_nessP == UNPROVIDED) {
+            check_wff_nessP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject logical_sentence = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject raw_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_raw_tuple(raw_tuple, physical_schema);
+                            SubLObject relevant_pf_indexicals = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            if (NIL != raw_sentence) {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject decoded_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_raw_sentence(raw_sentence, physical_schema, relevant_pf_indexicals, logical_schema, content_mt);
+                                    SubLObject relevant_logical_field_indexicals = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    if (NIL != decoded_sentence) {
+                                        logical_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_translate_decoded_sentence(decoded_sentence, logical_schema, relevant_logical_field_indexicals, content_mt, meta_mt);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if ($$True != logical_sentence) {
+                    logical_sentence = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_remove_unreformulatable(logical_sentence);
+                    if ((NIL == check_wff_nessP) || (NIL != com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_external_sentence_wffP(raw_tuple, physical_schema, logical_schema, logical_sentence, content_mt))) {
+                        return logical_sentence;
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Translate RAW-TUPLE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Return a cycl-sentence which expresses the intended meaning
+     * of RAW-TUPLE in the content mt of SK-SOURCE.
+     */
+    @LispMethod(comment = "Translate RAW-TUPLE\r\nusing physical interpretation PHYSICAL-SCHEMA\r\nunder logical interpretation LOGICAL-SCHEMA\r\nwhich are all described in META-MT.\r\nReturn a cycl-sentence which expresses the intended meaning\r\nof RAW-TUPLE in the content mt of SK-SOURCE.\nTranslate RAW-TUPLE\nusing physical interpretation PHYSICAL-SCHEMA\nunder logical interpretation LOGICAL-SCHEMA\nwhich are all described in META-MT.\nReturn a cycl-sentence which expresses the intended meaning\nof RAW-TUPLE in the content mt of SK-SOURCE.")
     public static SubLObject sksi_translate_one_raw_tuple_to_logical_sentence(final SubLObject raw_tuple, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject content_mt, final SubLObject meta_mt, SubLObject check_wff_nessP) {
         if (check_wff_nessP == UNPROVIDED) {
             check_wff_nessP = NIL;
@@ -1784,7 +3622,15 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             $current_sksi_batch_template$.rebind(_prev_bind_0, thread);
         }
         return result;
-    }
+    }/**
+     * Translate RAW-TUPLE
+     * using physical interpretation PHYSICAL-SCHEMA
+     * under logical interpretation LOGICAL-SCHEMA
+     * which are all described in META-MT.
+     * Return a cycl-sentence which expresses the intended meaning
+     * of RAW-TUPLE in the content mt of SK-SOURCE.
+     */
+
 
     public static SubLObject sksi_translate_one_raw_tuple_to_logical_sentence_int(final SubLObject raw_tuple, final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject content_mt, final SubLObject meta_mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -1990,6 +3836,28 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return cycl_utilities.expression_find($UNTRANSLATABLE, sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject sksi_remove_unreformulatable_alt(SubLObject sentence) {
+        if (NIL != atomic_sentenceP(sentence)) {
+            if (NIL == com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sentence_contains_unreformulatableP(sentence)) {
+                return sentence;
+            }
+        } else {
+            {
+                SubLObject results = NIL;
+                SubLObject args = cycl_utilities.formula_args(sentence, $IGNORE);
+                SubLObject cdolist_list_var = args;
+                SubLObject sub_sentence = NIL;
+                for (sub_sentence = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_sentence = cdolist_list_var.first()) {
+                    if (NIL == com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sentence_contains_unreformulatableP(sub_sentence)) {
+                        results = cons(sub_sentence, results);
+                    }
+                }
+                return make_conjunction(results);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject sksi_remove_unreformulatable(final SubLObject sentence) {
         if (NIL == atomic_sentenceP(sentence)) {
             SubLObject results = NIL;
@@ -2012,10 +3880,38 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject sentence_contains_unreformulatableP_alt(SubLObject sentence) {
+        return makeBoolean((NIL != cycl_utilities.expression_find($UNREFORMULATABLE, sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != cycl_utilities.expression_find($NULL, sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+    }
+
     public static SubLObject sentence_contains_unreformulatableP(final SubLObject sentence) {
         return makeBoolean((NIL != cycl_utilities.expression_find($UNREFORMULATABLE, sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != cycl_utilities.expression_find($NULL, sentence, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
     }
 
+    /**
+     * Translate RAW-TUPLE into a raw-sentence of #$fieldValue literals.
+     */
+    @LispMethod(comment = "Translate RAW-TUPLE into a raw-sentence of #$fieldValue literals.")
+    public static final SubLObject sksi_translate_raw_tuple_alt(SubLObject raw_tuple, SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject translation_pattern = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_raw_tuple_translation_pattern(physical_schema);
+                SubLObject pf_indexicals = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject raw_sentence = pattern_match.pattern_transform_tree(translation_pattern, raw_tuple, UNPROVIDED);
+                    return values(raw_sentence, pf_indexicals);
+                }
+            }
+        }
+    }
+
+    /**
+     * Translate RAW-TUPLE into a raw-sentence of #$fieldValue literals.
+     */
+    @LispMethod(comment = "Translate RAW-TUPLE into a raw-sentence of #$fieldValue literals.")
     public static SubLObject sksi_translate_raw_tuple(final SubLObject raw_tuple, final SubLObject physical_schema) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2026,6 +3922,23 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return values(raw_sentence, pf_indexicals);
     }
 
+    /**
+     * Translate RAW-SENTENCE into a decoded-sentence of #$indexicalReferent literals.
+     */
+    @LispMethod(comment = "Translate RAW-SENTENCE into a decoded-sentence of #$indexicalReferent literals.")
+    public static final SubLObject sksi_translate_raw_sentence_alt(SubLObject raw_sentence, SubLObject physical_schema, SubLObject relevant_pf_indexicals, SubLObject logical_schema, SubLObject content_mt) {
+        {
+            SubLObject translation_pattern = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_raw_sentence_translation_pattern(physical_schema, relevant_pf_indexicals, logical_schema, content_mt);
+            SubLObject decoded_sentence = formula_pattern_match.pattern_transform_formula(translation_pattern, raw_sentence, UNPROVIDED);
+            SubLObject relevant_logical_field_indexicals = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_logical_field_indexicals_of_decoded_sentence(decoded_sentence);
+            return values(decoded_sentence, relevant_logical_field_indexicals);
+        }
+    }
+
+    /**
+     * Translate RAW-SENTENCE into a decoded-sentence of #$indexicalReferent literals.
+     */
+    @LispMethod(comment = "Translate RAW-SENTENCE into a decoded-sentence of #$indexicalReferent literals.")
     public static SubLObject sksi_translate_raw_sentence(final SubLObject raw_sentence, final SubLObject physical_schema, final SubLObject relevant_pf_indexicals, final SubLObject logical_schema, final SubLObject content_mt) {
         final SubLObject translation_pattern = sksi_raw_sentence_translation_pattern(physical_schema, relevant_pf_indexicals, logical_schema, content_mt);
         final SubLObject decoded_sentence = formula_pattern_match.pattern_transform_formula(translation_pattern, raw_sentence, UNPROVIDED);
@@ -2033,10 +3946,70 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return values(decoded_sentence, relevant_logical_field_indexicals);
     }
 
+    /**
+     * Translate DECODED-SENTENCE into a logical-sentence, a conjunction of instantiated meaning sentences.
+     */
+    @LispMethod(comment = "Translate DECODED-SENTENCE into a logical-sentence, a conjunction of instantiated meaning sentences.")
+    public static final SubLObject sksi_translate_decoded_sentence_alt(SubLObject decoded_sentence, SubLObject logical_schema, SubLObject relevant_logical_field_indexicals, SubLObject content_mt, SubLObject meta_mt) {
+        {
+            SubLObject translation_pattern = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_decoded_sentence_translation_pattern(logical_schema, relevant_logical_field_indexicals, decoded_sentence, content_mt, meta_mt);
+            SubLObject logical_sentence = formula_pattern_match.pattern_transform_formula(translation_pattern, decoded_sentence, UNPROVIDED);
+            return logical_sentence;
+        }
+    }
+
+    /**
+     * Translate DECODED-SENTENCE into a logical-sentence, a conjunction of instantiated meaning sentences.
+     */
+    @LispMethod(comment = "Translate DECODED-SENTENCE into a logical-sentence, a conjunction of instantiated meaning sentences.")
     public static SubLObject sksi_translate_decoded_sentence(final SubLObject decoded_sentence, final SubLObject logical_schema, final SubLObject relevant_logical_field_indexicals, final SubLObject content_mt, final SubLObject meta_mt) {
         final SubLObject translation_pattern = sksi_decoded_sentence_translation_pattern(logical_schema, relevant_logical_field_indexicals, decoded_sentence, content_mt, meta_mt);
         final SubLObject logical_sentence = formula_pattern_match.pattern_transform_formula(translation_pattern, decoded_sentence, UNPROVIDED);
         return logical_sentence;
+    }
+
+    /**
+     * Return an iterator for the rows of SK-SOURCE starting at row START.
+     */
+    @LispMethod(comment = "Return an iterator for the rows of SK-SOURCE starting at row START.")
+    public static final SubLObject new_sk_source_row_iterator(SubLObject sk_source, SubLObject physical_schema, SubLObject meta_mt, SubLObject start_row, SubLObject end_row) {
+        if (start_row == UNPROVIDED) {
+            start_row = ZERO_INTEGER;
+        }
+        if (end_row == UNPROVIDED) {
+            end_row = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (sk_source == $$IMDB_MovieActors_KS) {
+                return iteration.new_list_iterator($list_alt40);
+            }
+            {
+                SubLObject input_iterator = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(meta_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject physical_fields = physical_schema_ordered_field_list(physical_schema);
+                            SubLObject physical_field_indexicals = indexicals_for_physical_fields(physical_fields);
+                            SubLObject csql = sksi_csql_generation.sksi_determine_csql_for_batch_translate(sk_source, physical_schema, physical_field_indexicals);
+                            input_iterator = sksi_sks_interaction.generate_iterator_from_csql(csql, sk_source, NIL, start_row, end_row, $BATCH);
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return input_iterator;
+            }
+        }
     }
 
     public static SubLObject new_sk_source_row_iterator(final SubLObject sk_source, final SubLObject physical_schema, final SubLObject meta_mt, SubLObject start_row, SubLObject end_row, SubLObject specified_physical_fields) {
@@ -2079,6 +4052,25 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return input_iterator;
     }
 
+    public static final SubLObject sk_source_row_iterator_next_alt(SubLObject iterator) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject outer_answer = NIL;
+                SubLObject outer_valid = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject inner_answer = iteration.iteration_next(iterator);
+                    SubLObject inner_valid = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    outer_answer = inner_answer;
+                    outer_valid = inner_valid;
+                }
+                return values(outer_answer, iterator, makeBoolean(NIL == outer_valid));
+            }
+        }
+    }
+
     public static SubLObject sk_source_row_iterator_next(final SubLObject iterator) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject outer_answer = NIL;
@@ -2090,6 +4082,37 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         outer_answer = inner_answer;
         outer_valid = inner_valid;
         return values(outer_answer, iterator, makeBoolean(NIL == outer_valid));
+    }
+
+    public static final SubLObject sksi_raw_tuple_translation_pattern_internal_alt(SubLObject physical_schema) {
+        {
+            SubLObject physical_fields = physical_schema_ordered_field_list(physical_schema);
+            SubLObject pf_indexicals = physical_fields_to_indexicals(physical_fields);
+            SubLObject datum_vars = NIL;
+            SubLObject field_value_literals = NIL;
+            SubLObject list_var = NIL;
+            SubLObject pf_indexical = NIL;
+            SubLObject field_number = NIL;
+            for (list_var = pf_indexicals, pf_indexical = list_var.first(), field_number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , pf_indexical = list_var.first() , field_number = add(ONE_INTEGER, field_number)) {
+                {
+                    SubLObject datum_var = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_get_datum_var(field_number);
+                    datum_vars = cons(datum_var, datum_vars);
+                    if (NIL != pf_indexical) {
+                        {
+                            SubLObject field_value_literal = list($$fieldValue, pf_indexical, list($VALUE, datum_var));
+                            field_value_literals = cons(field_value_literal, field_value_literals);
+                        }
+                    }
+                }
+            }
+            datum_vars = nreverse(datum_vars);
+            field_value_literals = nreverse(field_value_literals);
+            pf_indexicals = delete(NIL, pf_indexicals, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject translation_pattern = list($TUPLE, datum_vars, make_conjunction(field_value_literals));
+                return values(translation_pattern, pf_indexicals);
+            }
+        }
     }
 
     public static SubLObject sksi_raw_tuple_translation_pattern_internal(final SubLObject physical_schema) {
@@ -2117,6 +4140,32 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return values(translation_pattern, pf_indexicals);
     }
 
+    public static final SubLObject sksi_raw_tuple_translation_pattern_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_raw_tuple_translation_pattern_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SKSI_RAW_TUPLE_TRANSLATION_PATTERN, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SKSI_RAW_TUPLE_TRANSLATION_PATTERN, ONE_INTEGER, NIL, EQL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SKSI_RAW_TUPLE_TRANSLATION_PATTERN, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw46$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw46$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_raw_tuple_translation_pattern_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
+    }
+
     public static SubLObject sksi_raw_tuple_translation_pattern(final SubLObject physical_schema) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
@@ -2135,6 +4184,55 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject sksi_raw_sentence_translation_pattern_internal_alt(SubLObject physical_schema, SubLObject pf_indexicals, SubLObject logical_schema, SubLObject content_mt) {
+        if ((physical_schema == $$IMDB_MovieActors_PS) && (logical_schema == $$IMDB_MovieActors_LS)) {
+            return values($list_alt50, $list_alt51);
+        }
+        {
+            SubLObject raw_var_map = NIL;
+            SubLObject field_value_literals = NIL;
+            SubLObject list_var = NIL;
+            SubLObject pf_indexical = NIL;
+            SubLObject field_number = NIL;
+            for (list_var = pf_indexicals, pf_indexical = list_var.first(), field_number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , pf_indexical = list_var.first() , field_number = add(ONE_INTEGER, field_number)) {
+                {
+                    SubLObject raw_var = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_get_raw_var(field_number);
+                    SubLObject field_value_literal = list($$fieldValue, $ANYTHING, list($BIND, raw_var));
+                    raw_var_map = cons(cons(pf_indexical, list($VALUE, raw_var)), raw_var_map);
+                    field_value_literals = cons(field_value_literal, field_value_literals);
+                }
+            }
+            raw_var_map = nreverse(raw_var_map);
+            field_value_literals = nreverse(field_value_literals);
+            {
+                SubLObject relevant_logical_fields = sksi_determine_relevant_logical_fields(Mapping.mapcar(PHYSICAL_FIELD_FOR_INDEXICAL, pf_indexicals), physical_schema, logical_schema);
+                SubLObject indexical_referent_literals = NIL;
+                SubLObject cdolist_list_var = relevant_logical_fields;
+                SubLObject logical_field = NIL;
+                for (logical_field = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , logical_field = cdolist_list_var.first()) {
+                    {
+                        SubLObject recipes = sksi_field_translation_utilities.relevant_field_decodings(logical_field, logical_schema, physical_schema);
+                        SubLObject logical_field_indexical = indexical_for_logical_field(logical_field);
+                        SubLObject cdolist_list_var_48 = recipes;
+                        SubLObject recipe = NIL;
+                        for (recipe = cdolist_list_var_48.first(); NIL != cdolist_list_var_48; cdolist_list_var_48 = cdolist_list_var_48.rest() , recipe = cdolist_list_var_48.first()) {
+                            {
+                                SubLObject decoding = sublis(raw_var_map, recipe, UNPROVIDED, UNPROVIDED);
+                                SubLObject indexical_referent_literal = list($$indexicalReferent, logical_field_indexical, list($CALL, SKSI_BATCH_REFORMULATE, decoding, content_mt));
+                                indexical_referent_literals = cons(indexical_referent_literal, indexical_referent_literals);
+                            }
+                        }
+                    }
+                }
+                indexical_referent_literals = nreverse(indexical_referent_literals);
+                {
+                    SubLObject translation_pattern = list($TEMPLATE, make_conjunction(field_value_literals), list($CALL, SKSI_SIMPLIFY_DECODED_SENTENCE, make_conjunction(indexical_referent_literals)));
+                    return values(translation_pattern, relevant_logical_fields);
+                }
+            }
+        }
     }
 
     public static SubLObject sksi_raw_sentence_translation_pattern_internal(final SubLObject physical_schema, final SubLObject pf_indexicals, final SubLObject logical_schema, final SubLObject content_mt) {
@@ -2186,6 +4284,57 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         indexical_referent_literals = nreverse(indexical_referent_literals);
         final SubLObject translation_pattern = list($TEMPLATE, make_conjunction(field_value_literals), list($CALL, SKSI_SIMPLIFY_DECODED_SENTENCE, make_conjunction(indexical_referent_literals)));
         return values(translation_pattern, relevant_logical_fields);
+    }
+
+    public static final SubLObject sksi_raw_sentence_translation_pattern_alt(SubLObject physical_schema, SubLObject pf_indexicals, SubLObject logical_schema, SubLObject content_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_raw_sentence_translation_pattern_internal(physical_schema, pf_indexicals, logical_schema, content_mt);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SKSI_RAW_SENTENCE_TRANSLATION_PATTERN, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SKSI_RAW_SENTENCE_TRANSLATION_PATTERN, FOUR_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SKSI_RAW_SENTENCE_TRANSLATION_PATTERN, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_4(physical_schema, pf_indexicals, logical_schema, content_mt);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw46$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (physical_schema.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (pf_indexicals.equal(cached_args.first())) {
+                                            cached_args = cached_args.rest();
+                                            if (logical_schema.equal(cached_args.first())) {
+                                                cached_args = cached_args.rest();
+                                                if (((NIL != cached_args) && (NIL == cached_args.rest())) && content_mt.equal(cached_args.first())) {
+                                                    return memoization_state.caching_results(results2);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_raw_sentence_translation_pattern_internal(physical_schema, pf_indexicals, logical_schema, content_mt)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(physical_schema, pf_indexicals, logical_schema, content_mt));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject sksi_raw_sentence_translation_pattern(final SubLObject physical_schema, final SubLObject pf_indexicals, final SubLObject logical_schema, final SubLObject content_mt) {
@@ -2242,6 +4391,34 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return raw_input;
     }
 
+    public static final SubLObject sksi_batch_reformulate_alt(SubLObject expression, SubLObject content_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sk_source = content_mt_sk_source(content_mt, UNPROVIDED);
+                SubLObject v_answer = NIL;
+                SubLObject mt_var = content_mt;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
+                        if (list_utilities.tree_count(NIL, expression, UNPROVIDED, UNPROVIDED).isPositive()) {
+                            v_answer = $UNDECODED;
+                        } else {
+                            v_answer = sksi_reformulate.sksi_reformulate(expression, $DECODE, sk_source);
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
     public static SubLObject sksi_batch_reformulate(final SubLObject expression, final SubLObject content_mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject sk_source = sksi_kb_accessors.content_mt_sk_source(content_mt, UNPROVIDED);
@@ -2263,6 +4440,22 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return v_answer;
     }
 
+    public static final SubLObject sksi_simplify_decoded_sentence_alt(SubLObject decoded_sentence) {
+        {
+            SubLObject relevant_indexical_referents = NIL;
+            SubLObject indexical_referents = cycl_utilities.formula_args(decoded_sentence, UNPROVIDED);
+            SubLObject cdolist_list_var = indexical_referents;
+            SubLObject indexical_referent = NIL;
+            for (indexical_referent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , indexical_referent = cdolist_list_var.first()) {
+                if ($UNDECODED != cycl_utilities.formula_arg2(indexical_referent, UNPROVIDED)) {
+                    relevant_indexical_referents = cons(indexical_referent, relevant_indexical_referents);
+                }
+            }
+            relevant_indexical_referents = nreverse(relevant_indexical_referents);
+            return make_conjunction(relevant_indexical_referents);
+        }
+    }
+
     public static SubLObject sksi_simplify_decoded_sentence(final SubLObject decoded_sentence) {
         SubLObject relevant_indexical_referents = NIL;
         SubLObject cdolist_list_var;
@@ -2280,6 +4473,22 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return make_conjunction(relevant_indexical_referents);
     }
 
+    public static final SubLObject sksi_logical_field_indexicals_of_decoded_sentence_alt(SubLObject decoded_sentence) {
+        {
+            SubLObject relevant_logical_field_indexicals = NIL;
+            SubLObject indexical_referents = cycl_utilities.formula_args(decoded_sentence, UNPROVIDED);
+            SubLObject cdolist_list_var = indexical_referents;
+            SubLObject indexical_referent = NIL;
+            for (indexical_referent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , indexical_referent = cdolist_list_var.first()) {
+                {
+                    SubLObject logical_field_indexical = cycl_utilities.formula_arg1(indexical_referent, UNPROVIDED);
+                    relevant_logical_field_indexicals = cons(logical_field_indexical, relevant_logical_field_indexicals);
+                }
+            }
+            return nreverse(relevant_logical_field_indexicals);
+        }
+    }
+
     public static SubLObject sksi_logical_field_indexicals_of_decoded_sentence(final SubLObject decoded_sentence) {
         SubLObject relevant_logical_field_indexicals = NIL;
         SubLObject cdolist_list_var;
@@ -2293,6 +4502,21 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             indexical_referent = cdolist_list_var.first();
         } 
         return nreverse(relevant_logical_field_indexicals);
+    }
+
+    public static final SubLObject prune_consequent_conditional_meaning_sentences_wrt_antecedents_alt(SubLObject conditional_meaning_sentences, SubLObject decoded_sentence, SubLObject content_mt, SubLObject meta_mt) {
+        {
+            SubLObject lfi_value_cache = sksi_data_warehousing_utilities.construct_lfi_value_cache(decoded_sentence);
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = conditional_meaning_sentences;
+            SubLObject conditional_meaning_sentence = NIL;
+            for (conditional_meaning_sentence = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , conditional_meaning_sentence = cdolist_list_var.first()) {
+                if (sksi_data_warehousing_utilities.decoded_sentence_satisfies_conditionP(conditional_meaning_sentence, lfi_value_cache, content_mt, meta_mt) == T) {
+                    result = cons(sksi_meaning_sentence_utilities.get_consequent_meaning_sentence_from_conditional_meaning_sentence(conditional_meaning_sentence), result);
+                }
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject prune_consequent_conditional_meaning_sentences_wrt_antecedents(final SubLObject conditional_meaning_sentences, final SubLObject decoded_sentence, final SubLObject content_mt, final SubLObject meta_mt) {
@@ -2309,6 +4533,34 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
             conditional_meaning_sentence = cdolist_list_var.first();
         } 
         return nreverse(result);
+    }
+
+    public static final SubLObject sksi_decoded_sentence_translation_pattern_alt(SubLObject logical_schema, SubLObject relevant_logical_field_indexicals, SubLObject decoded_sentence, SubLObject content_mt, SubLObject meta_mt) {
+        {
+            SubLObject arg_var_map = NIL;
+            SubLObject indexical_referent_literals = NIL;
+            SubLObject list_var = NIL;
+            SubLObject logical_field_indexical = NIL;
+            SubLObject field_number = NIL;
+            for (list_var = relevant_logical_field_indexicals, logical_field_indexical = list_var.first(), field_number = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , logical_field_indexical = list_var.first() , field_number = add(ONE_INTEGER, field_number)) {
+                {
+                    SubLObject arg_var = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_get_arg_var(field_number);
+                    SubLObject indexical_referent_literal = list($$indexicalReferent, $ANYTHING, list($BIND, arg_var));
+                    arg_var_map = cons(cons(logical_field_indexical, list($VALUE, arg_var)), arg_var_map);
+                    indexical_referent_literals = cons(indexical_referent_literal, indexical_referent_literals);
+                }
+            }
+            arg_var_map = nreverse(arg_var_map);
+            indexical_referent_literals = nreverse(indexical_referent_literals);
+            {
+                SubLObject meaning_sentences = sksi_meaning_sentence_utilities.relevant_logical_schema_meaning_sentences(logical_schema, relevant_logical_field_indexicals, T, UNPROVIDED);
+                SubLObject conditional_meaning_sentences = sksi_meaning_sentence_utilities.relevant_logical_schema_conditional_meaning_sentences(logical_schema, relevant_logical_field_indexicals, T, UNPROVIDED);
+                SubLObject applicable_conditional_meaning_sentences = com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.prune_consequent_conditional_meaning_sentences_wrt_antecedents(conditional_meaning_sentences, decoded_sentence, content_mt, meta_mt);
+                SubLObject logical_sentence_recipe = simplify_cycl_sentence_syntax(make_conjunction(append(meaning_sentences, applicable_conditional_meaning_sentences)), UNPROVIDED);
+                SubLObject logical_sentence_template = sublis(arg_var_map, logical_sentence_recipe, symbol_function(EQUAL), UNPROVIDED);
+                return list($TEMPLATE, make_conjunction(indexical_referent_literals), logical_sentence_template);
+            }
+        }
     }
 
     public static SubLObject sksi_decoded_sentence_translation_pattern(final SubLObject logical_schema, final SubLObject relevant_logical_field_indexicals, final SubLObject decoded_sentence, final SubLObject content_mt, final SubLObject meta_mt) {
@@ -2431,8 +4683,8 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
     }
 
     public static SubLObject new_sksi_batch_template(final SubLObject rules, final SubLObject use_type_coercionP) {
-        assert NIL != inference_utilities.allowed_rules_spec_p(rules) : "inference_utilities.allowed_rules_spec_p(rules) " + "CommonSymbols.NIL != inference_utilities.allowed_rules_spec_p(rules) " + rules;
-        assert NIL != booleanp(use_type_coercionP) : "Types.booleanp(use_type_coercionP) " + "CommonSymbols.NIL != Types.booleanp(use_type_coercionP) " + use_type_coercionP;
+        assert NIL != inference_utilities.allowed_rules_spec_p(rules) : "! inference_utilities.allowed_rules_spec_p(rules) " + ("inference_utilities.allowed_rules_spec_p(rules) " + "CommonSymbols.NIL != inference_utilities.allowed_rules_spec_p(rules) ") + rules;
+        assert NIL != booleanp(use_type_coercionP) : "! booleanp(use_type_coercionP) " + ("Types.booleanp(use_type_coercionP) " + "CommonSymbols.NIL != Types.booleanp(use_type_coercionP) ") + use_type_coercionP;
         return list(rules, use_type_coercionP);
     }
 
@@ -2460,7 +4712,7 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
 
     public static SubLObject sksi_batch_template_enter(final SubLObject physical_schema, final SubLObject logical_schema, final SubLObject content_mt, final SubLObject value) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != sksi_batch_template_p(value) : "sksi_batch_translate.sksi_batch_template_p(value) " + "CommonSymbols.NIL != sksi_batch_translate.sksi_batch_template_p(value) " + value;
+        assert NIL != sksi_batch_template_p(value) : "! sksi_batch_translate.sksi_batch_template_p(value) " + ("sksi_batch_translate.sksi_batch_template_p(value) " + "CommonSymbols.NIL != sksi_batch_translate.sksi_batch_template_p(value) ") + value;
         final SubLObject key = list(physical_schema, logical_schema, content_mt);
         return dictionary.dictionary_enter($sksi_batch_templates$.getDynamicValue(thread), key, value);
     }
@@ -2470,6 +4722,10 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return $current_sksi_batch_template$.getDynamicValue(thread);
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLString $str_alt0$in_mt___S___ = makeString("in mt: ~S.~%");
+
     public static SubLObject current_sksi_batch_template_allowed_rules() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != misc_utilities.initialized_p($current_sksi_batch_template$.getDynamicValue(thread))) {
@@ -2477,6 +4733,12 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         }
         return kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread);
     }
+
+    static private final SubLString $str_alt1$f___S___ = makeString("f: ~S.~%");
+
+    static private final SubLString $str_alt3$Unable_to_open__S = makeString("Unable to open ~S");
+
+    static private final SubLString $str_alt9$_A_is_not_a__A = makeString("~A is not a ~A");
 
     public static SubLObject sksi_batch_translate_coerce_typesP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2486,9 +4748,17 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return $sksi_batch_translate_coerce_typesP$.getDynamicValue(thread);
     }
 
+    static private final SubLString $str_alt14$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
+
+    static private final SubLString $str_alt16$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
+
     public static SubLObject convert_sql_data_to_strings(final SubLObject data) {
         return Mapping.mapcar(CONVERT_SQL_DATUM_TO_STRING, data);
     }
+
+    static private final SubLString $str_alt17$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
+
+    static private final SubLString $str_alt18$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
 
     public static SubLObject convert_sql_datum_to_string(final SubLObject datum) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2506,6 +4776,16 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return result;
     }
 
+    static private final SubLString $str_alt19$____Translation_Time____A__ = makeString("~%;;Translation Time : ~A~%");
+
+    static private final SubLString $str_alt20$_____ = makeString(";; ~%");
+
+    static private final SubLString $str_alt21$___Meta_Mt_____________S__ = makeString(";; Meta Mt          : ~S~%");
+
+    static private final SubLString $str_alt22$___Source______________S__ = makeString(";; Source           : ~S~%");
+
+    static private final SubLString $str_alt23$___Physical_Schema_____S__ = makeString(";; Physical Schema  : ~S~%");
+
     public static SubLObject clear_sksi_schema_translation_lifting_rule() {
         final SubLObject cs = $sksi_schema_translation_lifting_rule_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2514,9 +4794,15 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt24$___Logical_Schema______S__ = makeString(";; Logical Schema   : ~S~%");
+
+    static private final SubLString $str_alt25$___Content_Mt__________S = makeString(";; Content Mt       : ~S");
+
     public static SubLObject remove_sksi_schema_translation_lifting_rule() {
         return memoization_state.caching_state_remove_function_results_with_args($sksi_schema_translation_lifting_rule_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
     }
+
+    static private final SubLString $str_alt26$________S_ = makeString("~%~%;; ~S ");
 
     public static SubLObject sksi_schema_translation_lifting_rule_internal() {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2526,6 +4812,10 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         }
         return rule;
     }
+
+    static private final SubLList $list_alt30 = list(makeSymbol("TUPLE-ITERATOR"), makeSymbol("&REST"), makeSymbol("REST"));
+
+    static private final SubLList $list_alt32 = list(makeSymbol("TUPLE-ITERATOR"), makeSymbol("MEMOIZATION-STATE"), makeSymbol("PHYSICAL-SCHEMA"), makeSymbol("LOGICAL-SCHEMA"), makeSymbol("CONTENT-MT"), makeSymbol("META-MT"), makeSymbol("CHECK-WFF-NESS?"));
 
     public static SubLObject sksi_schema_translation_lifting_rule() {
         SubLObject caching_state = $sksi_schema_translation_lifting_rule_caching_state$.getGlobalValue();
@@ -2540,6 +4830,24 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    static private final SubLString $str_alt38$__The_following_CycL_translation_ = makeString("~%The following CycL translation of the raw tuple ~A using the physical schema ~A and ~%the logical schema ~A is not well-formed in the content mt ~A.~%~%~A~%~A~%~%");
+
+    public static final SubLObject $$IMDB_MovieActors_KS = reader_make_constant_shell("IMDB-MovieActors-KS");
+
+    static private final SubLList $list_alt40 = list(list(makeString("Unforgiven (1992)"), makeString("Eastwood, Clint")), list(makeString("Unforgiven (1992)"), makeString("Hackman, Gene")));
+
+    public static final SubLSymbol $kw46$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    public static final SubLObject clear_sksi_get_datum_var_alt() {
+        {
+            SubLObject cs = $sksi_get_datum_var_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_sksi_get_datum_var() {
         final SubLObject cs = $sksi_get_datum_var_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2548,12 +4856,39 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_sksi_get_datum_var_alt(SubLObject number) {
+        return memoization_state.caching_state_remove_function_results_with_args($sksi_get_datum_var_caching_state$.getGlobalValue(), list(number), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_sksi_get_datum_var(final SubLObject number) {
         return memoization_state.caching_state_remove_function_results_with_args($sksi_get_datum_var_caching_state$.getGlobalValue(), list(number), UNPROVIDED, UNPROVIDED);
     }
 
+    static private final SubLList $list_alt50 = list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("fieldValue"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("RAW-1"))), list(reader_make_constant_shell("fieldValue"), makeKeyword("ANYTHING"), list($BIND, makeSymbol("RAW-2")))), list($CALL, makeSymbol("SKSI-SIMPLIFY-DECODED-SENTENCE"), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("indexicalReferent"), list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Movie-CW")), list($CALL, makeSymbol("SKSI-BATCH-REFORMULATE"), list(reader_make_constant_shell("MovieNamedFn"), list(makeKeyword("VALUE"), makeSymbol("RAW-1")))), makeSymbol("CONTENT-MT")), list(reader_make_constant_shell("indexicalReferent"), list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Person")), list($CALL, makeSymbol("SKSI-BATCH-REFORMULATE"), list(reader_make_constant_shell("PersonNamedFn"), list(makeKeyword("VALUE"), makeSymbol("RAW-2")))), makeSymbol("CONTENT-MT")))));
+
+    public static final SubLObject sksi_get_datum_var_internal_alt(SubLObject number) {
+        return intern(cconcatenate($str_alt63$DATUM_, format_nil.format_nil_s_no_copy(number)), UNPROVIDED);
+    }
+
     public static SubLObject sksi_get_datum_var_internal(final SubLObject number) {
         return intern(cconcatenate($str116$DATUM_, format_nil.format_nil_s_no_copy(number)), UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_get_datum_var_alt(SubLObject number) {
+        {
+            SubLObject caching_state = $sksi_get_datum_var_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(SKSI_GET_DATUM_VAR, $sksi_get_datum_var_caching_state$, NIL, EQL, ONE_INTEGER, TEN_INTEGER);
+            }
+            {
+                SubLObject results = memoization_state.caching_state_lookup(caching_state, number, $kw46$_MEMOIZED_ITEM_NOT_FOUND_);
+                if (results == $kw46$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_get_datum_var_internal(number)));
+                    memoization_state.caching_state_put(caching_state, number, results, UNPROVIDED);
+                }
+                return memoization_state.caching_results(results);
+            }
+        }
     }
 
     public static SubLObject sksi_get_datum_var(final SubLObject number) {
@@ -2569,6 +4904,16 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject clear_sksi_get_raw_var_alt() {
+        {
+            SubLObject cs = $sksi_get_raw_var_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_sksi_get_raw_var() {
         final SubLObject cs = $sksi_get_raw_var_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2577,12 +4922,39 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt51 = list(list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Movie-CW")), list(reader_make_constant_shell("TheFn"), reader_make_constant_shell("Person")));
+
+    public static final SubLObject remove_sksi_get_raw_var_alt(SubLObject number) {
+        return memoization_state.caching_state_remove_function_results_with_args($sksi_get_raw_var_caching_state$.getGlobalValue(), list(number), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_sksi_get_raw_var(final SubLObject number) {
         return memoization_state.caching_state_remove_function_results_with_args($sksi_get_raw_var_caching_state$.getGlobalValue(), list(number), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject sksi_get_raw_var_internal_alt(SubLObject number) {
+        return intern(cconcatenate($str_alt66$RAW_, format_nil.format_nil_s_no_copy(number)), UNPROVIDED);
+    }
+
     public static SubLObject sksi_get_raw_var_internal(final SubLObject number) {
         return intern(cconcatenate($str119$RAW_, format_nil.format_nil_s_no_copy(number)), UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_get_raw_var_alt(SubLObject number) {
+        {
+            SubLObject caching_state = $sksi_get_raw_var_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(SKSI_GET_RAW_VAR, $sksi_get_raw_var_caching_state$, NIL, EQL, ONE_INTEGER, TEN_INTEGER);
+            }
+            {
+                SubLObject results = memoization_state.caching_state_lookup(caching_state, number, $kw46$_MEMOIZED_ITEM_NOT_FOUND_);
+                if (results == $kw46$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_get_raw_var_internal(number)));
+                    memoization_state.caching_state_put(caching_state, number, results, UNPROVIDED);
+                }
+                return memoization_state.caching_results(results);
+            }
+        }
     }
 
     public static SubLObject sksi_get_raw_var(final SubLObject number) {
@@ -2598,6 +4970,22 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    static private final SubLString $str_alt63$DATUM_ = makeString("DATUM-");
+
+    static private final SubLString $str_alt66$RAW_ = makeString("RAW-");
+
+    static private final SubLString $str_alt69$ARG_ = makeString("ARG-");
+
+    public static final SubLObject clear_sksi_get_arg_var_alt() {
+        {
+            SubLObject cs = $sksi_get_arg_var_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_sksi_get_arg_var() {
         final SubLObject cs = $sksi_get_arg_var_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -2606,12 +4994,37 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_sksi_get_arg_var_alt(SubLObject number) {
+        return memoization_state.caching_state_remove_function_results_with_args($sksi_get_arg_var_caching_state$.getGlobalValue(), list(number), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_sksi_get_arg_var(final SubLObject number) {
         return memoization_state.caching_state_remove_function_results_with_args($sksi_get_arg_var_caching_state$.getGlobalValue(), list(number), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject sksi_get_arg_var_internal_alt(SubLObject number) {
+        return intern(cconcatenate($str_alt69$ARG_, format_nil.format_nil_s_no_copy(number)), UNPROVIDED);
+    }
+
     public static SubLObject sksi_get_arg_var_internal(final SubLObject number) {
         return intern(cconcatenate($str122$ARG_, format_nil.format_nil_s_no_copy(number)), UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_get_arg_var_alt(SubLObject number) {
+        {
+            SubLObject caching_state = $sksi_get_arg_var_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(SKSI_GET_ARG_VAR, $sksi_get_arg_var_caching_state$, NIL, EQL, ONE_INTEGER, TEN_INTEGER);
+            }
+            {
+                SubLObject results = memoization_state.caching_state_lookup(caching_state, number, $kw46$_MEMOIZED_ITEM_NOT_FOUND_);
+                if (results == $kw46$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_translate.sksi_get_arg_var_internal(number)));
+                    memoization_state.caching_state_put(caching_state, number, results, UNPROVIDED);
+                }
+                return memoization_state.caching_results(results);
+            }
+        }
     }
 
     public static SubLObject sksi_get_arg_var(final SubLObject number) {
@@ -2730,102 +5143,268 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject declare_sksi_batch_translate_file_alt() {
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT", 2, 3, false);
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STREAM", 3, 4, false);
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_file", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-FILE", 4, 3, false);
+        declareFunction("sksi_translate_all_sk_sources_in_mt", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT", 2, 3, false);
+        declareFunction("sksi_translate_all_sk_source_in_just_mt", "SKSI-TRANSLATE-ALL-SK-SOURCE-IN-JUST-MT", 2, 3, false);
+        declareFunction("sksi_translate_all_sk_sources_in_mt_to_stream", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-STREAM", 2, 4, false);
+        declareFunction("sksi_translate_all_sk_sources_in_mt_to_file", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-FILE", 3, 3, false);
+        declareFunction("sksi_translate_all_spec_sk_sources", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES", 2, 3, false);
+        declareFunction("sksi_translate_all_spec_sk_sources_to_stream", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-STREAM", 2, 4, false);
+        declareFunction("sksi_translate_all_spec_sk_sources_to_file", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-FILE", 3, 3, false);
+        declareFunction("sksi_translate_all_simple_sk_source", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE", 2, 3, false);
+        declareFunction("sksi_translate_all_simple_sk_source_to_stream", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE-TO-STREAM", 2, 4, false);
+        declareFunction("sksi_translate_simple_sk_source", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE", 4, 3, false);
+        declareFunction("sksi_translate_simple_sk_source_to_stream", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-STREAM", 4, 4, false);
+        declareFunction("sksi_translate_simple_sk_source_to_file", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-FILE", 5, 3, false);
+        declareFunction("new_sksi_translate_iterator", "NEW-SKSI-TRANSLATE-ITERATOR", 4, 3, false);
+        declareFunction("make_sksi_translate_iterator_state", "MAKE-SKSI-TRANSLATE-ITERATOR-STATE", 8, 0, false);
+        declareFunction("sksi_translate_iterate_done", "SKSI-TRANSLATE-ITERATE-DONE", 1, 0, false);
+        declareFunction("sksi_translate_iterate_next", "SKSI-TRANSLATE-ITERATE-NEXT", 1, 0, false);
+        declareFunction("sksi_translate_one_raw_tuple_to_ist_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-IST-LOGICAL-SENTENCE", 5, 1, false);
+        declareFunction("sksi_translate_one_raw_tuple_to_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE", 5, 1, false);
+        declareFunction("sksi_remove_unreformulatable", "SKSI-REMOVE-UNREFORMULATABLE", 1, 0, false);
+        declareFunction("sentence_contains_unreformulatableP", "SENTENCE-CONTAINS-UNREFORMULATABLE?", 1, 0, false);
+        declareFunction("sksi_external_sentence_wffP", "SKSI-EXTERNAL-SENTENCE-WFF?", 5, 0, false);
+        declareFunction("sksi_translate_raw_tuple", "SKSI-TRANSLATE-RAW-TUPLE", 2, 0, false);
+        declareFunction("sksi_translate_raw_sentence", "SKSI-TRANSLATE-RAW-SENTENCE", 5, 0, false);
+        declareFunction("sksi_translate_decoded_sentence", "SKSI-TRANSLATE-DECODED-SENTENCE", 5, 0, false);
+        declareFunction("new_sk_source_row_iterator", "NEW-SK-SOURCE-ROW-ITERATOR", 3, 2, false);
+        declareFunction("sk_source_row_iterator_next", "SK-SOURCE-ROW-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("sksi_raw_tuple_translation_pattern_internal", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN-INTERNAL", 1, 0, false);
+        declareFunction("sksi_raw_tuple_translation_pattern", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN", 1, 0, false);
+        declareFunction("sksi_raw_sentence_translation_pattern_internal", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN-INTERNAL", 4, 0, false);
+        declareFunction("sksi_raw_sentence_translation_pattern", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN", 4, 0, false);
+        declareFunction("sksi_batch_reformulate", "SKSI-BATCH-REFORMULATE", 2, 0, false);
+        declareFunction("sksi_simplify_decoded_sentence", "SKSI-SIMPLIFY-DECODED-SENTENCE", 1, 0, false);
+        declareFunction("sksi_logical_field_indexicals_of_decoded_sentence", "SKSI-LOGICAL-FIELD-INDEXICALS-OF-DECODED-SENTENCE", 1, 0, false);
+        declareFunction("prune_consequent_conditional_meaning_sentences_wrt_antecedents", "PRUNE-CONSEQUENT-CONDITIONAL-MEANING-SENTENCES-WRT-ANTECEDENTS", 4, 0, false);
+        declareFunction("sksi_decoded_sentence_translation_pattern", "SKSI-DECODED-SENTENCE-TRANSLATION-PATTERN", 5, 0, false);
+        declareFunction("clear_sksi_get_datum_var", "CLEAR-SKSI-GET-DATUM-VAR", 0, 0, false);
+        declareFunction("remove_sksi_get_datum_var", "REMOVE-SKSI-GET-DATUM-VAR", 1, 0, false);
+        declareFunction("sksi_get_datum_var_internal", "SKSI-GET-DATUM-VAR-INTERNAL", 1, 0, false);
+        declareFunction("sksi_get_datum_var", "SKSI-GET-DATUM-VAR", 1, 0, false);
+        declareFunction("clear_sksi_get_raw_var", "CLEAR-SKSI-GET-RAW-VAR", 0, 0, false);
+        declareFunction("remove_sksi_get_raw_var", "REMOVE-SKSI-GET-RAW-VAR", 1, 0, false);
+        declareFunction("sksi_get_raw_var_internal", "SKSI-GET-RAW-VAR-INTERNAL", 1, 0, false);
+        declareFunction("sksi_get_raw_var", "SKSI-GET-RAW-VAR", 1, 0, false);
+        declareFunction("clear_sksi_get_arg_var", "CLEAR-SKSI-GET-ARG-VAR", 0, 0, false);
+        declareFunction("remove_sksi_get_arg_var", "REMOVE-SKSI-GET-ARG-VAR", 1, 0, false);
+        declareFunction("sksi_get_arg_var_internal", "SKSI-GET-ARG-VAR-INTERNAL", 1, 0, false);
+        declareFunction("sksi_get_arg_var", "SKSI-GET-ARG-VAR", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_sksi_batch_translate_file() {
-        declareFunction(me, "set_sksi_batch_translate_only_asserted_meaning_sentences", "SET-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES", 1, 0, false);
-        declareFunction(me, "set_sksi_batch_translate_coerce_types", "SET-SKSI-BATCH-TRANSLATE-COERCE-TYPES", 1, 0, false);
-        declareMacro(me, "with_sksi_batch_translate_only_asserted_meaning_sentences", "WITH-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES");
-        declareMacro(me, "without_sksi_batch_translate_only_asserted_meaning_sentences", "WITHOUT-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES");
-        declareMacro(me, "with_sksi_batch_translate_coerce_types", "WITH-SKSI-BATCH-TRANSLATE-COERCE-TYPES");
-        declareMacro(me, "without_sksi_batch_translate_coerce_types", "WITHOUT-SKSI-BATCH-TRANSLATE-COERCE-TYPES");
-        declareMacro(me, "with_sksi_batch_sql_select_statement", "WITH-SKSI-BATCH-SQL-SELECT-STATEMENT");
-        declareFunction(me, "sksi_batch_assert_translations_of_table", "SKSI-BATCH-ASSERT-TRANSLATIONS-OF-TABLE", 1, 3, false);
-        declareFunction(me, "sksi_batch_assert_all_sk_sources_in_mt", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT", 2, 4, false);
-        declareFunction(me, "sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STREAM", 3, 4, false);
-        declareFunction(me, "sksi_batch_assert_all_sk_sources_in_mt_to_ke_string", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STRING", 3, 3, false);
-        declareFunction(me, "sksi_batch_assert_all_sk_sources_in_mt_to_ke_file", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-FILE", 4, 3, false);
-        declareFunction(me, "sksi_translate_all_sk_sources_in_mt", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT", 2, 4, false);
-        declareFunction(me, "sksi_translate_all_sk_source_in_just_mt", "SKSI-TRANSLATE-ALL-SK-SOURCE-IN-JUST-MT", 2, 4, false);
-        declareFunction(me, "sksi_translate_all_sk_sources_in_mt_to_stream", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-STREAM", 2, 4, false);
-        declareFunction(me, "sksi_translate_all_sk_sources_in_mt_to_file", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-FILE", 3, 3, false);
-        declareFunction(me, "sksi_translate_all_spec_sk_sources", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES", 2, 4, false);
-        declareFunction(me, "sksi_translate_all_spec_sk_sources_to_stream", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-STREAM", 2, 4, false);
-        declareFunction(me, "sksi_translate_all_spec_sk_sources_to_file", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-FILE", 3, 3, false);
-        declareFunction(me, "sksi_translate_all_simple_sk_source", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE", 2, 4, false);
-        declareFunction(me, "sksi_translate_all_simple_sk_source_to_stream", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE-TO-STREAM", 2, 4, false);
-        declareFunction(me, "sksi_translate_simple_sk_source", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE", 4, 4, false);
-        declareFunction(me, "sksi_translate_simple_sk_source_to_stream", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-STREAM", 4, 4, false);
-        declareFunction(me, "sksi_translate_simple_sk_source_to_file", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-FILE", 5, 3, false);
-        declareFunction(me, "new_sksi_translate_iterator", "NEW-SKSI-TRANSLATE-ITERATOR", 4, 3, false);
-        declareFunction(me, "make_sksi_translate_iterator_state", "MAKE-SKSI-TRANSLATE-ITERATOR-STATE", 8, 0, false);
-        declareFunction(me, "sksi_translate_iterate_done", "SKSI-TRANSLATE-ITERATE-DONE", 1, 0, false);
-        declareFunction(me, "sksi_translate_iterate_next", "SKSI-TRANSLATE-ITERATE-NEXT", 1, 0, false);
-        declareFunction(me, "sksi_translate_one_raw_tuple_to_ist_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-IST-LOGICAL-SENTENCE", 5, 2, false);
-        declareFunction(me, "sksi_translate_one_raw_tuple_to_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE", 5, 1, false);
-        declareFunction(me, "sksi_translate_one_raw_tuple_to_logical_sentence_int", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE-INT", 5, 0, false);
-        declareFunction(me, "sksi_postprocess_translated_sentence", "SKSI-POSTPROCESS-TRANSLATED-SENTENCE", 6, 0, false);
-        declareFunction(me, "sksi_postprocess_translated_asent", "SKSI-POSTPROCESS-TRANSLATED-ASENT", 6, 0, false);
-        declareFunction(me, "sksi_wff_check_batch_translated_sentence", "SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE", 3, 0, false);
-        declareFunction(me, "sksi_remove_untranslatable", "SKSI-REMOVE-UNTRANSLATABLE", 1, 0, false);
-        declareFunction(me, "sentence_contains_untranslatableP", "SENTENCE-CONTAINS-UNTRANSLATABLE?", 1, 0, false);
-        declareFunction(me, "sksi_remove_unreformulatable", "SKSI-REMOVE-UNREFORMULATABLE", 1, 0, false);
-        declareFunction(me, "sentence_contains_unreformulatableP", "SENTENCE-CONTAINS-UNREFORMULATABLE?", 1, 0, false);
-        declareFunction(me, "sksi_translate_raw_tuple", "SKSI-TRANSLATE-RAW-TUPLE", 2, 0, false);
-        declareFunction(me, "sksi_translate_raw_sentence", "SKSI-TRANSLATE-RAW-SENTENCE", 5, 0, false);
-        declareFunction(me, "sksi_translate_decoded_sentence", "SKSI-TRANSLATE-DECODED-SENTENCE", 5, 0, false);
-        declareFunction(me, "new_sk_source_row_iterator", "NEW-SK-SOURCE-ROW-ITERATOR", 3, 3, false);
-        declareFunction(me, "sk_source_row_iterator_next", "SK-SOURCE-ROW-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "sksi_raw_tuple_translation_pattern_internal", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN-INTERNAL", 1, 0, false);
-        declareFunction(me, "sksi_raw_tuple_translation_pattern", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN", 1, 0, false);
-        declareFunction(me, "sksi_raw_sentence_translation_pattern_internal", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN-INTERNAL", 4, 0, false);
-        declareFunction(me, "sksi_raw_sentence_translation_pattern", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN", 4, 0, false);
-        declareFunction(me, "physical_field_has_physical_override", "PHYSICAL-FIELD-HAS-PHYSICAL-OVERRIDE", 2, 0, false);
-        declareFunction(me, "possibly_override_physical_field_value", "POSSIBLY-OVERRIDE-PHYSICAL-FIELD-VALUE", 3, 0, false);
-        declareFunction(me, "sksi_batch_reformulate", "SKSI-BATCH-REFORMULATE", 2, 0, false);
-        declareFunction(me, "sksi_simplify_decoded_sentence", "SKSI-SIMPLIFY-DECODED-SENTENCE", 1, 0, false);
-        declareFunction(me, "sksi_logical_field_indexicals_of_decoded_sentence", "SKSI-LOGICAL-FIELD-INDEXICALS-OF-DECODED-SENTENCE", 1, 0, false);
-        declareFunction(me, "prune_consequent_conditional_meaning_sentences_wrt_antecedents", "PRUNE-CONSEQUENT-CONDITIONAL-MEANING-SENTENCES-WRT-ANTECEDENTS", 4, 0, false);
-        declareFunction(me, "sksi_decoded_sentence_translation_pattern", "SKSI-DECODED-SENTENCE-TRANSLATION-PATTERN", 5, 0, false);
-        declareFunction(me, "sksi_batch_assert_sentence_with_deduced_argument_assuming_table", "SKSI-BATCH-ASSERT-SENTENCE-WITH-DEDUCED-ARGUMENT-ASSUMING-TABLE", 3, 0, false);
-        declareFunction(me, "sksi_batch_assert_sentence_with_deduced_argument", "SKSI-BATCH-ASSERT-SENTENCE-WITH-DEDUCED-ARGUMENT", 4, 0, false);
-        declareFunction(me, "possibly_remember_primary_key_that_resulted_in_raw_tuple", "POSSIBLY-REMEMBER-PRIMARY-KEY-THAT-RESULTED-IN-RAW-TUPLE", 2, 0, false);
-        declareMacro(me, "with_sksi_batch_templates", "WITH-SKSI-BATCH-TEMPLATES");
-        declareMacro(me, "possibly_with_sksi_batch_templates", "POSSIBLY-WITH-SKSI-BATCH-TEMPLATES");
-        declareFunction(me, "initialize_sksi_batch_templates", "INITIALIZE-SKSI-BATCH-TEMPLATES", 0, 0, false);
-        declareFunction(me, "clear_sksi_batch_templates", "CLEAR-SKSI-BATCH-TEMPLATES", 0, 0, false);
-        declareFunction(me, "sksi_batch_template_p", "SKSI-BATCH-TEMPLATE-P", 1, 0, false);
-        declareFunction(me, "sksi_batch_template_allowed_rules", "SKSI-BATCH-TEMPLATE-ALLOWED-RULES", 1, 0, false);
-        declareFunction(me, "sksi_batch_template_use_type_coercionP", "SKSI-BATCH-TEMPLATE-USE-TYPE-COERCION?", 1, 0, false);
-        declareFunction(me, "new_sksi_batch_template", "NEW-SKSI-BATCH-TEMPLATE", 2, 0, false);
-        declareFunction(me, "remember_batch_template_for_future_use", "REMEMBER-BATCH-TEMPLATE-FOR-FUTURE-USE", 4, 0, false);
-        declareFunction(me, "sksi_batch_template_lookup", "SKSI-BATCH-TEMPLATE-LOOKUP", 3, 0, false);
-        declareFunction(me, "sksi_batch_template_enter", "SKSI-BATCH-TEMPLATE-ENTER", 4, 0, false);
-        declareFunction(me, "current_sksi_batch_template", "CURRENT-SKSI-BATCH-TEMPLATE", 0, 0, false);
-        declareFunction(me, "current_sksi_batch_template_allowed_rules", "CURRENT-SKSI-BATCH-TEMPLATE-ALLOWED-RULES", 0, 0, false);
-        declareFunction(me, "sksi_batch_translate_coerce_typesP", "SKSI-BATCH-TRANSLATE-COERCE-TYPES?", 0, 0, false);
-        declareFunction(me, "convert_sql_data_to_strings", "CONVERT-SQL-DATA-TO-STRINGS", 1, 0, false);
-        declareFunction(me, "convert_sql_datum_to_string", "CONVERT-SQL-DATUM-TO-STRING", 1, 0, false);
-        declareFunction(me, "clear_sksi_schema_translation_lifting_rule", "CLEAR-SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
-        declareFunction(me, "remove_sksi_schema_translation_lifting_rule", "REMOVE-SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
-        declareFunction(me, "sksi_schema_translation_lifting_rule_internal", "SKSI-SCHEMA-TRANSLATION-LIFTING-RULE-INTERNAL", 0, 0, false);
-        declareFunction(me, "sksi_schema_translation_lifting_rule", "SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
-        declareFunction(me, "clear_sksi_get_datum_var", "CLEAR-SKSI-GET-DATUM-VAR", 0, 0, false);
-        declareFunction(me, "remove_sksi_get_datum_var", "REMOVE-SKSI-GET-DATUM-VAR", 1, 0, false);
-        declareFunction(me, "sksi_get_datum_var_internal", "SKSI-GET-DATUM-VAR-INTERNAL", 1, 0, false);
-        declareFunction(me, "sksi_get_datum_var", "SKSI-GET-DATUM-VAR", 1, 0, false);
-        declareFunction(me, "clear_sksi_get_raw_var", "CLEAR-SKSI-GET-RAW-VAR", 0, 0, false);
-        declareFunction(me, "remove_sksi_get_raw_var", "REMOVE-SKSI-GET-RAW-VAR", 1, 0, false);
-        declareFunction(me, "sksi_get_raw_var_internal", "SKSI-GET-RAW-VAR-INTERNAL", 1, 0, false);
-        declareFunction(me, "sksi_get_raw_var", "SKSI-GET-RAW-VAR", 1, 0, false);
-        declareFunction(me, "clear_sksi_get_arg_var", "CLEAR-SKSI-GET-ARG-VAR", 0, 0, false);
-        declareFunction(me, "remove_sksi_get_arg_var", "REMOVE-SKSI-GET-ARG-VAR", 1, 0, false);
-        declareFunction(me, "sksi_get_arg_var_internal", "SKSI-GET-ARG-VAR-INTERNAL", 1, 0, false);
-        declareFunction(me, "sksi_get_arg_var", "SKSI-GET-ARG-VAR", 1, 0, false);
-        declareFunction(me, "sksi_batch_assert", "SKSI-BATCH-ASSERT", 3, 0, false);
-        declareFunction(me, "sksi_batch_add_argument", "SKSI-BATCH-ADD-ARGUMENT", 4, 0, false);
-        declareFunction(me, "sksi_batch_add_argument_return_value_handler", "SKSI-BATCH-ADD-ARGUMENT-RETURN-VALUE-HANDLER", 4, 1, false);
-        declareFunction(me, "sksi_batch_unassert", "SKSI-BATCH-UNASSERT", 2, 0, false);
-        declareFunction(me, "sksi_batch_unassert_return_value_handler", "SKSI-BATCH-UNASSERT-RETURN-VALUE-HANDLER", 3, 1, false);
-        declareFunction(me, "test_sksi_wff_check_batch_translated_sentence", "TEST-SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE", 4, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("set_sksi_batch_translate_only_asserted_meaning_sentences", "SET-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES", 1, 0, false);
+            declareFunction("set_sksi_batch_translate_coerce_types", "SET-SKSI-BATCH-TRANSLATE-COERCE-TYPES", 1, 0, false);
+            declareMacro("with_sksi_batch_translate_only_asserted_meaning_sentences", "WITH-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES");
+            declareMacro("without_sksi_batch_translate_only_asserted_meaning_sentences", "WITHOUT-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES");
+            declareMacro("with_sksi_batch_translate_coerce_types", "WITH-SKSI-BATCH-TRANSLATE-COERCE-TYPES");
+            declareMacro("without_sksi_batch_translate_coerce_types", "WITHOUT-SKSI-BATCH-TRANSLATE-COERCE-TYPES");
+            declareMacro("with_sksi_batch_sql_select_statement", "WITH-SKSI-BATCH-SQL-SELECT-STATEMENT");
+            declareFunction("sksi_batch_assert_translations_of_table", "SKSI-BATCH-ASSERT-TRANSLATIONS-OF-TABLE", 1, 3, false);
+            declareFunction("sksi_batch_assert_all_sk_sources_in_mt", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT", 2, 4, false);
+            declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STREAM", 3, 4, false);
+            declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_string", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STRING", 3, 3, false);
+            declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_file", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-FILE", 4, 3, false);
+            declareFunction("sksi_translate_all_sk_sources_in_mt", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT", 2, 4, false);
+            declareFunction("sksi_translate_all_sk_source_in_just_mt", "SKSI-TRANSLATE-ALL-SK-SOURCE-IN-JUST-MT", 2, 4, false);
+            declareFunction("sksi_translate_all_sk_sources_in_mt_to_stream", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-STREAM", 2, 4, false);
+            declareFunction("sksi_translate_all_sk_sources_in_mt_to_file", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-FILE", 3, 3, false);
+            declareFunction("sksi_translate_all_spec_sk_sources", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES", 2, 4, false);
+            declareFunction("sksi_translate_all_spec_sk_sources_to_stream", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-STREAM", 2, 4, false);
+            declareFunction("sksi_translate_all_spec_sk_sources_to_file", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-FILE", 3, 3, false);
+            declareFunction("sksi_translate_all_simple_sk_source", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE", 2, 4, false);
+            declareFunction("sksi_translate_all_simple_sk_source_to_stream", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE-TO-STREAM", 2, 4, false);
+            declareFunction("sksi_translate_simple_sk_source", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE", 4, 4, false);
+            declareFunction("sksi_translate_simple_sk_source_to_stream", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-STREAM", 4, 4, false);
+            declareFunction("sksi_translate_simple_sk_source_to_file", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-FILE", 5, 3, false);
+            declareFunction("new_sksi_translate_iterator", "NEW-SKSI-TRANSLATE-ITERATOR", 4, 3, false);
+            declareFunction("make_sksi_translate_iterator_state", "MAKE-SKSI-TRANSLATE-ITERATOR-STATE", 8, 0, false);
+            declareFunction("sksi_translate_iterate_done", "SKSI-TRANSLATE-ITERATE-DONE", 1, 0, false);
+            declareFunction("sksi_translate_iterate_next", "SKSI-TRANSLATE-ITERATE-NEXT", 1, 0, false);
+            declareFunction("sksi_translate_one_raw_tuple_to_ist_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-IST-LOGICAL-SENTENCE", 5, 2, false);
+            declareFunction("sksi_translate_one_raw_tuple_to_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE", 5, 1, false);
+            declareFunction("sksi_translate_one_raw_tuple_to_logical_sentence_int", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE-INT", 5, 0, false);
+            declareFunction("sksi_postprocess_translated_sentence", "SKSI-POSTPROCESS-TRANSLATED-SENTENCE", 6, 0, false);
+            declareFunction("sksi_postprocess_translated_asent", "SKSI-POSTPROCESS-TRANSLATED-ASENT", 6, 0, false);
+            declareFunction("sksi_wff_check_batch_translated_sentence", "SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE", 3, 0, false);
+            declareFunction("sksi_remove_untranslatable", "SKSI-REMOVE-UNTRANSLATABLE", 1, 0, false);
+            declareFunction("sentence_contains_untranslatableP", "SENTENCE-CONTAINS-UNTRANSLATABLE?", 1, 0, false);
+            declareFunction("sksi_remove_unreformulatable", "SKSI-REMOVE-UNREFORMULATABLE", 1, 0, false);
+            declareFunction("sentence_contains_unreformulatableP", "SENTENCE-CONTAINS-UNREFORMULATABLE?", 1, 0, false);
+            declareFunction("sksi_translate_raw_tuple", "SKSI-TRANSLATE-RAW-TUPLE", 2, 0, false);
+            declareFunction("sksi_translate_raw_sentence", "SKSI-TRANSLATE-RAW-SENTENCE", 5, 0, false);
+            declareFunction("sksi_translate_decoded_sentence", "SKSI-TRANSLATE-DECODED-SENTENCE", 5, 0, false);
+            declareFunction("new_sk_source_row_iterator", "NEW-SK-SOURCE-ROW-ITERATOR", 3, 3, false);
+            declareFunction("sk_source_row_iterator_next", "SK-SOURCE-ROW-ITERATOR-NEXT", 1, 0, false);
+            declareFunction("sksi_raw_tuple_translation_pattern_internal", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN-INTERNAL", 1, 0, false);
+            declareFunction("sksi_raw_tuple_translation_pattern", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN", 1, 0, false);
+            declareFunction("sksi_raw_sentence_translation_pattern_internal", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN-INTERNAL", 4, 0, false);
+            declareFunction("sksi_raw_sentence_translation_pattern", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN", 4, 0, false);
+            declareFunction("physical_field_has_physical_override", "PHYSICAL-FIELD-HAS-PHYSICAL-OVERRIDE", 2, 0, false);
+            declareFunction("possibly_override_physical_field_value", "POSSIBLY-OVERRIDE-PHYSICAL-FIELD-VALUE", 3, 0, false);
+            declareFunction("sksi_batch_reformulate", "SKSI-BATCH-REFORMULATE", 2, 0, false);
+            declareFunction("sksi_simplify_decoded_sentence", "SKSI-SIMPLIFY-DECODED-SENTENCE", 1, 0, false);
+            declareFunction("sksi_logical_field_indexicals_of_decoded_sentence", "SKSI-LOGICAL-FIELD-INDEXICALS-OF-DECODED-SENTENCE", 1, 0, false);
+            declareFunction("prune_consequent_conditional_meaning_sentences_wrt_antecedents", "PRUNE-CONSEQUENT-CONDITIONAL-MEANING-SENTENCES-WRT-ANTECEDENTS", 4, 0, false);
+            declareFunction("sksi_decoded_sentence_translation_pattern", "SKSI-DECODED-SENTENCE-TRANSLATION-PATTERN", 5, 0, false);
+            declareFunction("sksi_batch_assert_sentence_with_deduced_argument_assuming_table", "SKSI-BATCH-ASSERT-SENTENCE-WITH-DEDUCED-ARGUMENT-ASSUMING-TABLE", 3, 0, false);
+            declareFunction("sksi_batch_assert_sentence_with_deduced_argument", "SKSI-BATCH-ASSERT-SENTENCE-WITH-DEDUCED-ARGUMENT", 4, 0, false);
+            declareFunction("possibly_remember_primary_key_that_resulted_in_raw_tuple", "POSSIBLY-REMEMBER-PRIMARY-KEY-THAT-RESULTED-IN-RAW-TUPLE", 2, 0, false);
+            declareMacro("with_sksi_batch_templates", "WITH-SKSI-BATCH-TEMPLATES");
+            declareMacro("possibly_with_sksi_batch_templates", "POSSIBLY-WITH-SKSI-BATCH-TEMPLATES");
+            declareFunction("initialize_sksi_batch_templates", "INITIALIZE-SKSI-BATCH-TEMPLATES", 0, 0, false);
+            declareFunction("clear_sksi_batch_templates", "CLEAR-SKSI-BATCH-TEMPLATES", 0, 0, false);
+            declareFunction("sksi_batch_template_p", "SKSI-BATCH-TEMPLATE-P", 1, 0, false);
+            declareFunction("sksi_batch_template_allowed_rules", "SKSI-BATCH-TEMPLATE-ALLOWED-RULES", 1, 0, false);
+            declareFunction("sksi_batch_template_use_type_coercionP", "SKSI-BATCH-TEMPLATE-USE-TYPE-COERCION?", 1, 0, false);
+            declareFunction("new_sksi_batch_template", "NEW-SKSI-BATCH-TEMPLATE", 2, 0, false);
+            declareFunction("remember_batch_template_for_future_use", "REMEMBER-BATCH-TEMPLATE-FOR-FUTURE-USE", 4, 0, false);
+            declareFunction("sksi_batch_template_lookup", "SKSI-BATCH-TEMPLATE-LOOKUP", 3, 0, false);
+            declareFunction("sksi_batch_template_enter", "SKSI-BATCH-TEMPLATE-ENTER", 4, 0, false);
+            declareFunction("current_sksi_batch_template", "CURRENT-SKSI-BATCH-TEMPLATE", 0, 0, false);
+            declareFunction("current_sksi_batch_template_allowed_rules", "CURRENT-SKSI-BATCH-TEMPLATE-ALLOWED-RULES", 0, 0, false);
+            declareFunction("sksi_batch_translate_coerce_typesP", "SKSI-BATCH-TRANSLATE-COERCE-TYPES?", 0, 0, false);
+            declareFunction("convert_sql_data_to_strings", "CONVERT-SQL-DATA-TO-STRINGS", 1, 0, false);
+            declareFunction("convert_sql_datum_to_string", "CONVERT-SQL-DATUM-TO-STRING", 1, 0, false);
+            declareFunction("clear_sksi_schema_translation_lifting_rule", "CLEAR-SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
+            declareFunction("remove_sksi_schema_translation_lifting_rule", "REMOVE-SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
+            declareFunction("sksi_schema_translation_lifting_rule_internal", "SKSI-SCHEMA-TRANSLATION-LIFTING-RULE-INTERNAL", 0, 0, false);
+            declareFunction("sksi_schema_translation_lifting_rule", "SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
+            declareFunction("clear_sksi_get_datum_var", "CLEAR-SKSI-GET-DATUM-VAR", 0, 0, false);
+            declareFunction("remove_sksi_get_datum_var", "REMOVE-SKSI-GET-DATUM-VAR", 1, 0, false);
+            declareFunction("sksi_get_datum_var_internal", "SKSI-GET-DATUM-VAR-INTERNAL", 1, 0, false);
+            declareFunction("sksi_get_datum_var", "SKSI-GET-DATUM-VAR", 1, 0, false);
+            declareFunction("clear_sksi_get_raw_var", "CLEAR-SKSI-GET-RAW-VAR", 0, 0, false);
+            declareFunction("remove_sksi_get_raw_var", "REMOVE-SKSI-GET-RAW-VAR", 1, 0, false);
+            declareFunction("sksi_get_raw_var_internal", "SKSI-GET-RAW-VAR-INTERNAL", 1, 0, false);
+            declareFunction("sksi_get_raw_var", "SKSI-GET-RAW-VAR", 1, 0, false);
+            declareFunction("clear_sksi_get_arg_var", "CLEAR-SKSI-GET-ARG-VAR", 0, 0, false);
+            declareFunction("remove_sksi_get_arg_var", "REMOVE-SKSI-GET-ARG-VAR", 1, 0, false);
+            declareFunction("sksi_get_arg_var_internal", "SKSI-GET-ARG-VAR-INTERNAL", 1, 0, false);
+            declareFunction("sksi_get_arg_var", "SKSI-GET-ARG-VAR", 1, 0, false);
+            declareFunction("sksi_batch_assert", "SKSI-BATCH-ASSERT", 3, 0, false);
+            declareFunction("sksi_batch_add_argument", "SKSI-BATCH-ADD-ARGUMENT", 4, 0, false);
+            declareFunction("sksi_batch_add_argument_return_value_handler", "SKSI-BATCH-ADD-ARGUMENT-RETURN-VALUE-HANDLER", 4, 1, false);
+            declareFunction("sksi_batch_unassert", "SKSI-BATCH-UNASSERT", 2, 0, false);
+            declareFunction("sksi_batch_unassert_return_value_handler", "SKSI-BATCH-UNASSERT-RETURN-VALUE-HANDLER", 3, 1, false);
+            declareFunction("test_sksi_wff_check_batch_translated_sentence", "TEST-SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE", 4, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("sksi_batch_assert_all_sk_sources_in_mt", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT", 2, 3, false);
+            declareFunction("sksi_translate_all_sk_sources_in_mt", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT", 2, 3, false);
+            declareFunction("sksi_translate_all_sk_source_in_just_mt", "SKSI-TRANSLATE-ALL-SK-SOURCE-IN-JUST-MT", 2, 3, false);
+            declareFunction("sksi_translate_all_spec_sk_sources", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES", 2, 3, false);
+            declareFunction("sksi_translate_all_simple_sk_source", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE", 2, 3, false);
+            declareFunction("sksi_translate_simple_sk_source", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE", 4, 3, false);
+            declareFunction("sksi_translate_one_raw_tuple_to_ist_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-IST-LOGICAL-SENTENCE", 5, 1, false);
+            declareFunction("sksi_external_sentence_wffP", "SKSI-EXTERNAL-SENTENCE-WFF?", 5, 0, false);
+            declareFunction("new_sk_source_row_iterator", "NEW-SK-SOURCE-ROW-ITERATOR", 3, 2, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_sksi_batch_translate_file_Previous() {
+        declareFunction("set_sksi_batch_translate_only_asserted_meaning_sentences", "SET-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES", 1, 0, false);
+        declareFunction("set_sksi_batch_translate_coerce_types", "SET-SKSI-BATCH-TRANSLATE-COERCE-TYPES", 1, 0, false);
+        declareMacro("with_sksi_batch_translate_only_asserted_meaning_sentences", "WITH-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES");
+        declareMacro("without_sksi_batch_translate_only_asserted_meaning_sentences", "WITHOUT-SKSI-BATCH-TRANSLATE-ONLY-ASSERTED-MEANING-SENTENCES");
+        declareMacro("with_sksi_batch_translate_coerce_types", "WITH-SKSI-BATCH-TRANSLATE-COERCE-TYPES");
+        declareMacro("without_sksi_batch_translate_coerce_types", "WITHOUT-SKSI-BATCH-TRANSLATE-COERCE-TYPES");
+        declareMacro("with_sksi_batch_sql_select_statement", "WITH-SKSI-BATCH-SQL-SELECT-STATEMENT");
+        declareFunction("sksi_batch_assert_translations_of_table", "SKSI-BATCH-ASSERT-TRANSLATIONS-OF-TABLE", 1, 3, false);
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT", 2, 4, false);
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_stream", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STREAM", 3, 4, false);
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_string", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-STRING", 3, 3, false);
+        declareFunction("sksi_batch_assert_all_sk_sources_in_mt_to_ke_file", "SKSI-BATCH-ASSERT-ALL-SK-SOURCES-IN-MT-TO-KE-FILE", 4, 3, false);
+        declareFunction("sksi_translate_all_sk_sources_in_mt", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT", 2, 4, false);
+        declareFunction("sksi_translate_all_sk_source_in_just_mt", "SKSI-TRANSLATE-ALL-SK-SOURCE-IN-JUST-MT", 2, 4, false);
+        declareFunction("sksi_translate_all_sk_sources_in_mt_to_stream", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-STREAM", 2, 4, false);
+        declareFunction("sksi_translate_all_sk_sources_in_mt_to_file", "SKSI-TRANSLATE-ALL-SK-SOURCES-IN-MT-TO-FILE", 3, 3, false);
+        declareFunction("sksi_translate_all_spec_sk_sources", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES", 2, 4, false);
+        declareFunction("sksi_translate_all_spec_sk_sources_to_stream", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-STREAM", 2, 4, false);
+        declareFunction("sksi_translate_all_spec_sk_sources_to_file", "SKSI-TRANSLATE-ALL-SPEC-SK-SOURCES-TO-FILE", 3, 3, false);
+        declareFunction("sksi_translate_all_simple_sk_source", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE", 2, 4, false);
+        declareFunction("sksi_translate_all_simple_sk_source_to_stream", "SKSI-TRANSLATE-ALL-SIMPLE-SK-SOURCE-TO-STREAM", 2, 4, false);
+        declareFunction("sksi_translate_simple_sk_source", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE", 4, 4, false);
+        declareFunction("sksi_translate_simple_sk_source_to_stream", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-STREAM", 4, 4, false);
+        declareFunction("sksi_translate_simple_sk_source_to_file", "SKSI-TRANSLATE-SIMPLE-SK-SOURCE-TO-FILE", 5, 3, false);
+        declareFunction("new_sksi_translate_iterator", "NEW-SKSI-TRANSLATE-ITERATOR", 4, 3, false);
+        declareFunction("make_sksi_translate_iterator_state", "MAKE-SKSI-TRANSLATE-ITERATOR-STATE", 8, 0, false);
+        declareFunction("sksi_translate_iterate_done", "SKSI-TRANSLATE-ITERATE-DONE", 1, 0, false);
+        declareFunction("sksi_translate_iterate_next", "SKSI-TRANSLATE-ITERATE-NEXT", 1, 0, false);
+        declareFunction("sksi_translate_one_raw_tuple_to_ist_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-IST-LOGICAL-SENTENCE", 5, 2, false);
+        declareFunction("sksi_translate_one_raw_tuple_to_logical_sentence", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE", 5, 1, false);
+        declareFunction("sksi_translate_one_raw_tuple_to_logical_sentence_int", "SKSI-TRANSLATE-ONE-RAW-TUPLE-TO-LOGICAL-SENTENCE-INT", 5, 0, false);
+        declareFunction("sksi_postprocess_translated_sentence", "SKSI-POSTPROCESS-TRANSLATED-SENTENCE", 6, 0, false);
+        declareFunction("sksi_postprocess_translated_asent", "SKSI-POSTPROCESS-TRANSLATED-ASENT", 6, 0, false);
+        declareFunction("sksi_wff_check_batch_translated_sentence", "SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE", 3, 0, false);
+        declareFunction("sksi_remove_untranslatable", "SKSI-REMOVE-UNTRANSLATABLE", 1, 0, false);
+        declareFunction("sentence_contains_untranslatableP", "SENTENCE-CONTAINS-UNTRANSLATABLE?", 1, 0, false);
+        declareFunction("sksi_remove_unreformulatable", "SKSI-REMOVE-UNREFORMULATABLE", 1, 0, false);
+        declareFunction("sentence_contains_unreformulatableP", "SENTENCE-CONTAINS-UNREFORMULATABLE?", 1, 0, false);
+        declareFunction("sksi_translate_raw_tuple", "SKSI-TRANSLATE-RAW-TUPLE", 2, 0, false);
+        declareFunction("sksi_translate_raw_sentence", "SKSI-TRANSLATE-RAW-SENTENCE", 5, 0, false);
+        declareFunction("sksi_translate_decoded_sentence", "SKSI-TRANSLATE-DECODED-SENTENCE", 5, 0, false);
+        declareFunction("new_sk_source_row_iterator", "NEW-SK-SOURCE-ROW-ITERATOR", 3, 3, false);
+        declareFunction("sk_source_row_iterator_next", "SK-SOURCE-ROW-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("sksi_raw_tuple_translation_pattern_internal", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN-INTERNAL", 1, 0, false);
+        declareFunction("sksi_raw_tuple_translation_pattern", "SKSI-RAW-TUPLE-TRANSLATION-PATTERN", 1, 0, false);
+        declareFunction("sksi_raw_sentence_translation_pattern_internal", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN-INTERNAL", 4, 0, false);
+        declareFunction("sksi_raw_sentence_translation_pattern", "SKSI-RAW-SENTENCE-TRANSLATION-PATTERN", 4, 0, false);
+        declareFunction("physical_field_has_physical_override", "PHYSICAL-FIELD-HAS-PHYSICAL-OVERRIDE", 2, 0, false);
+        declareFunction("possibly_override_physical_field_value", "POSSIBLY-OVERRIDE-PHYSICAL-FIELD-VALUE", 3, 0, false);
+        declareFunction("sksi_batch_reformulate", "SKSI-BATCH-REFORMULATE", 2, 0, false);
+        declareFunction("sksi_simplify_decoded_sentence", "SKSI-SIMPLIFY-DECODED-SENTENCE", 1, 0, false);
+        declareFunction("sksi_logical_field_indexicals_of_decoded_sentence", "SKSI-LOGICAL-FIELD-INDEXICALS-OF-DECODED-SENTENCE", 1, 0, false);
+        declareFunction("prune_consequent_conditional_meaning_sentences_wrt_antecedents", "PRUNE-CONSEQUENT-CONDITIONAL-MEANING-SENTENCES-WRT-ANTECEDENTS", 4, 0, false);
+        declareFunction("sksi_decoded_sentence_translation_pattern", "SKSI-DECODED-SENTENCE-TRANSLATION-PATTERN", 5, 0, false);
+        declareFunction("sksi_batch_assert_sentence_with_deduced_argument_assuming_table", "SKSI-BATCH-ASSERT-SENTENCE-WITH-DEDUCED-ARGUMENT-ASSUMING-TABLE", 3, 0, false);
+        declareFunction("sksi_batch_assert_sentence_with_deduced_argument", "SKSI-BATCH-ASSERT-SENTENCE-WITH-DEDUCED-ARGUMENT", 4, 0, false);
+        declareFunction("possibly_remember_primary_key_that_resulted_in_raw_tuple", "POSSIBLY-REMEMBER-PRIMARY-KEY-THAT-RESULTED-IN-RAW-TUPLE", 2, 0, false);
+        declareMacro("with_sksi_batch_templates", "WITH-SKSI-BATCH-TEMPLATES");
+        declareMacro("possibly_with_sksi_batch_templates", "POSSIBLY-WITH-SKSI-BATCH-TEMPLATES");
+        declareFunction("initialize_sksi_batch_templates", "INITIALIZE-SKSI-BATCH-TEMPLATES", 0, 0, false);
+        declareFunction("clear_sksi_batch_templates", "CLEAR-SKSI-BATCH-TEMPLATES", 0, 0, false);
+        declareFunction("sksi_batch_template_p", "SKSI-BATCH-TEMPLATE-P", 1, 0, false);
+        declareFunction("sksi_batch_template_allowed_rules", "SKSI-BATCH-TEMPLATE-ALLOWED-RULES", 1, 0, false);
+        declareFunction("sksi_batch_template_use_type_coercionP", "SKSI-BATCH-TEMPLATE-USE-TYPE-COERCION?", 1, 0, false);
+        declareFunction("new_sksi_batch_template", "NEW-SKSI-BATCH-TEMPLATE", 2, 0, false);
+        declareFunction("remember_batch_template_for_future_use", "REMEMBER-BATCH-TEMPLATE-FOR-FUTURE-USE", 4, 0, false);
+        declareFunction("sksi_batch_template_lookup", "SKSI-BATCH-TEMPLATE-LOOKUP", 3, 0, false);
+        declareFunction("sksi_batch_template_enter", "SKSI-BATCH-TEMPLATE-ENTER", 4, 0, false);
+        declareFunction("current_sksi_batch_template", "CURRENT-SKSI-BATCH-TEMPLATE", 0, 0, false);
+        declareFunction("current_sksi_batch_template_allowed_rules", "CURRENT-SKSI-BATCH-TEMPLATE-ALLOWED-RULES", 0, 0, false);
+        declareFunction("sksi_batch_translate_coerce_typesP", "SKSI-BATCH-TRANSLATE-COERCE-TYPES?", 0, 0, false);
+        declareFunction("convert_sql_data_to_strings", "CONVERT-SQL-DATA-TO-STRINGS", 1, 0, false);
+        declareFunction("convert_sql_datum_to_string", "CONVERT-SQL-DATUM-TO-STRING", 1, 0, false);
+        declareFunction("clear_sksi_schema_translation_lifting_rule", "CLEAR-SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
+        declareFunction("remove_sksi_schema_translation_lifting_rule", "REMOVE-SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
+        declareFunction("sksi_schema_translation_lifting_rule_internal", "SKSI-SCHEMA-TRANSLATION-LIFTING-RULE-INTERNAL", 0, 0, false);
+        declareFunction("sksi_schema_translation_lifting_rule", "SKSI-SCHEMA-TRANSLATION-LIFTING-RULE", 0, 0, false);
+        declareFunction("clear_sksi_get_datum_var", "CLEAR-SKSI-GET-DATUM-VAR", 0, 0, false);
+        declareFunction("remove_sksi_get_datum_var", "REMOVE-SKSI-GET-DATUM-VAR", 1, 0, false);
+        declareFunction("sksi_get_datum_var_internal", "SKSI-GET-DATUM-VAR-INTERNAL", 1, 0, false);
+        declareFunction("sksi_get_datum_var", "SKSI-GET-DATUM-VAR", 1, 0, false);
+        declareFunction("clear_sksi_get_raw_var", "CLEAR-SKSI-GET-RAW-VAR", 0, 0, false);
+        declareFunction("remove_sksi_get_raw_var", "REMOVE-SKSI-GET-RAW-VAR", 1, 0, false);
+        declareFunction("sksi_get_raw_var_internal", "SKSI-GET-RAW-VAR-INTERNAL", 1, 0, false);
+        declareFunction("sksi_get_raw_var", "SKSI-GET-RAW-VAR", 1, 0, false);
+        declareFunction("clear_sksi_get_arg_var", "CLEAR-SKSI-GET-ARG-VAR", 0, 0, false);
+        declareFunction("remove_sksi_get_arg_var", "REMOVE-SKSI-GET-ARG-VAR", 1, 0, false);
+        declareFunction("sksi_get_arg_var_internal", "SKSI-GET-ARG-VAR-INTERNAL", 1, 0, false);
+        declareFunction("sksi_get_arg_var", "SKSI-GET-ARG-VAR", 1, 0, false);
+        declareFunction("sksi_batch_assert", "SKSI-BATCH-ASSERT", 3, 0, false);
+        declareFunction("sksi_batch_add_argument", "SKSI-BATCH-ADD-ARGUMENT", 4, 0, false);
+        declareFunction("sksi_batch_add_argument_return_value_handler", "SKSI-BATCH-ADD-ARGUMENT-RETURN-VALUE-HANDLER", 4, 1, false);
+        declareFunction("sksi_batch_unassert", "SKSI-BATCH-UNASSERT", 2, 0, false);
+        declareFunction("sksi_batch_unassert_return_value_handler", "SKSI-BATCH-UNASSERT-RETURN-VALUE-HANDLER", 3, 1, false);
+        declareFunction("test_sksi_wff_check_batch_translated_sentence", "TEST-SKSI-WFF-CHECK-BATCH-TRANSLATED-SENTENCE", 4, 0, false);
         return NIL;
     }
 
@@ -2882,157 +5461,6 @@ public final class sksi_batch_translate extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

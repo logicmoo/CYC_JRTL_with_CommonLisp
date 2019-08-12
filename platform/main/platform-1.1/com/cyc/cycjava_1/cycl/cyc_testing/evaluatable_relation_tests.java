@@ -161,8 +161,7 @@ public  final class evaluatable_relation_tests extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_evaluatable_relation_tests_file() {
-    // CVS_ID("Id: evaluatable-relation-tests.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_evaluatable_relation_test$.getGlobalValue(), Symbols.symbol_function($sym7$EVALUATABLE_RELATION_TEST_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_evaluatable_relation_test$.getGlobalValue(), Symbols.symbol_function($sym7$EVALUATABLE_RELATION_TEST_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$ERT_RELATION, $sym9$_CSETF_ERT_RELATION);
     Structures.def_csetf($sym10$ERT_ID, $sym11$_CSETF_ERT_ID);
     Structures.def_csetf($sym12$ERT_SENTENCE, $sym13$_CSETF_ERT_SENTENCE);

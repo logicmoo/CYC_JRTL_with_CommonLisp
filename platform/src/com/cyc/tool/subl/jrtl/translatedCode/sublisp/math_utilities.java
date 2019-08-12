@@ -425,18 +425,18 @@ public class math_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_math_utilities_file() {
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_ten_to_e", "BELL_TEN-TO-E", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_float_significand", "BELL_FLOAT-SIGNIFICAND", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_float_exponent", "BELL_FLOAT-EXPONENT", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_next_float", "BELL_NEXT-FLOAT", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_prev_float", "BELL_PREV-FLOAT", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_multiply_and_test", "BELL_MULTIPLY-AND-TEST", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bellerophon", "BELLEROPHON", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_fail", "BELL_FAIL", 3, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_compare", "BELL_COMPARE", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "bell_fail_loop", "BELL_FAIL-LOOP", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "fdl_generate", "FDL_GENERATE", 5, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.math_utilities", "flonum_digit_list", "FLONUM-DIGIT-LIST", 1, 0, false);
+        declareFunction("bell_ten_to_e", "BELL_TEN-TO-E", 1, 0, false);
+        declareFunction("bell_float_significand", "BELL_FLOAT-SIGNIFICAND", 1, 0, false);
+        declareFunction("bell_float_exponent", "BELL_FLOAT-EXPONENT", 1, 0, false);
+        declareFunction("bell_next_float", "BELL_NEXT-FLOAT", 1, 0, false);
+        declareFunction("bell_prev_float", "BELL_PREV-FLOAT", 1, 0, false);
+        declareFunction("bell_multiply_and_test", "BELL_MULTIPLY-AND-TEST", 2, 0, false);
+        declareFunction("bellerophon", "BELLEROPHON", 2, 0, false);
+        declareFunction("bell_fail", "BELL_FAIL", 3, 0, false);
+        declareFunction("bell_compare", "BELL_COMPARE", 2, 0, false);
+        declareFunction("bell_fail_loop", "BELL_FAIL-LOOP", 1, 0, false);
+        declareFunction("fdl_generate", "FDL_GENERATE", 5, 0, false);
+        declareFunction("flonum_digit_list", "FLONUM-DIGIT-LIST", 1, 0, false);
         return NIL;
     }
 

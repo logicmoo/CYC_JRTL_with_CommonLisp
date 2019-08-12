@@ -1,39 +1,32 @@
 package com.cyc.cycjava.cycl.inference;
 
 
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.at_var_types;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.cycl_variables;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.defns;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.file_utilities;
-import com.cyc.cycjava.cycl.format_cycl_expression;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.fort_types_interface;
-import com.cyc.cycjava.cycl.genls;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_czer;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava.cycl.inference.rule_applicability_tree;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.map_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.stream_buffer;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.uncanonicalizer;
-import com.cyc.cycjava.cycl.unification;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -45,7 +38,6 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFloat;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
@@ -53,57 +45,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.inference.rule_applicability_tree.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_pretty$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.$read_default_float_format$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class rule_applicability_tree extends SubLTranslatedFile {
+public final class rule_applicability_tree extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new rule_applicability_tree();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.rule_applicability_tree";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.rule_applicability_tree";
 
-    public static final String myFingerPrint = "6c18b3c4181f2dc6a93e995231d519f2836ddc675bb0dcd79e0889f9a7defd02";
 
 
 
@@ -930,30 +877,30 @@ public final class rule_applicability_tree extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_rule_applicability_tree_file() {
-        declareFunction(me, "kbq_extract_collated_rule_variable_bindings_map", "KBQ-EXTRACT-COLLATED-RULE-VARIABLE-BINDINGS-MAP", 1, 0, false);
-        declareFunction(me, "kct_extract_collated_rule_variable_bindings_map", "KCT-EXTRACT-COLLATED-RULE-VARIABLE-BINDINGS-MAP", 1, 0, false);
-        declareFunction(me, "save_rule_variable_map_files", "SAVE-RULE-VARIABLE-MAP-FILES", 2, 0, false);
-        declareFunction(me, "print_hash_pipe_delimited_list", "PRINT-HASH-PIPE-DELIMITED-LIST", 1, 1, false);
-        declareFunction(me, "read_rule_applicability_tree_files", "READ-RULE-APPLICABILITY-TREE-FILES", 1, 0, false);
-        declareFunction(me, "read_rule_applicability_tree_file", "READ-RULE-APPLICABILITY-TREE-FILE", 1, 0, false);
-        declareFunction(me, "canonicalize_rule_applicability_tree_recursive", "CANONICALIZE-RULE-APPLICABILITY-TREE-RECURSIVE", 1, 0, false);
-        declareFunction(me, "rule_applicability_tree", "RULE-APPLICABILITY-TREE", 1, 0, false);
-        declareFunction(me, "rule_has_applicability_treeP", "RULE-HAS-APPLICABILITY-TREE?", 1, 0, false);
-        declareFunction(me, "generalized_transformation_link_success_probability_estimate", "GENERALIZED-TRANSFORMATION-LINK-SUCCESS-PROBABILITY-ESTIMATE", 1, 0, false);
-        declareFunction(me, "rule_bindings_success_probability_estimate", "RULE-BINDINGS-SUCCESS-PROBABILITY-ESTIMATE", 2, 0, false);
-        declareFunction(me, "rule_bindings_success_probability_estimate_recursive", "RULE-BINDINGS-SUCCESS-PROBABILITY-ESTIMATE-RECURSIVE", 2, 0, false);
-        declareFunction(me, "rule_bindings_value_satisfies_constraintP", "RULE-BINDINGS-VALUE-SATISFIES-CONSTRAINT?", 2, 0, false);
-        declareFunction(me, "rule_bindings_match_probability", "RULE-BINDINGS-MATCH-PROBABILITY", 2, 0, false);
-        declareFunction(me, "generalized_transformation_link_bindings_wrt_applicability_tree", "GENERALIZED-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
-        declareFunction(me, "transformation_link_bindings_wrt_applicability_tree", "TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
-        declareFunction(me, "residual_transformation_link_bindings_wrt_applicability_tree", "RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
-        declareFunction(me, "transformation_link_bindings_wrt_applicability_tree_memoized_internal", "TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "transformation_link_bindings_wrt_applicability_tree_memoized", "TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED", 1, 0, false);
-        declareFunction(me, "residual_transformation_link_bindings_wrt_applicability_tree_memoized_internal", "RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "residual_transformation_link_bindings_wrt_applicability_tree_memoized", "RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED", 1, 0, false);
-        declareFunction(me, "compute_bindings_wrt_applicability_tree", "COMPUTE-BINDINGS-WRT-APPLICABILITY-TREE", 2, 0, false);
-        declareFunction(me, "problem_variable_constraints_wrt_applicability", "PROBLEM-VARIABLE-CONSTRAINTS-WRT-APPLICABILITY", 2, 0, false);
-        declareFunction(me, "problem_query_wrt_var", "PROBLEM-QUERY-WRT-VAR", 2, 0, false);
+        declareFunction("kbq_extract_collated_rule_variable_bindings_map", "KBQ-EXTRACT-COLLATED-RULE-VARIABLE-BINDINGS-MAP", 1, 0, false);
+        declareFunction("kct_extract_collated_rule_variable_bindings_map", "KCT-EXTRACT-COLLATED-RULE-VARIABLE-BINDINGS-MAP", 1, 0, false);
+        declareFunction("save_rule_variable_map_files", "SAVE-RULE-VARIABLE-MAP-FILES", 2, 0, false);
+        declareFunction("print_hash_pipe_delimited_list", "PRINT-HASH-PIPE-DELIMITED-LIST", 1, 1, false);
+        declareFunction("read_rule_applicability_tree_files", "READ-RULE-APPLICABILITY-TREE-FILES", 1, 0, false);
+        declareFunction("read_rule_applicability_tree_file", "READ-RULE-APPLICABILITY-TREE-FILE", 1, 0, false);
+        declareFunction("canonicalize_rule_applicability_tree_recursive", "CANONICALIZE-RULE-APPLICABILITY-TREE-RECURSIVE", 1, 0, false);
+        declareFunction("rule_applicability_tree", "RULE-APPLICABILITY-TREE", 1, 0, false);
+        declareFunction("rule_has_applicability_treeP", "RULE-HAS-APPLICABILITY-TREE?", 1, 0, false);
+        declareFunction("generalized_transformation_link_success_probability_estimate", "GENERALIZED-TRANSFORMATION-LINK-SUCCESS-PROBABILITY-ESTIMATE", 1, 0, false);
+        declareFunction("rule_bindings_success_probability_estimate", "RULE-BINDINGS-SUCCESS-PROBABILITY-ESTIMATE", 2, 0, false);
+        declareFunction("rule_bindings_success_probability_estimate_recursive", "RULE-BINDINGS-SUCCESS-PROBABILITY-ESTIMATE-RECURSIVE", 2, 0, false);
+        declareFunction("rule_bindings_value_satisfies_constraintP", "RULE-BINDINGS-VALUE-SATISFIES-CONSTRAINT?", 2, 0, false);
+        declareFunction("rule_bindings_match_probability", "RULE-BINDINGS-MATCH-PROBABILITY", 2, 0, false);
+        declareFunction("generalized_transformation_link_bindings_wrt_applicability_tree", "GENERALIZED-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
+        declareFunction("transformation_link_bindings_wrt_applicability_tree", "TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
+        declareFunction("residual_transformation_link_bindings_wrt_applicability_tree", "RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE", 1, 0, false);
+        declareFunction("transformation_link_bindings_wrt_applicability_tree_memoized_internal", "TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("transformation_link_bindings_wrt_applicability_tree_memoized", "TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED", 1, 0, false);
+        declareFunction("residual_transformation_link_bindings_wrt_applicability_tree_memoized_internal", "RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("residual_transformation_link_bindings_wrt_applicability_tree_memoized", "RESIDUAL-TRANSFORMATION-LINK-BINDINGS-WRT-APPLICABILITY-TREE-MEMOIZED", 1, 0, false);
+        declareFunction("compute_bindings_wrt_applicability_tree", "COMPUTE-BINDINGS-WRT-APPLICABILITY-TREE", 2, 0, false);
+        declareFunction("problem_variable_constraints_wrt_applicability", "PROBLEM-VARIABLE-CONSTRAINTS-WRT-APPLICABILITY", 2, 0, false);
+        declareFunction("problem_query_wrt_var", "PROBLEM-QUERY-WRT-VAR", 2, 0, false);
         return NIL;
     }
 

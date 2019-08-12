@@ -317,8 +317,7 @@ public  final class hl_prototypes extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_hl_prototypes_file() {
-    // CVS_ID("Id: hl-prototypes.lisp 128128 2009-06-24 15:33:11Z daves ");
-    subl_macro_promotions.declare_defglobal($sym0$_HL_PROTOTYPE_HITS_);
+        subl_macro_promotions.declare_defglobal($sym0$_HL_PROTOTYPE_HITS_);
     subl_macro_promotions.declare_defglobal($sym1$_HL_PROTOTYPE_HIT_TABLE_);
     subl_macro_promotions.declare_defglobal($sym2$_HL_PROTOTYPE_MISSES_);
     utilities_macros.register_kb_function($sym5$HL_PROTOTYPICAL_INSTANCE_AFTER_ADDING);

@@ -4233,8 +4233,7 @@ if you want to include the time spent so far in the current continuation. */
   }
 
   public static final SubLObject setup_inference_datastructures_inference_file() {
-    // CVS_ID("Id: inference-datastructures-inference.lisp 128951 2009-10-15 01:53:53Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_inference$.getGlobalValue(), Symbols.symbol_function($sym57$INFERENCE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_inference$.getGlobalValue(), Symbols.symbol_function($sym57$INFERENCE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym58$INFRNC_SUID, $sym59$_CSETF_INFRNC_SUID);
     Structures.def_csetf($sym60$INFRNC_PROBLEM_STORE, $sym61$_CSETF_INFRNC_PROBLEM_STORE);
     Structures.def_csetf($sym62$INFRNC_FORWARD_PROPAGATE, $sym63$_CSETF_INFRNC_FORWARD_PROPAGATE);

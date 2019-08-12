@@ -149,8 +149,7 @@ public  final class bijection extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_bijection_file() {
-    // CVS_ID("Id: bijection.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_bijection$.getGlobalValue(), Symbols.symbol_function($sym9$BIJECTION_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_bijection$.getGlobalValue(), Symbols.symbol_function($sym9$BIJECTION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym10$BIJECTION_SIZE, $sym11$_CSETF_BIJECTION_SIZE);
     Structures.def_csetf($sym12$BIJECTION_DATABASE, $sym13$_CSETF_BIJECTION_DATABASE);
     Structures.def_csetf($sym14$BIJECTION_INVERSE_DATABASE, $sym15$_CSETF_BIJECTION_INVERSE_DATABASE);

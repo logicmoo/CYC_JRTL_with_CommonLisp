@@ -556,8 +556,7 @@ ROBUST requests more thorough checking. */
   }
 
   public static final SubLObject setup_deduction_handles_file() {
-    // CVS_ID("Id: deduction-handles.lisp 128690 2009-09-02 19:44:47Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_DEDUCTION_FROM_ID_);
+        subl_macro_promotions.declare_defglobal($sym0$_DEDUCTION_FROM_ID_);
     utilities_macros.register_cyc_api_macro($sym10$DO_DEDUCTIONS, $list2, $str11$Iterate_over_all_HL_deduction_dat);
     access_macros.register_macro_helper($sym16$DO_DEDUCTIONS_TABLE, $sym10$DO_DEDUCTIONS);
     access_macros.register_macro_helper($sym17$CREATE_DEDUCTION_DUMP_ID_TABLE, $sym18$WITH_DEDUCTION_DUMP_ID_TABLE);

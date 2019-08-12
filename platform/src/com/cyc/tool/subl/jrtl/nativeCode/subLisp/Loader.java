@@ -1,18 +1,26 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.*;
+import java.util.List;
 
-import org.armedbear.lisp.*;
+import org.armedbear.lisp.Lisp;
 
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.exception.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.operator.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.*;
-import com.cyc.tool.subl.util.*;
+import com.cyc.cycjava.cycl.V02;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
+import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ResumeException;
+import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.PatchFileLoader;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLFiles;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 public class Loader {
     private static final List<Runnable>[] Passes = new List[] { new ArrayList<Runnable>(), new ArrayList<Runnable>(), new ArrayList<Runnable>() };
@@ -25,11 +33,16 @@ public class Loader {
     public static List<String> notAgain = new ArrayList<String>();
     public static List<String> shouldOverride = new ArrayList<String>();
     public static List<String> skippedClasses = new ArrayList<String>();
+    public static boolean usePrevious = true;
+    public static boolean else_do = true;
+    public static String suffix = "";
 
     static {
 	//skippedClasses.add("com.cyc.cycjava.cycl.kbi_.*");
-	skippedClasses.add("com.cyc.cycjava_2.cycl.cfasl.*");
-	skippedClasses.add("com.cyc.cycjava_2.cycl.dictionary.*");
+	if (false) {
+	    skippedClasses.add("com.cyc.cycjava_.*.cycl.cfasl.*");
+	    skippedClasses.add("com.cyc.cycjava_.*.cycl.dictionary.*");
+	}
 	// skippedClasses.add("com.cyc.cycjava_3.cycl.cfasl.*");
 	// skippedClasses.add("com.cyc.cycjava_2.cycl.dictionary.*");
 
@@ -105,68 +118,71 @@ public class Loader {
 	shouldOverride.add(string);
     }
 
-    public static void initialize_subl_file_ORIG(SubLFile file) {
-	org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
-	SubLFile was = currentFile;
-	Object statge = currentStage;
-	Class fileClass = file.getClass();
-	try {
-	    currentFile = file;
-	    currentStage = "declareFunctions";
-	    file.declareFunctions();
-	    file.initializeVariables();
-
-	    file.runTopLevelForms();
-	} catch (Throwable e) {
-	    currentStage = currentStage + "_ERROR";
-	    e.printStackTrace();
-	    try {
-		Errors.cerror("Continue.", "Error initializing SubL file: " + file.getClass().getName(), e);
-	    } catch (ResumeException re) {
-	    }
-	} finally {
-	    currentFile = was;
-	    currentStage = statge;
-	    SubLPackage.setCurrentPackage(p);
-	}
-    }
-
     public static void initialize_subl_file(SubLFile file) {
-	if (true) {
-	    initialize_subl_file_ORIG(file);
-	    return;
-	}
 	org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
 	SubLFile was = currentFile;
 	Object statge = currentStage;
 	Class fileClass = file.getClass();
+	String fileClassName = fileClass.getName();
+	String wasCN = SubLFiles.currentClassName;
+	try {
+	    Field f = fileClass.getDeclaredField("myName");
+	    String maybeFileClassName = (String) f.get(null);
+	    if (maybeFileClassName != null) {
+		if (fileClassName == null || !fileClassName.contentEquals(maybeFileClassName)) {
+		    //  Errors.warn("maybeFileClassName: " + fileClassName + " -> " + maybeFileClassName);
+		    //fileClassName = maybeFileClassName;
+		}
+	    }
+	} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e1) {
+	}
+
+	boolean wasUUSE_V1 = SubLFiles.USE_V1;
+	boolean wasUUSE_V2 = SubLFiles.USE_V2;
+	boolean pass2 = false;
+
+	String wasoriginalFileClassName = "" + SubLFiles.originalFileClassName;
+
+	if (wasoriginalFileClassName.contains(".cycjava.")) {
+	    SubLFiles.USE_V1 = true;
+	    SubLFiles.USE_V2 = false;
+	} else if (wasoriginalFileClassName.contains(".cycjava_2.")) {
+	    SubLFiles.USE_V1 = false;
+	    SubLFiles.USE_V2 = true;
+	    pass2 = true;
+	}
+	if (V02.class.isInstance(file)) {
+	    else_do = true;
+	}
+
 	try {
 	    currentFile = file;
+	    SubLFiles.currentClassName = fileClassName;
+
 	    currentStage = "declareFunctions";
-	    file.declareFunctions();
-	    maybeCallBaseMethod(0, "declare_", fileClass);
+	    boolean hasAlt = hasMethod("declare_|_file" + "_alt", fileClass);
+	    if (!pass2 || (hasAlt && pass2) || else_do) {
+		if (!usePrevious || !maybeCallMethod("declare_|_file" + suffix, fileClass))
+		    if (else_do)
+			file.declareFunctions();
+	    }
+
 	    currentStage = "initializeVariables";
-	    addPass(1, () -> {
-		file.initializeVariables();
-		try {
-		    maybeCallBaseMethod(1, "init_", fileClass);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-		currentStage = "initializeFns";
-		SubLFiles.initializeFns();
-	    });
-	    addPass(2, () -> {
-		currentStage = "runTopLevelForms";
-		file.runTopLevelForms();
-		try {
-		    maybeCallBaseMethod(2, "setup_", fileClass);
-		} catch (NoSuchMethodException | SecurityException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-		    // TODO Auto-generated catch block
-		    e.printStackTrace();
-		}
-	    });
+	    hasAlt = hasMethod("init_|_file" + "_alt", fileClass);
+	    if (!pass2 || (hasAlt && pass2) || else_do) {
+		if (!usePrevious || !maybeCallMethod("init_|_file" + suffix, fileClass))
+		    if (else_do)
+			file.initializeVariables();
+	    }
+
+	    currentStage = "runTopLevelForms";
+	    hasAlt = hasMethod("setup_|_file" + "_alt", fileClass);
+	    if (!pass2 || (hasAlt && pass2) || else_do) {
+		if (!usePrevious || !maybeCallMethod("setup_|_file" + suffix, fileClass))
+		    if (else_do)
+			file.runTopLevelForms();
+	    }
+
 	} catch (Throwable e) {
 	    currentStage = currentStage + "_ERROR";
 	    e.printStackTrace();
@@ -177,6 +193,9 @@ public class Loader {
 	} finally {
 	    currentFile = was;
 	    currentStage = statge;
+	    SubLFiles.currentClassName = wasCN;
+	    SubLFiles.USE_V1 = wasUUSE_V1;
+	    SubLFiles.USE_V2 = wasUUSE_V2;
 	    SubLPackage.setCurrentPackage(p);
 	}
     }
@@ -221,7 +240,7 @@ public class Loader {
 	}
     }
 
-    public static void initialize_subl_file_exact(String className, boolean b) {
+    public static void initialize_subl_file_exact(String className, boolean isExact) {
 	String shortClassName = className.substring(className.indexOf(".cycl.") + 1);
 	if (skippedClasses.contains(className)) {
 	    return;
@@ -241,8 +260,8 @@ public class Loader {
 	    }
 	}
 
-	org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
-
+	final org.armedbear.lisp.Package p = SubLPackage.getCurrentPackage();
+	final String wasOrigFileClassName = SubLFiles.originalFileClassName;
 	boolean removeAgain = true;
 	boolean was = SubLTranslatedFile.installingUnderlay;
 
@@ -266,28 +285,10 @@ public class Loader {
 	{
 	    if (p != Lisp.PACKAGE_SUBLISP && p != Lisp.PACKAGE_CYC)
 		SubLPackage.setCurrentPackage("CYC");
+	    SubLFiles.originalFileClassName = className;
 	    try {
 		final ClassLoader pATCH_FILE_LOADER = PatchFileLoader.PATCH_FILE_LOADER;
-		Class clazz = null;
-		try {
-		    if (clazz == null)
-			clazz = pATCH_FILE_LOADER.loadClass(className);
-		} catch (ClassNotFoundException e) {
-		    String otherClassName = className.replace(".cycjava_2.", ".cycjava_0.");
-		    if (otherClassName.equals(className)) {
-			otherClassName = className.replace(".cycjava.", ".cycjava_0.");
-		    }
-		    try {
-			clazz = pATCH_FILE_LOADER.loadClass(otherClassName);
-		    } catch (ClassNotFoundException e3) {
-			otherClassName = className.replace(".cycjava_2.", ".cycjava.");
-			if (otherClassName.equals(className)) {
-			    otherClassName = className.replace(".cycjava.", ".cycjava_2.");
-			}
-			clazz = pATCH_FILE_LOADER.loadClass(otherClassName);
-		    }
-		}
-
+		Class clazz = findClassOrNearby(className, pATCH_FILE_LOADER, isExact);
 		initialize_subl_file(clazz);
 		removeAgain = false;
 	    } catch (Throwable e) {
@@ -295,6 +296,7 @@ public class Loader {
 		Errors.cerror("Continue.", "Error initializing SubL file: " + className, e);
 	    }
 	} finally {
+	    SubLFiles.originalFileClassName = wasOrigFileClassName;
 	    if (!was && SubLTranslatedFile.installingUnderlay) {
 		SubLTranslatedFile.installingUnderlay = false;
 	    }
@@ -302,6 +304,43 @@ public class Loader {
 		notAgain.remove(className);
 	    SubLPackage.setCurrentPackage(p);
 	}
+    }
+
+    /**
+     * TODO Describe the purpose of this method.
+     * @param className
+     * @param pATCH_FILE_LOADER
+     * @param isExact 
+     * @return
+     * @throws ClassNotFoundException
+     */
+    private static Class findClassOrNearby(String className, final ClassLoader pATCH_FILE_LOADER, boolean isExact) throws ClassNotFoundException {
+	Class clazz = null;
+	try {
+	    if (clazz == null)
+		clazz = pATCH_FILE_LOADER.loadClass(className);
+	} catch (ClassNotFoundException e) {
+	    if (isExact)
+		throw e;
+	    String otherClassName = className.replace(".cycjava_2.", ".cycjava_0.");
+	    if (otherClassName.equals(className)) {
+		otherClassName = className.replace(".cycjava.", ".cycjava_0.");
+	    }
+	    try {
+		clazz = pATCH_FILE_LOADER.loadClass(otherClassName);
+	    } catch (ClassNotFoundException e3) {
+		otherClassName = className.replace(".cycjava_2.", ".cycjava.");
+		if (otherClassName.equals(className)) {
+		    otherClassName = className.replace(".cycjava.", ".cycjava_2.");
+		}
+		try {
+		    clazz = pATCH_FILE_LOADER.loadClass(otherClassName);
+		} catch (ClassNotFoundException e2) {
+		    throw e;
+		}
+	    }
+	}
+	return clazz;
     }
 
     /**
@@ -325,7 +364,7 @@ public class Loader {
      * @throws IllegalArgumentException
      * @throws InvocationTargetException
      */
-    static boolean maybeCallBaseMethod(int n, String prefix, Class fileClass) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    static boolean maybeCallBaseMethod(int n, String prefix, Class fileClass, boolean superClass) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 	Class superCl = fileClass.getSuperclass();
 	if (superCl == java.lang.Object.class || superCl == null)
 	    return false;
@@ -356,8 +395,46 @@ public class Loader {
 	return true;
     }
 
-    public static void declareFunction(Class file, String className, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
+    /**
+     * TODO Describe the purpose of this method.
+     * @param string
+     * @param fileClass
+     * @return
+     */
+    private static boolean maybeCallMethod(String string, Class fileClass) {
+	String shortName = fileClass.getSimpleName();
+	String superMethod = string.replace("|", shortName);
+	Method m;
+	try {
+	    m = fileClass.getDeclaredMethod(superMethod);
+	} catch (NoSuchMethodException e) {
+	    return false;
+	}
+	m.setAccessible(true);
+	try {
+	    m.invoke(null);
+	} catch (Exception e) {
+	    e.printStackTrace();
+	}
+	return true;
+    }
+
+    private static boolean hasMethod(String string, Class fileClass) {
+	String shortName = fileClass.getSimpleName();
+	String superMethod = string.replace("|", shortName);
+	Method m;
+	try {
+	    m = fileClass.getDeclaredMethod(superMethod);
+	} catch (NoSuchMethodException e) {
+	    return false;
+	}
+	return true;
+    }
+
+    public static SubLFunction declareFunction(Class file, String className, String methodName, String functionName, int requiredArgCount, int optionalArgCount, boolean allowsRest) {
 	final boolean neverRedefine = SubLMain.Never_REDEFINE;
+	final boolean alwaysRedefine = SubLMain.Always_REDEFINE;
+
 	try {
 	    List<Class> parameterTypes = new ArrayList<Class>();
 	    for (int i = 0; i < requiredArgCount + optionalArgCount; i++)
@@ -368,34 +445,42 @@ public class Loader {
 	    Method meth = null;
 
 	    if (file != null) {
-		meth = file.getMethod(methodName, parameterArray);
+		meth = getMethod(file, methodName, parameterArray);
 	    }
 
-	    SubLPackage currentPackage = Packages.$package$.getDynamicValue().toPackage();
+	    SubLPackage currentPackage = SubLPackage.getCurrentPackage();
 	    SubLSymbol functionSymbol = SubLObjectFactory.makeSymbol(functionName);
 
 	    if (!functionSymbol.fboundp()) {
+		SubLFunction using;
 		if (meth == null) {
-		    SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+		    using = SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 		} else {
-		    SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+		    using = SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 		}
-		return;
+		return using;
 	    }
 
 	    // Conflicts??!
 	    SubLFunction previous = null;
 	    previous = functionSymbol.getFunc();
+	    if (previous.isMacroOperator()) {
+		previous = previous.toMacro().getMacroExpander();
+	    }
 	    final int b = parameterArray.length - previous.applyArity() + (previous.allowsRest() ? 1 : 0);
 	    if (b == 0) {
 		if (SubLTranslatedFile.installingUnderlay) {
-		    return;
+		    if (!alwaysRedefine)
+			return previous;
 		}
-		Errors.warn("Attempt to redefine: " + functionSymbol);
-		return;
+		if (!alwaysRedefine) {
+		    Errors.warn("Attempt to redefine: " + functionSymbol);
+		    return previous;
+		}
 	    }
 	    if (SubLTranslatedFile.installingUnderlay) {
-		return;
+		if (!alwaysRedefine)
+		    return previous;
 	    }
 	    SubLSymbol found = functionSymbol;
 	    final SubLPackage package1 = found.getPackage();
@@ -410,29 +495,64 @@ public class Loader {
 		    if (functionSymbol == null) {
 			functionSymbol = currentPackage.internAndExport(functionName);
 		    }
+		    SubLFunction using;
 		    if (meth == null) {
-			SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+			using = SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 		    } else {
-			SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+			using = SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 		    }
 		    Errors.warn("Defining " + functionSymbol + " not using " + found);
-		    return;
+		    return using;
 		}
 	    }
-	    if (neverRedefine) {
+
+	    if (alwaysRedefine) {
+		//Errors.warn("ALWAYS Redefining " + functionSymbol);
+	    } else if (neverRedefine) {
 		Errors.warn("NEVER Redefining " + functionSymbol);
-		return;
+		return previous;
 	    }
 
 	    // SubLFunction func =
 	    if (meth == null) {
-		SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+		return SubLObjectFactory.makeCompiledFunction(className, methodName, parameterArray, SubLObject.class, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 	    } else {
-		SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
+		return SubLObjectFactory.makeCompiledFunction(meth, functionSymbol, requiredArgCount, optionalArgCount, allowsRest);
 	    }
 	} catch (Exception e) {
 	    Errors.cerror("Continue.", "Error while declaring function: " + functionName, e);
+	    return null;
 	}
+    }
+
+    /**
+     * TODO Describe the purpose of this method.
+     * @param file
+     * @param methodName
+     * @param parameterArray
+     * @return
+     * @throws SecurityException 
+     * @throws NoSuchMethodException 
+     */
+    private static Method getMethod(Class file, String methodName, Class[] parameterArray) throws NoSuchMethodException, SecurityException {
+	try {
+	    return file.getMethod(methodName, parameterArray);
+	} catch (NoSuchMethodException | SecurityException e) {
+	    return file.getMethod(methodName + "_alt", parameterArray);
+	}
+    }
+
+    /**
+     * TODO Describe the purpose of this method.
+     * @param methodClassStr
+     * @return
+     */
+    public static String altClassString(String methodClassStr) {
+	if (methodClassStr.contains("cycjava_2"))
+	    return methodClassStr.replace("cycjava_2", "cycjava");
+	if (methodClassStr.contains("cycjava"))
+	    return methodClassStr.replace("cycjava", "cycjava_2");
+	return methodClassStr + "_base";
     }
 
 }

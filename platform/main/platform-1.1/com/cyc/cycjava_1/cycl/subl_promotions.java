@@ -300,8 +300,7 @@ public  final class subl_promotions extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_subl_promotions_file() {
-    // CVS_ID("Id: subl-promotions.lisp 128498 2009-08-05 22:38:47Z daves ");
-    subl_macro_promotions.declare_defglobal($sym0$_MAKE_PROCESS_WITH_ARGS_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym0$_MAKE_PROCESS_WITH_ARGS_TABLE_);
     subl_macro_promotions.declare_defglobal($sym8$_INTERRUPT_PROCESS_WITH_ARGS_TABLE_);
     return NIL;
   }

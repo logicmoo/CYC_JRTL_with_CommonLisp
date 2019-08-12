@@ -1,8 +1,17 @@
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava.cycl.upward_ontology_closure;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -12,34 +21,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.upward_ontology_closure.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class upward_ontology_closure extends SubLTranslatedFile {
+public final class upward_ontology_closure extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new upward_ontology_closure();
 
-    public static final String myName = "com.cyc.cycjava.cycl.upward_ontology_closure";
+    public static final String myName = "com.cyc.cycjava_2.cycl.upward_ontology_closure";
 
-    public static final String myFingerPrint = "3d78083ff734c2be4a53b5413281c37e8d785f178ad04e99348bf812b9b29c87";
 
     // defparameter
     private static final SubLSymbol $upward_ontology_closure_trace$ = makeSymbol("*UPWARD-ONTOLOGY-CLOSURE-TRACE*");
@@ -463,12 +450,12 @@ public final class upward_ontology_closure extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_upward_ontology_closure_file() {
-        declareFunction(me, "upward_ontology_closure_wrt_inference", "UPWARD-ONTOLOGY-CLOSURE-WRT-INFERENCE", 1, 2, false);
-        declareFunction(me, "inference_complete_vocabulary_wrt_answers", "INFERENCE-COMPLETE-VOCABULARY-WRT-ANSWERS", 1, 0, false);
-        declareFunction(me, "inference_complete_backward_theory_for_answers", "INFERENCE-COMPLETE-BACKWARD-THEORY-FOR-ANSWERS", 1, 0, false);
-        declareFunction(me, "upward_ontology_closure", "UPWARD-ONTOLOGY-CLOSURE", 1, 2, false);
-        declareFunction(me, "upward_ontology_closure_possibly_add_new_term_via", "UPWARD-ONTOLOGY-CLOSURE-POSSIBLY-ADD-NEW-TERM-VIA", 4, 0, false);
-        declareFunction(me, "all_arg_constraint_preds", "ALL-ARG-CONSTRAINT-PREDS", 0, 0, false);
+        declareFunction("upward_ontology_closure_wrt_inference", "UPWARD-ONTOLOGY-CLOSURE-WRT-INFERENCE", 1, 2, false);
+        declareFunction("inference_complete_vocabulary_wrt_answers", "INFERENCE-COMPLETE-VOCABULARY-WRT-ANSWERS", 1, 0, false);
+        declareFunction("inference_complete_backward_theory_for_answers", "INFERENCE-COMPLETE-BACKWARD-THEORY-FOR-ANSWERS", 1, 0, false);
+        declareFunction("upward_ontology_closure", "UPWARD-ONTOLOGY-CLOSURE", 1, 2, false);
+        declareFunction("upward_ontology_closure_possibly_add_new_term_via", "UPWARD-ONTOLOGY-CLOSURE-POSSIBLY-ADD-NEW-TERM-VIA", 4, 0, false);
+        declareFunction("all_arg_constraint_preds", "ALL-ARG-CONSTRAINT-PREDS", 0, 0, false);
         return NIL;
     }
 

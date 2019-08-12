@@ -600,8 +600,7 @@ public  final class set_contents extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_set_contents_file() {
-    // CVS_ID("Id: set-contents.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym17$DO_SET_CONTENTS_BASIS_OBJECT, $sym26$DO_SET_CONTENTS);
+        access_macros.register_macro_helper($sym17$DO_SET_CONTENTS_BASIS_OBJECT, $sym26$DO_SET_CONTENTS);
     access_macros.register_macro_helper($sym19$DO_SET_CONTENTS_INITIAL_STATE, $sym26$DO_SET_CONTENTS);
     access_macros.register_macro_helper($sym20$DO_SET_CONTENTS_UPDATE_STATE, $sym26$DO_SET_CONTENTS);
     access_macros.register_macro_helper($sym22$DO_SET_CONTENTS_DONE_, $sym26$DO_SET_CONTENTS);

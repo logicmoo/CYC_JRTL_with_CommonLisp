@@ -130,8 +130,7 @@ public  final class unrepresented_term_index_manager extends SubLTranslatedFile 
   }
 
   public static final SubLObject setup_unrepresented_term_index_manager_file() {
-    // CVS_ID("Id: unrepresented-term-index-manager.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_UNREPRESENTED_TERM_INDEX_MANAGER_);
+        subl_macro_promotions.declare_defglobal($sym0$_UNREPRESENTED_TERM_INDEX_MANAGER_);
     return NIL;
   }
 

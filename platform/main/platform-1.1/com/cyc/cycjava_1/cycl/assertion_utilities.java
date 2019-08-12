@@ -736,8 +736,7 @@ public  final class assertion_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_assertion_utilities_file() {
-    // CVS_ID("Id: assertion-utilities.lisp 128428 2009-07-28 19:56:06Z goolsbey ");
-    utilities_macros.register_cyc_api_function($sym64$ASSERTION_HAS_META_ASSERTIONS_, $list65, $str66$Return_T_iff_ASSERTION_has_some_m, $list67, $list68);
+        utilities_macros.register_cyc_api_function($sym64$ASSERTION_HAS_META_ASSERTIONS_, $list65, $str66$Return_T_iff_ASSERTION_has_some_m, $list67, $list68);
     memoization_state.note_globally_cached_function($sym83$CACHED_SELF_LOOPING_RULE_ASSERTION_);
     memoization_state.note_globally_cached_function($sym86$CACHED_SELF_EXPANDING_RULE_ASSERTION_);
     return NIL;

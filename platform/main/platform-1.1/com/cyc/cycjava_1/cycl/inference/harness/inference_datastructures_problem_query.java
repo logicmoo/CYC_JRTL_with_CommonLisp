@@ -465,8 +465,7 @@ whose single element is an atomic-clause-p */
   }
 
   public static final SubLObject setup_inference_datastructures_problem_query_file() {
-    // CVS_ID("Id: inference-datastructures-problem-query.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.note_funcall_helper_function($sym34$FORMULA_TERM_SIGNATURE_VISIT);
+        utilities_macros.note_funcall_helper_function($sym34$FORMULA_TERM_SIGNATURE_VISIT);
     return NIL;
   }
 

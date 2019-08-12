@@ -1687,8 +1687,7 @@ if specified. */
   }
 
   public static final SubLObject setup_inference_czer_file() {
-    // CVS_ID("Id: inference-czer.lisp 128085 2009-06-22 16:31:33Z pace ");
-    subl_macro_promotions.declare_defglobal($sym18$_VARIABLE_TOKEN_);
+        subl_macro_promotions.declare_defglobal($sym18$_VARIABLE_TOKEN_);
     memoization_state.note_memoized_function($sym33$INFERENCE_CANONICALIZE_ASK_MEMOIZED);
     return NIL;
   }

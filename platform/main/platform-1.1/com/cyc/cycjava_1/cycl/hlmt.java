@@ -900,8 +900,7 @@ public  final class hlmt extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_hlmt_file() {
-    // CVS_ID("Id: hlmt.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_external_symbol($sym20$UNION_MT_RELEVANCE_CONTEXTS);
+        access_macros.register_external_symbol($sym20$UNION_MT_RELEVANCE_CONTEXTS);
     access_macros.register_macro_helper($sym41$MT_DIMENSION_OF_ARG, $sym48$DO_MT_DIMENSIONS);
     memoization_state.note_globally_cached_function($sym57$REDUCE_MT_UNION_HLMT_INT);
     return NIL;

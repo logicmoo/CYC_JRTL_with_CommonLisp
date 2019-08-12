@@ -103,12 +103,12 @@ public interface CommonSymbols extends CommonSymbols_KW {
     SubLSymbol SSS = makeSublispSymbol("***");
 
     // @TODO defvarCheckCL
-    public static final SubLSymbol $print_level$ = makeSublispSymbol("*PRINT-LEVEL*");
+    SubLSymbol $print_level$ = makeSublispSymbol("*PRINT-LEVEL*");
 
     // @TODO defvarCheckCL
-    public static final SubLSymbol $print_length$ = makeSublispSymbol("*PRINT-LENGTH*");
+    SubLSymbol $print_length$ = makeSublispSymbol("*PRINT-LENGTH*");
 
-    public static final SubLSymbol $cyc_tests$ = makeSymbol("*CYC-TESTS*");
+    SubLSymbol $cyc_tests$ = makeSymbol("*CYC-TESTS*");
 
     SubLSymbol IDENTITY = makeSublispSymbol("IDENTITY");
     SubLSymbol MEMBER = makeSublispSymbol("MEMBER");
@@ -298,6 +298,62 @@ public interface CommonSymbols extends CommonSymbols_KW {
     SubLInteger $int$512 = makeInteger(512);
     SubLInteger $int$4095 = makeInteger(4095);
     SubLInteger $int$4096 = makeInteger(4096);
+
+    SubLInteger $int$21 = makeInteger(21);
+
+    SubLInteger $int$22 = makeInteger(22);
+
+    SubLInteger $int$23 = makeInteger(23);
+
+    SubLInteger $int$24 = makeInteger(24);
+
+    SubLInteger $int$25 = makeInteger(25);
+
+    SubLInteger $int$26 = makeInteger(26);
+
+    SubLInteger $int$27 = makeInteger(27);
+
+    SubLInteger $int$28 = makeInteger(28);
+
+    SubLInteger $int$29 = makeInteger(29);
+
+    SubLInteger $int$30 = makeInteger(30);
+
+    SubLInteger $int$31 = makeInteger(31);
+
+    SubLInteger $int$33 = makeInteger(33);
+
+    SubLInteger $int$34 = makeInteger(34);
+
+    SubLInteger $int$35 = makeInteger(35);
+
+    SubLInteger $int$36 = makeInteger(36);
+
+    SubLInteger $int$37 = makeInteger(37);
+
+    SubLInteger $int$38 = makeInteger(38);
+
+    SubLInteger $int$39 = makeInteger(39);
+
+    SubLInteger $int$40 = makeInteger(40);
+
+    SubLInteger $int$41 = makeInteger(41);
+
+    SubLInteger $int$42 = makeInteger(42);
+
+    SubLInteger $int$43 = makeInteger(43);
+
+    SubLInteger $int$44 = makeInteger(44);
+
+    SubLInteger $int$45 = makeInteger(45);
+
+    SubLInteger $int$46 = makeInteger(46);
+
+    SubLInteger $int$47 = makeInteger(47);
+
+    SubLInteger $int$48 = makeInteger(48);
+
+    SubLInteger $int$49 = makeInteger(49);
 
     int PROCESS_TO_END = Integer.MAX_VALUE;
 }

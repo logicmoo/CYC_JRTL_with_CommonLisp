@@ -1226,8 +1226,7 @@ public  final class system_benchmarks extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_system_benchmarks_file() {
-    // CVS_ID("Id: system-benchmarks.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_external_symbol($sym2$BENCHMARK_CYCLOPS_COMPENSATING_FOR_PAGING);
+        access_macros.register_external_symbol($sym2$BENCHMARK_CYCLOPS_COMPENSATING_FOR_PAGING);
     subl_macro_promotions.declare_defglobal($sym47$_CYCLOPS_LOCK_);
     access_macros.register_external_symbol($sym98$BENCHMARK_PARALLEL_CYCLOPS_COMPENSATING_FOR_PAGING);
     access_macros.define_obsolete_register($sym108$BENCHMARK_CYCLOPS_SAMPLE, $list109);

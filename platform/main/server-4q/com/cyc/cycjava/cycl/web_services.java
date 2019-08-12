@@ -1,5 +1,42 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
+
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_macros.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.xml_utilities.*;
+import static com.cyc.cycjava.cycl.xml_vars.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.browser.cb_inference_monitors;
@@ -9,8 +46,6 @@ import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_s
 import com.cyc.cycjava.cycl.inference.harness.inference_metrics;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.harness.inference_utilities;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.web_services;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -24,80 +59,35 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.web_services.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_newline;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class web_services extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      WEB-SERVICES
+ * source file: /cyc/top/cycl/web-services.lisp
+ * created:     2019/07/03 17:38:52
+ */
+public final class web_services extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new web_services();
 
-    public static final String myName = "com.cyc.cycjava.cycl.web_services";
+ public static final String myName = "com.cyc.cycjava.cycl.web_services";
 
-    public static final String myFingerPrint = "b021fd6346ecd1cad3bf747b5e3c08bc5a950ff8ac9dbbf17c52a9549d7d9034";
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $last_monitored_inference$ = makeSymbol("*LAST-MONITORED-INFERENCE*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $filter_inference_visualizer_termsP$ = makeSymbol("*FILTER-INFERENCE-VISUALIZER-TERMS?*");
 
-
-
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $json_problem_label_max_length$ = makeSymbol("*JSON-PROBLEM-LABEL-MAX-LENGTH*");
 
     private static final SubLList $list0 = list(makeKeyword("INPUT-NAME"), makeString("query"));
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
 
     private static final SubLList $list2 = list(makeKeyword("INPUT-NAME"), makeString("mt"));
 
@@ -109,8 +99,6 @@ public final class web_services extends SubLTranslatedFile {
 
     private static final SubLString $$$ResultSet = makeString("ResultSet");
 
-
-
     private static final SubLString $$$Term = makeString("Term");
 
     private static final SubLString $$$cycl = makeString("cycl");
@@ -119,13 +107,11 @@ public final class web_services extends SubLTranslatedFile {
 
     private static final SubLSymbol XML_QUERY_VARIABLE = makeSymbol("XML-QUERY-VARIABLE");
 
-
-
+    @LispMethod(comment = "Internal Constants")
+    // Internal Constants
     private static final SubLString $$$root = makeString("root");
 
     private static final SubLSymbol XML_GET_GENLS_FROM_STRING = makeSymbol("XML-GET-GENLS-FROM-STRING");
-
-
 
     private static final SubLString $$$term = makeString("term");
 
@@ -175,10 +161,6 @@ public final class web_services extends SubLTranslatedFile {
 
     private static final SubLList $list39 = list(makeSymbol("CONTROL-STRING"), makeSymbol("&REST"), makeSymbol("ARGS"));
 
-
-
-
-
     private static final SubLSymbol $html_stream$ = makeSymbol("*HTML-STREAM*");
 
     private static final SubLString $$$mode = makeString("mode");
@@ -192,8 +174,6 @@ public final class web_services extends SubLTranslatedFile {
     private static final SubLString $$$dataType = makeString("dataType");
 
     private static final SubLString $$$language = makeString("language");
-
-
 
     private static final SubLList $list50 = list(makeUninternedSymbol("START"), makeUninternedSymbol("END"), makeUninternedSymbol("DELTA"));
 
@@ -236,14 +216,6 @@ public final class web_services extends SubLTranslatedFile {
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
     private static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol $ASSERTION_TOUCH_COUNT = makeKeyword("ASSERTION-TOUCH-COUNT");
 
@@ -299,8 +271,6 @@ public final class web_services extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$Thing = reader_make_constant_shell(makeString("Thing"));
-
     private static final SubLString $$$english = makeString("english");
 
     private static final SubLSymbol INFERENCE_VISUALIZER_TERM_GENERALITY = makeSymbol("INFERENCE-VISUALIZER-TERM-GENERALITY");
@@ -316,8 +286,6 @@ public final class web_services extends SubLTranslatedFile {
     private static final SubLInteger $int$600 = makeInteger(600);
 
     private static final SubLInteger $int$500 = makeInteger(500);
-
-
 
     private static final SubLSymbol $inference_visualizer_term_generality_caching_state$ = makeSymbol("*INFERENCE-VISUALIZER-TERM-GENERALITY-CACHING-STATE*");
 
@@ -341,15 +309,11 @@ public final class web_services extends SubLTranslatedFile {
 
     private static final SubLString $$$modulesData = makeString("modulesData");
 
-
-
     private static final SubLString $$$module = makeString("module");
 
     private static final SubLString $$$percentTime = makeString("percentTime");
 
     private static final SubLString $str126$__4f_ = makeString("~,4f%");
-
-
 
     private static final SubLSymbol NEGATIVE_NUMBER_P = makeSymbol("NEGATIVE-NUMBER-P");
 
@@ -359,25 +323,17 @@ public final class web_services extends SubLTranslatedFile {
 
     private static final SubLString $$$maxTime = makeString("maxTime");
 
-
-
     private static final SubLString $$$medianTime = makeString("medianTime");
 
     private static final SubLString $$$meanTime = makeString("meanTime");
 
     private static final SubLSymbol $sym135$_ = makeSymbol(">");
 
-
-
     private static final SubLSymbol XML_GET_INFERENCE_HL_MODULE_TIMES = makeSymbol("XML-GET-INFERENCE-HL-MODULE-TIMES");
 
     private static final SubLString $$$startTickNumber = makeString("startTickNumber");
 
     private static final SubLString $$$endTickNumber = makeString("endTickNumber");
-
-
-
-
 
     private static final SubLString $str142$_A = makeString("~A");
 
@@ -389,11 +345,7 @@ public final class web_services extends SubLTranslatedFile {
 
     private static final SubLSymbol $problem_store_link_id_map_json_string_caching_state$ = makeSymbol("*PROBLEM-STORE-LINK-ID-MAP-JSON-STRING-CACHING-STATE*");
 
-
-
     private static final SubLString $str148$_ = makeString("{");
-
-
 
     private static final SubLString $str150$_ = makeString(",");
 
@@ -406,8 +358,6 @@ public final class web_services extends SubLTranslatedFile {
     private static final SubLList $list154 = cons(makeUninternedSymbol("KEY"), makeSymbol("DATA"));
 
     private static final SubLList $list155 = list(makeSymbol("PARENT-ID"), makeSymbol("&REST"), makeSymbol("CHILDREN-IDS"));
-
-
 
     private static final SubLString $str157$_ = makeString("]");
 
@@ -527,6 +477,41 @@ public final class web_services extends SubLTranslatedFile {
         }
     }
 
+    // Definitions
+    public static final SubLObject xml_get_genls_from_string_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject _prev_bind_0_1 = $xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                        try {
+                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_start_tag_internal($$$root, NIL, NIL);
+                            com.cyc.cycjava.cycl.web_services.xml_get_genls_from_string_int(args);
+                        } finally {
+                            $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            $xml_indentation_level$.rebind(_prev_bind_0_1, thread);
+                        }
+                    }
+                    xml_terpri();
+                    xml_end_tag_internal($$$root);
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
+    }
+
+    // Definitions
     public static SubLObject xml_get_genls_from_string(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -571,6 +556,28 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject xml_get_genls_from_string_int_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            SubLObject term_string = web_utilities.html_url_decode(html_extract_input($$$term, args));
+            SubLObject terms = NIL;
+            terms = Mapping.mapcar(GET_NL_INTERP_CYCL, nl_parsing_api.string_phrasal_meanings(term_string, UNPROVIDED));
+            {
+                SubLObject cdolist_list_var = terms;
+                SubLObject v_term = NIL;
+                for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                    {
+                        SubLObject new_args = cons(list($$$term, com.cyc.cycjava.cycl.web_services.term_display_string(v_term)), remove(list($$$term, web_utilities.html_url_encode(term_string, UNPROVIDED)), args, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                        com.cyc.cycjava.cycl.web_services.xml_get_genls_int(new_args);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject xml_get_genls_from_string_int(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -588,6 +595,39 @@ public final class web_services extends SubLTranslatedFile {
             v_term = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject xml_get_genls_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject _prev_bind_0_2 = $xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                        try {
+                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_start_tag_internal($$$root, NIL, NIL);
+                            com.cyc.cycjava.cycl.web_services.xml_get_genls_int(args);
+                        } finally {
+                            $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            $xml_indentation_level$.rebind(_prev_bind_0_2, thread);
+                        }
+                    }
+                    xml_terpri();
+                    xml_end_tag_internal($$$root);
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject xml_get_genls(SubLObject args) {
@@ -632,6 +672,110 @@ public final class web_services extends SubLTranslatedFile {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return NIL;
+    }
+
+    public static final SubLObject xml_get_genls_int_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject term_string = web_utilities.html_url_decode(html_extract_input($$$term, args));
+                SubLObject v_term = cb_guess_fort_from_non_id(term_string);
+                SubLObject mt_string = html_extract_value($$$mt, args, $str_alt7$__InferencePSC);
+                SubLObject mt = cb_guess_fort_from_non_id(mt_string);
+                SubLObject v_genls = cardinality_estimates.sort_by_generality_estimate(genls.all_genls(v_term, mt, UNPROVIDED), UNPROVIDED);
+                SubLObject limit = read_from_string_ignoring_errors(html_extract_value($$$limit, args, $$$nil), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject generationP = read_from_string_ignoring_errors(html_extract_value($str_alt10$nl_generation, args, $$$nil), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject pph_params = com.cyc.cycjava.cycl.web_services.pph_params_from_html_args(args);
+                {
+                    SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                    try {
+                        $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                        {
+                            SubLObject term_attrs = list($$$name, com.cyc.cycjava.cycl.web_services.term_display_string(v_term));
+                            SubLObject current_term_count = ZERO_INTEGER;
+                            {
+                                SubLObject _prev_bind_0_3 = $xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_start_tag_internal($$$term, term_attrs, NIL);
+                                    {
+                                        SubLObject _prev_bind_0_4 = $xml_indentation_level$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_5 = $cycml_indent_level$.currentBinding(thread);
+                                        try {
+                                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                            xml_start_tag_internal($$$cycml, NIL, NIL);
+                                            cycml.cycml_serialize_term(v_term);
+                                            com.cyc.cycjava.cycl.web_services.xml_possibly_serialize_generation(v_term, pph_params, generationP);
+                                        } finally {
+                                            $cycml_indent_level$.rebind(_prev_bind_1_5, thread);
+                                            $xml_indentation_level$.rebind(_prev_bind_0_4, thread);
+                                        }
+                                    }
+                                    xml_terpri();
+                                    xml_end_tag_internal($$$cycml);
+                                    {
+                                        SubLObject cdolist_list_var = v_genls;
+                                        SubLObject genl = NIL;
+                                        for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
+                                            if ((NIL == limit) || current_term_count.numL(limit)) {
+                                                {
+                                                    SubLObject genl_name = com.cyc.cycjava.cycl.web_services.term_display_string(genl);
+                                                    SubLObject attrs = list($$$name, genl_name);
+                                                    {
+                                                        SubLObject _prev_bind_0_6 = $xml_indentation_level$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_7 = $cycml_indent_level$.currentBinding(thread);
+                                                        try {
+                                                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                                            xml_start_tag_internal($$$genl, attrs, NIL);
+                                                            {
+                                                                SubLObject _prev_bind_0_8 = $xml_indentation_level$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_9 = $cycml_indent_level$.currentBinding(thread);
+                                                                try {
+                                                                    $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                    $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                    xml_start_tag_internal($$$cycml, NIL, NIL);
+                                                                    cycml.cycml_serialize_term(genl);
+                                                                    com.cyc.cycjava.cycl.web_services.xml_possibly_serialize_generation(genl, pph_params, generationP);
+                                                                } finally {
+                                                                    $cycml_indent_level$.rebind(_prev_bind_1_9, thread);
+                                                                    $xml_indentation_level$.rebind(_prev_bind_0_8, thread);
+                                                                }
+                                                            }
+                                                            xml_terpri();
+                                                            xml_end_tag_internal($$$cycml);
+                                                        } finally {
+                                                            $cycml_indent_level$.rebind(_prev_bind_1_7, thread);
+                                                            $xml_indentation_level$.rebind(_prev_bind_0_6, thread);
+                                                        }
+                                                    }
+                                                    xml_terpri();
+                                                    xml_end_tag_internal($$$genl);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                                    $xml_indentation_level$.rebind(_prev_bind_0_3, thread);
+                                }
+                            }
+                            xml_terpri();
+                            xml_end_tag_internal($$$term);
+                        }
+                    } finally {
+                        $xml_stream$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject xml_get_genls_int(SubLObject args) {
@@ -789,6 +933,36 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject xml_possibly_serialize_generation_alt(SubLObject v_term, SubLObject pph_params, SubLObject do_somethingP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != do_somethingP) {
+                {
+                    SubLObject cdolist_list_var = nl_generation_api.cycl_term_to_nl_internal(v_term, pph_params);
+                    SubLObject map = NIL;
+                    for (map = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , map = cdolist_list_var.first()) {
+                        {
+                            SubLObject _prev_bind_0 = $xml_indentation_level$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                            try {
+                                $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                xml_start_tag_internal($$$generation, NIL, NIL);
+                                format($xml_stream$.getDynamicValue(thread), $str_alt16$_S, nl_generation_api.pph_output_map_to_text_internal(map, NIL, ZERO_INTEGER, NIL, NIL));
+                            } finally {
+                                $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                                $xml_indentation_level$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                        xml_terpri();
+                        xml_end_tag_internal($$$generation);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject xml_possibly_serialize_generation(final SubLObject v_term, final SubLObject pph_params, final SubLObject do_somethingP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != do_somethingP) {
@@ -831,6 +1005,40 @@ public final class web_services extends SubLTranslatedFile {
             } 
         }
         return NIL;
+    }
+
+    public static final SubLObject xml_get_upwards_closure_from_string_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject _prev_bind_0_10 = $xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                        try {
+                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_start_tag_internal($$$root, NIL, NIL);
+                            com.cyc.cycjava.cycl.web_services.xml_get_genls_from_string_int(args);
+                            com.cyc.cycjava.cycl.web_services.xml_get_isas_from_string_int(args);
+                        } finally {
+                            $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            $xml_indentation_level$.rebind(_prev_bind_0_10, thread);
+                        }
+                    }
+                    xml_terpri();
+                    xml_end_tag_internal($$$root);
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject xml_get_upwards_closure_from_string(SubLObject args) {
@@ -878,6 +1086,46 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt7$__InferencePSC = makeString("#$InferencePSC");
+
+    static private final SubLString $str_alt10$nl_generation = makeString("nl-generation");
+
+    static private final SubLString $str_alt16$_S = makeString("~S");
+
+    public static final SubLObject xml_get_upwards_closure_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject _prev_bind_0_11 = $xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                        try {
+                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_start_tag_internal($$$root, NIL, NIL);
+                            com.cyc.cycjava.cycl.web_services.xml_get_genls_int(args);
+                            com.cyc.cycjava.cycl.web_services.xml_get_isas_int(args);
+                        } finally {
+                            $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            $xml_indentation_level$.rebind(_prev_bind_0_11, thread);
+                        }
+                    }
+                    xml_terpri();
+                    xml_end_tag_internal($$$root);
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject xml_get_upwards_closure(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -921,6 +1169,39 @@ public final class web_services extends SubLTranslatedFile {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return NIL;
+    }
+
+    public static final SubLObject xml_get_isas_from_string_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject _prev_bind_0_12 = $xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                        try {
+                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_start_tag_internal($$$root, NIL, NIL);
+                            com.cyc.cycjava.cycl.web_services.xml_get_isas_from_string_int(args);
+                        } finally {
+                            $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            $xml_indentation_level$.rebind(_prev_bind_0_12, thread);
+                        }
+                    }
+                    xml_terpri();
+                    xml_end_tag_internal($$$root);
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject xml_get_isas_from_string(SubLObject args) {
@@ -967,6 +1248,28 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject xml_get_isas_from_string_int_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            SubLObject term_string = web_utilities.html_url_decode(html_extract_input($$$term, args));
+            SubLObject terms = NIL;
+            terms = Mapping.mapcar(GET_NL_INTERP_CYCL, nl_parsing_api.string_phrasal_meanings(term_string, UNPROVIDED));
+            {
+                SubLObject cdolist_list_var = terms;
+                SubLObject v_term = NIL;
+                for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                    {
+                        SubLObject new_args = cons(list($$$term, com.cyc.cycjava.cycl.web_services.term_display_string(v_term)), remove(list($$$term, web_utilities.html_url_encode(term_string, UNPROVIDED)), args, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                        com.cyc.cycjava.cycl.web_services.xml_get_isas_int(new_args);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject xml_get_isas_from_string_int(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -984,6 +1287,39 @@ public final class web_services extends SubLTranslatedFile {
             v_term = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject xml_get_isas_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject _prev_bind_0_13 = $xml_indentation_level$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                        try {
+                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                            xml_start_tag_internal($$$root, NIL, NIL);
+                            com.cyc.cycjava.cycl.web_services.xml_get_isas_int(args);
+                        } finally {
+                            $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                            $xml_indentation_level$.rebind(_prev_bind_0_13, thread);
+                        }
+                    }
+                    xml_terpri();
+                    xml_end_tag_internal($$$root);
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject xml_get_isas(SubLObject args) {
@@ -1028,6 +1364,111 @@ public final class web_services extends SubLTranslatedFile {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
         }
         return NIL;
+    }
+
+    public static final SubLObject xml_get_isas_int_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject term_string = web_utilities.html_url_decode(html_extract_input($$$term, args));
+                SubLObject v_term = cb_guess_fort_from_non_id(term_string);
+                SubLObject mt_string = html_extract_value($$$mt, args, $str_alt7$__InferencePSC);
+                SubLObject mt = cb_guess_fort_from_non_id(mt_string);
+                SubLObject isas = cardinality_estimates.sort_by_generality_estimate(isa.all_isa(czer_main.canonicalize_term(v_term, UNPROVIDED), mt, UNPROVIDED), UNPROVIDED);
+                SubLObject limit = read_from_string_ignoring_errors(html_extract_value($$$limit, args, $$$nil), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject generationP = read_from_string_ignoring_errors(html_extract_value($str_alt10$nl_generation, args, $$$nil), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject pph_params = com.cyc.cycjava.cycl.web_services.pph_params_from_html_args(args);
+                {
+                    SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                    try {
+                        $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                        {
+                            SubLObject term_attrs = list($$$name, com.cyc.cycjava.cycl.web_services.term_display_string(v_term));
+                            SubLObject current_count = ZERO_INTEGER;
+                            {
+                                SubLObject _prev_bind_0_14 = $xml_indentation_level$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                                try {
+                                    $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                    $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                    xml_start_tag_internal($$$term, term_attrs, NIL);
+                                    {
+                                        SubLObject _prev_bind_0_15 = $xml_indentation_level$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_16 = $cycml_indent_level$.currentBinding(thread);
+                                        try {
+                                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                            xml_start_tag_internal($$$cycml, NIL, NIL);
+                                            cycml.cycml_serialize_term(v_term);
+                                            com.cyc.cycjava.cycl.web_services.xml_possibly_serialize_generation(v_term, pph_params, generationP);
+                                        } finally {
+                                            $cycml_indent_level$.rebind(_prev_bind_1_16, thread);
+                                            $xml_indentation_level$.rebind(_prev_bind_0_15, thread);
+                                        }
+                                    }
+                                    xml_terpri();
+                                    xml_end_tag_internal($$$cycml);
+                                    {
+                                        SubLObject cdolist_list_var = isas;
+                                        SubLObject v_isa = NIL;
+                                        for (v_isa = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_isa = cdolist_list_var.first()) {
+                                            if ((NIL == limit) || current_count.numL(limit)) {
+                                                {
+                                                    SubLObject isa_name = com.cyc.cycjava.cycl.web_services.term_display_string(v_isa);
+                                                    SubLObject attrs = list($$$name, isa_name);
+                                                    {
+                                                        SubLObject _prev_bind_0_17 = $xml_indentation_level$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_18 = $cycml_indent_level$.currentBinding(thread);
+                                                        try {
+                                                            $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                            $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                                            xml_start_tag_internal($$$isa, attrs, NIL);
+                                                            {
+                                                                SubLObject _prev_bind_0_19 = $xml_indentation_level$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1_20 = $cycml_indent_level$.currentBinding(thread);
+                                                                try {
+                                                                    $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                    $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                    xml_start_tag_internal($$$cycml, NIL, NIL);
+                                                                    cycml.cycml_serialize_term(v_isa);
+                                                                    com.cyc.cycjava.cycl.web_services.xml_possibly_serialize_generation(v_isa, pph_params, generationP);
+                                                                } finally {
+                                                                    $cycml_indent_level$.rebind(_prev_bind_1_20, thread);
+                                                                    $xml_indentation_level$.rebind(_prev_bind_0_19, thread);
+                                                                }
+                                                            }
+                                                            xml_terpri();
+                                                            xml_end_tag_internal($$$cycml);
+                                                        } finally {
+                                                            $cycml_indent_level$.rebind(_prev_bind_1_18, thread);
+                                                            $xml_indentation_level$.rebind(_prev_bind_0_17, thread);
+                                                        }
+                                                    }
+                                                    xml_terpri();
+                                                    xml_end_tag_internal($$$isa);
+                                                    current_count = add(current_count, ONE_INTEGER);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                                    $xml_indentation_level$.rebind(_prev_bind_0_14, thread);
+                                }
+                            }
+                            xml_terpri();
+                            xml_end_tag_internal($$$term);
+                        }
+                    } finally {
+                        $xml_stream$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject xml_get_isas_int(SubLObject args) {
@@ -1186,6 +1627,82 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject xml_get_generation_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                try {
+                    $xml_stream$.bind($html_stream$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject term_string = web_utilities.html_url_decode(html_extract_input($$$term, args));
+                        SubLObject v_term = cb_guess_fort_from_non_id(term_string);
+                        SubLObject params = com.cyc.cycjava.cycl.web_services.pph_params_from_html_args(args);
+                        SubLObject generation_maps = nl_generation_api.cycl_term_to_nl_internal(v_term, params);
+                        SubLObject term_name = com.cyc.cycjava.cycl.web_services.term_display_string(v_term);
+                        SubLObject attrs = list($$$name, term_name);
+                        {
+                            SubLObject _prev_bind_0_21 = $xml_indentation_level$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = $cycml_indent_level$.currentBinding(thread);
+                            try {
+                                $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                xml_start_tag_internal($$$term, attrs, NIL);
+                                {
+                                    SubLObject _prev_bind_0_22 = $xml_indentation_level$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_23 = $cycml_indent_level$.currentBinding(thread);
+                                    try {
+                                        $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                        $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                        xml_start_tag_internal($$$cycml, NIL, NIL);
+                                        cycml.cycml_serialize_term(v_term);
+                                        {
+                                            SubLObject cdolist_list_var = generation_maps;
+                                            SubLObject map = NIL;
+                                            for (map = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , map = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject _prev_bind_0_24 = $xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_25 = $cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        $xml_indentation_level$.bind(add($xml_indentation_amount$.getDynamicValue(thread), $xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        $cycml_indent_level$.bind($xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_start_tag_internal($$$generation, NIL, NIL);
+                                                        format($xml_stream$.getDynamicValue(thread), $str_alt16$_S, nl_generation_api.pph_output_map_to_text_internal(map, NIL, ZERO_INTEGER, NIL, NIL));
+                                                    } finally {
+                                                        $cycml_indent_level$.rebind(_prev_bind_1_25, thread);
+                                                        $xml_indentation_level$.rebind(_prev_bind_0_24, thread);
+                                                    }
+                                                }
+                                                xml_terpri();
+                                                xml_end_tag_internal($$$generation);
+                                            }
+                                        }
+                                    } finally {
+                                        $cycml_indent_level$.rebind(_prev_bind_1_23, thread);
+                                        $xml_indentation_level$.rebind(_prev_bind_0_22, thread);
+                                    }
+                                }
+                                xml_terpri();
+                                xml_end_tag_internal($$$cycml);
+                            } finally {
+                                $cycml_indent_level$.rebind(_prev_bind_1, thread);
+                                $xml_indentation_level$.rebind(_prev_bind_0_21, thread);
+                            }
+                        }
+                        xml_terpri();
+                        xml_end_tag_internal($$$term);
+                    }
+                } finally {
+                    $xml_stream$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject xml_get_generation(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -1302,6 +1819,43 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pph_params_from_html_args_alt(SubLObject args) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject plist = NIL;
+                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(pph_parameter_declaration.pph_parameter_declarations()));
+                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject param_name = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                        SubLObject value = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject text_arg_value = html_extract_input(string_utilities.str(param_name), args);
+                            if (NIL != text_arg_value) {
+                                {
+                                    SubLObject decoded_string_value = web_utilities.html_url_decode(text_arg_value);
+                                    SubLObject fort_arg_value = cb_guess_fort_from_non_id(decoded_string_value);
+                                    SubLObject arg_value = (NIL != fort_arg_value) ? ((SubLObject) (fort_arg_value)) : read_from_string_ignoring_errors(decoded_string_value, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    if (NIL != arg_value) {
+                                        plist = cons(arg_value, plist);
+                                        plist = cons(param_name, plist);
+                                    }
+                                }
+                            }
+                        }
+                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                    }
+                } 
+                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                result = nl_generation_api.new_pph_parameters(plist);
+                return result;
+            }
+        }
+    }
+
     public static SubLObject pph_params_from_html_args(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1326,6 +1880,13 @@ public final class web_services extends SubLTranslatedFile {
         dictionary_contents.do_dictionary_contents_finalize(iteration_state);
         result = nl_generation_api.new_pph_parameters(plist);
         return result;
+    }
+
+    public static final SubLObject term_display_string_alt(SubLObject v_term) {
+        {
+            SubLObject el_term = (NIL != forts.fort_p(v_term)) ? ((SubLObject) (cycl_utilities.hl_to_el(v_term))) : v_term;
+            return string_utilities.string_remove_constant_reader_prefixes(string_utilities.to_lisp_string(cycl_utilities.hl_to_el(el_term)));
+        }
     }
 
     public static SubLObject term_display_string(final SubLObject v_term) {
@@ -2654,7 +3215,7 @@ public final class web_services extends SubLTranslatedFile {
             final SubLObject _prev_bind_0_$133 = json.$json_indent_level$.currentBinding(thread);
             try {
                 json.$json_indent_level$.bind(number_utilities.f_1X(json.$json_indent_level$.getDynamicValue(thread)), thread);
-                assert NIL != stringp($$$problemStoreId) : "Types.stringp(web_services.$str44$problemStoreId) " + "CommonSymbols.NIL != Types.stringp(web_services.$str44$problemStoreId) " + $$$problemStoreId;
+                assert NIL != stringp($$$problemStoreId) : "! stringp(web_services.$$$problemStoreId) " + ("Types.stringp(web_services.$str44$problemStoreId) " + "CommonSymbols.NIL != Types.stringp(web_services.$str44$problemStoreId) ") + $$$problemStoreId;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2663,7 +3224,7 @@ public final class web_services extends SubLTranslatedFile {
                 json.json_princ($str151$__);
                 json.json_serialize_atom(inference_datastructures_problem_store.problem_store_suid(store), UNPROVIDED);
                 json.$json_object_startedP$.setDynamicValue(T, thread);
-                assert NIL != stringp($$$links) : "Types.stringp(web_services.$str152$links) " + "CommonSymbols.NIL != Types.stringp(web_services.$str152$links) " + $$$links;
+                assert NIL != stringp($$$links) : "! stringp(web_services.$$$links) " + ("Types.stringp(web_services.$str152$links) " + "CommonSymbols.NIL != Types.stringp(web_services.$str152$links) ") + $$$links;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2709,7 +3270,7 @@ public final class web_services extends SubLTranslatedFile {
                     json.$json_sequence_startedP$.rebind(_prev_bind_0_$134, thread);
                 }
                 json.$json_object_startedP$.setDynamicValue(T, thread);
-                assert NIL != stringp($$$problems) : "Types.stringp(web_services.$str158$problems) " + "CommonSymbols.NIL != Types.stringp(web_services.$str158$problems) " + $$$problems;
+                assert NIL != stringp($$$problems) : "! stringp(web_services.$$$problems) " + ("Types.stringp(web_services.$str158$problems) " + "CommonSymbols.NIL != Types.stringp(web_services.$str158$problems) ") + $$$problems;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2911,7 +3472,7 @@ public final class web_services extends SubLTranslatedFile {
             final SubLObject _prev_bind_0_$142 = json.$json_indent_level$.currentBinding(thread);
             try {
                 json.$json_indent_level$.bind(number_utilities.f_1X(json.$json_indent_level$.getDynamicValue(thread)), thread);
-                assert NIL != stringp($$$pp) : "Types.stringp(web_services.$str170$pp) " + "CommonSymbols.NIL != Types.stringp(web_services.$str170$pp) " + $$$pp;
+                assert NIL != stringp($$$pp) : "! stringp(web_services.$$$pp) " + ("Types.stringp(web_services.$str170$pp) " + "CommonSymbols.NIL != Types.stringp(web_services.$str170$pp) ") + $$$pp;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2920,7 +3481,7 @@ public final class web_services extends SubLTranslatedFile {
                 json.json_princ($str151$__);
                 json.json_serialize_atom(parent_id, UNPROVIDED);
                 json.$json_object_startedP$.setDynamicValue(T, thread);
-                assert NIL != stringp($$$cp) : "Types.stringp(web_services.$str171$cp) " + "CommonSymbols.NIL != Types.stringp(web_services.$str171$cp) " + $$$cp;
+                assert NIL != stringp($$$cp) : "! stringp(web_services.$$$cp) " + ("Types.stringp(web_services.$str171$cp) " + "CommonSymbols.NIL != Types.stringp(web_services.$str171$cp) ") + $$$cp;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2961,7 +3522,7 @@ public final class web_services extends SubLTranslatedFile {
             final SubLObject _prev_bind_0_$143 = json.$json_indent_level$.currentBinding(thread);
             try {
                 json.$json_indent_level$.bind(number_utilities.f_1X(json.$json_indent_level$.getDynamicValue(thread)), thread);
-                assert NIL != stringp($$$id) : "Types.stringp(web_services.$str172$id) " + "CommonSymbols.NIL != Types.stringp(web_services.$str172$id) " + $$$id;
+                assert NIL != stringp($$$id) : "! stringp(web_services.$$$id) " + ("Types.stringp(web_services.$str172$id) " + "CommonSymbols.NIL != Types.stringp(web_services.$str172$id) ") + $$$id;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2970,7 +3531,7 @@ public final class web_services extends SubLTranslatedFile {
                 json.json_princ($str151$__);
                 json.json_serialize_atom(inference_datastructures_problem.problem_suid(problem), UNPROVIDED);
                 json.$json_object_startedP$.setDynamicValue(T, thread);
-                assert NIL != stringp($$$status) : "Types.stringp(web_services.$str173$status) " + "CommonSymbols.NIL != Types.stringp(web_services.$str173$status) " + $$$status;
+                assert NIL != stringp($$$status) : "! stringp(web_services.$$$status) " + ("Types.stringp(web_services.$str173$status) " + "CommonSymbols.NIL != Types.stringp(web_services.$str173$status) ") + $$$status;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2979,7 +3540,7 @@ public final class web_services extends SubLTranslatedFile {
                 json.json_princ($str151$__);
                 json.json_serialize_atom(princ_to_string(inference_datastructures_problem.problem_status(problem)), UNPROVIDED);
                 json.$json_object_startedP$.setDynamicValue(T, thread);
-                assert NIL != stringp($$$label) : "Types.stringp(web_services.$str174$label) " + "CommonSymbols.NIL != Types.stringp(web_services.$str174$label) " + $$$label;
+                assert NIL != stringp($$$label) : "! stringp(web_services.$$$label) " + ("Types.stringp(web_services.$str174$label) " + "CommonSymbols.NIL != Types.stringp(web_services.$str174$label) ") + $$$label;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -2988,7 +3549,7 @@ public final class web_services extends SubLTranslatedFile {
                 json.json_princ($str151$__);
                 json.json_serialize_atom(json_label_for_problem(problem, $$$english), UNPROVIDED);
                 json.$json_object_startedP$.setDynamicValue(T, thread);
-                assert NIL != stringp($$$cycl) : "Types.stringp(web_services.$str9$cycl) " + "CommonSymbols.NIL != Types.stringp(web_services.$str9$cycl) " + $$$cycl;
+                assert NIL != stringp($$$cycl) : "! stringp(web_services.$$$cycl) " + ("Types.stringp(web_services.$str9$cycl) " + "CommonSymbols.NIL != Types.stringp(web_services.$str9$cycl) ") + $$$cycl;
                 if (NIL != json.$json_object_startedP$.getDynamicValue(thread)) {
                     json.json_princ($str150$_);
                 }
@@ -3035,64 +3596,64 @@ public final class web_services extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_web_services_file() {
-        declareFunction(me, "xml_query_variable", "XML-QUERY-VARIABLE", 0, 1, false);
-        declareFunction(me, "xml_get_genls_from_string", "XML-GET-GENLS-FROM-STRING", 0, 1, false);
-        declareFunction(me, "xml_get_genls_from_string_int", "XML-GET-GENLS-FROM-STRING-INT", 0, 1, false);
-        declareFunction(me, "xml_get_genls", "XML-GET-GENLS", 0, 1, false);
-        declareFunction(me, "xml_get_genls_int", "XML-GET-GENLS-INT", 0, 1, false);
-        declareFunction(me, "xml_possibly_serialize_generation", "XML-POSSIBLY-SERIALIZE-GENERATION", 3, 0, false);
-        declareFunction(me, "xml_get_upwards_closure_from_string", "XML-GET-UPWARDS-CLOSURE-FROM-STRING", 0, 1, false);
-        declareFunction(me, "xml_get_upwards_closure", "XML-GET-UPWARDS-CLOSURE", 0, 1, false);
-        declareFunction(me, "xml_get_isas_from_string", "XML-GET-ISAS-FROM-STRING", 0, 1, false);
-        declareFunction(me, "xml_get_isas_from_string_int", "XML-GET-ISAS-FROM-STRING-INT", 0, 1, false);
-        declareFunction(me, "xml_get_isas", "XML-GET-ISAS", 0, 1, false);
-        declareFunction(me, "xml_get_isas_int", "XML-GET-ISAS-INT", 0, 1, false);
-        declareFunction(me, "xml_get_generation", "XML-GET-GENERATION", 0, 1, false);
-        declareFunction(me, "pph_params_from_html_args", "PPH-PARAMS-FROM-HTML-ARGS", 1, 0, false);
-        declareFunction(me, "term_display_string", "TERM-DISPLAY-STRING", 1, 0, false);
-        declareMacro(me, "my_html_format", "MY-HTML-FORMAT");
-        declareFunction(me, "reset_last_monitored_inference", "RESET-LAST-MONITORED-INFERENCE", 0, 0, false);
-        declareFunction(me, "cb_inference_tick_data", "CB-INFERENCE-TICK-DATA", 1, 0, false);
-        declareFunction(me, "clear_notify_getting_tick_data", "CLEAR-NOTIFY-GETTING-TICK-DATA", 0, 0, false);
-        declareFunction(me, "remove_notify_getting_tick_data", "REMOVE-NOTIFY-GETTING-TICK-DATA", 0, 1, false);
-        declareFunction(me, "notify_getting_tick_data_internal", "NOTIFY-GETTING-TICK-DATA-INTERNAL", 1, 0, false);
-        declareFunction(me, "notify_getting_tick_data", "NOTIFY-GETTING-TICK-DATA", 0, 1, false);
-        declareFunction(me, "html_output_tick_data", "HTML-OUTPUT-TICK-DATA", 5, 0, false);
-        declareFunction(me, "inference_progress_data_for_tick_number", "INFERENCE-PROGRESS-DATA-FOR-TICK-NUMBER", 2, 0, false);
-        declareFunction(me, "inference_progress_data_for_tick_number_memoized_internal", "INFERENCE-PROGRESS-DATA-FOR-TICK-NUMBER-MEMOIZED-INTERNAL", 2, 0, false);
-        declareFunction(me, "inference_progress_data_for_tick_number_memoized", "INFERENCE-PROGRESS-DATA-FOR-TICK-NUMBER-MEMOIZED", 2, 0, false);
-        declareFunction(me, "problem_store_total_tick_count", "PROBLEM-STORE-TOTAL-TICK-COUNT", 1, 0, false);
-        declareFunction(me, "problem_display_terms_from_tick_data", "PROBLEM-DISPLAY-TERMS-FROM-TICK-DATA", 1, 0, false);
-        declareFunction(me, "problem_display_terms", "PROBLEM-DISPLAY-TERMS", 1, 0, false);
-        declareFunction(me, "problem_display_formula", "PROBLEM-DISPLAY-FORMULA", 1, 0, false);
-        declareFunction(me, "assertion_display_terms_from_tick_data", "ASSERTION-DISPLAY-TERMS-FROM-TICK-DATA", 1, 0, false);
-        declareFunction(me, "inference_visualizer_show_termP", "INFERENCE-VISUALIZER-SHOW-TERM?", 1, 0, false);
-        declareFunction(me, "encode_terms", "ENCODE-TERMS", 2, 0, false);
-        declareFunction(me, "clear_inference_visualizer_term_generality", "CLEAR-INFERENCE-VISUALIZER-TERM-GENERALITY", 0, 0, false);
-        declareFunction(me, "remove_inference_visualizer_term_generality", "REMOVE-INFERENCE-VISUALIZER-TERM-GENERALITY", 1, 1, false);
-        declareFunction(me, "inference_visualizer_term_generality_internal", "INFERENCE-VISUALIZER-TERM-GENERALITY-INTERNAL", 2, 0, false);
-        declareFunction(me, "inference_visualizer_term_generality", "INFERENCE-VISUALIZER-TERM-GENERALITY", 1, 1, false);
-        declareFunction(me, "xml_get_inference_hl_module_times", "XML-GET-INFERENCE-HL-MODULE-TIMES", 1, 0, false);
-        declareFunction(me, "cb_inference_link_info", "CB-INFERENCE-LINK-INFO", 1, 0, false);
-        declareFunction(me, "get_inference_from_mode", "GET-INFERENCE-FROM-MODE", 1, 0, false);
-        declareFunction(me, "clear_problem_store_link_id_map_json_string", "CLEAR-PROBLEM-STORE-LINK-ID-MAP-JSON-STRING", 0, 0, false);
-        declareFunction(me, "remove_problem_store_link_id_map_json_string", "REMOVE-PROBLEM-STORE-LINK-ID-MAP-JSON-STRING", 1, 3, false);
-        declareFunction(me, "problem_store_link_id_map_json_string_internal", "PROBLEM-STORE-LINK-ID-MAP-JSON-STRING-INTERNAL", 4, 0, false);
-        declareFunction(me, "problem_store_link_id_map_json_string", "PROBLEM-STORE-LINK-ID-MAP-JSON-STRING", 1, 3, false);
-        declareFunction(me, "problem_store_complete_link_id_map_json_string", "PROBLEM-STORE-COMPLETE-LINK-ID-MAP-JSON-STRING", 1, 0, false);
-        declareFunction(me, "json_serialize_problem_store_link_id_map", "JSON-SERIALIZE-PROBLEM-STORE-LINK-ID-MAP", 1, 3, false);
-        declareFunction(me, "json_serialize_problem_store_complete_link_id_map", "JSON-SERIALIZE-PROBLEM-STORE-COMPLETE-LINK-ID-MAP", 1, 0, false);
-        declareFunction(me, "json_serialize_problem_store_link_id_map_int", "JSON-SERIALIZE-PROBLEM-STORE-LINK-ID-MAP-INT", 2, 0, false);
-        declareFunction(me, "sort_partial_link_id_map", "SORT-PARTIAL-LINK-ID-MAP", 1, 0, false);
-        declareFunction(me, "link_id_map_entry_L", "LINK-ID-MAP-ENTRY-<", 2, 0, false);
-        declareFunction(me, "get_partial_problem_store_link_id_map", "GET-PARTIAL-PROBLEM-STORE-LINK-ID-MAP", 1, 3, false);
-        declareFunction(me, "validate_partial_problem_store_link_id_maps", "VALIDATE-PARTIAL-PROBLEM-STORE-LINK-ID-MAPS", 1, 1, false);
-        declareFunction(me, "get_truncated_problem_store_link_id_map", "GET-TRUNCATED-PROBLEM-STORE-LINK-ID-MAP", 2, 1, false);
-        declareFunction(me, "get_truncated_problem_store_link_id_map_int", "GET-TRUNCATED-PROBLEM-STORE-LINK-ID-MAP-INT", 2, 0, false);
-        declareFunction(me, "problem_id_from_tick_data", "PROBLEM-ID-FROM-TICK-DATA", 2, 0, false);
-        declareFunction(me, "json_serialize_problem_store_link", "JSON-SERIALIZE-PROBLEM-STORE-LINK", 4, 0, false);
-        declareFunction(me, "json_serialize_problem", "JSON-SERIALIZE-PROBLEM", 1, 0, false);
-        declareFunction(me, "json_label_for_problem", "JSON-LABEL-FOR-PROBLEM", 2, 0, false);
+        declareFunction("xml_query_variable", "XML-QUERY-VARIABLE", 0, 1, false);
+        declareFunction("xml_get_genls_from_string", "XML-GET-GENLS-FROM-STRING", 0, 1, false);
+        declareFunction("xml_get_genls_from_string_int", "XML-GET-GENLS-FROM-STRING-INT", 0, 1, false);
+        declareFunction("xml_get_genls", "XML-GET-GENLS", 0, 1, false);
+        declareFunction("xml_get_genls_int", "XML-GET-GENLS-INT", 0, 1, false);
+        declareFunction("xml_possibly_serialize_generation", "XML-POSSIBLY-SERIALIZE-GENERATION", 3, 0, false);
+        declareFunction("xml_get_upwards_closure_from_string", "XML-GET-UPWARDS-CLOSURE-FROM-STRING", 0, 1, false);
+        declareFunction("xml_get_upwards_closure", "XML-GET-UPWARDS-CLOSURE", 0, 1, false);
+        declareFunction("xml_get_isas_from_string", "XML-GET-ISAS-FROM-STRING", 0, 1, false);
+        declareFunction("xml_get_isas_from_string_int", "XML-GET-ISAS-FROM-STRING-INT", 0, 1, false);
+        declareFunction("xml_get_isas", "XML-GET-ISAS", 0, 1, false);
+        declareFunction("xml_get_isas_int", "XML-GET-ISAS-INT", 0, 1, false);
+        declareFunction("xml_get_generation", "XML-GET-GENERATION", 0, 1, false);
+        declareFunction("pph_params_from_html_args", "PPH-PARAMS-FROM-HTML-ARGS", 1, 0, false);
+        declareFunction("term_display_string", "TERM-DISPLAY-STRING", 1, 0, false);
+        declareMacro("my_html_format", "MY-HTML-FORMAT");
+        declareFunction("reset_last_monitored_inference", "RESET-LAST-MONITORED-INFERENCE", 0, 0, false);
+        declareFunction("cb_inference_tick_data", "CB-INFERENCE-TICK-DATA", 1, 0, false);
+        declareFunction("clear_notify_getting_tick_data", "CLEAR-NOTIFY-GETTING-TICK-DATA", 0, 0, false);
+        declareFunction("remove_notify_getting_tick_data", "REMOVE-NOTIFY-GETTING-TICK-DATA", 0, 1, false);
+        declareFunction("notify_getting_tick_data_internal", "NOTIFY-GETTING-TICK-DATA-INTERNAL", 1, 0, false);
+        declareFunction("notify_getting_tick_data", "NOTIFY-GETTING-TICK-DATA", 0, 1, false);
+        declareFunction("html_output_tick_data", "HTML-OUTPUT-TICK-DATA", 5, 0, false);
+        declareFunction("inference_progress_data_for_tick_number", "INFERENCE-PROGRESS-DATA-FOR-TICK-NUMBER", 2, 0, false);
+        declareFunction("inference_progress_data_for_tick_number_memoized_internal", "INFERENCE-PROGRESS-DATA-FOR-TICK-NUMBER-MEMOIZED-INTERNAL", 2, 0, false);
+        declareFunction("inference_progress_data_for_tick_number_memoized", "INFERENCE-PROGRESS-DATA-FOR-TICK-NUMBER-MEMOIZED", 2, 0, false);
+        declareFunction("problem_store_total_tick_count", "PROBLEM-STORE-TOTAL-TICK-COUNT", 1, 0, false);
+        declareFunction("problem_display_terms_from_tick_data", "PROBLEM-DISPLAY-TERMS-FROM-TICK-DATA", 1, 0, false);
+        declareFunction("problem_display_terms", "PROBLEM-DISPLAY-TERMS", 1, 0, false);
+        declareFunction("problem_display_formula", "PROBLEM-DISPLAY-FORMULA", 1, 0, false);
+        declareFunction("assertion_display_terms_from_tick_data", "ASSERTION-DISPLAY-TERMS-FROM-TICK-DATA", 1, 0, false);
+        declareFunction("inference_visualizer_show_termP", "INFERENCE-VISUALIZER-SHOW-TERM?", 1, 0, false);
+        declareFunction("encode_terms", "ENCODE-TERMS", 2, 0, false);
+        declareFunction("clear_inference_visualizer_term_generality", "CLEAR-INFERENCE-VISUALIZER-TERM-GENERALITY", 0, 0, false);
+        declareFunction("remove_inference_visualizer_term_generality", "REMOVE-INFERENCE-VISUALIZER-TERM-GENERALITY", 1, 1, false);
+        declareFunction("inference_visualizer_term_generality_internal", "INFERENCE-VISUALIZER-TERM-GENERALITY-INTERNAL", 2, 0, false);
+        declareFunction("inference_visualizer_term_generality", "INFERENCE-VISUALIZER-TERM-GENERALITY", 1, 1, false);
+        declareFunction("xml_get_inference_hl_module_times", "XML-GET-INFERENCE-HL-MODULE-TIMES", 1, 0, false);
+        declareFunction("cb_inference_link_info", "CB-INFERENCE-LINK-INFO", 1, 0, false);
+        declareFunction("get_inference_from_mode", "GET-INFERENCE-FROM-MODE", 1, 0, false);
+        declareFunction("clear_problem_store_link_id_map_json_string", "CLEAR-PROBLEM-STORE-LINK-ID-MAP-JSON-STRING", 0, 0, false);
+        declareFunction("remove_problem_store_link_id_map_json_string", "REMOVE-PROBLEM-STORE-LINK-ID-MAP-JSON-STRING", 1, 3, false);
+        declareFunction("problem_store_link_id_map_json_string_internal", "PROBLEM-STORE-LINK-ID-MAP-JSON-STRING-INTERNAL", 4, 0, false);
+        declareFunction("problem_store_link_id_map_json_string", "PROBLEM-STORE-LINK-ID-MAP-JSON-STRING", 1, 3, false);
+        declareFunction("problem_store_complete_link_id_map_json_string", "PROBLEM-STORE-COMPLETE-LINK-ID-MAP-JSON-STRING", 1, 0, false);
+        declareFunction("json_serialize_problem_store_link_id_map", "JSON-SERIALIZE-PROBLEM-STORE-LINK-ID-MAP", 1, 3, false);
+        declareFunction("json_serialize_problem_store_complete_link_id_map", "JSON-SERIALIZE-PROBLEM-STORE-COMPLETE-LINK-ID-MAP", 1, 0, false);
+        declareFunction("json_serialize_problem_store_link_id_map_int", "JSON-SERIALIZE-PROBLEM-STORE-LINK-ID-MAP-INT", 2, 0, false);
+        declareFunction("sort_partial_link_id_map", "SORT-PARTIAL-LINK-ID-MAP", 1, 0, false);
+        declareFunction("link_id_map_entry_L", "LINK-ID-MAP-ENTRY-<", 2, 0, false);
+        declareFunction("get_partial_problem_store_link_id_map", "GET-PARTIAL-PROBLEM-STORE-LINK-ID-MAP", 1, 3, false);
+        declareFunction("validate_partial_problem_store_link_id_maps", "VALIDATE-PARTIAL-PROBLEM-STORE-LINK-ID-MAPS", 1, 1, false);
+        declareFunction("get_truncated_problem_store_link_id_map", "GET-TRUNCATED-PROBLEM-STORE-LINK-ID-MAP", 2, 1, false);
+        declareFunction("get_truncated_problem_store_link_id_map_int", "GET-TRUNCATED-PROBLEM-STORE-LINK-ID-MAP-INT", 2, 0, false);
+        declareFunction("problem_id_from_tick_data", "PROBLEM-ID-FROM-TICK-DATA", 2, 0, false);
+        declareFunction("json_serialize_problem_store_link", "JSON-SERIALIZE-PROBLEM-STORE-LINK", 4, 0, false);
+        declareFunction("json_serialize_problem", "JSON-SERIALIZE-PROBLEM", 1, 0, false);
+        declareFunction("json_label_for_problem", "JSON-LABEL-FOR-PROBLEM", 2, 0, false);
         return NIL;
     }
 
@@ -3106,7 +3667,60 @@ public final class web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_web_services_file_alt() {
+        note_html_handler_function(XML_GET_GENLS_FROM_STRING);
+        note_html_handler_function(XML_GET_GENLS_FROM_STRING_INT);
+        note_html_handler_function(XML_GET_GENLS);
+        note_html_handler_function(XML_GET_GENLS_INT);
+        note_html_handler_function(XML_GET_UPWARDS_CLOSURE_FROM_STRING);
+        note_html_handler_function(XML_GET_UPWARDS_CLOSURE);
+        note_html_handler_function(XML_GET_ISAS_FROM_STRING);
+        note_html_handler_function(XML_GET_ISAS_FROM_STRING_INT);
+        note_html_handler_function(XML_GET_ISAS);
+        note_html_handler_function(XML_GET_ISAS_INT);
+        note_html_handler_function(XML_GET_GENERATION);
+        return NIL;
+    }
+
     public static SubLObject setup_web_services_file() {
+        if (SubLFiles.USE_V1) {
+            html_macros.note_cgi_handler_function(XML_QUERY_VARIABLE, $XML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_GENLS_FROM_STRING, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_GENLS_FROM_STRING_INT, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_GENLS, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_GENLS_INT, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_UPWARDS_CLOSURE_FROM_STRING, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_UPWARDS_CLOSURE, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_ISAS_FROM_STRING, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_ISAS_FROM_STRING_INT, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_ISAS, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_ISAS_INT, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_GET_GENERATION, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(CB_INFERENCE_TICK_DATA, $HTML_HANDLER);
+            memoization_state.note_globally_cached_function(NOTIFY_GETTING_TICK_DATA);
+            memoization_state.note_memoized_function(INFERENCE_PROGRESS_DATA_FOR_TICK_NUMBER_MEMOIZED);
+            memoization_state.note_globally_cached_function(INFERENCE_VISUALIZER_TERM_GENERALITY);
+            html_macros.note_cgi_handler_function(XML_GET_INFERENCE_HL_MODULE_TIMES, $XML_HANDLER);
+            html_macros.note_cgi_handler_function(CB_INFERENCE_LINK_INFO, $HTML_HANDLER);
+            memoization_state.note_globally_cached_function(PROBLEM_STORE_LINK_ID_MAP_JSON_STRING);
+        }
+        if (SubLFiles.USE_V2) {
+            note_html_handler_function(XML_GET_GENLS_FROM_STRING);
+            note_html_handler_function(XML_GET_GENLS_FROM_STRING_INT);
+            note_html_handler_function(XML_GET_GENLS);
+            note_html_handler_function(XML_GET_GENLS_INT);
+            note_html_handler_function(XML_GET_UPWARDS_CLOSURE_FROM_STRING);
+            note_html_handler_function(XML_GET_UPWARDS_CLOSURE);
+            note_html_handler_function(XML_GET_ISAS_FROM_STRING);
+            note_html_handler_function(XML_GET_ISAS_FROM_STRING_INT);
+            note_html_handler_function(XML_GET_ISAS);
+            note_html_handler_function(XML_GET_ISAS_INT);
+            note_html_handler_function(XML_GET_GENERATION);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_web_services_file_Previous() {
         html_macros.note_cgi_handler_function(XML_QUERY_VARIABLE, $XML_HANDLER);
         html_macros.note_cgi_handler_function(XML_GET_GENLS_FROM_STRING, $HTML_HANDLER);
         html_macros.note_cgi_handler_function(XML_GET_GENLS_FROM_STRING_INT, $HTML_HANDLER);
@@ -3145,190 +3759,6 @@ public final class web_services extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

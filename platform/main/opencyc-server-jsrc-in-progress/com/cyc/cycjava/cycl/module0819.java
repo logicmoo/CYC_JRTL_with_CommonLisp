@@ -7008,8 +7008,7 @@ public final class module0819 extends SubLTranslatedFile
         "RW-LOCK-RELEASE-WRITE-LOCK" ) );
     $ic210$ = ConsesLow.list( (SubLObject) makeSymbol( "S#166", "CYC" ), (SubLObject) makeSymbol( "S#38900", "CYC" ) );
     $ic211$ = makeSymbol( "CVS-ID" );
-    $ic212$ = makeString( "// CVS_ID(" );
-    $ic213$ = makeSymbol( "DEFCONSTANT" );
+    $ic212$ = makeString( "    $ic213$ = makeSymbol( "DEFCONSTANT" );
     $ic214$ = ConsesLow.list( (SubLObject) makeSymbol( "S#166", "CYC" ), (SubLObject) makeSymbol( "VARIABLE" ), (SubLObject) makeSymbol( "S#33", "CYC" ),
         (SubLObject) makeSymbol( "&OPTIONAL" ), (SubLObject) makeSymbol( "DOCUMENTATION" ) );
     $ic215$ = makeString( "private " );

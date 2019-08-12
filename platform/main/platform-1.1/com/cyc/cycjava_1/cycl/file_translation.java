@@ -245,8 +245,7 @@ public  final class file_translation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_file_translation_file() {
-    // CVS_ID("Id: file-translation.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_trans_subl_file$.getGlobalValue(), Symbols.symbol_function($sym7$TRANS_SUBL_FILE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_trans_subl_file$.getGlobalValue(), Symbols.symbol_function($sym7$TRANS_SUBL_FILE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$TSF_MODULE_NAME, $sym9$_CSETF_TSF_MODULE_NAME);
     Structures.def_csetf($sym10$TSF_FILENAME, $sym11$_CSETF_TSF_FILENAME);
     Structures.def_csetf($sym12$TSF_INTERNAL_CONSTANTS, $sym13$_CSETF_TSF_INTERNAL_CONSTANTS);

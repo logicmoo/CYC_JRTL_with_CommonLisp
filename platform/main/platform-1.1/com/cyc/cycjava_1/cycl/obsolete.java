@@ -128,8 +128,7 @@ public  final class obsolete extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_obsolete_file() {
-    // CVS_ID("Id: obsolete.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.define_obsolete_register($sym0$NAT_P, $list1);
+        access_macros.define_obsolete_register($sym0$NAT_P, $list1);
     access_macros.define_obsolete_register($sym3$FIND_NAT, $list4);
     access_macros.define_obsolete_register($sym6$CYCL_SYSTEM_NUMBER, $list7);
     access_macros.define_obsolete_register($sym8$CYCL_PATCH_NUMBER, $list7);

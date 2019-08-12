@@ -127,8 +127,7 @@ public  final class cfasl_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cfasl_utilities_file() {
-    // CVS_ID("Id: cfasl-utilities.lisp 127165 2009-02-18 19:22:51Z rck ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

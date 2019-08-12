@@ -13,32 +13,32 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 
 public class SubLRegexPattern extends FromSubLisp implements SubLObject {
     public SubLRegexPattern(String patternStr, int options) {
-        int newOptions = 0;
-        if ((options & 0x10) != 0x0)
-            regexError("*regex-comopt-anchored* is not supported.");
-        if ((options & 0x1) != 0x0)
-            newOptions |= 0x2;
-        if ((options & 0x20) != 0x0)
-            regexError("*regex-compopt-dollar-endonly* is not supported.");
-        if ((options & 0x4) != 0x0)
-            newOptions |= 0x20;
-        if ((options & 0x8) != 0x0)
-            newOptions |= 0x4;
-        if ((options & 0x2) != 0x0)
-            newOptions |= 0x8;
-        if ((options & 0x40) != 0x0)
-            regexError("*regex-compopt-extra* is not supported.");
-        if ((options & 0x200) != 0x0)
-            regexError("*regex-compopt-ungreedy* is not supported.");
-        if ((options & 0x800) != 0x0) {
-        }
-        if ((options & 0x1000) != 0x0)
-            regexError("*regex-compopt-no-auto-capture* is not supported.");
-        if ((options & 0x2000) != 0x0)
-            regexError("*regex-compopt-no-utf8-check* is not supported.");
-        this.patternStr = patternStr;
-        pattern = Pattern.compile(patternStr, newOptions);
-        matcher = pattern.matcher("");
+	int newOptions = 0;
+	if ((options & 0x10) != 0x0)
+	    regexError("*regex-comopt-anchored* is not supported.");
+	if ((options & 0x1) != 0x0)
+	    newOptions |= 0x2;
+	if ((options & 0x20) != 0x0)
+	    regexError("*regex-compopt-dollar-endonly* is not supported.");
+	if ((options & 0x4) != 0x0)
+	    newOptions |= 0x20;
+	if ((options & 0x8) != 0x0)
+	    newOptions |= 0x4;
+	if ((options & 0x2) != 0x0)
+	    newOptions |= 0x8;
+	if ((options & 0x40) != 0x0)
+	    regexError("*regex-compopt-extra* is not supported.");
+	if ((options & 0x200) != 0x0)
+	    regexError("*regex-compopt-ungreedy* is not supported.");
+	if ((options & 0x800) != 0x0) {
+	}
+	if ((options & 0x1000) != 0x0)
+	    regexError("*regex-compopt-no-auto-capture* is not supported.");
+	if ((options & 0x2000) != 0x0)
+	    regexError("*regex-compopt-no-utf8-check* is not supported.");
+	this.patternStr = patternStr;
+	pattern = Pattern.compile(patternStr, newOptions);
+	matcher = pattern.matcher("");
     }
 
     private String patternStr;
@@ -60,281 +60,281 @@ public class SubLRegexPattern extends FromSubLisp implements SubLObject {
 
     @Override
     public boolean canFastHash() {
-        return true;
+	return true;
     }
 
     public ArrayList<String> getAllMatches(CharSequence str, int options, int maxNumMatches) {
-        if (options != 0)
-            regexError("No options supported on regex match under this implementation.");
-        matcher.reset(str);
-        ArrayList<String> result = new ArrayList<String>();
-        int nFound = 0;
-        while (nFound < maxNumMatches && matcher.find()) {
-            int start = matcher.start();
-            int end = matcher.end();
-            result.add(str.subSequence(start, end).toString());
-            ++nFound;
-            for (int i = 1, size = matcher.groupCount(); i <= size && nFound < maxNumMatches; ++nFound, ++i) {
-                start = matcher.start(i);
-                end = matcher.end(i);
-                result.add(str.subSequence(start, end).toString());
-            }
-        }
-        return result;
+	if (options != 0)
+	    regexError("No options supported on regex match under this implementation.");
+	matcher.reset(str);
+	ArrayList<String> result = new ArrayList<String>();
+	int nFound = 0;
+	while (nFound < maxNumMatches && matcher.find()) {
+	    int start = matcher.start();
+	    int end = matcher.end();
+	    result.add(str.subSequence(start, end).toString());
+	    ++nFound;
+	    for (int i = 1, size = matcher.groupCount(); i <= size && nFound < maxNumMatches; ++nFound, ++i) {
+		start = matcher.start(i);
+		end = matcher.end(i);
+		result.add(str.subSequence(start, end).toString());
+	    }
+	}
+	return result;
     }
 
     public ArrayList<Integer> getAllMatchesOffsets(CharSequence str, int options, int maxNumMatches) {
-        if (options != 0)
-            regexError("No options supported on regex match under this implementation.");
-        matcher.reset(str);
-        ArrayList<Integer> result = new ArrayList<Integer>();
-        int nFound = 0;
-        if (nFound < maxNumMatches && matcher.find()) {
-            int start = matcher.start();
-            int end = matcher.end();
-            result.add(new Integer(start));
-            result.add(new Integer(end));
-            ++nFound;
-            for (int i = 1, size = matcher.groupCount(); i <= size && nFound < maxNumMatches; ++nFound, ++i) {
-                start = matcher.start(i);
-                end = matcher.end(i);
-                result.add(new Integer(start));
-                result.add(new Integer(end));
-            }
-        }
-        return result;
+	if (options != 0)
+	    regexError("No options supported on regex match under this implementation.");
+	matcher.reset(str);
+	ArrayList<Integer> result = new ArrayList<Integer>();
+	int nFound = 0;
+	if (nFound < maxNumMatches && matcher.find()) {
+	    int start = matcher.start();
+	    int end = matcher.end();
+	    result.add(new Integer(start));
+	    result.add(new Integer(end));
+	    ++nFound;
+	    for (int i = 1, size = matcher.groupCount(); i <= size && nFound < maxNumMatches; ++nFound, ++i) {
+		start = matcher.start(i);
+		end = matcher.end(i);
+		result.add(new Integer(start));
+		result.add(new Integer(end));
+	    }
+	}
+	return result;
     }
 
     /**
      * @param string
      */
     private void regexError(String string) {
-        lastRegExError = SubLObjectFactory.makeString(string);
-        Errors.error(string);
+	lastRegExError = SubLObjectFactory.makeString(string);
+	Errors.error(string);
     }
 
     @Override
     public SubLSymbol getType() {
-        return Types.$dtp_alien$;
+	return Types.$dtp_alien$;
     }
 
     @Override
     public SubLFixnum getTypeCode() {
-        return CommonSymbols.THIRTEEN_INTEGER;
+	return CommonSymbols.THIRTEEN_INTEGER;
     }
 
     @Override
     public int hashCode(int depth) {
-        return super.superHash();
+	return super.superHash();
     }
 
     @Override
     public boolean isAlien() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isAtom() {
-        return true;
+	return true;
     }
 
     @Override
     public boolean isBigIntegerBignum() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isBignum() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isBoolean() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isChar() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isCons() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isDouble() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isEnvironment() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isError() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isFixnum() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isFunction() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isFunctionSpec() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isGuid() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isHashtable() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isHashtableIterator() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isIntBignum() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isInteger() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isKeyhash() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isKeyhashIterator() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isKeyword() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isList() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isLock() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isLongBignum() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isMacroOperator() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isNil() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isNumber() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isPackage() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isPackageIterator() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isProcess() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isReadWriteLock() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isRegexPattern() {
-        return true;
+	return true;
     }
 
     @Override
     public boolean isSemaphore() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isSequence() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isStream() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isString() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isStructure() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isSymbol() {
-        return false;
+	return false;
     }
 
     @Override
     public boolean isVector() {
-        return false;
+	return false;
     }
 
     @Override
     public SubLRegexPattern toRegexPattern() {
-        return this;
+	return this;
     }
 
     @Override
     public String printObjectImpl() {
-        return new String("<#" + toTypeName() + " pattern: \"" + patternStr + "\" @" + this.hashCode(0) + ">");
+	return new String("<#" + toTypeName() + " pattern: \"" + patternStr + "\" @" + this.hashCode(0) + ">");
     }
 
     @Override
     public String toTypeName() {
-        return "REGEX-PATTERN";
+	return "REGEX-PATTERN";
     }
 }

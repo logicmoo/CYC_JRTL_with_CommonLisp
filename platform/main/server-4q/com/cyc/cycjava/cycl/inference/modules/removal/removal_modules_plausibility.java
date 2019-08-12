@@ -1,22 +1,15 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.arithmetic;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_utilities;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_plausibility;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.nart_handles;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.plausibility_utilities;
-import com.cyc.cycjava.cycl.plausible_narts;
-import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -25,28 +18,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_plausibility.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_plausibility extends SubLTranslatedFile {
+public final class removal_modules_plausibility extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_plausibility();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_plausibility";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_plausibility";
 
-    public static final String myFingerPrint = "139109a1efbc8f0721cacb41d4d3af9e12e67ce4a95bbe4d70406982728247e4";
 
     private static final SubLObject $$referentiallyEmptyNAT = reader_make_constant_shell(makeString("referentiallyEmptyNAT"));
 
@@ -194,11 +171,11 @@ public final class removal_modules_plausibility extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_plausibility_file() {
-        declareFunction(me, "removal_referentially_empty_nat_expand", "REMOVAL-REFERENTIALLY-EMPTY-NAT-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_sentence_plausibility_score_expand", "REMOVAL-SENTENCE-PLAUSIBILITY-SCORE-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_plausibility_of_collection", "REMOVAL-PLAUSIBILITY-OF-COLLECTION", 2, 0, false);
-        declareFunction(me, "removal_plausibility_of_sentence", "REMOVAL-PLAUSIBILITY-OF-SENTENCE", 2, 0, false);
-        declareFunction(me, "removal_distance_between_term_sets", "REMOVAL-DISTANCE-BETWEEN-TERM-SETS", 2, 0, false);
+        declareFunction("removal_referentially_empty_nat_expand", "REMOVAL-REFERENTIALLY-EMPTY-NAT-EXPAND", 1, 1, false);
+        declareFunction("removal_sentence_plausibility_score_expand", "REMOVAL-SENTENCE-PLAUSIBILITY-SCORE-EXPAND", 1, 1, false);
+        declareFunction("removal_plausibility_of_collection", "REMOVAL-PLAUSIBILITY-OF-COLLECTION", 2, 0, false);
+        declareFunction("removal_plausibility_of_sentence", "REMOVAL-PLAUSIBILITY-OF-SENTENCE", 2, 0, false);
+        declareFunction("removal_distance_between_term_sets", "REMOVAL-DISTANCE-BETWEEN-TERM-SETS", 2, 0, false);
         return NIL;
     }
 

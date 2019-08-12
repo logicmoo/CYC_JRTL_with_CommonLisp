@@ -593,8 +593,7 @@ public  final class kb_paths extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_paths_file() {
-    // CVS_ID("Id: kb-paths.lisp 126640 2008-12-04 13:39:36Z builder ");
-    {
+        {
       SubLObject item_var = $sym0$_KBP_QUIT__;
       if ((NIL == conses_high.member(item_var, utilities_macros.$kbp_state_variables$.getGlobalValue(), Symbols.symbol_function(EQL), Symbols.symbol_function(IDENTITY)))) {
         utilities_macros.$kbp_state_variables$.setGlobalValue(cons(item_var, utilities_macros.$kbp_state_variables$.getGlobalValue()));

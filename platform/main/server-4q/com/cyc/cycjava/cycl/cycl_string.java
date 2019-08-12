@@ -1,8 +1,24 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cycl_string;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -16,44 +32,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.cycl_string.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_C;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_s;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cycl_string extends SubLTranslatedFile {
+public final class cycl_string extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cycl_string();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cycl_string";
+    public static final String myName = "com.cyc.cycjava_2.cycl.cycl_string";
 
-    public static final String myFingerPrint = "e21bb17980ddf4bfd977617842ec65a9a2bcbf539e46c84e937942ef03df033f";
 
     private static final SubLSymbol CYCL_TO_UTF8_STRING = makeSymbol("CYCL-TO-UTF8-STRING");
 
@@ -326,26 +310,26 @@ public final class cycl_string extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cycl_string_file() {
-        declareFunction(me, "cycl_string_p", "CYCL-STRING-P", 1, 0, false);
-        declareFunction(me, "cycl_string_wXo_control_charsP", "CYCL-STRING-W/O-CONTROL-CHARS?", 1, 0, false);
-        declareFunction(me, "cycl_to_utf8_string", "CYCL-TO-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "cycl_string_to_utf8_string", "CYCL-STRING-TO-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "cycl_string_to_unicode_vector", "CYCL-STRING-TO-UNICODE-VECTOR", 1, 0, false);
-        declareFunction(me, "cycl_list_to_utf8", "CYCL-LIST-TO-UTF8", 1, 0, false);
-        declareFunction(me, "cycl_stringE", "CYCL-STRING=", 2, 0, false);
-        declareFunction(me, "cycl_string_equal", "CYCL-STRING-EQUAL", 2, 0, false);
-        declareFunction(me, "cycl_string_L", "CYCL-STRING-<", 2, 0, false);
-        declareFunction(me, "cycl_string_L_via_unicode_vectors", "CYCL-STRING-<-VIA-UNICODE-VECTORS", 2, 0, false);
-        declareFunction(me, "cycl_superstringP", "CYCL-SUPERSTRING?", 3, 0, false);
-        declareFunction(me, "cycl_string_starts_with_by_test", "CYCL-STRING-STARTS-WITH-BY-TEST", 3, 0, false);
-        declareFunction(me, "cycl_string_ends_with_by_test", "CYCL-STRING-ENDS-WITH-BY-TEST", 3, 0, false);
-        declareFunction(me, "convert_string_to_cycl", "CONVERT-STRING-TO-CYCL", 1, 0, false);
-        declareFunction(me, "cycl_string_trim", "CYCL-STRING-TRIM", 2, 0, false);
-        declareFunction(me, "cycl_string_bunge", "CYCL-STRING-BUNGE", 1, 1, false);
-        declareFunction(me, "cycl_string_tokenize", "CYCL-STRING-TOKENIZE", 2, 0, false);
-        declareFunction(me, "canonicalize_cycl_string", "CANONICALIZE-CYCL-STRING", 1, 0, false);
-        declareFunction(me, "cycl_string_to_html_escaped_and_back", "CYCL-STRING-TO-HTML-ESCAPED-AND-BACK", 1, 0, false);
-        declareFunction(me, "cycl_string_to_utf8_string_and_back", "CYCL-STRING-TO-UTF8-STRING-AND-BACK", 1, 0, false);
+        declareFunction("cycl_string_p", "CYCL-STRING-P", 1, 0, false);
+        declareFunction("cycl_string_wXo_control_charsP", "CYCL-STRING-W/O-CONTROL-CHARS?", 1, 0, false);
+        declareFunction("cycl_to_utf8_string", "CYCL-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("cycl_string_to_utf8_string", "CYCL-STRING-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("cycl_string_to_unicode_vector", "CYCL-STRING-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("cycl_list_to_utf8", "CYCL-LIST-TO-UTF8", 1, 0, false);
+        declareFunction("cycl_stringE", "CYCL-STRING=", 2, 0, false);
+        declareFunction("cycl_string_equal", "CYCL-STRING-EQUAL", 2, 0, false);
+        declareFunction("cycl_string_L", "CYCL-STRING-<", 2, 0, false);
+        declareFunction("cycl_string_L_via_unicode_vectors", "CYCL-STRING-<-VIA-UNICODE-VECTORS", 2, 0, false);
+        declareFunction("cycl_superstringP", "CYCL-SUPERSTRING?", 3, 0, false);
+        declareFunction("cycl_string_starts_with_by_test", "CYCL-STRING-STARTS-WITH-BY-TEST", 3, 0, false);
+        declareFunction("cycl_string_ends_with_by_test", "CYCL-STRING-ENDS-WITH-BY-TEST", 3, 0, false);
+        declareFunction("convert_string_to_cycl", "CONVERT-STRING-TO-CYCL", 1, 0, false);
+        declareFunction("cycl_string_trim", "CYCL-STRING-TRIM", 2, 0, false);
+        declareFunction("cycl_string_bunge", "CYCL-STRING-BUNGE", 1, 1, false);
+        declareFunction("cycl_string_tokenize", "CYCL-STRING-TOKENIZE", 2, 0, false);
+        declareFunction("canonicalize_cycl_string", "CANONICALIZE-CYCL-STRING", 1, 0, false);
+        declareFunction("cycl_string_to_html_escaped_and_back", "CYCL-STRING-TO-HTML-ESCAPED-AND-BACK", 1, 0, false);
+        declareFunction("cycl_string_to_utf8_string_and_back", "CYCL-STRING-TO-UTF8-STRING-AND-BACK", 1, 0, false);
         return NIL;
     }
 

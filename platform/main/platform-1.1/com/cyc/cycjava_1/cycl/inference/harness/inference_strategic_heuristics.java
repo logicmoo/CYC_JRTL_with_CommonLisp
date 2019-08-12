@@ -1218,8 +1218,7 @@ All numeric lookup tables should end with :positive-infinity. */
   }
 
   public static final SubLObject setup_inference_strategic_heuristics_file() {
-    // CVS_ID("Id: inference-strategic-heuristics.lisp 128456 2009-07-31 16:45:00Z pace ");
-    subl_macro_promotions.declare_defglobal($sym0$_STRATEGIC_HEURISTIC_INDEX_);
+        subl_macro_promotions.declare_defglobal($sym0$_STRATEGIC_HEURISTIC_INDEX_);
     access_macros.register_macro_helper($sym1$STRATEGIC_HEURISTIC_INDEX, $sym2$DO_STRATEGIC_HEURISTICS);
     access_macros.register_macro_helper($sym16$DO_STRATEGIC_HEURISTICS_TACTIC_MATCH_P, $sym2$DO_STRATEGIC_HEURISTICS);
     declare_strategic_heuristic($kw25$SHALLOW_AND_CHEAP, $list26);

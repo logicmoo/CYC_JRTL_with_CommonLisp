@@ -1195,8 +1195,7 @@ public  final class sbhl_search_what_mts extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_search_what_mts_file() {
-    // CVS_ID("Id: sbhl-search-what-mts.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym3$POSSIBLY_UPDATE_SBHL_PATH_MTS, $sym5$SBHL_REBIND_PATH_MTS);
+        access_macros.register_macro_helper($sym3$POSSIBLY_UPDATE_SBHL_PATH_MTS, $sym5$SBHL_REBIND_PATH_MTS);
     return NIL;
   }
 

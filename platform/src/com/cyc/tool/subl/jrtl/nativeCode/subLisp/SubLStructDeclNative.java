@@ -1,17 +1,19 @@
 /* For LarKC */
 package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.armedbear.j.Debug;
 import org.armedbear.lisp.LispObject;
 import org.armedbear.lisp.Primitive;
 import org.armedbear.lisp.Symbol;
-import org.logicmoo.system.BeanShellCntrl.LispSlot;
 
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
@@ -21,511 +23,507 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbolFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
+import com.cyc.tool.subl.util.SubLFiles.LispSlot;
 
 //import sun.reflect.FieldAccessor;
 
-public class SubLStructDeclNative extends SubLStructDecl
-{
-	
-	
-	
-	
-	public LispObject isInstance(SubLObject v_object)
-	{
-		boolean was = ((v_object.getClass() == structClass));
-		return was ? SubLT.T : SubLNil.NIL;
+public class SubLStructDeclNative extends SubLStructDecl {
+
+    private Constructor<SubLStruct> defaultConstructor;
+
+    @Override
+    public LispObject isInstance(SubLObject v_object) {
+	boolean was = ((v_object.getClass() == structClass));
+	return was ? SubLT.T : SubLNil.NIL;
+    }
+
+    public static final class is_instance_of_foriegn_class extends Primitive {
+	private Class clazz;
+
+	public is_instance_of_foriegn_class(Symbol named, Class clazz) {
+	    super(named);
+	    named.setFunction(this);
+	    this.clazz = clazz;
+
 	}
 
-	
+	@Override
+	public LispObject execute(LispObject arg) {
+	    return clazz.isInstance(arg) ? SubLT.T : SubLNil.NIL;
+	}
+    }
 
-	public static final class is_instance_of_foriegn_class extends Primitive
-	{
-		private Class clazz;
+    //	public static SubLObject is_instance_p(final SubLObject v_object)
+    //	{
+    //		return assertion_content_holder.isInstance(v_object);
+    //	}
 
-		public is_instance_of_foriegn_class(Symbol named, Class clazz)
-		{
-			super(named);
-			named.setFunction(this);
-			this.clazz = clazz;
+    public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, String getterPrefix, String setterPre_Prefix) {
+	Field[] actualFields = structClass.getDeclaredFields();
+	List useFields = new ArrayList();
+	boolean annotationRequired = structClass.isAnnotationPresent(LispSlot.class);
 
-		}		
-		
-		public LispObject execute(LispObject arg)
-		{
-			return clazz.isInstance(arg) ? SubLT.T : SubLNil.NIL;
+	for (int i = 0; i < actualFields.length; i++) {
+	    Field f = actualFields[i];
+	    if (annotationRequired) {
+		if (!f.isAnnotationPresent(LispSlot.class)) {
+		    continue;
 		}
+	    } else {
+		if (Modifier.isStatic(f.getModifiers())) {
+		    if (!f.isAnnotationPresent(LispSlot.class)) {
+			continue;
+		    }
+		}
+	    }
+	    useFields.add(f.getName());
+	}
+	return makeStructDeclNative(structClass, typeName, null, getterPrefix, setterPre_Prefix, (String[]) useFields.toArray(new String[useFields.size()]), null);
+    }
+
+    public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, SubLSymbol predicateName, String getterPrefix, String setterPre_Prefix, String[] actualFieldNames, SubLSymbol printFunction) {
+	if (getterPrefix == null)
+	    getterPrefix = typeName.getName();
+	String getter = getterPrefix + "-";
+	SubLPackage intoPackage = typeName.getPackage();
+	String setter = setterPre_Prefix + getter;
+
+	if (printFunction == null || printFunction == SubLNil.NIL) {
+	    printFunction = SubLObjectFactory.makeSymbol("DEFAULT-STRUCT-PRINT-FUNCTION");
+	}
+	if (predicateName == null || predicateName == SubLNil.NIL) {
+	    predicateName = SubLObjectFactory.makeSymbol(typeName.getName() + "-P", intoPackage);
+	    new is_instance_of_foriegn_class(predicateName.toLispObject(), structClass);
 	}
 
-	//	public static SubLObject is_instance_p(final SubLObject v_object)
-	//	{
-	//		return assertion_content_holder.isInstance(v_object);
-	//	}
+	SubLSymbol[] slotNamesArray = new SubLSymbol[actualFieldNames.length];
+	SubLSymbol[] slotKeywordNamesArray = new SubLSymbol[actualFieldNames.length];
+	SubLSymbol[] getterNamesArray = new SubLSymbol[actualFieldNames.length];
+	SubLSymbol[] setterNamesArray = new SubLSymbol[actualFieldNames.length];
+	for (int i = 0; i < actualFieldNames.length; i++) {
+	    String fn = actualFieldNames[i];
+	    if (fn.startsWith("$")) {
+		fn = fn.substring(1);
+	    } else if (fn.startsWith("_")) {
+		fn = fn.substring(1);
+	    }
+	    fn = fn.replaceAll("_", "-").toUpperCase();
+	    slotKeywordNamesArray[i] = SubLSymbolFactory.makeKeyword(fn);
+	    slotNamesArray[i] = SubLSymbolFactory.makeSymbol(fn, intoPackage);
+	    getterNamesArray[i] = SubLSymbolFactory.makeSymbol(getter + fn, intoPackage);
+	    setterNamesArray[i] = SubLSymbolFactory.makeSymbol(setter + fn, intoPackage);
+	}
 
-	public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, String getterPrefix, String setterPre_Prefix)
-	{
-		Field[] actualFields = structClass.getDeclaredFields();
-		List useFields = new ArrayList();
-		boolean annotationRequired = structClass.isAnnotationPresent(LispSlot.class);
+	return new SubLStructDeclNative(structClass, typeName, predicateName, slotNamesArray, slotKeywordNamesArray, actualFieldNames, getterNamesArray, setterNamesArray, printFunction, null, false);
+    }
 
-		for (int i = 0; i < actualFields.length; i++)
-		{
-			Field f = actualFields[i];
-			if (annotationRequired)
-			{
-				if (!f.isAnnotationPresent(LispSlot.class))
-				{
-					continue;
-				}
+    public SubLStructDeclNative(Class structClass, SubLSymbol structName, SubLSymbol testFunction, //
+	    SubLSymbol[] slotNames, SubLSymbol[] slotKeywordNames, String[] actualFieldNames, //
+	    SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol printFunction, //
+	    SubLSymbol hashFunction, boolean isInterned) {
+	super(structName, getterNames, setterNames, slotKeywordNames, printFunction, hashFunction, testFunction, isInterned);
+	declaredFieldNameToFieldHash = new Hashtable();
+	this.structClass = structClass;
+
+	this.actualFieldNames = actualFieldNames;
+	int size = actualFieldNames.length;
+	fieldDecls = new Field[size];
+	int pingAt = size - 1;
+	int mustBeN = structClass.getDeclaredFields().length - 1;
+	assert Debug.assertTrue(size == mustBeN);
+	Debug.assertTrue(size == slotKeywordNames.length);
+	Debug.assertTrue(size == slotNames.length);
+	Debug.assertTrue(size == getterNames.length);
+	Debug.assertTrue(size == setterNames.length);
+	try {
+	    for (int i = 0; i < size; ++i) {
+		Field f = structClass.getDeclaredField(this.actualFieldNames[i]);
+		if (i == 0 || i == pingAt) {
+		    /* FIXME TODO Make work in JDK 11
+		    FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
+		    if (!(before instanceof SpyFA))
+		    {
+		    	SpyFA spy = new SpyFA(pingAt, i, before);
+		    	sfa.invoke(f, spy, true);
+		    }
+		    */
+		}
+		fieldDecls[i] = f;
+	    }
+	} catch (Exception e) {
+	    Errors.error("Got invalid struct field declaration.", e);
+	}
+    }
+    //
+    //	public static void main(String[] args)
+    //	{
+    //	}
+
+    @Override
+    public SubLStruct newInstance() {
+	try {
+	    if (defaultConstructor == null) {
+		structClass = getStructClass();
+		try {
+		    defaultConstructor = structClass.getConstructor(SubLObject.class);
+		} catch (NoSuchMethodException e0) {
+		    try {
+			defaultConstructor = structClass.getDeclaredConstructor(SubLObject.class);
+		    } catch (NoSuchMethodException e1) {
+			try {
+			    defaultConstructor = structClass.getConstructor();
+			} catch (NoSuchMethodException e2) {
+			    try {
+				defaultConstructor = structClass.getDeclaredConstructor();
+			    } catch (NoSuchMethodException e3) {
+				throw e2;
+			    }
 			}
-			else
-			{
-				if (Modifier.isStatic(f.getModifiers()))
-				{
-					if (!f.isAnnotationPresent(LispSlot.class))
-					{
-						continue;
-					}
-				}
-			}
-			useFields.add(f.getName());
+		    }
 		}
-		return makeStructDeclNative(structClass, typeName, null, getterPrefix, setterPre_Prefix, (String[]) useFields.toArray(new String[useFields.size()]), null);
+
+		defaultConstructor.setAccessible(true);
+	    }
+	    return defaultConstructor.newInstance();
+	} catch (InstantiationException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IllegalAccessException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (NoSuchMethodException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (SecurityException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (IllegalArgumentException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	} catch (InvocationTargetException e) {
+	    // TODO Auto-generated catch block
+	    e.printStackTrace();
+	}
+	return super.newInstance();
+    }
+
+    public Class<SubLStruct> getStructClass() {
+	return structClass;
+    }
+
+    private Field[] fieldDecls;
+    private Class structClass;
+    private String[] actualFieldNames;
+    private Hashtable<SubLSymbol, Field> declaredFieldNameToFieldHash;
+    private int pongAt;
+
+    public Field getFieldDecl(int i) {
+	return fieldDecls[i];
+    }
+
+    public void setFieldFromName(Object thiz, SubLSymbol declaredFieldName, SubLObject value) {
+	Field field = declaredFieldNameToFieldHash.get(declaredFieldName);
+	if (field == null)
+	    Errors.error("Can't find field: " + declaredFieldName + " on object: " + this + ".");
+	try {
+	    field.set(thiz, value);
+	} catch (Exception e) {
+	    Errors.error("Unable to set field on: " + this + " using name " + declaredFieldName + ".", e);
+	}
+    }
+
+    public SubLObject getFieldFromName(Object thiz, SubLSymbol declaredFieldName) {
+	Field field = declaredFieldNameToFieldHash.get(declaredFieldName);
+	if (field == null)
+	    Errors.error("Can't find field: " + declaredFieldName + " on object: " + this + ".");
+	SubLObject value;
+	try {
+	    value = (SubLObject) field.get(thiz);
+	    return value;
+	} catch (Exception e) {
+	    return Errors.error("Unable to get field on: " + this + " using name " + declaredFieldName + ".", e);
 	}
 
-	public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, SubLSymbol predicateName, String getterPrefix, String setterPre_Prefix, String[] actualFieldNames, SubLSymbol printFunction)
+    }
+    /*
+    
+    TODO make wiork in JDK 11
+    	public class SpyFA implements FieldAccessor
+    	{
+    		final FieldAccessor before;
+    		private int index;
+    		private int pingAt;
+    
+    		public SpyFA(int pingAt, int i, FieldAccessor b)
+    		{
+    
+    			this.pingAt = pingAt;
+    			this.index = i;
+    			before = b;
+    
+    		}
+    
+    
+    		
+    		
+    		
+    		public Object get(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.get(arg0);
+    		}
+    
+    		
+    		
+    		
+    		public boolean getBoolean(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getBoolean(arg0);
+    		}
+    
+    		
+    
+    		
+    		public byte getByte(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getByte(arg0);
+    		}
+    
+    		
+    		
+    		
+    		public char getChar(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getChar(arg0);
+    		}
+    
+    		
+    		
+    		
+    		
+    		public double getDouble(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getDouble(arg0);
+    		}
+    
+    		
+    		
+    		
+    		
+    		public float getFloat(Object arg0) throws IllegalArgumentException
+    		{
+    
+    			return before.getFloat(arg0);
+    		}
+    
+    
+    		
+    		
+    		
+    		public int getInt(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getInt(arg0);
+    		}
+    
+    		
+    		
+    		
+    		
+    		public long getLong(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getLong(arg0);
+    		}
+    
+    		
+    		
+    		
+    		
+    		public short getShort(Object arg0) throws IllegalArgumentException
+    		{
+    			return before.getShort(arg0);
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void set(Object arg0, Object arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			if (pingAt == index || index == 0)
+    			{
+    				Object waz = before.get(arg0);
+    				before.set(arg0, arg1);
+    				PrologSync.wasSetField((AbstractSubLStruct) arg0, index, pingAt, waz, arg1);
+    				return;
+    			}
+    			before.set(arg0, arg1);
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setBoolean(Object arg0, boolean arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setBoolean(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setByte(Object arg0, byte arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setByte(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setChar(Object arg0, char arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setChar(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setDouble(Object arg0, double arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setDouble(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setFloat(Object arg0, float arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setFloat(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setInt(Object arg0, int arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setInt(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setLong(Object arg0, long arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setLong(arg0, arg1);
+    
+    		}
+    
+    		
+    		
+    		
+    		
+    		public void setShort(Object arg0, short arg1) throws IllegalArgumentException, IllegalAccessException
+    		{
+    			before.setShort(arg0, arg1);
+    
+    		}
+    
+    	}
+    	
+     */
+
+    // public static Unsafe unsafe = Unsafe.getUnsafe();
+    static Method afa;
+    static Method sfa;
+    static {
+	/* TODO Make work in JDK11
+	try
 	{
-		if (getterPrefix == null) getterPrefix = typeName.getName();
-		String getter = getterPrefix + "-";
-		SubLPackage intoPackage = typeName.getPackage();
-		String setter = setterPre_Prefix + getter;
-
-		if (printFunction == null || printFunction == SubLNil.NIL)
-		{
-			printFunction = SubLObjectFactory.makeSymbol("DEFAULT-STRUCT-PRINT-FUNCTION");
-		}
-		if (predicateName == null || predicateName == SubLNil.NIL)
-		{
-			predicateName = SubLObjectFactory.makeSymbol(typeName.getName() + "-P", intoPackage);
-			new is_instance_of_foriegn_class(predicateName.toLispObject(), structClass);
-		}
-
-		SubLSymbol[] slotNamesArray = new SubLSymbol[actualFieldNames.length];
-		SubLSymbol[] slotKeywordNamesArray = new SubLSymbol[actualFieldNames.length];
-		SubLSymbol[] getterNamesArray = new SubLSymbol[actualFieldNames.length];
-		SubLSymbol[] setterNamesArray = new SubLSymbol[actualFieldNames.length];
-		for (int i = 0; i < actualFieldNames.length; i++)
-		{
-			String fn = actualFieldNames[i];
-			if (fn.startsWith("$"))
-			{
-				fn = fn.substring(1);
-			}
-			else if (fn.startsWith("_"))
-			{
-				fn = fn.substring(1);
-			}
-			fn = fn.replaceAll("_", "-").toUpperCase();
-			slotKeywordNamesArray[i] = SubLSymbolFactory.makeKeyword(fn);
-			slotNamesArray[i] = SubLSymbolFactory.makeSymbol(fn, intoPackage);
-			getterNamesArray[i] = SubLSymbolFactory.makeSymbol(getter + fn, intoPackage);
-			setterNamesArray[i] = SubLSymbolFactory.makeSymbol(setter + fn, intoPackage);
-		}
-
-		return new SubLStructDeclNative(structClass, typeName, predicateName, slotNamesArray, slotKeywordNamesArray, actualFieldNames, getterNamesArray, setterNamesArray, printFunction, null, false);
+		afa = Field.class.getDeclaredMethod("acquireFieldAccessor", boolean.class);
+		afa.setAccessible(true);
+		sfa = Field.class.getDeclaredMethod("setFieldAccessor", FieldAccessor.class, boolean.class);
+		sfa.setAccessible(true);
+	} catch (Throwable e)
+	{
+		throw new RuntimeException(e);
 	}
-
-	public SubLStructDeclNative(Class structClass, SubLSymbol structName, SubLSymbol testFunction, SubLSymbol[] slotNames, SubLSymbol[] slotKeywordNames, String[] actualFieldNames, SubLSymbol[] getterNames, SubLSymbol[] setterNames, SubLSymbol printFunction, SubLSymbol hashFunction, boolean isInterned)
-	{
-		super(structName, getterNames, setterNames, slotKeywordNames, printFunction, hashFunction, testFunction, isInterned);
-		declaredFieldNameToFieldHash = new Hashtable();
-		this.structClass = structClass;
-
-		this.actualFieldNames = actualFieldNames;
-		int size = actualFieldNames.length;
-		fieldDecls = new Field[size];
-		int pingAt = size - 1;
-		try
-		{
-			for (int i = 0; i < size; ++i)
-			{
-				Field f = structClass.getDeclaredField(this.actualFieldNames[i]);
-				if (i == 0 || i == pingAt)
-				{
-					/* FIXME TODO Make work in JDK 11
-					FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
-					if (!(before instanceof SpyFA))
-					{
-						SpyFA spy = new SpyFA(pingAt, i, before);
-						sfa.invoke(f, spy, true);
-					}
-					*/
-				}
-				fieldDecls[i] = f;
-			}
-		} catch (Exception e)
-		{
-			Errors.error("Got invalid struct field declaration.", e);
-		}
-	}
-	//
-	//	public static void main(String[] args)
-	//	{
-	//	}
-
-	
-	
-	
-	
-	public SubLStruct newInstance()
-	{
-		try
-		{
-			return getStructClass().newInstance();
-		} catch (InstantiationException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IllegalAccessException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return super.newInstance();
-	}
-
-	public Class<SubLStruct> getStructClass()
-	{
-		return structClass;
-	}
-
-	private Field[] fieldDecls;
-	private Class structClass;
-	private String[] actualFieldNames;
-	private Hashtable<SubLSymbol, Field> declaredFieldNameToFieldHash;
-	private int pongAt;
-
-	public Field getFieldDecl(int i)
-	{
-		return fieldDecls[i];
-	}
-
-	public void setFieldFromName(Object thiz, SubLSymbol declaredFieldName, SubLObject value)
-	{
-		Field field = (Field) declaredFieldNameToFieldHash.get(declaredFieldName);
-		if (field == null) Errors.error("Can't find field: " + declaredFieldName + " on object: " + this + ".");
-		try
-		{
-			field.set(thiz, value);
-		} catch (Exception e)
-		{
-			Errors.error("Unable to set field on: " + this + " using name " + declaredFieldName + ".", e);
-		}
-	}
-
-	public SubLObject getFieldFromName(Object thiz, SubLSymbol declaredFieldName)
-	{
-		Field field = (Field) declaredFieldNameToFieldHash.get(declaredFieldName);
-		if (field == null) Errors.error("Can't find field: " + declaredFieldName + " on object: " + this + ".");
-		SubLObject value;
-		try
-		{
-			value = (SubLObject) field.get(thiz);
-			return value;
-		} catch (Exception e)
-		{
-			return Errors.error("Unable to get field on: " + this + " using name " + declaredFieldName + ".", e);
-		}
-
-	}
-/*
-
-TODO make wiork in JDK 11
-	public class SpyFA implements FieldAccessor
-	{
-		final FieldAccessor before;
-		private int index;
-		private int pingAt;
-
-		public SpyFA(int pingAt, int i, FieldAccessor b)
-		{
-
-			this.pingAt = pingAt;
-			this.index = i;
-			before = b;
-
-		}
-
-
-		
-		
-		
-		public Object get(Object arg0) throws IllegalArgumentException
-		{
-			return before.get(arg0);
-		}
-
-		
-		
-		
-		public boolean getBoolean(Object arg0) throws IllegalArgumentException
-		{
-			return before.getBoolean(arg0);
-		}
-
-		
-
-		
-		public byte getByte(Object arg0) throws IllegalArgumentException
-		{
-			return before.getByte(arg0);
-		}
-
-		
-		
-		
-		public char getChar(Object arg0) throws IllegalArgumentException
-		{
-			return before.getChar(arg0);
-		}
-
-		
-		
-		
-		
-		public double getDouble(Object arg0) throws IllegalArgumentException
-		{
-			return before.getDouble(arg0);
-		}
-
-		
-		
-		
-		
-		public float getFloat(Object arg0) throws IllegalArgumentException
-		{
-
-			return before.getFloat(arg0);
-		}
-
-
-		
-		
-		
-		public int getInt(Object arg0) throws IllegalArgumentException
-		{
-			return before.getInt(arg0);
-		}
-
-		
-		
-		
-		
-		public long getLong(Object arg0) throws IllegalArgumentException
-		{
-			return before.getLong(arg0);
-		}
-
-		
-		
-		
-		
-		public short getShort(Object arg0) throws IllegalArgumentException
-		{
-			return before.getShort(arg0);
-		}
-
-		
-		
-		
-		
-		public void set(Object arg0, Object arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			if (pingAt == index || index == 0)
-			{
-				Object waz = before.get(arg0);
-				before.set(arg0, arg1);
-				PrologSync.wasSetField((AbstractSubLStruct) arg0, index, pingAt, waz, arg1);
-				return;
-			}
-			before.set(arg0, arg1);
-		}
-
-		
-		
-		
-		
-		public void setBoolean(Object arg0, boolean arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setBoolean(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setByte(Object arg0, byte arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setByte(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setChar(Object arg0, char arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setChar(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setDouble(Object arg0, double arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setDouble(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setFloat(Object arg0, float arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setFloat(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setInt(Object arg0, int arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setInt(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setLong(Object arg0, long arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setLong(arg0, arg1);
-
-		}
-
-		
-		
-		
-		
-		public void setShort(Object arg0, short arg1) throws IllegalArgumentException, IllegalAccessException
-		{
-			before.setShort(arg0, arg1);
-
-		}
-
-	}
-	
- */
-
-	// public static Unsafe unsafe = Unsafe.getUnsafe();
-	static Method afa;
-	static Method sfa;
-	static
-	{
-		/* TODO Make work in JDK11
-		try
-		{
-			afa = Field.class.getDeclaredMethod("acquireFieldAccessor", boolean.class);
-			afa.setAccessible(true);
-			sfa = Field.class.getDeclaredMethod("setFieldAccessor", FieldAccessor.class, boolean.class);
-			sfa.setAccessible(true);
-		} catch (Throwable e)
-		{
-			throw new RuntimeException(e);
-		}
-*/
-	}
-
-	
-	
-	
-	
-	public void setTrackStructInstance(boolean track, int pingAt)
-	{
-		this.izTracked = track;
-		if (izTracked)
-		{
-			listenToAllFields(fieldDecls, pingAt);
-		}
-	}
-
-	private void listenToAllFields(Field[] fields, int pingAt)
-	{
-		try
-		{
-			if (pingAt == -1)
-			{
-				pingAt = fields.length - 1;
-			}
-
-			if (pingAt < 0) { return; }
-			this.pongAt = pingAt;
-			Field f = fields[pingAt];
-			/*
-			 TODO for JDK11
-			FieldAccessor before;
-			before = (FieldAccessor) afa.invoke(f, true);
-			if (before instanceof SpyFA) return;
-			for (int i = 0; i < fields.length; i++)
-			{
-	 			f = fields[i];
-
-				before = (FieldAccessor) afa.invoke(f, true);
-				if (!(before instanceof SpyFA))
-				{
-					SpyFA spy = new SpyFA(pingAt, i, before);
-					sfa.invoke(f, spy, true);
-				}
-			}
-*/
-		} catch (Throwable e)
-		{
-			throw new RuntimeException(e);
-		}
-	}
-
-	void listenToField(Field[] fields, int pingAt)
-	{
-		try
-		{
-			if (pingAt == -1)
-			{
-				pingAt = fields.length - 1;
-			}
-
-			if (pingAt < 0) { return; }
-			Field f = fields[pingAt];
-			/*
-			 TODO for JDK11
-		
-			FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
-			if (!(before instanceof SpyFA))
-			{
-				SpyFA spy = new SpyFA(pingAt, pingAt, before);
-				sfa.invoke(f, spy, true);
-			}
 	*/
+    }
 
-		} catch (Throwable e)
-		{
-			throw new RuntimeException(e);
-		}
+    @Override
+    public void setTrackStructInstance(boolean track, int pingAt) {
+	this.izTracked = track;
+	if (izTracked) {
+	    listenToAllFields(fieldDecls, pingAt);
 	}
+    }
+
+    private void listenToAllFields(Field[] fields, int pingAt) {
+	try {
+	    if (pingAt == -1) {
+		pingAt = fields.length - 1;
+	    }
+
+	    if (pingAt < 0) {
+		return;
+	    }
+	    this.pongAt = pingAt;
+	    Field f = fields[pingAt];
+	    /*
+	     TODO for JDK11
+	    FieldAccessor before;
+	    before = (FieldAccessor) afa.invoke(f, true);
+	    if (before instanceof SpyFA) return;
+	    for (int i = 0; i < fields.length; i++)
+	    {
+	    	f = fields[i];
+	    
+	    	before = (FieldAccessor) afa.invoke(f, true);
+	    	if (!(before instanceof SpyFA))
+	    	{
+	    		SpyFA spy = new SpyFA(pingAt, i, before);
+	    		sfa.invoke(f, spy, true);
+	    	}
+	    }
+	    */
+	} catch (Throwable e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
+    void listenToField(Field[] fields, int pingAt) {
+	try {
+	    if (pingAt == -1) {
+		pingAt = fields.length - 1;
+	    }
+
+	    if (pingAt < 0) {
+		return;
+	    }
+	    Field f = fields[pingAt];
+	    /*
+	     TODO for JDK11
+	    
+	    FieldAccessor before = (FieldAccessor) afa.invoke(f, true);
+	    if (!(before instanceof SpyFA))
+	    {
+	    	SpyFA spy = new SpyFA(pingAt, pingAt, before);
+	    	sfa.invoke(f, spy, true);
+	    }
+	    */
+
+	} catch (Throwable e) {
+	    throw new RuntimeException(e);
+	}
+    }
 }

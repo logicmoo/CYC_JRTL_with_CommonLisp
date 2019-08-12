@@ -151,8 +151,7 @@ public  final class removal_modules_reflexivity extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_reflexivity_file() {
-    // CVS_ID("Id: removal-modules-reflexivity.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_removal_module($kw1$REMOVAL_REFLEXIVE_BOTH, $list2);
+        inference_modules.inference_removal_module($kw1$REMOVAL_REFLEXIVE_BOTH, $list2);
     inference_modules.inference_removal_module($kw3$REMOVAL_REFLEXIVE_ONE_ARG, $list4);
     inference_modules.inference_removal_module($kw5$REMOVAL_REFLEXIVE_MAP, $list6);
     inference_modules.inference_removal_module($kw8$REMOVAL_IRREFLEXIVE_BOTH, $list9);

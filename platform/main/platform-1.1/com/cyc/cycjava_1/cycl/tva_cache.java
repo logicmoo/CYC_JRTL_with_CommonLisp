@@ -882,8 +882,7 @@ public  final class tva_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_tva_cache_file() {
-    // CVS_ID("Id: tva-cache.lisp 126841 2009-01-17 16:49:52Z baxter ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tva_cache$.getGlobalValue(), Symbols.symbol_function($sym27$TVA_CACHE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tva_cache$.getGlobalValue(), Symbols.symbol_function($sym27$TVA_CACHE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym28$TVA_CACHE_PRED, $sym29$_CSETF_TVA_CACHE_PRED);
     Structures.def_csetf($sym30$TVA_CACHE_INDEX_ARGNUM, $sym31$_CSETF_TVA_CACHE_INDEX_ARGNUM);
     Structures.def_csetf($sym32$TVA_CACHE_TVA_PRED_GAFS, $sym33$_CSETF_TVA_CACHE_TVA_PRED_GAFS);

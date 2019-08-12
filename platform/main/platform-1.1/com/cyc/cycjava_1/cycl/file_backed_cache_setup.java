@@ -188,8 +188,7 @@ public  final class file_backed_cache_setup extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_file_backed_cache_setup_file() {
-    // CVS_ID("Id: file-backed-cache-setup.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_REGISTERED_FILE_BACKED_CACHES_);
+        subl_macro_promotions.declare_defglobal($sym0$_REGISTERED_FILE_BACKED_CACHES_);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_file_backed_cache_registration$.getGlobalValue(), Symbols.symbol_function($sym10$FILE_BACKED_CACHE_REGISTRATION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym11$FBCR_GENERATION_FUNCTION, $sym12$_CSETF_FBCR_GENERATION_FUNCTION);
     Structures.def_csetf($sym13$FBCR_INITIALIZATION_FUNCTION, $sym14$_CSETF_FBCR_INITIALIZATION_FUNCTION);

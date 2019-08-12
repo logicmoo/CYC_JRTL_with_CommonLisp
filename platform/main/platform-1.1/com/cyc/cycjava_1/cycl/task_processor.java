@@ -1866,8 +1866,7 @@ request originated. */
   }
 
   public static final SubLObject setup_task_processor_file() {
-    // CVS_ID("Id: task-processor.lisp 128320 2009-07-14 22:00:17Z rck ");
-    access_macros.register_external_symbol($sym0$SET_TASK_PROCESSOR_VERBOSITY);
+        access_macros.register_external_symbol($sym0$SET_TASK_PROCESSOR_VERBOSITY);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_task_info$.getGlobalValue(), Symbols.symbol_function($sym10$TASK_INFO_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym11$TI_TYPE, $sym12$_CSETF_TI_TYPE);
     Structures.def_csetf($sym13$TI_ID, $sym14$_CSETF_TI_ID);

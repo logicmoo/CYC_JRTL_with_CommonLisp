@@ -1299,8 +1299,7 @@ START and END determine the relevant portion of STRING. */
   }
 
   public static final SubLObject setup_tries_file() {
-    // CVS_ID("Id: tries.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_trie$.getGlobalValue(), Symbols.symbol_function($sym8$TRIE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_trie$.getGlobalValue(), Symbols.symbol_function($sym8$TRIE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$TRIE_NAME, $sym10$_CSETF_TRIE_NAME);
     Structures.def_csetf($sym11$TRIE_TOP_NODE, $sym12$_CSETF_TRIE_TOP_NODE);
     Structures.def_csetf($sym13$TRIE_UNIQUE, $sym14$_CSETF_TRIE_UNIQUE);

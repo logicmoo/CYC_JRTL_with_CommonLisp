@@ -164,8 +164,7 @@ public  final class glob extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_glob_file() {
-    // CVS_ID("Id: glob.lisp 127324 2009-03-06 16:55:08Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_glob$.getGlobalValue(), Symbols.symbol_function($sym7$GLOB_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_glob$.getGlobalValue(), Symbols.symbol_function($sym7$GLOB_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$GLOB_STRUC_TEST, $sym9$_CSETF_GLOB_STRUC_TEST);
     Structures.def_csetf($sym10$GLOB_STRUC_MAX_SIZE, $sym11$_CSETF_GLOB_STRUC_MAX_SIZE);
     Structures.def_csetf($sym12$GLOB_STRUC_ID_STATE, $sym13$_CSETF_GLOB_STRUC_ID_STATE);

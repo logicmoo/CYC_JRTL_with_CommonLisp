@@ -288,8 +288,7 @@ public  final class system_translation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_system_translation_file() {
-    // CVS_ID("Id: system-translation.lisp 128693 2009-09-02 20:28:49Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_system_translation$.getGlobalValue(), Symbols.symbol_function($sym9$SYSTEM_TRANSLATION_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_system_translation$.getGlobalValue(), Symbols.symbol_function($sym9$SYSTEM_TRANSLATION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym10$SYS_TR_SYSTEM, $sym11$_CSETF_SYS_TR_SYSTEM);
     Structures.def_csetf($sym12$SYS_TR_BACKEND, $sym13$_CSETF_SYS_TR_BACKEND);
     Structures.def_csetf($sym14$SYS_TR_FEATURES, $sym15$_CSETF_SYS_TR_FEATURES);

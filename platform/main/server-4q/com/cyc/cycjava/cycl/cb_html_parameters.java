@@ -1,27 +1,21 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_html_parameters;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_html_parameters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cb_html_parameters extends SubLTranslatedFile {
+public final class cb_html_parameters extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_html_parameters();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_html_parameters";
+    public static final String myName = "com.cyc.cycjava_2.cycl.cb_html_parameters";
 
-    public static final String myFingerPrint = "bf11cac43edde25761b233816dc05d0ca4a0a5bafd5bcabb4318dd659d0230b4";
 
     // defparameter
     public static final SubLSymbol $cb_html_assertion_sentence_class$ = makeSymbol("*CB-HTML-ASSERTION-SENTENCE-CLASS*");

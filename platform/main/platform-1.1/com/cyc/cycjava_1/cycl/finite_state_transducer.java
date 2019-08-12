@@ -147,8 +147,7 @@ public  final class finite_state_transducer extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_finite_state_transducer_file() {
-    // CVS_ID("Id: finite-state-transducer.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_finite_state_transducer$.getGlobalValue(), Symbols.symbol_function($sym7$FINITE_STATE_TRANSDUCER_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_finite_state_transducer$.getGlobalValue(), Symbols.symbol_function($sym7$FINITE_STATE_TRANSDUCER_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$FST_INITIAL_STATE, $sym9$_CSETF_FST_INITIAL_STATE);
     Structures.def_csetf($sym10$FST_FINAL_STATES, $sym11$_CSETF_FST_FINAL_STATES);
     Structures.def_csetf($sym12$FST_MACHINE_TABLE, $sym13$_CSETF_FST_MACHINE_TABLE);

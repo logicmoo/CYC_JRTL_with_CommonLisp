@@ -1,12 +1,46 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
+
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.arithmetic.*;
+import static com.cyc.cycjava.cycl.assertions_high.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.czer_main.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.fraction_utilities.*;
+import static com.cyc.cycjava.cycl.inference.ask_utilities.*;
+import static com.cyc.cycjava.cycl.iteration.*;
+import static com.cyc.cycjava.cycl.kb_mapping_macros.*;
+import static com.cyc.cycjava.cycl.kb_utilities.*;
+import static com.cyc.cycjava.cycl.number_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
 
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.harness.inference_worker;
 import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_transitivity;
-import com.cyc.cycjava.cycl.quantities;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -18,91 +52,65 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.quantities.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_period;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class quantities extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      QUANTITIES
+ * source file: /cyc/top/cycl/quantities.lisp
+ * created:     2019/07/03 17:37:52
+ */
+public final class quantities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new quantities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.quantities";
+ public static final String myName = "com.cyc.cycjava.cycl.quantities";
 
-    public static final String myFingerPrint = "b62c13b4452347b9cec9fc5629a767691632b72408bf6616f8859572801ff01b";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $convert_units_as_absolutesP$ = makeSymbol("*CONVERT-UNITS-AS-ABSOLUTES?*");
 
     // deflexical
+    // Definitions
+    /**
+     * A representative sample of the KB constants that numerical quantification depends on.
+     */
+    @LispMethod(comment = "A representative sample of the KB constants that numerical quantification depends on.\ndeflexical")
     private static final SubLSymbol $quant_core_constants$ = makeSymbol("*QUANT-CORE-CONSTANTS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $get_umf_search_state$ = makeSymbol("*GET-UMF-SEARCH-STATE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $get_umf_paths$ = makeSymbol("*GET-UMF-PATHS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $get_umf_allow_fractionsP$ = makeSymbol("*GET-UMF-ALLOW-FRACTIONS?*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $round_nth_n$ = makeSymbol("*ROUND-NTH-N*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $round_nth_output_format$ = makeSymbol("*ROUND-NTH-OUTPUT-FORMAT*");
 
     // Internal Constants
-    public static final SubLList $list0 = list(new SubLObject[]{ reader_make_constant_shell(makeString("IntervalMinFn")), reader_make_constant_shell(makeString("IntervalMaxFn")), reader_make_constant_shell(makeString("Unity")), reader_make_constant_shell(makeString("UnitOfMeasure")), reader_make_constant_shell(makeString("maxQuantValue")), reader_make_constant_shell(makeString("minQuantValue")), reader_make_constant_shell(makeString("unitMultiplicationFactor")), reader_make_constant_shell(makeString("multiplicationUnits")), reader_make_constant_shell(makeString("PerFn")), reader_make_constant_shell(makeString("TheSet")), reader_make_constant_shell(makeString("TheSetOf")), reader_make_constant_shell(makeString("thereExistAtLeast")), reader_make_constant_shell(makeString("thereExistAtMost")), reader_make_constant_shell(makeString("thereExistExactly")) });
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(new SubLObject[]{ reader_make_constant_shell("IntervalMinFn"), reader_make_constant_shell("IntervalMaxFn"), reader_make_constant_shell("Unity"), reader_make_constant_shell("UnitOfMeasure"), reader_make_constant_shell("maxQuantValue"), reader_make_constant_shell("minQuantValue"), reader_make_constant_shell("unitMultiplicationFactor"), reader_make_constant_shell("multiplicationUnits"), reader_make_constant_shell("PerFn"), reader_make_constant_shell("TheSet"), reader_make_constant_shell("TheSetOf"), reader_make_constant_shell("thereExistAtLeast"), reader_make_constant_shell("thereExistAtMost"), reader_make_constant_shell("thereExistExactly") });
 
-    public static final SubLSymbol $sym1$VALID_CONSTANT_ = makeSymbol("VALID-CONSTANT?");
+    static private final SubLSymbol $sym1$VALID_CONSTANT_ = makeSymbol("VALID-CONSTANT?");
 
-    private static final SubLObject $$ScalarInterval = reader_make_constant_shell(makeString("ScalarInterval"));
 
-    public static final SubLSymbol CYC_SCALAR_INTERVAL_P = makeSymbol("CYC-SCALAR-INTERVAL-P");
 
-    public static final SubLString $str4$A_KB_dependent_numerical_quantifi = makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
+    private static final SubLSymbol CYC_SCALAR_INTERVAL_P = makeSymbol("CYC-SCALAR-INTERVAL-P");
 
-    private static final SubLObject $$Unity = reader_make_constant_shell(makeString("Unity"));
+    static private final SubLString $str4$A_KB_dependent_numerical_quantifi = makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
 
 
 
@@ -110,11 +118,7 @@ public final class quantities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$maxQuantValue = reader_make_constant_shell(makeString("maxQuantValue"));
 
-    private static final SubLObject $$minQuantValue = reader_make_constant_shell(makeString("minQuantValue"));
-
-    private static final SubLObject $$unitAbsoluteScaleOffset = reader_make_constant_shell(makeString("unitAbsoluteScaleOffset"));
 
 
 
@@ -126,17 +130,15 @@ public final class quantities extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$unitMultiplicationFactor = reader_make_constant_shell(makeString("unitMultiplicationFactor"));
-
     private static final SubLString $str18$Link_not_found_ = makeString("Link not found!");
 
     private static final SubLList $list19 = list(makeSymbol("IGNORE"), makeSymbol("PREVIOUS-UNIT"), makeSymbol("FACTOR"));
 
     private static final SubLString $str20$No_previous_unit_ = makeString("No previous unit.");
 
-    private static final SubLObject $$multiplicationUnits = reader_make_constant_shell(makeString("multiplicationUnits"));
 
-    private static final SubLObject $$PerFn = reader_make_constant_shell(makeString("PerFn"));
+
+
 
     private static final SubLList $list23 = list(makeSymbol("UNIT1"), makeSymbol("MIN1"), makeSymbol("&OPTIONAL"), makeSymbol("MAX1"));
 
@@ -144,31 +146,29 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_INTEGER_RANGE = makeSymbol("CYC-INTEGER-RANGE");
 
-    private static final SubLObject $$integerRange = reader_make_constant_shell(makeString("integerRange"));
 
-    private static final SubLObject $$quantitySubsumes = reader_make_constant_shell(makeString("quantitySubsumes"));
+
+
 
     private static final SubLSymbol CYC_NUMBER_RANGE = makeSymbol("CYC-NUMBER-RANGE");
-
-    private static final SubLObject $$numberRange = reader_make_constant_shell(makeString("numberRange"));
 
 
 
     private static final SubLSymbol $sym31$FUZZY_NUMBER_ = makeSymbol("FUZZY-NUMBER?");
 
-    private static final SubLObject $$PlusFn = reader_make_constant_shell(makeString("PlusFn"));
 
-    private static final SubLObject $$IntervalOnNumberLine = reader_make_constant_shell(makeString("IntervalOnNumberLine"));
+
+
 
     private static final SubLSymbol CYC_QUANTITY_CONVERSION = makeSymbol("CYC-QUANTITY-CONVERSION");
 
     private static final SubLSymbol CYC_QUANTITY_CONVERSION_ABSOLUTE = makeSymbol("CYC-QUANTITY-CONVERSION-ABSOLUTE");
 
-    private static final SubLObject $$TimesFn = reader_make_constant_shell(makeString("TimesFn"));
 
-    private static final SubLObject $$IntegerExtent = reader_make_constant_shell(makeString("IntegerExtent"));
 
-    private static final SubLObject $$ScalarPointValue = reader_make_constant_shell(makeString("ScalarPointValue"));
+
+
+
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
@@ -184,11 +184,9 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_RESIDUE = makeSymbol("CYC-RESIDUE");
 
-    private static final SubLObject $$quantityCongruenceBase = reader_make_constant_shell(makeString("quantityCongruenceBase"));
 
 
 
-    private static final SubLObject $$MeasurableQuantityType = reader_make_constant_shell(makeString("MeasurableQuantityType"));
 
     private static final SubLSymbol CYC_ABSOLUTE_VALUE = makeSymbol("CYC-ABSOLUTE-VALUE");
 
@@ -197,8 +195,6 @@ public final class quantities extends SubLTranslatedFile {
     private static final SubLSymbol CYC_SQUARED = makeSymbol("CYC-SQUARED");
 
     private static final SubLList $list52 = list(makeSymbol("MIN"), makeSymbol("&OPTIONAL"), list(makeSymbol("MAX"), makeSymbol("MIN")));
-
-
 
     private static final SubLSymbol CYC_PERCENT = makeSymbol("CYC-PERCENT");
 
@@ -219,14 +215,6 @@ public final class quantities extends SubLTranslatedFile {
     private static final SubLSymbol CYC_ROUND_TRUNCATE = makeSymbol("CYC-ROUND-TRUNCATE");
 
 
-
-
-
-
-
-
-
-    private static final SubLObject $$DecimalFractionFn = reader_make_constant_shell(makeString("DecimalFractionFn"));
 
     private static final SubLSymbol ROUND_TO_NTH_DECIMAL = makeSymbol("ROUND-TO-NTH-DECIMAL");
 
@@ -270,7 +258,7 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_COTANGENT = makeSymbol("CYC-COTANGENT");
 
-    private static final SubLObject $$Radian = reader_make_constant_shell(makeString("Radian"));
+
 
     private static final SubLSymbol ASIN = makeSymbol("ASIN");
 
@@ -298,51 +286,43 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_QUADRATIC_SOLUTION_NEGATIVE = makeSymbol("CYC-QUADRATIC-SOLUTION-NEGATIVE");
 
-
-
     private static final SubLSymbol MAKE_EL_LIST = makeSymbol("MAKE-EL-LIST");
 
     private static final SubLSymbol CYC_COLLECTION_SUBSUMPTION_PATHS = makeSymbol("CYC-COLLECTION-SUBSUMPTION-PATHS");
 
     private static final SubLSymbol CYC_PREDICATE_SUBSUMPTION_PATHS = makeSymbol("CYC-PREDICATE-SUBSUMPTION-PATHS");
 
-    private static final SubLObject $$greaterThan = reader_make_constant_shell(makeString("greaterThan"));
+
 
     private static final SubLSymbol $sym108$FRACTION_ = makeSymbol("FRACTION?");
 
-    private static final SubLObject $$NegativeMixedFractionFn = reader_make_constant_shell(makeString("NegativeMixedFractionFn"));
 
-    private static final SubLObject $$MixedFractionFn = reader_make_constant_shell(makeString("MixedFractionFn"));
+
+
 
     private static final SubLString $str111$Can_t_negate__S = makeString("Can't negate ~S");
 
-    private static final SubLObject $$followingValue = reader_make_constant_shell(makeString("followingValue"));
 
-    public static final SubLList $list113 = list(makeSymbol("WHOLE"), makeSymbol("NUMERATOR"), makeSymbol("DENOMINATOR"));
+
+    static private final SubLList $list113 = list(makeSymbol("WHOLE"), makeSymbol("NUMERATOR"), makeSymbol("DENOMINATOR"));
 
     private static final SubLList $list114 = list(makeSymbol("NUMERATOR"), makeSymbol("DENOMINATOR"));
 
     private static final SubLSymbol $sym115$SIMPLE_FRACTION_ = makeSymbol("SIMPLE-FRACTION?");
 
-    private static final SubLObject $$SimpleFractionFn = reader_make_constant_shell(makeString("SimpleFractionFn"));
 
-    private static final SubLObject $$greaterThanOrEqualTo = reader_make_constant_shell(makeString("greaterThanOrEqualTo"));
+
+
 
     private static final SubLSymbol CYC_QUANTITY_SUBSUMES = makeSymbol("CYC-QUANTITY-SUBSUMES");
 
-    private static final SubLObject $$quantityIntersects = reader_make_constant_shell(makeString("quantityIntersects"));
+
 
     private static final SubLSymbol CYC_QUANTITY_INTERSECTS = makeSymbol("CYC-QUANTITY-INTERSECTS");
 
     private static final SubLSymbol CYC_DIVIDES_EVENLY = makeSymbol("CYC-DIVIDES-EVENLY");
 
     private static final SubLSymbol CYC_LIST_NTH = makeSymbol("CYC-LIST-NTH");
-
-
-
-
-
-
 
     private static final SubLSymbol CYC_LIST_CONCATENATE = makeSymbol("CYC-LIST-CONCATENATE");
 
@@ -360,7 +340,7 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_LIST_SUBSEQ = makeSymbol("CYC-LIST-SUBSEQ");
 
-    private static final SubLObject $$TheEmptyList = reader_make_constant_shell(makeString("TheEmptyList"));
+
 
     private static final SubLSymbol CYC_LIST_SUBSEQ_UP_TO = makeSymbol("CYC-LIST-SUBSEQ-UP-TO");
 
@@ -396,8 +376,6 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_MAP_FUNCTION_WITH_ARGS_OVER_LISTS = makeSymbol("CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS");
 
-
-
     private static final SubLSymbol CYC_APPLY_FUNCTION_RECURSIVELY = makeSymbol("CYC-APPLY-FUNCTION-RECURSIVELY");
 
     private static final SubLSymbol $sym154$CYC_LIST_MEMBER_ = makeSymbol("CYC-LIST-MEMBER?");
@@ -410,8 +388,6 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym158$CYC_INITIAL_SUBLIST_ = makeSymbol("CYC-INITIAL-SUBLIST?");
 
-
-
     private static final SubLString $str160$Don_t_know_how_to_determine_the_e = makeString("Don't know how to determine the extent of ~S in ~S");
 
     private static final SubLSymbol CYC_SET_INTERSECTION = makeSymbol("CYC-SET-INTERSECTION");
@@ -420,9 +396,9 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_SET_DIFFERENCE = makeSymbol("CYC-SET-DIFFERENCE");
 
-    private static final SubLObject $$TheEmptySet = reader_make_constant_shell(makeString("TheEmptySet"));
 
-    private static final SubLObject $$TheSet = reader_make_constant_shell(makeString("TheSet"));
+
+
 
     private static final SubLSymbol CYC_SET_EXTENT = makeSymbol("CYC-SET-EXTENT");
 
@@ -438,7 +414,7 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol CYC_RANDOM_INTEGER = makeSymbol("CYC-RANDOM-INTEGER");
 
-    private static final SubLInteger $int$21 = makeInteger(21);
+
 
     private static final SubLInteger $int$_24 = makeInteger(-24);
 
@@ -446,7 +422,7 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLInteger $int$_28 = makeInteger(-28);
 
-    private static final SubLInteger $int$31 = makeInteger(31);
+
 
     private static final SubLSymbol CYC_RANDOM_INTEGER_WITH_SEED = makeSymbol("CYC-RANDOM-INTEGER-WITH-SEED");
 
@@ -458,16 +434,33 @@ public final class quantities extends SubLTranslatedFile {
 
     private static final SubLSymbol GET_INTERCONVERTIBLE_UNITS_OF_MEASURE = makeSymbol("GET-INTERCONVERTIBLE-UNITS-OF-MEASURE");
 
+    private static final SubLList $list184 = list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), makeSymbol("?U"), reader_make_constant_shell("UnitOfMeasureNoPrefix")), list(reader_make_constant_shell("isa"), makeSymbol("?UT"), reader_make_constant_shell("InterconvertibleUnitType")), list(reader_make_constant_shell("isa"), makeSymbol("?U"), makeSymbol("?UT")));
 
-
-    private static final SubLList $list184 = list(reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("isa")), makeSymbol("?U"), reader_make_constant_shell(makeString("UnitOfMeasureNoPrefix"))), list(reader_make_constant_shell(makeString("isa")), makeSymbol("?UT"), reader_make_constant_shell(makeString("InterconvertibleUnitType"))), list(reader_make_constant_shell(makeString("isa")), makeSymbol("?U"), makeSymbol("?UT")));
-
-    private static final SubLObject $const185$CurrentWorldDataCollectorMt_NonHo = reader_make_constant_shell(makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
+    private static final SubLObject $const185$CurrentWorldDataCollectorMt_NonHo = reader_make_constant_shell("CurrentWorldDataCollectorMt-NonHomocentric");
 
     private static final SubLList $list186 = list(new SubLObject[]{ makeKeyword("INFERENCE-MODE"), makeKeyword("SHALLOW"), makeKeyword("ALLOW-INDETERMINATE-RESULTS?"), NIL, makeKeyword("DISJUNCTION-FREE-EL-VARS-POLICY"), makeKeyword("COMPUTE-INTERSECTION"), makeKeyword("MAX-TIME"), makeInteger(30), makeKeyword("RESULT-UNIQUENESS"), makeKeyword("BINDINGS"), makeKeyword("PROBABLY-APPROXIMATELY-DONE"), makeDouble(1.0), makeKeyword("ANSWER-LANGUAGE"), makeKeyword("HL"), makeKeyword("RETURN"), list(makeKeyword("TEMPLATE"), list(makeSymbol("?UT"), makeSymbol("?U"))) });
 
     private static final SubLList $list187 = list(makeSymbol("UNIT-TYPE"), makeSymbol("UNIT"));
 
+    /**
+     * Determines whether the portion of the KB necessary for numerical quantification is loaded.
+     * This is the KB analogue of the #+Cyc-Quant feature.
+     */
+    @LispMethod(comment = "Determines whether the portion of the KB necessary for numerical quantification is loaded.\r\nThis is the KB analogue of the #+Cyc-Quant feature.\nDetermines whether the portion of the KB necessary for numerical quantification is loaded.\nThis is the KB analogue of the #+Cyc-Quant feature.")
+    public static final SubLObject initialize_quant_kb_feature_alt() {
+        if (NIL != list_utilities.every_in_list($sym1$VALID_CONSTANT_, $quant_core_constants$.getGlobalValue(), UNPROVIDED)) {
+            kb_control_vars.set_quant_kb_loaded();
+        } else {
+            kb_control_vars.unset_quant_kb_loaded();
+        }
+        return kb_control_vars.quant_kb_loaded_p();
+    }
+
+    /**
+     * Determines whether the portion of the KB necessary for numerical quantification is loaded.
+     * This is the KB analogue of the #+Cyc-Quant feature.
+     */
+    @LispMethod(comment = "Determines whether the portion of the KB necessary for numerical quantification is loaded.\r\nThis is the KB analogue of the #+Cyc-Quant feature.\nDetermines whether the portion of the KB necessary for numerical quantification is loaded.\nThis is the KB analogue of the #+Cyc-Quant feature.")
     public static SubLObject initialize_quant_kb_feature() {
         if (NIL != list_utilities.every_in_list($sym1$VALID_CONSTANT_, $quant_core_constants$.getGlobalValue(), UNPROVIDED)) {
             kb_control_vars.set_quant_kb_loaded();
@@ -477,12 +470,38 @@ public final class quantities extends SubLTranslatedFile {
         return kb_control_vars.quant_kb_loaded_p();
     }
 
+    public static final SubLObject cyc_scalar_interval_p_alt(SubLObject v_object) {
+        return makeBoolean(((NIL != extended_numbers.extended_number_p(v_object)) || (NIL != collection_defns.ibqeP(v_object, UNPROVIDED))) || (NIL != isa.isa_in_any_mtP(v_object, $$ScalarInterval)));
+    }
+
     public static SubLObject cyc_scalar_interval_p(final SubLObject v_object) {
         return makeBoolean(((NIL != extended_numbers.extended_number_p(v_object)) || (NIL != collection_defns.ibqeP(v_object, UNPROVIDED))) || (NIL != isa.isa_in_any_mtP(v_object, $$ScalarInterval)));
     }
 
+    public static final SubLObject list_of_cyc_scalar_interval_p_alt(SubLObject v_object) {
+        return list_utilities.list_of_type_p(symbol_function(CYC_SCALAR_INTERVAL_P), v_object);
+    }
+
     public static SubLObject list_of_cyc_scalar_interval_p(final SubLObject v_object) {
         return list_utilities.list_of_type_p(symbol_function(CYC_SCALAR_INTERVAL_P), v_object);
+    }
+
+    public static final SubLObject make_interval_alt(SubLObject unit, SubLObject min, SubLObject max) {
+        if (max == UNPROVIDED) {
+            max = min;
+        }
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        if (NIL != extended_numbers.extended_numberE(min, max, UNPROVIDED)) {
+            if (unit == $$Unity) {
+                return min;
+            } else {
+                return list(unit, min);
+            }
+        } else {
+            return list(unit, min, max);
+        }
     }
 
     public static SubLObject make_interval(SubLObject unit, SubLObject min, SubLObject max) {
@@ -522,6 +541,54 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Expand quantity INTERVAL into a fully-specified IBQE.
+     */
+    @LispMethod(comment = "Expand quantity INTERVAL into a fully-specified IBQE.")
+    public static final SubLObject explode_interval_alt(SubLObject interval) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        if (NIL != extended_numbers.extended_number_p(interval)) {
+            return values($$Unity, interval, interval);
+        } else {
+            if (NIL != forts.fort_p(interval)) {
+                return com.cyc.cycjava.cycl.quantities.explode_fort_interval(interval);
+            } else {
+                if (interval.isAtom()) {
+                    relation_evaluation.throw_unevaluatable();
+                } else {
+                    {
+                        SubLObject unit = NIL;
+                        SubLObject min = NIL;
+                        SubLObject max = NIL;
+                        unit = interval.first();
+                        if (NIL == unit) {
+                            relation_evaluation.throw_unevaluatable();
+                        }
+                        min = second(interval);
+                        if (NIL == extended_numbers.extended_number_p(min)) {
+                            relation_evaluation.throw_unevaluatable();
+                        }
+                        max = (length(interval).numE(THREE_INTEGER)) ? ((SubLObject) (third(interval))) : min;
+                        if (NIL == extended_numbers.extended_number_p(max)) {
+                            relation_evaluation.throw_unevaluatable();
+                        }
+                        if (NIL == extended_numbers.extended_numberGE(max, min, UNPROVIDED)) {
+                            relation_evaluation.throw_unevaluatable();
+                        }
+                        return values(unit, min, max);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Expand quantity INTERVAL into a fully-specified IBQE.
+     */
+    @LispMethod(comment = "Expand quantity INTERVAL into a fully-specified IBQE.")
     public static SubLObject explode_interval(final SubLObject interval) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str4$A_KB_dependent_numerical_quantifi);
@@ -557,9 +624,64 @@ public final class quantities extends SubLTranslatedFile {
         return values(unit, min, max);
     }
 
+    /**
+     * Convert fort INTERVAL to an IBQE, if possible
+     */
+    @LispMethod(comment = "Convert fort INTERVAL to an IBQE, if possible")
+    public static final SubLObject explode_fort_interval_alt(SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(interval, FORT_P);
+            if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+                Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+            }
+            {
+                SubLObject max_quant_value = com.cyc.cycjava.cycl.quantities.max_quant_value(interval, UNPROVIDED);
+                SubLObject min_quant_value = com.cyc.cycjava.cycl.quantities.min_quant_value(interval, UNPROVIDED);
+                if ((((NIL != max_quant_value) && (NIL != min_quant_value)) && (NIL == forts.fort_p(max_quant_value))) && (NIL == forts.fort_p(min_quant_value))) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject max_quant_unit = com.cyc.cycjava.cycl.quantities.explode_interval(max_quant_value);
+                        SubLObject max_quant_min = thread.secondMultipleValue();
+                        SubLObject max_quant_max = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject min_quant_unit = com.cyc.cycjava.cycl.quantities.explode_interval(min_quant_value);
+                            SubLObject min_quant_min = thread.secondMultipleValue();
+                            SubLObject min_quant_max = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if (max_quant_unit != min_quant_unit) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            if (NIL == extended_numbers.extended_numberGE(max_quant_min, min_quant_max, UNPROVIDED)) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            return values(max_quant_unit, min_quant_max, max_quant_min);
+                        }
+                    }
+                }
+            }
+            if (NIL != nart_handles.nart_p(interval)) {
+                {
+                    SubLObject nart_hl_formula = narts_high.nart_hl_formula(interval);
+                    if (NIL != nart_hl_formula) {
+                        return com.cyc.cycjava.cycl.quantities.explode_interval(nart_hl_formula);
+                    }
+                }
+            }
+            relation_evaluation.throw_unevaluatable();
+            return NIL;
+        }
+    }
+
+    /**
+     * Convert fort INTERVAL to an IBQE, if possible
+     */
+    @LispMethod(comment = "Convert fort INTERVAL to an IBQE, if possible")
     public static SubLObject explode_fort_interval(final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(interval) : "forts.fort_p(interval) " + "CommonSymbols.NIL != forts.fort_p(interval) " + interval;
+        assert NIL != forts.fort_p(interval) : "! forts.fort_p(interval) " + ("forts.fort_p(interval) " + "CommonSymbols.NIL != forts.fort_p(interval) ") + interval;
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str4$A_KB_dependent_numerical_quantifi);
         }
@@ -597,6 +719,16 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject max_quant_value_alt(SubLObject fort, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        return kb_mapping_utilities.fpred_value_in_relevant_mts(fort, $$maxQuantValue, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject max_quant_value(final SubLObject fort, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -605,6 +737,16 @@ public final class quantities extends SubLTranslatedFile {
             Errors.error($str4$A_KB_dependent_numerical_quantifi);
         }
         return kb_mapping_utilities.fpred_value_in_relevant_mts(fort, $$maxQuantValue, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject min_quant_value_alt(SubLObject fort, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        return kb_mapping_utilities.fpred_value_in_relevant_mts(fort, $$minQuantValue, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject min_quant_value(final SubLObject fort, SubLObject mt) {
@@ -617,6 +759,13 @@ public final class quantities extends SubLTranslatedFile {
         return kb_mapping_utilities.fpred_value_in_relevant_mts(fort, $$minQuantValue, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject comparable_units_alt(SubLObject target_unit, SubLObject unit) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean((target_unit == unit) || (NIL != list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(unit, target_unit))));
+    }
+
     public static SubLObject comparable_units(final SubLObject target_unit, final SubLObject unit) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str4$A_KB_dependent_numerical_quantifi);
@@ -624,6 +773,30 @@ public final class quantities extends SubLTranslatedFile {
         return makeBoolean(target_unit.eql(unit) || (NIL != list_utilities.sublisp_boolean(get_unit_multiplication_factor(unit, target_unit))));
     }
 
+    /**
+     * Returns T IFF UNIT1 is comparable to UNIT2 and one UNIT1 is a
+     * smaller quantity than one UNIT2
+     */
+    @LispMethod(comment = "Returns T IFF UNIT1 is comparable to UNIT2 and one UNIT1 is a\r\nsmaller quantity than one UNIT2\nReturns T IFF UNIT1 is comparable to UNIT2 and one UNIT1 is a\nsmaller quantity than one UNIT2")
+    public static final SubLObject smaller_unit_than_alt(SubLObject unit1, SubLObject unit2) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        {
+            SubLObject factor = com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(unit1, unit2);
+            if (NIL == extended_numbers.extended_number_p(factor)) {
+                return NIL;
+            } else {
+                return numL(factor, ONE_INTEGER);
+            }
+        }
+    }
+
+    /**
+     * Returns T IFF UNIT1 is comparable to UNIT2 and one UNIT1 is a
+     * smaller quantity than one UNIT2
+     */
+    @LispMethod(comment = "Returns T IFF UNIT1 is comparable to UNIT2 and one UNIT1 is a\r\nsmaller quantity than one UNIT2\nReturns T IFF UNIT1 is comparable to UNIT2 and one UNIT1 is a\nsmaller quantity than one UNIT2")
     public static SubLObject smaller_unit_than(final SubLObject unit1, final SubLObject unit2) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str4$A_KB_dependent_numerical_quantifi);
@@ -633,6 +806,30 @@ public final class quantities extends SubLTranslatedFile {
             return NIL;
         }
         return numL(factor, ONE_INTEGER);
+    }
+
+    public static final SubLObject convert_to_units_alt(SubLObject target_unit, SubLObject unit, SubLObject min, SubLObject max) {
+        if (max == UNPROVIDED) {
+            max = min;
+        }
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        if (target_unit == unit) {
+            return values(min, max);
+        }
+        {
+            SubLObject factor = com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(unit, target_unit);
+            if (NIL == extended_numbers.extended_number_p(factor)) {
+                return NIL;
+            } else {
+                if (factor.numE(ONE_INTEGER)) {
+                    return values(min, max);
+                } else {
+                    return values(extended_numbers.extended_number_times(min, factor), extended_numbers.extended_number_times(max, factor));
+                }
+            }
+        }
     }
 
     public static SubLObject convert_to_units(final SubLObject target_unit, final SubLObject unit, final SubLObject min, SubLObject max) {
@@ -684,6 +881,51 @@ public final class quantities extends SubLTranslatedFile {
         return values(extended_numbers.extended_number_times(min, factor), extended_numbers.extended_number_times(max, factor));
     }
 
+    /**
+     * Return the conversion factor to multiply quantities in FROM-UNIT to get
+     * quantities in TO-UNIT.  Return NIL if no coversion can be determined.
+     */
+    @LispMethod(comment = "Return the conversion factor to multiply quantities in FROM-UNIT to get\r\nquantities in TO-UNIT.  Return NIL if no coversion can be determined.\nReturn the conversion factor to multiply quantities in FROM-UNIT to get\nquantities in TO-UNIT.  Return NIL if no coversion can be determined.")
+    public static final SubLObject unit_multiplication_factor_alt(SubLObject from_unit, SubLObject to_unit, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject factor = NIL;
+                if (NIL != mt) {
+                    {
+                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                factor = com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(from_unit, to_unit);
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    factor = com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(from_unit, to_unit);
+                }
+                return factor;
+            }
+        }
+    }
+
+    /**
+     * Return the conversion factor to multiply quantities in FROM-UNIT to get
+     * quantities in TO-UNIT.  Return NIL if no coversion can be determined.
+     */
+    @LispMethod(comment = "Return the conversion factor to multiply quantities in FROM-UNIT to get\r\nquantities in TO-UNIT.  Return NIL if no coversion can be determined.\nReturn the conversion factor to multiply quantities in FROM-UNIT to get\nquantities in TO-UNIT.  Return NIL if no coversion can be determined.")
     public static SubLObject unit_multiplication_factor(final SubLObject from_unit, final SubLObject to_unit, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -709,6 +951,19 @@ public final class quantities extends SubLTranslatedFile {
             factor = get_unit_multiplication_factor(from_unit, to_unit);
         }
         return factor;
+    }
+
+    public static final SubLObject get_unit_multiplication_factor_alt(SubLObject from_unit, SubLObject to_unit) {
+        if (from_unit == to_unit) {
+            return ONE_INTEGER;
+        }
+        {
+            SubLObject factor = com.cyc.cycjava.cycl.quantities.get_definitional_unit_multiplication_factor(from_unit, to_unit);
+            if (NIL == factor) {
+                factor = com.cyc.cycjava.cycl.quantities.get_contingent_unit_multiplication_factor(from_unit, to_unit);
+            }
+            return factor;
+        }
     }
 
     public static SubLObject get_unit_multiplication_factor(final SubLObject from_unit, final SubLObject to_unit) {
@@ -767,6 +1022,16 @@ public final class quantities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject clear_get_definitional_unit_multiplication_factor_alt() {
+        {
+            SubLObject cs = $get_definitional_unit_multiplication_factor_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_get_definitional_unit_multiplication_factor() {
         final SubLObject cs = $get_definitional_unit_multiplication_factor_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -775,12 +1040,56 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_get_definitional_unit_multiplication_factor_alt(SubLObject from_unit, SubLObject to_unit) {
+        return memoization_state.caching_state_remove_function_results_with_args($get_definitional_unit_multiplication_factor_caching_state$.getGlobalValue(), list(from_unit, to_unit), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_get_definitional_unit_multiplication_factor(final SubLObject from_unit, final SubLObject to_unit) {
         return memoization_state.caching_state_remove_function_results_with_args($get_definitional_unit_multiplication_factor_caching_state$.getGlobalValue(), list(from_unit, to_unit), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject get_definitional_unit_multiplication_factor_internal_alt(SubLObject from_unit, SubLObject to_unit) {
+        return com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor_int(from_unit, to_unit, mt_vars.$assertible_theory_mt_root$.getGlobalValue());
+    }
+
     public static SubLObject get_definitional_unit_multiplication_factor_internal(final SubLObject from_unit, final SubLObject to_unit) {
         return get_unit_multiplication_factor_int(from_unit, to_unit, mt_vars.$assertible_theory_mt_root$.getGlobalValue());
+    }
+
+    public static final SubLObject get_definitional_unit_multiplication_factor_alt(SubLObject from_unit, SubLObject to_unit) {
+        {
+            SubLObject caching_state = $get_definitional_unit_multiplication_factor_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(GET_DEFINITIONAL_UNIT_MULTIPLICATION_FACTOR, $get_definitional_unit_multiplication_factor_caching_state$, NIL, EQUAL, TWO_INTEGER, ZERO_INTEGER);
+            }
+            {
+                SubLObject sxhash = memoization_state.sxhash_calc_2(from_unit, to_unit);
+                SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                if (collisions != $kw11$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    {
+                        SubLObject cdolist_list_var = collisions;
+                        SubLObject collision = NIL;
+                        for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                            {
+                                SubLObject cached_args = collision.first();
+                                SubLObject results2 = second(collision);
+                                if (from_unit.equal(cached_args.first())) {
+                                    cached_args = cached_args.rest();
+                                    if (((NIL != cached_args) && (NIL == cached_args.rest())) && to_unit.equal(cached_args.first())) {
+                                        return memoization_state.caching_results(results2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.quantities.get_definitional_unit_multiplication_factor_internal(from_unit, to_unit)));
+                    memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(from_unit, to_unit));
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject get_definitional_unit_multiplication_factor(final SubLObject from_unit, final SubLObject to_unit) {
@@ -812,9 +1121,52 @@ public final class quantities extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject get_contingent_unit_multiplication_factor_alt(SubLObject from_unit, SubLObject to_unit) {
+        {
+            SubLObject mt = mt_relevance_macros.current_mt_relevance_mt();
+            return com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor_int(from_unit, to_unit, mt);
+        }
+    }
+
     public static SubLObject get_contingent_unit_multiplication_factor(final SubLObject from_unit, final SubLObject to_unit) {
         final SubLObject mt = mt_relevance_macros.current_mt_relevance_mt();
         return get_unit_multiplication_factor_int(from_unit, to_unit, mt);
+    }
+
+    public static final SubLObject get_unit_multiplication_factor_int_alt(SubLObject from_unit, SubLObject to_unit, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject factor = NIL;
+                {
+                    SubLObject _prev_bind_0 = $get_umf_allow_fractionsP$.currentBinding(thread);
+                    try {
+                        $get_umf_allow_fractionsP$.bind(NIL, thread);
+                        factor = com.cyc.cycjava.cycl.quantities.get_umf(to_unit, from_unit, mt);
+                        if (NIL == factor) {
+                            factor = com.cyc.cycjava.cycl.quantities.get_umf(from_unit, to_unit, mt);
+                            if (NIL != factor) {
+                                factor = divide(ONE_INTEGER, factor);
+                            }
+                        }
+                        if (NIL == factor) {
+                            {
+                                SubLObject _prev_bind_0_1 = $get_umf_allow_fractionsP$.currentBinding(thread);
+                                try {
+                                    $get_umf_allow_fractionsP$.bind(T, thread);
+                                    factor = com.cyc.cycjava.cycl.quantities.get_umf(to_unit, from_unit, mt);
+                                } finally {
+                                    $get_umf_allow_fractionsP$.rebind(_prev_bind_0_1, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        $get_umf_allow_fractionsP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return factor;
+            }
+        }
     }
 
     public static SubLObject get_unit_multiplication_factor_int(final SubLObject from_unit, final SubLObject to_unit, final SubLObject mt) {
@@ -843,6 +1195,49 @@ public final class quantities extends SubLTranslatedFile {
             $get_umf_allow_fractionsP$.rebind(_prev_bind_0, thread);
         }
         return factor;
+    }
+
+    public static final SubLObject get_umf_alt(SubLObject from_unit, SubLObject to_unit, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject foundP = NIL;
+                SubLObject factor = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $get_umf_paths$.currentBinding(thread);
+                    SubLObject _prev_bind_4 = $get_umf_search_state$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        $get_umf_paths$.bind(NIL, thread);
+                        $get_umf_search_state$.bind(queues.create_queue(), thread);
+                        queues.enqueue(from_unit, $get_umf_search_state$.getDynamicValue(thread));
+                        {
+                            SubLObject item_var = list(from_unit, NIL, ONE_INTEGER);
+                            if (NIL == member(item_var, $get_umf_paths$.getDynamicValue(thread), symbol_function(EQL), symbol_function(IDENTITY))) {
+                                $get_umf_paths$.setDynamicValue(cons(item_var, $get_umf_paths$.getDynamicValue(thread)), thread);
+                            }
+                        }
+                        foundP = com.cyc.cycjava.cycl.quantities.get_umf_internal(to_unit);
+                        if (NIL != foundP) {
+                            factor = com.cyc.cycjava.cycl.quantities.get_umf_gather_factor(to_unit, from_unit);
+                        }
+                    } finally {
+                        $get_umf_search_state$.rebind(_prev_bind_4, thread);
+                        $get_umf_paths$.rebind(_prev_bind_3, thread);
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return factor;
+            }
+        }
     }
 
     public static SubLObject get_umf(final SubLObject from_unit, final SubLObject to_unit, final SubLObject mt) {
@@ -878,6 +1273,73 @@ public final class quantities extends SubLTranslatedFile {
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return factor;
+    }
+
+    public static final SubLObject get_umf_internal_alt(SubLObject to_unit) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject from_unit = queues.dequeue($get_umf_search_state$.getDynamicValue(thread));
+                if (from_unit == to_unit) {
+                    return T;
+                }
+                if (NIL != from_unit) {
+                    {
+                        SubLObject umf_assertions = com.cyc.cycjava.cycl.quantities.gather_umf_assertions(from_unit);
+                        SubLObject cdolist_list_var = umf_assertions;
+                        SubLObject umf_assertion = NIL;
+                        for (umf_assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , umf_assertion = cdolist_list_var.first()) {
+                            {
+                                SubLObject datum = gaf_args(umf_assertion);
+                                SubLObject current = datum;
+                                SubLObject arg1_unit = NIL;
+                                SubLObject arg2_unit = NIL;
+                                SubLObject raw_factor = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt12);
+                                arg1_unit = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt12);
+                                arg2_unit = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt12);
+                                raw_factor = current.first();
+                                current = current.rest();
+                                if (NIL == current) {
+                                    raw_factor = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(raw_factor);
+                                    {
+                                        SubLObject new_factor = NIL;
+                                        SubLObject new_unit = NIL;
+                                        if (arg1_unit == from_unit) {
+                                            new_unit = arg2_unit;
+                                            new_factor = raw_factor;
+                                        } else {
+                                            new_unit = arg1_unit;
+                                            new_factor = divide(ONE_INTEGER, raw_factor);
+                                        }
+                                        if (!((NIL != subl_promotions.memberP(new_unit, $get_umf_paths$.getDynamicValue(thread), symbol_function(EQL), symbol_function(CAR))) || ((NIL == $get_umf_allow_fractionsP$.getDynamicValue(thread)) && new_factor.isDouble()))) {
+                                            {
+                                                SubLObject item_var = list(new_unit, from_unit, new_factor);
+                                                if (NIL == member(item_var, $get_umf_paths$.getDynamicValue(thread), symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                    $get_umf_paths$.setDynamicValue(cons(item_var, $get_umf_paths$.getDynamicValue(thread)), thread);
+                                                }
+                                            }
+                                            if (new_unit == to_unit) {
+                                                return T;
+                                            }
+                                            queues.enqueue(new_unit, $get_umf_search_state$.getDynamicValue(thread));
+                                        }
+                                    }
+                                } else {
+                                    cdestructuring_bind_error(datum, $list_alt12);
+                                }
+                            }
+                        }
+                        return com.cyc.cycjava.cycl.quantities.get_umf_internal(to_unit);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject get_umf_internal(final SubLObject to_unit) {
@@ -937,6 +1399,117 @@ public final class quantities extends SubLTranslatedFile {
             return get_umf_internal(to_unit);
         }
         return NIL;
+    }
+
+    public static final SubLObject gather_umf_assertions_alt(SubLObject unit) {
+        {
+            SubLObject result = NIL;
+            SubLObject gather_umf_assertions = NIL;
+            {
+                SubLObject pred_var = $$unitMultiplicationFactor;
+                if (NIL != do_gaf_arg_index_key_validator(unit, ONE_INTEGER, pred_var)) {
+                    {
+                        SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(unit, ONE_INTEGER, pred_var);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                            {
+                                                SubLObject done_var_2 = NIL;
+                                                SubLObject token_var_3 = NIL;
+                                                while (NIL == done_var_2) {
+                                                    {
+                                                        SubLObject assertion = iteration_next_without_values_macro_helper(final_index_iterator, token_var_3);
+                                                        SubLObject valid_4 = makeBoolean(token_var_3 != assertion);
+                                                        if (NIL != valid_4) {
+                                                            gather_umf_assertions = cons(assertion, gather_umf_assertions);
+                                                        }
+                                                        done_var_2 = makeBoolean(NIL == valid_4);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            {
+                SubLObject pred_var = $$unitMultiplicationFactor;
+                if (NIL != do_gaf_arg_index_key_validator(unit, TWO_INTEGER, pred_var)) {
+                    {
+                        SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(unit, TWO_INTEGER, pred_var);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                            {
+                                                SubLObject done_var_5 = NIL;
+                                                SubLObject token_var_6 = NIL;
+                                                while (NIL == done_var_5) {
+                                                    {
+                                                        SubLObject assertion = iteration_next_without_values_macro_helper(final_index_iterator, token_var_6);
+                                                        SubLObject valid_7 = makeBoolean(token_var_6 != assertion);
+                                                        if (NIL != valid_7) {
+                                                            gather_umf_assertions = cons(assertion, gather_umf_assertions);
+                                                        }
+                                                        done_var_5 = makeBoolean(NIL == valid_7);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            result = gather_umf_assertions;
+            return result;
+        }
     }
 
     public static SubLObject gather_umf_assertions(final SubLObject unit) {
@@ -1024,6 +1597,46 @@ public final class quantities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject get_umf_gather_factor_alt(SubLObject end_unit, SubLObject start_unit) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (end_unit == start_unit) {
+                return ONE_INTEGER;
+            }
+            {
+                SubLObject link = assoc(end_unit, $get_umf_paths$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
+                if (NIL == link) {
+                    Errors.error($str_alt16$Link_not_found_);
+                }
+                {
+                    SubLObject datum = link;
+                    SubLObject current = datum;
+                    SubLObject ignore = NIL;
+                    SubLObject previous_unit = NIL;
+                    SubLObject factor = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt17);
+                    ignore = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt17);
+                    previous_unit = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt17);
+                    factor = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        if (NIL == previous_unit) {
+                            Errors.error($str_alt18$No_previous_unit_);
+                        }
+                        return multiply(factor, com.cyc.cycjava.cycl.quantities.get_umf_gather_factor(previous_unit, start_unit));
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt17);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject get_umf_gather_factor(final SubLObject end_unit, final SubLObject start_unit) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (end_unit.eql(start_unit)) {
@@ -1057,6 +1670,26 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return the unit of measure which is UNIT1 x UNIT2
+     */
+    @LispMethod(comment = "Return the unit of measure which is UNIT1 x UNIT2")
+    public static final SubLObject unit_times_alt(SubLObject unit1, SubLObject unit2) {
+        if (unit1.equal($$Unity)) {
+            return unit2;
+        } else {
+            if (unit2.equal($$Unity)) {
+                return unit1;
+            } else {
+                return com.cyc.cycjava.cycl.quantities.complex_unit_times(unit1, unit2);
+            }
+        }
+    }
+
+    /**
+     * Return the unit of measure which is UNIT1 x UNIT2
+     */
+    @LispMethod(comment = "Return the unit of measure which is UNIT1 x UNIT2")
     public static SubLObject unit_times(final SubLObject unit1, final SubLObject unit2) {
         if (unit1.equal($$Unity)) {
             return unit2;
@@ -1067,6 +1700,26 @@ public final class quantities extends SubLTranslatedFile {
         return complex_unit_times(unit1, unit2);
     }
 
+    /**
+     * Return the unit of measure which is UNIT1 / UNIT2
+     */
+    @LispMethod(comment = "Return the unit of measure which is UNIT1 / UNIT2")
+    public static final SubLObject unit_quotient_alt(SubLObject unit1, SubLObject unit2) {
+        if (unit1.equal(unit2)) {
+            return $$Unity;
+        } else {
+            if (unit2.equal($$Unity)) {
+                return unit1;
+            } else {
+                return com.cyc.cycjava.cycl.quantities.complex_unit_quotient(unit1, unit2);
+            }
+        }
+    }
+
+    /**
+     * Return the unit of measure which is UNIT1 / UNIT2
+     */
+    @LispMethod(comment = "Return the unit of measure which is UNIT1 / UNIT2")
     public static SubLObject unit_quotient(final SubLObject unit1, final SubLObject unit2) {
         if (unit1.equal(unit2)) {
             return $$Unity;
@@ -1077,11 +1730,151 @@ public final class quantities extends SubLTranslatedFile {
         return complex_unit_quotient(unit1, unit2);
     }
 
+    /**
+     * Return the unit of measure which is the square root of UNIT
+     */
+    @LispMethod(comment = "Return the unit of measure which is the square root of UNIT")
+    public static final SubLObject unit_sqrt_alt(SubLObject unit) {
+        if (unit.equal($$Unity)) {
+            return unit;
+        } else {
+            return com.cyc.cycjava.cycl.quantities.complex_unit_sqrt(unit);
+        }
+    }
+
+    /**
+     * Return the unit of measure which is the square root of UNIT
+     */
+    @LispMethod(comment = "Return the unit of measure which is the square root of UNIT")
     public static SubLObject unit_sqrt(final SubLObject unit) {
         if (unit.equal($$Unity)) {
             return unit;
         }
         return complex_unit_sqrt(unit);
+    }
+
+    public static final SubLObject complex_unit_times_alt(SubLObject unit1, SubLObject unit2) {
+        {
+            SubLObject v_answer = NIL;
+            SubLObject pred_var = $$multiplicationUnits;
+            if (NIL != do_gaf_arg_index_key_validator(unit1, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(unit1, ONE_INTEGER, pred_var);
+                    SubLObject done_var = v_answer;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                        {
+                                            SubLObject done_var_8 = v_answer;
+                                            SubLObject token_var_9 = NIL;
+                                            while (NIL == done_var_8) {
+                                                {
+                                                    SubLObject assertion = iteration_next_without_values_macro_helper(final_index_iterator, token_var_9);
+                                                    SubLObject valid_10 = makeBoolean(token_var_9 != assertion);
+                                                    if (NIL != valid_10) {
+                                                        if (unit2 == gaf_arg2(assertion)) {
+                                                            v_answer = gaf_arg3(assertion);
+                                                        }
+                                                    }
+                                                    done_var_8 = makeBoolean((NIL == valid_10) || (NIL != v_answer));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != v_answer));
+                        }
+                    } 
+                }
+            }
+            if (NIL != v_answer) {
+                return v_answer;
+            }
+        }
+        {
+            SubLObject v_answer = NIL;
+            SubLObject pred_var = $$multiplicationUnits;
+            if (NIL != do_gaf_arg_index_key_validator(unit1, TWO_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(unit1, TWO_INTEGER, pred_var);
+                    SubLObject done_var = v_answer;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                        {
+                                            SubLObject done_var_11 = v_answer;
+                                            SubLObject token_var_12 = NIL;
+                                            while (NIL == done_var_11) {
+                                                {
+                                                    SubLObject assertion = iteration_next_without_values_macro_helper(final_index_iterator, token_var_12);
+                                                    SubLObject valid_13 = makeBoolean(token_var_12 != assertion);
+                                                    if (NIL != valid_13) {
+                                                        if (unit2 == gaf_arg1(assertion)) {
+                                                            v_answer = gaf_arg3(assertion);
+                                                        }
+                                                    }
+                                                    done_var_11 = makeBoolean((NIL == valid_13) || (NIL != v_answer));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != v_answer));
+                        }
+                    } 
+                }
+            }
+            if (NIL != v_answer) {
+                return v_answer;
+            }
+        }
+        if (NIL != com.cyc.cycjava.cycl.quantities.per_fn_unit(unit1)) {
+            return com.cyc.cycjava.cycl.quantities.complex_per_fn_unit_times(unit1, unit2);
+        }
+        if (NIL != com.cyc.cycjava.cycl.quantities.per_fn_unit(unit2)) {
+            return com.cyc.cycjava.cycl.quantities.complex_per_fn_unit_times(unit2, unit1);
+        }
+        return relation_evaluation.throw_unevaluatable();
     }
 
     public static SubLObject complex_unit_times(final SubLObject unit1, final SubLObject unit2) {
@@ -1182,6 +1975,39 @@ public final class quantities extends SubLTranslatedFile {
         return relation_evaluation.throw_unevaluatable();
     }
 
+    public static final SubLObject complex_per_fn_unit_times_alt(SubLObject per_unit, SubLObject unit) {
+        {
+            SubLObject per_numerator = cycl_utilities.nat_arg1(per_unit, UNPROVIDED);
+            SubLObject per_denominator = cycl_utilities.nat_arg2(per_unit, UNPROVIDED);
+            if (per_denominator.equal(unit)) {
+                return per_numerator;
+            } else {
+                if (NIL == com.cyc.cycjava.cycl.quantities.per_fn_unit(unit)) {
+                    relation_evaluation.throw_unevaluatable();
+                } else {
+                    {
+                        SubLObject other_numerator = cycl_utilities.nat_arg1(unit, UNPROVIDED);
+                        SubLObject other_denominator = cycl_utilities.nat_arg2(unit, UNPROVIDED);
+                        if (per_numerator.equal(other_denominator)) {
+                            if (per_denominator.equal(other_numerator)) {
+                                return $$Unity;
+                            } else {
+                                return list($$PerFn, other_numerator, per_denominator);
+                            }
+                        } else {
+                            if (per_denominator.equal(other_numerator)) {
+                                return list($$PerFn, per_numerator, other_denominator);
+                            } else {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject complex_per_fn_unit_times(final SubLObject per_unit, final SubLObject unit) {
         final SubLObject per_numerator = cycl_utilities.nat_arg1(per_unit, UNPROVIDED);
         final SubLObject per_denominator = cycl_utilities.nat_arg2(per_unit, UNPROVIDED);
@@ -1209,6 +2035,77 @@ public final class quantities extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject complex_unit_quotient_alt(SubLObject unit1, SubLObject unit2) {
+        {
+            SubLObject v_answer = NIL;
+            SubLObject pred_var = $$multiplicationUnits;
+            if (NIL != do_gaf_arg_index_key_validator(unit1, THREE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(unit1, THREE_INTEGER, pred_var);
+                    SubLObject done_var = v_answer;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                        {
+                                            SubLObject done_var_14 = v_answer;
+                                            SubLObject token_var_15 = NIL;
+                                            while (NIL == done_var_14) {
+                                                {
+                                                    SubLObject assertion = iteration_next_without_values_macro_helper(final_index_iterator, token_var_15);
+                                                    SubLObject valid_16 = makeBoolean(token_var_15 != assertion);
+                                                    if (NIL != valid_16) {
+                                                        if (unit2 == gaf_arg1(assertion)) {
+                                                            v_answer = gaf_arg2(assertion);
+                                                        } else {
+                                                            if (unit2 == gaf_arg2(assertion)) {
+                                                                v_answer = gaf_arg1(assertion);
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var_14 = makeBoolean((NIL == valid_16) || (NIL != v_answer));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != v_answer));
+                        }
+                    } 
+                }
+            }
+            if (NIL != v_answer) {
+                return v_answer;
+            }
+        }
+        if (NIL != com.cyc.cycjava.cycl.quantities.per_fn_unit(unit2)) {
+            return com.cyc.cycjava.cycl.quantities.complex_per_fn_unit_quotient(unit1, unit2);
+        }
+        if (NIL != com.cyc.cycjava.cycl.quantities.per_fn_unit(unit1)) {
+            return relation_evaluation.throw_unevaluatable();
+        }
+        return list($$PerFn, unit1, unit2);
     }
 
     public static SubLObject complex_unit_quotient(final SubLObject unit1, final SubLObject unit2) {
@@ -1275,6 +2172,39 @@ public final class quantities extends SubLTranslatedFile {
         return list($$PerFn, unit1, unit2);
     }
 
+    public static final SubLObject complex_per_fn_unit_quotient_alt(SubLObject unit, SubLObject per_unit) {
+        {
+            SubLObject per_numerator = cycl_utilities.nat_arg1(per_unit, UNPROVIDED);
+            SubLObject per_denominator = cycl_utilities.nat_arg2(per_unit, UNPROVIDED);
+            if (unit.equal(per_numerator)) {
+                return per_denominator;
+            } else {
+                if (unit.equal($$Unity)) {
+                    return list($$PerFn, per_denominator, per_numerator);
+                } else {
+                    if (NIL == com.cyc.cycjava.cycl.quantities.per_fn_unit(unit)) {
+                        relation_evaluation.throw_unevaluatable();
+                    } else {
+                        {
+                            SubLObject other_numerator = cycl_utilities.nat_arg1(unit, UNPROVIDED);
+                            SubLObject other_denominator = cycl_utilities.nat_arg2(unit, UNPROVIDED);
+                            if (other_numerator.equal(per_numerator)) {
+                                return list($$PerFn, per_denominator, other_denominator);
+                            } else {
+                                if (other_denominator.equal(per_denominator)) {
+                                    return list($$PerFn, other_numerator, per_numerator);
+                                } else {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject complex_per_fn_unit_quotient(final SubLObject unit, final SubLObject per_unit) {
         final SubLObject per_numerator = cycl_utilities.nat_arg1(per_unit, UNPROVIDED);
         final SubLObject per_denominator = cycl_utilities.nat_arg2(per_unit, UNPROVIDED);
@@ -1298,6 +2228,67 @@ public final class quantities extends SubLTranslatedFile {
             relation_evaluation.throw_unevaluatable();
         }
         return NIL;
+    }
+
+    public static final SubLObject complex_unit_sqrt_alt(SubLObject unit) {
+        {
+            SubLObject v_answer = NIL;
+            SubLObject pred_var = $$multiplicationUnits;
+            if (NIL != do_gaf_arg_index_key_validator(unit, THREE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = new_gaf_arg_final_index_spec_iterator(unit, THREE_INTEGER, pred_var);
+                    SubLObject done_var = v_answer;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                        {
+                                            SubLObject done_var_17 = v_answer;
+                                            SubLObject token_var_18 = NIL;
+                                            while (NIL == done_var_17) {
+                                                {
+                                                    SubLObject assertion = iteration_next_without_values_macro_helper(final_index_iterator, token_var_18);
+                                                    SubLObject valid_19 = makeBoolean(token_var_18 != assertion);
+                                                    if (NIL != valid_19) {
+                                                        if (gaf_arg1(assertion) == gaf_arg2(assertion)) {
+                                                            v_answer = gaf_arg1(assertion);
+                                                        }
+                                                    }
+                                                    done_var_17 = makeBoolean((NIL == valid_19) || (NIL != v_answer));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != v_answer));
+                        }
+                    } 
+                }
+            }
+            if (NIL != v_answer) {
+                return v_answer;
+            }
+            return relation_evaluation.throw_unevaluatable();
+        }
     }
 
     public static SubLObject complex_unit_sqrt(final SubLObject unit) {
@@ -1348,11 +2339,34 @@ public final class quantities extends SubLTranslatedFile {
         return relation_evaluation.throw_unevaluatable();
     }
 
+    public static final SubLObject per_fn_unit_alt(SubLObject unit) {
+        if ((NIL != term.hl_ground_nautP(unit)) || ((NIL != nart_handles.nart_p(unit)) && (NIL != narts_high.nart_hl_formula(unit)))) {
+            return eq(cycl_utilities.nat_function(unit), $$PerFn);
+        }
+        return NIL;
+    }
+
     public static SubLObject per_fn_unit(final SubLObject unit) {
         if ((NIL != term.hl_ground_nautP(unit)) || ((NIL != nart_handles.nart_p(unit)) && (NIL != narts_high.nart_hl_formula(unit)))) {
             return eql(cycl_utilities.nat_function(unit), $$PerFn);
         }
         return NIL;
+    }
+
+    public static final SubLObject make_and_simplify_interval_alt(SubLObject unit, SubLObject min, SubLObject max) {
+        if (max == UNPROVIDED) {
+            max = min;
+        }
+        if (NIL != com.cyc.cycjava.cycl.quantities.per_fn_unit(unit)) {
+            {
+                SubLObject unit_numerator = cycl_utilities.nat_arg1(unit, UNPROVIDED);
+                SubLObject unit_denominator = cycl_utilities.nat_arg2(unit, UNPROVIDED);
+                if (NIL != com.cyc.cycjava.cycl.quantities.comparable_units(unit_numerator, unit_denominator)) {
+                    return com.cyc.cycjava.cycl.quantities.cyc_quotient(com.cyc.cycjava.cycl.quantities.make_interval(unit_numerator, min, max), com.cyc.cycjava.cycl.quantities.make_interval(unit_denominator, ONE_INTEGER, UNPROVIDED));
+                }
+            }
+        }
+        return com.cyc.cycjava.cycl.quantities.make_interval(unit, min, max);
     }
 
     public static SubLObject make_and_simplify_interval(final SubLObject unit, SubLObject min, SubLObject max) {
@@ -1432,6 +2446,31 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * #$defnIff for uses of #$integerRange
+     */
+    @LispMethod(comment = "#$defnIff for uses of #$integerRange")
+    public static final SubLObject cyc_integer_range_alt(SubLObject integer) {
+        if (integer.isInteger()) {
+            {
+                SubLObject defn_collection = at_vars.defn_collection();
+                if (NIL != forts.fort_p(defn_collection)) {
+                    {
+                        SubLObject range_scalar = kb_mapping_utilities.fpred_value(defn_collection, $$integerRange, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        if (NIL != range_scalar) {
+                            return relation_evaluation.cyc_evaluate(make_binary_formula($$quantitySubsumes, range_scalar, integer));
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * #$defnIff for uses of #$integerRange
+     */
+    @LispMethod(comment = "#$defnIff for uses of #$integerRange")
     public static SubLObject cyc_integer_range(final SubLObject integer) {
         if (integer.isInteger()) {
             final SubLObject defn_collection = at_vars.defn_collection();
@@ -1445,6 +2484,31 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * #$defnIff for uses of #$numberRange
+     */
+    @LispMethod(comment = "#$defnIff for uses of #$numberRange")
+    public static final SubLObject cyc_number_range_alt(SubLObject number) {
+        if (number.isNumber()) {
+            {
+                SubLObject defn_collection = at_vars.defn_collection();
+                if (NIL != forts.fort_p(defn_collection)) {
+                    {
+                        SubLObject range_scalar = kb_mapping_utilities.fpred_value(defn_collection, $$numberRange, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        if (NIL != range_scalar) {
+                            return relation_evaluation.cyc_evaluate(make_binary_formula($$quantitySubsumes, range_scalar, number));
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * #$defnIff for uses of #$numberRange
+     */
+    @LispMethod(comment = "#$defnIff for uses of #$numberRange")
     public static SubLObject cyc_number_range(final SubLObject number) {
         if (number.isNumber()) {
             final SubLObject defn_collection = at_vars.defn_collection();
@@ -1458,6 +2522,66 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Cyc-Quant extension for #$PlusFn
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$PlusFn")
+    public static final SubLObject cyc_plus_quantities_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if ((NIL != extended_numbers.extended_number_p(interval1)) && (NIL != extended_numbers.extended_number_p(interval2))) {
+                    ans = extended_numbers.extended_number_plus(interval1, interval2);
+                } else {
+                    if (ZERO_INTEGER.eql(interval1) && (NIL != at_defns.quiet_has_typeP(interval2, $$IntervalOnNumberLine, UNPROVIDED))) {
+                        return interval2;
+                    } else {
+                        if (ZERO_INTEGER.eql(interval2) && (NIL != at_defns.quiet_has_typeP(interval1, $$IntervalOnNumberLine, UNPROVIDED))) {
+                            return interval1;
+                        } else {
+                            if ((NIL != list_utilities.tree_find_if($sym27$FUZZY_NUMBER_, interval1, UNPROVIDED)) || (NIL != list_utilities.tree_find_if($sym27$FUZZY_NUMBER_, interval2, UNPROVIDED))) {
+                                return list($$PlusFn, interval1, interval2);
+                            } else {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                                    SubLObject min1 = thread.secondMultipleValue();
+                                    SubLObject max1 = thread.thirdMultipleValue();
+                                    thread.resetMultipleValues();
+                                    thread.resetMultipleValues();
+                                    {
+                                        SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                                        SubLObject min2 = thread.secondMultipleValue();
+                                        SubLObject max2 = thread.thirdMultipleValue();
+                                        thread.resetMultipleValues();
+                                        if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                            relation_evaluation.throw_unevaluatable();
+                                        }
+                                        thread.resetMultipleValues();
+                                        {
+                                            SubLObject new_min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, max2);
+                                            SubLObject new_max2 = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            min2 = new_min2;
+                                            max2 = new_max2;
+                                        }
+                                        ans = com.cyc.cycjava.cycl.quantities.make_interval(unit1, extended_numbers.extended_number_plus(min1, min2), extended_numbers.extended_number_plus(max1, max2));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * Cyc-Quant extension for #$PlusFn
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$PlusFn")
     public static SubLObject cyc_plus_quantities(final SubLObject interval1, final SubLObject interval2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject v_answer = NIL;
@@ -1532,6 +2656,22 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * Cyc-Quant extension for #$MinusFn
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$MinusFn")
+    public static final SubLObject cyc_minus_quantities_alt(SubLObject interval) {
+        if (NIL != extended_numbers.extended_number_p(interval)) {
+            return extended_numbers.extended_number_negate(interval);
+        } else {
+            return cyc_times_internal(MINUS_ONE_INTEGER, interval);
+        }
+    }
+
+    /**
+     * Cyc-Quant extension for #$MinusFn
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$MinusFn")
     public static SubLObject cyc_minus_quantities(final SubLObject interval) {
         if (NIL != extended_numbers.extended_number_p(interval)) {
             return extended_numbers.extended_number_negate(interval);
@@ -1539,6 +2679,40 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.cyc_times_internal(MINUS_ONE_INTEGER, interval);
     }
 
+    /**
+     * evaluationDefn for #$QuantityConversionFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuantityConversionFn")
+    public static final SubLObject cyc_quantity_conversion_alt(SubLObject new_unit, SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                SubLObject min = thread.secondMultipleValue();
+                SubLObject max = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(new_unit, unit)) {
+                    relation_evaluation.throw_unevaluatable();
+                }
+                thread.resetMultipleValues();
+                {
+                    SubLObject new_min = com.cyc.cycjava.cycl.quantities.convert_to_units(new_unit, unit, min, max);
+                    SubLObject new_max = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject ans = com.cyc.cycjava.cycl.quantities.make_interval(new_unit, new_min, new_max);
+                        return arithmetic_answer(ans);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$QuantityConversionFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuantityConversionFn")
     public static SubLObject cyc_quantity_conversion(final SubLObject new_unit, final SubLObject interval) {
         final SubLObject result = convert_quantity(new_unit, interval);
         if (NIL == result) {
@@ -1591,6 +2765,34 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * Return the SubL number represented by the CycL #$RealNumber QUANTITY.
+     */
+    @LispMethod(comment = "Return the SubL number represented by the CycL #$RealNumber QUANTITY.")
+    public static final SubLObject cycl_real_number_to_number_alt(SubLObject quantity) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != extended_numbers.extended_number_p(quantity)) {
+                return quantity;
+            }
+            thread.resetMultipleValues();
+            {
+                SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(com.cyc.cycjava.cycl.quantities.cyc_quantity_conversion($$Unity, quantity));
+                SubLObject number_min = thread.secondMultipleValue();
+                SubLObject number_max = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                if (!number_min.numE(number_max)) {
+                    relation_evaluation.throw_unevaluatable();
+                }
+                return number_min;
+            }
+        }
+    }
+
+    /**
+     * Return the SubL number represented by the CycL #$RealNumber QUANTITY.
+     */
+    @LispMethod(comment = "Return the SubL number represented by the CycL #$RealNumber QUANTITY.")
     public static SubLObject cycl_real_number_to_number(final SubLObject quantity) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != extended_numbers.possibly_infinite_or_extended_number_p(quantity)) {
@@ -1607,6 +2809,86 @@ public final class quantities extends SubLTranslatedFile {
         return number_min;
     }
 
+    /**
+     * Cyc-Quant extension for #$TimesFn
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$TimesFn")
+    public static final SubLObject cyc_times_quantities_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if ((NIL != extended_numbers.extended_number_p(interval1)) && (NIL != extended_numbers.extended_number_p(interval2))) {
+                    ans = extended_numbers.extended_number_times(interval1, interval2);
+                } else {
+                    if ((NIL != list_utilities.tree_find_if($sym27$FUZZY_NUMBER_, interval1, UNPROVIDED)) || (NIL != list_utilities.tree_find_if($sym27$FUZZY_NUMBER_, interval2, UNPROVIDED))) {
+                        return list($$TimesFn, interval1, interval2);
+                    } else {
+                        if (NIL != extended_numbers.extended_number_p(interval1)) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                                SubLObject min2 = thread.secondMultipleValue();
+                                SubLObject max2 = thread.thirdMultipleValue();
+                                thread.resetMultipleValues();
+                                if (NIL != extended_numbers.extended_number_minus_p(interval1)) {
+                                    ans = com.cyc.cycjava.cycl.quantities.make_interval(unit2, extended_numbers.extended_number_times(interval1, max2), extended_numbers.extended_number_times(interval1, min2));
+                                } else {
+                                    ans = com.cyc.cycjava.cycl.quantities.make_interval(unit2, extended_numbers.extended_number_times(interval1, min2), extended_numbers.extended_number_times(interval1, max2));
+                                }
+                            }
+                        } else {
+                            if (NIL != extended_numbers.extended_number_p(interval2)) {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                                    SubLObject min1 = thread.secondMultipleValue();
+                                    SubLObject max1 = thread.thirdMultipleValue();
+                                    thread.resetMultipleValues();
+                                    if (NIL != extended_numbers.extended_number_minus_p(interval2)) {
+                                        ans = com.cyc.cycjava.cycl.quantities.make_interval(unit1, extended_numbers.extended_number_times(interval2, max1), extended_numbers.extended_number_times(interval2, min1));
+                                    } else {
+                                        ans = com.cyc.cycjava.cycl.quantities.make_interval(unit1, extended_numbers.extended_number_times(interval2, min1), extended_numbers.extended_number_times(interval2, max1));
+                                    }
+                                }
+                            } else {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                                    SubLObject min1 = thread.secondMultipleValue();
+                                    SubLObject max1 = thread.thirdMultipleValue();
+                                    thread.resetMultipleValues();
+                                    thread.resetMultipleValues();
+                                    {
+                                        SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                                        SubLObject min2 = thread.secondMultipleValue();
+                                        SubLObject max2 = thread.thirdMultipleValue();
+                                        thread.resetMultipleValues();
+                                        {
+                                            SubLObject result_unit = com.cyc.cycjava.cycl.quantities.unit_times(unit1, unit2);
+                                            SubLObject min1min2 = extended_numbers.extended_number_times(min1, min2);
+                                            SubLObject min1max2 = extended_numbers.extended_number_times(min1, max2);
+                                            SubLObject max1min2 = extended_numbers.extended_number_times(max1, min2);
+                                            SubLObject max1max2 = extended_numbers.extended_number_times(max1, max2);
+                                            SubLObject result_min = min(min1min2, new SubLObject[]{ min1max2, max1min2, max1max2 });
+                                            SubLObject result_max = max(min1min2, new SubLObject[]{ min1max2, max1min2, max1max2 });
+                                            ans = com.cyc.cycjava.cycl.quantities.make_and_simplify_interval(result_unit, result_min, result_max);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * Cyc-Quant extension for #$TimesFn
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$TimesFn")
     public static SubLObject cyc_times_quantities(final SubLObject interval1, final SubLObject interval2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject v_answer = NIL;
@@ -1723,6 +3005,31 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     *
+     *
+     * @return BOOLEAN; Is TERM a fuzzy number?
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return BOOLEAN; Is TERM a fuzzy number?\r\n@unknown baxter")
+    public static final SubLObject fuzzy_numberP_alt(SubLObject v_term) {
+        if (NIL != forts.fort_p(v_term)) {
+            return makeBoolean((NIL != isa.isaP(v_term, $$IntegerExtent, UNPROVIDED, UNPROVIDED)) && ((NIL == com.cyc.cycjava.cycl.quantities.max_quant_value(v_term, UNPROVIDED)) || (NIL == com.cyc.cycjava.cycl.quantities.min_quant_value(v_term, UNPROVIDED))));
+        } else {
+            if (NIL != term.nautP(v_term, UNPROVIDED)) {
+                return makeBoolean((NIL != isa.isaP(v_term, $$IntegerExtent, UNPROVIDED, UNPROVIDED)) && (NIL == isa.isaP(v_term, $$ScalarPointValue, UNPROVIDED, UNPROVIDED)));
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @return BOOLEAN; Is TERM a fuzzy number?
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return BOOLEAN; Is TERM a fuzzy number?\r\n@unknown baxter")
     public static SubLObject fuzzy_numberP(final SubLObject v_term) {
         if (NIL != extended_numbers.cyc_infinite_number_p(v_term)) {
             return NIL;
@@ -1736,6 +3043,93 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$QuotientFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuotientFn")
+    public static final SubLObject cyc_quotient_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval2.isNumber() && interval2.isZero()) {
+                    relation_evaluation.throw_unevaluatable();
+                } else {
+                    if ((NIL != extended_numbers.extended_number_p(interval2)) && (NIL != extended_numbers.extended_number_p(interval1))) {
+                        if ((NIL != scientific_numbers.scientific_number_p(interval1)) || (NIL != scientific_numbers.scientific_number_p(interval2))) {
+                            ans = extended_numbers.extended_number_quotient(interval1, interval2);
+                        } else {
+                            if (NIL != extended_numbers.extended_numberE(interval2, ONE_INTEGER, UNPROVIDED)) {
+                                ans = interval1;
+                            } else {
+                                if (NIL != extended_numbers.extended_numberE(interval1, interval2, UNPROVIDED)) {
+                                    ans = ONE_INTEGER;
+                                } else {
+                                    ans = extended_numbers.extended_number_quotient(interval1, interval2);
+                                }
+                            }
+                        }
+                    } else {
+                        if (interval2.isNumber()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                                SubLObject min1 = thread.secondMultipleValue();
+                                SubLObject max1 = thread.thirdMultipleValue();
+                                thread.resetMultipleValues();
+                                ans = com.cyc.cycjava.cycl.quantities.make_interval(unit1, extended_numbers.extended_number_quotient(min1, interval2), extended_numbers.extended_number_quotient(max1, interval2));
+                            }
+                        } else {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                                SubLObject min2 = thread.secondMultipleValue();
+                                SubLObject max2 = thread.thirdMultipleValue();
+                                thread.resetMultipleValues();
+                                if (!((NIL != extended_numbers.extended_number_minus_p(max2)) || (NIL != extended_numbers.extended_number_plus_p(min2)))) {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                                    SubLObject min1 = thread.secondMultipleValue();
+                                    SubLObject max1 = thread.thirdMultipleValue();
+                                    thread.resetMultipleValues();
+                                    if (NIL != com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                        thread.resetMultipleValues();
+                                        {
+                                            SubLObject new_min1 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit2, unit1, min1, max1);
+                                            SubLObject new_max1 = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            unit1 = unit2;
+                                            min1 = new_min1;
+                                            max1 = new_max1;
+                                        }
+                                    }
+                                    {
+                                        SubLObject result_unit = com.cyc.cycjava.cycl.quantities.unit_quotient(unit1, unit2);
+                                        SubLObject min1min2 = extended_numbers.extended_number_quotient(min1, min2);
+                                        SubLObject min1max2 = extended_numbers.extended_number_quotient(min1, max2);
+                                        SubLObject max1min2 = extended_numbers.extended_number_quotient(max1, min2);
+                                        SubLObject max1max2 = extended_numbers.extended_number_quotient(max1, max2);
+                                        SubLObject result_min = extended_numbers.extended_number_min(list(min1min2, min1max2, max1min2, max1max2));
+                                        SubLObject result_max = extended_numbers.extended_number_max(list(min1min2, min1max2, max1min2, max1max2));
+                                        ans = com.cyc.cycjava.cycl.quantities.make_and_simplify_interval(result_unit, result_min, result_max);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$QuotientFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuotientFn")
     public static SubLObject cyc_quotient(final SubLObject interval1, final SubLObject interval2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ignore_errors_tag = NIL;
@@ -1840,10 +3234,80 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$InverseOfIntervalFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$InverseOfIntervalFn")
+    public static final SubLObject cyc_inverse_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_quotient(ONE_INTEGER, interval);
+    }
+
+    /**
+     * evaluationDefn for #$InverseOfIntervalFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$InverseOfIntervalFn")
     public static SubLObject cyc_inverse(final SubLObject interval) {
         return cyc_quotient(ONE_INTEGER, interval);
     }
 
+    /**
+     * evaluationDefn for #$ModuloFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ModuloFn")
+    public static final SubLObject cyc_modulo_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval2.isNumber() && interval2.isZero()) {
+                    relation_evaluation.throw_unevaluatable();
+                } else {
+                    if (interval2.isNumber() && interval1.isNumber()) {
+                        ans = mod(interval1, interval2);
+                    } else {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                            SubLObject min2 = thread.secondMultipleValue();
+                            SubLObject max2 = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if (!min2.numE(max2)) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            if (min2.isZero()) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                                SubLObject min1 = thread.secondMultipleValue();
+                                SubLObject max1 = thread.thirdMultipleValue();
+                                thread.resetMultipleValues();
+                                if (!min1.numE(max1)) {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                                if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                                {
+                                    SubLObject converted_min1 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit2, unit1, min1, UNPROVIDED);
+                                    SubLObject result_unit = unit2;
+                                    SubLObject result_min = mod(converted_min1, min2);
+                                    ans = com.cyc.cycjava.cycl.quantities.make_and_simplify_interval(result_unit, result_min, UNPROVIDED);
+                                }
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$ModuloFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ModuloFn")
     public static SubLObject cyc_modulo(final SubLObject interval1, final SubLObject base) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ignore_errors_tag = NIL;
@@ -1929,6 +3393,71 @@ public final class quantities extends SubLTranslatedFile {
         return T;
     }
 
+    /**
+     * evaluationDefn for #$ResidueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ResidueFn")
+    public static final SubLObject cyc_residue_alt(SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                SubLObject min = thread.secondMultipleValue();
+                SubLObject max = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL == unit) {
+                    relation_evaluation.throw_unevaluatable();
+                }
+                {
+                    SubLObject measure_types = com.cyc.cycjava.cycl.quantities.unit_of_measure_type(unit);
+                    if (NIL == measure_types) {
+                        relation_evaluation.throw_unevaluatable();
+                    }
+                    {
+                        SubLObject new_min = NIL;
+                        SubLObject new_max = NIL;
+                        if (NIL == new_min) {
+                            {
+                                SubLObject csome_list_var = measure_types;
+                                SubLObject measure_type = NIL;
+                                for (measure_type = csome_list_var.first(); !((NIL != new_min) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , measure_type = csome_list_var.first()) {
+                                    if (NIL == new_min) {
+                                        {
+                                            SubLObject csome_list_var_20 = com.cyc.cycjava.cycl.quantities.quantity_congruence_base(measure_type);
+                                            SubLObject base = NIL;
+                                            for (base = csome_list_var_20.first(); !((NIL != new_min) || (NIL == csome_list_var_20)); csome_list_var_20 = csome_list_var_20.rest() , base = csome_list_var_20.first()) {
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject base_unit = com.cyc.cycjava.cycl.quantities.explode_interval(base);
+                                                    SubLObject base_min = thread.secondMultipleValue();
+                                                    SubLObject base_max = thread.thirdMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if (base_min.numE(base_max) && (NIL != com.cyc.cycjava.cycl.quantities.comparable_units(unit, base_unit))) {
+                                                        {
+                                                            SubLObject converted_base_value = com.cyc.cycjava.cycl.quantities.convert_to_units(unit, base_unit, base_min, UNPROVIDED);
+                                                            new_min = mod(min, converted_base_value);
+                                                            new_max = add(new_min, subtract(max, min));
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        return com.cyc.cycjava.cycl.quantities.make_interval(unit, NIL != new_min ? ((SubLObject) (new_min)) : min, NIL != new_max ? ((SubLObject) (new_max)) : max);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$ResidueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ResidueFn")
     public static SubLObject cyc_residue(final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -1976,8 +3505,26 @@ public final class quantities extends SubLTranslatedFile {
         return make_interval(unit, NIL != new_min ? new_min : min, NIL != new_max ? new_max : max);
     }
 
+    public static final SubLObject quantity_congruence_base_alt(SubLObject quantity_type) {
+        return kb_mapping_utilities.pred_values(quantity_type, $$quantityCongruenceBase, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject quantity_congruence_base(final SubLObject quantity_type) {
         return kb_mapping_utilities.pred_values(quantity_type, $$quantityCongruenceBase, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject unit_of_measure_type_alt(SubLObject unit) {
+        {
+            SubLObject types = NIL;
+            SubLObject cdolist_list_var = kb_accessors.result_isa(unit, UNPROVIDED);
+            SubLObject type = NIL;
+            for (type = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , type = cdolist_list_var.first()) {
+                if (NIL != at_defns.quiet_has_typeP(type, $$MeasurableQuantityType, UNPROVIDED)) {
+                    types = cons(type, types);
+                }
+            }
+            return nreverse(types);
+        }
     }
 
     public static SubLObject unit_of_measure_type(final SubLObject unit) {
@@ -1995,6 +3542,45 @@ public final class quantities extends SubLTranslatedFile {
         return nreverse(types);
     }
 
+    /**
+     * evaluationDefn for #$AbsoluteValueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$AbsoluteValueFn")
+    public static final SubLObject cyc_absolute_value_alt(SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (NIL != extended_numbers.extended_number_p(interval)) {
+                    ans = extended_numbers.extended_number_abs(interval);
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                        SubLObject min = thread.secondMultipleValue();
+                        SubLObject max = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject min_abs = extended_numbers.extended_number_abs(min);
+                            SubLObject max_abs = extended_numbers.extended_number_abs(max);
+                            SubLObject result_min = extended_numbers.extended_number_min(list(min_abs, max_abs));
+                            SubLObject result_max = extended_numbers.extended_number_max(list(min_abs, max_abs));
+                            if ((NIL != extended_numbers.extended_number_minus_p(min)) && (NIL != extended_numbers.extended_number_plus_p(max))) {
+                                result_min = ZERO_INTEGER;
+                            }
+                            ans = com.cyc.cycjava.cycl.quantities.make_interval(unit, result_min, result_max);
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$AbsoluteValueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$AbsoluteValueFn")
     public static SubLObject cyc_absolute_value(final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ignore_errors_tag = NIL;
@@ -2038,6 +3624,48 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$SqrtFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SqrtFn")
+    public static final SubLObject cyc_sqrt_alt(SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if ((NIL != extended_numbers.extended_number_p(interval)) && (NIL != extended_numbers.extended_number_minus_p(interval))) {
+                    relation_evaluation.throw_unevaluatable();
+                } else {
+                    if (NIL != extended_numbers.extended_number_p(interval)) {
+                        ans = extended_numbers.extended_number_sqrt(interval);
+                    } else {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                            SubLObject min = thread.secondMultipleValue();
+                            SubLObject max = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if ((NIL != extended_numbers.extended_number_minus_p(min)) || (NIL != extended_numbers.extended_number_minus_p(max))) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            {
+                                SubLObject result_unit = com.cyc.cycjava.cycl.quantities.unit_sqrt(unit);
+                                SubLObject min_sqrt = extended_numbers.extended_number_sqrt(min);
+                                SubLObject max_sqrt = extended_numbers.extended_number_sqrt(max);
+                                ans = com.cyc.cycjava.cycl.quantities.make_interval(result_unit, min_sqrt, max_sqrt);
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$SqrtFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SqrtFn")
     public static SubLObject cyc_sqrt(final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != extended_numbers.possibly_infinite_or_extended_number_p(interval)) && (NIL != extended_numbers.possibly_infinite_or_extended_number_minus_p(interval))) {
@@ -2101,10 +3729,65 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$SquaredFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SquaredFn")
+    public static final SubLObject cyc_squared_alt(SubLObject interval) {
+        return cyc_times_internal(interval, interval);
+    }
+
+    /**
+     * evaluationDefn for #$SquaredFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SquaredFn")
     public static SubLObject cyc_squared(final SubLObject interval) {
         return arithmetic.cyc_times_internal(interval, interval);
     }
 
+    /**
+     * evaluationDefn for #$Percent
+     */
+    @LispMethod(comment = "evaluationDefn for #$Percent")
+    public static final SubLObject cyc_percent_alt(SubLObject args) {
+        {
+            SubLObject ans = NIL;
+            if (!((NIL != list_utilities.lengthGE(args, ONE_INTEGER, UNPROVIDED)) && (NIL != list_utilities.lengthLE(args, TWO_INTEGER, UNPROVIDED)))) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            {
+                SubLObject datum = args;
+                SubLObject current = datum;
+                SubLObject min = NIL;
+                destructuring_bind_must_consp(current, datum, $list_alt43);
+                min = current.first();
+                current = current.rest();
+                {
+                    SubLObject max = (current.isCons()) ? ((SubLObject) (current.first())) : min;
+                    destructuring_bind_must_listp(current, datum, $list_alt43);
+                    current = current.rest();
+                    if (NIL == current) {
+                        if (!(min.isNumber() && max.isNumber())) {
+                            relation_evaluation.throw_unevaluatable();
+                        }
+                        {
+                            SubLObject min_scaled = divide(min, $int$100);
+                            SubLObject max_scaled = divide(max, $int$100);
+                            ans = com.cyc.cycjava.cycl.quantities.make_interval($$Unity, min_scaled, max_scaled);
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt43);
+                    }
+                }
+            }
+            return arithmetic_answer(ans);
+        }
+    }
+
+    /**
+     * evaluationDefn for #$Percent
+     */
+    @LispMethod(comment = "evaluationDefn for #$Percent")
     public static SubLObject cyc_percent(final SubLObject args) {
         SubLObject ans = NIL;
         if ((NIL == list_utilities.lengthGE(args, ONE_INTEGER, UNPROVIDED)) || (NIL == list_utilities.lengthLE(args, TWO_INTEGER, UNPROVIDED))) {
@@ -2130,20 +3813,94 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * evaluationDefn for #$RoundUpFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$RoundUpFn")
+    public static final SubLObject cyc_round_up_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_round_internal(interval, CEILING);
+    }
+
+    /**
+     * evaluationDefn for #$RoundUpFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$RoundUpFn")
     public static SubLObject cyc_round_up(final SubLObject interval) {
         return cyc_round_internal(interval, CEILING, UNPROVIDED);
     }
 
+    /**
+     * evaluationDefn for #$RoundClosestFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$RoundClosestFn")
+    public static final SubLObject cyc_round_closest_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_round_internal(interval, ROUND);
+    }
+
+    /**
+     * evaluationDefn for #$RoundClosestFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$RoundClosestFn")
     public static SubLObject cyc_round_closest(final SubLObject interval) {
         return cyc_round_internal(interval, ROUND, UNPROVIDED);
     }
 
+    /**
+     * evaluationDefn for #$RoundDownFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$RoundDownFn")
+    public static final SubLObject cyc_round_down_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_round_internal(interval, FLOOR);
+    }
+
+    /**
+     * evaluationDefn for #$RoundDownFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$RoundDownFn")
     public static SubLObject cyc_round_down(final SubLObject interval) {
         return cyc_round_internal(interval, FLOOR, UNPROVIDED);
     }
 
+    /**
+     * evaluationDefn for #$TruncateFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$TruncateFn")
+    public static final SubLObject cyc_round_truncate_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_round_internal(interval, TRUNCATE);
+    }
+
+    /**
+     * evaluationDefn for #$TruncateFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$TruncateFn")
     public static SubLObject cyc_round_truncate(final SubLObject interval) {
         return cyc_round_internal(interval, TRUNCATE, UNPROVIDED);
+    }
+
+    public static final SubLObject cyc_round_internal(SubLObject interval, SubLObject rounding_func) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval.isNumber()) {
+                    ans = funcall(rounding_func, interval);
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                        SubLObject min = thread.secondMultipleValue();
+                        SubLObject max = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject min_round = funcall(rounding_func, min);
+                            SubLObject max_round = funcall(rounding_func, max);
+                            ans = com.cyc.cycjava.cycl.quantities.make_interval(unit, min_round, max_round);
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
     }
 
     public static SubLObject cyc_round_internal(final SubLObject interval, final SubLObject rounding_func, SubLObject seen) {
@@ -2211,8 +3968,8 @@ public final class quantities extends SubLTranslatedFile {
             decimal = $round_nth_n$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != numberp(number) : "Types.numberp(number) " + "CommonSymbols.NIL != Types.numberp(number) " + number;
-        assert NIL != subl_promotions.non_negative_integer_p(decimal) : "subl_promotions.non_negative_integer_p(decimal) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(decimal) " + decimal;
+        assert NIL != numberp(number) : "! numberp(number) " + ("Types.numberp(number) " + "CommonSymbols.NIL != Types.numberp(number) ") + number;
+        assert NIL != subl_promotions.non_negative_integer_p(decimal) : "! subl_promotions.non_negative_integer_p(decimal) " + ("subl_promotions.non_negative_integer_p(decimal) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(decimal) ") + decimal;
         final SubLObject decimal_pos = position(CHAR_period, string_utilities.to_string(number), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         final SubLObject current_decimal_places = (NIL != decimal_pos) ? number_utilities.f_1_(subtract(length(string_utilities.to_string(number)), decimal_pos)) : ZERO_INTEGER;
         if (current_decimal_places.numLE(decimal)) {
@@ -2260,6 +4017,27 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$MaxRangeFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MaxRangeFn")
+    public static final SubLObject cyc_max_range_alt(SubLObject args) {
+        if (NIL == args) {
+            relation_evaluation.throw_unevaluatable();
+        } else {
+            if (NIL != list_utilities.singletonP(args)) {
+                return args.first();
+            } else {
+                return quantity_reduce(symbol_function(CYC_MAX_RANGE_INTERNAL), NIL, args);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * evaluationDefn for #$MaxRangeFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MaxRangeFn")
     public static SubLObject cyc_max_range(final SubLObject args) {
         if (NIL == args) {
             relation_evaluation.throw_unevaluatable();
@@ -2269,6 +4047,54 @@ public final class quantities extends SubLTranslatedFile {
             return args.first();
         }
         return arithmetic.quantity_reduce(symbol_function(CYC_MAX_RANGE_INTERNAL), NIL, args);
+    }
+
+    public static final SubLObject cyc_max_range_internal_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval1.isNumber() && interval2.isNumber()) {
+                    {
+                        SubLObject min = min(interval1, interval2);
+                        SubLObject max = max(interval1, interval2);
+                        ans = com.cyc.cycjava.cycl.quantities.make_interval($$Unity, min, max);
+                    }
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                        SubLObject min1 = thread.secondMultipleValue();
+                        SubLObject max1 = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                            SubLObject min2 = thread.secondMultipleValue();
+                            SubLObject max2 = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject new_min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, max2);
+                                SubLObject new_max2 = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                min2 = new_min2;
+                                max2 = new_max2;
+                            }
+                            {
+                                SubLObject ans_min = min(min1, min2);
+                                SubLObject ans_max = max(max1, max2);
+                                ans = com.cyc.cycjava.cycl.quantities.make_interval(unit1, ans_min, ans_max);
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
     }
 
     public static SubLObject cyc_max_range_internal(final SubLObject interval1, final SubLObject interval2) {
@@ -2342,6 +4168,27 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$MaxRangeFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MaxRangeFn")
+    public static final SubLObject cyc_min_range_alt(SubLObject args) {
+        if (NIL == args) {
+            relation_evaluation.throw_unevaluatable();
+        } else {
+            if (NIL != list_utilities.singletonP(args)) {
+                return args.first();
+            } else {
+                return quantity_reduce(symbol_function(CYC_MIN_RANGE_INTERNAL), NIL, args);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * evaluationDefn for #$MaxRangeFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MaxRangeFn")
     public static SubLObject cyc_min_range(final SubLObject args) {
         if (NIL == args) {
             relation_evaluation.throw_unevaluatable();
@@ -2351,6 +4198,58 @@ public final class quantities extends SubLTranslatedFile {
             return args.first();
         }
         return arithmetic.quantity_reduce(symbol_function(CYC_MIN_RANGE_INTERNAL), NIL, args);
+    }
+
+    public static final SubLObject cyc_min_range_internal_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval1.isNumber() && interval2.isNumber()) {
+                    if (interval1.numE(interval2)) {
+                        ans = interval1;
+                    } else {
+                        relation_evaluation.throw_unevaluatable();
+                    }
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                        SubLObject min1 = thread.secondMultipleValue();
+                        SubLObject max1 = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                            SubLObject min2 = thread.secondMultipleValue();
+                            SubLObject max2 = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject new_min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, max2);
+                                SubLObject new_max2 = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                min2 = new_min2;
+                                max2 = new_max2;
+                            }
+                            {
+                                SubLObject ans_min = max(min1, min2);
+                                SubLObject ans_max = min(max1, max2);
+                                if (ans_max.numGE(ans_min)) {
+                                    ans = com.cyc.cycjava.cycl.quantities.make_interval(unit1, ans_min, ans_max);
+                                } else {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
     }
 
     public static SubLObject cyc_min_range_internal(final SubLObject interval1, final SubLObject interval2) {
@@ -2410,6 +4309,36 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(ans);
     }
 
+    /**
+     * evaluationDefn for #$MinQuantValueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MinQuantValueFn")
+    public static final SubLObject cyc_min_quant_value_alt(SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval.isNumber()) {
+                    ans = interval;
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                        SubLObject min = thread.secondMultipleValue();
+                        SubLObject max = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        ans = com.cyc.cycjava.cycl.quantities.make_interval(unit, min, UNPROVIDED);
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$MinQuantValueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MinQuantValueFn")
     public static SubLObject cyc_min_quant_value(final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -2430,6 +4359,36 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * evaluationDefn for #$MaxQuantValueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MaxQuantValueFn")
+    public static final SubLObject cyc_max_quant_value_alt(SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (interval.isNumber()) {
+                    ans = interval;
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                        SubLObject min = thread.secondMultipleValue();
+                        SubLObject max = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        ans = com.cyc.cycjava.cycl.quantities.make_interval(unit, max, UNPROVIDED);
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$MaxQuantValueFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MaxQuantValueFn")
     public static SubLObject cyc_max_quant_value(final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -2487,6 +4446,39 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(ans);
     }
 
+    /**
+     * evaluationDefn for #$ToleranceFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ToleranceFn")
+    public static final SubLObject cyc_tolerance_alt(SubLObject interval, SubLObject fraction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (NIL != extended_numbers.extended_number_p(interval)) {
+                    ans = com.cyc.cycjava.cycl.quantities.cyc_tolerance_internal(fraction, $$Unity, interval, interval, interval);
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                        SubLObject min = thread.secondMultipleValue();
+                        SubLObject max = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject average = extended_numbers.extended_number_quotient(extended_numbers.extended_number_plus(min, max), TWO_INTEGER);
+                            ans = com.cyc.cycjava.cycl.quantities.cyc_tolerance_internal(fraction, unit, min, average, max);
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$ToleranceFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ToleranceFn")
     public static SubLObject cyc_tolerance(final SubLObject interval, final SubLObject fraction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ans = NIL;
@@ -2504,6 +4496,15 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(ans);
     }
 
+    public static final SubLObject cyc_tolerance_internal_alt(SubLObject fraction, SubLObject unit, SubLObject min, SubLObject average, SubLObject max) {
+        {
+            SubLObject delta = extended_numbers.extended_number_abs(extended_numbers.extended_number_times(average, fraction));
+            SubLObject ans_min = extended_numbers.extended_number_minus(min, delta);
+            SubLObject ans_max = extended_numbers.extended_number_plus(max, delta);
+            return com.cyc.cycjava.cycl.quantities.make_interval(unit, ans_min, ans_max);
+        }
+    }
+
     public static SubLObject cyc_tolerance_internal(final SubLObject fraction, final SubLObject unit, final SubLObject min, final SubLObject average, final SubLObject max) {
         final SubLObject delta = extended_numbers.extended_number_abs(extended_numbers.extended_number_times(average, fraction));
         final SubLObject ans_min = extended_numbers.extended_number_minus(min, delta);
@@ -2511,6 +4512,37 @@ public final class quantities extends SubLTranslatedFile {
         return make_interval(unit, ans_min, ans_max);
     }
 
+    /**
+     * evaluationDefn for #$SignificantDigitsFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SignificantDigitsFn")
+    public static final SubLObject cyc_significant_digits_alt(SubLObject digits, SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            digits = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(digits);
+            if (NIL == subl_promotions.positive_integer_p(digits)) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            thread.resetMultipleValues();
+            {
+                SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(interval);
+                SubLObject min = thread.secondMultipleValue();
+                SubLObject max = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                min = significant_digits(min, digits);
+                max = significant_digits(max, digits);
+                {
+                    SubLObject v_answer = com.cyc.cycjava.cycl.quantities.make_interval(unit, min, max);
+                    return arithmetic_answer(v_answer);
+                }
+            }
+        }
+    }
+
+    /**
+     * evaluationDefn for #$SignificantDigitsFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SignificantDigitsFn")
     public static SubLObject cyc_significant_digits(SubLObject digits, final SubLObject interval) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject ignore_errors_tag = NIL;
@@ -2548,28 +4580,120 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * evaluationDefn for #$SineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SineFn")
+    public static final SubLObject cyc_sine_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_trig_internal(SIN, interval);
+    }
+
+    /**
+     * evaluationDefn for #$SineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SineFn")
     public static SubLObject cyc_sine(final SubLObject interval) {
         return cyc_trig_internal(SIN, interval);
     }
 
+    /**
+     * evaluationDefn for #$CosineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$CosineFn")
+    public static final SubLObject cyc_cosine_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_trig_internal(COS, interval);
+    }
+
+    /**
+     * evaluationDefn for #$CosineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$CosineFn")
     public static SubLObject cyc_cosine(final SubLObject interval) {
         return cyc_trig_internal(COS, interval);
     }
 
+    /**
+     * evaluationDefn for #$TangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$TangentFn")
+    public static final SubLObject cyc_tangent_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_trig_internal(TAN, interval);
+    }
+
+    /**
+     * evaluationDefn for #$TangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$TangentFn")
     public static SubLObject cyc_tangent(final SubLObject interval) {
         return cyc_trig_internal(TAN, interval);
     }
 
+    /**
+     * evaluationDefn for #$CosecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$CosecantFn")
+    public static final SubLObject cyc_cosecant_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_inverse(com.cyc.cycjava.cycl.quantities.cyc_sine(interval));
+    }
+
+    /**
+     * evaluationDefn for #$CosecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$CosecantFn")
     public static SubLObject cyc_cosecant(final SubLObject interval) {
         return cyc_inverse(cyc_sine(interval));
     }
 
+    /**
+     * evaluationDefn for #$SecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SecantFn")
+    public static final SubLObject cyc_secant_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_inverse(com.cyc.cycjava.cycl.quantities.cyc_cosine(interval));
+    }
+
+    /**
+     * evaluationDefn for #$SecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$SecantFn")
     public static SubLObject cyc_secant(final SubLObject interval) {
         return cyc_inverse(cyc_cosine(interval));
     }
 
+    /**
+     * evaluationDefn for #$CotangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$CotangentFn")
+    public static final SubLObject cyc_cotangent_alt(SubLObject interval) {
+        return com.cyc.cycjava.cycl.quantities.cyc_inverse(com.cyc.cycjava.cycl.quantities.cyc_tangent(interval));
+    }
+
+    /**
+     * evaluationDefn for #$CotangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$CotangentFn")
     public static SubLObject cyc_cotangent(final SubLObject interval) {
         return cyc_inverse(cyc_tangent(interval));
+    }
+
+    public static final SubLObject cyc_trig_internal_alt(SubLObject trig_func, SubLObject interval) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject unit = com.cyc.cycjava.cycl.quantities.explode_interval(com.cyc.cycjava.cycl.quantities.cyc_quantity_conversion($$Radian, interval));
+                SubLObject min = thread.secondMultipleValue();
+                SubLObject max = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                if (!min.numE(max)) {
+                    relation_evaluation.throw_unevaluatable();
+                }
+                {
+                    SubLObject result = funcall(trig_func, min);
+                    return arithmetic_answer(result);
+                }
+            }
+        }
     }
 
     public static SubLObject cyc_trig_internal(final SubLObject trig_func, final SubLObject interval) {
@@ -2586,28 +4710,131 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(result);
     }
 
+    /**
+     * evaluationDefn for #$ArcSineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcSineFn")
+    public static final SubLObject cyc_arc_sine_alt(SubLObject number) {
+        return com.cyc.cycjava.cycl.quantities.cyc_inverse_trig_internal(ASIN, number);
+    }
+
+    /**
+     * evaluationDefn for #$ArcSineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcSineFn")
     public static SubLObject cyc_arc_sine(final SubLObject number) {
         return cyc_inverse_trig_internal(ASIN, number);
     }
 
+    /**
+     * evaluationDefn for #$ArcCosineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcCosineFn")
+    public static final SubLObject cyc_arc_cosine_alt(SubLObject number) {
+        return com.cyc.cycjava.cycl.quantities.cyc_inverse_trig_internal(ACOS, number);
+    }
+
+    /**
+     * evaluationDefn for #$ArcCosineFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcCosineFn")
     public static SubLObject cyc_arc_cosine(final SubLObject number) {
         return cyc_inverse_trig_internal(ACOS, number);
     }
 
+    /**
+     * evaluationDefn for #$ArcTangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcTangentFn")
+    public static final SubLObject cyc_arc_tangent_alt(SubLObject number) {
+        return com.cyc.cycjava.cycl.quantities.cyc_inverse_trig_internal(ATAN, number);
+    }
+
+    /**
+     * evaluationDefn for #$ArcTangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcTangentFn")
     public static SubLObject cyc_arc_tangent(final SubLObject number) {
         return cyc_inverse_trig_internal(ATAN, number);
     }
 
+    /**
+     * evaluationDefn for #$ArcCosecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcCosecantFn")
+    public static final SubLObject cyc_arc_cosecant_alt(SubLObject number) {
+        return com.cyc.cycjava.cycl.quantities.cyc_arc_sine(com.cyc.cycjava.cycl.quantities.cyc_inverse(number));
+    }
+
+    /**
+     * evaluationDefn for #$ArcCosecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcCosecantFn")
     public static SubLObject cyc_arc_cosecant(final SubLObject number) {
         return cyc_arc_sine(cyc_inverse(number));
     }
 
+    /**
+     * evaluationDefn for #$ArcSecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcSecantFn")
+    public static final SubLObject cyc_arc_secant_alt(SubLObject number) {
+        return com.cyc.cycjava.cycl.quantities.cyc_arc_cosine(com.cyc.cycjava.cycl.quantities.cyc_inverse(number));
+    }
+
+    /**
+     * evaluationDefn for #$ArcSecantFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcSecantFn")
     public static SubLObject cyc_arc_secant(final SubLObject number) {
         return cyc_arc_cosine(cyc_inverse(number));
     }
 
+    /**
+     * evaluationDefn for #$ArcCotangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcCotangentFn")
+    public static final SubLObject cyc_arc_cotangent_alt(SubLObject number) {
+        return com.cyc.cycjava.cycl.quantities.cyc_arc_tangent(com.cyc.cycjava.cycl.quantities.cyc_inverse(number));
+    }
+
+    /**
+     * evaluationDefn for #$ArcCotangentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ArcCotangentFn")
     public static SubLObject cyc_arc_cotangent(final SubLObject number) {
         return cyc_arc_tangent(cyc_inverse(number));
+    }
+
+    public static final SubLObject cyc_inverse_trig_internal_alt(SubLObject inverse_trig_func, SubLObject number) {
+        {
+            SubLObject error_message = NIL;
+            SubLObject result = NIL;
+            try {
+                {
+                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
+                    try {
+                        bind(Errors.$error_handler$, CATCH_ERROR_MESSAGE_HANDLER);
+                        try {
+                            result = funcall(inverse_trig_func, number);
+                        } catch (Throwable catch_var) {
+                            Errors.handleThrowable(catch_var, NIL);
+                        }
+                    } finally {
+                        rebind(Errors.$error_handler$, _prev_bind_0);
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+            }
+            if (NIL != error_message) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            {
+                SubLObject ans = com.cyc.cycjava.cycl.quantities.make_interval($$Radian, result, result);
+                return arithmetic_answer(ans);
+            }
+        }
     }
 
     public static SubLObject cyc_inverse_trig_internal(final SubLObject inverse_trig_func, final SubLObject number) {
@@ -2639,6 +4866,47 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * evaluationDefn for #$LogarithmFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$LogarithmFn")
+    public static final SubLObject cyc_logarithm_alt(SubLObject number, SubLObject base) {
+        number = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(number);
+        base = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(base);
+        if (!(((NIL != extended_numbers.extended_number_plus_p(number)) && (NIL != extended_numbers.extended_number_non_negative_p(base))) && (NIL == extended_numbers.extended_numberE(base, ONE_INTEGER, UNPROVIDED)))) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject result = NIL;
+            SubLObject ignore_errors_tag = NIL;
+            try {
+                {
+                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
+                    try {
+                        bind(Errors.$error_handler$, symbol_function(IGNORE_ERRORS_HANDLER));
+                        try {
+                            result = extended_numbers.extended_number_log(number, base);
+                        } catch (Throwable catch_var) {
+                            Errors.handleThrowable(catch_var, NIL);
+                        }
+                    } finally {
+                        rebind(Errors.$error_handler$, _prev_bind_0);
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+            }
+            if (NIL == extended_numbers.extended_number_p(result)) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return arithmetic_answer(result);
+        }
+    }
+
+    /**
+     * evaluationDefn for #$LogarithmFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$LogarithmFn")
     public static SubLObject cyc_logarithm(SubLObject number, SubLObject base) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         number = cycl_real_number_to_number(number);
@@ -2672,6 +4940,44 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(result);
     }
 
+    /**
+     * evaluationDefn for #$ExponentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ExponentFn")
+    public static final SubLObject cyc_exponent_alt(SubLObject number, SubLObject exponent) {
+        number = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(number);
+        exponent = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(exponent);
+        {
+            SubLObject result = NIL;
+            SubLObject ignore_errors_tag = NIL;
+            try {
+                {
+                    SubLObject _prev_bind_0 = currentBinding(Errors.$error_handler$);
+                    try {
+                        bind(Errors.$error_handler$, symbol_function(IGNORE_ERRORS_HANDLER));
+                        try {
+                            result = extended_numbers.extended_number_expt(number, exponent);
+                        } catch (Throwable catch_var) {
+                            Errors.handleThrowable(catch_var, NIL);
+                        }
+                    } finally {
+                        rebind(Errors.$error_handler$, _prev_bind_0);
+                    }
+                }
+            } catch (Throwable ccatch_env_var) {
+                ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+            }
+            if (NIL == extended_numbers.extended_number_p(result)) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return arithmetic_answer(result);
+        }
+    }
+
+    /**
+     * evaluationDefn for #$ExponentFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$ExponentFn")
     public static SubLObject cyc_exponent(SubLObject number, SubLObject exponent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         number = cycl_real_number_to_number(number);
@@ -2702,6 +5008,29 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(result);
     }
 
+    /**
+     * evaluationDefn for #$QuadraticSolution-PositiveFn
+     * Provides the positive root of A*X^2 + BX + C
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuadraticSolution-PositiveFn\r\nProvides the positive root of A*X^2 + BX + C\nevaluationDefn for #$QuadraticSolution-PositiveFn\nProvides the positive root of A*X^2 + BX + C")
+    public static final SubLObject cyc_quadratic_solution_positive_alt(SubLObject arg_a, SubLObject arg_b, SubLObject arg_c) {
+        arg_a = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(arg_a);
+        arg_b = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(arg_b);
+        arg_c = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(arg_c);
+        {
+            SubLObject delta = extended_numbers.extended_number_minus(extended_numbers.extended_number_expt(arg_b, TWO_INTEGER), extended_numbers.extended_number_times(FOUR_INTEGER, extended_numbers.extended_number_times(arg_a, arg_c)));
+            if ((NIL != extended_numbers.extended_number_zero_p(arg_a)) || (NIL != extended_numbers.extended_number_minus_p(delta))) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return arithmetic_answer(extended_numbers.extended_number_quotient(extended_numbers.extended_number_plus(extended_numbers.extended_number_negate(arg_b), extended_numbers.extended_number_sqrt(delta)), extended_numbers.extended_number_times(TWO_INTEGER, arg_a)));
+        }
+    }
+
+    /**
+     * evaluationDefn for #$QuadraticSolution-PositiveFn
+     * Provides the positive root of A*X^2 + BX + C
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuadraticSolution-PositiveFn\r\nProvides the positive root of A*X^2 + BX + C\nevaluationDefn for #$QuadraticSolution-PositiveFn\nProvides the positive root of A*X^2 + BX + C")
     public static SubLObject cyc_quadratic_solution_positive(SubLObject arg_a, SubLObject arg_b, SubLObject arg_c) {
         arg_a = cycl_real_number_to_number(arg_a);
         arg_b = cycl_real_number_to_number(arg_b);
@@ -2713,6 +5042,29 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(extended_numbers.extended_number_quotient(extended_numbers.extended_number_plus(extended_numbers.extended_number_negate(arg_b), extended_numbers.extended_number_sqrt(delta)), extended_numbers.extended_number_times(TWO_INTEGER, arg_a)));
     }
 
+    /**
+     * evaluationDefn for #$QuadraticSolution-NegativeFn
+     * Provides the negative root of A*X^2 + BX + C
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuadraticSolution-NegativeFn\r\nProvides the negative root of A*X^2 + BX + C\nevaluationDefn for #$QuadraticSolution-NegativeFn\nProvides the negative root of A*X^2 + BX + C")
+    public static final SubLObject cyc_quadratic_solution_negative_alt(SubLObject arg_a, SubLObject arg_b, SubLObject arg_c) {
+        arg_a = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(arg_a);
+        arg_b = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(arg_b);
+        arg_c = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(arg_c);
+        {
+            SubLObject delta = extended_numbers.extended_number_minus(extended_numbers.extended_number_expt(arg_b, TWO_INTEGER), extended_numbers.extended_number_times(FOUR_INTEGER, extended_numbers.extended_number_times(arg_a, arg_c)));
+            if ((NIL != extended_numbers.extended_number_zero_p(arg_a)) || (NIL != extended_numbers.extended_number_minus_p(delta))) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return arithmetic_answer(extended_numbers.extended_number_quotient(extended_numbers.extended_number_minus(extended_numbers.extended_number_negate(arg_b), extended_numbers.extended_number_sqrt(delta)), extended_numbers.extended_number_times(TWO_INTEGER, arg_a)));
+        }
+    }
+
+    /**
+     * evaluationDefn for #$QuadraticSolution-NegativeFn
+     * Provides the negative root of A*X^2 + BX + C
+     */
+    @LispMethod(comment = "evaluationDefn for #$QuadraticSolution-NegativeFn\r\nProvides the negative root of A*X^2 + BX + C\nevaluationDefn for #$QuadraticSolution-NegativeFn\nProvides the negative root of A*X^2 + BX + C")
     public static SubLObject cyc_quadratic_solution_negative(SubLObject arg_a, SubLObject arg_b, SubLObject arg_c) {
         arg_a = cycl_real_number_to_number(arg_a);
         arg_b = cycl_real_number_to_number(arg_b);
@@ -2722,6 +5074,18 @@ public final class quantities extends SubLTranslatedFile {
             relation_evaluation.throw_unevaluatable();
         }
         return arithmetic.arithmetic_answer(extended_numbers.extended_number_quotient(extended_numbers.extended_number_minus(extended_numbers.extended_number_negate(arg_b), extended_numbers.extended_number_sqrt(delta)), extended_numbers.extended_number_times(TWO_INTEGER, arg_a)));
+    }
+
+    public static final SubLObject cyc_collection_subsumption_paths_alt(SubLObject el_set) {
+        if (NIL == el_set_p(el_set)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject cols = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(el_set, $HL);
+            SubLObject paths = collection_subsumption_paths(cols);
+            SubLObject el_paths = Mapping.mapcar(MAKE_EL_LIST, paths);
+            return make_el_set(el_paths, UNPROVIDED);
+        }
     }
 
     public static SubLObject cyc_collection_subsumption_paths(final SubLObject el_set) {
@@ -2734,6 +5098,18 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_set(el_paths, UNPROVIDED);
     }
 
+    public static final SubLObject cyc_predicate_subsumption_paths_alt(SubLObject el_set) {
+        if (NIL == el_set_p(el_set)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject preds = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(el_set, $HL);
+            SubLObject paths = predicate_subsumption_paths(preds);
+            SubLObject el_paths = Mapping.mapcar(MAKE_EL_LIST, paths);
+            return make_el_set(el_paths, UNPROVIDED);
+        }
+    }
+
     public static SubLObject cyc_predicate_subsumption_paths(final SubLObject el_set) {
         if (NIL == el_set_p(el_set)) {
             relation_evaluation.throw_unevaluatable();
@@ -2744,6 +5120,53 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_set(el_paths, UNPROVIDED);
     }
 
+    /**
+     * Cyc-Quant extension for #$lessThan
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$lessThan")
+    public static final SubLObject cyc_less_than_quantities_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ((NIL != extended_numbers.extended_number_p(interval1)) && (NIL != extended_numbers.extended_number_p(interval2))) {
+                return extended_numbers.extended_numberL(interval1, interval2, UNPROVIDED);
+            }
+            if ((((NIL != forts.fort_p(interval1)) && (NIL != forts.fort_p(interval2))) && (NIL != isa.isa_in_any_mtP(interval1, $$ScalarInterval))) && (NIL != isa.isa_in_any_mtP(interval2, $$ScalarInterval))) {
+                if (NIL != equals.equalsP(interval1, interval2, UNPROVIDED, UNPROVIDED)) {
+                    return NIL;
+                }
+                if (NIL != com.cyc.cycjava.cycl.quantities.following_valueP(interval1, interval2, UNPROVIDED)) {
+                    return T;
+                }
+                if (NIL != com.cyc.cycjava.cycl.quantities.following_valueP(interval2, interval1, UNPROVIDED)) {
+                    return NIL;
+                }
+            }
+            thread.resetMultipleValues();
+            {
+                SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                SubLObject min1 = thread.secondMultipleValue();
+                SubLObject max1 = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                thread.resetMultipleValues();
+                {
+                    SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                    SubLObject min2 = thread.secondMultipleValue();
+                    SubLObject max2 = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                        relation_evaluation.throw_unevaluatable();
+                    }
+                    min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, UNPROVIDED);
+                    return extended_numbers.extended_numberL(max1, min2, UNPROVIDED);
+                }
+            }
+        }
+    }
+
+    /**
+     * Cyc-Quant extension for #$lessThan
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$lessThan")
     public static SubLObject cyc_less_than_quantities(final SubLObject interval1, final SubLObject interval2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != extended_numbers.extended_number_p(interval1)) && (NIL != extended_numbers.extended_number_p(interval2))) {
@@ -2806,7 +5229,7 @@ public final class quantities extends SubLTranslatedFile {
     }
 
     public static SubLObject negate_fraction(final SubLObject fraction) {
-        assert NIL != collection_defns.fractionP(fraction, UNPROVIDED) : "collection_defns.fractionP(fraction, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != collection_defns.fractionP(fraction, CommonSymbols.UNPROVIDED) " + fraction;
+        assert NIL != collection_defns.fractionP(fraction, UNPROVIDED) : "! collection_defns.fractionP(fraction, .UNPROVIDED) " + ("collection_defns.fractionP(fraction, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != collection_defns.fractionP(fraction, CommonSymbols.UNPROVIDED) ") + fraction;
         if ((NIL != collection_defns.simple_fractionP(fraction, UNPROVIDED)) || (NIL != collection_defns.decimal_fractionP(fraction, UNPROVIDED))) {
             return replace_formula_arg(ONE_INTEGER, arithmetic.cyc_minus(cycl_utilities.nat_arg1(fraction, UNPROVIDED)), fraction);
         }
@@ -2818,6 +5241,13 @@ public final class quantities extends SubLTranslatedFile {
         }
         Errors.error($str111$Can_t_negate__S, fraction);
         return NIL;
+    }
+
+    public static final SubLObject following_valueP_alt(SubLObject small_attribute, SubLObject big_attribute, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return removal_modules_transitivity.inference_transitivity_check($$followingValue, small_attribute, big_attribute, mt, UNPROVIDED);
     }
 
     public static SubLObject following_valueP(final SubLObject small_attribute, final SubLObject big_attribute, SubLObject mt) {
@@ -2940,7 +5370,7 @@ public final class quantities extends SubLTranslatedFile {
     }
 
     public static SubLObject convert_simple_fraction_to_fraction(final SubLObject simple_fraction) {
-        assert NIL != collection_defns.simple_fractionP(simple_fraction, UNPROVIDED) : "collection_defns.simple_fractionP(simple_fraction, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != collection_defns.simple_fractionP(simple_fraction, CommonSymbols.UNPROVIDED) " + simple_fraction;
+        assert NIL != collection_defns.simple_fractionP(simple_fraction, UNPROVIDED) : "! collection_defns.simple_fractionP(simple_fraction, .UNPROVIDED) " + ("collection_defns.simple_fractionP(simple_fraction, CommonSymbols.UNPROVIDED) " + "CommonSymbols.NIL != collection_defns.simple_fractionP(simple_fraction, CommonSymbols.UNPROVIDED) ") + simple_fraction;
         SubLObject current;
         final SubLObject datum = current = cycl_utilities.nat_args(simple_fraction, UNPROVIDED);
         SubLObject numerator = NIL;
@@ -2994,6 +5424,53 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Cyc-Quant extension for #$lessThanOrEqualTo
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$lessThanOrEqualTo")
+    public static final SubLObject cyc_less_than_or_equal_to_quantities_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ((NIL != extended_numbers.extended_number_p(interval1)) && (NIL != extended_numbers.extended_number_p(interval2))) {
+                return extended_numbers.extended_numberLE(interval1, interval2, UNPROVIDED);
+            }
+            if ((((NIL != forts.fort_p(interval1)) && (NIL != forts.fort_p(interval2))) && (NIL != isa.isa_in_any_mtP(interval1, $$ScalarInterval))) && (NIL != isa.isa_in_any_mtP(interval2, $$ScalarInterval))) {
+                if (NIL != equals.equalsP(interval1, interval2, UNPROVIDED, UNPROVIDED)) {
+                    return T;
+                }
+                if (NIL != com.cyc.cycjava.cycl.quantities.following_valueP(interval1, interval2, UNPROVIDED)) {
+                    return T;
+                }
+                if (NIL != com.cyc.cycjava.cycl.quantities.following_valueP(interval2, interval1, UNPROVIDED)) {
+                    return NIL;
+                }
+            }
+            thread.resetMultipleValues();
+            {
+                SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                SubLObject min1 = thread.secondMultipleValue();
+                SubLObject max1 = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                thread.resetMultipleValues();
+                {
+                    SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                    SubLObject min2 = thread.secondMultipleValue();
+                    SubLObject max2 = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                        relation_evaluation.throw_unevaluatable();
+                    }
+                    min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, UNPROVIDED);
+                    return extended_numbers.extended_numberLE(max1, min2, UNPROVIDED);
+                }
+            }
+        }
+    }
+
+    /**
+     * Cyc-Quant extension for #$lessThanOrEqualTo
+     */
+    @LispMethod(comment = "Cyc-Quant extension for #$lessThanOrEqualTo")
     public static SubLObject cyc_less_than_or_equal_to_quantities(final SubLObject interval1, final SubLObject interval2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != extended_numbers.extended_number_p(interval1)) && (NIL != extended_numbers.extended_number_p(interval2))) {
@@ -3055,6 +5532,42 @@ public final class quantities extends SubLTranslatedFile {
         return extended_numbers.possibly_infinite_or_extended_numberLE(max1, min2);
     }
 
+    public static final SubLObject cyc_quantity_subsumes_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (!((NIL != com.cyc.cycjava.cycl.quantities.cyc_scalar_interval_p(interval1)) && (NIL != com.cyc.cycjava.cycl.quantities.cyc_scalar_interval_p(interval2)))) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            {
+                SubLObject successP = NIL;
+                if (interval1.isNumber() && interval2.isNumber()) {
+                    successP = numE(interval1, interval2);
+                } else {
+                    if ((NIL != forts.fort_p(interval1)) && (NIL != forts.fort_p(interval2))) {
+                        successP = equals.equalsP(interval2, interval1, UNPROVIDED, UNPROVIDED);
+                        if (NIL == successP) {
+                            {
+                                SubLObject _prev_bind_0 = gt_vars.$suspend_gt_type_checkingP$.currentBinding(thread);
+                                try {
+                                    gt_vars.$suspend_gt_type_checkingP$.bind(T, thread);
+                                    successP = gt_methods.gt_booleanP($$quantitySubsumes, interval1, interval2, UNPROVIDED);
+                                } finally {
+                                    gt_vars.$suspend_gt_type_checkingP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                            if (NIL == successP) {
+                                successP = com.cyc.cycjava.cycl.quantities.cyc_quantity_subsumes_proper_intervals(interval1, interval2);
+                            }
+                        }
+                    } else {
+                        successP = com.cyc.cycjava.cycl.quantities.cyc_quantity_subsumes_proper_intervals(interval1, interval2);
+                    }
+                }
+                return successP;
+            }
+        }
+    }
+
     public static SubLObject cyc_quantity_subsumes(final SubLObject interval1, final SubLObject interval2) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (interval1.isNumber() && interval2.isNumber()) {
@@ -3077,6 +5590,32 @@ public final class quantities extends SubLTranslatedFile {
             }
         }
         return cyc_quantity_subsumes_proper_intervals(interval1, interval2);
+    }
+
+    public static final SubLObject cyc_quantity_subsumes_proper_intervals_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                SubLObject min1 = thread.secondMultipleValue();
+                SubLObject max1 = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                thread.resetMultipleValues();
+                {
+                    SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                    SubLObject min2 = thread.secondMultipleValue();
+                    SubLObject max2 = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                        relation_evaluation.throw_unevaluatable();
+                    }
+                    min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, UNPROVIDED);
+                    max2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, max2, UNPROVIDED);
+                    return makeBoolean(min1.numLE(min2) && max1.numGE(max2));
+                }
+            }
+        }
     }
 
     public static SubLObject cyc_quantity_subsumes_proper_intervals(final SubLObject interval1, final SubLObject interval2) {
@@ -3117,6 +5656,40 @@ public final class quantities extends SubLTranslatedFile {
         }
         relation_evaluation.throw_unevaluatable();
         return NIL;
+    }
+
+    public static final SubLObject cyc_quantity_intersects_alt(SubLObject interval1, SubLObject interval2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (interval1.isNumber() && interval2.isNumber()) {
+                return numE(interval1, interval2);
+            }
+            if ((((NIL != forts.fort_p(interval1)) && (NIL != forts.fort_p(interval2))) && (NIL != isa.isa_in_any_mtP(interval1, $$ScalarInterval))) && (NIL != isa.isa_in_any_mtP(interval1, $$ScalarInterval))) {
+                if (NIL != equals.equalsP(interval2, interval1, UNPROVIDED, UNPROVIDED)) {
+                    return T;
+                }
+            }
+            thread.resetMultipleValues();
+            {
+                SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(interval1);
+                SubLObject min1 = thread.secondMultipleValue();
+                SubLObject max1 = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                thread.resetMultipleValues();
+                {
+                    SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(interval2);
+                    SubLObject min2 = thread.secondMultipleValue();
+                    SubLObject max2 = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                        relation_evaluation.throw_unevaluatable();
+                    }
+                    min2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, min2, UNPROVIDED);
+                    max2 = com.cyc.cycjava.cycl.quantities.convert_to_units(unit1, unit2, max2, UNPROVIDED);
+                    return makeBoolean(min1.numLE(max2) && min2.numLE(max1));
+                }
+            }
+        }
     }
 
     public static SubLObject cyc_quantity_intersects(final SubLObject interval1, final SubLObject interval2) {
@@ -3183,6 +5756,10 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(new SubLObject[]{ reader_make_constant_shell("IntervalMinFn"), reader_make_constant_shell("IntervalMaxFn"), reader_make_constant_shell("Unity"), reader_make_constant_shell("UnitOfMeasure"), reader_make_constant_shell("maxQuantValue"), reader_make_constant_shell("minQuantValue"), reader_make_constant_shell("unitMultiplicationFactor"), reader_make_constant_shell("multiplicationUnits"), reader_make_constant_shell("PerFn"), reader_make_constant_shell("TheSet"), reader_make_constant_shell("TheSetOf"), reader_make_constant_shell("thereExistAtLeast"), reader_make_constant_shell("thereExistAtMost"), reader_make_constant_shell("thereExistExactly") });
+
     public static SubLObject cyc_divides_evenly(final SubLObject interval1, final SubLObject interval2) {
         final SubLObject quotient = cyc_round_closest(cyc_quotient(interval2, interval1));
         if (NIL != extended_numbers.extended_number_integer_p(cyc_quantity_measure(quotient))) {
@@ -3190,6 +5767,25 @@ public final class quantities extends SubLTranslatedFile {
             return arithmetic.cyc_numerically_equal(product, interval2);
         }
         return NIL;
+    }
+
+    static private final SubLString $str_alt4$A_KB_dependent_numerical_quantifi = makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
+
+    public static final SubLObject cyc_list_nth_alt(SubLObject el_list, SubLObject n) {
+        if (!((NIL != el_non_empty_list_p(el_list)) && n.isInteger())) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        if (!n.isPositive()) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        n = subtract(n, ONE_INTEGER);
+        {
+            SubLObject list = el_list_items(el_list);
+            if (n.numGE(length(list))) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return nth(n, list);
+        }
     }
 
     public static SubLObject cyc_list_nth(final SubLObject el_list, SubLObject n) {
@@ -3207,12 +5803,23 @@ public final class quantities extends SubLTranslatedFile {
         return nth(n, list);
     }
 
+    public static final SubLObject cyc_list_concatenate_alt(SubLObject args) {
+        if (NIL == list_utilities.every_in_list(symbol_function(EL_LIST_P), args, UNPROVIDED)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return make_el_list(apply(symbol_function(APPEND), Mapping.mapcar(symbol_function(EL_LIST_ITEMS), args)), UNPROVIDED);
+    }
+
     public static SubLObject cyc_list_concatenate(final SubLObject args) {
         if (NIL == list_utilities.every_in_list(symbol_function(EL_LIST_P), args, UNPROVIDED)) {
             relation_evaluation.throw_unevaluatable();
         }
         return make_el_list(apply(symbol_function(APPEND), Mapping.mapcar(symbol_function(EL_LIST_ITEMS), args)), UNPROVIDED);
     }
+
+    public static final SubLSymbol $kw11$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLList $list_alt12 = list(makeSymbol("ARG1-UNIT"), makeSymbol("ARG2-UNIT"), makeSymbol("RAW-FACTOR"));
 
     public static SubLObject cyc_append_to_list(final SubLObject item, final SubLObject list) {
         if (NIL == el_list_p(list)) {
@@ -3221,11 +5828,24 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_list(list_utilities.snoc(item, el_list_items(list)), UNPROVIDED);
     }
 
+    static private final SubLString $str_alt16$Link_not_found_ = makeString("Link not found!");
+
+    static private final SubLList $list_alt17 = list(makeSymbol("IGNORE"), makeSymbol("PREVIOUS-UNIT"), makeSymbol("FACTOR"));
+
     public static SubLObject cyc_prepend_to_list(final SubLObject item, final SubLObject list) {
         if (NIL == el_list_p(list)) {
             relation_evaluation.throw_unevaluatable();
         }
         return make_el_list(cons(item, el_list_items(list)), UNPROVIDED);
+    }
+
+    static private final SubLString $str_alt18$No_previous_unit_ = makeString("No previous unit.");
+
+    public static final SubLObject cyc_list_first_alt(SubLObject el_list) {
+        if (NIL == el_non_empty_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return el_list_items(el_list).first();
     }
 
     public static SubLObject cyc_list_first(final SubLObject el_list) {
@@ -3246,6 +5866,13 @@ public final class quantities extends SubLTranslatedFile {
         return second(items);
     }
 
+    public static final SubLObject cyc_list_rest_alt(SubLObject el_list) {
+        if (NIL == el_non_empty_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return make_el_list(el_list_items(el_list).rest(), UNPROVIDED);
+    }
+
     public static SubLObject cyc_list_rest(final SubLObject el_list) {
         if (NIL == el_non_empty_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
@@ -3253,11 +5880,38 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_list(el_list_items(el_list).rest(), UNPROVIDED);
     }
 
+    static private final SubLSymbol $sym27$FUZZY_NUMBER_ = makeSymbol("FUZZY-NUMBER?");
+
+    public static final SubLObject cyc_list_last_alt(SubLObject el_list) {
+        if (NIL == el_non_empty_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return last(el_list_items(el_list), UNPROVIDED).first();
+    }
+
     public static SubLObject cyc_list_last(final SubLObject el_list) {
         if (NIL == el_non_empty_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
         }
         return last(el_list_items(el_list), UNPROVIDED).first();
+    }
+
+    public static final SubLObject cyc_list_subseq_alt(SubLObject el_list, SubLObject start, SubLObject end) {
+        if (!(((NIL != el_list_p(el_list)) && start.isInteger()) && end.isInteger())) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        if (((!start.isPositive()) || (!end.isPositive())) || end.numL(start)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject list = el_list_items(el_list);
+            SubLObject length = length(list);
+            if (start.numG(length) || end.numG(length)) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            start = subtract(start, ONE_INTEGER);
+            return make_el_list(subseq(list, start, end), UNPROVIDED);
+        }
     }
 
     public static SubLObject cyc_list_subseq(final SubLObject el_list, SubLObject start, final SubLObject end) {
@@ -3296,6 +5950,36 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_list(subseq(list, start, end_mod), UNPROVIDED);
     }
 
+    static private final SubLList $list_alt43 = list(makeSymbol("MIN"), makeSymbol("&OPTIONAL"), list(makeSymbol("MAX"), makeSymbol("MIN")));
+
+    public static final SubLObject cyc_list_search_alt(SubLObject el_sublist, SubLObject el_list) {
+        if (!((NIL != el_list_p(el_sublist)) && (NIL != el_list_p(el_list)))) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject sublist = el_list_items(el_sublist);
+            SubLObject list = el_list_items(el_list);
+            SubLObject positions = NIL;
+            if (NIL == sublist) {
+                {
+                    SubLObject cdotimes_end_var = length(list);
+                    SubLObject i = NIL;
+                    for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                        positions = cons(add(i, ONE_INTEGER), positions);
+                    }
+                }
+            } else {
+                {
+                    SubLObject position = NIL;
+                    for (position = search(sublist, list, symbol_function(EQUAL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, ZERO_INTEGER, NIL); NIL != position; position = search(sublist, list, symbol_function(EQUAL), symbol_function(IDENTITY), ZERO_INTEGER, NIL, add(position, ONE_INTEGER), NIL)) {
+                        positions = cons(add(position, ONE_INTEGER), positions);
+                    }
+                }
+            }
+            return make_el_list(nreverse(positions), UNPROVIDED);
+        }
+    }
+
     public static SubLObject cyc_list_search(final SubLObject el_sublist, final SubLObject el_list) {
         if ((NIL == el_list_p(el_sublist)) || (NIL == el_list_p(el_list))) {
             relation_evaluation.throw_unevaluatable();
@@ -3318,6 +6002,28 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_list(nreverse(positions), UNPROVIDED);
     }
 
+    /**
+     * #$evaluationDefn for #$PositionOfItemInListFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$PositionOfItemInListFn")
+    public static final SubLObject cyc_position_alt(SubLObject item, SubLObject el_list) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject list = el_list_items(el_list);
+            SubLObject position = position(item, list, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            if (!position.isInteger()) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return arithmetic_answer(add(position, ONE_INTEGER));
+        }
+    }
+
+    /**
+     * #$evaluationDefn for #$PositionOfItemInListFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$PositionOfItemInListFn")
     public static SubLObject cyc_position(final SubLObject item, final SubLObject el_list) {
         if (NIL == el_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
@@ -3330,6 +6036,13 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(add(position, ONE_INTEGER));
     }
 
+    public static final SubLObject cyc_list_length_alt(SubLObject el_list) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return length(el_list_items(el_list));
+    }
+
     public static SubLObject cyc_list_length(final SubLObject el_list) {
         if (NIL == el_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
@@ -3337,11 +6050,29 @@ public final class quantities extends SubLTranslatedFile {
         return length(el_list_items(el_list));
     }
 
+    public static final SubLObject cyc_list_reverse_alt(SubLObject el_list) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return make_el_list(reverse(el_list_items(el_list)), UNPROVIDED);
+    }
+
     public static SubLObject cyc_list_reverse(final SubLObject el_list) {
         if (NIL == el_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
         }
         return make_el_list(reverse(el_list_items(el_list)), UNPROVIDED);
+    }
+
+    public static final SubLObject cyc_list_member_set_alt(SubLObject el_list) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject list = el_list_items(el_list);
+            SubLObject v_set = nreverse(delete_duplicates(reverse(list), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED));
+            return bq_cons($$TheSet, append(v_set, NIL));
+        }
     }
 
     public static SubLObject cyc_list_member_set(final SubLObject el_list) {
@@ -3360,6 +6091,41 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_list(items, UNPROVIDED);
     }
 
+    /**
+     * (SubstituteFromListFn EXP (TheList (TheList NEW1 OLD1) ... (TheList NEWN OLDN)))
+     * returns a CycLFormula which is derived from EXP by substituting NEW1 for OLD1, NEW2 for OLD2,
+     * and so on for each pair that is an element of the second argument.
+     */
+    @LispMethod(comment = "(SubstituteFromListFn EXP (TheList (TheList NEW1 OLD1) ... (TheList NEWN OLDN)))\r\nreturns a CycLFormula which is derived from EXP by substituting NEW1 for OLD1, NEW2 for OLD2,\r\nand so on for each pair that is an element of the second argument.\n(SubstituteFromListFn EXP (TheList (TheList NEW1 OLD1) ... (TheList NEWN OLDN)))\nreturns a CycLFormula which is derived from EXP by substituting NEW1 for OLD1, NEW2 for OLD2,\nand so on for each pair that is an element of the second argument.")
+    public static final SubLObject cyc_substitute_from_list_alt(SubLObject expr, SubLObject el_list) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject el_pairs = el_list_items(el_list);
+            if (NIL == list_utilities.every_in_list(EL_LIST_P, el_pairs, UNPROVIDED)) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            {
+                SubLObject doubleton_list = Mapping.mapcar(EL_LIST_ITEMS, el_pairs);
+                if (NIL == list_utilities.every_in_list($sym110$DOUBLETON_, doubleton_list, UNPROVIDED)) {
+                    relation_evaluation.throw_unevaluatable();
+                }
+                {
+                    SubLObject alist = Mapping.mapcar(DOUBLETON_TO_CONS, doubleton_list);
+                    SubLObject new_expr = cycl_utilities.expression_sublis(list_utilities.flip_alist(alist), expr, symbol_function(EQUAL), UNPROVIDED);
+                    return new_expr;
+                }
+            }
+        }
+    }
+
+    /**
+     * (SubstituteFromListFn EXP (TheList (TheList NEW1 OLD1) ... (TheList NEWN OLDN)))
+     * returns a CycLFormula which is derived from EXP by substituting NEW1 for OLD1, NEW2 for OLD2,
+     * and so on for each pair that is an element of the second argument.
+     */
+    @LispMethod(comment = "(SubstituteFromListFn EXP (TheList (TheList NEW1 OLD1) ... (TheList NEWN OLDN)))\r\nreturns a CycLFormula which is derived from EXP by substituting NEW1 for OLD1, NEW2 for OLD2,\r\nand so on for each pair that is an element of the second argument.\n(SubstituteFromListFn EXP (TheList (TheList NEW1 OLD1) ... (TheList NEWN OLDN)))\nreturns a CycLFormula which is derived from EXP by substituting NEW1 for OLD1, NEW2 for OLD2,\nand so on for each pair that is an element of the second argument.")
     public static SubLObject cyc_substitute_from_list(final SubLObject expr, final SubLObject el_list) {
         if (NIL == el_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
@@ -3377,6 +6143,35 @@ public final class quantities extends SubLTranslatedFile {
         return new_expr;
     }
 
+    /**
+     * (a b) -> (a . b)
+     */
+    @LispMethod(comment = "(a b) -> (a . b)")
+    public static final SubLObject doubleton_to_cons_alt(SubLObject doubleton) {
+        {
+            SubLObject datum = doubleton;
+            SubLObject current = datum;
+            SubLObject a = NIL;
+            SubLObject b = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt113);
+            a = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt113);
+            b = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                return cons(a, b);
+            } else {
+                cdestructuring_bind_error(datum, $list_alt113);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * (a b) -> (a . b)
+     */
+    @LispMethod(comment = "(a b) -> (a . b)")
     public static SubLObject doubleton_to_cons(final SubLObject doubleton) {
         SubLObject a = NIL;
         SubLObject b = NIL;
@@ -3405,11 +6200,29 @@ public final class quantities extends SubLTranslatedFile {
         return new_expr;
     }
 
+    static private final SubLSymbol $sym110$DOUBLETON_ = makeSymbol("DOUBLETON?");
+
     public static SubLObject cyc_remove_adjacent_duplicates_from_list_fn(final SubLObject el_list) {
         if (NIL == el_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
         }
         return make_el_list(list_utilities.remove_duplicates_sorted(el_list_items(el_list), UNPROVIDED), UNPROVIDED);
+    }
+
+    static private final SubLList $list_alt113 = list(makeSymbol("A"), makeSymbol("B"));
+
+    public static final SubLObject cyc_map_function_over_list_alt(SubLObject function, SubLObject el_list) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject elements = el_list_items(el_list);
+            SubLObject v_answer = com.cyc.cycjava.cycl.quantities.cyc_map_function_int(function, elements);
+            if (NIL == v_answer) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return make_el_list(v_answer, UNPROVIDED);
+        }
     }
 
     public static SubLObject cyc_map_function_over_list(final SubLObject function, final SubLObject el_list) {
@@ -3422,6 +6235,43 @@ public final class quantities extends SubLTranslatedFile {
             relation_evaluation.throw_unevaluatable();
         }
         return make_el_list(v_answer, UNPROVIDED);
+    }
+
+    static private final SubLSymbol $sym118$CYC_LIST_MEMBER_ = makeSymbol("CYC-LIST-MEMBER?");
+
+    static private final SubLSymbol $sym119$CYC_LIST_CONTAINS_MEMBER_ = makeSymbol("CYC-LIST-CONTAINS-MEMBER?");
+
+    static private final SubLList $list_alt120 = list(makeSymbol("CYC-LIST-MEMBER?"));
+
+    static private final SubLSymbol $sym121$CYC_SUBLIST_ = makeSymbol("CYC-SUBLIST?");
+
+    static private final SubLSymbol $sym122$CYC_INITIAL_SUBLIST_ = makeSymbol("CYC-INITIAL-SUBLIST?");
+
+    static private final SubLString $str_alt124$Don_t_know_how_to_determine_the_e = makeString("Don't know how to determine the extent of ~S in ~S");
+
+    public static final SubLObject cyc_map_function_int_alt(SubLObject function, SubLObject list) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_answer = NIL;
+                SubLObject cdolist_list_var = list;
+                SubLObject element = NIL;
+                for (element = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , element = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject element_result = relation_evaluation.cyc_evaluate(list(function, element));
+                        SubLObject valid = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL == valid) {
+                            relation_evaluation.throw_unevaluatable();
+                        } else {
+                            v_answer = cons(element_result, v_answer);
+                        }
+                    }
+                }
+                return nreverse(v_answer);
+            }
+        }
     }
 
     public static SubLObject cyc_map_function_int(final SubLObject function, final SubLObject list) {
@@ -3528,6 +6378,25 @@ public final class quantities extends SubLTranslatedFile {
         return nreverse(v_answer);
     }
 
+    public static final SubLObject cyc_map_function_with_args_over_lists_alt(SubLObject function, SubLObject const_indices, SubLObject const_args, SubLObject var_indices, SubLObject var_arg_lists) {
+        if (!(((((NIL != el_list_p(const_indices)) && (NIL != el_list_p(const_args))) && (NIL != el_list_p(var_indices))) && (NIL != el_list_p(var_arg_lists))) && (NIL != list_utilities.every_in_list(EL_LIST_P, el_list_items(var_arg_lists), UNPROVIDED)))) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject ci = el_list_items(const_indices);
+            SubLObject ca = el_list_items(const_args);
+            SubLObject vi = el_list_items(var_indices);
+            SubLObject va = Mapping.mapcar(EL_LIST_ITEMS, el_list_items(var_arg_lists));
+            if (!((((((NIL != list_utilities.list_of_type_p(symbol_function(NON_NEGATIVE_INTEGER_P), ci)) && (NIL != list_utilities.list_of_type_p(symbol_function(NON_NEGATIVE_INTEGER_P), vi))) && (NIL != list_utilities.same_length_p(ci, ca))) && (NIL != list_utilities.same_length_p(vi, va))) && (NIL == keyhash_utilities.fast_intersection(ci, vi, UNPROVIDED, UNPROVIDED, UNPROVIDED))) && (NIL != list_utilities.same_lengths_p(va)))) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            {
+                SubLObject results = com.cyc.cycjava.cycl.quantities.cyc_map_function_with_args_over_lists_int(function, ci, ca, vi, va);
+                return make_el_list(results, UNPROVIDED);
+            }
+        }
+    }
+
     public static SubLObject cyc_map_function_with_args_over_lists(final SubLObject function, final SubLObject const_indices, final SubLObject const_args, final SubLObject var_indices, final SubLObject var_arg_lists) {
         if (((((NIL == el_list_p(const_indices)) || (NIL == el_list_p(const_args))) || (NIL == el_list_p(var_indices))) || (NIL == el_list_p(var_arg_lists))) || (NIL == list_utilities.every_in_list(EL_LIST_P, el_list_items(var_arg_lists), UNPROVIDED))) {
             relation_evaluation.throw_unevaluatable();
@@ -3541,6 +6410,39 @@ public final class quantities extends SubLTranslatedFile {
         }
         final SubLObject results = cyc_map_function_with_args_over_lists_int(function, ci, ca, vi, va);
         return make_el_list(results, UNPROVIDED);
+    }
+
+    public static final SubLObject cyc_map_function_with_args_over_lists_int_alt(SubLObject function, SubLObject const_indices, SubLObject const_args, SubLObject var_indices, SubLObject var_arg_lists) {
+        {
+            SubLObject v_arity = f_1X(apply(symbol_function(MAX), append(const_indices, var_indices)));
+            SubLObject args = make_list(v_arity, NIL);
+            SubLObject length = length(var_arg_lists.first());
+            SubLObject results = NIL;
+            SubLObject const_index = NIL;
+            SubLObject const_index_21 = NIL;
+            SubLObject const_arg = NIL;
+            SubLObject const_arg_22 = NIL;
+            for (const_index = const_indices, const_index_21 = const_index.first(), const_arg = const_args, const_arg_22 = const_arg.first(); !((NIL == const_arg) && (NIL == const_index)); const_index = const_index.rest() , const_index_21 = const_index.first() , const_arg = const_arg.rest() , const_arg_22 = const_arg.first()) {
+                set_nth(const_index_21, args, const_arg_22);
+            }
+            {
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(length); i = add(i, ONE_INTEGER)) {
+                    {
+                        SubLObject temp_args = copy_list(args);
+                        SubLObject var_index = NIL;
+                        SubLObject var_index_23 = NIL;
+                        SubLObject var_arg_list = NIL;
+                        SubLObject var_arg_list_24 = NIL;
+                        for (var_index = var_indices, var_index_23 = var_index.first(), var_arg_list = var_arg_lists, var_arg_list_24 = var_arg_list.first(); !((NIL == var_arg_list) && (NIL == var_index)); var_index = var_index.rest() , var_index_23 = var_index.first() , var_arg_list = var_arg_list.rest() , var_arg_list_24 = var_arg_list.first()) {
+                            set_nth(var_index_23, temp_args, nth(i, var_arg_list_24));
+                        }
+                        results = cons(relation_evaluation.cyc_evaluate(cons(function, temp_args)), results);
+                    }
+                }
+            }
+            return nreverse(results);
+        }
     }
 
     public static SubLObject cyc_map_function_with_args_over_lists_int(final SubLObject function, final SubLObject const_indices, final SubLObject const_args, final SubLObject var_indices, final SubLObject var_arg_lists) {
@@ -3607,6 +6509,21 @@ public final class quantities extends SubLTranslatedFile {
         return val;
     }
 
+    /**
+     * #$evaluationDefn for #$listMembers
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$listMembers")
+    public static final SubLObject cyc_list_memberP_alt(SubLObject el_list, SubLObject obj) {
+        if (NIL == el_list_p(el_list)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return subl_promotions.memberP(obj, el_list_items(el_list), symbol_function(EQUAL), UNPROVIDED);
+    }
+
+    /**
+     * #$evaluationDefn for #$listMembers
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$listMembers")
     public static SubLObject cyc_list_memberP(final SubLObject el_list, final SubLObject obj) {
         if (NIL == el_list_p(el_list)) {
             relation_evaluation.throw_unevaluatable();
@@ -3614,8 +6531,19 @@ public final class quantities extends SubLTranslatedFile {
         return subl_promotions.memberP(obj, el_list_items(el_list), symbol_function(EQUAL), UNPROVIDED);
     }
 
+    public static final SubLObject cyc_list_contains_memberP_alt(SubLObject el_list, SubLObject obj) {
+        return com.cyc.cycjava.cycl.quantities.cyc_list_memberP(el_list, obj);
+    }
+
     public static SubLObject cyc_list_contains_memberP(final SubLObject el_list, final SubLObject obj) {
         return cyc_list_memberP(el_list, obj);
+    }
+
+    public static final SubLObject cyc_sublistP_alt(SubLObject el_list, SubLObject el_list_sub) {
+        if (!((NIL != el_list_p(el_list)) && (NIL != el_list_p(el_list_sub)))) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return search(el_list_items(el_list_sub), el_list_items(el_list), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject cyc_sublistP(final SubLObject el_list, final SubLObject el_list_sub) {
@@ -3623,6 +6551,27 @@ public final class quantities extends SubLTranslatedFile {
             relation_evaluation.throw_unevaluatable();
         }
         return search(el_list_items(el_list_sub), el_list_items(el_list), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject cyc_initial_sublistP_alt(SubLObject list, SubLObject sub) {
+        if (!(list.isList() && sub.isList())) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        if (length(sub).numG(length(list))) {
+            return NIL;
+        } else {
+            {
+                SubLObject mismatchP = NIL;
+                SubLObject l = NIL;
+                SubLObject s = NIL;
+                for (l = list, s = sub; !((NIL != mismatchP) || (NIL == s)); l = l.rest() , s = s.rest()) {
+                    if (!s.first().equalp(l.first())) {
+                        mismatchP = T;
+                    }
+                }
+                return makeBoolean(NIL == mismatchP);
+            }
+        }
     }
 
     public static SubLObject cyc_initial_sublistP(final SubLObject list, final SubLObject sub) {
@@ -3645,28 +6594,75 @@ public final class quantities extends SubLTranslatedFile {
         return makeBoolean(NIL == mismatchP);
     }
 
+    public static final SubLObject cyc_non_empty_set_p_alt(SubLObject v_object) {
+        return el_non_empty_set_p(v_object);
+    }
+
     public static SubLObject cyc_non_empty_set_p(final SubLObject v_object) {
         return el_non_empty_set_p(v_object);
+    }
+
+    public static final SubLObject cyc_empty_set_p_alt(SubLObject v_object) {
+        return el_empty_set_p(v_object);
     }
 
     public static SubLObject cyc_empty_set_p(final SubLObject v_object) {
         return el_empty_set_p(v_object);
     }
 
+    public static final SubLObject cyc_set_p_alt(SubLObject v_object) {
+        return el_set_p(v_object);
+    }
+
     public static SubLObject cyc_set_p(final SubLObject v_object) {
         return el_set_p(v_object);
+    }
+
+    public static final SubLObject extensional_set_p_alt(SubLObject v_object) {
+        return el_extensional_set_p(v_object);
     }
 
     public static SubLObject extensional_set_p(final SubLObject v_object) {
         return el_extensional_set_p(v_object);
     }
 
+    public static final SubLObject intensional_set_p_alt(SubLObject v_object) {
+        return el_intensional_set_p(v_object);
+    }
+
     public static SubLObject intensional_set_p(final SubLObject v_object) {
         return el_intensional_set_p(v_object);
     }
 
+    public static final SubLObject make_hl_extensional_set_alt(SubLObject objects) {
+        return canonicalize_fn_term_if_reified(make_el_extensional_set(objects));
+    }
+
     public static SubLObject make_hl_extensional_set(final SubLObject objects) {
         return czer_main.canonicalize_fn_term_if_reified(make_el_extensional_set(objects));
+    }
+
+    public static final SubLObject evaluate_set_elements_alt(SubLObject v_set, SubLObject answer_language) {
+        if (answer_language == UNPROVIDED) {
+            answer_language = $EL;
+        }
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        if ((NIL != forts.fort_p(v_set)) && (NIL != fort_types_interface.collectionP(v_set))) {
+            return isa.all_fort_instances(v_set, UNPROVIDED, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.quantities.extensional_set_p(v_set)) {
+                return extensional_set_elements(v_set);
+            } else {
+                if (NIL != com.cyc.cycjava.cycl.quantities.intensional_set_p(v_set)) {
+                    return the_set_of_elements(v_set, answer_language, UNPROVIDED);
+                } else {
+                    relation_evaluation.throw_unevaluatable();
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject evaluate_set_elements(final SubLObject v_set, SubLObject answer_language) {
@@ -3689,6 +6685,44 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return the current extent of SET in MT.
+     */
+    @LispMethod(comment = "Return the current extent of SET in MT.")
+    public static final SubLObject set_extent_alt(SubLObject v_set, SubLObject mt, SubLObject answer_language) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (answer_language == UNPROVIDED) {
+            answer_language = $EL;
+        }
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt4$A_KB_dependent_numerical_quantifi);
+        }
+        if ((NIL != forts.fort_p(v_set)) && (NIL != fort_types_interface.collectionP(v_set))) {
+            return isa.all_fort_instances(v_set, mt, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.quantities.extensional_set_p(v_set)) {
+                return extensional_set_elements(v_set);
+            } else {
+                if (NIL != com.cyc.cycjava.cycl.quantities.intensional_set_p(v_set)) {
+                    if (NIL != mt) {
+                        return the_set_of_elements(v_set, answer_language, mt);
+                    } else {
+                        return the_set_of_elements(v_set, UNPROVIDED, UNPROVIDED);
+                    }
+                } else {
+                    Errors.error($str_alt124$Don_t_know_how_to_determine_the_e, v_set, mt);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Return the current extent of SET in MT.
+     */
+    @LispMethod(comment = "Return the current extent of SET in MT.")
     public static SubLObject set_extent(final SubLObject v_set, SubLObject mt, SubLObject answer_language) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -3715,6 +6749,28 @@ public final class quantities extends SubLTranslatedFile {
         return ask_utilities.the_set_of_elements(v_set, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     * #$evaluationDefn for #$SetOrCollectionIntersection
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetOrCollectionIntersection")
+    public static final SubLObject cyc_set_intersection_alt(SubLObject set_1, SubLObject set_2) {
+        if ((NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(set_1)) && (NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(set_2))) {
+            {
+                SubLObject elements_1 = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(set_1, $HL);
+                SubLObject elements_2 = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(set_2, $HL);
+                SubLObject intersection = keyhash_utilities.fast_intersection(elements_1, elements_2, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED);
+                return com.cyc.cycjava.cycl.quantities.make_hl_extensional_set(intersection);
+            }
+        } else {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return NIL;
+    }
+
+    /**
+     * #$evaluationDefn for #$SetOrCollectionIntersection
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetOrCollectionIntersection")
     public static SubLObject cyc_set_intersection(final SubLObject set_1, final SubLObject set_2) {
         if ((NIL != cyc_set_p(set_1)) && (NIL != cyc_set_p(set_2))) {
             final SubLObject elements_1 = evaluate_set_elements(set_1, $HL);
@@ -3726,6 +6782,28 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * #$evaluationDefn for #$SetOrCollectionUnion
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetOrCollectionUnion")
+    public static final SubLObject cyc_set_union_alt(SubLObject set_1, SubLObject set_2) {
+        if ((NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(set_1)) && (NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(set_2))) {
+            {
+                SubLObject elements_1 = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(set_1, $HL);
+                SubLObject elements_2 = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(set_2, $HL);
+                SubLObject union = append(elements_1, elements_2);
+                return com.cyc.cycjava.cycl.quantities.make_hl_extensional_set(union);
+            }
+        } else {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return NIL;
+    }
+
+    /**
+     * #$evaluationDefn for #$SetOrCollectionUnion
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetOrCollectionUnion")
     public static SubLObject cyc_set_union(final SubLObject set_1, final SubLObject set_2) {
         if ((NIL != cyc_set_p(set_1)) && (NIL != cyc_set_p(set_2))) {
             final SubLObject elements_1 = evaluate_set_elements(set_1, $HL);
@@ -3737,6 +6815,28 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * #$evaluationDefn for #$SetOrCollectionDifference
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetOrCollectionDifference")
+    public static final SubLObject cyc_set_difference_alt(SubLObject set_1, SubLObject set_2) {
+        if ((NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(set_1)) && (NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(set_2))) {
+            {
+                SubLObject elements_1 = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(set_1, $HL);
+                SubLObject elements_2 = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(set_2, $HL);
+                SubLObject difference = list_utilities.fast_set_difference(elements_1, elements_2, symbol_function(EQUAL));
+                return com.cyc.cycjava.cycl.quantities.make_hl_extensional_set(difference);
+            }
+        } else {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return NIL;
+    }
+
+    /**
+     * #$evaluationDefn for #$SetOrCollectionDifference
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetOrCollectionDifference")
     public static SubLObject cyc_set_difference(final SubLObject set_1, final SubLObject set_2) {
         if ((NIL != cyc_set_p(set_1)) && (NIL != cyc_set_p(set_2))) {
             final SubLObject elements_1 = evaluate_set_elements(set_1, $HL);
@@ -3748,6 +6848,28 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * #$evaluationDefn for #$SetExtentFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetExtentFn")
+    public static final SubLObject cyc_set_extent_alt(SubLObject v_set) {
+        if (!((NIL != com.cyc.cycjava.cycl.quantities.cyc_set_p(v_set)) || (NIL != forts.fort_p(v_set)))) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        {
+            SubLObject extent = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(v_set, $HL);
+            SubLObject hl_extent = com.cyc.cycjava.cycl.quantities.make_hl_extensional_set(extent);
+            if ($$TheEmptySet == hl_extent) {
+                return make_nat_formula($$TheSet, NIL);
+            }
+            return hl_extent;
+        }
+    }
+
+    /**
+     * #$evaluationDefn for #$SetExtentFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$SetExtentFn")
     public static SubLObject cyc_set_extent(final SubLObject v_set) {
         if ((NIL == cyc_set_p(v_set)) && (NIL == forts.fort_p(v_set))) {
             relation_evaluation.throw_unevaluatable();
@@ -3760,6 +6882,25 @@ public final class quantities extends SubLTranslatedFile {
         return hl_extent;
     }
 
+    /**
+     * #$evaluationDefn for #$MapFunctionOverSet
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$MapFunctionOverSet")
+    public static final SubLObject cyc_map_function_over_set_alt(SubLObject function, SubLObject v_set) {
+        {
+            SubLObject elements = com.cyc.cycjava.cycl.quantities.evaluate_set_elements(v_set, $HL);
+            SubLObject v_answer = com.cyc.cycjava.cycl.quantities.cyc_map_function_int(function, elements);
+            if (NIL == v_answer) {
+                relation_evaluation.throw_unevaluatable();
+            }
+            return com.cyc.cycjava.cycl.quantities.make_hl_extensional_set(v_answer);
+        }
+    }
+
+    /**
+     * #$evaluationDefn for #$MapFunctionOverSet
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$MapFunctionOverSet")
     public static SubLObject cyc_map_function_over_set(final SubLObject function, final SubLObject v_set) {
         final SubLObject elements = evaluate_set_elements(v_set, $HL);
         final SubLObject v_answer = cyc_map_function_int(function, elements);
@@ -3769,6 +6910,26 @@ public final class quantities extends SubLTranslatedFile {
         return make_hl_extensional_set(v_answer);
     }
 
+    /**
+     * #$evaluationDefn for #$LeastCommonMultipleFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$LeastCommonMultipleFn")
+    public static final SubLObject cyc_least_common_multiple_alt(SubLObject args) {
+        if (NIL == com.cyc.cycjava.cycl.quantities.list_of_cyc_scalar_interval_p(args)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        if (NIL == args) {
+            relation_evaluation.throw_unevaluatable();
+        } else {
+            return quantity_reduce(symbol_function(CYC_LEAST_COMMON_MULTIPLE_INTERNAL), NIL, args);
+        }
+        return NIL;
+    }
+
+    /**
+     * #$evaluationDefn for #$LeastCommonMultipleFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$LeastCommonMultipleFn")
     public static SubLObject cyc_least_common_multiple(final SubLObject args) {
         if (NIL == list_of_cyc_scalar_interval_p(args)) {
             relation_evaluation.throw_unevaluatable();
@@ -3778,6 +6939,69 @@ public final class quantities extends SubLTranslatedFile {
             return NIL;
         }
         return arithmetic.quantity_reduce(symbol_function(CYC_LEAST_COMMON_MULTIPLE_INTERNAL), NIL, args);
+    }
+
+    public static final SubLObject cyc_least_common_multiple_internal_alt(SubLObject scalar1, SubLObject scalar2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (scalar1.isInteger() && scalar2.isInteger()) {
+                    ans = lcm2(scalar1, scalar2);
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(scalar1);
+                        SubLObject min1 = thread.secondMultipleValue();
+                        SubLObject max1 = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(scalar2);
+                            SubLObject min2 = thread.secondMultipleValue();
+                            SubLObject max2 = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if (!(((min1.isInteger() && max1.isInteger()) && min2.isInteger()) && max2.isInteger())) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            if (!(min1.numE(max1) && min2.numE(max2))) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            {
+                                SubLObject smaller_unit = NIL;
+                                SubLObject larger_unit = NIL;
+                                SubLObject smaller_unit_integer = NIL;
+                                SubLObject larger_unit_integer = NIL;
+                                if (NIL != com.cyc.cycjava.cycl.quantities.smaller_unit_than(unit1, unit2)) {
+                                    smaller_unit = unit1;
+                                    larger_unit = unit2;
+                                    smaller_unit_integer = min1;
+                                    larger_unit_integer = min2;
+                                } else {
+                                    smaller_unit = unit2;
+                                    larger_unit = unit1;
+                                    smaller_unit_integer = min2;
+                                    larger_unit_integer = min1;
+                                }
+                                if (!((smaller_unit == larger_unit) || (NIL != com.cyc.cycjava.cycl.quantities.integer_valuedP(com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(larger_unit, smaller_unit))))) {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                                larger_unit_integer = round(com.cyc.cycjava.cycl.quantities.convert_to_units(smaller_unit, larger_unit, larger_unit_integer, UNPROVIDED), UNPROVIDED);
+                                {
+                                    SubLObject lcm = lcm2(smaller_unit_integer, larger_unit_integer);
+                                    SubLObject large_unit_lcm = round(com.cyc.cycjava.cycl.quantities.convert_to_units(larger_unit, smaller_unit, lcm, UNPROVIDED), UNPROVIDED);
+                                    ans = com.cyc.cycjava.cycl.quantities.make_interval(larger_unit, large_unit_lcm, UNPROVIDED);
+                                }
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
     }
 
     public static SubLObject cyc_least_common_multiple_internal(final SubLObject scalar1, final SubLObject scalar2) {
@@ -3831,6 +7055,26 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(ans);
     }
 
+    /**
+     * #$evaluationDefn for #$GreatestCommonDivisorFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$GreatestCommonDivisorFn")
+    public static final SubLObject cyc_greatest_common_divisor_alt(SubLObject args) {
+        if (NIL == com.cyc.cycjava.cycl.quantities.list_of_cyc_scalar_interval_p(args)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        if (NIL == args) {
+            relation_evaluation.throw_unevaluatable();
+        } else {
+            return quantity_reduce(symbol_function(CYC_GREATEST_COMMON_DIVISOR_INTERNAL), NIL, args);
+        }
+        return NIL;
+    }
+
+    /**
+     * #$evaluationDefn for #$GreatestCommonDivisorFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$GreatestCommonDivisorFn")
     public static SubLObject cyc_greatest_common_divisor(final SubLObject args) {
         if (NIL == list_of_cyc_scalar_interval_p(args)) {
             relation_evaluation.throw_unevaluatable();
@@ -3840,6 +7084,65 @@ public final class quantities extends SubLTranslatedFile {
             return NIL;
         }
         return arithmetic.quantity_reduce(symbol_function(CYC_GREATEST_COMMON_DIVISOR_INTERNAL), NIL, args);
+    }
+
+    public static final SubLObject cyc_greatest_common_divisor_internal_alt(SubLObject scalar1, SubLObject scalar2) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (scalar1.isInteger() && scalar2.isInteger()) {
+                    ans = gcd2(scalar1, scalar2);
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject unit1 = com.cyc.cycjava.cycl.quantities.explode_interval(scalar1);
+                        SubLObject min1 = thread.secondMultipleValue();
+                        SubLObject max1 = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject unit2 = com.cyc.cycjava.cycl.quantities.explode_interval(scalar2);
+                            SubLObject min2 = thread.secondMultipleValue();
+                            SubLObject max2 = thread.thirdMultipleValue();
+                            thread.resetMultipleValues();
+                            if (!(((min1.isInteger() && max1.isInteger()) && min2.isInteger()) && max2.isInteger())) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            if (!(min1.numE(max1) && min2.numE(max2))) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            if (NIL == com.cyc.cycjava.cycl.quantities.comparable_units(unit1, unit2)) {
+                                relation_evaluation.throw_unevaluatable();
+                            }
+                            {
+                                SubLObject smaller_unit = NIL;
+                                SubLObject larger_unit = NIL;
+                                SubLObject smaller_unit_integer = NIL;
+                                SubLObject larger_unit_integer = NIL;
+                                if (NIL != com.cyc.cycjava.cycl.quantities.smaller_unit_than(unit1, unit2)) {
+                                    smaller_unit = unit1;
+                                    larger_unit = unit2;
+                                    smaller_unit_integer = min1;
+                                    larger_unit_integer = min2;
+                                } else {
+                                    smaller_unit = unit2;
+                                    larger_unit = unit1;
+                                    smaller_unit_integer = min2;
+                                    larger_unit_integer = min1;
+                                }
+                                if (!((smaller_unit == larger_unit) || (NIL != com.cyc.cycjava.cycl.quantities.integer_valuedP(com.cyc.cycjava.cycl.quantities.get_unit_multiplication_factor(larger_unit, smaller_unit))))) {
+                                    relation_evaluation.throw_unevaluatable();
+                                }
+                                larger_unit_integer = round(com.cyc.cycjava.cycl.quantities.convert_to_units(smaller_unit, larger_unit, larger_unit_integer, UNPROVIDED), UNPROVIDED);
+                                ans = com.cyc.cycjava.cycl.quantities.make_interval(smaller_unit, gcd2(smaller_unit_integer, larger_unit_integer), UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+                return arithmetic_answer(ans);
+            }
+        }
     }
 
     public static SubLObject cyc_greatest_common_divisor_internal(final SubLObject scalar1, final SubLObject scalar2) {
@@ -3891,10 +7194,30 @@ public final class quantities extends SubLTranslatedFile {
         return ans;
     }
 
+    public static final SubLObject integer_valuedP_alt(SubLObject number) {
+        return makeBoolean(number.isNumber() && mod(number, ONE_INTEGER).isZero());
+    }
+
     public static SubLObject integer_valuedP(final SubLObject number) {
         return makeBoolean(number.isNumber() && mod(number, ONE_INTEGER).isZero());
     }
 
+    /**
+     * #$evaluationDefn for #$RandomIntegerFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$RandomIntegerFn")
+    public static final SubLObject cyc_random_integer_alt(SubLObject max) {
+        max = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(max);
+        if (NIL == subl_promotions.positive_integer_p(max)) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return arithmetic_answer(random.random(max));
+    }
+
+    /**
+     * #$evaluationDefn for #$RandomIntegerFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$RandomIntegerFn")
     public static SubLObject cyc_random_integer(SubLObject max) {
         max = cycl_real_number_to_number(max);
         if (NIL == subl_promotions.positive_integer_p(max)) {
@@ -3923,6 +7246,23 @@ public final class quantities extends SubLTranslatedFile {
         return arithmetic.arithmetic_answer(mod(hash, max));
     }
 
+    /**
+     * #$evaluationDefn for #$NRandomIntegersFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$NRandomIntegersFn")
+    public static final SubLObject cyc_n_random_integers_alt(SubLObject n, SubLObject max) {
+        n = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(n);
+        max = com.cyc.cycjava.cycl.quantities.cycl_real_number_to_number(max);
+        if (!((NIL != subl_promotions.non_negative_integer_p(n)) && (NIL != subl_promotions.positive_integer_p(max)))) {
+            relation_evaluation.throw_unevaluatable();
+        }
+        return make_el_list(Mapping.mapcar(symbol_function(ARITHMETIC_ANSWER), n_random_integers(n, max, UNPROVIDED)), UNPROVIDED);
+    }
+
+    /**
+     * #$evaluationDefn for #$NRandomIntegersFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$NRandomIntegersFn")
     public static SubLObject cyc_n_random_integers(SubLObject n, SubLObject max) {
         n = cycl_real_number_to_number(n);
         max = cycl_real_number_to_number(max);
@@ -3932,6 +7272,38 @@ public final class quantities extends SubLTranslatedFile {
         return make_el_list(Mapping.mapcar(symbol_function(ARITHMETIC_ANSWER), number_utilities.n_random_integers(n, max, UNPROVIDED)), UNPROVIDED);
     }
 
+    /**
+     * #$evaluationDefn for #$MatrixSolutionFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$MatrixSolutionFn")
+    public static final SubLObject cyc_matrix_solution_alt(SubLObject cycl_matrix) {
+        {
+            SubLObject matrix = copy_tree(el_list_items(cycl_matrix));
+            SubLObject list_var = NIL;
+            SubLObject row = NIL;
+            SubLObject index = NIL;
+            for (list_var = matrix, row = list_var.first(), index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , row = list_var.first() , index = add(ONE_INTEGER, index)) {
+                set_nth(index, matrix, el_list_items(row));
+            }
+            matrix = matrix_utilities.gaussian_elimination(matrix);
+            if (NIL == matrix) {
+                relation_evaluation.throw_unevaluatable();
+            } else {
+                matrix = matrix_utilities.remove_allzero_rows(matrix);
+                if (NIL == matrix_utilities.triangular_matrix_of_integer_or_fraction_p(matrix)) {
+                    relation_evaluation.throw_unevaluatable();
+                } else {
+                    return make_el_list(normalize_fractional_phrase(list_utilities.snoc(ONE_INTEGER, matrix_utilities.solve_triangular_matrix(matrix))), UNPROVIDED);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * #$evaluationDefn for #$MatrixSolutionFn
+     */
+    @LispMethod(comment = "#$evaluationDefn for #$MatrixSolutionFn")
     public static SubLObject cyc_matrix_solution(final SubLObject cycl_matrix) {
         SubLObject matrix = copy_tree(el_list_items(cycl_matrix));
         SubLObject list_var = NIL;
@@ -3988,182 +7360,503 @@ public final class quantities extends SubLTranslatedFile {
         return map;
     }
 
+    public static final SubLObject declare_quantities_file_alt() {
+        declareFunction("initialize_quant_kb_feature", "INITIALIZE-QUANT-KB-FEATURE", 0, 0, false);
+        declareFunction("cyc_scalar_interval_p", "CYC-SCALAR-INTERVAL-P", 1, 0, false);
+        declareFunction("list_of_cyc_scalar_interval_p", "LIST-OF-CYC-SCALAR-INTERVAL-P", 1, 0, false);
+        declareFunction("make_interval", "MAKE-INTERVAL", 2, 1, false);
+        declareFunction("explode_interval", "EXPLODE-INTERVAL", 1, 0, false);
+        declareFunction("explode_fort_interval", "EXPLODE-FORT-INTERVAL", 1, 0, false);
+        declareFunction("max_quant_value", "MAX-QUANT-VALUE", 1, 1, false);
+        declareFunction("min_quant_value", "MIN-QUANT-VALUE", 1, 1, false);
+        declareFunction("comparable_units", "COMPARABLE-UNITS", 2, 0, false);
+        declareFunction("smaller_unit_than", "SMALLER-UNIT-THAN", 2, 0, false);
+        declareFunction("convert_to_units", "CONVERT-TO-UNITS", 3, 1, false);
+        declareFunction("unit_multiplication_factor", "UNIT-MULTIPLICATION-FACTOR", 2, 1, false);
+        declareFunction("get_unit_multiplication_factor", "GET-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("clear_get_definitional_unit_multiplication_factor", "CLEAR-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 0, 0, false);
+        declareFunction("remove_get_definitional_unit_multiplication_factor", "REMOVE-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_definitional_unit_multiplication_factor_internal", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR-INTERNAL", 2, 0, false);
+        declareFunction("get_definitional_unit_multiplication_factor", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_contingent_unit_multiplication_factor", "GET-CONTINGENT-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_unit_multiplication_factor_int", "GET-UNIT-MULTIPLICATION-FACTOR-INT", 3, 0, false);
+        declareFunction("get_umf", "GET-UMF", 3, 0, false);
+        declareFunction("get_umf_internal", "GET-UMF-INTERNAL", 1, 0, false);
+        declareFunction("gather_umf_assertions", "GATHER-UMF-ASSERTIONS", 1, 0, false);
+        declareFunction("get_umf_gather_factor", "GET-UMF-GATHER-FACTOR", 2, 0, false);
+        declareFunction("unit_times", "UNIT-TIMES", 2, 0, false);
+        declareFunction("unit_quotient", "UNIT-QUOTIENT", 2, 0, false);
+        declareFunction("unit_sqrt", "UNIT-SQRT", 1, 0, false);
+        declareFunction("complex_unit_times", "COMPLEX-UNIT-TIMES", 2, 0, false);
+        declareFunction("complex_per_fn_unit_times", "COMPLEX-PER-FN-UNIT-TIMES", 2, 0, false);
+        declareFunction("complex_unit_quotient", "COMPLEX-UNIT-QUOTIENT", 2, 0, false);
+        declareFunction("complex_per_fn_unit_quotient", "COMPLEX-PER-FN-UNIT-QUOTIENT", 2, 0, false);
+        declareFunction("complex_unit_sqrt", "COMPLEX-UNIT-SQRT", 1, 0, false);
+        declareFunction("per_fn_unit", "PER-FN-UNIT", 1, 0, false);
+        declareFunction("make_and_simplify_interval", "MAKE-AND-SIMPLIFY-INTERVAL", 2, 1, false);
+        declareFunction("cyc_integer_range", "CYC-INTEGER-RANGE", 1, 0, false);
+        declareFunction("cyc_number_range", "CYC-NUMBER-RANGE", 1, 0, false);
+        declareFunction("cyc_plus_quantities", "CYC-PLUS-QUANTITIES", 2, 0, false);
+        declareFunction("cyc_minus_quantities", "CYC-MINUS-QUANTITIES", 1, 0, false);
+        declareFunction("cyc_quantity_conversion", "CYC-QUANTITY-CONVERSION", 2, 0, false);
+        declareFunction("cycl_real_number_to_number", "CYCL-REAL-NUMBER-TO-NUMBER", 1, 0, false);
+        declareFunction("cyc_times_quantities", "CYC-TIMES-QUANTITIES", 2, 0, false);
+        declareFunction("fuzzy_numberP", "FUZZY-NUMBER?", 1, 0, false);
+        declareFunction("cyc_quotient", "CYC-QUOTIENT", 2, 0, false);
+        declareFunction("cyc_inverse", "CYC-INVERSE", 1, 0, false);
+        declareFunction("cyc_modulo", "CYC-MODULO", 2, 0, false);
+        declareFunction("cyc_residue", "CYC-RESIDUE", 1, 0, false);
+        declareFunction("quantity_congruence_base", "QUANTITY-CONGRUENCE-BASE", 1, 0, false);
+        declareFunction("unit_of_measure_type", "UNIT-OF-MEASURE-TYPE", 1, 0, false);
+        declareFunction("cyc_absolute_value", "CYC-ABSOLUTE-VALUE", 1, 0, false);
+        declareFunction("cyc_sqrt", "CYC-SQRT", 1, 0, false);
+        declareFunction("cyc_squared", "CYC-SQUARED", 1, 0, false);
+        declareFunction("cyc_percent", "CYC-PERCENT", 1, 0, false);
+        declareFunction("cyc_round_up", "CYC-ROUND-UP", 1, 0, false);
+        declareFunction("cyc_round_closest", "CYC-ROUND-CLOSEST", 1, 0, false);
+        declareFunction("cyc_round_down", "CYC-ROUND-DOWN", 1, 0, false);
+        declareFunction("cyc_round_truncate", "CYC-ROUND-TRUNCATE", 1, 0, false);
+        declareFunction("cyc_round_internal", "CYC-ROUND-INTERNAL", 2, 0, false);
+        declareFunction("cyc_max_range", "CYC-MAX-RANGE", 1, 0, false);
+        declareFunction("cyc_max_range_internal", "CYC-MAX-RANGE-INTERNAL", 2, 0, false);
+        declareFunction("cyc_min_range", "CYC-MIN-RANGE", 1, 0, false);
+        declareFunction("cyc_min_range_internal", "CYC-MIN-RANGE-INTERNAL", 2, 0, false);
+        declareFunction("cyc_min_quant_value", "CYC-MIN-QUANT-VALUE", 1, 0, false);
+        declareFunction("cyc_max_quant_value", "CYC-MAX-QUANT-VALUE", 1, 0, false);
+        declareFunction("cyc_tolerance", "CYC-TOLERANCE", 2, 0, false);
+        declareFunction("cyc_tolerance_internal", "CYC-TOLERANCE-INTERNAL", 5, 0, false);
+        declareFunction("cyc_significant_digits", "CYC-SIGNIFICANT-DIGITS", 2, 0, false);
+        declareFunction("cyc_sine", "CYC-SINE", 1, 0, false);
+        declareFunction("cyc_cosine", "CYC-COSINE", 1, 0, false);
+        declareFunction("cyc_tangent", "CYC-TANGENT", 1, 0, false);
+        declareFunction("cyc_cosecant", "CYC-COSECANT", 1, 0, false);
+        declareFunction("cyc_secant", "CYC-SECANT", 1, 0, false);
+        declareFunction("cyc_cotangent", "CYC-COTANGENT", 1, 0, false);
+        declareFunction("cyc_trig_internal", "CYC-TRIG-INTERNAL", 2, 0, false);
+        declareFunction("cyc_arc_sine", "CYC-ARC-SINE", 1, 0, false);
+        declareFunction("cyc_arc_cosine", "CYC-ARC-COSINE", 1, 0, false);
+        declareFunction("cyc_arc_tangent", "CYC-ARC-TANGENT", 1, 0, false);
+        declareFunction("cyc_arc_cosecant", "CYC-ARC-COSECANT", 1, 0, false);
+        declareFunction("cyc_arc_secant", "CYC-ARC-SECANT", 1, 0, false);
+        declareFunction("cyc_arc_cotangent", "CYC-ARC-COTANGENT", 1, 0, false);
+        declareFunction("cyc_inverse_trig_internal", "CYC-INVERSE-TRIG-INTERNAL", 2, 0, false);
+        declareFunction("cyc_logarithm", "CYC-LOGARITHM", 2, 0, false);
+        declareFunction("cyc_exponent", "CYC-EXPONENT", 2, 0, false);
+        declareFunction("cyc_quadratic_solution_positive", "CYC-QUADRATIC-SOLUTION-POSITIVE", 3, 0, false);
+        declareFunction("cyc_quadratic_solution_negative", "CYC-QUADRATIC-SOLUTION-NEGATIVE", 3, 0, false);
+        declareFunction("cyc_collection_subsumption_paths", "CYC-COLLECTION-SUBSUMPTION-PATHS", 1, 0, false);
+        declareFunction("cyc_predicate_subsumption_paths", "CYC-PREDICATE-SUBSUMPTION-PATHS", 1, 0, false);
+        declareFunction("cyc_less_than_quantities", "CYC-LESS-THAN-QUANTITIES", 2, 0, false);
+        declareFunction("following_valueP", "FOLLOWING-VALUE?", 2, 1, false);
+        declareFunction("cyc_less_than_or_equal_to_quantities", "CYC-LESS-THAN-OR-EQUAL-TO-QUANTITIES", 2, 0, false);
+        declareFunction("cyc_quantity_subsumes", "CYC-QUANTITY-SUBSUMES", 2, 0, false);
+        declareFunction("cyc_quantity_subsumes_proper_intervals", "CYC-QUANTITY-SUBSUMES-PROPER-INTERVALS", 2, 0, false);
+        declareFunction("cyc_quantity_intersects", "CYC-QUANTITY-INTERSECTS", 2, 0, false);
+        declareFunction("cyc_list_nth", "CYC-LIST-NTH", 2, 0, false);
+        declareFunction("cyc_list_concatenate", "CYC-LIST-CONCATENATE", 1, 0, false);
+        declareFunction("cyc_list_first", "CYC-LIST-FIRST", 1, 0, false);
+        declareFunction("cyc_list_rest", "CYC-LIST-REST", 1, 0, false);
+        declareFunction("cyc_list_last", "CYC-LIST-LAST", 1, 0, false);
+        declareFunction("cyc_list_subseq", "CYC-LIST-SUBSEQ", 3, 0, false);
+        declareFunction("cyc_list_search", "CYC-LIST-SEARCH", 2, 0, false);
+        declareFunction("cyc_position", "CYC-POSITION", 2, 0, false);
+        declareFunction("cyc_list_length", "CYC-LIST-LENGTH", 1, 0, false);
+        declareFunction("cyc_list_reverse", "CYC-LIST-REVERSE", 1, 0, false);
+        declareFunction("cyc_list_member_set", "CYC-LIST-MEMBER-SET", 1, 0, false);
+        declareFunction("cyc_substitute_from_list", "CYC-SUBSTITUTE-FROM-LIST", 2, 0, false);
+        declareFunction("doubleton_to_cons", "DOUBLETON-TO-CONS", 1, 0, false);
+        declareFunction("cyc_map_function_over_list", "CYC-MAP-FUNCTION-OVER-LIST", 2, 0, false);
+        declareFunction("cyc_map_function_int", "CYC-MAP-FUNCTION-INT", 2, 0, false);
+        declareFunction("cyc_map_function_with_args_over_lists", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS", 5, 0, false);
+        declareFunction("cyc_map_function_with_args_over_lists_int", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS-INT", 5, 0, false);
+        declareFunction("cyc_list_memberP", "CYC-LIST-MEMBER?", 2, 0, false);
+        declareFunction("cyc_list_contains_memberP", "CYC-LIST-CONTAINS-MEMBER?", 2, 0, false);
+        declareFunction("cyc_sublistP", "CYC-SUBLIST?", 2, 0, false);
+        declareFunction("cyc_initial_sublistP", "CYC-INITIAL-SUBLIST?", 2, 0, false);
+        declareFunction("cyc_non_empty_set_p", "CYC-NON-EMPTY-SET-P", 1, 0, false);
+        declareFunction("cyc_empty_set_p", "CYC-EMPTY-SET-P", 1, 0, false);
+        declareFunction("cyc_set_p", "CYC-SET-P", 1, 0, false);
+        declareFunction("extensional_set_p", "EXTENSIONAL-SET-P", 1, 0, false);
+        declareFunction("intensional_set_p", "INTENSIONAL-SET-P", 1, 0, false);
+        declareFunction("make_hl_extensional_set", "MAKE-HL-EXTENSIONAL-SET", 1, 0, false);
+        declareFunction("evaluate_set_elements", "EVALUATE-SET-ELEMENTS", 1, 1, false);
+        declareFunction("set_extent", "SET-EXTENT", 1, 2, false);
+        declareFunction("cyc_set_intersection", "CYC-SET-INTERSECTION", 2, 0, false);
+        declareFunction("cyc_set_union", "CYC-SET-UNION", 2, 0, false);
+        declareFunction("cyc_set_difference", "CYC-SET-DIFFERENCE", 2, 0, false);
+        declareFunction("cyc_set_extent", "CYC-SET-EXTENT", 1, 0, false);
+        declareFunction("cyc_map_function_over_set", "CYC-MAP-FUNCTION-OVER-SET", 2, 0, false);
+        declareFunction("cyc_least_common_multiple", "CYC-LEAST-COMMON-MULTIPLE", 1, 0, false);
+        declareFunction("cyc_least_common_multiple_internal", "CYC-LEAST-COMMON-MULTIPLE-INTERNAL", 2, 0, false);
+        declareFunction("cyc_greatest_common_divisor", "CYC-GREATEST-COMMON-DIVISOR", 1, 0, false);
+        declareFunction("cyc_greatest_common_divisor_internal", "CYC-GREATEST-COMMON-DIVISOR-INTERNAL", 2, 0, false);
+        declareFunction("integer_valuedP", "INTEGER-VALUED?", 1, 0, false);
+        declareFunction("cyc_random_integer", "CYC-RANDOM-INTEGER", 1, 0, false);
+        declareFunction("cyc_n_random_integers", "CYC-N-RANDOM-INTEGERS", 2, 0, false);
+        declareFunction("cyc_matrix_solution", "CYC-MATRIX-SOLUTION", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_quantities_file() {
-        declareFunction(me, "initialize_quant_kb_feature", "INITIALIZE-QUANT-KB-FEATURE", 0, 0, false);
-        declareFunction(me, "cyc_scalar_interval_p", "CYC-SCALAR-INTERVAL-P", 1, 0, false);
-        declareFunction(me, "list_of_cyc_scalar_interval_p", "LIST-OF-CYC-SCALAR-INTERVAL-P", 1, 0, false);
-        declareFunction(me, "make_interval", "MAKE-INTERVAL", 2, 1, false);
-        declareFunction(me, "explode_interval_ignoring_unevaluatable", "EXPLODE-INTERVAL-IGNORING-UNEVALUATABLE", 1, 0, false);
-        declareFunction(me, "explode_interval", "EXPLODE-INTERVAL", 1, 0, false);
-        declareFunction(me, "explode_fort_interval", "EXPLODE-FORT-INTERVAL", 1, 0, false);
-        declareFunction(me, "max_quant_value", "MAX-QUANT-VALUE", 1, 1, false);
-        declareFunction(me, "min_quant_value", "MIN-QUANT-VALUE", 1, 1, false);
-        declareFunction(me, "comparable_units", "COMPARABLE-UNITS", 2, 0, false);
-        declareFunction(me, "smaller_unit_than", "SMALLER-UNIT-THAN", 2, 0, false);
-        declareFunction(me, "convert_to_units", "CONVERT-TO-UNITS", 3, 1, false);
-        declareFunction(me, "convert_to_units_absolute", "CONVERT-TO-UNITS-ABSOLUTE", 3, 1, false);
-        declareFunction(me, "unit_multiplication_factor", "UNIT-MULTIPLICATION-FACTOR", 2, 1, false);
-        declareFunction(me, "get_unit_multiplication_factor", "GET-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
-        declareFunction(me, "get_unit_absolute_scale_offset", "GET-UNIT-ABSOLUTE-SCALE-OFFSET", 2, 0, false);
-        declareFunction(me, "clear_get_definitional_unit_multiplication_factor", "CLEAR-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 0, 0, false);
-        declareFunction(me, "remove_get_definitional_unit_multiplication_factor", "REMOVE-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
-        declareFunction(me, "get_definitional_unit_multiplication_factor_internal", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR-INTERNAL", 2, 0, false);
-        declareFunction(me, "get_definitional_unit_multiplication_factor", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
-        declareFunction(me, "get_contingent_unit_multiplication_factor", "GET-CONTINGENT-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
-        declareFunction(me, "get_unit_multiplication_factor_int", "GET-UNIT-MULTIPLICATION-FACTOR-INT", 3, 0, false);
-        declareFunction(me, "get_umf", "GET-UMF", 3, 0, false);
-        declareFunction(me, "get_umf_internal", "GET-UMF-INTERNAL", 1, 0, false);
-        declareFunction(me, "gather_umf_assertions", "GATHER-UMF-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "get_umf_gather_factor", "GET-UMF-GATHER-FACTOR", 2, 0, false);
-        declareFunction(me, "unit_times", "UNIT-TIMES", 2, 0, false);
-        declareFunction(me, "unit_quotient", "UNIT-QUOTIENT", 2, 0, false);
-        declareFunction(me, "unit_sqrt", "UNIT-SQRT", 1, 0, false);
-        declareFunction(me, "complex_unit_times", "COMPLEX-UNIT-TIMES", 2, 0, false);
-        declareFunction(me, "complex_per_fn_unit_times", "COMPLEX-PER-FN-UNIT-TIMES", 2, 0, false);
-        declareFunction(me, "complex_unit_quotient", "COMPLEX-UNIT-QUOTIENT", 2, 0, false);
-        declareFunction(me, "complex_per_fn_unit_quotient", "COMPLEX-PER-FN-UNIT-QUOTIENT", 2, 0, false);
-        declareFunction(me, "complex_unit_sqrt", "COMPLEX-UNIT-SQRT", 1, 0, false);
-        declareFunction(me, "per_fn_unit", "PER-FN-UNIT", 1, 0, false);
-        declareFunction(me, "make_and_simplify_interval", "MAKE-AND-SIMPLIFY-INTERVAL", 2, 1, false);
-        declareFunction(me, "term_unify_with_units", "TERM-UNIFY-WITH-UNITS", 2, 0, false);
-        declareFunction(me, "cyc_integer_range", "CYC-INTEGER-RANGE", 1, 0, false);
-        declareFunction(me, "cyc_number_range", "CYC-NUMBER-RANGE", 1, 0, false);
-        declareFunction(me, "cyc_plus_quantities", "CYC-PLUS-QUANTITIES", 2, 0, false);
-        declareFunction(me, "cyc_plus_quantities_int", "CYC-PLUS-QUANTITIES-INT", 2, 0, false);
-        declareFunction(me, "cyc_minus_quantities", "CYC-MINUS-QUANTITIES", 1, 0, false);
-        declareFunction(me, "cyc_quantity_conversion", "CYC-QUANTITY-CONVERSION", 2, 0, false);
-        declareFunction(me, "convert_quantity", "CONVERT-QUANTITY", 2, 0, false);
-        declareFunction(me, "cyc_quantity_conversion_absolute", "CYC-QUANTITY-CONVERSION-ABSOLUTE", 2, 0, false);
-        declareFunction(me, "convert_quantity_absolute", "CONVERT-QUANTITY-ABSOLUTE", 2, 0, false);
-        declareFunction(me, "cycl_real_number_to_number", "CYCL-REAL-NUMBER-TO-NUMBER", 1, 0, false);
-        declareFunction(me, "cyc_times_quantities", "CYC-TIMES-QUANTITIES", 2, 0, false);
-        declareFunction(me, "cyc_times_quantities_int", "CYC-TIMES-QUANTITIES-INT", 2, 0, false);
-        declareFunction(me, "fuzzy_numberP", "FUZZY-NUMBER?", 1, 0, false);
-        declareFunction(me, "cyc_quotient", "CYC-QUOTIENT", 2, 0, false);
-        declareFunction(me, "cyc_inverse", "CYC-INVERSE", 1, 0, false);
-        declareFunction(me, "cyc_modulo", "CYC-MODULO", 2, 0, false);
-        declareFunction(me, "sanity_check_cyc_modulo", "SANITY-CHECK-CYC-MODULO", 3, 0, false);
-        declareFunction(me, "cyc_residue", "CYC-RESIDUE", 1, 0, false);
-        declareFunction(me, "quantity_congruence_base", "QUANTITY-CONGRUENCE-BASE", 1, 0, false);
-        declareFunction(me, "unit_of_measure_type", "UNIT-OF-MEASURE-TYPE", 1, 0, false);
-        declareFunction(me, "cyc_absolute_value", "CYC-ABSOLUTE-VALUE", 1, 0, false);
-        declareFunction(me, "cyc_sqrt", "CYC-SQRT", 1, 0, false);
-        declareFunction(me, "cyc_squared", "CYC-SQUARED", 1, 0, false);
-        declareFunction(me, "cyc_percent", "CYC-PERCENT", 1, 0, false);
-        declareFunction(me, "cyc_round_up", "CYC-ROUND-UP", 1, 0, false);
-        declareFunction(me, "cyc_round_closest", "CYC-ROUND-CLOSEST", 1, 0, false);
-        declareFunction(me, "cyc_round_down", "CYC-ROUND-DOWN", 1, 0, false);
-        declareFunction(me, "cyc_round_truncate", "CYC-ROUND-TRUNCATE", 1, 0, false);
-        declareFunction(me, "cyc_round_internal", "CYC-ROUND-INTERNAL", 2, 1, false);
-        declareFunction(me, "round_to_nth_decimal", "ROUND-TO-NTH-DECIMAL", 1, 1, false);
-        declareFunction(me, "cyc_round_closest_to_nth_decimal", "CYC-ROUND-CLOSEST-TO-NTH-DECIMAL", 2, 0, false);
-        declareFunction(me, "cyc_max_range", "CYC-MAX-RANGE", 1, 0, false);
-        declareFunction(me, "cyc_max_range_internal", "CYC-MAX-RANGE-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_min_range", "CYC-MIN-RANGE", 1, 0, false);
-        declareFunction(me, "cyc_min_range_internal", "CYC-MIN-RANGE-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_min_quant_value", "CYC-MIN-QUANT-VALUE", 1, 0, false);
-        declareFunction(me, "cyc_max_quant_value", "CYC-MAX-QUANT-VALUE", 1, 0, false);
-        declareFunction(me, "cyc_quantity_unit", "CYC-QUANTITY-UNIT", 1, 0, false);
-        declareFunction(me, "cyc_quantity_measure", "CYC-QUANTITY-MEASURE", 1, 0, false);
-        declareFunction(me, "cyc_tolerance", "CYC-TOLERANCE", 2, 0, false);
-        declareFunction(me, "cyc_tolerance_internal", "CYC-TOLERANCE-INTERNAL", 5, 0, false);
-        declareFunction(me, "cyc_significant_digits", "CYC-SIGNIFICANT-DIGITS", 2, 0, false);
-        declareFunction(me, "cyc_sine", "CYC-SINE", 1, 0, false);
-        declareFunction(me, "cyc_cosine", "CYC-COSINE", 1, 0, false);
-        declareFunction(me, "cyc_tangent", "CYC-TANGENT", 1, 0, false);
-        declareFunction(me, "cyc_cosecant", "CYC-COSECANT", 1, 0, false);
-        declareFunction(me, "cyc_secant", "CYC-SECANT", 1, 0, false);
-        declareFunction(me, "cyc_cotangent", "CYC-COTANGENT", 1, 0, false);
-        declareFunction(me, "cyc_trig_internal", "CYC-TRIG-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_arc_sine", "CYC-ARC-SINE", 1, 0, false);
-        declareFunction(me, "cyc_arc_cosine", "CYC-ARC-COSINE", 1, 0, false);
-        declareFunction(me, "cyc_arc_tangent", "CYC-ARC-TANGENT", 1, 0, false);
-        declareFunction(me, "cyc_arc_cosecant", "CYC-ARC-COSECANT", 1, 0, false);
-        declareFunction(me, "cyc_arc_secant", "CYC-ARC-SECANT", 1, 0, false);
-        declareFunction(me, "cyc_arc_cotangent", "CYC-ARC-COTANGENT", 1, 0, false);
-        declareFunction(me, "cyc_inverse_trig_internal", "CYC-INVERSE-TRIG-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_logarithm", "CYC-LOGARITHM", 2, 0, false);
-        declareFunction(me, "cyc_exponent", "CYC-EXPONENT", 2, 0, false);
-        declareFunction(me, "cyc_quadratic_solution_positive", "CYC-QUADRATIC-SOLUTION-POSITIVE", 3, 0, false);
-        declareFunction(me, "cyc_quadratic_solution_negative", "CYC-QUADRATIC-SOLUTION-NEGATIVE", 3, 0, false);
-        declareFunction(me, "cyc_collection_subsumption_paths", "CYC-COLLECTION-SUBSUMPTION-PATHS", 1, 0, false);
-        declareFunction(me, "cyc_predicate_subsumption_paths", "CYC-PREDICATE-SUBSUMPTION-PATHS", 1, 0, false);
-        declareFunction(me, "cyc_less_than_quantities", "CYC-LESS-THAN-QUANTITIES", 2, 0, false);
-        declareFunction(me, "negate_fraction", "NEGATE-FRACTION", 1, 0, false);
-        declareFunction(me, "following_valueP", "FOLLOWING-VALUE?", 2, 1, false);
-        declareFunction(me, "convert_fraction_to_real_number", "CONVERT-FRACTION-TO-REAL-NUMBER", 1, 0, false);
-        declareFunction(me, "convert_fraction_to_simple_fraction", "CONVERT-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
-        declareFunction(me, "convert_mixed_fraction_to_simple_fraction", "CONVERT-MIXED-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
-        declareFunction(me, "convert_negative_mixed_fraction_to_simple_fraction", "CONVERT-NEGATIVE-MIXED-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
-        declareFunction(me, "convert_simple_fraction_to_mixed_fraction", "CONVERT-SIMPLE-FRACTION-TO-MIXED-FRACTION", 1, 0, false);
-        declareFunction(me, "convert_simple_fraction_to_fraction", "CONVERT-SIMPLE-FRACTION-TO-FRACTION", 1, 0, false);
-        declareFunction(me, "convert_mixed_fraction_to_simple_fraction_internal", "CONVERT-MIXED-FRACTION-TO-SIMPLE-FRACTION-INTERNAL", 3, 0, false);
-        declareFunction(me, "convert_decimal_fraction_to_simple_fraction", "CONVERT-DECIMAL-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
-        declareFunction(me, "fractionsL", "FRACTIONS<", 2, 0, false);
-        declareFunction(me, "fractionsLE", "FRACTIONS<=", 2, 0, false);
-        declareFunction(me, "normalize_fractions", "NORMALIZE-FRACTIONS", 2, 0, false);
-        declareFunction(me, "cyc_less_than_or_equal_to_quantities", "CYC-LESS-THAN-OR-EQUAL-TO-QUANTITIES", 2, 0, false);
-        declareFunction(me, "cyc_quantity_subsumes", "CYC-QUANTITY-SUBSUMES", 2, 0, false);
-        declareFunction(me, "cyc_quantity_subsumes_proper_intervals", "CYC-QUANTITY-SUBSUMES-PROPER-INTERVALS", 2, 0, false);
-        declareFunction(me, "cyc_quantity_intersects", "CYC-QUANTITY-INTERSECTS", 2, 0, false);
-        declareFunction(me, "cyc_quantity_intersects_proper_intervals", "CYC-QUANTITY-INTERSECTS-PROPER-INTERVALS", 2, 0, false);
-        declareFunction(me, "cyc_divides_evenly", "CYC-DIVIDES-EVENLY", 2, 0, false);
-        declareFunction(me, "cyc_list_nth", "CYC-LIST-NTH", 2, 0, false);
-        declareFunction(me, "cyc_list_concatenate", "CYC-LIST-CONCATENATE", 1, 0, false);
-        declareFunction(me, "cyc_append_to_list", "CYC-APPEND-TO-LIST", 2, 0, false);
-        declareFunction(me, "cyc_prepend_to_list", "CYC-PREPEND-TO-LIST", 2, 0, false);
-        declareFunction(me, "cyc_list_first", "CYC-LIST-FIRST", 1, 0, false);
-        declareFunction(me, "cyc_list_second", "CYC-LIST-SECOND", 1, 0, false);
-        declareFunction(me, "cyc_list_rest", "CYC-LIST-REST", 1, 0, false);
-        declareFunction(me, "cyc_list_last", "CYC-LIST-LAST", 1, 0, false);
-        declareFunction(me, "cyc_list_subseq", "CYC-LIST-SUBSEQ", 3, 0, false);
-        declareFunction(me, "cyc_list_subseq_up_to", "CYC-LIST-SUBSEQ-UP-TO", 3, 0, false);
-        declareFunction(me, "cyc_list_search", "CYC-LIST-SEARCH", 2, 0, false);
-        declareFunction(me, "cyc_position", "CYC-POSITION", 2, 0, false);
-        declareFunction(me, "cyc_list_length", "CYC-LIST-LENGTH", 1, 0, false);
-        declareFunction(me, "cyc_list_reverse", "CYC-LIST-REVERSE", 1, 0, false);
-        declareFunction(me, "cyc_list_member_set", "CYC-LIST-MEMBER-SET", 1, 0, false);
-        declareFunction(me, "cyc_set_element_list", "CYC-SET-ELEMENT-LIST", 1, 0, false);
-        declareFunction(me, "cyc_substitute_from_list", "CYC-SUBSTITUTE-FROM-LIST", 2, 0, false);
-        declareFunction(me, "doubleton_to_cons", "DOUBLETON-TO-CONS", 1, 0, false);
-        declareFunction(me, "cyc_substitute_from_the_term_binding_set", "CYC-SUBSTITUTE-FROM-THE-TERM-BINDING-SET", 2, 0, false);
-        declareFunction(me, "cyc_remove_adjacent_duplicates_from_list_fn", "CYC-REMOVE-ADJACENT-DUPLICATES-FROM-LIST-FN", 1, 0, false);
-        declareFunction(me, "cyc_map_function_over_list", "CYC-MAP-FUNCTION-OVER-LIST", 2, 0, false);
-        declareFunction(me, "cyc_map_function_int", "CYC-MAP-FUNCTION-INT", 2, 0, false);
-        declareFunction(me, "cyc_map_function_over_list_until", "CYC-MAP-FUNCTION-OVER-LIST-UNTIL", 3, 0, false);
-        declareFunction(me, "cyc_map_function_until_int", "CYC-MAP-FUNCTION-UNTIL-INT", 3, 0, false);
-        declareFunction(me, "cyc_map_function_over_list_until_result", "CYC-MAP-FUNCTION-OVER-LIST-UNTIL-RESULT", 3, 0, false);
-        declareFunction(me, "cyc_map_function_until_result_int", "CYC-MAP-FUNCTION-UNTIL-RESULT-INT", 3, 0, false);
-        declareFunction(me, "cyc_map_function_with_args_over_lists", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS", 5, 0, false);
-        declareFunction(me, "cyc_map_function_with_args_over_lists_int", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS-INT", 5, 0, false);
-        declareFunction(me, "cyc_apply_function_recursively", "CYC-APPLY-FUNCTION-RECURSIVELY", 3, 0, false);
-        declareFunction(me, "cyc_list_memberP", "CYC-LIST-MEMBER?", 2, 0, false);
-        declareFunction(me, "cyc_list_contains_memberP", "CYC-LIST-CONTAINS-MEMBER?", 2, 0, false);
-        declareFunction(me, "cyc_sublistP", "CYC-SUBLIST?", 2, 0, false);
-        declareFunction(me, "cyc_initial_sublistP", "CYC-INITIAL-SUBLIST?", 2, 0, false);
-        declareFunction(me, "cyc_non_empty_set_p", "CYC-NON-EMPTY-SET-P", 1, 0, false);
-        declareFunction(me, "cyc_empty_set_p", "CYC-EMPTY-SET-P", 1, 0, false);
-        declareFunction(me, "cyc_set_p", "CYC-SET-P", 1, 0, false);
-        declareFunction(me, "extensional_set_p", "EXTENSIONAL-SET-P", 1, 0, false);
-        declareFunction(me, "intensional_set_p", "INTENSIONAL-SET-P", 1, 0, false);
-        declareFunction(me, "make_hl_extensional_set", "MAKE-HL-EXTENSIONAL-SET", 1, 0, false);
-        declareFunction(me, "evaluate_set_elements", "EVALUATE-SET-ELEMENTS", 1, 1, false);
-        declareFunction(me, "set_extent", "SET-EXTENT", 1, 2, false);
-        declareFunction(me, "cyc_set_intersection", "CYC-SET-INTERSECTION", 2, 0, false);
-        declareFunction(me, "cyc_set_union", "CYC-SET-UNION", 2, 0, false);
-        declareFunction(me, "cyc_set_difference", "CYC-SET-DIFFERENCE", 2, 0, false);
-        declareFunction(me, "cyc_set_extent", "CYC-SET-EXTENT", 1, 0, false);
-        declareFunction(me, "cyc_map_function_over_set", "CYC-MAP-FUNCTION-OVER-SET", 2, 0, false);
-        declareFunction(me, "cyc_least_common_multiple", "CYC-LEAST-COMMON-MULTIPLE", 1, 0, false);
-        declareFunction(me, "cyc_least_common_multiple_internal", "CYC-LEAST-COMMON-MULTIPLE-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_greatest_common_divisor", "CYC-GREATEST-COMMON-DIVISOR", 1, 0, false);
-        declareFunction(me, "cyc_greatest_common_divisor_internal", "CYC-GREATEST-COMMON-DIVISOR-INTERNAL", 2, 0, false);
-        declareFunction(me, "integer_valuedP", "INTEGER-VALUED?", 1, 0, false);
-        declareFunction(me, "cyc_random_integer", "CYC-RANDOM-INTEGER", 1, 0, false);
-        declareFunction(me, "cyc_random_integer_with_seed", "CYC-RANDOM-INTEGER-WITH-SEED", 2, 0, false);
-        declareFunction(me, "cyc_n_random_integers", "CYC-N-RANDOM-INTEGERS", 2, 0, false);
-        declareFunction(me, "cyc_matrix_solution", "CYC-MATRIX-SOLUTION", 1, 0, false);
-        declareFunction(me, "get_interconvertible_units_of_measure", "GET-INTERCONVERTIBLE-UNITS-OF-MEASURE", 0, 1, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("initialize_quant_kb_feature", "INITIALIZE-QUANT-KB-FEATURE", 0, 0, false);
+            declareFunction("cyc_scalar_interval_p", "CYC-SCALAR-INTERVAL-P", 1, 0, false);
+            declareFunction("list_of_cyc_scalar_interval_p", "LIST-OF-CYC-SCALAR-INTERVAL-P", 1, 0, false);
+            declareFunction("make_interval", "MAKE-INTERVAL", 2, 1, false);
+            declareFunction("explode_interval_ignoring_unevaluatable", "EXPLODE-INTERVAL-IGNORING-UNEVALUATABLE", 1, 0, false);
+            declareFunction("explode_interval", "EXPLODE-INTERVAL", 1, 0, false);
+            declareFunction("explode_fort_interval", "EXPLODE-FORT-INTERVAL", 1, 0, false);
+            declareFunction("max_quant_value", "MAX-QUANT-VALUE", 1, 1, false);
+            declareFunction("min_quant_value", "MIN-QUANT-VALUE", 1, 1, false);
+            declareFunction("comparable_units", "COMPARABLE-UNITS", 2, 0, false);
+            declareFunction("smaller_unit_than", "SMALLER-UNIT-THAN", 2, 0, false);
+            declareFunction("convert_to_units", "CONVERT-TO-UNITS", 3, 1, false);
+            declareFunction("convert_to_units_absolute", "CONVERT-TO-UNITS-ABSOLUTE", 3, 1, false);
+            declareFunction("unit_multiplication_factor", "UNIT-MULTIPLICATION-FACTOR", 2, 1, false);
+            declareFunction("get_unit_multiplication_factor", "GET-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+            declareFunction("get_unit_absolute_scale_offset", "GET-UNIT-ABSOLUTE-SCALE-OFFSET", 2, 0, false);
+            declareFunction("clear_get_definitional_unit_multiplication_factor", "CLEAR-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 0, 0, false);
+            declareFunction("remove_get_definitional_unit_multiplication_factor", "REMOVE-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+            declareFunction("get_definitional_unit_multiplication_factor_internal", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR-INTERNAL", 2, 0, false);
+            declareFunction("get_definitional_unit_multiplication_factor", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+            declareFunction("get_contingent_unit_multiplication_factor", "GET-CONTINGENT-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+            declareFunction("get_unit_multiplication_factor_int", "GET-UNIT-MULTIPLICATION-FACTOR-INT", 3, 0, false);
+            declareFunction("get_umf", "GET-UMF", 3, 0, false);
+            declareFunction("get_umf_internal", "GET-UMF-INTERNAL", 1, 0, false);
+            declareFunction("gather_umf_assertions", "GATHER-UMF-ASSERTIONS", 1, 0, false);
+            declareFunction("get_umf_gather_factor", "GET-UMF-GATHER-FACTOR", 2, 0, false);
+            declareFunction("unit_times", "UNIT-TIMES", 2, 0, false);
+            declareFunction("unit_quotient", "UNIT-QUOTIENT", 2, 0, false);
+            declareFunction("unit_sqrt", "UNIT-SQRT", 1, 0, false);
+            declareFunction("complex_unit_times", "COMPLEX-UNIT-TIMES", 2, 0, false);
+            declareFunction("complex_per_fn_unit_times", "COMPLEX-PER-FN-UNIT-TIMES", 2, 0, false);
+            declareFunction("complex_unit_quotient", "COMPLEX-UNIT-QUOTIENT", 2, 0, false);
+            declareFunction("complex_per_fn_unit_quotient", "COMPLEX-PER-FN-UNIT-QUOTIENT", 2, 0, false);
+            declareFunction("complex_unit_sqrt", "COMPLEX-UNIT-SQRT", 1, 0, false);
+            declareFunction("per_fn_unit", "PER-FN-UNIT", 1, 0, false);
+            declareFunction("make_and_simplify_interval", "MAKE-AND-SIMPLIFY-INTERVAL", 2, 1, false);
+            declareFunction("term_unify_with_units", "TERM-UNIFY-WITH-UNITS", 2, 0, false);
+            declareFunction("cyc_integer_range", "CYC-INTEGER-RANGE", 1, 0, false);
+            declareFunction("cyc_number_range", "CYC-NUMBER-RANGE", 1, 0, false);
+            declareFunction("cyc_plus_quantities", "CYC-PLUS-QUANTITIES", 2, 0, false);
+            declareFunction("cyc_plus_quantities_int", "CYC-PLUS-QUANTITIES-INT", 2, 0, false);
+            declareFunction("cyc_minus_quantities", "CYC-MINUS-QUANTITIES", 1, 0, false);
+            declareFunction("cyc_quantity_conversion", "CYC-QUANTITY-CONVERSION", 2, 0, false);
+            declareFunction("convert_quantity", "CONVERT-QUANTITY", 2, 0, false);
+            declareFunction("cyc_quantity_conversion_absolute", "CYC-QUANTITY-CONVERSION-ABSOLUTE", 2, 0, false);
+            declareFunction("convert_quantity_absolute", "CONVERT-QUANTITY-ABSOLUTE", 2, 0, false);
+            declareFunction("cycl_real_number_to_number", "CYCL-REAL-NUMBER-TO-NUMBER", 1, 0, false);
+            declareFunction("cyc_times_quantities", "CYC-TIMES-QUANTITIES", 2, 0, false);
+            declareFunction("cyc_times_quantities_int", "CYC-TIMES-QUANTITIES-INT", 2, 0, false);
+            declareFunction("fuzzy_numberP", "FUZZY-NUMBER?", 1, 0, false);
+            declareFunction("cyc_quotient", "CYC-QUOTIENT", 2, 0, false);
+            declareFunction("cyc_inverse", "CYC-INVERSE", 1, 0, false);
+            declareFunction("cyc_modulo", "CYC-MODULO", 2, 0, false);
+            declareFunction("sanity_check_cyc_modulo", "SANITY-CHECK-CYC-MODULO", 3, 0, false);
+            declareFunction("cyc_residue", "CYC-RESIDUE", 1, 0, false);
+            declareFunction("quantity_congruence_base", "QUANTITY-CONGRUENCE-BASE", 1, 0, false);
+            declareFunction("unit_of_measure_type", "UNIT-OF-MEASURE-TYPE", 1, 0, false);
+            declareFunction("cyc_absolute_value", "CYC-ABSOLUTE-VALUE", 1, 0, false);
+            declareFunction("cyc_sqrt", "CYC-SQRT", 1, 0, false);
+            declareFunction("cyc_squared", "CYC-SQUARED", 1, 0, false);
+            declareFunction("cyc_percent", "CYC-PERCENT", 1, 0, false);
+            declareFunction("cyc_round_up", "CYC-ROUND-UP", 1, 0, false);
+            declareFunction("cyc_round_closest", "CYC-ROUND-CLOSEST", 1, 0, false);
+            declareFunction("cyc_round_down", "CYC-ROUND-DOWN", 1, 0, false);
+            declareFunction("cyc_round_truncate", "CYC-ROUND-TRUNCATE", 1, 0, false);
+            declareFunction("cyc_round_internal", "CYC-ROUND-INTERNAL", 2, 1, false);
+            declareFunction("round_to_nth_decimal", "ROUND-TO-NTH-DECIMAL", 1, 1, false);
+            declareFunction("cyc_round_closest_to_nth_decimal", "CYC-ROUND-CLOSEST-TO-NTH-DECIMAL", 2, 0, false);
+            declareFunction("cyc_max_range", "CYC-MAX-RANGE", 1, 0, false);
+            declareFunction("cyc_max_range_internal", "CYC-MAX-RANGE-INTERNAL", 2, 0, false);
+            declareFunction("cyc_min_range", "CYC-MIN-RANGE", 1, 0, false);
+            declareFunction("cyc_min_range_internal", "CYC-MIN-RANGE-INTERNAL", 2, 0, false);
+            declareFunction("cyc_min_quant_value", "CYC-MIN-QUANT-VALUE", 1, 0, false);
+            declareFunction("cyc_max_quant_value", "CYC-MAX-QUANT-VALUE", 1, 0, false);
+            declareFunction("cyc_quantity_unit", "CYC-QUANTITY-UNIT", 1, 0, false);
+            declareFunction("cyc_quantity_measure", "CYC-QUANTITY-MEASURE", 1, 0, false);
+            declareFunction("cyc_tolerance", "CYC-TOLERANCE", 2, 0, false);
+            declareFunction("cyc_tolerance_internal", "CYC-TOLERANCE-INTERNAL", 5, 0, false);
+            declareFunction("cyc_significant_digits", "CYC-SIGNIFICANT-DIGITS", 2, 0, false);
+            declareFunction("cyc_sine", "CYC-SINE", 1, 0, false);
+            declareFunction("cyc_cosine", "CYC-COSINE", 1, 0, false);
+            declareFunction("cyc_tangent", "CYC-TANGENT", 1, 0, false);
+            declareFunction("cyc_cosecant", "CYC-COSECANT", 1, 0, false);
+            declareFunction("cyc_secant", "CYC-SECANT", 1, 0, false);
+            declareFunction("cyc_cotangent", "CYC-COTANGENT", 1, 0, false);
+            declareFunction("cyc_trig_internal", "CYC-TRIG-INTERNAL", 2, 0, false);
+            declareFunction("cyc_arc_sine", "CYC-ARC-SINE", 1, 0, false);
+            declareFunction("cyc_arc_cosine", "CYC-ARC-COSINE", 1, 0, false);
+            declareFunction("cyc_arc_tangent", "CYC-ARC-TANGENT", 1, 0, false);
+            declareFunction("cyc_arc_cosecant", "CYC-ARC-COSECANT", 1, 0, false);
+            declareFunction("cyc_arc_secant", "CYC-ARC-SECANT", 1, 0, false);
+            declareFunction("cyc_arc_cotangent", "CYC-ARC-COTANGENT", 1, 0, false);
+            declareFunction("cyc_inverse_trig_internal", "CYC-INVERSE-TRIG-INTERNAL", 2, 0, false);
+            declareFunction("cyc_logarithm", "CYC-LOGARITHM", 2, 0, false);
+            declareFunction("cyc_exponent", "CYC-EXPONENT", 2, 0, false);
+            declareFunction("cyc_quadratic_solution_positive", "CYC-QUADRATIC-SOLUTION-POSITIVE", 3, 0, false);
+            declareFunction("cyc_quadratic_solution_negative", "CYC-QUADRATIC-SOLUTION-NEGATIVE", 3, 0, false);
+            declareFunction("cyc_collection_subsumption_paths", "CYC-COLLECTION-SUBSUMPTION-PATHS", 1, 0, false);
+            declareFunction("cyc_predicate_subsumption_paths", "CYC-PREDICATE-SUBSUMPTION-PATHS", 1, 0, false);
+            declareFunction("cyc_less_than_quantities", "CYC-LESS-THAN-QUANTITIES", 2, 0, false);
+            declareFunction("negate_fraction", "NEGATE-FRACTION", 1, 0, false);
+            declareFunction("following_valueP", "FOLLOWING-VALUE?", 2, 1, false);
+            declareFunction("convert_fraction_to_real_number", "CONVERT-FRACTION-TO-REAL-NUMBER", 1, 0, false);
+            declareFunction("convert_fraction_to_simple_fraction", "CONVERT-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+            declareFunction("convert_mixed_fraction_to_simple_fraction", "CONVERT-MIXED-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+            declareFunction("convert_negative_mixed_fraction_to_simple_fraction", "CONVERT-NEGATIVE-MIXED-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+            declareFunction("convert_simple_fraction_to_mixed_fraction", "CONVERT-SIMPLE-FRACTION-TO-MIXED-FRACTION", 1, 0, false);
+            declareFunction("convert_simple_fraction_to_fraction", "CONVERT-SIMPLE-FRACTION-TO-FRACTION", 1, 0, false);
+            declareFunction("convert_mixed_fraction_to_simple_fraction_internal", "CONVERT-MIXED-FRACTION-TO-SIMPLE-FRACTION-INTERNAL", 3, 0, false);
+            declareFunction("convert_decimal_fraction_to_simple_fraction", "CONVERT-DECIMAL-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+            declareFunction("fractionsL", "FRACTIONS<", 2, 0, false);
+            declareFunction("fractionsLE", "FRACTIONS<=", 2, 0, false);
+            declareFunction("normalize_fractions", "NORMALIZE-FRACTIONS", 2, 0, false);
+            declareFunction("cyc_less_than_or_equal_to_quantities", "CYC-LESS-THAN-OR-EQUAL-TO-QUANTITIES", 2, 0, false);
+            declareFunction("cyc_quantity_subsumes", "CYC-QUANTITY-SUBSUMES", 2, 0, false);
+            declareFunction("cyc_quantity_subsumes_proper_intervals", "CYC-QUANTITY-SUBSUMES-PROPER-INTERVALS", 2, 0, false);
+            declareFunction("cyc_quantity_intersects", "CYC-QUANTITY-INTERSECTS", 2, 0, false);
+            declareFunction("cyc_quantity_intersects_proper_intervals", "CYC-QUANTITY-INTERSECTS-PROPER-INTERVALS", 2, 0, false);
+            declareFunction("cyc_divides_evenly", "CYC-DIVIDES-EVENLY", 2, 0, false);
+            declareFunction("cyc_list_nth", "CYC-LIST-NTH", 2, 0, false);
+            declareFunction("cyc_list_concatenate", "CYC-LIST-CONCATENATE", 1, 0, false);
+            declareFunction("cyc_append_to_list", "CYC-APPEND-TO-LIST", 2, 0, false);
+            declareFunction("cyc_prepend_to_list", "CYC-PREPEND-TO-LIST", 2, 0, false);
+            declareFunction("cyc_list_first", "CYC-LIST-FIRST", 1, 0, false);
+            declareFunction("cyc_list_second", "CYC-LIST-SECOND", 1, 0, false);
+            declareFunction("cyc_list_rest", "CYC-LIST-REST", 1, 0, false);
+            declareFunction("cyc_list_last", "CYC-LIST-LAST", 1, 0, false);
+            declareFunction("cyc_list_subseq", "CYC-LIST-SUBSEQ", 3, 0, false);
+            declareFunction("cyc_list_subseq_up_to", "CYC-LIST-SUBSEQ-UP-TO", 3, 0, false);
+            declareFunction("cyc_list_search", "CYC-LIST-SEARCH", 2, 0, false);
+            declareFunction("cyc_position", "CYC-POSITION", 2, 0, false);
+            declareFunction("cyc_list_length", "CYC-LIST-LENGTH", 1, 0, false);
+            declareFunction("cyc_list_reverse", "CYC-LIST-REVERSE", 1, 0, false);
+            declareFunction("cyc_list_member_set", "CYC-LIST-MEMBER-SET", 1, 0, false);
+            declareFunction("cyc_set_element_list", "CYC-SET-ELEMENT-LIST", 1, 0, false);
+            declareFunction("cyc_substitute_from_list", "CYC-SUBSTITUTE-FROM-LIST", 2, 0, false);
+            declareFunction("doubleton_to_cons", "DOUBLETON-TO-CONS", 1, 0, false);
+            declareFunction("cyc_substitute_from_the_term_binding_set", "CYC-SUBSTITUTE-FROM-THE-TERM-BINDING-SET", 2, 0, false);
+            declareFunction("cyc_remove_adjacent_duplicates_from_list_fn", "CYC-REMOVE-ADJACENT-DUPLICATES-FROM-LIST-FN", 1, 0, false);
+            declareFunction("cyc_map_function_over_list", "CYC-MAP-FUNCTION-OVER-LIST", 2, 0, false);
+            declareFunction("cyc_map_function_int", "CYC-MAP-FUNCTION-INT", 2, 0, false);
+            declareFunction("cyc_map_function_over_list_until", "CYC-MAP-FUNCTION-OVER-LIST-UNTIL", 3, 0, false);
+            declareFunction("cyc_map_function_until_int", "CYC-MAP-FUNCTION-UNTIL-INT", 3, 0, false);
+            declareFunction("cyc_map_function_over_list_until_result", "CYC-MAP-FUNCTION-OVER-LIST-UNTIL-RESULT", 3, 0, false);
+            declareFunction("cyc_map_function_until_result_int", "CYC-MAP-FUNCTION-UNTIL-RESULT-INT", 3, 0, false);
+            declareFunction("cyc_map_function_with_args_over_lists", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS", 5, 0, false);
+            declareFunction("cyc_map_function_with_args_over_lists_int", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS-INT", 5, 0, false);
+            declareFunction("cyc_apply_function_recursively", "CYC-APPLY-FUNCTION-RECURSIVELY", 3, 0, false);
+            declareFunction("cyc_list_memberP", "CYC-LIST-MEMBER?", 2, 0, false);
+            declareFunction("cyc_list_contains_memberP", "CYC-LIST-CONTAINS-MEMBER?", 2, 0, false);
+            declareFunction("cyc_sublistP", "CYC-SUBLIST?", 2, 0, false);
+            declareFunction("cyc_initial_sublistP", "CYC-INITIAL-SUBLIST?", 2, 0, false);
+            declareFunction("cyc_non_empty_set_p", "CYC-NON-EMPTY-SET-P", 1, 0, false);
+            declareFunction("cyc_empty_set_p", "CYC-EMPTY-SET-P", 1, 0, false);
+            declareFunction("cyc_set_p", "CYC-SET-P", 1, 0, false);
+            declareFunction("extensional_set_p", "EXTENSIONAL-SET-P", 1, 0, false);
+            declareFunction("intensional_set_p", "INTENSIONAL-SET-P", 1, 0, false);
+            declareFunction("make_hl_extensional_set", "MAKE-HL-EXTENSIONAL-SET", 1, 0, false);
+            declareFunction("evaluate_set_elements", "EVALUATE-SET-ELEMENTS", 1, 1, false);
+            declareFunction("set_extent", "SET-EXTENT", 1, 2, false);
+            declareFunction("cyc_set_intersection", "CYC-SET-INTERSECTION", 2, 0, false);
+            declareFunction("cyc_set_union", "CYC-SET-UNION", 2, 0, false);
+            declareFunction("cyc_set_difference", "CYC-SET-DIFFERENCE", 2, 0, false);
+            declareFunction("cyc_set_extent", "CYC-SET-EXTENT", 1, 0, false);
+            declareFunction("cyc_map_function_over_set", "CYC-MAP-FUNCTION-OVER-SET", 2, 0, false);
+            declareFunction("cyc_least_common_multiple", "CYC-LEAST-COMMON-MULTIPLE", 1, 0, false);
+            declareFunction("cyc_least_common_multiple_internal", "CYC-LEAST-COMMON-MULTIPLE-INTERNAL", 2, 0, false);
+            declareFunction("cyc_greatest_common_divisor", "CYC-GREATEST-COMMON-DIVISOR", 1, 0, false);
+            declareFunction("cyc_greatest_common_divisor_internal", "CYC-GREATEST-COMMON-DIVISOR-INTERNAL", 2, 0, false);
+            declareFunction("integer_valuedP", "INTEGER-VALUED?", 1, 0, false);
+            declareFunction("cyc_random_integer", "CYC-RANDOM-INTEGER", 1, 0, false);
+            declareFunction("cyc_random_integer_with_seed", "CYC-RANDOM-INTEGER-WITH-SEED", 2, 0, false);
+            declareFunction("cyc_n_random_integers", "CYC-N-RANDOM-INTEGERS", 2, 0, false);
+            declareFunction("cyc_matrix_solution", "CYC-MATRIX-SOLUTION", 1, 0, false);
+            declareFunction("get_interconvertible_units_of_measure", "GET-INTERCONVERTIBLE-UNITS-OF-MEASURE", 0, 1, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("cyc_round_internal", "CYC-ROUND-INTERNAL", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_quantities_file_Previous() {
+        declareFunction("initialize_quant_kb_feature", "INITIALIZE-QUANT-KB-FEATURE", 0, 0, false);
+        declareFunction("cyc_scalar_interval_p", "CYC-SCALAR-INTERVAL-P", 1, 0, false);
+        declareFunction("list_of_cyc_scalar_interval_p", "LIST-OF-CYC-SCALAR-INTERVAL-P", 1, 0, false);
+        declareFunction("make_interval", "MAKE-INTERVAL", 2, 1, false);
+        declareFunction("explode_interval_ignoring_unevaluatable", "EXPLODE-INTERVAL-IGNORING-UNEVALUATABLE", 1, 0, false);
+        declareFunction("explode_interval", "EXPLODE-INTERVAL", 1, 0, false);
+        declareFunction("explode_fort_interval", "EXPLODE-FORT-INTERVAL", 1, 0, false);
+        declareFunction("max_quant_value", "MAX-QUANT-VALUE", 1, 1, false);
+        declareFunction("min_quant_value", "MIN-QUANT-VALUE", 1, 1, false);
+        declareFunction("comparable_units", "COMPARABLE-UNITS", 2, 0, false);
+        declareFunction("smaller_unit_than", "SMALLER-UNIT-THAN", 2, 0, false);
+        declareFunction("convert_to_units", "CONVERT-TO-UNITS", 3, 1, false);
+        declareFunction("convert_to_units_absolute", "CONVERT-TO-UNITS-ABSOLUTE", 3, 1, false);
+        declareFunction("unit_multiplication_factor", "UNIT-MULTIPLICATION-FACTOR", 2, 1, false);
+        declareFunction("get_unit_multiplication_factor", "GET-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_unit_absolute_scale_offset", "GET-UNIT-ABSOLUTE-SCALE-OFFSET", 2, 0, false);
+        declareFunction("clear_get_definitional_unit_multiplication_factor", "CLEAR-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 0, 0, false);
+        declareFunction("remove_get_definitional_unit_multiplication_factor", "REMOVE-GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_definitional_unit_multiplication_factor_internal", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR-INTERNAL", 2, 0, false);
+        declareFunction("get_definitional_unit_multiplication_factor", "GET-DEFINITIONAL-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_contingent_unit_multiplication_factor", "GET-CONTINGENT-UNIT-MULTIPLICATION-FACTOR", 2, 0, false);
+        declareFunction("get_unit_multiplication_factor_int", "GET-UNIT-MULTIPLICATION-FACTOR-INT", 3, 0, false);
+        declareFunction("get_umf", "GET-UMF", 3, 0, false);
+        declareFunction("get_umf_internal", "GET-UMF-INTERNAL", 1, 0, false);
+        declareFunction("gather_umf_assertions", "GATHER-UMF-ASSERTIONS", 1, 0, false);
+        declareFunction("get_umf_gather_factor", "GET-UMF-GATHER-FACTOR", 2, 0, false);
+        declareFunction("unit_times", "UNIT-TIMES", 2, 0, false);
+        declareFunction("unit_quotient", "UNIT-QUOTIENT", 2, 0, false);
+        declareFunction("unit_sqrt", "UNIT-SQRT", 1, 0, false);
+        declareFunction("complex_unit_times", "COMPLEX-UNIT-TIMES", 2, 0, false);
+        declareFunction("complex_per_fn_unit_times", "COMPLEX-PER-FN-UNIT-TIMES", 2, 0, false);
+        declareFunction("complex_unit_quotient", "COMPLEX-UNIT-QUOTIENT", 2, 0, false);
+        declareFunction("complex_per_fn_unit_quotient", "COMPLEX-PER-FN-UNIT-QUOTIENT", 2, 0, false);
+        declareFunction("complex_unit_sqrt", "COMPLEX-UNIT-SQRT", 1, 0, false);
+        declareFunction("per_fn_unit", "PER-FN-UNIT", 1, 0, false);
+        declareFunction("make_and_simplify_interval", "MAKE-AND-SIMPLIFY-INTERVAL", 2, 1, false);
+        declareFunction("term_unify_with_units", "TERM-UNIFY-WITH-UNITS", 2, 0, false);
+        declareFunction("cyc_integer_range", "CYC-INTEGER-RANGE", 1, 0, false);
+        declareFunction("cyc_number_range", "CYC-NUMBER-RANGE", 1, 0, false);
+        declareFunction("cyc_plus_quantities", "CYC-PLUS-QUANTITIES", 2, 0, false);
+        declareFunction("cyc_plus_quantities_int", "CYC-PLUS-QUANTITIES-INT", 2, 0, false);
+        declareFunction("cyc_minus_quantities", "CYC-MINUS-QUANTITIES", 1, 0, false);
+        declareFunction("cyc_quantity_conversion", "CYC-QUANTITY-CONVERSION", 2, 0, false);
+        declareFunction("convert_quantity", "CONVERT-QUANTITY", 2, 0, false);
+        declareFunction("cyc_quantity_conversion_absolute", "CYC-QUANTITY-CONVERSION-ABSOLUTE", 2, 0, false);
+        declareFunction("convert_quantity_absolute", "CONVERT-QUANTITY-ABSOLUTE", 2, 0, false);
+        declareFunction("cycl_real_number_to_number", "CYCL-REAL-NUMBER-TO-NUMBER", 1, 0, false);
+        declareFunction("cyc_times_quantities", "CYC-TIMES-QUANTITIES", 2, 0, false);
+        declareFunction("cyc_times_quantities_int", "CYC-TIMES-QUANTITIES-INT", 2, 0, false);
+        declareFunction("fuzzy_numberP", "FUZZY-NUMBER?", 1, 0, false);
+        declareFunction("cyc_quotient", "CYC-QUOTIENT", 2, 0, false);
+        declareFunction("cyc_inverse", "CYC-INVERSE", 1, 0, false);
+        declareFunction("cyc_modulo", "CYC-MODULO", 2, 0, false);
+        declareFunction("sanity_check_cyc_modulo", "SANITY-CHECK-CYC-MODULO", 3, 0, false);
+        declareFunction("cyc_residue", "CYC-RESIDUE", 1, 0, false);
+        declareFunction("quantity_congruence_base", "QUANTITY-CONGRUENCE-BASE", 1, 0, false);
+        declareFunction("unit_of_measure_type", "UNIT-OF-MEASURE-TYPE", 1, 0, false);
+        declareFunction("cyc_absolute_value", "CYC-ABSOLUTE-VALUE", 1, 0, false);
+        declareFunction("cyc_sqrt", "CYC-SQRT", 1, 0, false);
+        declareFunction("cyc_squared", "CYC-SQUARED", 1, 0, false);
+        declareFunction("cyc_percent", "CYC-PERCENT", 1, 0, false);
+        declareFunction("cyc_round_up", "CYC-ROUND-UP", 1, 0, false);
+        declareFunction("cyc_round_closest", "CYC-ROUND-CLOSEST", 1, 0, false);
+        declareFunction("cyc_round_down", "CYC-ROUND-DOWN", 1, 0, false);
+        declareFunction("cyc_round_truncate", "CYC-ROUND-TRUNCATE", 1, 0, false);
+        declareFunction("cyc_round_internal", "CYC-ROUND-INTERNAL", 2, 1, false);
+        declareFunction("round_to_nth_decimal", "ROUND-TO-NTH-DECIMAL", 1, 1, false);
+        declareFunction("cyc_round_closest_to_nth_decimal", "CYC-ROUND-CLOSEST-TO-NTH-DECIMAL", 2, 0, false);
+        declareFunction("cyc_max_range", "CYC-MAX-RANGE", 1, 0, false);
+        declareFunction("cyc_max_range_internal", "CYC-MAX-RANGE-INTERNAL", 2, 0, false);
+        declareFunction("cyc_min_range", "CYC-MIN-RANGE", 1, 0, false);
+        declareFunction("cyc_min_range_internal", "CYC-MIN-RANGE-INTERNAL", 2, 0, false);
+        declareFunction("cyc_min_quant_value", "CYC-MIN-QUANT-VALUE", 1, 0, false);
+        declareFunction("cyc_max_quant_value", "CYC-MAX-QUANT-VALUE", 1, 0, false);
+        declareFunction("cyc_quantity_unit", "CYC-QUANTITY-UNIT", 1, 0, false);
+        declareFunction("cyc_quantity_measure", "CYC-QUANTITY-MEASURE", 1, 0, false);
+        declareFunction("cyc_tolerance", "CYC-TOLERANCE", 2, 0, false);
+        declareFunction("cyc_tolerance_internal", "CYC-TOLERANCE-INTERNAL", 5, 0, false);
+        declareFunction("cyc_significant_digits", "CYC-SIGNIFICANT-DIGITS", 2, 0, false);
+        declareFunction("cyc_sine", "CYC-SINE", 1, 0, false);
+        declareFunction("cyc_cosine", "CYC-COSINE", 1, 0, false);
+        declareFunction("cyc_tangent", "CYC-TANGENT", 1, 0, false);
+        declareFunction("cyc_cosecant", "CYC-COSECANT", 1, 0, false);
+        declareFunction("cyc_secant", "CYC-SECANT", 1, 0, false);
+        declareFunction("cyc_cotangent", "CYC-COTANGENT", 1, 0, false);
+        declareFunction("cyc_trig_internal", "CYC-TRIG-INTERNAL", 2, 0, false);
+        declareFunction("cyc_arc_sine", "CYC-ARC-SINE", 1, 0, false);
+        declareFunction("cyc_arc_cosine", "CYC-ARC-COSINE", 1, 0, false);
+        declareFunction("cyc_arc_tangent", "CYC-ARC-TANGENT", 1, 0, false);
+        declareFunction("cyc_arc_cosecant", "CYC-ARC-COSECANT", 1, 0, false);
+        declareFunction("cyc_arc_secant", "CYC-ARC-SECANT", 1, 0, false);
+        declareFunction("cyc_arc_cotangent", "CYC-ARC-COTANGENT", 1, 0, false);
+        declareFunction("cyc_inverse_trig_internal", "CYC-INVERSE-TRIG-INTERNAL", 2, 0, false);
+        declareFunction("cyc_logarithm", "CYC-LOGARITHM", 2, 0, false);
+        declareFunction("cyc_exponent", "CYC-EXPONENT", 2, 0, false);
+        declareFunction("cyc_quadratic_solution_positive", "CYC-QUADRATIC-SOLUTION-POSITIVE", 3, 0, false);
+        declareFunction("cyc_quadratic_solution_negative", "CYC-QUADRATIC-SOLUTION-NEGATIVE", 3, 0, false);
+        declareFunction("cyc_collection_subsumption_paths", "CYC-COLLECTION-SUBSUMPTION-PATHS", 1, 0, false);
+        declareFunction("cyc_predicate_subsumption_paths", "CYC-PREDICATE-SUBSUMPTION-PATHS", 1, 0, false);
+        declareFunction("cyc_less_than_quantities", "CYC-LESS-THAN-QUANTITIES", 2, 0, false);
+        declareFunction("negate_fraction", "NEGATE-FRACTION", 1, 0, false);
+        declareFunction("following_valueP", "FOLLOWING-VALUE?", 2, 1, false);
+        declareFunction("convert_fraction_to_real_number", "CONVERT-FRACTION-TO-REAL-NUMBER", 1, 0, false);
+        declareFunction("convert_fraction_to_simple_fraction", "CONVERT-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+        declareFunction("convert_mixed_fraction_to_simple_fraction", "CONVERT-MIXED-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+        declareFunction("convert_negative_mixed_fraction_to_simple_fraction", "CONVERT-NEGATIVE-MIXED-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+        declareFunction("convert_simple_fraction_to_mixed_fraction", "CONVERT-SIMPLE-FRACTION-TO-MIXED-FRACTION", 1, 0, false);
+        declareFunction("convert_simple_fraction_to_fraction", "CONVERT-SIMPLE-FRACTION-TO-FRACTION", 1, 0, false);
+        declareFunction("convert_mixed_fraction_to_simple_fraction_internal", "CONVERT-MIXED-FRACTION-TO-SIMPLE-FRACTION-INTERNAL", 3, 0, false);
+        declareFunction("convert_decimal_fraction_to_simple_fraction", "CONVERT-DECIMAL-FRACTION-TO-SIMPLE-FRACTION", 1, 0, false);
+        declareFunction("fractionsL", "FRACTIONS<", 2, 0, false);
+        declareFunction("fractionsLE", "FRACTIONS<=", 2, 0, false);
+        declareFunction("normalize_fractions", "NORMALIZE-FRACTIONS", 2, 0, false);
+        declareFunction("cyc_less_than_or_equal_to_quantities", "CYC-LESS-THAN-OR-EQUAL-TO-QUANTITIES", 2, 0, false);
+        declareFunction("cyc_quantity_subsumes", "CYC-QUANTITY-SUBSUMES", 2, 0, false);
+        declareFunction("cyc_quantity_subsumes_proper_intervals", "CYC-QUANTITY-SUBSUMES-PROPER-INTERVALS", 2, 0, false);
+        declareFunction("cyc_quantity_intersects", "CYC-QUANTITY-INTERSECTS", 2, 0, false);
+        declareFunction("cyc_quantity_intersects_proper_intervals", "CYC-QUANTITY-INTERSECTS-PROPER-INTERVALS", 2, 0, false);
+        declareFunction("cyc_divides_evenly", "CYC-DIVIDES-EVENLY", 2, 0, false);
+        declareFunction("cyc_list_nth", "CYC-LIST-NTH", 2, 0, false);
+        declareFunction("cyc_list_concatenate", "CYC-LIST-CONCATENATE", 1, 0, false);
+        declareFunction("cyc_append_to_list", "CYC-APPEND-TO-LIST", 2, 0, false);
+        declareFunction("cyc_prepend_to_list", "CYC-PREPEND-TO-LIST", 2, 0, false);
+        declareFunction("cyc_list_first", "CYC-LIST-FIRST", 1, 0, false);
+        declareFunction("cyc_list_second", "CYC-LIST-SECOND", 1, 0, false);
+        declareFunction("cyc_list_rest", "CYC-LIST-REST", 1, 0, false);
+        declareFunction("cyc_list_last", "CYC-LIST-LAST", 1, 0, false);
+        declareFunction("cyc_list_subseq", "CYC-LIST-SUBSEQ", 3, 0, false);
+        declareFunction("cyc_list_subseq_up_to", "CYC-LIST-SUBSEQ-UP-TO", 3, 0, false);
+        declareFunction("cyc_list_search", "CYC-LIST-SEARCH", 2, 0, false);
+        declareFunction("cyc_position", "CYC-POSITION", 2, 0, false);
+        declareFunction("cyc_list_length", "CYC-LIST-LENGTH", 1, 0, false);
+        declareFunction("cyc_list_reverse", "CYC-LIST-REVERSE", 1, 0, false);
+        declareFunction("cyc_list_member_set", "CYC-LIST-MEMBER-SET", 1, 0, false);
+        declareFunction("cyc_set_element_list", "CYC-SET-ELEMENT-LIST", 1, 0, false);
+        declareFunction("cyc_substitute_from_list", "CYC-SUBSTITUTE-FROM-LIST", 2, 0, false);
+        declareFunction("doubleton_to_cons", "DOUBLETON-TO-CONS", 1, 0, false);
+        declareFunction("cyc_substitute_from_the_term_binding_set", "CYC-SUBSTITUTE-FROM-THE-TERM-BINDING-SET", 2, 0, false);
+        declareFunction("cyc_remove_adjacent_duplicates_from_list_fn", "CYC-REMOVE-ADJACENT-DUPLICATES-FROM-LIST-FN", 1, 0, false);
+        declareFunction("cyc_map_function_over_list", "CYC-MAP-FUNCTION-OVER-LIST", 2, 0, false);
+        declareFunction("cyc_map_function_int", "CYC-MAP-FUNCTION-INT", 2, 0, false);
+        declareFunction("cyc_map_function_over_list_until", "CYC-MAP-FUNCTION-OVER-LIST-UNTIL", 3, 0, false);
+        declareFunction("cyc_map_function_until_int", "CYC-MAP-FUNCTION-UNTIL-INT", 3, 0, false);
+        declareFunction("cyc_map_function_over_list_until_result", "CYC-MAP-FUNCTION-OVER-LIST-UNTIL-RESULT", 3, 0, false);
+        declareFunction("cyc_map_function_until_result_int", "CYC-MAP-FUNCTION-UNTIL-RESULT-INT", 3, 0, false);
+        declareFunction("cyc_map_function_with_args_over_lists", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS", 5, 0, false);
+        declareFunction("cyc_map_function_with_args_over_lists_int", "CYC-MAP-FUNCTION-WITH-ARGS-OVER-LISTS-INT", 5, 0, false);
+        declareFunction("cyc_apply_function_recursively", "CYC-APPLY-FUNCTION-RECURSIVELY", 3, 0, false);
+        declareFunction("cyc_list_memberP", "CYC-LIST-MEMBER?", 2, 0, false);
+        declareFunction("cyc_list_contains_memberP", "CYC-LIST-CONTAINS-MEMBER?", 2, 0, false);
+        declareFunction("cyc_sublistP", "CYC-SUBLIST?", 2, 0, false);
+        declareFunction("cyc_initial_sublistP", "CYC-INITIAL-SUBLIST?", 2, 0, false);
+        declareFunction("cyc_non_empty_set_p", "CYC-NON-EMPTY-SET-P", 1, 0, false);
+        declareFunction("cyc_empty_set_p", "CYC-EMPTY-SET-P", 1, 0, false);
+        declareFunction("cyc_set_p", "CYC-SET-P", 1, 0, false);
+        declareFunction("extensional_set_p", "EXTENSIONAL-SET-P", 1, 0, false);
+        declareFunction("intensional_set_p", "INTENSIONAL-SET-P", 1, 0, false);
+        declareFunction("make_hl_extensional_set", "MAKE-HL-EXTENSIONAL-SET", 1, 0, false);
+        declareFunction("evaluate_set_elements", "EVALUATE-SET-ELEMENTS", 1, 1, false);
+        declareFunction("set_extent", "SET-EXTENT", 1, 2, false);
+        declareFunction("cyc_set_intersection", "CYC-SET-INTERSECTION", 2, 0, false);
+        declareFunction("cyc_set_union", "CYC-SET-UNION", 2, 0, false);
+        declareFunction("cyc_set_difference", "CYC-SET-DIFFERENCE", 2, 0, false);
+        declareFunction("cyc_set_extent", "CYC-SET-EXTENT", 1, 0, false);
+        declareFunction("cyc_map_function_over_set", "CYC-MAP-FUNCTION-OVER-SET", 2, 0, false);
+        declareFunction("cyc_least_common_multiple", "CYC-LEAST-COMMON-MULTIPLE", 1, 0, false);
+        declareFunction("cyc_least_common_multiple_internal", "CYC-LEAST-COMMON-MULTIPLE-INTERNAL", 2, 0, false);
+        declareFunction("cyc_greatest_common_divisor", "CYC-GREATEST-COMMON-DIVISOR", 1, 0, false);
+        declareFunction("cyc_greatest_common_divisor_internal", "CYC-GREATEST-COMMON-DIVISOR-INTERNAL", 2, 0, false);
+        declareFunction("integer_valuedP", "INTEGER-VALUED?", 1, 0, false);
+        declareFunction("cyc_random_integer", "CYC-RANDOM-INTEGER", 1, 0, false);
+        declareFunction("cyc_random_integer_with_seed", "CYC-RANDOM-INTEGER-WITH-SEED", 2, 0, false);
+        declareFunction("cyc_n_random_integers", "CYC-N-RANDOM-INTEGERS", 2, 0, false);
+        declareFunction("cyc_matrix_solution", "CYC-MATRIX-SOLUTION", 1, 0, false);
+        declareFunction("get_interconvertible_units_of_measure", "GET-INTERCONVERTIBLE-UNITS-OF-MEASURE", 0, 1, false);
         return NIL;
     }
 
@@ -4179,7 +7872,224 @@ public final class quantities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_quantities_file_alt() {
+        memoization_state.note_globally_cached_function(GET_DEFINITIONAL_UNIT_MULTIPLICATION_FACTOR);
+        if (CYC_INTEGER_RANGE.isSymbol()) {
+            {
+                SubLObject item_var = CYC_INTEGER_RANGE;
+                if (NIL == member(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+                    at_vars.$at_collection_specific_defns$.setDynamicValue(cons(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue()));
+                }
+            }
+        }
+        register_kb_function(CYC_INTEGER_RANGE);
+        if (CYC_NUMBER_RANGE.isSymbol()) {
+            {
+                SubLObject item_var = CYC_NUMBER_RANGE;
+                if (NIL == member(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+                    at_vars.$at_collection_specific_defns$.setDynamicValue(cons(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue()));
+                }
+            }
+        }
+        register_kb_function(CYC_NUMBER_RANGE);
+        register_kb_function(CYC_QUANTITY_CONVERSION);
+        register_kb_function(CYC_QUOTIENT);
+        register_kb_function(CYC_INVERSE);
+        register_kb_function(CYC_MODULO);
+        register_kb_function(CYC_RESIDUE);
+        register_kb_function(CYC_ABSOLUTE_VALUE);
+        register_kb_function(CYC_SQRT);
+        register_kb_function(CYC_SQUARED);
+        register_kb_function(CYC_PERCENT);
+        register_kb_function(CYC_ROUND_UP);
+        register_kb_function(CYC_ROUND_CLOSEST);
+        register_kb_function(CYC_ROUND_DOWN);
+        register_kb_function(CYC_ROUND_TRUNCATE);
+        register_kb_function(CYC_MAX_RANGE);
+        register_kb_function(CYC_MIN_RANGE);
+        register_kb_function(CYC_MIN_QUANT_VALUE);
+        register_kb_function(CYC_MAX_QUANT_VALUE);
+        register_kb_function(CYC_TOLERANCE);
+        register_kb_function(CYC_SIGNIFICANT_DIGITS);
+        register_kb_function(CYC_SINE);
+        register_kb_function(CYC_COSINE);
+        register_kb_function(CYC_TANGENT);
+        register_kb_function(CYC_COSECANT);
+        register_kb_function(CYC_SECANT);
+        register_kb_function(CYC_COTANGENT);
+        register_kb_function(CYC_ARC_SINE);
+        register_kb_function(CYC_ARC_COSINE);
+        register_kb_function(CYC_ARC_TANGENT);
+        register_kb_function(CYC_ARC_COSECANT);
+        register_kb_function(CYC_ARC_SECANT);
+        register_kb_function(CYC_ARC_COTANGENT);
+        register_kb_function(CYC_LOGARITHM);
+        register_kb_function(CYC_EXPONENT);
+        register_kb_function(CYC_QUADRATIC_SOLUTION_POSITIVE);
+        register_kb_function(CYC_QUADRATIC_SOLUTION_NEGATIVE);
+        register_kb_function(CYC_COLLECTION_SUBSUMPTION_PATHS);
+        register_kb_function(CYC_PREDICATE_SUBSUMPTION_PATHS);
+        register_kb_function(CYC_QUANTITY_SUBSUMES);
+        register_kb_function(CYC_QUANTITY_INTERSECTS);
+        register_kb_function(CYC_LIST_NTH);
+        register_kb_function(CYC_LIST_CONCATENATE);
+        register_kb_function(CYC_LIST_FIRST);
+        register_kb_function(CYC_LIST_REST);
+        register_kb_function(CYC_LIST_LAST);
+        register_kb_function(CYC_LIST_SUBSEQ);
+        register_kb_function(CYC_LIST_SEARCH);
+        register_kb_function(CYC_POSITION);
+        register_kb_function(CYC_LIST_LENGTH);
+        register_kb_function(CYC_LIST_REVERSE);
+        register_kb_function(CYC_LIST_MEMBER_SET);
+        register_kb_function(CYC_SUBSTITUTE_FROM_LIST);
+        register_kb_function(CYC_MAP_FUNCTION_OVER_LIST);
+        register_kb_function(CYC_MAP_FUNCTION_WITH_ARGS_OVER_LISTS);
+        register_kb_function($sym118$CYC_LIST_MEMBER_);
+        define_obsolete_register($sym119$CYC_LIST_CONTAINS_MEMBER_, $list_alt120);
+        register_kb_function($sym121$CYC_SUBLIST_);
+        register_kb_function($sym122$CYC_INITIAL_SUBLIST_);
+        register_kb_function(CYC_SET_INTERSECTION);
+        register_kb_function(CYC_SET_UNION);
+        register_kb_function(CYC_SET_DIFFERENCE);
+        register_kb_function(CYC_SET_EXTENT);
+        register_kb_function(CYC_MAP_FUNCTION_OVER_SET);
+        register_kb_function(CYC_LEAST_COMMON_MULTIPLE);
+        register_kb_function(CYC_GREATEST_COMMON_DIVISOR);
+        register_kb_function(CYC_RANDOM_INTEGER);
+        register_kb_function(CYC_N_RANDOM_INTEGERS);
+        register_kb_function(CYC_MATRIX_SOLUTION);
+        return NIL;
+    }
+
     public static SubLObject setup_quantities_file() {
+        if (SubLFiles.USE_V1) {
+            memoization_state.note_globally_cached_function(GET_DEFINITIONAL_UNIT_MULTIPLICATION_FACTOR);
+            if (CYC_INTEGER_RANGE.isSymbol()) {
+                final SubLObject item_var = CYC_INTEGER_RANGE;
+                if (NIL == member(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+                    at_vars.$at_collection_specific_defns$.setDynamicValue(cons(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue()));
+                }
+            }
+            register_kb_function(CYC_INTEGER_RANGE);
+            if (CYC_NUMBER_RANGE.isSymbol()) {
+                final SubLObject item_var = CYC_NUMBER_RANGE;
+                if (NIL == member(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+                    at_vars.$at_collection_specific_defns$.setDynamicValue(cons(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue()));
+                }
+            }
+            register_kb_function(CYC_NUMBER_RANGE);
+            register_kb_function(CYC_QUANTITY_CONVERSION);
+            register_kb_function(CYC_QUANTITY_CONVERSION_ABSOLUTE);
+            register_kb_function(CYC_QUOTIENT);
+            register_kb_function(CYC_INVERSE);
+            register_kb_function(CYC_MODULO);
+            register_kb_function(CYC_RESIDUE);
+            register_kb_function(CYC_ABSOLUTE_VALUE);
+            register_kb_function(CYC_SQRT);
+            register_kb_function(CYC_SQUARED);
+            register_kb_function(CYC_PERCENT);
+            register_kb_function(CYC_ROUND_UP);
+            register_kb_function(CYC_ROUND_CLOSEST);
+            register_kb_function(CYC_ROUND_DOWN);
+            register_kb_function(CYC_ROUND_TRUNCATE);
+            register_kb_function(CYC_ROUND_CLOSEST_TO_NTH_DECIMAL);
+            register_kb_function(CYC_MAX_RANGE);
+            register_kb_function(CYC_MIN_RANGE);
+            register_kb_function(CYC_MIN_QUANT_VALUE);
+            register_kb_function(CYC_MAX_QUANT_VALUE);
+            register_kb_function(CYC_QUANTITY_UNIT);
+            register_kb_function(CYC_QUANTITY_MEASURE);
+            register_kb_function(CYC_TOLERANCE);
+            register_kb_function(CYC_SIGNIFICANT_DIGITS);
+            register_kb_function(CYC_SINE);
+            register_kb_function(CYC_COSINE);
+            register_kb_function(CYC_TANGENT);
+            register_kb_function(CYC_COSECANT);
+            register_kb_function(CYC_SECANT);
+            register_kb_function(CYC_COTANGENT);
+            register_kb_function(CYC_ARC_SINE);
+            register_kb_function(CYC_ARC_COSINE);
+            register_kb_function(CYC_ARC_TANGENT);
+            register_kb_function(CYC_ARC_COSECANT);
+            register_kb_function(CYC_ARC_SECANT);
+            register_kb_function(CYC_ARC_COTANGENT);
+            register_kb_function(CYC_LOGARITHM);
+            register_kb_function(CYC_EXPONENT);
+            register_kb_function(CYC_QUADRATIC_SOLUTION_POSITIVE);
+            register_kb_function(CYC_QUADRATIC_SOLUTION_NEGATIVE);
+            register_kb_function(CYC_COLLECTION_SUBSUMPTION_PATHS);
+            register_kb_function(CYC_PREDICATE_SUBSUMPTION_PATHS);
+            register_kb_function(CYC_QUANTITY_SUBSUMES);
+            register_kb_function(CYC_QUANTITY_INTERSECTS);
+            register_kb_function(CYC_DIVIDES_EVENLY);
+            register_kb_function(CYC_LIST_NTH);
+            register_kb_function(CYC_LIST_CONCATENATE);
+            register_kb_function(CYC_APPEND_TO_LIST);
+            register_kb_function(CYC_PREPEND_TO_LIST);
+            register_kb_function(CYC_LIST_FIRST);
+            register_kb_function(CYC_LIST_SECOND);
+            register_kb_function(CYC_LIST_REST);
+            register_kb_function(CYC_LIST_LAST);
+            register_kb_function(CYC_LIST_SUBSEQ);
+            register_kb_function(CYC_LIST_SUBSEQ_UP_TO);
+            register_kb_function(CYC_LIST_SEARCH);
+            register_kb_function(CYC_POSITION);
+            register_kb_function(CYC_LIST_LENGTH);
+            register_kb_function(CYC_LIST_REVERSE);
+            register_kb_function(CYC_LIST_MEMBER_SET);
+            register_kb_function(CYC_SET_ELEMENT_LIST);
+            register_kb_function(CYC_SUBSTITUTE_FROM_LIST);
+            register_kb_function(CYC_SUBSTITUTE_FROM_THE_TERM_BINDING_SET);
+            register_kb_function(CYC_REMOVE_ADJACENT_DUPLICATES_FROM_LIST_FN);
+            register_kb_function(CYC_MAP_FUNCTION_OVER_LIST);
+            register_kb_function(CYC_MAP_FUNCTION_OVER_LIST_UNTIL);
+            register_kb_function(CYC_MAP_FUNCTION_OVER_LIST_UNTIL_RESULT);
+            register_kb_function(CYC_MAP_FUNCTION_WITH_ARGS_OVER_LISTS);
+            register_kb_function(CYC_APPLY_FUNCTION_RECURSIVELY);
+            register_kb_function($sym154$CYC_LIST_MEMBER_);
+            define_obsolete_register($sym155$CYC_LIST_CONTAINS_MEMBER_, $list156);
+            register_kb_function($sym157$CYC_SUBLIST_);
+            register_kb_function($sym158$CYC_INITIAL_SUBLIST_);
+            register_kb_function(CYC_SET_INTERSECTION);
+            register_kb_function(CYC_SET_UNION);
+            register_kb_function(CYC_SET_DIFFERENCE);
+            register_kb_function(CYC_SET_EXTENT);
+            register_kb_function(CYC_MAP_FUNCTION_OVER_SET);
+            register_kb_function(CYC_LEAST_COMMON_MULTIPLE);
+            register_kb_function(CYC_GREATEST_COMMON_DIVISOR);
+            register_kb_function(CYC_RANDOM_INTEGER);
+            register_kb_function(CYC_RANDOM_INTEGER_WITH_SEED);
+            register_kb_function(CYC_N_RANDOM_INTEGERS);
+            register_kb_function(CYC_MATRIX_SOLUTION);
+            register_external_symbol(GET_INTERCONVERTIBLE_UNITS_OF_MEASURE);
+        }
+        if (SubLFiles.USE_V2) {
+            if (CYC_INTEGER_RANGE.isSymbol()) {
+                {
+                    SubLObject item_var = CYC_INTEGER_RANGE;
+                    if (NIL == member(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+                        at_vars.$at_collection_specific_defns$.setDynamicValue(cons(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue()));
+                    }
+                }
+            }
+            if (CYC_NUMBER_RANGE.isSymbol()) {
+                {
+                    SubLObject item_var = CYC_NUMBER_RANGE;
+                    if (NIL == member(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue(), symbol_function(EQL), symbol_function(IDENTITY))) {
+                        at_vars.$at_collection_specific_defns$.setDynamicValue(cons(item_var, at_vars.$at_collection_specific_defns$.getDynamicValue()));
+                    }
+                }
+            }
+            register_kb_function($sym118$CYC_LIST_MEMBER_);
+            define_obsolete_register($sym119$CYC_LIST_CONTAINS_MEMBER_, $list_alt120);
+            register_kb_function($sym121$CYC_SUBLIST_);
+            register_kb_function($sym122$CYC_INITIAL_SUBLIST_);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_quantities_file_Previous() {
         memoization_state.note_globally_cached_function(GET_DEFINITIONAL_UNIT_MULTIPLICATION_FACTOR);
         if (CYC_INTEGER_RANGE.isSymbol()) {
             final SubLObject item_var = CYC_INTEGER_RANGE;
@@ -4298,203 +8208,6 @@ public final class quantities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

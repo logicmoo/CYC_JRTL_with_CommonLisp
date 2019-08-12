@@ -66,7 +66,7 @@ public class character_names extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_character_names_file() {
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.character_names", "character_names", "CHARACTER-NAMES", 1, 0, false);
+        declareFunction("character_names", "CHARACTER-NAMES", 1, 0, false);
         return SubLNil.NIL;
     }
 

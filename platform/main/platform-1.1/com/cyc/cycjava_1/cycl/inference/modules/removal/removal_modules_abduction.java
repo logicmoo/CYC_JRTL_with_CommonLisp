@@ -158,8 +158,7 @@ public  final class removal_modules_abduction extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_abduction_file() {
-    // CVS_ID("Id: removal-modules-abduction.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym3$_ABDUCTION_TERM_ISG_);
+        subl_macro_promotions.declare_defglobal($sym3$_ABDUCTION_TERM_ISG_);
     inference_modules.inference_removal_module($kw17$REMOVAL_ABDUCTION_POS_CHECK, $list18);
     inference_modules.inference_removal_module($kw20$REMOVAL_ABDUCTION_POS_UNIFY, $list21);
     inference_modules.inference_removal_module($kw22$REMOVAL_EXCLUSIVE_ABDUCTION_POS, $list23);

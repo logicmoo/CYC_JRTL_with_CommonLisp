@@ -147,8 +147,7 @@ public  final class access_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_access_macros_file() {
-    // CVS_ID("Id: access-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    meta_macros.declare_indention_pattern($sym28$DEFPARAMETER_MACRO_HELPER, $list29);
+        meta_macros.declare_indention_pattern($sym28$DEFPARAMETER_MACRO_HELPER, $list29);
     {
       SubLObject cdolist_list_var = $external_access_methods$.getGlobalValue();
       SubLObject symbol = NIL;

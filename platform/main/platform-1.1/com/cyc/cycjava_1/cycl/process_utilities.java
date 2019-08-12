@@ -454,8 +454,7 @@ public  final class process_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_process_utilities_file() {
-    // CVS_ID("Id: process-utilities.lisp 128914 2009-10-06 17:44:34Z rck ");
-    access_macros.define_obsolete_register($sym0$INTERRUPT_INITIAL_PROCESS, $list1);
+        access_macros.define_obsolete_register($sym0$INTERRUPT_INITIAL_PROCESS, $list1);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_task$.getGlobalValue(), Symbols.symbol_function($sym14$TASK_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym15$TASK_PROCESS, $sym16$_CSETF_TASK_PROCESS);
     Structures.def_csetf($sym17$TASK_COMPLETED, $sym18$_CSETF_TASK_COMPLETED);

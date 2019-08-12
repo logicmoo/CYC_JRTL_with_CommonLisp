@@ -184,8 +184,7 @@ public  final class at_admitted extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_admitted_file() {
-    // CVS_ID("Id: at-admitted.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_memoized_function($sym0$ADMITTED_ARGUMENT_);
+        memoization_state.note_memoized_function($sym0$ADMITTED_ARGUMENT_);
     return NIL;
   }
 

@@ -141,8 +141,7 @@ Hence, all union tactics should be preferred. */
   }
 
   public static final SubLObject setup_inference_worker_union_file() {
-    // CVS_ID("Id: inference-worker-union.lisp 128648 2009-08-27 17:23:55Z pace ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

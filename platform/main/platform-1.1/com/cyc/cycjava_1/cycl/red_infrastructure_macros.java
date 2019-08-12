@@ -172,8 +172,7 @@ public  final class red_infrastructure_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_red_infrastructure_macros_file() {
-    // CVS_ID("Id: red-infrastructure-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym2$RED_DEF_HELPER, $list28);
+        access_macros.register_macro_helper($sym2$RED_DEF_HELPER, $list28);
     access_macros.register_macro_helper($sym27$RED_REINITIALIZE_VARIABLE_HELPER, $sym30$RED_REINITIALIZE_VARIABLE);
     subl_macro_promotions.declare_defglobal($sym49$REDDEF_GBL_PRVT);
     subl_macro_promotions.declare_defglobal($sym51$REDDEF_GBL_PROT);

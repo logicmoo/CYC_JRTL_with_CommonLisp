@@ -890,8 +890,7 @@ correspondingly split into a list of multiples.  For example :
   }
 
   public static final SubLObject setup_number_utilities_file() {
-    // CVS_ID("Id: number-utilities.lisp 128638 2009-08-26 17:25:03Z rck ");
-    utilities_macros.register_cyc_api_function($sym3$NIL_OR_INTEGER_P, $list4, $str5$Return_T_iff_OBJECT_is_either_an_, NIL, $list6);
+        utilities_macros.register_cyc_api_function($sym3$NIL_OR_INTEGER_P, $list4, $str5$Return_T_iff_OBJECT_is_either_an_, NIL, $list6);
     generic_testing.define_test_case_table_int($sym70$CHECKSUM_SANITY_CHECK, list(new SubLObject[] {$kw71$TEST, NIL, $kw72$OWNER, NIL, $kw73$CLASSES, NIL, $kw74$KB, $kw75$TINY, $kw76$WORKING_, T}), $list77);
     access_macros.register_macro_helper($sym78$CHECKSUM_SETUP, $list79);
     memoization_state.note_memoized_function($sym111$FIBONACCI_MEMOIZED);

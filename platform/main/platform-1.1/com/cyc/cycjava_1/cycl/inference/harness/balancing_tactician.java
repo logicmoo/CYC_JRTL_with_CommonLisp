@@ -211,8 +211,7 @@ but more recent work requires this to be T for correctness. */
   }
 
   public static final SubLObject setup_balancing_tactician_file() {
-    // CVS_ID("Id: balancing-tactician.lisp 128795 2009-09-16 17:03:43Z pace ");
-    inference_tactician.inference_strategy_type($kw0$BALANCING, $list1);
+        inference_tactician.inference_strategy_type($kw0$BALANCING, $list1);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_balancing_tactician_data$.getGlobalValue(), Symbols.symbol_function($sym9$BALANCING_TACTICIAN_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym10$BAL_TAC_DATA_NEW_ROOT_SUBSTRATEGY, $sym11$_CSETF_BAL_TAC_DATA_NEW_ROOT_SUBSTRATEGY);
     Structures.def_csetf($sym12$BAL_TAC_DATA_TRANSFORMATION_SUBSTRATEGY, $sym13$_CSETF_BAL_TAC_DATA_TRANSFORMATION_SUBSTRATEGY);

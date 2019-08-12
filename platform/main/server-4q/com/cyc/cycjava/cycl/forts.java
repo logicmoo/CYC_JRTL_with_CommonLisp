@@ -1,9 +1,44 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cfasl;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -23,136 +58,107 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.forts.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_readably$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class forts extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      FORTS
+ * source file: /cyc/top/cycl/forts.lisp
+ * created:     2019/07/03 17:37:20
+ */
+public final class forts extends SubLTranslatedFile implements V12 {
+    public static final class $fort_id_index_native extends SubLStructNative {
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        public SubLObject getField2() {
+            return com.cyc.cycjava.cycl.forts.$fort_id_index_native.this.$constants;
+        }
+
+        public SubLObject getField3() {
+            return com.cyc.cycjava.cycl.forts.$fort_id_index_native.this.$narts;
+        }
+
+        public SubLObject setField2(SubLObject value) {
+            return com.cyc.cycjava.cycl.forts.$fort_id_index_native.this.$constants = value;
+        }
+
+        public SubLObject setField3(SubLObject value) {
+            return com.cyc.cycjava.cycl.forts.$fort_id_index_native.this.$narts = value;
+        }
+
+        public SubLObject $constants = Lisp.NIL;
+
+        public SubLObject $narts = Lisp.NIL;
+
+        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.forts.$fort_id_index_native.class, FORT_ID_INDEX, FORT_ID_INDEX_P, $list_alt40, $list_alt41, new String[]{ "$constants", "$narts" }, $list_alt42, $list_alt43, PRINT_FORT_ID_INDEX);
+    }
+
     public static final SubLFile me = new forts();
 
-    public static final String myName = "com.cyc.cycjava.cycl.forts";
+ public static final String myName = "com.cyc.cycjava.cycl.forts";
 
-    public static final String myFingerPrint = "47a6760ac485dc04bd675a1e4bcbcea0939054120725b20de7a998053e7d76d4";
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_fort_id_index$ = makeSymbol("*DTP-FORT-ID-INDEX*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     private static final SubLSymbol $cfasl_opcode_fort_id_index$ = makeSymbol("*CFASL-OPCODE-FORT-ID-INDEX*");
 
+    static private final SubLList $list1 = list(makeSymbol("OBJECT"));
 
+    static private final SubLString $str2$Return_T_iff_OBJECT_is_a_first_or = makeString("Return T iff OBJECT is a first order reified term (FORT).");
 
-    public static final SubLList $list1 = list(makeSymbol("OBJECT"));
+    static private final SubLList $list3 = list(makeSymbol("BOOLEANP"));
 
-    public static final SubLString $str2$Return_T_iff_OBJECT_is_a_first_or = makeString("Return T iff OBJECT is a first order reified term (FORT).");
+    private static final SubLSymbol FORT_EL_FORMULA = makeSymbol("FORT-EL-FORMULA");
 
-    public static final SubLList $list3 = list(makeSymbol("BOOLEANP"));
+    static private final SubLList $list5 = list(makeSymbol("FORT"));
 
-    public static final SubLSymbol FORT_EL_FORMULA = makeSymbol("FORT-EL-FORMULA");
+    static private final SubLString $str6$Return_the_EL_formula_for_any_FOR = makeString("Return the EL formula for any FORT.");
 
-    public static final SubLList $list5 = list(makeSymbol("FORT"));
+    static private final SubLList $list7 = list(list(makeSymbol("FORT"), makeSymbol("FORT-P")));
 
-    public static final SubLString $str6$Return_the_EL_formula_for_any_FOR = makeString("Return the EL formula for any FORT.");
+    static private final SubLList $list8 = list(list(makeSymbol("NIL-OR"), makeSymbol("CONSP")));
 
-    public static final SubLList $list7 = list(list(makeSymbol("FORT"), makeSymbol("FORT-P")));
+    static private final SubLList $list9 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("PROGRESS-MESSAGE"), makeString("mapping Cyc FORTs")), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    public static final SubLList $list8 = list(list(makeSymbol("NIL-OR"), makeSymbol("CONSP")));
+    static private final SubLString $$$mapping_Cyc_FORTs = makeString("mapping Cyc FORTs");
 
-    public static final SubLList $list9 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("PROGRESS-MESSAGE"), makeString("mapping Cyc FORTs")), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    public static final SubLString $$$mapping_Cyc_FORTs = makeString("mapping Cyc FORTs");
-
-    public static final SubLList $list11 = list(makeKeyword("DONE"));
+    static private final SubLList $list11 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
+    static private final SubLSymbol $sym14$TABLE_VAR = makeUninternedSymbol("TABLE-VAR");
 
+    static private final SubLList $list16 = list(makeSymbol("DO-FORTS-TABLES"));
 
-    public static final SubLSymbol $sym14$TABLE_VAR = makeUninternedSymbol("TABLE-VAR");
+    static private final SubLSymbol $sym19$MESSAGE = makeUninternedSymbol("MESSAGE");
 
+    static private final SubLSymbol $sym20$TOTAL = makeUninternedSymbol("TOTAL");
 
+    static private final SubLSymbol $sym21$SOFAR = makeUninternedSymbol("SOFAR");
 
-    public static final SubLList $list16 = list(makeSymbol("DO-FORTS-TABLES"));
+    static private final SubLList $list23 = list(list(makeSymbol("FORT-COUNT")));
 
+    static private final SubLList $list24 = list(ZERO_INTEGER);
 
+    private static final SubLSymbol DO_FORTS = makeSymbol("DO-FORTS");
 
+    static private final SubLString $str29$Iterate_over_all_HL_FORT_datastru = makeString("Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.\n   VAR is bound to the FORT.\n   PROGRESS-MESSAGE is a progress message string.\n   Iteration halts as soon as DONE becomes non-nil.");
 
+    private static final SubLSymbol DO_FORTS_TABLES = makeSymbol("DO-FORTS-TABLES");
 
-    public static final SubLSymbol $sym19$MESSAGE = makeUninternedSymbol("MESSAGE");
+    private static final SubLSymbol FORT_COUNT = makeSymbol("FORT-COUNT");
 
-    public static final SubLSymbol $sym20$TOTAL = makeUninternedSymbol("TOTAL");
+    static private final SubLString $str32$Return_the_total_number_of_FORTs_ = makeString("Return the total number of FORTs.");
 
-    public static final SubLSymbol $sym21$SOFAR = makeUninternedSymbol("SOFAR");
-
-
-
-    public static final SubLList $list23 = list(list(makeSymbol("FORT-COUNT")));
-
-    public static final SubLList $list24 = list(ZERO_INTEGER);
-
-
-
-    public static final SubLSymbol DO_FORTS = makeSymbol("DO-FORTS");
-
-
-
-
-
-    public static final SubLString $str29$Iterate_over_all_HL_FORT_datastru = makeString("Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.\n   VAR is bound to the FORT.\n   PROGRESS-MESSAGE is a progress message string.\n   Iteration halts as soon as DONE becomes non-nil.");
-
-    public static final SubLSymbol DO_FORTS_TABLES = makeSymbol("DO-FORTS-TABLES");
-
-    public static final SubLSymbol FORT_COUNT = makeSymbol("FORT-COUNT");
-
-    public static final SubLString $str32$Return_the_total_number_of_FORTs_ = makeString("Return the total number of FORTs.");
-
-    public static final SubLList $list33 = list(makeSymbol("INTEGERP"));
-
-
+    static private final SubLList $list33 = list(makeSymbol("INTEGERP"));
 
     private static final SubLInteger $int$500 = makeInteger(500);
-
-
 
     private static final SubLString $str37$_S_was_not_a_FORT = makeString("~S was not a FORT");
 
@@ -160,13 +166,13 @@ public final class forts extends SubLTranslatedFile {
 
     private static final SubLString $str39$Remove_FORT_from_the_KB_ = makeString("Remove FORT from the KB.");
 
-    public static final SubLList $list40 = list(makeSymbol("NULL"));
+    static private final SubLList $list40 = list(makeSymbol("NULL"));
 
     private static final SubLSymbol FORT_ID_INDEX = makeSymbol("FORT-ID-INDEX");
 
     private static final SubLSymbol FORT_ID_INDEX_P = makeSymbol("FORT-ID-INDEX-P");
 
-    public static final SubLList $list43 = list(makeSymbol("CONSTANTS"), makeSymbol("NARTS"));
+    static private final SubLList $list43 = list(makeSymbol("CONSTANTS"), makeSymbol("NARTS"));
 
     private static final SubLList $list44 = list(makeKeyword("CONSTANTS"), makeKeyword("NARTS"));
 
@@ -188,19 +194,9 @@ public final class forts extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_FORT_ID_INDEX_NARTS = makeSymbol("_CSETF-FORT-ID-INDEX-NARTS");
 
-
-
-
-
     private static final SubLString $str56$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_FORT_ID_INDEX = makeSymbol("MAKE-FORT-ID-INDEX");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_FORT_ID_INDEX_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-FORT-ID-INDEX-METHOD");
 
@@ -210,21 +206,11 @@ public final class forts extends SubLTranslatedFile {
 
     private static final SubLList $list64 = list(list(makeSymbol("ID-INDEX-VAR"), makeSymbol("ID-VAR"), makeSymbol("FORT"), makeSymbol("FORT-ID-INDEX")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-
-
-
-
     private static final SubLList $list67 = list(makeSymbol("FORT-P"));
 
     private static final SubLList $list68 = list(makeSymbol("FORT-ID-INDEX-P"));
 
-
-
     private static final SubLSymbol $sym70$VALID_FORT_ = makeSymbol("VALID-FORT?");
-
-
-
-
 
     private static final SubLSymbol CONSTANT_INTERNAL_ID = makeSymbol("CONSTANT-INTERNAL-ID");
 
@@ -244,11 +230,7 @@ public final class forts extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym81$ID = makeUninternedSymbol("ID");
 
-
-
     private static final SubLSymbol DO_FII_GET_CONSTANTS = makeSymbol("DO-FII-GET-CONSTANTS");
-
-
 
     private static final SubLList $list85 = list(list(makeSymbol("NART"), makeSymbol("VALUE"), makeSymbol("FORT-ID-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -264,42 +246,69 @@ public final class forts extends SubLTranslatedFile {
 
     private static final SubLSymbol CFASL_OUTPUT_OBJECT_FORT_ID_INDEX_METHOD = makeSymbol("CFASL-OUTPUT-OBJECT-FORT-ID-INDEX-METHOD");
 
-
-
     private static final SubLString $str93$Checking_that_forts_iterators_wor = makeString("Checking that forts iterators work.");
-
-
 
     private static final SubLSymbol $sym95$_EXIT = makeSymbol("%EXIT");
 
-
-
     private static final SubLString $str97$FORTS_ITERATOR_exhausted_before_D = makeString("FORTS-ITERATOR exhausted before DO-FORTS");
-
-
 
     private static final SubLString $str99$FORTS_ITERATOR_returned_non_fort_ = makeString("FORTS-ITERATOR returned non-fort!");
 
-
-
     private static final SubLString $str101$FORTS_ITERATOR_and_DO_FORTS_diffe = makeString("FORTS-ITERATOR and DO-FORTS differ in which FORT they think is next");
-
-
 
     private static final SubLString $str103$The_FORTS_iterator_has_more_value = makeString("The FORTS iterator has more values than DO-FORTS.");
 
+    // Definitions
+    /**
+     * Return T iff OBJECT is a first order reified term (FORT).
+     */
+    @LispMethod(comment = "Return T iff OBJECT is a first order reified term (FORT).")
+    public static final SubLObject fort_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != constant_p(v_object)) || (NIL != nart_handles.nart_p(v_object)));
+    }
+
+    // Definitions
+    /**
+     * Return T iff OBJECT is a first order reified term (FORT).
+     */
+    @LispMethod(comment = "Return T iff OBJECT is a first order reified term (FORT).")
     public static SubLObject fort_p(final SubLObject v_object) {
         return makeBoolean((NIL != constant_p(v_object)) || (NIL != nart_handles.nart_p(v_object)));
+    }
+
+    public static final SubLObject non_fort_p_alt(SubLObject v_object) {
+        return makeBoolean(NIL == fort_p(v_object));
     }
 
     public static SubLObject non_fort_p(final SubLObject v_object) {
         return makeBoolean(NIL == fort_p(v_object));
     }
 
+    public static final SubLObject list_of_fort_p_alt(SubLObject v_object) {
+        return list_utilities.list_of_type_p(FORT_P, v_object);
+    }
+
     public static SubLObject list_of_fort_p(final SubLObject v_object) {
         return list_utilities.list_of_type_p(FORT_P, v_object);
     }
 
+    /**
+     * Return the EL formula for any FORT.
+     */
+    @LispMethod(comment = "Return the EL formula for any FORT.")
+    public static final SubLObject fort_el_formula_alt(SubLObject fort) {
+        SubLTrampolineFile.checkType(fort, FORT_P);
+        if (NIL != constant_p(fort)) {
+            return fort;
+        } else {
+            return narts_high.nart_el_formula(fort);
+        }
+    }
+
+    /**
+     * Return the EL formula for any FORT.
+     */
+    @LispMethod(comment = "Return the EL formula for any FORT.")
     public static SubLObject fort_el_formula(final SubLObject fort) {
         SubLTrampolineFile.enforceType(fort, FORT_P);
         if (NIL != constant_p(fort)) {
@@ -308,10 +317,101 @@ public final class forts extends SubLTranslatedFile {
         return narts_high.nart_el_formula(fort);
     }
 
+    /**
+     * Iterate over the CONSTANTS and the NARTs in order.
+     */
+    @LispMethod(comment = "Iterate over the CONSTANTS and the NARTs in order.")
+    public static final SubLObject new_forts_iterator_alt() {
+        return iteration.new_iterator_iterator(list(new_constants_iterator(), nart_handles.new_narts_iterator()));
+    }
+
+    /**
+     * Iterate over the CONSTANTS and the NARTs in order.
+     */
+    @LispMethod(comment = "Iterate over the CONSTANTS and the NARTs in order.")
     public static SubLObject new_forts_iterator() {
         return iteration.new_iterator_iterator(list(new_constants_iterator(), nart_handles.new_narts_iterator()));
     }
 
+    /**
+     * Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.
+     * VAR is bound to the FORT.
+     * PROGRESS-MESSAGE is a progress message string.
+     * Iteration halts as soon as DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.\r\nVAR is bound to the FORT.\r\nPROGRESS-MESSAGE is a progress message string.\r\nIteration halts as soon as DONE becomes non-nil.\nIterate over all HL FORT datastructures, executing BODY within the scope of VAR.\nVAR is bound to the FORT.\nPROGRESS-MESSAGE is a progress message string.\nIteration halts as soon as DONE becomes non-nil.")
+    public static final SubLObject do_forts_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt9);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt9);
+                    var = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject progress_message = (current.isCons()) ? ((SubLObject) (current.first())) : $$$mapping_Cyc_FORTs;
+                        destructuring_bind_must_listp(current, datum, $list_alt9);
+                        current = current.rest();
+                        {
+                            SubLObject allow_other_keys_p = NIL;
+                            SubLObject rest = current;
+                            SubLObject bad = NIL;
+                            SubLObject current_1 = NIL;
+                            for (; NIL != rest;) {
+                                destructuring_bind_must_consp(rest, datum, $list_alt9);
+                                current_1 = rest.first();
+                                rest = rest.rest();
+                                destructuring_bind_must_consp(rest, datum, $list_alt9);
+                                if (NIL == member(current_1, $list_alt11, UNPROVIDED, UNPROVIDED)) {
+                                    bad = T;
+                                }
+                                if (current_1 == $ALLOW_OTHER_KEYS) {
+                                    allow_other_keys_p = rest.first();
+                                }
+                                rest = rest.rest();
+                            }
+                            if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                                cdestructuring_bind_error(datum, $list_alt9);
+                            }
+                            {
+                                SubLObject done_tail = property_list_member($DONE, current);
+                                SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                                current = temp;
+                                {
+                                    SubLObject body = current;
+                                    if (NIL == progress_message) {
+                                        {
+                                            SubLObject table_var = $sym14$TABLE_VAR;
+                                            return list(DO_LIST, list(table_var, $list_alt16, $DONE, done), listS(DO_KB_SUID_TABLE, list(var, table_var, $PROGRESS_MESSAGE, NIL, $DONE, done), append(body, NIL)));
+                                        }
+                                    }
+                                    {
+                                        SubLObject message = $sym19$MESSAGE;
+                                        SubLObject total = $sym20$TOTAL;
+                                        SubLObject sofar = $sym21$SOFAR;
+                                        return list(CLET, list(list(message, progress_message), bq_cons(total, $list_alt23), bq_cons(sofar, $list_alt24)), list(NOTING_PERCENT_PROGRESS, message, listS(DO_FORTS, list(var, NIL, $DONE, done), list(CINC, sofar), list(NOTE_PERCENT_PROGRESS, sofar, total), append(body, NIL))));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.
+     * VAR is bound to the FORT.
+     * PROGRESS-MESSAGE is a progress message string.
+     * Iteration halts as soon as DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.\r\nVAR is bound to the FORT.\r\nPROGRESS-MESSAGE is a progress message string.\r\nIteration halts as soon as DONE becomes non-nil.\nIterate over all HL FORT datastructures, executing BODY within the scope of VAR.\nVAR is bound to the FORT.\nPROGRESS-MESSAGE is a progress message string.\nIteration halts as soon as DONE becomes non-nil.")
     public static SubLObject do_forts(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -359,12 +459,45 @@ public final class forts extends SubLTranslatedFile {
         return list(CLET, list(list(message, progress_message), bq_cons(total, $list23), bq_cons(sofar, $list24)), list(NOTING_PERCENT_PROGRESS, message, listS(DO_FORTS, list(var, NIL, $DONE, done), list(CINC, sofar), list(NOTE_PERCENT_PROGRESS, sofar, total), append(body, NIL))));
     }
 
+    public static final SubLObject do_forts_tables_alt() {
+        return list(do_constants_table(), nart_handles.do_narts_table());
+    }
+
     public static SubLObject do_forts_tables() {
         return list(do_constants_table(), nart_handles.do_narts_table());
     }
 
+    /**
+     * Return the total number of FORTs.
+     */
+    @LispMethod(comment = "Return the total number of FORTs.")
+    public static final SubLObject fort_count_alt() {
+        return add(constant_count(), nart_handles.nart_count());
+    }
+
+    /**
+     * Return the total number of FORTs.
+     */
+    @LispMethod(comment = "Return the total number of FORTs.")
     public static SubLObject fort_count() {
         return add(constant_count(), nart_handles.nart_count());
+    }
+
+    /**
+     * Return a randomly chosen FORT.
+     */
+    @LispMethod(comment = "Return a randomly chosen FORT.")
+    public static final SubLObject random_fort() {
+        {
+            SubLObject fort_count = fort_count();
+            SubLObject fort_type_indicator = random.random(fort_count);
+            SubLObject constant_threshold = constant_count();
+            if (fort_type_indicator.numL(constant_threshold)) {
+                return constants_high.random_constant(UNPROVIDED);
+            } else {
+                return narts_high.random_nart(UNPROVIDED);
+            }
+        }
     }
 
     public static SubLObject random_fort(SubLObject test) {
@@ -397,7 +530,7 @@ public final class forts extends SubLTranslatedFile {
         if (test == UNPROVIDED) {
             test = symbol_function(TRUE);
         }
-        assert NIL != subl_promotions.non_negative_integer_p(n) : "subl_promotions.non_negative_integer_p(n) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(n) " + n;
+        assert NIL != subl_promotions.non_negative_integer_p(n) : "! subl_promotions.non_negative_integer_p(n) " + ("subl_promotions.non_negative_integer_p(n) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(n) ") + n;
         if (NIL != allow_repeatsP) {
             SubLObject result = NIL;
             SubLObject i;
@@ -412,6 +545,27 @@ public final class forts extends SubLTranslatedFile {
         return set_contents.set_contents_element_list(result);
     }
 
+    /**
+     * Return the indexing structure for FORT.
+     */
+    @LispMethod(comment = "Return the indexing structure for FORT.")
+    public static final SubLObject fort_index_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return constants_low.constant_index(fort);
+        } else {
+            if (NIL != nart_handles.nart_p(fort)) {
+                return narts_low.nart_index(fort);
+            } else {
+                Errors.error($str_alt34$_S_was_not_a_FORT, fort);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Return the indexing structure for FORT.
+     */
+    @LispMethod(comment = "Return the indexing structure for FORT.")
     public static SubLObject fort_index(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return constants_low.constant_index(fort);
@@ -423,16 +577,53 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Primitively change the assertion index for FORT to NEW-INDEX.
+     */
+    @LispMethod(comment = "Primitively change the assertion index for FORT to NEW-INDEX.")
+    public static final SubLObject reset_fort_index_alt(SubLObject fort, SubLObject new_index) {
+        SubLTrampolineFile.checkType(fort, FORT_P);
+        if (NIL != constant_p(fort)) {
+            return constants_low.reset_constant_index(fort, new_index);
+        } else {
+            return narts_low.reset_nart_index(fort, new_index);
+        }
+    }
+
+    /**
+     * Primitively change the assertion index for FORT to NEW-INDEX.
+     */
+    @LispMethod(comment = "Primitively change the assertion index for FORT to NEW-INDEX.")
     public static SubLObject reset_fort_index(final SubLObject fort, final SubLObject new_index) {
-        assert NIL != fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
+        assert NIL != fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
         if (NIL != constant_p(fort)) {
             return constants_low.reset_constant_index(fort, new_index);
         }
         return narts_low.reset_nart_index(fort, new_index);
     }
 
+    /**
+     * Primitively clear the assertion index for FORT.
+     */
+    @LispMethod(comment = "Primitively clear the assertion index for FORT.")
+    public static final SubLObject clear_fort_index_alt(SubLObject fort) {
+        return reset_fort_index(fort, new_simple_index());
+    }
+
+    /**
+     * Primitively clear the assertion index for FORT.
+     */
+    @LispMethod(comment = "Primitively clear the assertion index for FORT.")
     public static SubLObject clear_fort_index(final SubLObject fort) {
         return reset_fort_index(fort, new_simple_index());
+    }
+
+    public static final SubLObject fort_internal_id_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return constants_high.constant_internal_id(fort);
+        } else {
+            return number_utilities.f_1_(minus(nart_handles.nart_id(fort)));
+        }
     }
 
     public static SubLObject fort_internal_id(final SubLObject fort) {
@@ -442,6 +633,14 @@ public final class forts extends SubLTranslatedFile {
         return number_utilities.f_1_(minus(nart_handles.nart_id(fort)));
     }
 
+    public static final SubLObject fort_external_id_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return constants_high.constant_external_id(fort);
+        } else {
+            return number_utilities.f_1_(minus(nart_handles.nart_id(fort)));
+        }
+    }
+
     public static SubLObject fort_external_id(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return constants_high.constant_external_id(fort);
@@ -449,6 +648,26 @@ public final class forts extends SubLTranslatedFile {
         return number_utilities.f_1_(minus(nart_handles.nart_id(fort)));
     }
 
+    /**
+     * Return T if FORT is a valid FORT.
+     */
+    @LispMethod(comment = "Return T if FORT is a valid FORT.")
+    public static final SubLObject valid_fortP_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return valid_constantP(fort, UNPROVIDED);
+        } else {
+            if (NIL != nart_handles.nart_p(fort)) {
+                return nart_handles.valid_nartP(fort, UNPROVIDED);
+            } else {
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     * Return T if FORT is a valid FORT.
+     */
+    @LispMethod(comment = "Return T if FORT is a valid FORT.")
     public static SubLObject valid_fortP(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return valid_constantP(fort, UNPROVIDED);
@@ -459,6 +678,28 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return T if FORT is a valid FORT.
+     * Performs more thorough checking than @xref VALID-FORT?.
+     */
+    @LispMethod(comment = "Return T if FORT is a valid FORT.\r\nPerforms more thorough checking than @xref VALID-FORT?.\nReturn T if FORT is a valid FORT.\nPerforms more thorough checking than @xref VALID-FORT?.")
+    public static final SubLObject valid_fort_robustP_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return valid_constant_robustP(fort);
+        } else {
+            if (NIL != nart_handles.nart_p(fort)) {
+                return nart_handles.valid_nart_robustP(fort);
+            } else {
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     * Return T if FORT is a valid FORT.
+     * Performs more thorough checking than @xref VALID-FORT?.
+     */
+    @LispMethod(comment = "Return T if FORT is a valid FORT.\r\nPerforms more thorough checking than @xref VALID-FORT?.\nReturn T if FORT is a valid FORT.\nPerforms more thorough checking than @xref VALID-FORT?.")
     public static SubLObject valid_fort_robustP(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return valid_constant_robustP(fort);
@@ -469,6 +710,26 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return T if FORT is an invalid FORT.
+     */
+    @LispMethod(comment = "Return T if FORT is an invalid FORT.")
+    public static final SubLObject invalid_fortP_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return invalid_constantP(fort, UNPROVIDED);
+        } else {
+            if (NIL != nart_handles.nart_p(fort)) {
+                return narts_high.invalid_nartP(fort, UNPROVIDED);
+            } else {
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     * Return T if FORT is an invalid FORT.
+     */
+    @LispMethod(comment = "Return T if FORT is an invalid FORT.")
     public static SubLObject invalid_fortP(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return invalid_constantP(fort, UNPROVIDED);
@@ -479,6 +740,28 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return T if FORT is an invalid FORT.
+     * Performs more thorough checking than @xref INVALID-FORT?.
+     */
+    @LispMethod(comment = "Return T if FORT is an invalid FORT.\r\nPerforms more thorough checking than @xref INVALID-FORT?.\nReturn T if FORT is an invalid FORT.\nPerforms more thorough checking than @xref INVALID-FORT?.")
+    public static final SubLObject invalid_fort_robustP_alt(SubLObject fort) {
+        if (NIL != constant_p(fort)) {
+            return invalid_constant_robustP(fort);
+        } else {
+            if (NIL != nart_handles.nart_p(fort)) {
+                return narts_high.invalid_nart_robustP(fort);
+            } else {
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     * Return T if FORT is an invalid FORT.
+     * Performs more thorough checking than @xref INVALID-FORT?.
+     */
+    @LispMethod(comment = "Return T if FORT is an invalid FORT.\r\nPerforms more thorough checking than @xref INVALID-FORT?.\nReturn T if FORT is an invalid FORT.\nPerforms more thorough checking than @xref INVALID-FORT?.")
     public static SubLObject invalid_fort_robustP(final SubLObject fort) {
         if (NIL != constant_p(fort)) {
             return invalid_constant_robustP(fort);
@@ -489,6 +772,23 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Remove FORT from the KB.
+     */
+    @LispMethod(comment = "Remove FORT from the KB.")
+    public static final SubLObject remove_fort_alt(SubLObject fort) {
+        SubLTrampolineFile.checkType(fort, FORT_P);
+        if (NIL != constant_p(fort)) {
+            return constants_high.remove_constant(fort);
+        } else {
+            return narts_high.remove_nart(fort);
+        }
+    }
+
+    /**
+     * Remove FORT from the KB.
+     */
+    @LispMethod(comment = "Remove FORT from the KB.")
     public static SubLObject remove_fort(final SubLObject fort) {
         SubLTrampolineFile.enforceType(fort, FORT_P);
         if (NIL != constant_p(fort)) {
@@ -497,40 +797,96 @@ public final class forts extends SubLTranslatedFile {
         return narts_high.remove_nart(fort);
     }
 
+    public static final SubLObject fort_id_index_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_fort_id_index(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject fort_id_index_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_fort_id_index(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject fort_id_index_p(final SubLObject v_object) {
-        return v_object.getClass() == forts.$fort_id_index_native.class ? T : NIL;
+    public static final SubLObject fort_id_index_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.forts.$fort_id_index_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject fort_id_index_constants(final SubLObject v_object) {
-        assert NIL != fort_id_index_p(v_object) : "forts.fort_id_index_p(v_object) " + "CommonSymbols.NIL != forts.fort_id_index_p(v_object) " + v_object;
+    public static SubLObject fort_id_index_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.forts.$fort_id_index_native.class ? T : NIL;
+    }
+
+    public static final SubLObject fort_id_index_constants_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORT_ID_INDEX_P);
         return v_object.getField2();
     }
 
-    public static SubLObject fort_id_index_narts(final SubLObject v_object) {
-        assert NIL != fort_id_index_p(v_object) : "forts.fort_id_index_p(v_object) " + "CommonSymbols.NIL != forts.fort_id_index_p(v_object) " + v_object;
+    public static SubLObject fort_id_index_constants(final SubLObject v_object) {
+        assert NIL != fort_id_index_p(v_object) : "! forts.fort_id_index_p(v_object) " + "forts.fort_id_index_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject fort_id_index_narts_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, FORT_ID_INDEX_P);
         return v_object.getField3();
     }
 
-    public static SubLObject _csetf_fort_id_index_constants(final SubLObject v_object, final SubLObject value) {
-        assert NIL != fort_id_index_p(v_object) : "forts.fort_id_index_p(v_object) " + "CommonSymbols.NIL != forts.fort_id_index_p(v_object) " + v_object;
+    public static SubLObject fort_id_index_narts(final SubLObject v_object) {
+        assert NIL != fort_id_index_p(v_object) : "! forts.fort_id_index_p(v_object) " + "forts.fort_id_index_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject _csetf_fort_id_index_constants_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORT_ID_INDEX_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_fort_id_index_narts(final SubLObject v_object, final SubLObject value) {
-        assert NIL != fort_id_index_p(v_object) : "forts.fort_id_index_p(v_object) " + "CommonSymbols.NIL != forts.fort_id_index_p(v_object) " + v_object;
+    public static SubLObject _csetf_fort_id_index_constants(final SubLObject v_object, final SubLObject value) {
+        assert NIL != fort_id_index_p(v_object) : "! forts.fort_id_index_p(v_object) " + "forts.fort_id_index_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_fort_id_index_narts_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, FORT_ID_INDEX_P);
         return v_object.setField3(value);
+    }
+
+    public static SubLObject _csetf_fort_id_index_narts(final SubLObject v_object, final SubLObject value) {
+        assert NIL != fort_id_index_p(v_object) : "! forts.fort_id_index_p(v_object) " + "forts.fort_id_index_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject make_fort_id_index_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.forts.$fort_id_index_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($CONSTANTS)) {
+                        _csetf_fort_id_index_constants(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($NARTS)) {
+                            _csetf_fort_id_index_narts(v_new, current_value);
+                        } else {
+                            Errors.error($str_alt52$Invalid_slot__S_for_construction_, current_arg);
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_fort_id_index(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new forts.$fort_id_index_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.forts.$fort_id_index_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -564,6 +920,29 @@ public final class forts extends SubLTranslatedFile {
         return visit_defstruct_fort_id_index(obj, visitor_fn);
     }
 
+    public static final SubLObject print_fort_id_index_alt(SubLObject fort_id_index, SubLObject stream, SubLObject depth) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $print_readably$.getDynamicValue(thread)) {
+                print_not_readable(fort_id_index, stream);
+            } else {
+                {
+                    SubLObject v_object = fort_id_index;
+                    SubLObject stream_2 = stream;
+                    write_string($str_alt53$__, stream_2, UNPROVIDED, UNPROVIDED);
+                    write(type_of(v_object), new SubLObject[]{ $STREAM, stream_2 });
+                    write_char(CHAR_space, stream_2);
+                    write_string($str_alt55$Constant_Index_, stream, UNPROVIDED, UNPROVIDED);
+                    princ(fort_id_index_constants(fort_id_index), stream);
+                    write_string($str_alt56$Nart_Index_, stream, UNPROVIDED, UNPROVIDED);
+                    princ(fort_id_index_narts(fort_id_index), stream);
+                    write_char(CHAR_greater, stream_2);
+                }
+            }
+            return fort_id_index;
+        }
+    }
+
     public static SubLObject print_fort_id_index(final SubLObject fort_id_index, final SubLObject stream, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $print_readably$.getDynamicValue(thread)) {
@@ -577,6 +956,46 @@ public final class forts extends SubLTranslatedFile {
             print_macros.print_unreadable_object_postamble(stream, fort_id_index, NIL, NIL);
         }
         return fort_id_index;
+    }
+
+    public static final SubLObject with_fort_id_index_index_and_id_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt58);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject id_index_var = NIL;
+                    SubLObject id_var = NIL;
+                    SubLObject fort = NIL;
+                    SubLObject fort_id_index = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt58);
+                    id_index_var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt58);
+                    id_var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt58);
+                    fort = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt58);
+                    fort_id_index = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return list(PROGN, listS(CHECK_TYPE, fort, $list_alt61), listS(CHECK_TYPE, fort_id_index, $list_alt62), list(PWHEN, list($sym64$VALID_FORT_, fort), listS(CLET, list(list(id_index_var, list(FIF, list(CONSTANT_P, fort), list(FORT_ID_INDEX_CONSTANTS, fort_id_index), list(FORT_ID_INDEX_NARTS, fort_id_index))), list(id_var, list(FIF, list(CONSTANT_P, fort), list(CONSTANT_INTERNAL_ID, fort), list(NART_ID, fort)))), append(body, NIL))));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt58);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject with_fort_id_index_index_and_id(final SubLObject macroform, final SubLObject environment) {
@@ -610,6 +1029,23 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Constructor. @return fort-id-index-p; Returns a new fort index.
+     */
+    @LispMethod(comment = "Constructor. @return fort-id-index-p; Returns a new fort index.")
+    public static final SubLObject new_fort_id_index_alt() {
+        {
+            SubLObject fort_id_index = make_fort_id_index(UNPROVIDED);
+            _csetf_fort_id_index_constants(fort_id_index, new_fort_id_index_constants());
+            _csetf_fort_id_index_narts(fort_id_index, new_fort_id_index_narts());
+            return fort_id_index;
+        }
+    }
+
+    /**
+     * Constructor. @return fort-id-index-p; Returns a new fort index.
+     */
+    @LispMethod(comment = "Constructor. @return fort-id-index-p; Returns a new fort index.")
     public static SubLObject new_fort_id_index() {
         final SubLObject fort_id_index = make_fort_id_index(UNPROVIDED);
         _csetf_fort_id_index_constants(fort_id_index, new_fort_id_index_constants());
@@ -617,20 +1053,62 @@ public final class forts extends SubLTranslatedFile {
         return fort_id_index;
     }
 
-    public static SubLObject fort_id_index_count(final SubLObject fort_id_index) {
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+    /**
+     * Accessor. Return the total number of objects indexed in FORT-ID-INDEX
+     */
+    @LispMethod(comment = "Accessor. Return the total number of objects indexed in FORT-ID-INDEX")
+    public static final SubLObject fort_id_index_count_alt(SubLObject fort_id_index) {
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
         return add(id_index_count(fort_id_index_constants(fort_id_index)), id_index_count(fort_id_index_narts(fort_id_index)));
     }
 
-    public static SubLObject fort_id_index_emptyP(final SubLObject fort_id_index) {
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+    /**
+     * Accessor. Return the total number of objects indexed in FORT-ID-INDEX
+     */
+    @LispMethod(comment = "Accessor. Return the total number of objects indexed in FORT-ID-INDEX")
+    public static SubLObject fort_id_index_count(final SubLObject fort_id_index) {
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
+        return add(id_index_count(fort_id_index_constants(fort_id_index)), id_index_count(fort_id_index_narts(fort_id_index)));
+    }
+
+    public static final SubLObject fort_id_index_emptyP_alt(SubLObject fort_id_index) {
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
         return eq(fort_id_index_count(fort_id_index), ZERO_INTEGER);
     }
 
+    public static SubLObject fort_id_index_emptyP(final SubLObject fort_id_index) {
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
+        return eq(fort_id_index_count(fort_id_index), ZERO_INTEGER);
+    }
+
+    /**
+     * Accessor. Returns the object associated with FORT in FORT-ID-INDEX.
+     */
+    @LispMethod(comment = "Accessor. Returns the object associated with FORT in FORT-ID-INDEX.")
+    public static final SubLObject fort_id_index_lookup_alt(SubLObject fort_id_index, SubLObject fort) {
+        {
+            SubLObject v_answer = NIL;
+            SubLTrampolineFile.checkType(fort, FORT_P);
+            SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
+            if (NIL != valid_fortP(fort)) {
+                {
+                    SubLObject v_id_index = (NIL != constant_p(fort)) ? ((SubLObject) (fort_id_index_constants(fort_id_index))) : fort_id_index_narts(fort_id_index);
+                    SubLObject id = (NIL != constant_p(fort)) ? ((SubLObject) (constants_high.constant_internal_id(fort))) : nart_handles.nart_id(fort);
+                    v_answer = id_index_lookup(v_id_index, id, UNPROVIDED);
+                }
+            }
+            return v_answer;
+        }
+    }
+
+    /**
+     * Accessor. Returns the object associated with FORT in FORT-ID-INDEX.
+     */
+    @LispMethod(comment = "Accessor. Returns the object associated with FORT in FORT-ID-INDEX.")
     public static SubLObject fort_id_index_lookup(final SubLObject fort_id_index, final SubLObject fort) {
         SubLObject v_answer = NIL;
-        assert NIL != fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+        assert NIL != fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
         if (NIL != valid_fortP(fort)) {
             final SubLObject v_id_index = (NIL != constant_p(fort)) ? fort_id_index_constants(fort_id_index) : fort_id_index_narts(fort_id_index);
             final SubLObject id = (NIL != constant_p(fort)) ? constants_high.constant_internal_id(fort) : nart_handles.nart_id(fort);
@@ -639,9 +1117,30 @@ public final class forts extends SubLTranslatedFile {
         return v_answer;
     }
 
+    /**
+     * Modifier. Enter OBJECT in FORT-ID-INDEX as the object associated with FORT.
+     */
+    @LispMethod(comment = "Modifier. Enter OBJECT in FORT-ID-INDEX as the object associated with FORT.")
+    public static final SubLObject fort_id_index_enter_alt(SubLObject fort_id_index, SubLObject fort, SubLObject v_object) {
+        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
+        if (NIL != valid_fortP(fort)) {
+            {
+                SubLObject v_id_index = (NIL != constant_p(fort)) ? ((SubLObject) (fort_id_index_constants(fort_id_index))) : fort_id_index_narts(fort_id_index);
+                SubLObject id = (NIL != constant_p(fort)) ? ((SubLObject) (constants_high.constant_internal_id(fort))) : nart_handles.nart_id(fort);
+                id_index_enter(v_id_index, id, v_object);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Modifier. Enter OBJECT in FORT-ID-INDEX as the object associated with FORT.
+     */
+    @LispMethod(comment = "Modifier. Enter OBJECT in FORT-ID-INDEX as the object associated with FORT.")
     public static SubLObject fort_id_index_enter(final SubLObject fort_id_index, final SubLObject fort, final SubLObject v_object) {
-        assert NIL != fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+        assert NIL != fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
         if (NIL != valid_fortP(fort)) {
             final SubLObject v_id_index = (NIL != constant_p(fort)) ? fort_id_index_constants(fort_id_index) : fort_id_index_narts(fort_id_index);
             final SubLObject id = (NIL != constant_p(fort)) ? constants_high.constant_internal_id(fort) : nart_handles.nart_id(fort);
@@ -650,9 +1149,30 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Modifier. Remove all FORT associations in FORT-ID-INDEX.
+     */
+    @LispMethod(comment = "Modifier. Remove all FORT associations in FORT-ID-INDEX.")
+    public static final SubLObject fort_id_index_remove_alt(SubLObject fort_id_index, SubLObject fort) {
+        SubLTrampolineFile.checkType(fort, FORT_P);
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
+        if (NIL != valid_fortP(fort)) {
+            {
+                SubLObject v_id_index = (NIL != constant_p(fort)) ? ((SubLObject) (fort_id_index_constants(fort_id_index))) : fort_id_index_narts(fort_id_index);
+                SubLObject id = (NIL != constant_p(fort)) ? ((SubLObject) (constants_high.constant_internal_id(fort))) : nart_handles.nart_id(fort);
+                id_index_remove(v_id_index, id);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Modifier. Remove all FORT associations in FORT-ID-INDEX.
+     */
+    @LispMethod(comment = "Modifier. Remove all FORT associations in FORT-ID-INDEX.")
     public static SubLObject fort_id_index_remove(final SubLObject fort_id_index, final SubLObject fort) {
-        assert NIL != fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+        assert NIL != fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
         if (NIL != valid_fortP(fort)) {
             final SubLObject v_id_index = (NIL != constant_p(fort)) ? fort_id_index_constants(fort_id_index) : fort_id_index_narts(fort_id_index);
             final SubLObject id = (NIL != constant_p(fort)) ? constants_high.constant_internal_id(fort) : nart_handles.nart_id(fort);
@@ -661,33 +1181,158 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
-    public static SubLObject clear_fort_id_index(final SubLObject fort_id_index) {
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+    /**
+     * Modifier. Clears the id indexes of FORT-ID-INDEX.
+     */
+    @LispMethod(comment = "Modifier. Clears the id indexes of FORT-ID-INDEX.")
+    public static final SubLObject clear_fort_id_index_alt(SubLObject fort_id_index) {
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
         clear_id_index(fort_id_index_constants(fort_id_index));
         clear_id_index(fort_id_index_narts(fort_id_index));
         return NIL;
     }
 
-    public static SubLObject optimize_fort_id_index(final SubLObject fort_id_index) {
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+    /**
+     * Modifier. Clears the id indexes of FORT-ID-INDEX.
+     */
+    @LispMethod(comment = "Modifier. Clears the id indexes of FORT-ID-INDEX.")
+    public static SubLObject clear_fort_id_index(final SubLObject fort_id_index) {
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
+        clear_id_index(fort_id_index_constants(fort_id_index));
+        clear_id_index(fort_id_index_narts(fort_id_index));
+        return NIL;
+    }
+
+    /**
+     * Modifier. Optimizes the storage of FORT-ID-INDEX, moving new objects from hashtables
+     * to vectors. @xref optimize-id-index.
+     */
+    @LispMethod(comment = "Modifier. Optimizes the storage of FORT-ID-INDEX, moving new objects from hashtables\r\nto vectors. @xref optimize-id-index.\nModifier. Optimizes the storage of FORT-ID-INDEX, moving new objects from hashtables\nto vectors. @xref optimize-id-index.")
+    public static final SubLObject optimize_fort_id_index_alt(SubLObject fort_id_index) {
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
         optimize_id_index(fort_id_index_constants(fort_id_index), UNPROVIDED);
         optimize_id_index(fort_id_index_narts(fort_id_index), UNPROVIDED);
         return NIL;
     }
 
-    public static SubLObject fort_id_index_optimized_p(final SubLObject fort_id_index) {
-        assert NIL != fort_id_index_p(fort_id_index) : "forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) " + fort_id_index;
+    /**
+     * Modifier. Optimizes the storage of FORT-ID-INDEX, moving new objects from hashtables
+     * to vectors. @xref optimize-id-index.
+     */
+    @LispMethod(comment = "Modifier. Optimizes the storage of FORT-ID-INDEX, moving new objects from hashtables\r\nto vectors. @xref optimize-id-index.\nModifier. Optimizes the storage of FORT-ID-INDEX, moving new objects from hashtables\nto vectors. @xref optimize-id-index.")
+    public static SubLObject optimize_fort_id_index(final SubLObject fort_id_index) {
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
+        optimize_id_index(fort_id_index_constants(fort_id_index), UNPROVIDED);
+        optimize_id_index(fort_id_index_narts(fort_id_index), UNPROVIDED);
+        return NIL;
+    }
+
+    /**
+     * Accessor. @return booleanp. Returns whether both the constant and nart
+     * index in FORT-ID-INDEX are optimized.
+     */
+    @LispMethod(comment = "Accessor. @return booleanp. Returns whether both the constant and nart\r\nindex in FORT-ID-INDEX are optimized.\nAccessor. @return booleanp. Returns whether both the constant and nart\nindex in FORT-ID-INDEX are optimized.")
+    public static final SubLObject fort_id_index_optimized_p_alt(SubLObject fort_id_index) {
+        SubLTrampolineFile.checkType(fort_id_index, FORT_ID_INDEX_P);
         return makeBoolean((NIL != id_index_optimized_p(fort_id_index_constants(fort_id_index))) && (NIL != id_index_optimized_p(fort_id_index_narts(fort_id_index))));
+    }
+
+    /**
+     * Accessor. @return booleanp. Returns whether both the constant and nart
+     * index in FORT-ID-INDEX are optimized.
+     */
+    @LispMethod(comment = "Accessor. @return booleanp. Returns whether both the constant and nart\r\nindex in FORT-ID-INDEX are optimized.\nAccessor. @return booleanp. Returns whether both the constant and nart\nindex in FORT-ID-INDEX are optimized.")
+    public static SubLObject fort_id_index_optimized_p(final SubLObject fort_id_index) {
+        assert NIL != fort_id_index_p(fort_id_index) : "! forts.fort_id_index_p(fort_id_index) " + ("forts.fort_id_index_p(fort_id_index) " + "CommonSymbols.NIL != forts.fort_id_index_p(fort_id_index) ") + fort_id_index;
+        return makeBoolean((NIL != id_index_optimized_p(fort_id_index_constants(fort_id_index))) && (NIL != id_index_optimized_p(fort_id_index_narts(fort_id_index))));
+    }
+
+    public static final SubLObject new_fort_id_index_constants_alt() {
+        return new_id_index(constants_high.new_constant_internal_id_threshold(), UNPROVIDED);
     }
 
     public static SubLObject new_fort_id_index_constants() {
         return new_id_index(constants_high.new_constant_internal_id_threshold(), UNPROVIDED);
     }
 
+    public static final SubLObject new_fort_id_index_narts_alt() {
+        return new_id_index(nart_handles.new_nart_id_threshold(), UNPROVIDED);
+    }
+
     public static SubLObject new_fort_id_index_narts() {
         return new_id_index(nart_handles.new_nart_id_threshold(), UNPROVIDED);
     }
 
+    /**
+     * Iterate over FORT-ID-INDEX, binding FORT and VALUE to each FORT and value indexed.
+     * BODY is executed once within the scope of each binding of FORT VALUE.
+     * Iteration halts as soon as DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Iterate over FORT-ID-INDEX, binding FORT and VALUE to each FORT and value indexed.\r\nBODY is executed once within the scope of each binding of FORT VALUE.\r\nIteration halts as soon as DONE becomes non-nil.\nIterate over FORT-ID-INDEX, binding FORT and VALUE to each FORT and value indexed.\nBODY is executed once within the scope of each binding of FORT VALUE.\nIteration halts as soon as DONE becomes non-nil.")
+    public static final SubLObject do_fort_id_index_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt69);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject fort = NIL;
+                    SubLObject value = NIL;
+                    SubLObject fort_id_index = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt69);
+                    fort = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt69);
+                    value = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt69);
+                    fort_id_index = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_3 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt69);
+                            current_3 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt69);
+                            if (NIL == member(current_3, $list_alt11, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_3 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt69);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject fii = $sym70$FII;
+                                return list(CLET, list(list(fii, fort_id_index)), listS(DO_FORT_ID_INDEX_CONSTANTS, list(fort, value, fii, $DONE, done), append(body, NIL)), listS(DO_FORT_ID_INDEX_NARTS, list(fort, value, fii, $DONE, done), append(body, NIL)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Iterate over FORT-ID-INDEX, binding FORT and VALUE to each FORT and value indexed.
+     * BODY is executed once within the scope of each binding of FORT VALUE.
+     * Iteration halts as soon as DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Iterate over FORT-ID-INDEX, binding FORT and VALUE to each FORT and value indexed.\r\nBODY is executed once within the scope of each binding of FORT VALUE.\r\nIteration halts as soon as DONE becomes non-nil.\nIterate over FORT-ID-INDEX, binding FORT and VALUE to each FORT and value indexed.\nBODY is executed once within the scope of each binding of FORT VALUE.\nIteration halts as soon as DONE becomes non-nil.")
     public static SubLObject do_fort_id_index(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -732,6 +1377,64 @@ public final class forts extends SubLTranslatedFile {
         current = body = temp;
         final SubLObject fii = $sym76$FII;
         return list(CLET, list(list(fii, fort_id_index)), listS(DO_FORT_ID_INDEX_CONSTANTS, list(fort, value, fii, $DONE, done), append(body, NIL)), listS(DO_FORT_ID_INDEX_NARTS, list(fort, value, fii, $DONE, done), append(body, NIL)));
+    }
+
+    public static final SubLObject do_fort_id_index_constants_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt74);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject constant = NIL;
+                    SubLObject value = NIL;
+                    SubLObject fort_id_index = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt74);
+                    constant = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt74);
+                    value = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt74);
+                    fort_id_index = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_4 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt74);
+                            current_4 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt74);
+                            if (NIL == member(current_4, $list_alt11, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_4 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt74);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym75$ID;
+                                return list(DO_ID_INDEX, list(id, value, list(DO_FII_GET_CONSTANTS, fort_id_index), $DONE, done), list(CLET, list(list(constant, list(FIND_CONSTANT_BY_INTERNAL_ID, id))), listS(PWHEN, constant, append(body, NIL))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_fort_id_index_constants(final SubLObject macroform, final SubLObject environment) {
@@ -780,8 +1483,70 @@ public final class forts extends SubLTranslatedFile {
         return list(DO_ID_INDEX, list(id, value, list(DO_FII_GET_CONSTANTS, fort_id_index), $DONE, done), list(CLET, list(list(constant, list(FIND_CONSTANT_BY_INTERNAL_ID, id))), listS(PWHEN, constant, append(body, NIL))));
     }
 
+    public static final SubLObject do_fii_get_constants_alt(SubLObject fort_id_index) {
+        return fort_id_index_constants(fort_id_index);
+    }
+
     public static SubLObject do_fii_get_constants(final SubLObject fort_id_index) {
         return fort_id_index_constants(fort_id_index);
+    }
+
+    public static final SubLObject do_fort_id_index_narts_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt79);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject nart = NIL;
+                    SubLObject value = NIL;
+                    SubLObject fort_id_index = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt79);
+                    nart = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt79);
+                    value = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt79);
+                    fort_id_index = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_5 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt79);
+                            current_5 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt79);
+                            if (NIL == member(current_5, $list_alt11, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_5 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt79);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject id = $sym80$ID;
+                                return list(DO_ID_INDEX, list(id, value, list(DO_FII_GET_NARTS, fort_id_index), $DONE, done), list(CLET, list(list(nart, list(FIND_NART_BY_ID, id))), listS(PWHEN, nart, append(body, NIL))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_fort_id_index_narts(final SubLObject macroform, final SubLObject environment) {
@@ -830,12 +1595,80 @@ public final class forts extends SubLTranslatedFile {
         return list(DO_ID_INDEX, list(id, value, list(DO_FII_GET_NARTS, fort_id_index), $DONE, done), list(CLET, list(list(nart, list(FIND_NART_BY_ID, id))), listS(PWHEN, nart, append(body, NIL))));
     }
 
+    public static final SubLObject do_fii_get_narts_alt(SubLObject fort_id_index) {
+        return fort_id_index_narts(fort_id_index);
+    }
+
     public static SubLObject do_fii_get_narts(final SubLObject fort_id_index) {
         return fort_id_index_narts(fort_id_index);
     }
 
+    public static final SubLObject cfasl_output_object_fort_id_index_method_alt(SubLObject v_object, SubLObject stream) {
+        return cfasl_output_fort_id_index(v_object, stream);
+    }
+
     public static SubLObject cfasl_output_object_fort_id_index_method(final SubLObject v_object, final SubLObject stream) {
         return cfasl_output_fort_id_index(v_object, stream);
+    }
+
+    public static final SubLObject cfasl_output_fort_id_index_alt(SubLObject fort_id_index, SubLObject stream) {
+        cfasl_raw_write_byte($cfasl_opcode_fort_id_index$.getGlobalValue(), stream);
+        {
+            SubLObject count = fort_id_index_count(fort_id_index);
+            cfasl_output(count, stream);
+            {
+                SubLObject fii = fort_id_index;
+                {
+                    SubLObject idx = do_fii_get_constants(fii);
+                    if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                        {
+                            SubLObject id = do_id_index_next_id(idx, NIL, NIL, NIL);
+                            SubLObject state_var = do_id_index_next_state(idx, NIL, id, NIL);
+                            SubLObject value = NIL;
+                            while (NIL != id) {
+                                value = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                if (NIL != do_id_index_id_and_object_validP(id, value, $SKIP)) {
+                                    {
+                                        SubLObject fort = constants_high.find_constant_by_internal_id(id);
+                                        if (NIL != fort) {
+                                            cfasl_output(fort, stream);
+                                            cfasl_output(value, stream);
+                                        }
+                                    }
+                                }
+                                id = do_id_index_next_id(idx, NIL, id, state_var);
+                                state_var = do_id_index_next_state(idx, NIL, id, state_var);
+                            } 
+                        }
+                    }
+                }
+                {
+                    SubLObject idx = do_fii_get_narts(fii);
+                    if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                        {
+                            SubLObject id = do_id_index_next_id(idx, NIL, NIL, NIL);
+                            SubLObject state_var = do_id_index_next_state(idx, NIL, id, NIL);
+                            SubLObject value = NIL;
+                            while (NIL != id) {
+                                value = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                if (NIL != do_id_index_id_and_object_validP(id, value, $SKIP)) {
+                                    {
+                                        SubLObject fort = nart_handles.find_nart_by_id(id);
+                                        if (NIL != fort) {
+                                            cfasl_output(fort, stream);
+                                            cfasl_output(value, stream);
+                                        }
+                                    }
+                                }
+                                id = do_id_index_next_id(idx, NIL, id, state_var);
+                                state_var = do_id_index_next_state(idx, NIL, id, state_var);
+                            } 
+                        }
+                    }
+                }
+            }
+        }
+        return fort_id_index;
     }
 
     public static SubLObject cfasl_output_fort_id_index(final SubLObject fort_id_index, final SubLObject stream) {
@@ -941,6 +1774,25 @@ public final class forts extends SubLTranslatedFile {
         return fort_id_index;
     }
 
+    public static final SubLObject cfasl_input_fort_id_index_alt(SubLObject stream) {
+        {
+            SubLObject count = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
+            SubLObject fort_id_index = NIL;
+            fort_id_index = new_fort_id_index();
+            {
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(count); i = add(i, ONE_INTEGER)) {
+                    {
+                        SubLObject fort = cfasl_input_object(stream);
+                        SubLObject value = cfasl_input_object(stream);
+                        fort_id_index_enter(fort_id_index, fort, value);
+                    }
+                }
+            }
+            return fort_id_index;
+        }
+    }
+
     public static SubLObject cfasl_input_fort_id_index(final SubLObject stream) {
         final SubLObject count = cfasl_input(stream, UNPROVIDED, UNPROVIDED);
         SubLObject fort_id_index = NIL;
@@ -956,6 +1808,93 @@ public final class forts extends SubLTranslatedFile {
         return fort_id_index;
     }
 
+    /**
+     * Verify that the DO-FORTS macro and the FORTS-ITERATOR have equivalent capabilities.
+     *
+     * @return either an error description or NIL if all is well
+     */
+    @LispMethod(comment = "Verify that the DO-FORTS macro and the FORTS-ITERATOR have equivalent capabilities.\r\n\r\n@return either an error description or NIL if all is well")
+    public static final SubLObject verify_do_forts_macro_iteration_equivalence_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject index = ZERO_INTEGER;
+                SubLObject iter = new_forts_iterator();
+                SubLObject message = $str_alt87$Checking_that_forts_iterators_wor;
+                SubLObject total = fort_count();
+                SubLObject sofar = ZERO_INTEGER;
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble(message);
+                        {
+                            SubLObject cdolist_list_var = do_forts_tables();
+                            SubLObject table_var = NIL;
+                            for (table_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , table_var = cdolist_list_var.first()) {
+                                if (NIL == do_id_index_empty_p(table_var, $SKIP)) {
+                                    {
+                                        SubLObject id = do_id_index_next_id(table_var, T, NIL, NIL);
+                                        SubLObject state_var = do_id_index_next_state(table_var, T, id, NIL);
+                                        SubLObject fort = NIL;
+                                        while (NIL != id) {
+                                            fort = do_id_index_state_object(table_var, $SKIP, id, state_var);
+                                            if (NIL != do_id_index_id_and_object_validP(id, fort, $SKIP)) {
+                                                sofar = add(sofar, ONE_INTEGER);
+                                                note_percent_progress(sofar, total);
+                                                index = add(index, ONE_INTEGER);
+                                                {
+                                                    SubLObject candidate = iteration.iteration_next_without_values(iter, $EXHAUSTED);
+                                                    if (NIL == fort_p(candidate)) {
+                                                        if (candidate == $EXHAUSTED) {
+                                                            return list($ERROR, $str_alt91$FORTS_ITERATOR_exhausted_before_D, $INDEX, index);
+                                                        } else {
+                                                            return list($ERROR, $str_alt93$FORTS_ITERATOR_returned_non_fort_, $CANDIDATE, candidate, $INDEX, index);
+                                                        }
+                                                    }
+                                                    if (candidate != fort) {
+                                                        return list($ERROR, $str_alt95$FORTS_ITERATOR_and_DO_FORTS_diffe, $CANDIDATE, candidate, $FORT, fort, $INDEX, index);
+                                                    }
+                                                }
+                                            }
+                                            id = do_id_index_next_id(table_var, T, id, state_var);
+                                            state_var = do_id_index_next_state(table_var, T, id, state_var);
+                                        } 
+                                    }
+                                }
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                {
+                    SubLObject exhausted = iteration.iteration_next_without_values(iter, $EXHAUSTED);
+                    if ($EXHAUSTED != exhausted) {
+                        return list($ERROR, $str_alt97$The_FORTS_iterator_has_more_value, $INDEX, index, $CANDIDATE, exhausted);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Verify that the DO-FORTS macro and the FORTS-ITERATOR have equivalent capabilities.
+     *
+     * @return either an error description or NIL if all is well
+     */
+    @LispMethod(comment = "Verify that the DO-FORTS macro and the FORTS-ITERATOR have equivalent capabilities.\r\n\r\n@return either an error description or NIL if all is well")
     public static SubLObject verify_do_forts_macro_iteration_equivalence() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject index = ZERO_INTEGER;
@@ -1068,64 +2007,228 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
-    public static SubLObject declare_forts_file() {
-        declareFunction(me, "fort_p", "FORT-P", 1, 0, false);
-        new forts.$fort_p$UnaryFunction();
-        declareFunction(me, "non_fort_p", "NON-FORT-P", 1, 0, false);
-        declareFunction(me, "list_of_fort_p", "LIST-OF-FORT-P", 1, 0, false);
-        declareFunction(me, "fort_el_formula", "FORT-EL-FORMULA", 1, 0, false);
-        declareFunction(me, "new_forts_iterator", "NEW-FORTS-ITERATOR", 0, 0, false);
-        declareMacro(me, "do_forts", "DO-FORTS");
-        declareFunction(me, "do_forts_tables", "DO-FORTS-TABLES", 0, 0, false);
-        declareFunction(me, "fort_count", "FORT-COUNT", 0, 0, false);
-        declareFunction(me, "random_fort", "RANDOM-FORT", 0, 1, false);
-        declareFunction(me, "sample_forts", "SAMPLE-FORTS", 0, 3, false);
-        declareFunction(me, "fort_index", "FORT-INDEX", 1, 0, false);
-        declareFunction(me, "reset_fort_index", "RESET-FORT-INDEX", 2, 0, false);
-        declareFunction(me, "clear_fort_index", "CLEAR-FORT-INDEX", 1, 0, false);
-        declareFunction(me, "fort_internal_id", "FORT-INTERNAL-ID", 1, 0, false);
-        new forts.$fort_internal_id$UnaryFunction();
-        declareFunction(me, "fort_external_id", "FORT-EXTERNAL-ID", 1, 0, false);
-        declareFunction(me, "valid_fortP", "VALID-FORT?", 1, 0, false);
-        declareFunction(me, "valid_fort_robustP", "VALID-FORT-ROBUST?", 1, 0, false);
-        declareFunction(me, "invalid_fortP", "INVALID-FORT?", 1, 0, false);
-        new forts.$invalid_fortP$UnaryFunction();
-        declareFunction(me, "invalid_fort_robustP", "INVALID-FORT-ROBUST?", 1, 0, false);
-        declareFunction(me, "remove_fort", "REMOVE-FORT", 1, 0, false);
-        declareFunction(me, "fort_id_index_print_function_trampoline", "FORT-ID-INDEX-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "fort_id_index_p", "FORT-ID-INDEX-P", 1, 0, false);
-        new forts.$fort_id_index_p$UnaryFunction();
-        declareFunction(me, "fort_id_index_constants", "FORT-ID-INDEX-CONSTANTS", 1, 0, false);
-        declareFunction(me, "fort_id_index_narts", "FORT-ID-INDEX-NARTS", 1, 0, false);
-        declareFunction(me, "_csetf_fort_id_index_constants", "_CSETF-FORT-ID-INDEX-CONSTANTS", 2, 0, false);
-        declareFunction(me, "_csetf_fort_id_index_narts", "_CSETF-FORT-ID-INDEX-NARTS", 2, 0, false);
-        declareFunction(me, "make_fort_id_index", "MAKE-FORT-ID-INDEX", 0, 1, false);
-        declareFunction(me, "visit_defstruct_fort_id_index", "VISIT-DEFSTRUCT-FORT-ID-INDEX", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_fort_id_index_method", "VISIT-DEFSTRUCT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
-        declareFunction(me, "print_fort_id_index", "PRINT-FORT-ID-INDEX", 3, 0, false);
-        declareMacro(me, "with_fort_id_index_index_and_id", "WITH-FORT-ID-INDEX-INDEX-AND-ID");
-        declareFunction(me, "new_fort_id_index", "NEW-FORT-ID-INDEX", 0, 0, false);
-        declareFunction(me, "fort_id_index_count", "FORT-ID-INDEX-COUNT", 1, 0, false);
-        declareFunction(me, "fort_id_index_emptyP", "FORT-ID-INDEX-EMPTY?", 1, 0, false);
-        declareFunction(me, "fort_id_index_lookup", "FORT-ID-INDEX-LOOKUP", 2, 0, false);
-        declareFunction(me, "fort_id_index_enter", "FORT-ID-INDEX-ENTER", 3, 0, false);
-        declareFunction(me, "fort_id_index_remove", "FORT-ID-INDEX-REMOVE", 2, 0, false);
-        declareFunction(me, "clear_fort_id_index", "CLEAR-FORT-ID-INDEX", 1, 0, false);
-        declareFunction(me, "optimize_fort_id_index", "OPTIMIZE-FORT-ID-INDEX", 1, 0, false);
-        declareFunction(me, "fort_id_index_optimized_p", "FORT-ID-INDEX-OPTIMIZED-P", 1, 0, false);
-        declareFunction(me, "new_fort_id_index_constants", "NEW-FORT-ID-INDEX-CONSTANTS", 0, 0, false);
-        declareFunction(me, "new_fort_id_index_narts", "NEW-FORT-ID-INDEX-NARTS", 0, 0, false);
-        declareMacro(me, "do_fort_id_index", "DO-FORT-ID-INDEX");
-        declareMacro(me, "do_fort_id_index_constants", "DO-FORT-ID-INDEX-CONSTANTS");
-        declareFunction(me, "do_fii_get_constants", "DO-FII-GET-CONSTANTS", 1, 0, false);
-        declareMacro(me, "do_fort_id_index_narts", "DO-FORT-ID-INDEX-NARTS");
-        declareFunction(me, "do_fii_get_narts", "DO-FII-GET-NARTS", 1, 0, false);
-        declareFunction(me, "cfasl_output_object_fort_id_index_method", "CFASL-OUTPUT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
-        declareFunction(me, "cfasl_output_fort_id_index", "CFASL-OUTPUT-FORT-ID-INDEX", 2, 0, false);
-        declareFunction(me, "cfasl_input_fort_id_index", "CFASL-INPUT-FORT-ID-INDEX", 1, 0, false);
-        declareFunction(me, "verify_do_forts_macro_iteration_equivalence", "VERIFY-DO-FORTS-MACRO-ITERATION-EQUIVALENCE", 0, 0, false);
+    public static final SubLObject declare_forts_file_alt() {
+        declareFunction("fort_p", "FORT-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.forts.$fort_p$UnaryFunction();
+        declareFunction("non_fort_p", "NON-FORT-P", 1, 0, false);
+        declareFunction("list_of_fort_p", "LIST-OF-FORT-P", 1, 0, false);
+        declareFunction("fort_el_formula", "FORT-EL-FORMULA", 1, 0, false);
+        declareFunction("new_forts_iterator", "NEW-FORTS-ITERATOR", 0, 0, false);
+        declareMacro("do_forts", "DO-FORTS");
+        declareFunction("do_forts_tables", "DO-FORTS-TABLES", 0, 0, false);
+        declareFunction("fort_count", "FORT-COUNT", 0, 0, false);
+        declareFunction("random_fort", "RANDOM-FORT", 0, 0, false);
+        declareFunction("fort_index", "FORT-INDEX", 1, 0, false);
+        declareFunction("reset_fort_index", "RESET-FORT-INDEX", 2, 0, false);
+        declareFunction("clear_fort_index", "CLEAR-FORT-INDEX", 1, 0, false);
+        declareFunction("fort_internal_id", "FORT-INTERNAL-ID", 1, 0, false);
+        new com.cyc.cycjava.cycl.forts.$fort_internal_id$UnaryFunction();
+        declareFunction("fort_external_id", "FORT-EXTERNAL-ID", 1, 0, false);
+        declareFunction("valid_fortP", "VALID-FORT?", 1, 0, false);
+        declareFunction("valid_fort_robustP", "VALID-FORT-ROBUST?", 1, 0, false);
+        declareFunction("invalid_fortP", "INVALID-FORT?", 1, 0, false);
+        new com.cyc.cycjava.cycl.forts.$invalid_fortP$UnaryFunction();
+        declareFunction("invalid_fort_robustP", "INVALID-FORT-ROBUST?", 1, 0, false);
+        declareFunction("remove_fort", "REMOVE-FORT", 1, 0, false);
+        declareFunction("fort_id_index_print_function_trampoline", "FORT-ID-INDEX-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("fort_id_index_p", "FORT-ID-INDEX-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.forts.$fort_id_index_p$UnaryFunction();
+        declareFunction("fort_id_index_constants", "FORT-ID-INDEX-CONSTANTS", 1, 0, false);
+        declareFunction("fort_id_index_narts", "FORT-ID-INDEX-NARTS", 1, 0, false);
+        declareFunction("_csetf_fort_id_index_constants", "_CSETF-FORT-ID-INDEX-CONSTANTS", 2, 0, false);
+        declareFunction("_csetf_fort_id_index_narts", "_CSETF-FORT-ID-INDEX-NARTS", 2, 0, false);
+        declareFunction("make_fort_id_index", "MAKE-FORT-ID-INDEX", 0, 1, false);
+        declareFunction("print_fort_id_index", "PRINT-FORT-ID-INDEX", 3, 0, false);
+        declareMacro("with_fort_id_index_index_and_id", "WITH-FORT-ID-INDEX-INDEX-AND-ID");
+        declareFunction("new_fort_id_index", "NEW-FORT-ID-INDEX", 0, 0, false);
+        declareFunction("fort_id_index_count", "FORT-ID-INDEX-COUNT", 1, 0, false);
+        declareFunction("fort_id_index_emptyP", "FORT-ID-INDEX-EMPTY?", 1, 0, false);
+        declareFunction("fort_id_index_lookup", "FORT-ID-INDEX-LOOKUP", 2, 0, false);
+        declareFunction("fort_id_index_enter", "FORT-ID-INDEX-ENTER", 3, 0, false);
+        declareFunction("fort_id_index_remove", "FORT-ID-INDEX-REMOVE", 2, 0, false);
+        declareFunction("clear_fort_id_index", "CLEAR-FORT-ID-INDEX", 1, 0, false);
+        declareFunction("optimize_fort_id_index", "OPTIMIZE-FORT-ID-INDEX", 1, 0, false);
+        declareFunction("fort_id_index_optimized_p", "FORT-ID-INDEX-OPTIMIZED-P", 1, 0, false);
+        declareFunction("new_fort_id_index_constants", "NEW-FORT-ID-INDEX-CONSTANTS", 0, 0, false);
+        declareFunction("new_fort_id_index_narts", "NEW-FORT-ID-INDEX-NARTS", 0, 0, false);
+        declareMacro("do_fort_id_index", "DO-FORT-ID-INDEX");
+        declareMacro("do_fort_id_index_constants", "DO-FORT-ID-INDEX-CONSTANTS");
+        declareFunction("do_fii_get_constants", "DO-FII-GET-CONSTANTS", 1, 0, false);
+        declareMacro("do_fort_id_index_narts", "DO-FORT-ID-INDEX-NARTS");
+        declareFunction("do_fii_get_narts", "DO-FII-GET-NARTS", 1, 0, false);
+        declareFunction("cfasl_output_object_fort_id_index_method", "CFASL-OUTPUT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_fort_id_index", "CFASL-OUTPUT-FORT-ID-INDEX", 2, 0, false);
+        declareFunction("cfasl_input_fort_id_index", "CFASL-INPUT-FORT-ID-INDEX", 1, 0, false);
+        declareFunction("verify_do_forts_macro_iteration_equivalence", "VERIFY-DO-FORTS-MACRO-ITERATION-EQUIVALENCE", 0, 0, false);
         return NIL;
     }
+
+    public static SubLObject declare_forts_file() {
+        if (SubLFiles.USE_V1) {
+            declareFunction("fort_p", "FORT-P", 1, 0, false);
+            new forts.$fort_p$UnaryFunction();
+            declareFunction("non_fort_p", "NON-FORT-P", 1, 0, false);
+            declareFunction("list_of_fort_p", "LIST-OF-FORT-P", 1, 0, false);
+            declareFunction("fort_el_formula", "FORT-EL-FORMULA", 1, 0, false);
+            declareFunction("new_forts_iterator", "NEW-FORTS-ITERATOR", 0, 0, false);
+            declareMacro("do_forts", "DO-FORTS");
+            declareFunction("do_forts_tables", "DO-FORTS-TABLES", 0, 0, false);
+            declareFunction("fort_count", "FORT-COUNT", 0, 0, false);
+            declareFunction("random_fort", "RANDOM-FORT", 0, 1, false);
+            declareFunction("sample_forts", "SAMPLE-FORTS", 0, 3, false);
+            declareFunction("fort_index", "FORT-INDEX", 1, 0, false);
+            declareFunction("reset_fort_index", "RESET-FORT-INDEX", 2, 0, false);
+            declareFunction("clear_fort_index", "CLEAR-FORT-INDEX", 1, 0, false);
+            declareFunction("fort_internal_id", "FORT-INTERNAL-ID", 1, 0, false);
+            new forts.$fort_internal_id$UnaryFunction();
+            declareFunction("fort_external_id", "FORT-EXTERNAL-ID", 1, 0, false);
+            declareFunction("valid_fortP", "VALID-FORT?", 1, 0, false);
+            declareFunction("valid_fort_robustP", "VALID-FORT-ROBUST?", 1, 0, false);
+            declareFunction("invalid_fortP", "INVALID-FORT?", 1, 0, false);
+            new forts.$invalid_fortP$UnaryFunction();
+            declareFunction("invalid_fort_robustP", "INVALID-FORT-ROBUST?", 1, 0, false);
+            declareFunction("remove_fort", "REMOVE-FORT", 1, 0, false);
+            declareFunction("fort_id_index_print_function_trampoline", "FORT-ID-INDEX-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("fort_id_index_p", "FORT-ID-INDEX-P", 1, 0, false);
+            new forts.$fort_id_index_p$UnaryFunction();
+            declareFunction("fort_id_index_constants", "FORT-ID-INDEX-CONSTANTS", 1, 0, false);
+            declareFunction("fort_id_index_narts", "FORT-ID-INDEX-NARTS", 1, 0, false);
+            declareFunction("_csetf_fort_id_index_constants", "_CSETF-FORT-ID-INDEX-CONSTANTS", 2, 0, false);
+            declareFunction("_csetf_fort_id_index_narts", "_CSETF-FORT-ID-INDEX-NARTS", 2, 0, false);
+            declareFunction("make_fort_id_index", "MAKE-FORT-ID-INDEX", 0, 1, false);
+            declareFunction("visit_defstruct_fort_id_index", "VISIT-DEFSTRUCT-FORT-ID-INDEX", 2, 0, false);
+            declareFunction("visit_defstruct_object_fort_id_index_method", "VISIT-DEFSTRUCT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
+            declareFunction("print_fort_id_index", "PRINT-FORT-ID-INDEX", 3, 0, false);
+            declareMacro("with_fort_id_index_index_and_id", "WITH-FORT-ID-INDEX-INDEX-AND-ID");
+            declareFunction("new_fort_id_index", "NEW-FORT-ID-INDEX", 0, 0, false);
+            declareFunction("fort_id_index_count", "FORT-ID-INDEX-COUNT", 1, 0, false);
+            declareFunction("fort_id_index_emptyP", "FORT-ID-INDEX-EMPTY?", 1, 0, false);
+            declareFunction("fort_id_index_lookup", "FORT-ID-INDEX-LOOKUP", 2, 0, false);
+            declareFunction("fort_id_index_enter", "FORT-ID-INDEX-ENTER", 3, 0, false);
+            declareFunction("fort_id_index_remove", "FORT-ID-INDEX-REMOVE", 2, 0, false);
+            declareFunction("clear_fort_id_index", "CLEAR-FORT-ID-INDEX", 1, 0, false);
+            declareFunction("optimize_fort_id_index", "OPTIMIZE-FORT-ID-INDEX", 1, 0, false);
+            declareFunction("fort_id_index_optimized_p", "FORT-ID-INDEX-OPTIMIZED-P", 1, 0, false);
+            declareFunction("new_fort_id_index_constants", "NEW-FORT-ID-INDEX-CONSTANTS", 0, 0, false);
+            declareFunction("new_fort_id_index_narts", "NEW-FORT-ID-INDEX-NARTS", 0, 0, false);
+            declareMacro("do_fort_id_index", "DO-FORT-ID-INDEX");
+            declareMacro("do_fort_id_index_constants", "DO-FORT-ID-INDEX-CONSTANTS");
+            declareFunction("do_fii_get_constants", "DO-FII-GET-CONSTANTS", 1, 0, false);
+            declareMacro("do_fort_id_index_narts", "DO-FORT-ID-INDEX-NARTS");
+            declareFunction("do_fii_get_narts", "DO-FII-GET-NARTS", 1, 0, false);
+            declareFunction("cfasl_output_object_fort_id_index_method", "CFASL-OUTPUT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
+            declareFunction("cfasl_output_fort_id_index", "CFASL-OUTPUT-FORT-ID-INDEX", 2, 0, false);
+            declareFunction("cfasl_input_fort_id_index", "CFASL-INPUT-FORT-ID-INDEX", 1, 0, false);
+            declareFunction("verify_do_forts_macro_iteration_equivalence", "VERIFY-DO-FORTS-MACRO-ITERATION-EQUIVALENCE", 0, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("random_fort", "RANDOM-FORT", 0, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_forts_file_Previous() {
+        declareFunction("fort_p", "FORT-P", 1, 0, false);
+        new forts.$fort_p$UnaryFunction();
+        declareFunction("non_fort_p", "NON-FORT-P", 1, 0, false);
+        declareFunction("list_of_fort_p", "LIST-OF-FORT-P", 1, 0, false);
+        declareFunction("fort_el_formula", "FORT-EL-FORMULA", 1, 0, false);
+        declareFunction("new_forts_iterator", "NEW-FORTS-ITERATOR", 0, 0, false);
+        declareMacro("do_forts", "DO-FORTS");
+        declareFunction("do_forts_tables", "DO-FORTS-TABLES", 0, 0, false);
+        declareFunction("fort_count", "FORT-COUNT", 0, 0, false);
+        declareFunction("random_fort", "RANDOM-FORT", 0, 1, false);
+        declareFunction("sample_forts", "SAMPLE-FORTS", 0, 3, false);
+        declareFunction("fort_index", "FORT-INDEX", 1, 0, false);
+        declareFunction("reset_fort_index", "RESET-FORT-INDEX", 2, 0, false);
+        declareFunction("clear_fort_index", "CLEAR-FORT-INDEX", 1, 0, false);
+        declareFunction("fort_internal_id", "FORT-INTERNAL-ID", 1, 0, false);
+        new forts.$fort_internal_id$UnaryFunction();
+        declareFunction("fort_external_id", "FORT-EXTERNAL-ID", 1, 0, false);
+        declareFunction("valid_fortP", "VALID-FORT?", 1, 0, false);
+        declareFunction("valid_fort_robustP", "VALID-FORT-ROBUST?", 1, 0, false);
+        declareFunction("invalid_fortP", "INVALID-FORT?", 1, 0, false);
+        new forts.$invalid_fortP$UnaryFunction();
+        declareFunction("invalid_fort_robustP", "INVALID-FORT-ROBUST?", 1, 0, false);
+        declareFunction("remove_fort", "REMOVE-FORT", 1, 0, false);
+        declareFunction("fort_id_index_print_function_trampoline", "FORT-ID-INDEX-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("fort_id_index_p", "FORT-ID-INDEX-P", 1, 0, false);
+        new forts.$fort_id_index_p$UnaryFunction();
+        declareFunction("fort_id_index_constants", "FORT-ID-INDEX-CONSTANTS", 1, 0, false);
+        declareFunction("fort_id_index_narts", "FORT-ID-INDEX-NARTS", 1, 0, false);
+        declareFunction("_csetf_fort_id_index_constants", "_CSETF-FORT-ID-INDEX-CONSTANTS", 2, 0, false);
+        declareFunction("_csetf_fort_id_index_narts", "_CSETF-FORT-ID-INDEX-NARTS", 2, 0, false);
+        declareFunction("make_fort_id_index", "MAKE-FORT-ID-INDEX", 0, 1, false);
+        declareFunction("visit_defstruct_fort_id_index", "VISIT-DEFSTRUCT-FORT-ID-INDEX", 2, 0, false);
+        declareFunction("visit_defstruct_object_fort_id_index_method", "VISIT-DEFSTRUCT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
+        declareFunction("print_fort_id_index", "PRINT-FORT-ID-INDEX", 3, 0, false);
+        declareMacro("with_fort_id_index_index_and_id", "WITH-FORT-ID-INDEX-INDEX-AND-ID");
+        declareFunction("new_fort_id_index", "NEW-FORT-ID-INDEX", 0, 0, false);
+        declareFunction("fort_id_index_count", "FORT-ID-INDEX-COUNT", 1, 0, false);
+        declareFunction("fort_id_index_emptyP", "FORT-ID-INDEX-EMPTY?", 1, 0, false);
+        declareFunction("fort_id_index_lookup", "FORT-ID-INDEX-LOOKUP", 2, 0, false);
+        declareFunction("fort_id_index_enter", "FORT-ID-INDEX-ENTER", 3, 0, false);
+        declareFunction("fort_id_index_remove", "FORT-ID-INDEX-REMOVE", 2, 0, false);
+        declareFunction("clear_fort_id_index", "CLEAR-FORT-ID-INDEX", 1, 0, false);
+        declareFunction("optimize_fort_id_index", "OPTIMIZE-FORT-ID-INDEX", 1, 0, false);
+        declareFunction("fort_id_index_optimized_p", "FORT-ID-INDEX-OPTIMIZED-P", 1, 0, false);
+        declareFunction("new_fort_id_index_constants", "NEW-FORT-ID-INDEX-CONSTANTS", 0, 0, false);
+        declareFunction("new_fort_id_index_narts", "NEW-FORT-ID-INDEX-NARTS", 0, 0, false);
+        declareMacro("do_fort_id_index", "DO-FORT-ID-INDEX");
+        declareMacro("do_fort_id_index_constants", "DO-FORT-ID-INDEX-CONSTANTS");
+        declareFunction("do_fii_get_constants", "DO-FII-GET-CONSTANTS", 1, 0, false);
+        declareMacro("do_fort_id_index_narts", "DO-FORT-ID-INDEX-NARTS");
+        declareFunction("do_fii_get_narts", "DO-FII-GET-NARTS", 1, 0, false);
+        declareFunction("cfasl_output_object_fort_id_index_method", "CFASL-OUTPUT-OBJECT-FORT-ID-INDEX-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_fort_id_index", "CFASL-OUTPUT-FORT-ID-INDEX", 2, 0, false);
+        declareFunction("cfasl_input_fort_id_index", "CFASL-INPUT-FORT-ID-INDEX", 1, 0, false);
+        declareFunction("verify_do_forts_macro_iteration_equivalence", "VERIFY-DO-FORTS-MACRO-ITERATION-EQUIVALENCE", 0, 0, false);
+        return NIL;
+    }
+
+    static private final SubLList $list_alt1 = list(makeSymbol("OBJECT"));
+
+    static private final SubLString $str_alt2$Return_T_iff_OBJECT_is_a_first_or = makeString("Return T iff OBJECT is a first order reified term (FORT).");
+
+    static private final SubLList $list_alt3 = list(makeSymbol("BOOLEANP"));
+
+    static private final SubLList $list_alt5 = list(makeSymbol("FORT"));
+
+    static private final SubLString $str_alt6$Return_the_EL_formula_for_any_FOR = makeString("Return the EL formula for any FORT.");
+
+    static private final SubLList $list_alt7 = list(list(makeSymbol("FORT"), makeSymbol("FORT-P")));
+
+    static private final SubLList $list_alt8 = list(list(makeSymbol("NIL-OR"), makeSymbol("CONSP")));
+
+    static private final SubLList $list_alt9 = list(list(makeSymbol("VAR"), makeSymbol("&OPTIONAL"), list(makeSymbol("PROGRESS-MESSAGE"), makeString("mapping Cyc FORTs")), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt11 = list($DONE);
+
+    static private final SubLList $list_alt16 = list(makeSymbol("DO-FORTS-TABLES"));
+
+    static private final SubLList $list_alt23 = list(list(makeSymbol("FORT-COUNT")));
+
+    static private final SubLList $list_alt24 = list(ZERO_INTEGER);
+
+    static private final SubLString $str_alt29$Iterate_over_all_HL_FORT_datastru = makeString("Iterate over all HL FORT datastructures, executing BODY within the scope of VAR.\n   VAR is bound to the FORT.\n   PROGRESS-MESSAGE is a progress message string.\n   Iteration halts as soon as DONE becomes non-nil.");
+
+    static private final SubLString $str_alt32$Return_the_total_number_of_FORTs_ = makeString("Return the total number of FORTs.");
+
+    static private final SubLList $list_alt33 = list(makeSymbol("INTEGERP"));
+
+    static private final SubLString $str_alt34$_S_was_not_a_FORT = makeString("~S was not a FORT");
+
+    static private final SubLString $str_alt36$Remove_FORT_from_the_KB_ = makeString("Remove FORT from the KB.");
+
+    static private final SubLList $list_alt37 = list(makeSymbol("NULL"));
+
+    static private final SubLList $list_alt40 = list(makeSymbol("CONSTANTS"), makeSymbol("NARTS"));
+
+    static private final SubLList $list_alt41 = list(makeKeyword("CONSTANTS"), makeKeyword("NARTS"));
+
+    static private final SubLList $list_alt42 = list(makeSymbol("FORT-ID-INDEX-CONSTANTS"), makeSymbol("FORT-ID-INDEX-NARTS"));
+
+    static private final SubLList $list_alt43 = list(makeSymbol("_CSETF-FORT-ID-INDEX-CONSTANTS"), makeSymbol("_CSETF-FORT-ID-INDEX-NARTS"));
 
     public static SubLObject init_forts_file() {
         defconstant("*DTP-FORT-ID-INDEX*", FORT_ID_INDEX);
@@ -1133,7 +2236,54 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_forts_file_alt() {
+        register_cyc_api_function(FORT_P, $list_alt1, $str_alt2$Return_T_iff_OBJECT_is_a_first_or, NIL, $list_alt3);
+        register_cyc_api_function(FORT_EL_FORMULA, $list_alt5, $str_alt6$Return_the_EL_formula_for_any_FOR, $list_alt7, $list_alt8);
+        register_cyc_api_macro(DO_FORTS, $list_alt9, $str_alt29$Iterate_over_all_HL_FORT_datastru);
+        register_macro_helper(DO_FORTS_TABLES, DO_FORTS);
+        register_cyc_api_function(FORT_COUNT, NIL, $str_alt32$Return_the_total_number_of_FORTs_, NIL, $list_alt33);
+        register_cyc_api_function(REMOVE_FORT, $list_alt5, $str_alt36$Remove_FORT_from_the_KB_, $list_alt7, $list_alt37);
+        register_method($print_object_method_table$.getGlobalValue(), $dtp_fort_id_index$.getGlobalValue(), symbol_function(FORT_ID_INDEX_PRINT_FUNCTION_TRAMPOLINE));
+        def_csetf(FORT_ID_INDEX_CONSTANTS, _CSETF_FORT_ID_INDEX_CONSTANTS);
+        def_csetf(FORT_ID_INDEX_NARTS, _CSETF_FORT_ID_INDEX_NARTS);
+        identity(FORT_ID_INDEX);
+        register_macro_helper(DO_FORT_ID_INDEX_CONSTANTS, DO_FORT_ID_INDEX);
+        register_macro_helper(DO_FII_GET_CONSTANTS, DO_FORT_ID_INDEX_CONSTANTS);
+        register_macro_helper(DO_FORT_ID_INDEX_NARTS, DO_FORT_ID_INDEX);
+        register_macro_helper(DO_FII_GET_NARTS, DO_FORT_ID_INDEX_NARTS);
+        register_cfasl_input_function($cfasl_opcode_fort_id_index$.getGlobalValue(), CFASL_INPUT_FORT_ID_INDEX);
+        register_method($cfasl_output_object_method_table$.getGlobalValue(), $dtp_fort_id_index$.getGlobalValue(), symbol_function(CFASL_OUTPUT_OBJECT_FORT_ID_INDEX_METHOD));
+        return NIL;
+    }
+
     public static SubLObject setup_forts_file() {
+        if (SubLFiles.USE_V1) {
+            register_cyc_api_function(FORT_P, $list1, $str2$Return_T_iff_OBJECT_is_a_first_or, NIL, $list3);
+            register_cyc_api_function(FORT_EL_FORMULA, $list5, $str6$Return_the_EL_formula_for_any_FOR, $list7, $list8);
+            register_cyc_api_macro(DO_FORTS, $list9, $str29$Iterate_over_all_HL_FORT_datastru);
+            register_macro_helper(DO_FORTS_TABLES, DO_FORTS);
+            register_cyc_api_function(FORT_COUNT, NIL, $str32$Return_the_total_number_of_FORTs_, NIL, $list33);
+            register_cyc_api_function(REMOVE_FORT, $list5, $str39$Remove_FORT_from_the_KB_, $list7, $list40);
+            register_method($print_object_method_table$.getGlobalValue(), $dtp_fort_id_index$.getGlobalValue(), symbol_function(FORT_ID_INDEX_PRINT_FUNCTION_TRAMPOLINE));
+            SubLSpecialOperatorDeclarations.proclaim($list49);
+            def_csetf(FORT_ID_INDEX_CONSTANTS, _CSETF_FORT_ID_INDEX_CONSTANTS);
+            def_csetf(FORT_ID_INDEX_NARTS, _CSETF_FORT_ID_INDEX_NARTS);
+            identity(FORT_ID_INDEX);
+            register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_fort_id_index$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_FORT_ID_INDEX_METHOD));
+            register_macro_helper(DO_FORT_ID_INDEX_CONSTANTS, DO_FORT_ID_INDEX);
+            register_macro_helper(DO_FII_GET_CONSTANTS, DO_FORT_ID_INDEX_CONSTANTS);
+            register_macro_helper(DO_FORT_ID_INDEX_NARTS, DO_FORT_ID_INDEX);
+            register_macro_helper(DO_FII_GET_NARTS, DO_FORT_ID_INDEX_NARTS);
+            register_cfasl_input_function($cfasl_opcode_fort_id_index$.getGlobalValue(), CFASL_INPUT_FORT_ID_INDEX);
+            register_method($cfasl_output_object_method_table$.getGlobalValue(), $dtp_fort_id_index$.getGlobalValue(), symbol_function(CFASL_OUTPUT_OBJECT_FORT_ID_INDEX_METHOD));
+        }
+        if (SubLFiles.USE_V2) {
+            register_cyc_api_function(REMOVE_FORT, $list_alt5, $str_alt36$Remove_FORT_from_the_KB_, $list_alt7, $list_alt37);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_forts_file_Previous() {
         register_cyc_api_function(FORT_P, $list1, $str2$Return_T_iff_OBJECT_is_a_first_or, NIL, $list3);
         register_cyc_api_function(FORT_EL_FORMULA, $list5, $str6$Return_the_EL_formula_for_any_FOR, $list7, $list8);
         register_cyc_api_macro(DO_FORTS, $list9, $str29$Iterate_over_all_HL_FORT_datastru);
@@ -1155,6 +2305,26 @@ public final class forts extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt52$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLString $str_alt53$__ = makeString("#<");
+
+    static private final SubLString $str_alt55$Constant_Index_ = makeString("Constant Index:");
+
+    static private final SubLString $str_alt56$Nart_Index_ = makeString("Nart Index:");
+
+    static private final SubLList $list_alt58 = list(list(makeSymbol("ID-INDEX-VAR"), makeSymbol("ID-VAR"), makeSymbol("FORT"), makeSymbol("FORT-ID-INDEX")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt61 = list(makeSymbol("FORT-P"));
+
+    static private final SubLList $list_alt62 = list(makeSymbol("FORT-ID-INDEX-P"));
+
+    static private final SubLSymbol $sym64$VALID_FORT_ = makeSymbol("VALID-FORT?");
+
+    static private final SubLList $list_alt69 = list(list(makeSymbol("FORT"), makeSymbol("VALUE"), makeSymbol("FORT-ID-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym70$FII = makeUninternedSymbol("FII");
+
     @Override
     public void declareFunctions() {
         declare_forts_file();
@@ -1171,114 +2341,9 @@ public final class forts extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt74 = list(list(makeSymbol("CONSTANT"), makeSymbol("VALUE"), makeSymbol("FORT-ID-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     public static final class $fort_p$UnaryFunction extends UnaryFunction {
         public $fort_p$UnaryFunction() {
@@ -1291,6 +2356,10 @@ public final class forts extends SubLTranslatedFile {
         }
     }
 
+    static private final SubLSymbol $sym75$ID = makeUninternedSymbol("ID");
+
+    static private final SubLList $list_alt79 = list(list(makeSymbol("NART"), makeSymbol("VALUE"), makeSymbol("FORT-ID-INDEX"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
     public static final class $fort_internal_id$UnaryFunction extends UnaryFunction {
         public $fort_internal_id$UnaryFunction() {
             super(extractFunctionNamed("FORT-INTERNAL-ID"));
@@ -1301,6 +2370,8 @@ public final class forts extends SubLTranslatedFile {
             return fort_internal_id(arg1);
         }
     }
+
+    static private final SubLSymbol $sym80$ID = makeUninternedSymbol("ID");
 
     public static final class $invalid_fortP$UnaryFunction extends UnaryFunction {
         public $invalid_fortP$UnaryFunction() {
@@ -1313,47 +2384,17 @@ public final class forts extends SubLTranslatedFile {
         }
     }
 
-    public static final class $fort_id_index_native extends SubLStructNative {
-        public SubLObject $constants;
+    static private final SubLString $str_alt87$Checking_that_forts_iterators_wor = makeString("Checking that forts iterators work.");
 
-        public SubLObject $narts;
+    static private final SubLSymbol $sym89$_EXIT = makeSymbol("%EXIT");
 
-        private static final SubLStructDeclNative structDecl;
+    static private final SubLString $str_alt91$FORTS_ITERATOR_exhausted_before_D = makeString("FORTS-ITERATOR exhausted before DO-FORTS");
 
-        public $fort_id_index_native() {
-            this.$constants = Lisp.NIL;
-            this.$narts = Lisp.NIL;
-        }
+    static private final SubLString $str_alt93$FORTS_ITERATOR_returned_non_fort_ = makeString("FORTS-ITERATOR returned non-fort!");
 
-        @Override
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
+    static private final SubLString $str_alt95$FORTS_ITERATOR_and_DO_FORTS_diffe = makeString("FORTS-ITERATOR and DO-FORTS differ in which FORT they think is next");
 
-        @Override
-        public SubLObject getField2() {
-            return this.$constants;
-        }
-
-        @Override
-        public SubLObject getField3() {
-            return this.$narts;
-        }
-
-        @Override
-        public SubLObject setField2(final SubLObject value) {
-            return this.$constants = value;
-        }
-
-        @Override
-        public SubLObject setField3(final SubLObject value) {
-            return this.$narts = value;
-        }
-
-        static {
-            structDecl = makeStructDeclNative(forts.$fort_id_index_native.class, FORT_ID_INDEX, FORT_ID_INDEX_P, $list43, $list44, new String[]{ "$constants", "$narts" }, $list45, $list46, PRINT_FORT_ID_INDEX);
-        }
-    }
+    static private final SubLString $str_alt97$The_FORTS_iterator_has_more_value = makeString("The FORTS iterator has more values than DO-FORTS.");
 
     public static final class $fort_id_index_p$UnaryFunction extends UnaryFunction {
         public $fort_id_index_p$UnaryFunction() {

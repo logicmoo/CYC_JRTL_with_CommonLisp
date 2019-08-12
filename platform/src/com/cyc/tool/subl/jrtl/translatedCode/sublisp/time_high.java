@@ -43,14 +43,14 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class time_high extends SubLTranslatedFile {
     public static SubLObject declare_time_high_file() {
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "decode_universal_time", "DECODE-UNIVERSAL-TIME", 1, 1, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "guess_year_from_two_digits", "GUESS-YEAR-FROM-TWO-DIGITS", 1, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "encode_universal_time", "ENCODE-UNIVERSAL-TIME", 6, 1, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "encode_universal_time_internal", "ENCODE-UNIVERSAL-TIME-INTERNAL", 7, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "get_universal_time", "GET-UNIVERSAL-TIME", 0, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "get_decoded_time", "GET-DECODED-TIME", 0, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "get_internal_real_time", "GET-INTERNAL-REAL-TIME", 0, 0, false);
-	declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high", "get_internal_run_time", "GET-INTERNAL-RUN-TIME", 0, 0, false);
+	declareFunction("decode_universal_time", "DECODE-UNIVERSAL-TIME", 1, 1, false);
+	declareFunction("guess_year_from_two_digits", "GUESS-YEAR-FROM-TWO-DIGITS", 1, 0, false);
+	declareFunction("encode_universal_time", "ENCODE-UNIVERSAL-TIME", 6, 1, false);
+	declareFunction("encode_universal_time_internal", "ENCODE-UNIVERSAL-TIME-INTERNAL", 7, 0, false);
+	declareFunction("get_universal_time", "GET-UNIVERSAL-TIME", 0, 0, false);
+	declareFunction("get_decoded_time", "GET-DECODED-TIME", 0, 0, false);
+	declareFunction("get_internal_real_time", "GET-INTERNAL-REAL-TIME", 0, 0, false);
+	declareFunction("get_internal_run_time", "GET-INTERNAL-RUN-TIME", 0, 0, false);
 	return SubLNil.NIL;
     }
 

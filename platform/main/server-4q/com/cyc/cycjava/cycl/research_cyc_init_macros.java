@@ -1,24 +1,6 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.research_cyc_init_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-
-import static com.cyc.cycjava.cycl.research_cyc_init_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
@@ -27,15 +9,22 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import java.util.Iterator;
+
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class research_cyc_init_macros extends SubLTranslatedFile {
+public final class research_cyc_init_macros extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new research_cyc_init_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.research_cyc_init_macros";
+    public static final String myName = "com.cyc.cycjava_2.cycl.research_cyc_init_macros";
 
-    public static final String myFingerPrint = "787ebf95729593146a51989abab4d1c86003c81069b92604dd119b535d2d38ed";
 
     private static final SubLString $$$CYC = makeString("CYC");
 
@@ -110,8 +99,8 @@ public final class research_cyc_init_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_research_cyc_init_macros_file() {
-        declareMacro(me, "compute_research_cyc_initialization_methods", "COMPUTE-RESEARCH-CYC-INITIALIZATION-METHODS");
-        declareFunction(me, "function_symbol_with_no_args_p", "FUNCTION-SYMBOL-WITH-NO-ARGS-P", 1, 0, false);
+        declareMacro("compute_research_cyc_initialization_methods", "COMPUTE-RESEARCH-CYC-INITIALIZATION-METHODS");
+        declareFunction("function_symbol_with_no_args_p", "FUNCTION-SYMBOL-WITH-NO-ARGS-P", 1, 0, false);
         return NIL;
     }
 

@@ -1074,8 +1074,7 @@ public  final class transformation_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_transformation_modules_file() {
-    // CVS_ID("Id: transformation-modules.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_transformation_module($kw44$TRANS_PREDICATE_POS, $list45);
+        inference_modules.inference_transformation_module($kw44$TRANS_PREDICATE_POS, $list45);
     inference_modules.inference_transformation_module($kw46$TRANS_PREDICATE_NEG, $list47);
     memoization_state.note_memoized_function($sym48$TRANS_PREDICATE_RULE_SELECT_INT);
     memoization_state.note_memoized_function($sym52$TRANS_PREDICATE_GENLPREDS_POS_RULE_SELECT_INT);

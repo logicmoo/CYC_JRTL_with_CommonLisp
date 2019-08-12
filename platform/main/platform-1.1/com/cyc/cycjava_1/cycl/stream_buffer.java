@@ -163,8 +163,7 @@ public  final class stream_buffer extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_stream_buffer_file() {
-    // CVS_ID("Id: stream-buffer.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_string_buffer$.getGlobalValue(), Symbols.symbol_function($sym8$STRING_BUFFER_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_string_buffer$.getGlobalValue(), Symbols.symbol_function($sym8$STRING_BUFFER_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$STRBUF_STRING, $sym10$_CSETF_STRBUF_STRING);
     Structures.def_csetf($sym11$STRBUF_POSITION, $sym12$_CSETF_STRBUF_POSITION);
     Equality.identity($sym1$STRING_BUFFER);

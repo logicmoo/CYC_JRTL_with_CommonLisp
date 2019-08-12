@@ -194,8 +194,7 @@ END range.  If no constant exists, return NIL. */
   }
 
   public static final SubLObject setup_constant_completion_high_file() {
-    // CVS_ID("Id: constant-completion-high.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_obsolete_cyc_api_function($sym1$VALID_CONSTANT_NAME_CHAR, $list2, $list3, $str4$Deprecated_in_favor_of_valid_cons, $list5, $list6);
+        utilities_macros.register_obsolete_cyc_api_function($sym1$VALID_CONSTANT_NAME_CHAR, $list2, $list3, $str4$Deprecated_in_favor_of_valid_cons, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym8$VALID_CONSTANT_NAME_CHAR_P, $list3, $str9$Return_T_iff_CHAR_is_a_character_, $list5, $list6);
     utilities_macros.register_obsolete_cyc_api_function($sym10$VALID_CONSTANT_NAME, $list11, $list12, $str13$Deprecated_in_favor_of_valid_cons, NIL, $list6);
     utilities_macros.register_cyc_api_function($sym15$VALID_CONSTANT_NAME_P, $list12, $str16$Return_T_iff_STRING_is_a_valid_na, NIL, $list6);

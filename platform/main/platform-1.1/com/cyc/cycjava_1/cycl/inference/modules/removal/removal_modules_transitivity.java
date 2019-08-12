@@ -694,8 +694,7 @@ public  final class removal_modules_transitivity extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_transitivity_file() {
-    // CVS_ID("Id: removal-modules-transitivity.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_removal_module($kw4$REMOVAL_TRANSITIVE_CHECK, $list5);
+        inference_modules.inference_removal_module($kw4$REMOVAL_TRANSITIVE_CHECK, $list5);
     inference_modules.inference_removal_module($kw6$REMOVAL_TRANSITIVE_ARG1_WALK, $list7);
     inference_modules.inference_removal_module($kw24$REMOVAL_TRANSITIVE_ARG2_WALK, $list25);
     return NIL;

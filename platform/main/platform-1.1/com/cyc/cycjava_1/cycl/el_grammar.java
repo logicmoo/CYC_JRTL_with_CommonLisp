@@ -105,8 +105,7 @@ public  final class el_grammar extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_el_grammar_file() {
-    // CVS_ID("Id: el-grammar.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Initializers

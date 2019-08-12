@@ -199,8 +199,7 @@ public  final class cycl_query_specification extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cycl_query_specification_file() {
-    // CVS_ID("Id: cycl-query-specification.lisp 128069 2009-06-19 18:33:16Z baxter ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cycl_query_specification$.getGlobalValue(), Symbols.symbol_function($sym7$CYCL_QUERY_SPECIFICATION_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cycl_query_specification$.getGlobalValue(), Symbols.symbol_function($sym7$CYCL_QUERY_SPECIFICATION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$CYCL_QUERY_SPEC_CYCL_ID, $sym9$_CSETF_CYCL_QUERY_SPEC_CYCL_ID);
     Structures.def_csetf($sym10$CYCL_QUERY_SPEC_FORMULA, $sym11$_CSETF_CYCL_QUERY_SPEC_FORMULA);
     Structures.def_csetf($sym12$CYCL_QUERY_SPEC_MT, $sym13$_CSETF_CYCL_QUERY_SPEC_MT);

@@ -1580,8 +1580,7 @@ public  final class forward_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_forward_modules_file() {
-    // CVS_ID("Id: forward-modules.lisp 127557 2009-04-07 20:29:51Z goolsbey ");
-    access_macros.register_macro_helper($sym7$DO_FORWARD_MODULES_LIST, $sym8$DO_FORWARD_MODULES);
+        access_macros.register_macro_helper($sym7$DO_FORWARD_MODULES_LIST, $sym8$DO_FORWARD_MODULES);
     forward_module($kw13$FORWARD_NORMAL_POS, $list14);
     forward_module($kw15$FORWARD_NORMAL_NEG, $list16);
     forward_module($kw17$FORWARD_ISA, $list18);

@@ -134,8 +134,7 @@ public  final class vector_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_vector_utilities_file() {
-    // CVS_ID("Id: vector-utilities.lisp 127256 2009-02-26 15:28:07Z baxter ");
-    access_macros.define_obsolete_register($sym2$CLEAR_VECTOR, $list3);
+        access_macros.define_obsolete_register($sym2$CLEAR_VECTOR, $list3);
     generic_testing.define_test_case_table_int($sym13$64_BIT_STRING_TUPLES_LENGTH, list(new SubLObject[] {$kw14$TEST, NIL, $kw15$OWNER, NIL, $kw16$CLASSES, NIL, $kw17$KB, $kw18$TINY, $kw19$WORKING_, T}), $list20);
     generic_testing.define_test_case_table_int($sym21$64_BIT_STRING_BYTE_VECTOR_LENGTH, list(new SubLObject[] {$kw14$TEST, NIL, $kw15$OWNER, NIL, $kw16$CLASSES, NIL, $kw17$KB, $kw18$TINY, $kw19$WORKING_, T}), $list22);
     return NIL;

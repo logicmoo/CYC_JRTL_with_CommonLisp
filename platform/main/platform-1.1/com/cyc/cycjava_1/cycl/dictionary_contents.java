@@ -339,8 +339,7 @@ public  final class dictionary_contents extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_dictionary_contents_file() {
-    // CVS_ID("Id: dictionary-contents.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym12$DO_DICTIONARY_CONTENTS_STATE, $sym21$DO_DICTIONARY_CONTENTS);
+        access_macros.register_macro_helper($sym12$DO_DICTIONARY_CONTENTS_STATE, $sym21$DO_DICTIONARY_CONTENTS);
     access_macros.register_macro_helper($sym17$DO_DICTIONARY_CONTENTS_KEY_VALUE, $sym22$DO_DICTIONARY);
     access_macros.register_macro_helper($sym19$DO_DICTIONARY_CONTENTS_NEXT, $sym22$DO_DICTIONARY);
     access_macros.register_macro_helper($sym15$DO_DICTIONARY_CONTENTS_DONE_, $sym22$DO_DICTIONARY);

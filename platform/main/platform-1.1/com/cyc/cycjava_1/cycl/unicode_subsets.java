@@ -144,8 +144,7 @@ public  final class unicode_subsets extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_unicode_subsets_file() {
-    // CVS_ID("Id: unicode-subsets.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

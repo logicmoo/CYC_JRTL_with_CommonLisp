@@ -290,8 +290,7 @@ public  final class narts_high extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_narts_high_file() {
-    // CVS_ID("Id: narts-high.lisp 126735 2008-12-22 23:55:19Z goolsbey ");
-    utilities_macros.register_cyc_api_function($sym1$NART_HL_FORMULA, $list2, $str3$Return_the_hl_formula_of_this_NAR, $list4, $list5);
+        utilities_macros.register_cyc_api_function($sym1$NART_HL_FORMULA, $list2, $str3$Return_the_hl_formula_of_this_NAR, $list4, $list5);
     utilities_macros.register_cyc_api_function($sym6$NAUT_P, $list7, $str8$Return_T_iff_OBJECT_is_a_datastru, NIL, $list9);
     utilities_macros.register_cyc_api_function($sym10$NART_EL_FORMULA, $list2, $str11$Return_the_el_formula_of_this_NAR, $list4, $list5);
     utilities_macros.register_cyc_api_function($sym14$RANDOM_NART, $list15, $str16$Return_a_randomly_chosen_NART_tha, NIL, $list17);

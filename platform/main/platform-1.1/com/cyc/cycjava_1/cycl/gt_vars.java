@@ -369,8 +369,7 @@ public  final class gt_vars extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_gt_vars_file() {
-    // CVS_ID("Id: gt-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    {
+        {
       SubLObject item_var = $sym1$_GT_DISPATCH_TABLE_;
       if ((NIL == conses_high.member(item_var, utilities_macros.$gt_state_variables$.getGlobalValue(), Symbols.symbol_function(EQL), Symbols.symbol_function(IDENTITY)))) {
         utilities_macros.$gt_state_variables$.setGlobalValue(cons(item_var, utilities_macros.$gt_state_variables$.getGlobalValue()));

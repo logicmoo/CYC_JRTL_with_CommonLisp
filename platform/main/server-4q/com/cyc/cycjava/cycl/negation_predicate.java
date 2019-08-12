@@ -1,7 +1,19 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.negation_predicate;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
 import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
@@ -17,52 +29,30 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.negation_predicate.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class negation_predicate extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      NEGATION-PREDICATE
+ * source file: /cyc/top/cycl/negation-predicate.lisp
+ * created:     2019/07/03 17:37:28
+ */
+public final class negation_predicate extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new negation_predicate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.negation_predicate";
+ public static final String myName = "com.cyc.cycjava.cycl.negation_predicate";
 
-    public static final String myFingerPrint = "223db5c1367843f53428a65305557e4905a795564f44608596d4ffb1b88ec902";
 
-    private static final SubLObject $$negationPreds = reader_make_constant_shell(makeString("negationPreds"));
 
-    private static final SubLObject $$negationInverse = reader_make_constant_shell(makeString("negationInverse"));
+
+
 
     private static final SubLSymbol ALL_NEGATION_PREDICATES_MEMOIZED = makeSymbol("ALL-NEGATION-PREDICATES-MEMOIZED");
 
-    public static final SubLList $list3 = list(list(makeSymbol("NEGATION-PRED"), makeSymbol("PRED"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    static private final SubLList $list3 = list(list(makeSymbol("NEGATION-PRED"), makeSymbol("PRED"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list4 = list(makeKeyword("MT"), makeKeyword("TV"), makeKeyword("DONE"));
+    private static final SubLList $list4 = list(makeKeyword("MT"), makeKeyword("TV"), $DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol ALL_NEGATION_PREDICATES = makeSymbol("ALL-NEGATION-PREDICATES");
 
@@ -82,6 +72,26 @@ public final class negation_predicate extends SubLTranslatedFile {
 
     private static final SubLSymbol REMOVE_NEGATION_INVERSE = makeSymbol("REMOVE-NEGATION-INVERSE");
 
+    // Definitions
+    /**
+     * the predicates delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the predicates delcared to be disjoint with <pred>")
+    public static final SubLObject local_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_link_methods.sbhl_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv, UNPROVIDED);
+    }
+
+    // Definitions
+    /**
+     * the predicates delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the predicates delcared to be disjoint with <pred>")
     public static SubLObject local_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -92,6 +102,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv, UNPROVIDED);
     }
 
+    /**
+     * the inverses delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the inverses delcared to be disjoint with <pred>")
+    public static final SubLObject local_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_link_methods.sbhl_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv, UNPROVIDED);
+    }
+
+    /**
+     * the inverses delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the inverses delcared to be disjoint with <pred>")
     public static SubLObject local_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -102,6 +130,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv, UNPROVIDED);
     }
 
+    /**
+     * the most-general among the predicates delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the predicates delcared to be disjoint with <pred>")
+    public static final SubLObject local_max_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_max_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * the most-general among the predicates delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the predicates delcared to be disjoint with <pred>")
     public static SubLObject local_max_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -112,6 +158,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_max_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    /**
+     * the most-general among the inverses delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the inverses delcared to be disjoint with <pred>")
+    public static final SubLObject local_max_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_max_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * the most-general among the inverses delcared to be disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the inverses delcared to be disjoint with <pred>")
     public static SubLObject local_max_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -122,6 +186,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_max_forward_true_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
     }
 
+    /**
+     * the predicates delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the predicates delcared to be not disjoint with <pred>")
+    public static final SubLObject local_not_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_link_methods.sbhl_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv, UNPROVIDED);
+    }
+
+    /**
+     * the predicates delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the predicates delcared to be not disjoint with <pred>")
     public static SubLObject local_not_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -132,6 +214,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv, UNPROVIDED);
     }
 
+    /**
+     * the inverses delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the inverses delcared to be not disjoint with <pred>")
+    public static final SubLObject local_not_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_link_methods.sbhl_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv, UNPROVIDED);
+    }
+
+    /**
+     * the inverses delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the inverses delcared to be not disjoint with <pred>")
     public static SubLObject local_not_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -142,6 +242,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv, UNPROVIDED);
     }
 
+    /**
+     * the most-general among the predicates delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the predicates delcared to be not disjoint with <pred>")
+    public static final SubLObject local_min_not_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_min_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * the most-general among the predicates delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the predicates delcared to be not disjoint with <pred>")
     public static SubLObject local_min_not_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -152,6 +270,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_min_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    /**
+     * the most-general among the inverses delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the inverses delcared to be not disjoint with <pred>")
+    public static final SubLObject local_min_not_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_min_forward_false_link_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * the most-general among the inverses delcared to be not disjoint with <pred>
+     */
+    @LispMethod(comment = "the most-general among the inverses delcared to be not disjoint with <pred>")
     public static SubLObject local_min_not_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -217,6 +353,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     * all of the negation-predicates of PRED
+     */
+    @LispMethod(comment = "all of the negation-predicates of PRED")
+    public static final SubLObject all_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_implied_relations.sbhl_all_implied_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * all of the negation-predicates of PRED
+     */
+    @LispMethod(comment = "all of the negation-predicates of PRED")
     public static SubLObject all_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -225,6 +379,63 @@ public final class negation_predicate extends SubLTranslatedFile {
             tv = NIL;
         }
         return sbhl_search_implied_relations.sbhl_all_implied_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    public static final SubLObject do_all_negation_predicates_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt2);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject negation_pred = NIL;
+                    SubLObject pred = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt2);
+                    negation_pred = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt2);
+                    pred = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_1 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt2);
+                            current_1 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt2);
+                            if (NIL == member(current_1, $list_alt3, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_1 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt2);
+                        }
+                        {
+                            SubLObject mt_tail = property_list_member($MT, current);
+                            SubLObject mt = (NIL != mt_tail) ? ((SubLObject) (cadr(mt_tail))) : NIL;
+                            SubLObject tv_tail = property_list_member($TV, current);
+                            SubLObject tv = (NIL != tv_tail) ? ((SubLObject) (cadr(tv_tail))) : NIL;
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                return listS(DO_LIST, list(negation_pred, list(ALL_NEGATION_PREDICATES, pred, mt, tv), $DONE, done), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_all_negation_predicates(final SubLObject macroform, final SubLObject environment) {
@@ -272,6 +483,13 @@ public final class negation_predicate extends SubLTranslatedFile {
         return listS(DO_LIST, list(negation_pred, list(ALL_NEGATION_PREDICATES, pred, mt, tv), $DONE, done), append(body, NIL));
     }
 
+    public static final SubLObject all_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.all_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject all_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -279,6 +497,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return all_negation_predicates(pred, mt, UNPROVIDED);
     }
 
+    /**
+     * all of the negation-inverses of PRED
+     */
+    @LispMethod(comment = "all of the negation-inverses of PRED")
+    public static final SubLObject all_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_implied_relations.sbhl_all_implied_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * all of the negation-inverses of PRED
+     */
+    @LispMethod(comment = "all of the negation-inverses of PRED")
     public static SubLObject all_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -289,6 +525,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.sbhl_all_implied_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
     }
 
+    /**
+     * all of the predicates not disjoint with PRED
+     */
+    @LispMethod(comment = "all of the predicates not disjoint with PRED")
+    public static final SubLObject all_not_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_all_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * all of the predicates not disjoint with PRED
+     */
+    @LispMethod(comment = "all of the predicates not disjoint with PRED")
     public static SubLObject all_not_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -299,6 +553,13 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_all_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    public static final SubLObject all_not_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.all_not_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject all_not_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -306,6 +567,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return all_not_negation_predicates(pred, mt, UNPROVIDED);
     }
 
+    /**
+     * all of the inverses not disjoint with PRED
+     */
+    @LispMethod(comment = "all of the inverses not disjoint with PRED")
+    public static final SubLObject all_not_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_all_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * all of the inverses not disjoint with PRED
+     */
+    @LispMethod(comment = "all of the inverses not disjoint with PRED")
     public static SubLObject all_not_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -316,6 +595,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_all_forward_false_nodes(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
     }
 
+    /**
+     * most-general negation predicates of <pred>
+     */
+    @LispMethod(comment = "most-general negation predicates of <pred>")
+    public static final SubLObject max_all_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_implied_relations.sbhl_implied_max_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * most-general negation predicates of <pred>
+     */
+    @LispMethod(comment = "most-general negation predicates of <pred>")
     public static SubLObject max_all_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -326,11 +623,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.sbhl_implied_max_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    public static final SubLObject negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.max_all_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         return max_all_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
+    public static final SubLObject max_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.max_all_negation_predicates(pred, mt, UNPROVIDED);
     }
 
     public static SubLObject max_negation_preds(final SubLObject pred, SubLObject mt) {
@@ -340,6 +651,13 @@ public final class negation_predicate extends SubLTranslatedFile {
         return max_all_negation_predicates(pred, mt, UNPROVIDED);
     }
 
+    public static final SubLObject max_negation_predicates_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.max_all_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject max_negation_predicates(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -347,6 +665,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return max_all_negation_predicates(pred, mt, UNPROVIDED);
     }
 
+    /**
+     * most-general negation inverses of <pred>
+     */
+    @LispMethod(comment = "most-general negation inverses of <pred>")
+    public static final SubLObject max_all_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_implied_relations.sbhl_implied_max_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * most-general negation inverses of <pred>
+     */
+    @LispMethod(comment = "most-general negation inverses of <pred>")
     public static SubLObject max_all_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -357,6 +693,13 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.sbhl_implied_max_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
     }
 
+    public static final SubLObject max_negation_inverses_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.max_all_negation_inverses(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject max_negation_inverses(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -364,6 +707,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return max_all_negation_inverses(pred, mt, UNPROVIDED);
     }
 
+    /**
+     * most subordinate of all negation predicates of <pred>
+     */
+    @LispMethod(comment = "most subordinate of all negation predicates of <pred>")
+    public static final SubLObject min_all_not_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_implied_min_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * most subordinate of all negation predicates of <pred>
+     */
+    @LispMethod(comment = "most subordinate of all negation predicates of <pred>")
     public static SubLObject min_all_not_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -374,6 +735,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_implied_min_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    /**
+     * most subordinate of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the spec-preds of <pred>")
+    public static final SubLObject min_implied_not_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_leaf_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module($$negationPreds)), pred, mt, tv);
+    }
+
+    /**
+     * most subordinate of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the spec-preds of <pred>")
     public static SubLObject min_implied_not_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -384,6 +763,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_leaf_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module($$negationPreds)), pred, mt, tv);
     }
 
+    /**
+     * most subordinate of the asserted not-negation-predicates of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the asserted not-negation-predicates of the spec-preds of <pred>")
+    public static final SubLObject min_all_asserted_not_negation_predicates_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_min_asserted_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     * most subordinate of the asserted not-negation-predicates of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the asserted not-negation-predicates of the spec-preds of <pred>")
     public static SubLObject min_all_asserted_not_negation_predicates(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -394,11 +791,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_min_asserted_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    public static final SubLObject not_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.min_all_not_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject not_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         return min_all_not_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
+    public static final SubLObject min_not_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.min_all_not_negation_predicates(pred, mt, UNPROVIDED);
     }
 
     public static SubLObject min_not_negation_preds(final SubLObject pred, SubLObject mt) {
@@ -408,6 +819,13 @@ public final class negation_predicate extends SubLTranslatedFile {
         return min_all_not_negation_predicates(pred, mt, UNPROVIDED);
     }
 
+    public static final SubLObject min_not_negation_predicates_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.min_all_not_negation_predicates(pred, mt, UNPROVIDED);
+    }
+
     public static SubLObject min_not_negation_predicates(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -415,6 +833,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return min_all_not_negation_predicates(pred, mt, UNPROVIDED);
     }
 
+    /**
+     * most subordinate of all negation inverses of <pred>
+     */
+    @LispMethod(comment = "most subordinate of all negation inverses of <pred>")
+    public static final SubLObject min_all_not_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_implied_min_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * most subordinate of all negation inverses of <pred>
+     */
+    @LispMethod(comment = "most subordinate of all negation inverses of <pred>")
     public static SubLObject min_all_not_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -425,6 +861,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_implied_min_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
     }
 
+    /**
+     * most subordinate of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the spec-preds of <pred>")
+    public static final SubLObject min_implied_not_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_leaf_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module($$negationInverse)), pred, mt, tv);
+    }
+
+    /**
+     * most subordinate of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the spec-preds of <pred>")
     public static SubLObject min_implied_not_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -435,6 +889,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_leaf_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module($$negationInverse)), pred, mt, tv);
     }
 
+    /**
+     * most subordinate of the asserted not-negation-inverses of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the asserted not-negation-inverses of the spec-preds of <pred>")
+    public static final SubLObject min_all_asserted_not_negation_inverses_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_min_asserted_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    /**
+     * most subordinate of the asserted not-negation-inverses of the spec-preds of <pred>
+     */
+    @LispMethod(comment = "most subordinate of the asserted not-negation-inverses of the spec-preds of <pred>")
     public static SubLObject min_all_asserted_not_negation_inverses(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -443,6 +915,13 @@ public final class negation_predicate extends SubLTranslatedFile {
             tv = NIL;
         }
         return sbhl_search_methods.sbhl_min_asserted_false_disjoins(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt, tv);
+    }
+
+    public static final SubLObject min_not_negation_inverses_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.min_all_not_negation_inverses(pred, mt, UNPROVIDED);
     }
 
     public static SubLObject min_not_negation_inverses(final SubLObject pred, SubLObject mt) {
@@ -510,6 +989,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     * are predicates <pred1> and <pred2> disjoint?
+     */
+    @LispMethod(comment = "are predicates <pred1> and <pred2> disjoint?")
+    public static final SubLObject negation_predicateP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_implied_relations.sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, mt, tv);
+    }
+
+    /**
+     * are predicates <pred1> and <pred2> disjoint?
+     */
+    @LispMethod(comment = "are predicates <pred1> and <pred2> disjoint?")
     public static SubLObject negation_predicateP(final SubLObject pred1, final SubLObject pred2, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -520,6 +1017,21 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, mt, tv);
     }
 
+    /**
+     * are extensions of preds <pred1> and <pred2> disjoint?
+     */
+    @LispMethod(comment = "are extensions of preds <pred1> and <pred2> disjoint?")
+    public static final SubLObject negation_predP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.negation_predicateP(pred1, pred2, mt, UNPROVIDED);
+    }
+
+    /**
+     * are extensions of preds <pred1> and <pred2> disjoint?
+     */
+    @LispMethod(comment = "are extensions of preds <pred1> and <pred2> disjoint?")
     public static SubLObject negation_predP(final SubLObject pred1, final SubLObject pred2, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -585,6 +1097,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     * are inverses <pred1> and <pred2> disjoint?
+     */
+    @LispMethod(comment = "are inverses <pred1> and <pred2> disjoint?")
+    public static final SubLObject negation_inverseP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_implied_relations.sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, mt, tv);
+    }
+
+    /**
+     * are inverses <pred1> and <pred2> disjoint?
+     */
+    @LispMethod(comment = "are inverses <pred1> and <pred2> disjoint?")
     public static SubLObject negation_inverseP(final SubLObject pred1, final SubLObject pred2, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -595,6 +1125,21 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, mt, tv);
     }
 
+    /**
+     * are extensions of preds <pred1> and <pred2> not disjoint?
+     */
+    @LispMethod(comment = "are extensions of preds <pred1> and <pred2> not disjoint?")
+    public static final SubLObject not_negation_predP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return com.cyc.cycjava.cycl.negation_predicate.not_negation_predicateP(pred1, pred2, mt, UNPROVIDED);
+    }
+
+    /**
+     * are extensions of preds <pred1> and <pred2> not disjoint?
+     */
+    @LispMethod(comment = "are extensions of preds <pred1> and <pred2> not disjoint?")
     public static SubLObject not_negation_predP(final SubLObject pred1, final SubLObject pred2, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -602,6 +1147,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return not_negation_predicateP(pred1, pred2, mt, UNPROVIDED);
     }
 
+    /**
+     * are predicates <pred1> and <pred2> not disjoint?
+     */
+    @LispMethod(comment = "are predicates <pred1> and <pred2> not disjoint?")
+    public static final SubLObject not_negation_predicateP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, mt, tv);
+    }
+
+    /**
+     * are predicates <pred1> and <pred2> not disjoint?
+     */
+    @LispMethod(comment = "are predicates <pred1> and <pred2> not disjoint?")
     public static SubLObject not_negation_predicateP(final SubLObject pred1, final SubLObject pred2, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -612,6 +1175,24 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, mt, tv);
     }
 
+    /**
+     * are inverses <pred1> and <pred2> not disjoint?
+     */
+    @LispMethod(comment = "are inverses <pred1> and <pred2> not disjoint?")
+    public static final SubLObject not_negation_inverseP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, mt, tv);
+    }
+
+    /**
+     * are inverses <pred1> and <pred2> not disjoint?
+     */
+    @LispMethod(comment = "are inverses <pred1> and <pred2> not disjoint?")
     public static SubLObject not_negation_inverseP(final SubLObject pred1, final SubLObject pred2, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -622,6 +1203,28 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_false_predicate_relation_p(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, mt, tv);
     }
 
+    /**
+     *
+     *
+     * @return booleanp; does PRED have any negation-preds or negation-inverses?
+     */
+    @LispMethod(comment = "@return booleanp; does PRED have any negation-preds or negation-inverses?")
+    public static final SubLObject some_negation_pred_or_inverseP_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return list_utilities.sublisp_boolean(com.cyc.cycjava.cycl.negation_predicate.some_negation_pred_or_inverse(pred, mt, tv));
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; does PRED have any negation-preds or negation-inverses?
+     */
+    @LispMethod(comment = "@return booleanp; does PRED have any negation-preds or negation-inverses?")
     public static SubLObject some_negation_pred_or_inverseP(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -632,6 +1235,28 @@ public final class negation_predicate extends SubLTranslatedFile {
         return list_utilities.sublisp_boolean(some_negation_pred_or_inverse(pred, mt, tv));
     }
 
+    /**
+     *
+     *
+     * @return sbhl-node-object-p; the first found #$negationPred or #$negationInverse of PRED.
+     */
+    @LispMethod(comment = "@return sbhl-node-object-p; the first found #$negationPred or #$negationInverse of PRED.")
+    public static final SubLObject some_negation_pred_or_inverse_alt(SubLObject pred, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_methods.sbhl_gather_first_true_disjoin(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
+    }
+
+    /**
+     *
+     *
+     * @return sbhl-node-object-p; the first found #$negationPred or #$negationInverse of PRED.
+     */
+    @LispMethod(comment = "@return sbhl-node-object-p; the first found #$negationPred or #$negationInverse of PRED.")
     public static SubLObject some_negation_pred_or_inverse(final SubLObject pred, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -642,6 +1267,46 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_methods.sbhl_gather_first_true_disjoin(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt, tv);
     }
 
+    /**
+     * If predicate1 and predicate2 are the same, returns T if there is a _known_
+     * (i.e. not assumed) reason for believing they are not negation-pred.
+     * If they are not the same, then it considers assumed reasons
+     * as well, and returns T if there is some reason for believing
+     * they are not negation-pred with all reasons considered.
+     */
+    @LispMethod(comment = "If predicate1 and predicate2 are the same, returns T if there is a _known_\r\n(i.e. not assumed) reason for believing they are not negation-pred.\r\nIf they are not the same, then it considers assumed reasons\r\nas well, and returns T if there is some reason for believing\r\nthey are not negation-pred with all reasons considered.\nIf predicate1 and predicate2 are the same, returns T if there is a _known_\n(i.e. not assumed) reason for believing they are not negation-pred.\nIf they are not the same, then it considers assumed reasons\nas well, and returns T if there is some reason for believing\nthey are not negation-pred with all reasons considered.")
+    public static final SubLObject basis_for_not_negation_predP_alt(SubLObject predicate1, SubLObject predicate2, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject known_not_negation_predP = NIL;
+                if (predicate1 == predicate2) {
+                    {
+                        SubLObject _prev_bind_0 = sbhl_module_vars.$assume_sbhl_extensions_nonempty$.currentBinding(thread);
+                        try {
+                            sbhl_module_vars.$assume_sbhl_extensions_nonempty$.bind(NIL, thread);
+                            known_not_negation_predP = com.cyc.cycjava.cycl.negation_predicate.not_negation_predP(predicate1, predicate2, mt);
+                        } finally {
+                            sbhl_module_vars.$assume_sbhl_extensions_nonempty$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return makeBoolean(((predicate1 == predicate2) && (NIL != known_not_negation_predP)) || ((predicate1 != predicate2) && (NIL != com.cyc.cycjava.cycl.negation_predicate.not_negation_predP(predicate1, predicate2, mt))));
+            }
+        }
+    }
+
+    /**
+     * If predicate1 and predicate2 are the same, returns T if there is a _known_
+     * (i.e. not assumed) reason for believing they are not negation-pred.
+     * If they are not the same, then it considers assumed reasons
+     * as well, and returns T if there is some reason for believing
+     * they are not negation-pred with all reasons considered.
+     */
+    @LispMethod(comment = "If predicate1 and predicate2 are the same, returns T if there is a _known_\r\n(i.e. not assumed) reason for believing they are not negation-pred.\r\nIf they are not the same, then it considers assumed reasons\r\nas well, and returns T if there is some reason for believing\r\nthey are not negation-pred with all reasons considered.\nIf predicate1 and predicate2 are the same, returns T if there is a _known_\n(i.e. not assumed) reason for believing they are not negation-pred.\nIf they are not the same, then it considers assumed reasons\nas well, and returns T if there is some reason for believing\nthey are not negation-pred with all reasons considered.")
     public static SubLObject basis_for_not_negation_predP(final SubLObject predicate1, final SubLObject predicate2, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -660,6 +1325,46 @@ public final class negation_predicate extends SubLTranslatedFile {
         return makeBoolean((predicate1.eql(predicate2) && (NIL != known_not_negation_predP)) || ((!predicate1.eql(predicate2)) && (NIL != not_negation_predP(predicate1, predicate2, mt))));
     }
 
+    /**
+     * If predicate1 and predicate2 are the same, returns T if there is a _known_
+     * (i.e. not assumed) reason for believing they are not negation-inverse.
+     * If they are not the same, then it considers assumed reasons
+     * as well, and returns T if there is some reason for believing
+     * they are not negation-inverse with all reasons considered.
+     */
+    @LispMethod(comment = "If predicate1 and predicate2 are the same, returns T if there is a _known_\r\n(i.e. not assumed) reason for believing they are not negation-inverse.\r\nIf they are not the same, then it considers assumed reasons\r\nas well, and returns T if there is some reason for believing\r\nthey are not negation-inverse with all reasons considered.\nIf predicate1 and predicate2 are the same, returns T if there is a _known_\n(i.e. not assumed) reason for believing they are not negation-inverse.\nIf they are not the same, then it considers assumed reasons\nas well, and returns T if there is some reason for believing\nthey are not negation-inverse with all reasons considered.")
+    public static final SubLObject basis_for_not_negation_inverseP_alt(SubLObject predicate1, SubLObject predicate2, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject known_not_negation_inverseP = NIL;
+                if (predicate1 == predicate2) {
+                    {
+                        SubLObject _prev_bind_0 = sbhl_module_vars.$assume_sbhl_extensions_nonempty$.currentBinding(thread);
+                        try {
+                            sbhl_module_vars.$assume_sbhl_extensions_nonempty$.bind(NIL, thread);
+                            known_not_negation_inverseP = com.cyc.cycjava.cycl.negation_predicate.not_negation_inverseP(predicate1, predicate2, mt, UNPROVIDED);
+                        } finally {
+                            sbhl_module_vars.$assume_sbhl_extensions_nonempty$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return makeBoolean(((predicate1 == predicate2) && (NIL != known_not_negation_inverseP)) || ((predicate1 != predicate2) && (NIL != com.cyc.cycjava.cycl.negation_predicate.not_negation_inverseP(predicate1, predicate2, mt, UNPROVIDED))));
+            }
+        }
+    }
+
+    /**
+     * If predicate1 and predicate2 are the same, returns T if there is a _known_
+     * (i.e. not assumed) reason for believing they are not negation-inverse.
+     * If they are not the same, then it considers assumed reasons
+     * as well, and returns T if there is some reason for believing
+     * they are not negation-inverse with all reasons considered.
+     */
+    @LispMethod(comment = "If predicate1 and predicate2 are the same, returns T if there is a _known_\r\n(i.e. not assumed) reason for believing they are not negation-inverse.\r\nIf they are not the same, then it considers assumed reasons\r\nas well, and returns T if there is some reason for believing\r\nthey are not negation-inverse with all reasons considered.\nIf predicate1 and predicate2 are the same, returns T if there is a _known_\n(i.e. not assumed) reason for believing they are not negation-inverse.\nIf they are not the same, then it considers assumed reasons\nas well, and returns T if there is some reason for believing\nthey are not negation-inverse with all reasons considered.")
     public static SubLObject basis_for_not_negation_inverseP(final SubLObject predicate1, final SubLObject predicate2, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -678,6 +1383,27 @@ public final class negation_predicate extends SubLTranslatedFile {
         return makeBoolean((predicate1.eql(predicate2) && (NIL != known_not_negation_inverseP)) || ((!predicate1.eql(predicate2)) && (NIL != not_negation_inverseP(predicate1, predicate2, mt, UNPROVIDED))));
     }
 
+    /**
+     * justification of (negation-pred? <p1> <p2>)
+     */
+    @LispMethod(comment = "justification of (negation-pred? <p1> <p2>)")
+    public static final SubLObject why_negation_predP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt, SubLObject tv, SubLObject behavior) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        if (behavior == UNPROVIDED) {
+            behavior = NIL;
+        }
+        return sbhl_search_implied_relations.why_sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, mt, tv, behavior);
+    }
+
+    /**
+     * justification of (negation-pred? <p1> <p2>)
+     */
+    @LispMethod(comment = "justification of (negation-pred? <p1> <p2>)")
     public static SubLObject why_negation_predP(final SubLObject pred1, final SubLObject pred2, SubLObject mt, SubLObject tv, SubLObject behavior) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -691,6 +1417,27 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.why_sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, mt, tv, behavior);
     }
 
+    /**
+     * justification of (negation-inverse? <p1> <p2>)
+     */
+    @LispMethod(comment = "justification of (negation-inverse? <p1> <p2>)")
+    public static final SubLObject why_negation_inverseP_alt(SubLObject pred1, SubLObject pred2, SubLObject mt, SubLObject tv, SubLObject behavior) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        if (behavior == UNPROVIDED) {
+            behavior = NIL;
+        }
+        return sbhl_search_implied_relations.why_sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, mt, tv, behavior);
+    }
+
+    /**
+     * justification of (negation-inverse? <p1> <p2>)
+     */
+    @LispMethod(comment = "justification of (negation-inverse? <p1> <p2>)")
     public static SubLObject why_negation_inverseP(final SubLObject pred1, final SubLObject pred2, SubLObject mt, SubLObject tv, SubLObject behavior) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -704,6 +1451,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_implied_relations.why_sbhl_implied_disjoins_relation_p(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, mt, tv, behavior);
     }
 
+    /**
+     *
+     *
+     * @return listp; Returns in what (most-genl) mts PRED2 is a negation-predicate of PRED1
+     */
+    @LispMethod(comment = "@return listp; Returns in what (most-genl) mts PRED2 is a negation-predicate of PRED1")
+    public static final SubLObject max_floor_mts_of_negation_predicate_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; Returns in what (most-genl) mts PRED2 is a negation-predicate of PRED1
+     */
+    @LispMethod(comment = "@return listp; Returns in what (most-genl) mts PRED2 is a negation-predicate of PRED1")
     public static SubLObject max_floor_mts_of_negation_predicate_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -711,10 +1477,33 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, tv);
     }
 
+    public static final SubLObject max_floor_mts_of_negation_pred_paths_alt(SubLObject pred1, SubLObject pred2) {
+        return com.cyc.cycjava.cycl.negation_predicate.max_floor_mts_of_negation_predicate_paths(pred1, pred2, UNPROVIDED);
+    }
+
     public static SubLObject max_floor_mts_of_negation_pred_paths(final SubLObject pred1, final SubLObject pred2) {
         return max_floor_mts_of_negation_predicate_paths(pred1, pred2, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with negation-predicate paths from PRED1 to PRED2?
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with negation-predicate paths from PRED1 to PRED2?")
+    public static final SubLObject min_mts_of_negation_predicate_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_min_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with negation-predicate paths from PRED1 to PRED2?
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with negation-predicate paths from PRED1 to PRED2?")
     public static SubLObject min_mts_of_negation_predicate_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -722,10 +1511,33 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_min_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred1, pred2, tv);
     }
 
+    public static final SubLObject min_mts_of_negation_pred_paths_alt(SubLObject pred1, SubLObject pred2) {
+        return com.cyc.cycjava.cycl.negation_predicate.min_mts_of_negation_predicate_paths(pred1, pred2, UNPROVIDED);
+    }
+
     public static SubLObject min_mts_of_negation_pred_paths(final SubLObject pred1, final SubLObject pred2) {
         return min_mts_of_negation_predicate_paths(pred1, pred2, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-predicate path. Currently this does not take disjoins into account.
+     */
+    @LispMethod(comment = "@return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-predicate path. Currently this does not take disjoins into account.")
+    public static final SubLObject max_floor_mts_of_not_negation_predicate_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_max_floor_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred2, pred1, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-predicate path. Currently this does not take disjoins into account.
+     */
+    @LispMethod(comment = "@return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-predicate path. Currently this does not take disjoins into account.")
     public static SubLObject max_floor_mts_of_not_negation_predicate_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -733,6 +1545,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_max_floor_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred2, pred1, tv);
     }
 
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with false negation-predicate paths from PRED1 to PRED2?. Currently this does not take disjoins into account.
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with false negation-predicate paths from PRED1 to PRED2?. Currently this does not take disjoins into account.")
+    public static final SubLObject min_mts_of_not_negation_predicate_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_min_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred2, pred1, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with false negation-predicate paths from PRED1 to PRED2?. Currently this does not take disjoins into account.
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with false negation-predicate paths from PRED1 to PRED2?. Currently this does not take disjoins into account.")
     public static SubLObject min_mts_of_not_negation_predicate_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -740,6 +1571,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_min_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationPreds), pred2, pred1, tv);
     }
 
+    /**
+     *
+     *
+     * @return listp; Returns in what (most-genl) mts PRED2 is a negation-inverse of PRED1
+     */
+    @LispMethod(comment = "@return listp; Returns in what (most-genl) mts PRED2 is a negation-inverse of PRED1")
+    public static final SubLObject max_floor_mts_of_negation_inverse_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; Returns in what (most-genl) mts PRED2 is a negation-inverse of PRED1
+     */
+    @LispMethod(comment = "@return listp; Returns in what (most-genl) mts PRED2 is a negation-inverse of PRED1")
     public static SubLObject max_floor_mts_of_negation_inverse_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -747,6 +1597,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, tv);
     }
 
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with negation-binverse paths from PRED1 to PRED2?
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with negation-binverse paths from PRED1 to PRED2?")
+    public static final SubLObject min_mts_of_negation_inverse_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_min_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with negation-binverse paths from PRED1 to PRED2?
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with negation-binverse paths from PRED1 to PRED2?")
     public static SubLObject min_mts_of_negation_inverse_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -754,6 +1623,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_min_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred1, pred2, tv);
     }
 
+    /**
+     *
+     *
+     * @return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-inverse path.
+     */
+    @LispMethod(comment = "@return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-inverse path.")
+    public static final SubLObject max_floor_mts_of_not_negation_inverse_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_max_floor_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred2, pred1, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-inverse path.
+     */
+    @LispMethod(comment = "@return listp; the most genl mts by which PRED2 is accessible to PRED1 by a false negation-inverse path.")
     public static SubLObject max_floor_mts_of_not_negation_inverse_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -761,6 +1649,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_max_floor_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred2, pred1, tv);
     }
 
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with false negation-inverse paths from PRED1 to PRED2?.
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with false negation-inverse paths from PRED1 to PRED2?.")
+    public static final SubLObject min_mts_of_not_negation_inverse_paths_alt(SubLObject pred1, SubLObject pred2, SubLObject tv) {
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return sbhl_search_what_mts.sbhl_min_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred2, pred1, tv);
+    }
+
+    /**
+     *
+     *
+     * @return listp; what minimal sets of mts are associated with false negation-inverse paths from PRED1 to PRED2?.
+     */
+    @LispMethod(comment = "@return listp; what minimal sets of mts are associated with false negation-inverse paths from PRED1 to PRED2?.")
     public static SubLObject min_mts_of_not_negation_inverse_paths(final SubLObject pred1, final SubLObject pred2, SubLObject tv) {
         if (tv == UNPROVIDED) {
             tv = NIL;
@@ -768,10 +1675,45 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_search_what_mts.sbhl_min_mts_of_false_predicate_paths(sbhl_module_vars.get_sbhl_module($$negationInverse), pred2, pred1, tv);
     }
 
+    /**
+     *
+     *
+     * @return listp; the microtheories in which PRED has negation-predicate assertions.
+     */
+    @LispMethod(comment = "@return listp; the microtheories in which PRED has negation-predicate assertions.")
+    public static final SubLObject negation_predicate_mts_alt(SubLObject pred) {
+        return kb_accessors.pred_mts(pred, $$negationPreds, UNPROVIDED);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the microtheories in which PRED has negation-predicate assertions.
+     */
+    @LispMethod(comment = "@return listp; the microtheories in which PRED has negation-predicate assertions.")
     public static SubLObject negation_predicate_mts(final SubLObject pred) {
         return kb_accessors.pred_mts(pred, $$negationPreds, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return listp; the asserted true links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the asserted true links for PRED in MT / *mt* via negation-predicate.")
+    public static final SubLObject asserted_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_asserted_true_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the asserted true links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the asserted true links for PRED in MT / *mt* via negation-predicate.")
     public static SubLObject asserted_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -779,6 +1721,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_asserted_true_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the asserted false links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the asserted false links for PRED in MT / *mt* via negation-predicate.")
+    public static final SubLObject asserted_not_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_asserted_false_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the asserted false links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the asserted false links for PRED in MT / *mt* via negation-predicate.")
     public static SubLObject asserted_not_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -786,6 +1747,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_asserted_false_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the supported true links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the supported true links for PRED in MT / *mt* via negation-predicate.")
+    public static final SubLObject supported_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_supported_true_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the supported true links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the supported true links for PRED in MT / *mt* via negation-predicate.")
     public static SubLObject supported_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -793,6 +1773,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_supported_true_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the supported false links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the supported false links for PRED in MT / *mt* via negation-predicate.")
+    public static final SubLObject supported_not_negation_preds_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_supported_false_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the supported false links for PRED in MT / *mt* via negation-predicate.
+     */
+    @LispMethod(comment = "@return listp; the supported false links for PRED in MT / *mt* via negation-predicate.")
     public static SubLObject supported_not_negation_preds(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -800,10 +1799,45 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_supported_false_links(sbhl_module_vars.get_sbhl_module($$negationPreds), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the microtheories in which PRED has negation-inverse assertions.
+     */
+    @LispMethod(comment = "@return listp; the microtheories in which PRED has negation-inverse assertions.")
+    public static final SubLObject negation_inverse_mts_alt(SubLObject pred) {
+        return kb_accessors.pred_mts(pred, sbhl_module_vars.get_sbhl_module($$negationInverse), UNPROVIDED);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the microtheories in which PRED has negation-inverse assertions.
+     */
+    @LispMethod(comment = "@return listp; the microtheories in which PRED has negation-inverse assertions.")
     public static SubLObject negation_inverse_mts(final SubLObject pred) {
         return kb_accessors.pred_mts(pred, sbhl_module_vars.get_sbhl_module($$negationInverse), UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return listp; the asserted true links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the asserted true links for PRED in MT / *mt* via negation-inverse.")
+    public static final SubLObject asserted_negation_inverses_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_asserted_true_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the asserted true links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the asserted true links for PRED in MT / *mt* via negation-inverse.")
     public static SubLObject asserted_negation_inverses(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -811,6 +1845,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_asserted_true_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the asserted false links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the asserted false links for PRED in MT / *mt* via negation-inverse.")
+    public static final SubLObject asserted_not_negation_inverses_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_asserted_false_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the asserted false links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the asserted false links for PRED in MT / *mt* via negation-inverse.")
     public static SubLObject asserted_not_negation_inverses(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -818,6 +1871,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_asserted_false_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the supported true links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the supported true links for PRED in MT / *mt* via negation-inverse.")
+    public static final SubLObject supported_negation_inverses_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_supported_true_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the supported true links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the supported true links for PRED in MT / *mt* via negation-inverse.")
     public static SubLObject supported_negation_inverses(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -825,6 +1897,25 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_supported_true_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
     }
 
+    /**
+     *
+     *
+     * @return listp; the supported false links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the supported false links for PRED in MT / *mt* via negation-inverse.")
+    public static final SubLObject supported_not_negation_inverses_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return sbhl_link_methods.sbhl_supported_false_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
+    }
+
+    /**
+     *
+     *
+     * @return listp; the supported false links for PRED in MT / *mt* via negation-inverse.
+     */
+    @LispMethod(comment = "@return listp; the supported false links for PRED in MT / *mt* via negation-inverse.")
     public static SubLObject supported_not_negation_inverses(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -832,33 +1923,98 @@ public final class negation_predicate extends SubLTranslatedFile {
         return sbhl_link_methods.sbhl_supported_false_links(sbhl_module_vars.get_sbhl_module($$negationInverse), pred, mt);
     }
 
+    /**
+     * Modifier. Adds sbhl links with @see sbhl-after-adding.
+     */
+    @LispMethod(comment = "Modifier. Adds sbhl links with @see sbhl-after-adding.")
+    public static final SubLObject negation_predicate_after_adding_alt(SubLObject source, SubLObject assertion) {
+        sbhl_link_methods.sbhl_after_adding(source, assertion, sbhl_module_vars.get_sbhl_module($$negationPreds));
+        return NIL;
+    }
+
+    @LispMethod(comment = "Modifier. Adds sbhl links with @see sbhl-after-adding.")
     public static SubLObject negation_predicate_after_adding(SubLObject source, final SubLObject assertion) {
         sbhl_link_methods.sbhl_after_adding(source, assertion, sbhl_module_vars.get_sbhl_module($$negationPreds));
         return NIL;
     }
 
+    /**
+     * Modifier. Adds sbhl links with @see sbhl-after-adding.
+     */
+    @LispMethod(comment = "Modifier. Adds sbhl links with @see sbhl-after-adding.")
+    public static final SubLObject negation_inverse_after_adding_alt(SubLObject source, SubLObject assertion) {
+        sbhl_link_methods.sbhl_after_adding(source, assertion, sbhl_module_vars.get_sbhl_module($$negationInverse));
+        return NIL;
+    }
+
+    @LispMethod(comment = "Modifier. Adds sbhl links with @see sbhl-after-adding.")
     public static SubLObject negation_inverse_after_adding(SubLObject source, final SubLObject assertion) {
         sbhl_link_methods.sbhl_after_adding(source, assertion, sbhl_module_vars.get_sbhl_module($$negationInverse));
         return NIL;
     }
 
+    /**
+     * Modifier. Adds sbhl links with @see negation-inverse-after-adding.
+     */
+    @LispMethod(comment = "Modifier. Adds sbhl links with @see negation-inverse-after-adding.")
+    public static final SubLObject add_negation_inverse_alt(SubLObject source, SubLObject assertion) {
+        com.cyc.cycjava.cycl.negation_predicate.negation_inverse_after_adding(source, assertion);
+        return NIL;
+    }
+
+    @LispMethod(comment = "Modifier. Adds sbhl links with @see negation-inverse-after-adding.")
     public static SubLObject add_negation_inverse(SubLObject source, final SubLObject assertion) {
         negation_inverse_after_adding(source, assertion);
         return NIL;
     }
 
+    /**
+     * Modifier. Removes sbhl links with @see sbhl-after-removing.
+     */
+    @LispMethod(comment = "Modifier. Removes sbhl links with @see sbhl-after-removing.")
+    public static final SubLObject negation_predicate_after_removing_alt(SubLObject source, SubLObject assertion) {
+        sbhl_link_methods.sbhl_after_removing(source, assertion, sbhl_module_vars.get_sbhl_module($$negationPreds));
+        return NIL;
+    }
+
+    @LispMethod(comment = "Modifier. Removes sbhl links with @see sbhl-after-removing.")
     public static SubLObject negation_predicate_after_removing(SubLObject source, final SubLObject assertion) {
         sbhl_link_methods.sbhl_after_removing(source, assertion, sbhl_module_vars.get_sbhl_module($$negationPreds));
         return NIL;
     }
 
+    /**
+     * Modifier. Removes sbhl links with @see sbhl-after-removing.
+     */
+    @LispMethod(comment = "Modifier. Removes sbhl links with @see sbhl-after-removing.")
+    public static final SubLObject negation_inverse_after_removing_alt(SubLObject source, SubLObject assertion) {
+        sbhl_link_methods.sbhl_after_removing(source, assertion, sbhl_module_vars.get_sbhl_module($$negationInverse));
+        return NIL;
+    }
+
+    @LispMethod(comment = "Modifier. Removes sbhl links with @see sbhl-after-removing.")
     public static SubLObject negation_inverse_after_removing(SubLObject source, final SubLObject assertion) {
         sbhl_link_methods.sbhl_after_removing(source, assertion, sbhl_module_vars.get_sbhl_module($$negationInverse));
         return NIL;
     }
 
+    /**
+     * Modifier. Removes sbhl links with @see sbhl-after-removing.
+     */
+    @LispMethod(comment = "Modifier. Removes sbhl links with @see sbhl-after-removing.")
+    public static final SubLObject remove_negation_inverse_alt(SubLObject source, SubLObject assertion) {
+        com.cyc.cycjava.cycl.negation_predicate.negation_inverse_after_removing(source, assertion);
+        return NIL;
+    }
+
+    @LispMethod(comment = "Modifier. Removes sbhl links with @see sbhl-after-removing.")
     public static SubLObject remove_negation_inverse(SubLObject source, final SubLObject assertion) {
         negation_inverse_after_removing(source, assertion);
+        return NIL;
+    }
+
+    public static final SubLObject clear_negation_predicate_graph_alt() {
+        sbhl_link_methods.clear_sbhl_module_graph(sbhl_module_vars.get_sbhl_module($$negationPreds));
         return NIL;
     }
 
@@ -867,9 +2023,50 @@ public final class negation_predicate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_negation_inverse_graph_alt() {
+        sbhl_link_methods.clear_sbhl_module_graph(sbhl_module_vars.get_sbhl_module($$negationInverse));
+        return NIL;
+    }
+
     public static SubLObject clear_negation_inverse_graph() {
         sbhl_link_methods.clear_sbhl_module_graph(sbhl_module_vars.get_sbhl_module($$negationInverse));
         return NIL;
+    }
+
+    public static final SubLObject clear_node_negation_predicate_links_alt(SubLObject node) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                try {
+                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$negationPreds), thread);
+                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$negationPreds)), thread);
+                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$negationPreds)), thread);
+                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$negationPreds), thread);
+                    {
+                        SubLObject cdolist_list_var = sbhl_link_methods.sbhl_link_mts(sbhl_module_vars.get_sbhl_module($$negationPreds), node);
+                        SubLObject mt = NIL;
+                        for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                            if (NIL != fort_types_interface.predicateP(node)) {
+                                sbhl_link_methods.clear_sbhl_links_within_mt(node, mt, UNPROVIDED);
+                            }
+                        }
+                    }
+                } finally {
+                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
+                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject clear_node_negation_predicate_links(final SubLObject node) {
@@ -905,6 +2102,42 @@ public final class negation_predicate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_node_negation_inverse_links_alt(SubLObject node) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                SubLObject _prev_bind_1 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                try {
+                    sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$negationInverse), thread);
+                    sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$negationInverse)), thread);
+                    sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$negationInverse)), thread);
+                    sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$negationInverse), thread);
+                    {
+                        SubLObject cdolist_list_var = sbhl_link_methods.sbhl_link_mts(sbhl_module_vars.get_sbhl_module($$negationInverse), node);
+                        SubLObject mt = NIL;
+                        for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                            if (NIL != fort_types_interface.predicateP(node)) {
+                                sbhl_link_methods.clear_sbhl_links_within_mt(node, mt, UNPROVIDED);
+                            }
+                        }
+                    }
+                } finally {
+                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                    sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                    sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                    sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1, thread);
+                    sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject clear_node_negation_inverse_links(final SubLObject node) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject _prev_bind_0 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
@@ -938,6 +2171,23 @@ public final class negation_predicate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject reset_negation_predicate_links_alt(SubLObject pred) {
+        {
+            SubLObject mts = com.cyc.cycjava.cycl.negation_predicate.negation_predicate_mts(pred);
+            com.cyc.cycjava.cycl.negation_predicate.clear_node_negation_predicate_links(pred);
+            {
+                SubLObject cdolist_list_var = mts;
+                SubLObject mt = NIL;
+                for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                    if (NIL != fort_types_interface.predicateP(pred)) {
+                        com.cyc.cycjava.cycl.negation_predicate.reset_negation_predicate_links_in_mt(pred, mt);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject reset_negation_predicate_links(final SubLObject pred) {
         final SubLObject mts = negation_predicate_mts(pred);
         clear_node_negation_predicate_links(pred);
@@ -951,6 +2201,23 @@ public final class negation_predicate extends SubLTranslatedFile {
             cdolist_list_var = cdolist_list_var.rest();
             mt = cdolist_list_var.first();
         } 
+        return NIL;
+    }
+
+    public static final SubLObject reset_negation_inverse_links_alt(SubLObject pred) {
+        {
+            SubLObject mts = com.cyc.cycjava.cycl.negation_predicate.negation_inverse_mts(pred);
+            com.cyc.cycjava.cycl.negation_predicate.clear_node_negation_inverse_links(pred);
+            {
+                SubLObject cdolist_list_var = mts;
+                SubLObject mt = NIL;
+                for (mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , mt = cdolist_list_var.first()) {
+                    if (NIL != fort_types_interface.predicateP(pred)) {
+                        com.cyc.cycjava.cycl.negation_predicate.reset_negation_inverse_links_in_mt(pred, mt);
+                    }
+                }
+            }
+        }
         return NIL;
     }
 
@@ -970,13 +2237,34 @@ public final class negation_predicate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject reset_negation_predicate_links_in_mt_alt(SubLObject pred, SubLObject mt) {
+        sbhl_link_methods.sbhl_recompute_links(pred, mt, sbhl_module_vars.get_sbhl_module($$negationPreds));
+        return NIL;
+    }
+
     public static SubLObject reset_negation_predicate_links_in_mt(final SubLObject pred, final SubLObject mt) {
         sbhl_link_methods.sbhl_recompute_links(pred, mt, sbhl_module_vars.get_sbhl_module($$negationPreds));
         return NIL;
     }
 
+    public static final SubLObject reset_negation_inverse_links_in_mt_alt(SubLObject pred, SubLObject mt) {
+        sbhl_link_methods.sbhl_recompute_links(pred, mt, sbhl_module_vars.get_sbhl_module($$negationInverse));
+        return NIL;
+    }
+
     public static SubLObject reset_negation_inverse_links_in_mt(final SubLObject pred, final SubLObject mt) {
         sbhl_link_methods.sbhl_recompute_links(pred, mt, sbhl_module_vars.get_sbhl_module($$negationInverse));
+        return NIL;
+    }
+
+    public static final SubLObject reset_negation_predicate_graph_alt(SubLObject clearP) {
+        if (clearP == UNPROVIDED) {
+            clearP = T;
+        }
+        if (NIL != clearP) {
+            com.cyc.cycjava.cycl.negation_predicate.clear_negation_predicate_graph();
+        }
+        sbhl_link_methods.sbhl_recompute_graph_links(sbhl_module_vars.get_sbhl_module($$negationPreds));
         return NIL;
     }
 
@@ -988,6 +2276,17 @@ public final class negation_predicate extends SubLTranslatedFile {
             clear_negation_predicate_graph();
         }
         sbhl_link_methods.sbhl_recompute_graph_links(sbhl_module_vars.get_sbhl_module($$negationPreds));
+        return NIL;
+    }
+
+    public static final SubLObject reset_negation_inverse_graph_alt(SubLObject clearP) {
+        if (clearP == UNPROVIDED) {
+            clearP = T;
+        }
+        if (NIL != clearP) {
+            com.cyc.cycjava.cycl.negation_predicate.clear_negation_inverse_graph();
+        }
+        sbhl_link_methods.sbhl_recompute_graph_links(sbhl_module_vars.get_sbhl_module($$negationInverse));
         return NIL;
     }
 
@@ -1003,93 +2302,97 @@ public final class negation_predicate extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_negation_predicate_file() {
-        declareFunction(me, "local_negation_predicates", "LOCAL-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "local_negation_inverses", "LOCAL-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "local_max_negation_predicates", "LOCAL-MAX-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "local_max_negation_inverses", "LOCAL-MAX-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "local_not_negation_predicates", "LOCAL-NOT-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "local_not_negation_inverses", "LOCAL-NOT-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "local_min_not_negation_predicates", "LOCAL-MIN-NOT-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "local_min_not_negation_inverses", "LOCAL-MIN-NOT-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "all_negation_predicates_memoized_internal", "ALL-NEGATION-PREDICATES-MEMOIZED-INTERNAL", 1, 2, false);
-        declareFunction(me, "all_negation_predicates_memoized", "ALL-NEGATION-PREDICATES-MEMOIZED", 1, 2, false);
-        declareFunction(me, "all_negation_predicates", "ALL-NEGATION-PREDICATES", 1, 2, false);
-        declareMacro(me, "do_all_negation_predicates", "DO-ALL-NEGATION-PREDICATES");
-        declareFunction(me, "all_negation_preds", "ALL-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "all_negation_inverses", "ALL-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "all_not_negation_predicates", "ALL-NOT-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "all_not_negation_preds", "ALL-NOT-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "all_not_negation_inverses", "ALL-NOT-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "max_all_negation_predicates", "MAX-ALL-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "negation_preds", "NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "max_negation_preds", "MAX-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "max_negation_predicates", "MAX-NEGATION-PREDICATES", 1, 1, false);
-        declareFunction(me, "max_all_negation_inverses", "MAX-ALL-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "max_negation_inverses", "MAX-NEGATION-INVERSES", 1, 1, false);
-        declareFunction(me, "min_all_not_negation_predicates", "MIN-ALL-NOT-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "min_implied_not_negation_predicates", "MIN-IMPLIED-NOT-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "min_all_asserted_not_negation_predicates", "MIN-ALL-ASSERTED-NOT-NEGATION-PREDICATES", 1, 2, false);
-        declareFunction(me, "not_negation_preds", "NOT-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "min_not_negation_preds", "MIN-NOT-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "min_not_negation_predicates", "MIN-NOT-NEGATION-PREDICATES", 1, 1, false);
-        declareFunction(me, "min_all_not_negation_inverses", "MIN-ALL-NOT-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "min_implied_not_negation_inverses", "MIN-IMPLIED-NOT-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "min_all_asserted_not_negation_inverses", "MIN-ALL-ASSERTED-NOT-NEGATION-INVERSES", 1, 2, false);
-        declareFunction(me, "min_not_negation_inverses", "MIN-NOT-NEGATION-INVERSES", 1, 1, false);
-        declareFunction(me, "negation_predicateP_memoized_internal", "NEGATION-PREDICATE?-MEMOIZED-INTERNAL", 2, 2, false);
-        declareFunction(me, "negation_predicateP_memoized", "NEGATION-PREDICATE?-MEMOIZED", 2, 2, false);
-        declareFunction(me, "negation_predicateP", "NEGATION-PREDICATE?", 2, 2, false);
-        declareFunction(me, "negation_predP", "NEGATION-PRED?", 2, 1, false);
-        declareFunction(me, "negation_inverseP_memoized_internal", "NEGATION-INVERSE?-MEMOIZED-INTERNAL", 2, 2, false);
-        declareFunction(me, "negation_inverseP_memoized", "NEGATION-INVERSE?-MEMOIZED", 2, 2, false);
-        declareFunction(me, "negation_inverseP", "NEGATION-INVERSE?", 2, 2, false);
-        declareFunction(me, "not_negation_predP", "NOT-NEGATION-PRED?", 2, 1, false);
-        declareFunction(me, "not_negation_predicateP", "NOT-NEGATION-PREDICATE?", 2, 2, false);
-        declareFunction(me, "not_negation_inverseP", "NOT-NEGATION-INVERSE?", 2, 2, false);
-        declareFunction(me, "some_negation_pred_or_inverseP", "SOME-NEGATION-PRED-OR-INVERSE?", 1, 2, false);
-        declareFunction(me, "some_negation_pred_or_inverse", "SOME-NEGATION-PRED-OR-INVERSE", 1, 2, false);
-        declareFunction(me, "basis_for_not_negation_predP", "BASIS-FOR-NOT-NEGATION-PRED?", 2, 1, false);
-        declareFunction(me, "basis_for_not_negation_inverseP", "BASIS-FOR-NOT-NEGATION-INVERSE?", 2, 1, false);
-        declareFunction(me, "why_negation_predP", "WHY-NEGATION-PRED?", 2, 3, false);
-        declareFunction(me, "why_negation_inverseP", "WHY-NEGATION-INVERSE?", 2, 3, false);
-        declareFunction(me, "max_floor_mts_of_negation_predicate_paths", "MAX-FLOOR-MTS-OF-NEGATION-PREDICATE-PATHS", 2, 1, false);
-        declareFunction(me, "max_floor_mts_of_negation_pred_paths", "MAX-FLOOR-MTS-OF-NEGATION-PRED-PATHS", 2, 0, false);
-        declareFunction(me, "min_mts_of_negation_predicate_paths", "MIN-MTS-OF-NEGATION-PREDICATE-PATHS", 2, 1, false);
-        declareFunction(me, "min_mts_of_negation_pred_paths", "MIN-MTS-OF-NEGATION-PRED-PATHS", 2, 0, false);
-        declareFunction(me, "max_floor_mts_of_not_negation_predicate_paths", "MAX-FLOOR-MTS-OF-NOT-NEGATION-PREDICATE-PATHS", 2, 1, false);
-        declareFunction(me, "min_mts_of_not_negation_predicate_paths", "MIN-MTS-OF-NOT-NEGATION-PREDICATE-PATHS", 2, 1, false);
-        declareFunction(me, "max_floor_mts_of_negation_inverse_paths", "MAX-FLOOR-MTS-OF-NEGATION-INVERSE-PATHS", 2, 1, false);
-        declareFunction(me, "min_mts_of_negation_inverse_paths", "MIN-MTS-OF-NEGATION-INVERSE-PATHS", 2, 1, false);
-        declareFunction(me, "max_floor_mts_of_not_negation_inverse_paths", "MAX-FLOOR-MTS-OF-NOT-NEGATION-INVERSE-PATHS", 2, 1, false);
-        declareFunction(me, "min_mts_of_not_negation_inverse_paths", "MIN-MTS-OF-NOT-NEGATION-INVERSE-PATHS", 2, 1, false);
-        declareFunction(me, "negation_predicate_mts", "NEGATION-PREDICATE-MTS", 1, 0, false);
-        declareFunction(me, "asserted_negation_preds", "ASSERTED-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "asserted_not_negation_preds", "ASSERTED-NOT-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "supported_negation_preds", "SUPPORTED-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "supported_not_negation_preds", "SUPPORTED-NOT-NEGATION-PREDS", 1, 1, false);
-        declareFunction(me, "negation_inverse_mts", "NEGATION-INVERSE-MTS", 1, 0, false);
-        declareFunction(me, "asserted_negation_inverses", "ASSERTED-NEGATION-INVERSES", 1, 1, false);
-        declareFunction(me, "asserted_not_negation_inverses", "ASSERTED-NOT-NEGATION-INVERSES", 1, 1, false);
-        declareFunction(me, "supported_negation_inverses", "SUPPORTED-NEGATION-INVERSES", 1, 1, false);
-        declareFunction(me, "supported_not_negation_inverses", "SUPPORTED-NOT-NEGATION-INVERSES", 1, 1, false);
-        declareFunction(me, "negation_predicate_after_adding", "NEGATION-PREDICATE-AFTER-ADDING", 2, 0, false);
-        declareFunction(me, "negation_inverse_after_adding", "NEGATION-INVERSE-AFTER-ADDING", 2, 0, false);
-        declareFunction(me, "add_negation_inverse", "ADD-NEGATION-INVERSE", 2, 0, false);
-        declareFunction(me, "negation_predicate_after_removing", "NEGATION-PREDICATE-AFTER-REMOVING", 2, 0, false);
-        declareFunction(me, "negation_inverse_after_removing", "NEGATION-INVERSE-AFTER-REMOVING", 2, 0, false);
-        declareFunction(me, "remove_negation_inverse", "REMOVE-NEGATION-INVERSE", 2, 0, false);
-        declareFunction(me, "clear_negation_predicate_graph", "CLEAR-NEGATION-PREDICATE-GRAPH", 0, 0, false);
-        declareFunction(me, "clear_negation_inverse_graph", "CLEAR-NEGATION-INVERSE-GRAPH", 0, 0, false);
-        declareFunction(me, "clear_node_negation_predicate_links", "CLEAR-NODE-NEGATION-PREDICATE-LINKS", 1, 0, false);
-        declareFunction(me, "clear_node_negation_inverse_links", "CLEAR-NODE-NEGATION-INVERSE-LINKS", 1, 0, false);
-        declareFunction(me, "reset_negation_predicate_links", "RESET-NEGATION-PREDICATE-LINKS", 1, 0, false);
-        declareFunction(me, "reset_negation_inverse_links", "RESET-NEGATION-INVERSE-LINKS", 1, 0, false);
-        declareFunction(me, "reset_negation_predicate_links_in_mt", "RESET-NEGATION-PREDICATE-LINKS-IN-MT", 2, 0, false);
-        declareFunction(me, "reset_negation_inverse_links_in_mt", "RESET-NEGATION-INVERSE-LINKS-IN-MT", 2, 0, false);
-        declareFunction(me, "reset_negation_predicate_graph", "RESET-NEGATION-PREDICATE-GRAPH", 0, 1, false);
-        declareFunction(me, "reset_negation_inverse_graph", "RESET-NEGATION-INVERSE-GRAPH", 0, 1, false);
+        declareFunction("local_negation_predicates", "LOCAL-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("local_negation_inverses", "LOCAL-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("local_max_negation_predicates", "LOCAL-MAX-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("local_max_negation_inverses", "LOCAL-MAX-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("local_not_negation_predicates", "LOCAL-NOT-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("local_not_negation_inverses", "LOCAL-NOT-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("local_min_not_negation_predicates", "LOCAL-MIN-NOT-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("local_min_not_negation_inverses", "LOCAL-MIN-NOT-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("all_negation_predicates_memoized_internal", "ALL-NEGATION-PREDICATES-MEMOIZED-INTERNAL", 1, 2, false);
+        declareFunction("all_negation_predicates_memoized", "ALL-NEGATION-PREDICATES-MEMOIZED", 1, 2, false);
+        declareFunction("all_negation_predicates", "ALL-NEGATION-PREDICATES", 1, 2, false);
+        declareMacro("do_all_negation_predicates", "DO-ALL-NEGATION-PREDICATES");
+        declareFunction("all_negation_preds", "ALL-NEGATION-PREDS", 1, 1, false);
+        declareFunction("all_negation_inverses", "ALL-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("all_not_negation_predicates", "ALL-NOT-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("all_not_negation_preds", "ALL-NOT-NEGATION-PREDS", 1, 1, false);
+        declareFunction("all_not_negation_inverses", "ALL-NOT-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("max_all_negation_predicates", "MAX-ALL-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("negation_preds", "NEGATION-PREDS", 1, 1, false);
+        declareFunction("max_negation_preds", "MAX-NEGATION-PREDS", 1, 1, false);
+        declareFunction("max_negation_predicates", "MAX-NEGATION-PREDICATES", 1, 1, false);
+        declareFunction("max_all_negation_inverses", "MAX-ALL-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("max_negation_inverses", "MAX-NEGATION-INVERSES", 1, 1, false);
+        declareFunction("min_all_not_negation_predicates", "MIN-ALL-NOT-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("min_implied_not_negation_predicates", "MIN-IMPLIED-NOT-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("min_all_asserted_not_negation_predicates", "MIN-ALL-ASSERTED-NOT-NEGATION-PREDICATES", 1, 2, false);
+        declareFunction("not_negation_preds", "NOT-NEGATION-PREDS", 1, 1, false);
+        declareFunction("min_not_negation_preds", "MIN-NOT-NEGATION-PREDS", 1, 1, false);
+        declareFunction("min_not_negation_predicates", "MIN-NOT-NEGATION-PREDICATES", 1, 1, false);
+        declareFunction("min_all_not_negation_inverses", "MIN-ALL-NOT-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("min_implied_not_negation_inverses", "MIN-IMPLIED-NOT-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("min_all_asserted_not_negation_inverses", "MIN-ALL-ASSERTED-NOT-NEGATION-INVERSES", 1, 2, false);
+        declareFunction("min_not_negation_inverses", "MIN-NOT-NEGATION-INVERSES", 1, 1, false);
+        declareFunction("negation_predicateP_memoized_internal", "NEGATION-PREDICATE?-MEMOIZED-INTERNAL", 2, 2, false);
+        declareFunction("negation_predicateP_memoized", "NEGATION-PREDICATE?-MEMOIZED", 2, 2, false);
+        declareFunction("negation_predicateP", "NEGATION-PREDICATE?", 2, 2, false);
+        declareFunction("negation_predP", "NEGATION-PRED?", 2, 1, false);
+        declareFunction("negation_inverseP_memoized_internal", "NEGATION-INVERSE?-MEMOIZED-INTERNAL", 2, 2, false);
+        declareFunction("negation_inverseP_memoized", "NEGATION-INVERSE?-MEMOIZED", 2, 2, false);
+        declareFunction("negation_inverseP", "NEGATION-INVERSE?", 2, 2, false);
+        declareFunction("not_negation_predP", "NOT-NEGATION-PRED?", 2, 1, false);
+        declareFunction("not_negation_predicateP", "NOT-NEGATION-PREDICATE?", 2, 2, false);
+        declareFunction("not_negation_inverseP", "NOT-NEGATION-INVERSE?", 2, 2, false);
+        declareFunction("some_negation_pred_or_inverseP", "SOME-NEGATION-PRED-OR-INVERSE?", 1, 2, false);
+        declareFunction("some_negation_pred_or_inverse", "SOME-NEGATION-PRED-OR-INVERSE", 1, 2, false);
+        declareFunction("basis_for_not_negation_predP", "BASIS-FOR-NOT-NEGATION-PRED?", 2, 1, false);
+        declareFunction("basis_for_not_negation_inverseP", "BASIS-FOR-NOT-NEGATION-INVERSE?", 2, 1, false);
+        declareFunction("why_negation_predP", "WHY-NEGATION-PRED?", 2, 3, false);
+        declareFunction("why_negation_inverseP", "WHY-NEGATION-INVERSE?", 2, 3, false);
+        declareFunction("max_floor_mts_of_negation_predicate_paths", "MAX-FLOOR-MTS-OF-NEGATION-PREDICATE-PATHS", 2, 1, false);
+        declareFunction("max_floor_mts_of_negation_pred_paths", "MAX-FLOOR-MTS-OF-NEGATION-PRED-PATHS", 2, 0, false);
+        declareFunction("min_mts_of_negation_predicate_paths", "MIN-MTS-OF-NEGATION-PREDICATE-PATHS", 2, 1, false);
+        declareFunction("min_mts_of_negation_pred_paths", "MIN-MTS-OF-NEGATION-PRED-PATHS", 2, 0, false);
+        declareFunction("max_floor_mts_of_not_negation_predicate_paths", "MAX-FLOOR-MTS-OF-NOT-NEGATION-PREDICATE-PATHS", 2, 1, false);
+        declareFunction("min_mts_of_not_negation_predicate_paths", "MIN-MTS-OF-NOT-NEGATION-PREDICATE-PATHS", 2, 1, false);
+        declareFunction("max_floor_mts_of_negation_inverse_paths", "MAX-FLOOR-MTS-OF-NEGATION-INVERSE-PATHS", 2, 1, false);
+        declareFunction("min_mts_of_negation_inverse_paths", "MIN-MTS-OF-NEGATION-INVERSE-PATHS", 2, 1, false);
+        declareFunction("max_floor_mts_of_not_negation_inverse_paths", "MAX-FLOOR-MTS-OF-NOT-NEGATION-INVERSE-PATHS", 2, 1, false);
+        declareFunction("min_mts_of_not_negation_inverse_paths", "MIN-MTS-OF-NOT-NEGATION-INVERSE-PATHS", 2, 1, false);
+        declareFunction("negation_predicate_mts", "NEGATION-PREDICATE-MTS", 1, 0, false);
+        declareFunction("asserted_negation_preds", "ASSERTED-NEGATION-PREDS", 1, 1, false);
+        declareFunction("asserted_not_negation_preds", "ASSERTED-NOT-NEGATION-PREDS", 1, 1, false);
+        declareFunction("supported_negation_preds", "SUPPORTED-NEGATION-PREDS", 1, 1, false);
+        declareFunction("supported_not_negation_preds", "SUPPORTED-NOT-NEGATION-PREDS", 1, 1, false);
+        declareFunction("negation_inverse_mts", "NEGATION-INVERSE-MTS", 1, 0, false);
+        declareFunction("asserted_negation_inverses", "ASSERTED-NEGATION-INVERSES", 1, 1, false);
+        declareFunction("asserted_not_negation_inverses", "ASSERTED-NOT-NEGATION-INVERSES", 1, 1, false);
+        declareFunction("supported_negation_inverses", "SUPPORTED-NEGATION-INVERSES", 1, 1, false);
+        declareFunction("supported_not_negation_inverses", "SUPPORTED-NOT-NEGATION-INVERSES", 1, 1, false);
+        declareFunction("negation_predicate_after_adding", "NEGATION-PREDICATE-AFTER-ADDING", 2, 0, false);
+        declareFunction("negation_inverse_after_adding", "NEGATION-INVERSE-AFTER-ADDING", 2, 0, false);
+        declareFunction("add_negation_inverse", "ADD-NEGATION-INVERSE", 2, 0, false);
+        declareFunction("negation_predicate_after_removing", "NEGATION-PREDICATE-AFTER-REMOVING", 2, 0, false);
+        declareFunction("negation_inverse_after_removing", "NEGATION-INVERSE-AFTER-REMOVING", 2, 0, false);
+        declareFunction("remove_negation_inverse", "REMOVE-NEGATION-INVERSE", 2, 0, false);
+        declareFunction("clear_negation_predicate_graph", "CLEAR-NEGATION-PREDICATE-GRAPH", 0, 0, false);
+        declareFunction("clear_negation_inverse_graph", "CLEAR-NEGATION-INVERSE-GRAPH", 0, 0, false);
+        declareFunction("clear_node_negation_predicate_links", "CLEAR-NODE-NEGATION-PREDICATE-LINKS", 1, 0, false);
+        declareFunction("clear_node_negation_inverse_links", "CLEAR-NODE-NEGATION-INVERSE-LINKS", 1, 0, false);
+        declareFunction("reset_negation_predicate_links", "RESET-NEGATION-PREDICATE-LINKS", 1, 0, false);
+        declareFunction("reset_negation_inverse_links", "RESET-NEGATION-INVERSE-LINKS", 1, 0, false);
+        declareFunction("reset_negation_predicate_links_in_mt", "RESET-NEGATION-PREDICATE-LINKS-IN-MT", 2, 0, false);
+        declareFunction("reset_negation_inverse_links_in_mt", "RESET-NEGATION-INVERSE-LINKS-IN-MT", 2, 0, false);
+        declareFunction("reset_negation_predicate_graph", "RESET-NEGATION-PREDICATE-GRAPH", 0, 1, false);
+        declareFunction("reset_negation_inverse_graph", "RESET-NEGATION-INVERSE-GRAPH", 0, 1, false);
         return NIL;
     }
+
+    static private final SubLList $list_alt2 = list(list(makeSymbol("NEGATION-PRED"), makeSymbol("PRED"), makeSymbol("&KEY"), makeSymbol("MT"), makeSymbol("TV"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt3 = list(makeKeyword("MT"), makeKeyword("TV"), $DONE);
 
     public static SubLObject init_negation_predicate_file() {
         return NIL;
@@ -1124,26 +2427,6 @@ public final class negation_predicate extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

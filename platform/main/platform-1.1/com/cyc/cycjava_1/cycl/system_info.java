@@ -140,8 +140,7 @@ public  final class system_info extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_system_info_file() {
-    // CVS_ID("Id: system-info.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_external_symbol($sym7$CYC_REVISION_STRING);
+        access_macros.register_external_symbol($sym7$CYC_REVISION_STRING);
     access_macros.register_external_symbol($sym8$CYC_REVISION_STRING_S1P_FORMAT);
     access_macros.register_external_symbol($sym10$CYC_REVISION_NUMBERS);
     subl_macro_promotions.declare_defglobal($sym11$_CYCL_START_TIME_);

@@ -185,8 +185,7 @@ public  final class cyc_bookkeeping extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cyc_bookkeeping_file() {
-    // CVS_ID("Id: cyc-bookkeeping.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_BOOKKEEPING_ENABLED__);
+        subl_macro_promotions.declare_defglobal($sym0$_BOOKKEEPING_ENABLED__);
     access_macros.register_external_symbol($sym1$WITH_BOOKKEEPING_INFO);
     access_macros.register_external_symbol($sym18$NEW_BOOKKEEPING_INFO);
     return NIL;

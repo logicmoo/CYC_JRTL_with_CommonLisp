@@ -428,8 +428,7 @@ import com.cyc.tool.subl.util.*;
   }
 
   public static final SubLObject setup_generic_testing_file() {
-    // CVS_ID("Id: generic-testing.lisp 127151 2009-02-18 03:42:14Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_TEST_CASE_TABLE_INDEX_);
+        subl_macro_promotions.declare_defglobal($sym0$_TEST_CASE_TABLE_INDEX_);
     subl_macro_promotions.declare_defglobal($sym2$_ORDERED_TEST_CASES_);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_generic_test_case_table$.getGlobalValue(), Symbols.symbol_function($sym14$GENERIC_TEST_CASE_TABLE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym15$GTCT_NAME, $sym16$_CSETF_GTCT_NAME);

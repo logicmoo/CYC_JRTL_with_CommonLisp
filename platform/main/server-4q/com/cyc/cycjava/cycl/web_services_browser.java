@@ -1,10 +1,35 @@
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.cycjava.cycl.web_services_browser;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -17,55 +42,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.cycjava.cycl.web_services_browser.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_ampersand;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_question;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_slash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_pretty$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class web_services_browser extends SubLTranslatedFile {
+public final class web_services_browser extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new web_services_browser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.web_services_browser";
+    public static final String myName = "com.cyc.cycjava_2.cycl.web_services_browser";
 
-    public static final String myFingerPrint = "04c1b54a4de5cacae2a530e59be2ca85d30a02b7fdc4d3fbcbdd8f617c082d2a";
 
     private static final SubLString $$$userName = makeString("userName");
 
@@ -3583,31 +3565,31 @@ public final class web_services_browser extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_web_services_browser_file() {
-        declareFunction(me, "xml_login", "XML-LOGIN", 0, 1, false);
-        declareFunction(me, "xml_logout", "XML-LOGOUT", 0, 1, false);
-        declareFunction(me, "xml_server_defaults", "XML-SERVER-DEFAULTS", 0, 1, false);
-        declareFunction(me, "xml_server_status", "XML-SERVER-STATUS", 0, 1, false);
-        declareFunction(me, "valid_cb_command_string_p", "VALID-CB-COMMAND-STRING-P", 1, 0, false);
-        declareFunction(me, "xml_html_item", "XML-HTML-ITEM", 2, 0, false);
-        declareFunction(me, "xml_tool_item", "XML-TOOL-ITEM", 2, 0, false);
-        declareFunction(me, "xml_nav_item", "XML-NAV-ITEM", 2, 0, false);
-        declareFunction(me, "xml_bookmarked_tool_item", "XML-BOOKMARKED-TOOL-ITEM", 2, 0, false);
-        declareFunction(me, "xml_bookmarked_html_item", "XML-BOOKMARKED-HTML-ITEM", 2, 0, false);
-        declareFunction(me, "xml_item_separator", "XML-ITEM-SEPARATOR", 0, 0, false);
-        declareFunction(me, "xml_tools", "XML-TOOLS", 0, 1, false);
-        declareFunction(me, "xml_bookmarked_tool_url_hack", "XML-BOOKMARKED-TOOL-URL-HACK", 1, 0, false);
-        declareFunction(me, "xml_bookmarked_tools", "XML-BOOKMARKED-TOOLS", 0, 1, false);
-        declareFunction(me, "xml_history", "XML-HISTORY", 0, 1, false);
-        declareFunction(me, "xml_user_preferences", "XML-USER-PREFERENCES", 0, 1, false);
-        declareFunction(me, "xml_set_user_preference_variable", "XML-SET-USER-PREFERENCE-VARIABLE", 0, 1, false);
-        declareFunction(me, "xml_save_user_preferences", "XML-SAVE-USER-PREFERENCES", 0, 1, false);
-        declareFunction(me, "xml_subl_eval", "XML-SUBL-EVAL", 0, 1, false);
-        declareFunction(me, "json_context_menu_data", "JSON-CONTEXT-MENU-DATA", 1, 0, false);
-        declareFunction(me, "json_assertion_context_menu_data", "JSON-ASSERTION-CONTEXT-MENU-DATA", 1, 0, false);
-        declareFunction(me, "user_assertion_meta_assertion_sentences", "USER-ASSERTION-META-ASSERTION-SENTENCES", 2, 0, false);
-        declareFunction(me, "json_term_context_menu_data", "JSON-TERM-CONTEXT-MENU-DATA", 1, 0, false);
-        declareFunction(me, "user_term_meta_assertion_sentences", "USER-TERM-META-ASSERTION-SENTENCES", 2, 0, false);
-        declareFunction(me, "meta_assertion_marker_data", "META-ASSERTION-MARKER-DATA", 2, 0, false);
+        declareFunction("xml_login", "XML-LOGIN", 0, 1, false);
+        declareFunction("xml_logout", "XML-LOGOUT", 0, 1, false);
+        declareFunction("xml_server_defaults", "XML-SERVER-DEFAULTS", 0, 1, false);
+        declareFunction("xml_server_status", "XML-SERVER-STATUS", 0, 1, false);
+        declareFunction("valid_cb_command_string_p", "VALID-CB-COMMAND-STRING-P", 1, 0, false);
+        declareFunction("xml_html_item", "XML-HTML-ITEM", 2, 0, false);
+        declareFunction("xml_tool_item", "XML-TOOL-ITEM", 2, 0, false);
+        declareFunction("xml_nav_item", "XML-NAV-ITEM", 2, 0, false);
+        declareFunction("xml_bookmarked_tool_item", "XML-BOOKMARKED-TOOL-ITEM", 2, 0, false);
+        declareFunction("xml_bookmarked_html_item", "XML-BOOKMARKED-HTML-ITEM", 2, 0, false);
+        declareFunction("xml_item_separator", "XML-ITEM-SEPARATOR", 0, 0, false);
+        declareFunction("xml_tools", "XML-TOOLS", 0, 1, false);
+        declareFunction("xml_bookmarked_tool_url_hack", "XML-BOOKMARKED-TOOL-URL-HACK", 1, 0, false);
+        declareFunction("xml_bookmarked_tools", "XML-BOOKMARKED-TOOLS", 0, 1, false);
+        declareFunction("xml_history", "XML-HISTORY", 0, 1, false);
+        declareFunction("xml_user_preferences", "XML-USER-PREFERENCES", 0, 1, false);
+        declareFunction("xml_set_user_preference_variable", "XML-SET-USER-PREFERENCE-VARIABLE", 0, 1, false);
+        declareFunction("xml_save_user_preferences", "XML-SAVE-USER-PREFERENCES", 0, 1, false);
+        declareFunction("xml_subl_eval", "XML-SUBL-EVAL", 0, 1, false);
+        declareFunction("json_context_menu_data", "JSON-CONTEXT-MENU-DATA", 1, 0, false);
+        declareFunction("json_assertion_context_menu_data", "JSON-ASSERTION-CONTEXT-MENU-DATA", 1, 0, false);
+        declareFunction("user_assertion_meta_assertion_sentences", "USER-ASSERTION-META-ASSERTION-SENTENCES", 2, 0, false);
+        declareFunction("json_term_context_menu_data", "JSON-TERM-CONTEXT-MENU-DATA", 1, 0, false);
+        declareFunction("user_term_meta_assertion_sentences", "USER-TERM-META-ASSERTION-SENTENCES", 2, 0, false);
+        declareFunction("meta_assertion_marker_data", "META-ASSERTION-MARKER-DATA", 2, 0, false);
         return NIL;
     }
 

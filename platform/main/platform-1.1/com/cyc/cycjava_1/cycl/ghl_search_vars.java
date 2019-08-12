@@ -492,8 +492,7 @@ public  final class ghl_search_vars extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_ghl_search_vars_file() {
-    // CVS_ID("Id: ghl-search-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_ghl_search$.getGlobalValue(), Symbols.symbol_function($sym8$GHL_SEARCH_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_ghl_search$.getGlobalValue(), Symbols.symbol_function($sym8$GHL_SEARCH_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$GHL_SEARCH_GRAPHL_SEARCH, $sym10$_CSETF_GHL_SEARCH_GRAPHL_SEARCH);
     Structures.def_csetf($sym11$GHL_SEARCH_PREDICATES, $sym12$_CSETF_GHL_SEARCH_PREDICATES);
     Structures.def_csetf($sym13$GHL_SEARCH_TV, $sym14$_CSETF_GHL_SEARCH_TV);

@@ -387,8 +387,7 @@ and the code assumes that these mts are the same. */
   }
 
   public static final SubLObject setup_mt_vars_file() {
-    // CVS_ID("Id: mt-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym6$_MT_ROOT_);
+        subl_macro_promotions.declare_defglobal($sym6$_MT_ROOT_);
     note_mt_var($sym6$_MT_ROOT_, NIL);
     subl_macro_promotions.declare_defglobal($sym8$_THEORY_MT_ROOT_);
     note_mt_var($sym8$_THEORY_MT_ROOT_, NIL);

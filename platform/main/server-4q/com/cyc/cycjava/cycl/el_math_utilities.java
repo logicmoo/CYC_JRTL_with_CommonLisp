@@ -1,49 +1,69 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.el_math_utilities;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_math_utilities.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class el_math_utilities extends SubLTranslatedFile {
+public final class el_math_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new el_math_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.el_math_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.el_math_utilities";
 
-    public static final String myFingerPrint = "2f12b0102c6e61515479ee7646c2846024ea7ba429a65bcafb3f00a0fd6be5ef";
 
     // Internal Constants
-    public static final SubLString $str0$A_KB_dependent_numerical_quantifi = makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLString $str0$A_KB_dependent_numerical_quantifi = makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
 
-    private static final SubLObject $$IntervalMinFn = reader_make_constant_shell(makeString("IntervalMinFn"));
 
-    private static final SubLObject $$Unity = reader_make_constant_shell(makeString("Unity"));
 
-    private static final SubLObject $$PlusInfinity = reader_make_constant_shell(makeString("PlusInfinity"));
 
-    private static final SubLObject $$IntervalMaxFn = reader_make_constant_shell(makeString("IntervalMaxFn"));
 
-    private static final SubLObject $$thereExistAtLeast = reader_make_constant_shell(makeString("thereExistAtLeast"));
 
-    private static final SubLObject $$thereExistAtMost = reader_make_constant_shell(makeString("thereExistAtMost"));
 
-    private static final SubLObject $$thereExistExactly = reader_make_constant_shell(makeString("thereExistExactly"));
 
+
+
+
+
+
+
+
+    // Definitions
+    /**
+     *
+     *
+     * @return boolean; t iff it is TERM has a minimum of a specific format;
+    i.e. if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).
+     */
+    @LispMethod(comment = "@return boolean; t iff it is TERM has a minimum of a specific format;\r\ni.e. if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).")
+    public static final SubLObject el_minP_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.el_math_utilities.interval_minP(v_term)) || (NIL != com.cyc.cycjava.cycl.el_math_utilities.plus_infinity_unityP(v_term)));
+    }
+
+    // Definitions
+    /**
+     *
+     *
+     * @return boolean; t iff it is TERM has a minimum of a specific format;
+    i.e. if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).
+     */
+    @LispMethod(comment = "@return boolean; t iff it is TERM has a minimum of a specific format;\r\ni.e. if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).")
     public static SubLObject el_minP(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -51,6 +71,25 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return makeBoolean((NIL != interval_minP(v_term)) || (NIL != plus_infinity_unityP(v_term)));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMinFn.
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMinFn.")
+    public static final SubLObject interval_minP_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean((NIL != el_formula_p(v_term)) && ($$IntervalMinFn == cycl_utilities.formula_arg0(v_term)));
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMinFn.
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMinFn.")
     public static SubLObject interval_minP(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -58,6 +97,25 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return makeBoolean((NIL != el_formula_p(v_term)) && $$IntervalMinFn.eql(cycl_utilities.formula_arg0(v_term)));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is of the form (#$Unity <something> #$PlusInfinity [...]).
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is of the form (#$Unity <something> #$PlusInfinity [...]).")
+    public static final SubLObject plus_infinity_unityP_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean(((NIL != el_formula_p(v_term)) && ($$Unity == cycl_utilities.formula_arg0(v_term))) && ($$PlusInfinity == cycl_utilities.formula_arg2(v_term, UNPROVIDED)));
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is of the form (#$Unity <something> #$PlusInfinity [...]).
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is of the form (#$Unity <something> #$PlusInfinity [...]).")
     public static SubLObject plus_infinity_unityP(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -65,6 +123,26 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return makeBoolean(((NIL != el_formula_p(v_term)) && $$Unity.eql(cycl_utilities.formula_arg0(v_term))) && $$PlusInfinity.eql(cycl_utilities.formula_arg2(v_term, UNPROVIDED)));
     }
 
+    /**
+     * Returns <min> if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).
+     * Otherwise it will return NIL.
+     */
+    @LispMethod(comment = "Returns <min> if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).\r\nOtherwise it will return NIL.\nReturns <min> if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).\nOtherwise it will return NIL.")
+    public static final SubLObject el_min_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        if (NIL != com.cyc.cycjava.cycl.el_math_utilities.interval_minP(v_term)) {
+            return cycl_utilities.formula_arg1(v_term, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.el_math_utilities.plus_infinity_unityP(v_term)) {
+                return cycl_utilities.formula_arg1(v_term, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
+    @LispMethod(comment = "Returns <min> if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).\r\nOtherwise it will return NIL.\nReturns <min> if TERM is of the form (#$IntervalMinFn <min>) or (#$Unity <min> #$PlusInfinity).\nOtherwise it will return NIL.")
     public static SubLObject el_min(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -78,6 +156,27 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff it is TERM has a maximum of a specific format;
+    i.e. if TERM is an EL formula of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).
+     */
+    @LispMethod(comment = "@return boolean; t iff it is TERM has a maximum of a specific format;\r\ni.e. if TERM is an EL formula of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).")
+    public static final SubLObject el_maxP_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.el_math_utilities.interval_maxP(v_term)) || (NIL != com.cyc.cycjava.cycl.el_math_utilities.unity_non_neg_maxP(v_term)));
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff it is TERM has a maximum of a specific format;
+    i.e. if TERM is an EL formula of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).
+     */
+    @LispMethod(comment = "@return boolean; t iff it is TERM has a maximum of a specific format;\r\ni.e. if TERM is an EL formula of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).")
     public static SubLObject el_maxP(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -85,6 +184,25 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return makeBoolean((NIL != interval_maxP(v_term)) || (NIL != unity_non_neg_maxP(v_term)));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMaxFn.
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMaxFn.")
+    public static final SubLObject interval_maxP_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean((NIL != el_formula_p(v_term)) && ($$IntervalMaxFn == cycl_utilities.formula_arg0(v_term)));
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMaxFn.
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is an EL formula whose arg0 is #$IntervalMaxFn.")
     public static SubLObject interval_maxP(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -92,6 +210,25 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return makeBoolean((NIL != el_formula_p(v_term)) && $$IntervalMaxFn.eql(cycl_utilities.formula_arg0(v_term)));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is an EL formula of the form (#$Unity 0 <max>).
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is an EL formula of the form (#$Unity 0 <max>).")
+    public static final SubLObject unity_non_neg_maxP_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        return makeBoolean((((NIL != el_formula_p(v_term)) && ($$Unity == cycl_utilities.formula_arg0(v_term))) && (ZERO_INTEGER == cycl_utilities.formula_arg1(v_term, UNPROVIDED))) && (NIL != cycl_utilities.formula_arg2(v_term, UNPROVIDED)));
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff TERM is an EL formula of the form (#$Unity 0 <max>).
+     */
+    @LispMethod(comment = "@return boolean; t iff TERM is an EL formula of the form (#$Unity 0 <max>).")
     public static SubLObject unity_non_neg_maxP(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -99,6 +236,30 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return makeBoolean((((NIL != el_formula_p(v_term)) && $$Unity.eql(cycl_utilities.formula_arg0(v_term))) && ZERO_INTEGER.eql(cycl_utilities.formula_arg1(v_term, UNPROVIDED))) && (NIL != cycl_utilities.formula_arg2(v_term, UNPROVIDED)));
     }
 
+    /**
+     * Returns <max> if TERM is of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).
+     * Otherwise it will return NIL.
+     */
+    @LispMethod(comment = "Returns <max> if TERM is of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).\r\nOtherwise it will return NIL.\nReturns <max> if TERM is of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).\nOtherwise it will return NIL.")
+    public static final SubLObject el_max_alt(SubLObject v_term) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        if (NIL != com.cyc.cycjava.cycl.el_math_utilities.unity_non_neg_maxP(v_term)) {
+            return cycl_utilities.formula_arg2(v_term, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.el_math_utilities.interval_maxP(v_term)) {
+                return cycl_utilities.formula_arg1(v_term, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Returns <max> if TERM is of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).
+     * Otherwise it will return NIL.
+     */
+    @LispMethod(comment = "Returns <max> if TERM is of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).\r\nOtherwise it will return NIL.\nReturns <max> if TERM is of the form (#$IntervalMaxFn <max>) or (#$Unity 0 <max>).\nOtherwise it will return NIL.")
     public static SubLObject el_max(final SubLObject v_term) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -112,6 +273,31 @@ public final class el_math_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Given a bounded existential quantifier and a number, returns a Cyc scalar interval denoting the interval.
+     * e.g. (quantified-interval #$thereExistAtLeast 4) returns (#$IntervalMinFn 4).
+     */
+    @LispMethod(comment = "Given a bounded existential quantifier and a number, returns a Cyc scalar interval denoting the interval.\r\ne.g. (quantified-interval #$thereExistAtLeast 4) returns (#$IntervalMinFn 4).\nGiven a bounded existential quantifier and a number, returns a Cyc scalar interval denoting the interval.\ne.g. (quantified-interval #$thereExistAtLeast 4) returns (#$IntervalMinFn 4).")
+    public static final SubLObject quantified_interval_alt(SubLObject quant, SubLObject num) {
+        if (NIL == kb_control_vars.quant_kb_loaded_p()) {
+            Errors.error($str_alt0$A_KB_dependent_numerical_quantifi);
+        }
+        if ($$thereExistAtLeast == quant) {
+            return make_unary_formula($$IntervalMinFn, num);
+        } else {
+            if ($$thereExistAtMost == quant) {
+                return make_unary_formula($$IntervalMaxFn, num);
+            } else {
+                if ($$thereExistExactly == quant) {
+                    return num;
+                } else {
+                    return NIL;
+                }
+            }
+        }
+    }
+
+    @LispMethod(comment = "Given a bounded existential quantifier and a number, returns a Cyc scalar interval denoting the interval.\r\ne.g. (quantified-interval #$thereExistAtLeast 4) returns (#$IntervalMinFn 4).\nGiven a bounded existential quantifier and a number, returns a Cyc scalar interval denoting the interval.\ne.g. (quantified-interval #$thereExistAtLeast 4) returns (#$IntervalMinFn 4).")
     public static SubLObject quantified_interval(final SubLObject quant, final SubLObject num) {
         if (NIL == kb_control_vars.quant_kb_loaded_p()) {
             Errors.error($str0$A_KB_dependent_numerical_quantifi);
@@ -129,15 +315,15 @@ public final class el_math_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_el_math_utilities_file() {
-        declareFunction(me, "el_minP", "EL-MIN?", 1, 0, false);
-        declareFunction(me, "interval_minP", "INTERVAL-MIN?", 1, 0, false);
-        declareFunction(me, "plus_infinity_unityP", "PLUS-INFINITY-UNITY?", 1, 0, false);
-        declareFunction(me, "el_min", "EL-MIN", 1, 0, false);
-        declareFunction(me, "el_maxP", "EL-MAX?", 1, 0, false);
-        declareFunction(me, "interval_maxP", "INTERVAL-MAX?", 1, 0, false);
-        declareFunction(me, "unity_non_neg_maxP", "UNITY-NON-NEG-MAX?", 1, 0, false);
-        declareFunction(me, "el_max", "EL-MAX", 1, 0, false);
-        declareFunction(me, "quantified_interval", "QUANTIFIED-INTERVAL", 2, 0, false);
+        declareFunction("el_minP", "EL-MIN?", 1, 0, false);
+        declareFunction("interval_minP", "INTERVAL-MIN?", 1, 0, false);
+        declareFunction("plus_infinity_unityP", "PLUS-INFINITY-UNITY?", 1, 0, false);
+        declareFunction("el_min", "EL-MIN", 1, 0, false);
+        declareFunction("el_maxP", "EL-MAX?", 1, 0, false);
+        declareFunction("interval_maxP", "INTERVAL-MAX?", 1, 0, false);
+        declareFunction("unity_non_neg_maxP", "UNITY-NON-NEG-MAX?", 1, 0, false);
+        declareFunction("el_max", "EL-MAX", 1, 0, false);
+        declareFunction("quantified_interval", "QUANTIFIED-INTERVAL", 2, 0, false);
         return NIL;
     }
 
@@ -165,16 +351,11 @@ public final class el_math_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
     }
+
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLString $str_alt0$A_KB_dependent_numerical_quantifi = makeString("A KB-dependent numerical quantification function was called, but the current Cyc KB does not contain knowledge about numerical quantification.");
 }
 
 /**

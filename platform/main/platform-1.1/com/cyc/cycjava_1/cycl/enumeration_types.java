@@ -291,8 +291,7 @@ import com.cyc.tool.subl.util.*;
   }
 
   public static final SubLObject setup_enumeration_types_file() {
-    // CVS_ID("Id: enumeration-types.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym1$DIRECTION_P, $list2, $str3$Return_T_iff_OBJECT_is_a_valid_as, NIL, $list4);
+        utilities_macros.register_cyc_api_function($sym1$DIRECTION_P, $list2, $str3$Return_T_iff_OBJECT_is_a_valid_as, NIL, $list4);
     utilities_macros.register_cyc_api_function($sym7$EL_STRENGTH_P, $list2, $str8$Return_T_iff_OBJECT_is_a_valid_Cy, NIL, $list4);
     utilities_macros.register_cyc_api_function($sym14$TRUTH_P, $list2, $str15$Returns_T_iff_OBJECT_is_a_valid_C, NIL, NIL);
     utilities_macros.register_cyc_api_function($sym21$SENSE_P, $list2, $str22$Return_T_iff_OBJECT_is_a_valid_Cy, NIL, $list4);

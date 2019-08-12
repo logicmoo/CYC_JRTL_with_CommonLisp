@@ -177,8 +177,7 @@ just returns a nice, simple boolean. */
   }
 
   public static final SubLObject setup_abnormal_file() {
-    // CVS_ID("Id: abnormal.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

@@ -1,10 +1,34 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.sbhl;
 
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.binary_tree;
 import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.cycjava.cycl.hash_table_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_iteration;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -20,77 +44,56 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.sbhl.sbhl_iteration.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_readably$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class sbhl_iteration extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      SBHL-ITERATION
+ * source file: /cyc/top/cycl/sbhl/sbhl-iteration.lisp
+ * created:     2019/07/03 17:37:18
+ */
+public final class sbhl_iteration extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sbhl_iteration();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_iteration";
+ public static final String myName = "com.cyc.cycjava.cycl.sbhl.sbhl_iteration";
 
-    public static final String myFingerPrint = "3008f15e60c7eb93b68b385ad71952d8914e6c5c8e4ab44cd3f9919eef3d8a83";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
+    // Definitions
     public static final SubLSymbol $sbhl_iterator_store$ = makeSymbol("*SBHL-ITERATOR-STORE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $sbhl_iterator_store_max$ = makeSymbol("*SBHL-ITERATOR-STORE-MAX*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_sbhl_iterator$ = makeSymbol("*DTP-SBHL-ITERATOR*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $sbhl_null_iterator$ = makeSymbol("*SBHL-NULL-ITERATOR*");
 
+    static private final SubLList $list1 = list(list(makeSymbol("*SBHL-ITERATOR-STORE*"), list(makeSymbol("FIF"), list(makeSymbol("WITHIN-SBHL-ITERATOR-RESOURCING?")), makeSymbol("*SBHL-ITERATOR-STORE*"), list(makeSymbol("NEW-SBHL-STACK"), makeSymbol("*SBHL-ITERATOR-STORE-MAX*")))));
 
+    private static final SubLSymbol SBHL_ITERATOR = makeSymbol("SBHL-ITERATOR");
 
-    public static final SubLList $list1 = list(list(makeSymbol("*SBHL-ITERATOR-STORE*"), list(makeSymbol("FIF"), list(makeSymbol("WITHIN-SBHL-ITERATOR-RESOURCING?")), makeSymbol("*SBHL-ITERATOR-STORE*"), list(makeSymbol("NEW-SBHL-STACK"), makeSymbol("*SBHL-ITERATOR-STORE-MAX*")))));
+    private static final SubLSymbol SBHL_ITERATOR_P = makeSymbol("SBHL-ITERATOR-P");
 
-    public static final SubLSymbol SBHL_ITERATOR = makeSymbol("SBHL-ITERATOR");
+    static private final SubLList $list4 = list(makeSymbol("STATE"), makeSymbol("DONE"), makeSymbol("NEXT"), makeSymbol("FINALIZE"));
 
-    public static final SubLSymbol SBHL_ITERATOR_P = makeSymbol("SBHL-ITERATOR-P");
+    static private final SubLList $list5 = list(makeKeyword("STATE"), $DONE, $NEXT, makeKeyword("FINALIZE"));
 
-    public static final SubLList $list4 = list(makeSymbol("STATE"), makeSymbol("DONE"), makeSymbol("NEXT"), makeSymbol("FINALIZE"));
+    static private final SubLList $list6 = list(makeSymbol("SBHL-IT-STATE"), makeSymbol("SBHL-IT-DONE"), makeSymbol("SBHL-IT-NEXT"), makeSymbol("SBHL-IT-FINALIZE"));
 
-    public static final SubLList $list5 = list(makeKeyword("STATE"), makeKeyword("DONE"), makeKeyword("NEXT"), makeKeyword("FINALIZE"));
+    static private final SubLList $list7 = list(makeSymbol("_CSETF-SBHL-IT-STATE"), makeSymbol("_CSETF-SBHL-IT-DONE"), makeSymbol("_CSETF-SBHL-IT-NEXT"), makeSymbol("_CSETF-SBHL-IT-FINALIZE"));
 
-    public static final SubLList $list6 = list(makeSymbol("SBHL-IT-STATE"), makeSymbol("SBHL-IT-DONE"), makeSymbol("SBHL-IT-NEXT"), makeSymbol("SBHL-IT-FINALIZE"));
+    private static final SubLSymbol PRINT_SBHL_ITERATOR = makeSymbol("PRINT-SBHL-ITERATOR");
 
-    public static final SubLList $list7 = list(makeSymbol("_CSETF-SBHL-IT-STATE"), makeSymbol("_CSETF-SBHL-IT-DONE"), makeSymbol("_CSETF-SBHL-IT-NEXT"), makeSymbol("_CSETF-SBHL-IT-FINALIZE"));
-
-    public static final SubLSymbol PRINT_SBHL_ITERATOR = makeSymbol("PRINT-SBHL-ITERATOR");
-
-    public static final SubLSymbol SBHL_ITERATOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("SBHL-ITERATOR-PRINT-FUNCTION-TRAMPOLINE");
+    private static final SubLSymbol SBHL_ITERATOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("SBHL-ITERATOR-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list10 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("SBHL-ITERATOR-P"));
 
@@ -110,23 +113,9 @@ public final class sbhl_iteration extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_SBHL_IT_FINALIZE = makeSymbol("_CSETF-SBHL-IT-FINALIZE");
 
-
-
-
-
-
-
-
-
     private static final SubLString $str23$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_SBHL_ITERATOR = makeSymbol("MAKE-SBHL-ITERATOR");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_SBHL_ITERATOR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-SBHL-ITERATOR-METHOD");
 
@@ -149,10 +138,6 @@ public final class sbhl_iteration extends SubLTranslatedFile {
     private static final SubLSymbol SBHL_ITERATOR_ITERATOR_DONE = makeSymbol("SBHL-ITERATOR-ITERATOR-DONE");
 
     private static final SubLSymbol SBHL_AVL_TREE_ITERATOR_DONE = makeSymbol("SBHL-AVL-TREE-ITERATOR-DONE");
-
-
-
-
 
     private static final SubLSymbol SBHL_TIME_DATE_LINK_ITERATOR_DONE = makeSymbol("SBHL-TIME-DATE-LINK-ITERATOR-DONE");
 
@@ -208,7 +193,7 @@ public final class sbhl_iteration extends SubLTranslatedFile {
 
     private static final SubLList $list67 = list(list(makeSymbol("VAR"), makeSymbol("SBHL-ITERATOR"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list68 = list(makeKeyword("DONE"));
+    private static final SubLList $list68 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
@@ -218,19 +203,9 @@ public final class sbhl_iteration extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym72$DONE_VAR = makeUninternedSymbol("DONE-VAR");
 
-
-
     private static final SubLSymbol SBHL_ITERATION_NEXT = makeSymbol("SBHL-ITERATION-NEXT");
 
-
-
-
-
-
-
-
-
-    public static final SubLList $list79 = list(list(makeSymbol("VAR"), makeSymbol("N"), makeSymbol("SBHL-ITERATOR"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    static private final SubLList $list79 = list(list(makeSymbol("VAR"), makeSymbol("N"), makeSymbol("SBHL-ITERATOR"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     private static final SubLSymbol $sym80$COUNT = makeUninternedSymbol("COUNT");
 
@@ -240,19 +215,27 @@ public final class sbhl_iteration extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym83$__ = makeSymbol(">=");
 
-
-
-
-
     private static final SubLList $list86 = list(T);
 
-
-
-
+    public static final SubLObject within_sbhl_iterator_resourcingP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return sbhl_search_datastructures.sbhl_stack_p($sbhl_iterator_store$.getDynamicValue(thread));
+        }
+    }
 
     public static SubLObject within_sbhl_iterator_resourcingP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return sbhl_search_datastructures.sbhl_stack_p($sbhl_iterator_store$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject with_sbhl_iterator_resourcing_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject body = current;
+            return listS(CLET, $list_alt1, append(body, NIL));
+        }
     }
 
     public static SubLObject with_sbhl_iterator_resourcing(final SubLObject macroform, final SubLObject environment) {
@@ -262,14 +245,40 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return listS(CLET, $list1, append(body, NIL));
     }
 
+    public static final SubLObject find_or_create_sbhl_iterator_shell_alt() {
+        {
+            SubLObject iterator_shell = find_sbhl_iterator_shell();
+            return NIL != iterator_shell ? ((SubLObject) (iterator_shell)) : make_sbhl_iterator(UNPROVIDED);
+        }
+    }
+
     public static SubLObject find_or_create_sbhl_iterator_shell() {
         final SubLObject iterator_shell = find_sbhl_iterator_shell();
         return NIL != iterator_shell ? iterator_shell : make_sbhl_iterator(UNPROVIDED);
     }
 
+    public static final SubLObject find_sbhl_iterator_shell_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return NIL != within_sbhl_iterator_resourcingP() ? ((SubLObject) (sbhl_search_datastructures.sbhl_stack_pop($sbhl_iterator_store$.getDynamicValue(thread)))) : NIL;
+        }
+    }
+
     public static SubLObject find_sbhl_iterator_shell() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return NIL != within_sbhl_iterator_resourcingP() ? sbhl_search_datastructures.sbhl_stack_pop($sbhl_iterator_store$.getDynamicValue(thread)) : NIL;
+    }
+
+    public static final SubLObject release_sbhl_iterator_alt(SubLObject sbhl_iterator) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != within_sbhl_iterator_resourcingP()) {
+                if (!($sbhl_iterator_store_max$.getGlobalValue().isInteger() && sbhl_search_datastructures.sbhl_stack_size($sbhl_iterator_store$.getDynamicValue(thread)).numGE($sbhl_iterator_store_max$.getGlobalValue()))) {
+                    sbhl_search_datastructures.sbhl_stack_push(sbhl_iterator, $sbhl_iterator_store$.getDynamicValue(thread));
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject release_sbhl_iterator(final SubLObject sbhl_iterator) {
@@ -280,60 +289,144 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject sbhl_iterator_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_sbhl_iterator(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject sbhl_iterator_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_sbhl_iterator(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject sbhl_iterator_p(final SubLObject v_object) {
-        return v_object.getClass() == sbhl_iteration.$sbhl_iterator_native.class ? T : NIL;
+    public static final SubLObject sbhl_iterator_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.sbhl.sbhl_iteration.$sbhl_iterator_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject sbhl_it_state(final SubLObject v_object) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject sbhl_iterator_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.sbhl.sbhl_iteration.$sbhl_iterator_native.class ? T : NIL;
+    }
+
+    public static final SubLObject sbhl_it_state_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.getField2();
     }
 
-    public static SubLObject sbhl_it_done(final SubLObject v_object) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject sbhl_it_state(final SubLObject v_object) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject sbhl_it_done_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.getField3();
     }
 
-    public static SubLObject sbhl_it_next(final SubLObject v_object) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject sbhl_it_done(final SubLObject v_object) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject sbhl_it_next_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.getField4();
     }
 
-    public static SubLObject sbhl_it_finalize(final SubLObject v_object) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject sbhl_it_next(final SubLObject v_object) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject sbhl_it_finalize_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.getField5();
     }
 
-    public static SubLObject _csetf_sbhl_it_state(final SubLObject v_object, final SubLObject value) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject sbhl_it_finalize(final SubLObject v_object) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject _csetf_sbhl_it_state_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_sbhl_it_done(final SubLObject v_object, final SubLObject value) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject _csetf_sbhl_it_state(final SubLObject v_object, final SubLObject value) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_sbhl_it_done_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_sbhl_it_next(final SubLObject v_object, final SubLObject value) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject _csetf_sbhl_it_done(final SubLObject v_object, final SubLObject value) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_sbhl_it_next_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_sbhl_it_finalize(final SubLObject v_object, final SubLObject value) {
-        assert NIL != sbhl_iterator_p(v_object) : "sbhl_iteration.sbhl_iterator_p(v_object) " + "CommonSymbols.NIL != sbhl_iteration.sbhl_iterator_p(v_object) " + v_object;
+    public static SubLObject _csetf_sbhl_it_next(final SubLObject v_object, final SubLObject value) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_sbhl_it_finalize_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, SBHL_ITERATOR_P);
         return v_object.setField5(value);
+    }
+
+    public static SubLObject _csetf_sbhl_it_finalize(final SubLObject v_object, final SubLObject value) {
+        assert NIL != sbhl_iterator_p(v_object) : "! sbhl_iteration.sbhl_iterator_p(v_object) " + "sbhl_iteration.sbhl_iterator_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject make_sbhl_iterator_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.sbhl.sbhl_iteration.$sbhl_iterator_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($STATE)) {
+                        _csetf_sbhl_it_state(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($DONE)) {
+                            _csetf_sbhl_it_done(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($NEXT)) {
+                                _csetf_sbhl_it_next(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($FINALIZE)) {
+                                    _csetf_sbhl_it_finalize(v_new, current_value);
+                                } else {
+                                    Errors.error($str_alt22$Invalid_slot__S_for_construction_, current_arg);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_sbhl_iterator(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new sbhl_iteration.$sbhl_iterator_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.sbhl.sbhl_iteration.$sbhl_iterator_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -377,6 +470,30 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return visit_defstruct_sbhl_iterator(obj, visitor_fn);
     }
 
+    public static final SubLObject print_sbhl_iterator_alt(SubLObject iterator, SubLObject stream, SubLObject depth) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $print_readably$.getDynamicValue(thread)) {
+                print_not_readable(iterator, stream);
+            } else {
+                {
+                    SubLObject v_object = iterator;
+                    SubLObject stream_1 = stream;
+                    write_string($str_alt23$__, stream_1, UNPROVIDED, UNPROVIDED);
+                    write(type_of(v_object), new SubLObject[]{ $STREAM, stream_1 });
+                    write_char(CHAR_space, stream_1);
+                    if (NIL != sbhl_iteration_doneP(iterator)) {
+                        write_string($str_alt25$_DONE, stream, UNPROVIDED, UNPROVIDED);
+                    }
+                    write_char(CHAR_space, stream_1);
+                    write(pointer(v_object), new SubLObject[]{ $STREAM, stream_1, $BASE, SIXTEEN_INTEGER });
+                    write_char(CHAR_greater, stream_1);
+                }
+            }
+            return iterator;
+        }
+    }
+
     public static SubLObject print_sbhl_iterator(final SubLObject iterator, final SubLObject stream, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $print_readably$.getDynamicValue(thread)) {
@@ -391,6 +508,43 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return iterator;
     }
 
+    /**
+     * Return a new iterator for incrementally iterating over objects in STATE.
+     *
+     * STATE is a datastructure which is the initial state of the iteration.
+     *
+     * DONE must be a unary function which when called on STATE returns non-NIL
+     * iff the iteration is complete.  The function should not affect STATE.
+     *
+     * NEXT must be a unary function which when called on STATE returns the next
+     * raw iteration item from the state.  A return of NIL indicates that iteration
+     * is done.  The function should update STATE by side effect.
+     */
+    @LispMethod(comment = "Return a new iterator for incrementally iterating over objects in STATE.\r\n\r\nSTATE is a datastructure which is the initial state of the iteration.\r\n\r\nDONE must be a unary function which when called on STATE returns non-NIL\r\niff the iteration is complete.  The function should not affect STATE.\r\n\r\nNEXT must be a unary function which when called on STATE returns the next\r\nraw iteration item from the state.  A return of NIL indicates that iteration\r\nis done.  The function should update STATE by side effect.\nReturn a new iterator for incrementally iterating over objects in STATE.\n\nSTATE is a datastructure which is the initial state of the iteration.\n\nDONE must be a unary function which when called on STATE returns non-NIL\niff the iteration is complete.  The function should not affect STATE.\n\nNEXT must be a unary function which when called on STATE returns the next\nraw iteration item from the state.  A return of NIL indicates that iteration\nis done.  The function should update STATE by side effect.")
+    public static final SubLObject new_sbhl_iterator_alt(SubLObject state, SubLObject done, SubLObject next, SubLObject finalize) {
+        {
+            SubLObject sbhl_iterator = find_or_create_sbhl_iterator_shell();
+            _csetf_sbhl_it_state(sbhl_iterator, state);
+            _csetf_sbhl_it_done(sbhl_iterator, done);
+            _csetf_sbhl_it_next(sbhl_iterator, next);
+            _csetf_sbhl_it_finalize(sbhl_iterator, finalize);
+            return sbhl_iterator;
+        }
+    }
+
+    /**
+     * Return a new iterator for incrementally iterating over objects in STATE.
+     *
+     * STATE is a datastructure which is the initial state of the iteration.
+     *
+     * DONE must be a unary function which when called on STATE returns non-NIL
+     * iff the iteration is complete.  The function should not affect STATE.
+     *
+     * NEXT must be a unary function which when called on STATE returns the next
+     * raw iteration item from the state.  A return of NIL indicates that iteration
+     * is done.  The function should update STATE by side effect.
+     */
+    @LispMethod(comment = "Return a new iterator for incrementally iterating over objects in STATE.\r\n\r\nSTATE is a datastructure which is the initial state of the iteration.\r\n\r\nDONE must be a unary function which when called on STATE returns non-NIL\r\niff the iteration is complete.  The function should not affect STATE.\r\n\r\nNEXT must be a unary function which when called on STATE returns the next\r\nraw iteration item from the state.  A return of NIL indicates that iteration\r\nis done.  The function should update STATE by side effect.\nReturn a new iterator for incrementally iterating over objects in STATE.\n\nSTATE is a datastructure which is the initial state of the iteration.\n\nDONE must be a unary function which when called on STATE returns non-NIL\niff the iteration is complete.  The function should not affect STATE.\n\nNEXT must be a unary function which when called on STATE returns the next\nraw iteration item from the state.  A return of NIL indicates that iteration\nis done.  The function should update STATE by side effect.")
     public static SubLObject new_sbhl_iterator(final SubLObject state, final SubLObject done, final SubLObject next, final SubLObject finalize) {
         final SubLObject sbhl_iterator = find_or_create_sbhl_iterator_shell();
         _csetf_sbhl_it_state(sbhl_iterator, state);
@@ -398,6 +552,75 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         _csetf_sbhl_it_next(sbhl_iterator, next);
         _csetf_sbhl_it_finalize(sbhl_iterator, finalize);
         return sbhl_iterator;
+    }
+
+    public static final SubLObject sbhl_iteration_doneP_alt(SubLObject sbhl_iterator) {
+        {
+            SubLObject pcase_var = sbhl_it_done(sbhl_iterator);
+            if (pcase_var.eql(SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_DONE)) {
+                return sbhl_link_iterators.sbhl_link_node_search_state_iterator_done(sbhl_it_state(sbhl_iterator));
+            } else {
+                if (pcase_var.eql(SBHL_MODULE_DIRECTION_LINK_SEARCH_STATE_ITERATOR_DONE)) {
+                    return sbhl_link_iterators.sbhl_module_direction_link_search_state_iterator_done(sbhl_it_state(sbhl_iterator));
+                } else {
+                    if (pcase_var.eql(SBHL_MODULE_TV_LINK_NODE_SEARCH_STATE_ITERATOR_DONE)) {
+                        return sbhl_link_iterators.sbhl_module_tv_link_node_search_state_iterator_done(sbhl_it_state(sbhl_iterator));
+                    } else {
+                        if (pcase_var.eql(SBHL_MODULE_NAUT_LINK_NODE_SEARCH_STATE_ITERATOR_DONE)) {
+                            return sbhl_link_iterators.sbhl_module_naut_link_node_search_state_iterator_done(sbhl_it_state(sbhl_iterator));
+                        } else {
+                            if (pcase_var.eql(SBHL_LIST_ITERATOR_DONE)) {
+                                return sbhl_list_iterator_done(sbhl_it_state(sbhl_iterator));
+                            } else {
+                                if (pcase_var.eql(SBHL_ALIST_ITERATOR_DONE)) {
+                                    return sbhl_alist_iterator_done(sbhl_it_state(sbhl_iterator));
+                                } else {
+                                    if (pcase_var.eql(SBHL_HASH_TABLE_ITERATOR_DONE)) {
+                                        return sbhl_hash_table_iterator_done(sbhl_it_state(sbhl_iterator));
+                                    } else {
+                                        if (pcase_var.eql(SBHL_ITERATOR_ITERATOR_DONE)) {
+                                            return sbhl_iterator_iterator_done(sbhl_it_state(sbhl_iterator));
+                                        } else {
+                                            if (pcase_var.eql(SBHL_AVL_TREE_ITERATOR_DONE)) {
+                                                return binary_tree.sbhl_avl_tree_iterator_done(sbhl_it_state(sbhl_iterator));
+                                            } else {
+                                                if (pcase_var.eql(TRUE)) {
+                                                    return T;
+                                                } else {
+                                                    if (pcase_var.eql(FALSE)) {
+                                                        return NIL;
+                                                    } else {
+                                                        {
+                                                            SubLObject pcase_var_2 = sbhl_it_done(sbhl_iterator);
+                                                            if (pcase_var_2.eql(SBHL_TIME_DATE_LINK_ITERATOR_DONE)) {
+                                                                return sbhl_time_dates.sbhl_time_date_link_iterator_done(sbhl_it_state(sbhl_iterator));
+                                                            } else {
+                                                                if (pcase_var_2.eql(SBHL_TIME_DATE_DATE_LINK_ITERATOR_DONE)) {
+                                                                    return sbhl_time_dates.sbhl_time_date_date_link_iterator_done(sbhl_it_state(sbhl_iterator));
+                                                                } else {
+                                                                    if (pcase_var_2.eql(SBHL_TIME_DATE_LINK_TAG_ITERATOR_DONE)) {
+                                                                        return sbhl_time_dates.sbhl_time_date_link_tag_iterator_done(sbhl_it_state(sbhl_iterator));
+                                                                    } else {
+                                                                        if (pcase_var_2.eql(SBHL_TIME_DATE_MT_LINK_ITERATOR_DONE)) {
+                                                                            return sbhl_time_dates.sbhl_time_date_mt_link_iterator_done(sbhl_it_state(sbhl_iterator));
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        return funcall(sbhl_it_done(sbhl_iterator), sbhl_it_state(sbhl_iterator));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject sbhl_iteration_doneP(final SubLObject sbhl_iterator) {
@@ -449,6 +672,78 @@ public final class sbhl_iteration extends SubLTranslatedFile {
             return sbhl_time_dates.sbhl_time_date_mt_link_iterator_done(sbhl_it_state(sbhl_iterator));
         }
         return funcall(sbhl_it_done(sbhl_iterator), sbhl_it_state(sbhl_iterator));
+    }
+
+    public static final SubLObject sbhl_iteration_next_alt(SubLObject sbhl_iterator) {
+        {
+            SubLObject result = NIL;
+            SubLObject pcase_var = sbhl_it_next(sbhl_iterator);
+            if (pcase_var.eql(SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_NEXT)) {
+                result = sbhl_link_iterators.sbhl_link_node_search_state_iterator_next(sbhl_it_state(sbhl_iterator));
+            } else {
+                if (pcase_var.eql(SBHL_MODULE_DIRECTION_LINK_SEARCH_STATE_ITERATOR_NEXT)) {
+                    result = sbhl_link_iterators.sbhl_module_direction_link_search_state_iterator_next(sbhl_it_state(sbhl_iterator));
+                } else {
+                    if (pcase_var.eql(SBHL_MODULE_TV_LINK_NODE_SEARCH_STATE_ITERATOR_NEXT)) {
+                        result = sbhl_link_iterators.sbhl_module_tv_link_node_search_state_iterator_next(sbhl_it_state(sbhl_iterator));
+                    } else {
+                        if (pcase_var.eql(SBHL_MODULE_NAUT_LINK_NODE_SEARCH_STATE_ITERATOR_NEXT)) {
+                            result = sbhl_link_iterators.sbhl_module_naut_link_node_search_state_iterator_next(sbhl_it_state(sbhl_iterator));
+                        } else {
+                            if (pcase_var.eql(SBHL_LIST_ITERATOR_NEXT)) {
+                                result = sbhl_list_iterator_next(sbhl_it_state(sbhl_iterator));
+                            } else {
+                                if (pcase_var.eql(SBHL_ALIST_ITERATOR_NEXT)) {
+                                    result = sbhl_alist_iterator_next(sbhl_it_state(sbhl_iterator));
+                                } else {
+                                    if (pcase_var.eql(SBHL_HASH_TABLE_ITERATOR_NEXT)) {
+                                        result = sbhl_hash_table_iterator_next(sbhl_it_state(sbhl_iterator));
+                                    } else {
+                                        if (pcase_var.eql(SBHL_ITERATOR_ITERATOR_NEXT)) {
+                                            result = sbhl_iterator_iterator_next(sbhl_it_state(sbhl_iterator));
+                                        } else {
+                                            if (pcase_var.eql(SBHL_AVL_TREE_ITERATOR_NEXT)) {
+                                                result = binary_tree.sbhl_avl_tree_iterator_next(sbhl_it_state(sbhl_iterator));
+                                            } else {
+                                                if (pcase_var.eql(FALSE)) {
+                                                    result = NIL;
+                                                } else {
+                                                    {
+                                                        SubLObject pcase_var_3 = sbhl_it_next(sbhl_iterator);
+                                                        if (pcase_var_3.eql(SBHL_TIME_DATE_LINK_ITERATOR_NEXT)) {
+                                                            result = sbhl_time_dates.sbhl_time_date_link_iterator_next(sbhl_it_state(sbhl_iterator));
+                                                        } else {
+                                                            if (pcase_var_3.eql(SBHL_TIME_DATE_DATE_LINK_ITERATOR_NEXT)) {
+                                                                result = sbhl_time_dates.sbhl_time_date_date_link_iterator_next(sbhl_it_state(sbhl_iterator));
+                                                            } else {
+                                                                if (pcase_var_3.eql(SBHL_TIME_DATE_LINK_TAG_ITERATOR_NEXT)) {
+                                                                    result = sbhl_time_dates.sbhl_time_date_link_tag_iterator_next(sbhl_it_state(sbhl_iterator));
+                                                                } else {
+                                                                    if (pcase_var_3.eql(SBHL_TIME_DATE_MT_LINK_ITERATOR_NEXT)) {
+                                                                        result = sbhl_time_dates.sbhl_time_date_mt_link_iterator_next(sbhl_it_state(sbhl_iterator));
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    if (NIL == result) {
+                                                        result = funcall(sbhl_it_next(sbhl_iterator), sbhl_it_state(sbhl_iterator));
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (NIL == result) {
+                _csetf_sbhl_it_done(sbhl_iterator, TRUE);
+            }
+            return result;
+        }
     }
 
     public static SubLObject sbhl_iteration_next(final SubLObject sbhl_iterator) {
@@ -519,6 +814,66 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject sbhl_iteration_finalize_alt(SubLObject sbhl_iterator) {
+        {
+            SubLObject result = NIL;
+            SubLObject pcase_var = sbhl_it_finalize(sbhl_iterator);
+            if (pcase_var.eql(SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_FINALIZE)) {
+                result = sbhl_link_iterators.sbhl_link_node_search_state_iterator_finalize(sbhl_it_state(sbhl_iterator));
+            } else {
+                if (pcase_var.eql(SBHL_MODULE_DIRECTION_LINK_SEARCH_STATE_ITERATOR_FINALIZE)) {
+                    result = sbhl_link_iterators.sbhl_module_direction_link_search_state_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                } else {
+                    if (pcase_var.eql(SBHL_MODULE_TV_LINK_NODE_SEARCH_STATE_ITERATOR_FINALIZE)) {
+                        result = sbhl_link_iterators.sbhl_module_tv_link_node_search_state_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                    } else {
+                        if (pcase_var.eql(SBHL_MODULE_NAUT_LINK_NODE_SEARCH_STATE_ITERATOR_FINALIZE)) {
+                            result = sbhl_link_iterators.sbhl_module_naut_link_node_search_state_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                        } else {
+                            if (pcase_var.eql(SBHL_ITERATOR_ITERATOR_FINALIZE)) {
+                                result = sbhl_iterator_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                            } else {
+                                if (pcase_var.eql(TRUE)) {
+                                    result = T;
+                                } else {
+                                    {
+                                        SubLObject handledP = NIL;
+                                        handledP = T;
+                                        {
+                                            SubLObject pcase_var_4 = sbhl_it_finalize(sbhl_iterator);
+                                            if (pcase_var_4.eql(SBHL_TIME_DATE_LINK_ITERATOR_FINALIZE)) {
+                                                result = sbhl_time_dates.sbhl_time_date_link_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                                            } else {
+                                                if (pcase_var_4.eql(SBHL_TIME_DATE_DATE_LINK_ITERATOR_FINALIZE)) {
+                                                    result = sbhl_time_dates.sbhl_time_date_date_link_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                                                } else {
+                                                    if (pcase_var_4.eql(SBHL_TIME_DATE_LINK_TAG_ITERATOR_FINALIZE)) {
+                                                        result = sbhl_time_dates.sbhl_time_date_link_tag_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                                                    } else {
+                                                        if (pcase_var_4.eql(SBHL_TIME_DATE_MT_LINK_ITERATOR_FINALIZE)) {
+                                                            result = sbhl_time_dates.sbhl_time_date_mt_link_iterator_finalize(sbhl_it_state(sbhl_iterator));
+                                                        } else {
+                                                            handledP = NIL;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (NIL == handledP) {
+                                            result = funcall(sbhl_it_finalize(sbhl_iterator), sbhl_it_state(sbhl_iterator));
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            release_sbhl_iterator(sbhl_iterator);
+            return result;
+        }
+    }
+
     public static SubLObject sbhl_iteration_finalize(final SubLObject sbhl_iterator) {
         SubLObject result = NIL;
         final SubLObject pcase_var = sbhl_it_finalize(sbhl_iterator);
@@ -573,6 +928,79 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * Execute BODY within the scope of VAR for each object in the iteration of SBHL-ITERATOR.
+     * Execution will stop if DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Execute BODY within the scope of VAR for each object in the iteration of SBHL-ITERATOR.\r\nExecution will stop if DONE becomes non-nil.\nExecute BODY within the scope of VAR for each object in the iteration of SBHL-ITERATOR.\nExecution will stop if DONE becomes non-nil.")
+    public static final SubLObject do_sbhl_iterator_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt64);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject sbhl_iterator = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt64);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt64);
+                    sbhl_iterator = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_5 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt64);
+                            current_5 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt64);
+                            if (NIL == member(current_5, $list_alt65, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_5 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt64);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                if (!sbhl_iterator.isSymbol()) {
+                                    {
+                                        SubLObject iterator_var = $sym67$ITERATOR_VAR;
+                                        return list(CLET, list(list(iterator_var, sbhl_iterator)), listS(DO_SBHL_ITERATOR, list(var, iterator_var, $DONE, done), append(body, NIL)));
+                                    }
+                                } else {
+                                    {
+                                        SubLObject done_var = $sym69$DONE_VAR;
+                                        return list(CLET, list(list(done_var, done)), list(UNTIL, done_var, list(CLET, list(list(var, list(SBHL_ITERATION_NEXT, sbhl_iterator))), listS(PWHEN, var, append(body, NIL)), list(CSETQ, done_var, NIL != done ? ((SubLObject) (list(COR, list(NULL, var), done))) : list(NULL, var)))));
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Execute BODY within the scope of VAR for each object in the iteration of SBHL-ITERATOR.
+     * Execution will stop if DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Execute BODY within the scope of VAR for each object in the iteration of SBHL-ITERATOR.\r\nExecution will stop if DONE becomes non-nil.\nExecute BODY within the scope of VAR for each object in the iteration of SBHL-ITERATOR.\nExecution will stop if DONE becomes non-nil.")
     public static SubLObject do_sbhl_iterator(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -619,6 +1047,75 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return list(CLET, list(list(done_var, done)), list(UNTIL, done_var, list(CLET, list(list(var, list(SBHL_ITERATION_NEXT, sbhl_iterator))), listS(PWHEN, var, append(body, NIL)), list(CSETQ, done_var, NIL != done ? list(COR, list(NULL, var), done) : list(NULL, var)))));
     }
 
+    /**
+     * Execute BODY within the scope of VAR for each of the first N objects in the
+     * iteration of SBHL-ITERATOR.  Execution will stop if DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Execute BODY within the scope of VAR for each of the first N objects in the\r\niteration of SBHL-ITERATOR.  Execution will stop if DONE becomes non-nil.\nExecute BODY within the scope of VAR for each of the first N objects in the\niteration of SBHL-ITERATOR.  Execution will stop if DONE becomes non-nil.")
+    public static final SubLObject do_n_sbhl_iterator_objects_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt76);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject var = NIL;
+                    SubLObject n = NIL;
+                    SubLObject sbhl_iterator = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt76);
+                    var = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt76);
+                    n = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt76);
+                    sbhl_iterator = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_6 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt76);
+                            current_6 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt76);
+                            if (NIL == member(current_6, $list_alt65, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_6 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt76);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject count = $sym77$COUNT;
+                                SubLObject new_done = $sym78$NEW_DONE;
+                                return list(CLET, list(bq_cons(count, $list_alt79), list(new_done, list(COR, done, list($sym80$__, count, n)))), list(DO_SBHL_ITERATOR, list(var, sbhl_iterator, $DONE, new_done), bq_cons(PROGN, append(body, list(list(CINC, count), list(PWHEN, list(COR, done, list($sym80$__, count, n)), listS(CSETQ, new_done, $list_alt83)))))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Execute BODY within the scope of VAR for each of the first N objects in the
+     * iteration of SBHL-ITERATOR.  Execution will stop if DONE becomes non-nil.
+     */
+    @LispMethod(comment = "Execute BODY within the scope of VAR for each of the first N objects in the\r\niteration of SBHL-ITERATOR.  Execution will stop if DONE becomes non-nil.\nExecute BODY within the scope of VAR for each of the first N objects in the\niteration of SBHL-ITERATOR.  Execution will stop if DONE becomes non-nil.")
     public static SubLObject do_n_sbhl_iterator_objects(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -666,6 +1163,13 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return list(CLET, list(bq_cons(count, $list82), list(new_done, list(COR, done, list($sym83$__, count, n)))), list(DO_SBHL_ITERATOR, list(var, sbhl_iterator, $DONE, new_done), bq_cons(PROGN, append(body, list(list(CINC, count), list(PWHEN, list(COR, done, list($sym83$__, count, n)), listS(CSETQ, new_done, $list86)))))));
     }
 
+    public static final SubLObject new_sbhl_null_iterator_alt() {
+        if (NIL == $sbhl_null_iterator$.getGlobalValue()) {
+            $sbhl_null_iterator$.setGlobalValue(new_sbhl_iterator(NIL, TRUE, FALSE, TRUE));
+        }
+        return $sbhl_null_iterator$.getGlobalValue();
+    }
+
     public static SubLObject new_sbhl_null_iterator() {
         if (NIL == $sbhl_null_iterator$.getGlobalValue()) {
             $sbhl_null_iterator$.setGlobalValue(new_sbhl_iterator(NIL, TRUE, FALSE, TRUE));
@@ -673,16 +1177,44 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return $sbhl_null_iterator$.getGlobalValue();
     }
 
+    public static final SubLObject sbhl_null_iterator_p_alt(SubLObject v_object) {
+        return eq(v_object, $sbhl_null_iterator$.getGlobalValue());
+    }
+
     public static SubLObject sbhl_null_iterator_p(final SubLObject v_object) {
         return eq(v_object, $sbhl_null_iterator$.getGlobalValue());
     }
 
+    /**
+     * Returns an iterator for LIST.
+     */
+    @LispMethod(comment = "Returns an iterator for LIST.")
+    public static final SubLObject new_sbhl_list_iterator_alt(SubLObject list) {
+        return new_sbhl_iterator(make_vector(ONE_INTEGER, list), SBHL_LIST_ITERATOR_DONE, SBHL_LIST_ITERATOR_NEXT, TRUE);
+    }
+
+    /**
+     * Returns an iterator for LIST.
+     */
+    @LispMethod(comment = "Returns an iterator for LIST.")
     public static SubLObject new_sbhl_list_iterator(final SubLObject list) {
         return new_sbhl_iterator(make_vector(ONE_INTEGER, list), SBHL_LIST_ITERATOR_DONE, SBHL_LIST_ITERATOR_NEXT, TRUE);
     }
 
+    public static final SubLObject sbhl_list_iterator_done_alt(SubLObject state) {
+        return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
     public static SubLObject sbhl_list_iterator_done(final SubLObject state) {
         return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
+    public static final SubLObject sbhl_list_iterator_next_alt(SubLObject state) {
+        {
+            SubLObject list = aref(state, ZERO_INTEGER);
+            set_aref(state, ZERO_INTEGER, list.rest());
+            return list.first();
+        }
     }
 
     public static SubLObject sbhl_list_iterator_next(final SubLObject state) {
@@ -691,12 +1223,42 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return list.first();
     }
 
+    /**
+     * Returns an iterator for ALIST.
+     * Results are tuples of the form (<key> <value>).
+     */
+    @LispMethod(comment = "Returns an iterator for ALIST.\r\nResults are tuples of the form (<key> <value>).\nReturns an iterator for ALIST.\nResults are tuples of the form (<key> <value>).")
+    public static final SubLObject new_sbhl_alist_iterator_alt(SubLObject alist) {
+        return new_sbhl_iterator(make_vector(ONE_INTEGER, alist), SBHL_ALIST_ITERATOR_DONE, SBHL_ALIST_ITERATOR_NEXT, TRUE);
+    }
+
+    /**
+     * Returns an iterator for ALIST.
+     * Results are tuples of the form (<key> <value>).
+     */
+    @LispMethod(comment = "Returns an iterator for ALIST.\r\nResults are tuples of the form (<key> <value>).\nReturns an iterator for ALIST.\nResults are tuples of the form (<key> <value>).")
     public static SubLObject new_sbhl_alist_iterator(final SubLObject alist) {
         return new_sbhl_iterator(make_vector(ONE_INTEGER, alist), SBHL_ALIST_ITERATOR_DONE, SBHL_ALIST_ITERATOR_NEXT, TRUE);
     }
 
+    public static final SubLObject sbhl_alist_iterator_done_alt(SubLObject state) {
+        return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
     public static SubLObject sbhl_alist_iterator_done(final SubLObject state) {
         return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
+    public static final SubLObject sbhl_alist_iterator_next_alt(SubLObject state) {
+        {
+            SubLObject alist = aref(state, ZERO_INTEGER);
+            set_aref(state, ZERO_INTEGER, alist.rest());
+            if (NIL != alist.first()) {
+                return list(caar(alist), cdar(alist));
+            } else {
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject sbhl_alist_iterator_next(final SubLObject state) {
@@ -708,12 +1270,39 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Returns an iterator for HASH-TABLE.
+     * Results are tuples of the form (<key> <value>).
+     */
+    @LispMethod(comment = "Returns an iterator for HASH-TABLE.\r\nResults are tuples of the form (<key> <value>).\nReturns an iterator for HASH-TABLE.\nResults are tuples of the form (<key> <value>).")
+    public static final SubLObject new_sbhl_hash_table_iterator_alt(SubLObject hash_table) {
+        return new_sbhl_iterator(make_sbhl_hash_table_iterator_state(hash_table), SBHL_HASH_TABLE_ITERATOR_DONE, SBHL_HASH_TABLE_ITERATOR_NEXT, TRUE);
+    }
+
+    /**
+     * Returns an iterator for HASH-TABLE.
+     * Results are tuples of the form (<key> <value>).
+     */
+    @LispMethod(comment = "Returns an iterator for HASH-TABLE.\r\nResults are tuples of the form (<key> <value>).\nReturns an iterator for HASH-TABLE.\nResults are tuples of the form (<key> <value>).")
     public static SubLObject new_sbhl_hash_table_iterator(final SubLObject hash_table) {
         return new_sbhl_iterator(make_sbhl_hash_table_iterator_state(hash_table), SBHL_HASH_TABLE_ITERATOR_DONE, SBHL_HASH_TABLE_ITERATOR_NEXT, TRUE);
     }
 
+    public static final SubLObject sbhl_hash_table_iterator_done_alt(SubLObject state) {
+        return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
     public static SubLObject sbhl_hash_table_iterator_done(final SubLObject state) {
         return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
+    public static final SubLObject sbhl_hash_table_iterator_next_alt(SubLObject state) {
+        {
+            SubLObject keys = aref(state, ZERO_INTEGER);
+            SubLObject key = keys.first();
+            set_aref(state, ZERO_INTEGER, keys.rest());
+            return NIL != key ? ((SubLObject) (list(key, gethash(key, aref(state, ONE_INTEGER), UNPROVIDED)))) : NIL;
+        }
     }
 
     public static SubLObject sbhl_hash_table_iterator_next(final SubLObject state) {
@@ -723,6 +1312,15 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return NIL != key ? list(key, gethash(key, aref(state, ONE_INTEGER), UNPROVIDED)) : NIL;
     }
 
+    public static final SubLObject make_sbhl_hash_table_iterator_state_alt(SubLObject hash_table) {
+        {
+            SubLObject state = make_vector(TWO_INTEGER, NIL);
+            set_aref(state, ZERO_INTEGER, hash_table_utilities.hash_table_keys(hash_table));
+            set_aref(state, ONE_INTEGER, hash_table);
+            return state;
+        }
+    }
+
     public static SubLObject make_sbhl_hash_table_iterator_state(final SubLObject hash_table) {
         final SubLObject state = make_vector(TWO_INTEGER, NIL);
         set_aref(state, ZERO_INTEGER, hash_table_utilities.hash_table_keys(hash_table));
@@ -730,6 +1328,28 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return state;
     }
 
+    /**
+     * Returns an iterator for DICTIONARY.
+     * Results are tuples of the form (<key> <value>).
+     */
+    @LispMethod(comment = "Returns an iterator for DICTIONARY.\r\nResults are tuples of the form (<key> <value>).\nReturns an iterator for DICTIONARY.\nResults are tuples of the form (<key> <value>).")
+    public static final SubLObject new_sbhl_dictionary_iterator_alt(SubLObject v_dictionary) {
+        {
+            SubLObject database = dictionary.dictionary_contents(v_dictionary);
+            SubLObject pcase_var = dictionary.dictionary_style(v_dictionary);
+            if (pcase_var.eql($ALIST)) {
+                return new_sbhl_alist_iterator(database);
+            } else {
+                if (pcase_var.eql($HASHTABLE)) {
+                    return new_sbhl_hash_table_iterator(database);
+                } else {
+                    return dictionary.dictionary_style_error(v_dictionary);
+                }
+            }
+        }
+    }
+
+    @LispMethod(comment = "Returns an iterator for DICTIONARY.\r\nResults are tuples of the form (<key> <value>).\nReturns an iterator for DICTIONARY.\nResults are tuples of the form (<key> <value>).")
     public static SubLObject new_sbhl_dictionary_iterator(final SubLObject v_dictionary) {
         final SubLObject database = dictionary.dictionary_contents(v_dictionary);
         final SubLObject pcase_var = dictionary.dictionary_style(v_dictionary);
@@ -742,14 +1362,54 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return dictionary.dictionary_style_error(v_dictionary);
     }
 
+    /**
+     * Returns an iterator that iterates through the iterators
+     * of ITERATORS.
+     */
+    @LispMethod(comment = "Returns an iterator that iterates through the iterators\r\nof ITERATORS.\nReturns an iterator that iterates through the iterators\nof ITERATORS.")
+    public static final SubLObject new_sbhl_iterator_iterator_alt(SubLObject iterators) {
+        {
+            SubLObject state = make_vector(ONE_INTEGER, UNPROVIDED);
+            set_aref(state, ZERO_INTEGER, iterators);
+            return new_sbhl_iterator(state, SBHL_ITERATOR_ITERATOR_DONE, SBHL_ITERATOR_ITERATOR_NEXT, SBHL_ITERATOR_ITERATOR_FINALIZE);
+        }
+    }
+
+    @LispMethod(comment = "Returns an iterator that iterates through the iterators\r\nof ITERATORS.\nReturns an iterator that iterates through the iterators\nof ITERATORS.")
     public static SubLObject new_sbhl_iterator_iterator(final SubLObject iterators) {
         final SubLObject state = make_vector(ONE_INTEGER, UNPROVIDED);
         set_aref(state, ZERO_INTEGER, iterators);
         return new_sbhl_iterator(state, SBHL_ITERATOR_ITERATOR_DONE, SBHL_ITERATOR_ITERATOR_NEXT, SBHL_ITERATOR_ITERATOR_FINALIZE);
     }
 
+    public static final SubLObject sbhl_iterator_iterator_done_alt(SubLObject state) {
+        return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
     public static SubLObject sbhl_iterator_iterator_done(final SubLObject state) {
         return sublisp_null(aref(state, ZERO_INTEGER));
+    }
+
+    public static final SubLObject sbhl_iterator_iterator_next_alt(SubLObject state) {
+        {
+            SubLObject iterator = aref(state, ZERO_INTEGER).first();
+            SubLObject result = NIL;
+            SubLObject doneP = NIL;
+            while (!((NIL != result) || (NIL != doneP))) {
+                if (NIL == iterator) {
+                    doneP = T;
+                } else {
+                    if (NIL != sbhl_iteration_doneP(iterator)) {
+                        sbhl_iteration_finalize(iterator);
+                        set_aref(state, ZERO_INTEGER, aref(state, ZERO_INTEGER).rest());
+                        iterator = aref(state, ZERO_INTEGER).first();
+                    } else {
+                        result = sbhl_iteration_next(iterator);
+                    }
+                }
+            } 
+            return result;
+        }
     }
 
     public static SubLObject sbhl_iterator_iterator_next(final SubLObject state) {
@@ -772,6 +1432,17 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject sbhl_iterator_iterator_finalize_alt(SubLObject state) {
+        {
+            SubLObject cdolist_list_var = aref(state, ZERO_INTEGER);
+            SubLObject iterator = NIL;
+            for (iterator = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , iterator = cdolist_list_var.first()) {
+                sbhl_iteration_finalize(iterator);
+            }
+        }
+        return T;
+    }
+
     public static SubLObject sbhl_iterator_iterator_finalize(final SubLObject state) {
         SubLObject cdolist_list_var = aref(state, ZERO_INTEGER);
         SubLObject iterator = NIL;
@@ -785,49 +1456,49 @@ public final class sbhl_iteration extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_sbhl_iteration_file() {
-        declareFunction(me, "within_sbhl_iterator_resourcingP", "WITHIN-SBHL-ITERATOR-RESOURCING?", 0, 0, false);
-        declareMacro(me, "with_sbhl_iterator_resourcing", "WITH-SBHL-ITERATOR-RESOURCING");
-        declareFunction(me, "find_or_create_sbhl_iterator_shell", "FIND-OR-CREATE-SBHL-ITERATOR-SHELL", 0, 0, false);
-        declareFunction(me, "find_sbhl_iterator_shell", "FIND-SBHL-ITERATOR-SHELL", 0, 0, false);
-        declareFunction(me, "release_sbhl_iterator", "RELEASE-SBHL-ITERATOR", 1, 0, false);
-        declareFunction(me, "sbhl_iterator_print_function_trampoline", "SBHL-ITERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "sbhl_iterator_p", "SBHL-ITERATOR-P", 1, 0, false);
+        declareFunction("within_sbhl_iterator_resourcingP", "WITHIN-SBHL-ITERATOR-RESOURCING?", 0, 0, false);
+        declareMacro("with_sbhl_iterator_resourcing", "WITH-SBHL-ITERATOR-RESOURCING");
+        declareFunction("find_or_create_sbhl_iterator_shell", "FIND-OR-CREATE-SBHL-ITERATOR-SHELL", 0, 0, false);
+        declareFunction("find_sbhl_iterator_shell", "FIND-SBHL-ITERATOR-SHELL", 0, 0, false);
+        declareFunction("release_sbhl_iterator", "RELEASE-SBHL-ITERATOR", 1, 0, false);
+        declareFunction("sbhl_iterator_print_function_trampoline", "SBHL-ITERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("sbhl_iterator_p", "SBHL-ITERATOR-P", 1, 0, false);
         new sbhl_iteration.$sbhl_iterator_p$UnaryFunction();
-        declareFunction(me, "sbhl_it_state", "SBHL-IT-STATE", 1, 0, false);
-        declareFunction(me, "sbhl_it_done", "SBHL-IT-DONE", 1, 0, false);
-        declareFunction(me, "sbhl_it_next", "SBHL-IT-NEXT", 1, 0, false);
-        declareFunction(me, "sbhl_it_finalize", "SBHL-IT-FINALIZE", 1, 0, false);
-        declareFunction(me, "_csetf_sbhl_it_state", "_CSETF-SBHL-IT-STATE", 2, 0, false);
-        declareFunction(me, "_csetf_sbhl_it_done", "_CSETF-SBHL-IT-DONE", 2, 0, false);
-        declareFunction(me, "_csetf_sbhl_it_next", "_CSETF-SBHL-IT-NEXT", 2, 0, false);
-        declareFunction(me, "_csetf_sbhl_it_finalize", "_CSETF-SBHL-IT-FINALIZE", 2, 0, false);
-        declareFunction(me, "make_sbhl_iterator", "MAKE-SBHL-ITERATOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_sbhl_iterator", "VISIT-DEFSTRUCT-SBHL-ITERATOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_sbhl_iterator_method", "VISIT-DEFSTRUCT-OBJECT-SBHL-ITERATOR-METHOD", 2, 0, false);
-        declareFunction(me, "print_sbhl_iterator", "PRINT-SBHL-ITERATOR", 3, 0, false);
-        declareFunction(me, "new_sbhl_iterator", "NEW-SBHL-ITERATOR", 4, 0, false);
-        declareFunction(me, "sbhl_iteration_doneP", "SBHL-ITERATION-DONE?", 1, 0, false);
-        declareFunction(me, "sbhl_iteration_next", "SBHL-ITERATION-NEXT", 1, 0, false);
-        declareFunction(me, "sbhl_iteration_finalize", "SBHL-ITERATION-FINALIZE", 1, 0, false);
-        declareMacro(me, "do_sbhl_iterator", "DO-SBHL-ITERATOR");
-        declareMacro(me, "do_n_sbhl_iterator_objects", "DO-N-SBHL-ITERATOR-OBJECTS");
-        declareFunction(me, "new_sbhl_null_iterator", "NEW-SBHL-NULL-ITERATOR", 0, 0, false);
-        declareFunction(me, "sbhl_null_iterator_p", "SBHL-NULL-ITERATOR-P", 1, 0, false);
-        declareFunction(me, "new_sbhl_list_iterator", "NEW-SBHL-LIST-ITERATOR", 1, 0, false);
-        declareFunction(me, "sbhl_list_iterator_done", "SBHL-LIST-ITERATOR-DONE", 1, 0, false);
-        declareFunction(me, "sbhl_list_iterator_next", "SBHL-LIST-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "new_sbhl_alist_iterator", "NEW-SBHL-ALIST-ITERATOR", 1, 0, false);
-        declareFunction(me, "sbhl_alist_iterator_done", "SBHL-ALIST-ITERATOR-DONE", 1, 0, false);
-        declareFunction(me, "sbhl_alist_iterator_next", "SBHL-ALIST-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "new_sbhl_hash_table_iterator", "NEW-SBHL-HASH-TABLE-ITERATOR", 1, 0, false);
-        declareFunction(me, "sbhl_hash_table_iterator_done", "SBHL-HASH-TABLE-ITERATOR-DONE", 1, 0, false);
-        declareFunction(me, "sbhl_hash_table_iterator_next", "SBHL-HASH-TABLE-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "make_sbhl_hash_table_iterator_state", "MAKE-SBHL-HASH-TABLE-ITERATOR-STATE", 1, 0, false);
-        declareFunction(me, "new_sbhl_dictionary_iterator", "NEW-SBHL-DICTIONARY-ITERATOR", 1, 0, false);
-        declareFunction(me, "new_sbhl_iterator_iterator", "NEW-SBHL-ITERATOR-ITERATOR", 1, 0, false);
-        declareFunction(me, "sbhl_iterator_iterator_done", "SBHL-ITERATOR-ITERATOR-DONE", 1, 0, false);
-        declareFunction(me, "sbhl_iterator_iterator_next", "SBHL-ITERATOR-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "sbhl_iterator_iterator_finalize", "SBHL-ITERATOR-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction("sbhl_it_state", "SBHL-IT-STATE", 1, 0, false);
+        declareFunction("sbhl_it_done", "SBHL-IT-DONE", 1, 0, false);
+        declareFunction("sbhl_it_next", "SBHL-IT-NEXT", 1, 0, false);
+        declareFunction("sbhl_it_finalize", "SBHL-IT-FINALIZE", 1, 0, false);
+        declareFunction("_csetf_sbhl_it_state", "_CSETF-SBHL-IT-STATE", 2, 0, false);
+        declareFunction("_csetf_sbhl_it_done", "_CSETF-SBHL-IT-DONE", 2, 0, false);
+        declareFunction("_csetf_sbhl_it_next", "_CSETF-SBHL-IT-NEXT", 2, 0, false);
+        declareFunction("_csetf_sbhl_it_finalize", "_CSETF-SBHL-IT-FINALIZE", 2, 0, false);
+        declareFunction("make_sbhl_iterator", "MAKE-SBHL-ITERATOR", 0, 1, false);
+        declareFunction("visit_defstruct_sbhl_iterator", "VISIT-DEFSTRUCT-SBHL-ITERATOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_sbhl_iterator_method", "VISIT-DEFSTRUCT-OBJECT-SBHL-ITERATOR-METHOD", 2, 0, false);
+        declareFunction("print_sbhl_iterator", "PRINT-SBHL-ITERATOR", 3, 0, false);
+        declareFunction("new_sbhl_iterator", "NEW-SBHL-ITERATOR", 4, 0, false);
+        declareFunction("sbhl_iteration_doneP", "SBHL-ITERATION-DONE?", 1, 0, false);
+        declareFunction("sbhl_iteration_next", "SBHL-ITERATION-NEXT", 1, 0, false);
+        declareFunction("sbhl_iteration_finalize", "SBHL-ITERATION-FINALIZE", 1, 0, false);
+        declareMacro("do_sbhl_iterator", "DO-SBHL-ITERATOR");
+        declareMacro("do_n_sbhl_iterator_objects", "DO-N-SBHL-ITERATOR-OBJECTS");
+        declareFunction("new_sbhl_null_iterator", "NEW-SBHL-NULL-ITERATOR", 0, 0, false);
+        declareFunction("sbhl_null_iterator_p", "SBHL-NULL-ITERATOR-P", 1, 0, false);
+        declareFunction("new_sbhl_list_iterator", "NEW-SBHL-LIST-ITERATOR", 1, 0, false);
+        declareFunction("sbhl_list_iterator_done", "SBHL-LIST-ITERATOR-DONE", 1, 0, false);
+        declareFunction("sbhl_list_iterator_next", "SBHL-LIST-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("new_sbhl_alist_iterator", "NEW-SBHL-ALIST-ITERATOR", 1, 0, false);
+        declareFunction("sbhl_alist_iterator_done", "SBHL-ALIST-ITERATOR-DONE", 1, 0, false);
+        declareFunction("sbhl_alist_iterator_next", "SBHL-ALIST-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("new_sbhl_hash_table_iterator", "NEW-SBHL-HASH-TABLE-ITERATOR", 1, 0, false);
+        declareFunction("sbhl_hash_table_iterator_done", "SBHL-HASH-TABLE-ITERATOR-DONE", 1, 0, false);
+        declareFunction("sbhl_hash_table_iterator_next", "SBHL-HASH-TABLE-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("make_sbhl_hash_table_iterator_state", "MAKE-SBHL-HASH-TABLE-ITERATOR-STATE", 1, 0, false);
+        declareFunction("new_sbhl_dictionary_iterator", "NEW-SBHL-DICTIONARY-ITERATOR", 1, 0, false);
+        declareFunction("new_sbhl_iterator_iterator", "NEW-SBHL-ITERATOR-ITERATOR", 1, 0, false);
+        declareFunction("sbhl_iterator_iterator_done", "SBHL-ITERATOR-ITERATOR-DONE", 1, 0, false);
+        declareFunction("sbhl_iterator_iterator_next", "SBHL-ITERATOR-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("sbhl_iterator_iterator_finalize", "SBHL-ITERATOR-ITERATOR-FINALIZE", 1, 0, false);
         return NIL;
     }
 
@@ -851,15 +1522,23 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt1 = list(list(makeSymbol("*SBHL-ITERATOR-STORE*"), list(makeSymbol("FIF"), list(makeSymbol("WITHIN-SBHL-ITERATOR-RESOURCING?")), makeSymbol("*SBHL-ITERATOR-STORE*"), list(makeSymbol("NEW-SBHL-STACK"), makeSymbol("*SBHL-ITERATOR-STORE-MAX*")))));
+
+    static private final SubLList $list_alt4 = list(makeSymbol("STATE"), makeSymbol("DONE"), makeSymbol("NEXT"), makeSymbol("FINALIZE"));
+
     @Override
     public void declareFunctions() {
         declare_sbhl_iteration_file();
     }
 
+    static private final SubLList $list_alt5 = list(makeKeyword("STATE"), $DONE, $NEXT, makeKeyword("FINALIZE"));
+
     @Override
     public void initializeVariables() {
         init_sbhl_iteration_file();
     }
+
+    static private final SubLList $list_alt6 = list(makeSymbol("SBHL-IT-STATE"), makeSymbol("SBHL-IT-DONE"), makeSymbol("SBHL-IT-NEXT"), makeSymbol("SBHL-IT-FINALIZE"));
 
     @Override
     public void runTopLevelForms() {
@@ -867,101 +1546,9 @@ public final class sbhl_iteration extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt7 = list(makeSymbol("_CSETF-SBHL-IT-STATE"), makeSymbol("_CSETF-SBHL-IT-DONE"), makeSymbol("_CSETF-SBHL-IT-NEXT"), makeSymbol("_CSETF-SBHL-IT-FINALIZE"));
 
     public static final class $sbhl_iterator_native extends SubLStructNative {
         public SubLObject $state;
@@ -975,10 +1562,10 @@ public final class sbhl_iteration extends SubLTranslatedFile {
         private static final SubLStructDeclNative structDecl;
 
         public $sbhl_iterator_native() {
-            this.$state = Lisp.NIL;
-            this.$done = Lisp.NIL;
-            this.$next = Lisp.NIL;
-            this.$finalize = Lisp.NIL;
+            sbhl_iteration.$sbhl_iterator_native.this.$state = Lisp.NIL;
+            sbhl_iteration.$sbhl_iterator_native.this.$done = Lisp.NIL;
+            sbhl_iteration.$sbhl_iterator_native.this.$next = Lisp.NIL;
+            sbhl_iteration.$sbhl_iterator_native.this.$finalize = Lisp.NIL;
         }
 
         @Override
@@ -988,48 +1575,54 @@ public final class sbhl_iteration extends SubLTranslatedFile {
 
         @Override
         public SubLObject getField2() {
-            return this.$state;
+            return sbhl_iteration.$sbhl_iterator_native.this.$state;
         }
 
         @Override
         public SubLObject getField3() {
-            return this.$done;
+            return sbhl_iteration.$sbhl_iterator_native.this.$done;
         }
 
         @Override
         public SubLObject getField4() {
-            return this.$next;
+            return sbhl_iteration.$sbhl_iterator_native.this.$next;
         }
 
         @Override
         public SubLObject getField5() {
-            return this.$finalize;
+            return sbhl_iteration.$sbhl_iterator_native.this.$finalize;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return this.$state = value;
+            return sbhl_iteration.$sbhl_iterator_native.this.$state = value;
         }
 
         @Override
         public SubLObject setField3(final SubLObject value) {
-            return this.$done = value;
+            return sbhl_iteration.$sbhl_iterator_native.this.$done = value;
         }
 
         @Override
         public SubLObject setField4(final SubLObject value) {
-            return this.$next = value;
+            return sbhl_iteration.$sbhl_iterator_native.this.$next = value;
         }
 
         @Override
         public SubLObject setField5(final SubLObject value) {
-            return this.$finalize = value;
+            return sbhl_iteration.$sbhl_iterator_native.this.$finalize = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(sbhl_iteration.$sbhl_iterator_native.class, SBHL_ITERATOR, SBHL_ITERATOR_P, $list4, $list5, new String[]{ "$state", "$done", "$next", "$finalize" }, $list6, $list7, PRINT_SBHL_ITERATOR);
+            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.sbhl.sbhl_iteration.$sbhl_iterator_native.class, SBHL_ITERATOR, SBHL_ITERATOR_P, $list4, $list5, new String[]{ "$state", "$done", "$next", "$finalize" }, $list6, $list7, PRINT_SBHL_ITERATOR);
         }
     }
+
+    static private final SubLString $str_alt22$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLString $str_alt23$__ = makeString("#<");
+
+    static private final SubLString $str_alt25$_DONE = makeString(" DONE");
 
     public static final class $sbhl_iterator_p$UnaryFunction extends UnaryFunction {
         public $sbhl_iterator_p$UnaryFunction() {
@@ -1041,6 +1634,26 @@ public final class sbhl_iteration extends SubLTranslatedFile {
             return sbhl_iterator_p(arg1);
         }
     }
+
+    static private final SubLList $list_alt64 = list(list(makeSymbol("VAR"), makeSymbol("SBHL-ITERATOR"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt65 = list($DONE);
+
+    static private final SubLSymbol $sym67$ITERATOR_VAR = makeUninternedSymbol("ITERATOR-VAR");
+
+    static private final SubLSymbol $sym69$DONE_VAR = makeUninternedSymbol("DONE-VAR");
+
+    static private final SubLList $list_alt76 = list(list(makeSymbol("VAR"), makeSymbol("N"), makeSymbol("SBHL-ITERATOR"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym77$COUNT = makeUninternedSymbol("COUNT");
+
+    static private final SubLSymbol $sym78$NEW_DONE = makeUninternedSymbol("NEW-DONE");
+
+    static private final SubLList $list_alt79 = list(ZERO_INTEGER);
+
+    static private final SubLSymbol $sym80$__ = makeSymbol(">=");
+
+    static private final SubLList $list_alt83 = list(T);
 }
 
 /**

@@ -973,8 +973,7 @@ import com.cyc.tool.subl.util.*;
   }
 
   public static final SubLObject setup_hl_supports_file() {
-    // CVS_ID("Id: hl-supports.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym2$_HL_SUPPORT_MODULES_);
+        subl_macro_promotions.declare_defglobal($sym2$_HL_SUPPORT_MODULES_);
     utilities_macros.register_cyc_api_function($sym4$HL_SUPPORT_MODULE_P, $list5, $str6$Return_T_iff_OBJECT_is_an_HL_supp, NIL, $list7);
     setup_hl_support_module($kw20$CODE, $list22);
     setup_hl_support_module($kw24$OPAQUE, $list25);

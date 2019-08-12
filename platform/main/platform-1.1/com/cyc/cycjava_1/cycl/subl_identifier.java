@@ -255,8 +255,7 @@ public  final class subl_identifier extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_subl_identifier_file() {
-    // CVS_ID("Id: subl-identifier.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_SUBLID_DOMAIN_TO_FORTS_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym0$_SUBLID_DOMAIN_TO_FORTS_TABLE_);
     subl_macro_promotions.declare_defglobal($sym1$_SUBLID_ID_TO_FORTS_TABLE_);
     subl_macro_promotions.declare_defglobal($sym2$_SUBLID_FORT_TO_ID_TABLE_);
     utilities_macros.register_kb_function($sym17$ADD_SUBLIDENTIFIER);

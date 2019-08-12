@@ -291,8 +291,7 @@ public  final class search extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_search_file() {
-    // CVS_ID("Id: search.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_search_struc$.getGlobalValue(), Symbols.symbol_function($sym7$SEARCH_STRUC_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_search_struc$.getGlobalValue(), Symbols.symbol_function($sym7$SEARCH_STRUC_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$SEARCH_TREE, $sym9$_CSETF_SEARCH_TREE);
     Structures.def_csetf($sym10$SEARCH_LEAVES, $sym11$_CSETF_SEARCH_LEAVES);
     Structures.def_csetf($sym12$SEARCH_GOALS, $sym13$_CSETF_SEARCH_GOALS);

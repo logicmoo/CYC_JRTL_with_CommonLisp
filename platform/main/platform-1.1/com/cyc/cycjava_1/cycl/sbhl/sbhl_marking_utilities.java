@@ -421,8 +421,7 @@ public  final class sbhl_marking_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_marking_utilities_file() {
-    // CVS_ID("Id: sbhl-marking-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

@@ -2428,8 +2428,7 @@ public final class inference_worker_join_ordered
 
   public static final SubLObject setup_inference_worker_join_ordered_file()
   {
-    // CVS_ID("Id: inference-worker-join-ordered.lisp 128924 2009-10-07
-    // 17:48:12Z pace ");
+        // 17:48:12Z pace ");
     Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), $dtp_join_ordered_link_data$.getGlobalValue(), Symbols.symbol_function( $sym7$JOIN_ORDERED_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE ) );
     Structures.def_csetf( $sym8$JO_LINK_DATA_FOCAL_PROOF_INDEX, $sym9$_CSETF_JO_LINK_DATA_FOCAL_PROOF_INDEX );
     Structures.def_csetf( $sym10$JO_LINK_DATA_NON_FOCAL_PROOF_INDEX, $sym11$_CSETF_JO_LINK_DATA_NON_FOCAL_PROOF_INDEX );

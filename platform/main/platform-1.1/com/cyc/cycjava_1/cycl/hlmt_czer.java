@@ -117,8 +117,7 @@ public  final class hlmt_czer extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_hlmt_czer_file() {
-    // CVS_ID("Id: hlmt-czer.lisp 128779 2009-09-16 15:24:48Z pace ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

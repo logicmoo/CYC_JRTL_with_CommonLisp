@@ -1,55 +1,34 @@
 package com.cyc.cycjava.cycl.nl;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.cycl_variables;
-import com.cyc.cycjava.cycl.el_grammar;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
-import com.cyc.cycjava.cycl.inference.harness.inference_macros;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.nl.removal_modules_scg;
-import com.cyc.cycjava.cycl.subcollection_unwinder;
-import com.cyc.cycjava.cycl.unification;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.nl.removal_modules_scg.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
+import com.cyc.cycjava.cycl.inference.harness.inference_macros;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_scg extends SubLTranslatedFile {
+public final class removal_modules_scg extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_scg();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl.removal_modules_scg";
+    public static final String myName = "com.cyc.cycjava_2.cycl.nl.removal_modules_scg";
 
-    public static final String myFingerPrint = "924dd601ec858157a405c0f735c7ba2965edf57116dd77b93443aa22f3f02796";
 
     // defparameter
     private static final SubLSymbol $scg_parse_removal_clear_cachesP$ = makeSymbol("*SCG-PARSE-REMOVAL-CLEAR-CACHES?*");
@@ -249,11 +228,11 @@ public final class removal_modules_scg extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_scg_file() {
-        declareFunction(me, "removal_scg_parse_expand", "REMOVAL-SCG-PARSE-EXPAND", 1, 1, false);
-        declareFunction(me, "scg_parse_pred_uses_legacy_incorrect_non_quotingP", "SCG-PARSE-PRED-USES-LEGACY-INCORRECT-NON-QUOTING?", 1, 0, false);
-        declareFunction(me, "scg_parse_pred_partialP", "SCG-PARSE-PRED-PARTIAL?", 1, 0, false);
-        declareFunction(me, "scg_parse_pred_restriction_type", "SCG-PARSE-PRED-RESTRICTION-TYPE", 1, 0, false);
-        declareFunction(me, "removal_unwinding_of_subcollection_expression_expand", "REMOVAL-UNWINDING-OF-SUBCOLLECTION-EXPRESSION-EXPAND", 1, 1, false);
+        declareFunction("removal_scg_parse_expand", "REMOVAL-SCG-PARSE-EXPAND", 1, 1, false);
+        declareFunction("scg_parse_pred_uses_legacy_incorrect_non_quotingP", "SCG-PARSE-PRED-USES-LEGACY-INCORRECT-NON-QUOTING?", 1, 0, false);
+        declareFunction("scg_parse_pred_partialP", "SCG-PARSE-PRED-PARTIAL?", 1, 0, false);
+        declareFunction("scg_parse_pred_restriction_type", "SCG-PARSE-PRED-RESTRICTION-TYPE", 1, 0, false);
+        declareFunction("removal_unwinding_of_subcollection_expression_expand", "REMOVAL-UNWINDING-OF-SUBCOLLECTION-EXPRESSION-EXPAND", 1, 1, false);
         return NIL;
     }
 

@@ -81,7 +81,7 @@ public class LarKCHttpServer extends SubLTranslatedFile
 
     @Override
 	public void declareFunctions() {
-	    declareFunction(myName, "start_sparql_server", "START-SPARQL-SERVER", 0, 0, false);
+	    declareFunction("start_sparql_server", "START-SPARQL-SERVER", 0, 0, false);
 	}
 
     @Override

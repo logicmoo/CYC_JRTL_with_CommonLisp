@@ -1,75 +1,25 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.backward_utilities;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.formula_pattern_match;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.genl_mts;
-import com.cyc.cycjava.cycl.genl_predicates;
-import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.hl_macros;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.inference.harness.forward;
-import com.cyc.cycjava.cycl.inference.harness.inference_metrics;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.inference_trampolines;
-import com.cyc.cycjava.cycl.inference.modules.forward_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_natfunction;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_symmetry;
-import com.cyc.cycjava.cycl.inference.pragma_induction;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.kb_indexing;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.negation_predicate;
-import com.cyc.cycjava.cycl.relation_evaluation;
-import com.cyc.cycjava.cycl.tms;
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.cycjava.cycl.wff;
-import com.cyc.cycjava.cycl.wff_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.arguments.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$unbound_rule_backchain_enabled$;
 import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cycl_utilities.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.forward_modules.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.cycjava.cycl.genl_mts.*;
+import static com.cyc.cycjava.cycl.genl_predicates.*;
+import static com.cyc.cycjava.cycl.inference.harness.forward.*;
+import static com.cyc.cycjava.cycl.negation_predicate.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
@@ -77,62 +27,68 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.inference_trampolines;
+import com.cyc.cycjava.cycl.inference.pragma_induction;
+import com.cyc.cycjava.cycl.inference.harness.forward;
+import com.cyc.cycjava.cycl.inference.harness.inference_metrics;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_natfunction;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_symmetry;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class forward_modules extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      FORWARD-MODULES
+ * source file: /cyc/top/cycl/inference/modules/forward-modules.lisp
+ * created:     2019/07/03 17:37:48
+ */
+public final class forward_modules extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new forward_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.forward_modules";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.forward_modules";
 
-    public static final String myFingerPrint = "dd3a325d8a9a7a7e20b036b53ac8460ee5b0329bf7869144464dec69d553dc94";
 
     // defparameter
     // Definitions
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $forward_modules$ = makeSymbol("*FORWARD-MODULES*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $forward_tactic_specs$ = makeSymbol("*FORWARD-TACTIC-SPECS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $prevent_forward_triggering_via_evaluatable_predicate_antecedent_literalsP$ = makeSymbol("*PREVENT-FORWARD-TRIGGERING-VIA-EVALUATABLE-PREDICATE-ANTECEDENT-LITERALS?*");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     // defvar
+    @LispMethod(comment = "defvar")
     public static final SubLSymbol $gaf_predicate_forward_inference_enabledP$ = makeSymbol("*GAF-PREDICATE-FORWARD-INFERENCE-ENABLED?*");
 
+    static private final SubLList $list1 = list(list(makeSymbol("HL-MODULE"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-
-    public static final SubLList $list1 = list(list(makeSymbol("HL-MODULE"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-    public static final SubLList $list2 = list(makeKeyword("DONE"));
+    static private final SubLList $list2 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
+    static private final SubLList $list6 = list(makeSymbol("DO-FORWARD-MODULES-LIST"));
 
+    private static final SubLSymbol DO_FORWARD_MODULES_LIST = makeSymbol("DO-FORWARD-MODULES-LIST");
 
-
-
-    public static final SubLList $list6 = list(makeSymbol("DO-FORWARD-MODULES-LIST"));
-
-    public static final SubLSymbol DO_FORWARD_MODULES_LIST = makeSymbol("DO-FORWARD-MODULES-LIST");
-
-    public static final SubLSymbol DO_FORWARD_MODULES = makeSymbol("DO-FORWARD-MODULES");
-
-
+    private static final SubLSymbol DO_FORWARD_MODULES = makeSymbol("DO-FORWARD-MODULES");
 
     private static final SubLSymbol $sym10$TMS_ASSERTION_BEING_REMOVED_ = makeSymbol("TMS-ASSERTION-BEING-REMOVED?");
 
@@ -142,17 +98,7 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol KBEQ = makeSymbol("KBEQ");
 
-
-
     private static final SubLSymbol $FORWARD_TACTIC_SPECS = makeKeyword("FORWARD-TACTIC-SPECS");
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol $FORWARD_NORMAL_POS = makeKeyword("FORWARD-NORMAL-POS");
 
@@ -162,51 +108,41 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLList $list23 = list(makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NORMAL-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NORMAL-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NORMAL-NEG-EXPAND"));
 
-
-
-    public static final SubLList $list25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("isa")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-ISA-EXPAND") });
-
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+    static private final SubLList $list25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("isa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-ISA-EXPAND") });
 
 
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
 
     private static final SubLSymbol FORWARD_INFERENCE_ALL_GENLS = makeSymbol("FORWARD-INFERENCE-ALL-GENLS");
 
     private static final SubLSymbol $FORWARD_NOT_ISA = makeKeyword("FORWARD-NOT-ISA");
 
-    private static final SubLList $list31 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("isa")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-ISA-EXPAND") });
+    private static final SubLList $list31 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("isa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-ISA-EXPAND") });
 
     private static final SubLSymbol CACHED_ALL_SPECS = makeSymbol("CACHED-ALL-SPECS");
 
     private static final SubLSymbol $cached_all_specs_caching_state$ = makeSymbol("*CACHED-ALL-SPECS-CACHING-STATE*");
 
-
-
     private static final SubLSymbol CLEAR_CACHED_ALL_SPECS = makeSymbol("CLEAR-CACHED-ALL-SPECS");
 
     private static final SubLSymbol $FORWARD_QUOTED_ISA = makeKeyword("FORWARD-QUOTED-ISA");
 
-    private static final SubLList $list37 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("quotedIsa")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-QUOTED-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-QUOTED-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-QUOTED-ISA-EXPAND") });
+    private static final SubLList $list37 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("quotedIsa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-QUOTED-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-QUOTED-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-QUOTED-ISA-EXPAND") });
 
-    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
+
 
     private static final SubLSymbol $FORWARD_NOT_QUOTED_ISA = makeKeyword("FORWARD-NOT-QUOTED-ISA");
 
-    public static final SubLList $list40 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("quotedIsa")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-QUOTED-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-QUOTED-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-QUOTED-ISA-EXPAND") });
+    static private final SubLList $list40 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("quotedIsa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-QUOTED-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-QUOTED-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-QUOTED-ISA-EXPAND") });
 
-
-
-    public static final SubLList $list42 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genls")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLS-EXPAND") });
+    static private final SubLList $list42 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genls"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLS-EXPAND") });
 
     private static final SubLSymbol $FORWARD_NOT_GENLS = makeKeyword("FORWARD-NOT-GENLS");
 
-    public static final SubLList $list44 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genls")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLS-EXPAND") });
+    static private final SubLList $list44 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genls"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLS-EXPAND") });
 
-
-
-    public static final SubLList $list46 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genlMt")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLMT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLMT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLMT-EXPAND") });
+    static private final SubLList $list46 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlMt"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLMT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLMT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLMT-EXPAND") });
 
     private static final SubLSymbol CACHED_ALL_GENL_MTS = makeSymbol("CACHED-ALL-GENL-MTS");
 
@@ -214,13 +150,11 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_CACHED_ALL_GENL_MTS = makeSymbol("CLEAR-CACHED-ALL-GENL-MTS");
 
-    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
-
 
 
     private static final SubLSymbol $FORWARD_NOT_GENLMT = makeKeyword("FORWARD-NOT-GENLMT");
 
-    public static final SubLList $list53 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genlMt")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLMT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLMT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLMT-EXPAND") });
+    static private final SubLList $list53 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlMt"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLMT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLMT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLMT-EXPAND") });
 
     private static final SubLSymbol CACHED_ALL_SPEC_MTS = makeSymbol("CACHED-ALL-SPEC-MTS");
 
@@ -230,43 +164,39 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol $FORWARD_SYMMETRIC_POS = makeKeyword("FORWARD-SYMMETRIC-POS");
 
-    public static final SubLList $list58 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-SYMMETRIC-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-SYMMETRIC-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-SYMMETRIC-POS-EXPAND") });
+    static private final SubLList $list58 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-SYMMETRIC-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-SYMMETRIC-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-SYMMETRIC-POS-EXPAND") });
 
-
-
-    private static final SubLList $list60 = list(reader_make_constant_shell(makeString("SymmetricBinaryPredicate")));
+    private static final SubLList $list60 = list(reader_make_constant_shell("SymmetricBinaryPredicate"));
 
     private static final SubLSymbol $FORWARD_SYMMETRIC_NEG = makeKeyword("FORWARD-SYMMETRIC-NEG");
 
-    private static final SubLList $list62 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-SYMMETRIC-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-SYMMETRIC-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-SYMMETRIC-NEG-EXPAND") });
-
-
+    private static final SubLList $list62 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-SYMMETRIC-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-SYMMETRIC-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-SYMMETRIC-NEG-EXPAND") });
 
     private static final SubLList $list64 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-ASYMMETRIC-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-ASYMMETRIC-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-ASYMMETRIC-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-ASYMMETRIC-EXPAND") });
 
-    public static final SubLList $list65 = list(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-ASYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"));
+    static private final SubLList $list65 = list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-ASYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"));
 
-    private static final SubLList $list66 = list(reader_make_constant_shell(makeString("AsymmetricBinaryPredicate")));
+    private static final SubLList $list66 = list(reader_make_constant_shell("AsymmetricBinaryPredicate"));
 
     private static final SubLSymbol $FORWARD_COMMUTATIVE_POS = makeKeyword("FORWARD-COMMUTATIVE-POS");
 
-    private static final SubLList $list68 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), listS(list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), cons(list(makeKeyword("TEST"), makeSymbol("INFERENCE-AT-LEAST-PARTIALLY-COMMUTATIVE-PREDICATE-P")), makeKeyword("ANYTHING"))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-COMMUTATIVE-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-COMMUTATIVE-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-COMMUTATIVE-POS-EXPAND") });
+    private static final SubLList $list68 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), listS(list($TEST, makeSymbol("NON-HL-PREDICATE-P")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), cons(list($TEST, makeSymbol("INFERENCE-AT-LEAST-PARTIALLY-COMMUTATIVE-PREDICATE-P")), makeKeyword("ANYTHING"))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-COMMUTATIVE-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-COMMUTATIVE-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-COMMUTATIVE-POS-EXPAND") });
 
-    public static final SubLList $list69 = list(reader_make_constant_shell(makeString("CommutativePredicate")));
+    static private final SubLList $list69 = list(reader_make_constant_shell("CommutativePredicate"));
 
-    private static final SubLList $list70 = list(reader_make_constant_shell(makeString("PartiallyCommutativePredicate")));
+    private static final SubLList $list70 = list(reader_make_constant_shell("PartiallyCommutativePredicate"));
 
     private static final SubLSymbol $FORWARD_COMMUTATIVE_NEG = makeKeyword("FORWARD-COMMUTATIVE-NEG");
 
-    private static final SubLList $list72 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), listS(list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), cons(list(makeKeyword("TEST"), makeSymbol("INFERENCE-AT-LEAST-PARTIALLY-COMMUTATIVE-PREDICATE-P")), makeKeyword("ANYTHING"))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-COMMUTATIVE-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-COMMUTATIVE-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-COMMUTATIVE-NEG-EXPAND") });
+    private static final SubLList $list72 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), listS(list($TEST, makeSymbol("NON-HL-PREDICATE-P")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), cons(list($TEST, makeSymbol("INFERENCE-AT-LEAST-PARTIALLY-COMMUTATIVE-PREDICATE-P")), makeKeyword("ANYTHING"))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-COMMUTATIVE-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-COMMUTATIVE-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-COMMUTATIVE-NEG-EXPAND") });
 
     private static final SubLSymbol $FORWARD_GENLPREDS_GAF = makeKeyword("FORWARD-GENLPREDS-GAF");
 
-    public static final SubLList $list74 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genlPreds")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("genlPreds")), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), makeKeyword("FORT"), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?")))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLPREDS-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLPREDS-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLPREDS-GAF-EXPAND") });
+    static private final SubLList $list74 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlPreds"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("genlPreds"), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), $FORT, list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?")))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLPREDS-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLPREDS-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLPREDS-GAF-EXPAND") });
 
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
 
-    private static final SubLObject $$genlInverse = reader_make_constant_shell(makeString("genlInverse"));
+
+
 
     private static final SubLSymbol CACHED_ALL_GENL_PREDS = makeSymbol("CACHED-ALL-GENL-PREDS");
 
@@ -280,31 +210,27 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_CACHED_ALL_GENL_INVERSES = makeSymbol("CLEAR-CACHED-ALL-GENL-INVERSES");
 
-
-
     private static final SubLSymbol $FORWARD_NOT_GENLPREDS_GAF = makeKeyword("FORWARD-NOT-GENLPREDS-GAF");
 
-    public static final SubLList $list85 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genlPreds")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-EXPAND") });
+    static private final SubLList $list85 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlPreds"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-EXPAND") });
 
     private static final SubLSymbol $FORWARD_GENLPREDS_POS = makeKeyword("FORWARD-GENLPREDS-POS");
 
-    public static final SubLList $list87 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLPREDS-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLPREDS-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLPREDS-POS-EXPAND") });
+    static private final SubLList $list87 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLPREDS-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLPREDS-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLPREDS-POS-EXPAND") });
 
     private static final SubLSymbol $FORWARD_GENLINVERSE_GAF = makeKeyword("FORWARD-GENLINVERSE-GAF");
 
-    private static final SubLList $list89 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genlInverse")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("genlInverse")), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), makeKeyword("FORT"), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?")))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLINVERSE-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLINVERSE-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLINVERSE-GAF-EXPAND") });
+    private static final SubLList $list89 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlInverse"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("genlInverse"), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), $FORT, list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?")))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLINVERSE-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLINVERSE-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLINVERSE-GAF-EXPAND") });
 
     private static final SubLSymbol $FORWARD_NOT_GENLINVERSE_GAF = makeKeyword("FORWARD-NOT-GENLINVERSE-GAF");
 
-    private static final SubLList $list91 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("genlInverse")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-EXPAND") });
+    private static final SubLList $list91 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlInverse"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-EXPAND") });
 
     private static final SubLSymbol $FORWARD_GENLINVERSE_POS = makeKeyword("FORWARD-GENLINVERSE-POS");
 
-    public static final SubLList $list93 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLINVERSE-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLINVERSE-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLINVERSE-POS-EXPAND") });
+    static private final SubLList $list93 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLINVERSE-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLINVERSE-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLINVERSE-POS-EXPAND") });
 
-
-
-    public static final SubLList $list95 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-NEGATIONPREDS-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NEGATIONPREDS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NEGATIONPREDS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NEGATIONPREDS-EXPAND") });
+    static private final SubLList $list95 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-NEGATIONPREDS-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NEGATIONPREDS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NEGATIONPREDS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NEGATIONPREDS-EXPAND") });
 
     private static final SubLSymbol CACHED_ALL_NEGATION_PREDS = makeSymbol("CACHED-ALL-NEGATION-PREDS");
 
@@ -312,11 +238,7 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_CACHED_ALL_NEGATION_PREDS = makeSymbol("CLEAR-CACHED-ALL-NEGATION-PREDS");
 
-    private static final SubLList $list99 = cons(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SOME-NEGATION-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"));
-
-
-
-    private static final SubLObject $$negationPreds = reader_make_constant_shell(makeString("negationPreds"));
+    private static final SubLList $list99 = cons(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-NEGATION-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"));
 
 
 
@@ -328,15 +250,15 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_CACHED_ALL_NEGATION_INVERSES = makeSymbol("CLEAR-CACHED-ALL-NEGATION-INVERSES");
 
-    private static final SubLList $list107 = list(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-SOME-NEGATION-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"));
+    private static final SubLList $list107 = list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-NEGATION-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"));
 
-    private static final SubLObject $$negationInverse = reader_make_constant_shell(makeString("negationInverse"));
+
 
     private static final SubLSymbol $FORWARD_EVAL_POS = makeKeyword("FORWARD-EVAL-POS");
 
     private static final SubLList $list110 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("EXCLUSIVE"), makeSymbol("FORWARD-EVAL-EXCLUSIVE-POS"), makeKeyword("EXPAND"), makeSymbol("FORWARD-EVAL-EXPAND-POS"));
 
-    private static final SubLList $list111 = cons(list(makeKeyword("AND"), list(makeKeyword("TEST"), makeSymbol("NON-HL-PREDICATE-P")), list(makeKeyword("TEST"), makeSymbol("INFERENCE-EVALUATABLE-PREDICATE?"))), makeKeyword("ANYTHING"));
+    private static final SubLList $list111 = cons(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-EVALUATABLE-PREDICATE?"))), makeKeyword("ANYTHING"));
 
     private static final SubLSymbol $FORWARD_EVAL_NEG = makeKeyword("FORWARD-EVAL-NEG");
 
@@ -344,23 +266,19 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLSymbol $FORWARD_TERM_OF_UNIT = makeKeyword("FORWARD-TERM-OF-UNIT");
 
-    private static final SubLList $list115 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("termOfUnit")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-TERM-OF-UNIT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-TERM-OF-UNIT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-TERM-OF-UNIT-EXPAND") });
+    private static final SubLList $list115 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("termOfUnit"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-TERM-OF-UNIT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-TERM-OF-UNIT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-TERM-OF-UNIT-EXPAND") });
 
-    private static final SubLObject $$termOfUnit = reader_make_constant_shell(makeString("termOfUnit"));
+
 
     private static final SubLSymbol $FORWARD_NAT_FUNCTION = makeKeyword("FORWARD-NAT-FUNCTION");
 
-    private static final SubLList $list118 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("termOfUnit")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NAT-FUNCTION-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NAT-FUNCTION-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NAT-FUNCTION-EXPAND") });
+    private static final SubLList $list118 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("termOfUnit"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NAT-FUNCTION-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NAT-FUNCTION-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NAT-FUNCTION-EXPAND") });
 
-    private static final SubLObject $$natFunction = reader_make_constant_shell(makeString("natFunction"));
+
 
     private static final SubLSymbol $FORWARD_GAF_PREDICATE = makeKeyword("FORWARD-GAF-PREDICATE");
 
     private static final SubLList $list121 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-GAF-PREDICATE-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GAF-PREDICATE-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GAF-PREDICATE-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GAF-PREDICATE-EXPAND") });
-
-    private static final SubLObject $$gafPredicate = reader_make_constant_shell(makeString("gafPredicate"));
-
-
 
 
 
@@ -380,17 +298,31 @@ public final class forward_modules extends SubLTranslatedFile {
 
     private static final SubLList $list132 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-IST-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-IST-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-IST-POS-EXPAND"));
 
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
+
 
     private static final SubLSymbol $FORWARD_IST_NEG = makeKeyword("FORWARD-IST-NEG");
 
     private static final SubLList $list135 = list(makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-IST-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-IST-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-IST-NEG-EXPAND"));
 
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
+
+
+    public static final SubLObject forward_modules_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return copy_list($forward_modules$.getDynamicValue(thread));
+        }
+    }
 
     public static SubLObject forward_modules() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return copy_list($forward_modules$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject forward_module_count_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return length($forward_modules$.getDynamicValue(thread));
+        }
     }
 
     public static SubLObject forward_module_count() {
@@ -398,11 +330,40 @@ public final class forward_modules extends SubLTranslatedFile {
         return length($forward_modules$.getDynamicValue(thread));
     }
 
+    public static final SubLObject forward_module_p_alt(SubLObject v_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean((NIL != inference_modules.hl_module_p(v_object)) && (NIL != member(v_object, $forward_modules$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)));
+        }
+    }
+
     public static SubLObject forward_module_p(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean((NIL != inference_modules.hl_module_p(v_object)) && (NIL != member(v_object, $forward_modules$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)));
     }
 
+    /**
+     * Declare forward module NAME with property list PLIST.
+     */
+    @LispMethod(comment = "Declare forward module NAME with property list PLIST.")
+    public static final SubLObject forward_module_alt(SubLObject name, SubLObject plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject hl_module = inference_modules.setup_module(name, $FORWARD, plist);
+                SubLObject item_var = hl_module;
+                if (NIL == member(item_var, $forward_modules$.getDynamicValue(thread), symbol_function(EQL), symbol_function(IDENTITY))) {
+                    $forward_modules$.setDynamicValue(cons(item_var, $forward_modules$.getDynamicValue(thread)), thread);
+                }
+                return hl_module;
+            }
+        }
+    }
+
+    /**
+     * Declare forward module NAME with property list PLIST.
+     */
+    @LispMethod(comment = "Declare forward module NAME with property list PLIST.")
     public static SubLObject forward_module(final SubLObject name, final SubLObject plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject item_var;
@@ -413,6 +374,29 @@ public final class forward_modules extends SubLTranslatedFile {
         return hl_module;
     }
 
+    /**
+     * Undeclare the forward module named NAME.
+     */
+    @LispMethod(comment = "Undeclare the forward module named NAME.")
+    public static final SubLObject undeclare_forward_module_alt(SubLObject name) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject hl_module = inference_modules.find_hl_module_by_name(name);
+                if (NIL != hl_module) {
+                    inference_modules.remove_hl_module(hl_module);
+                    $forward_modules$.setDynamicValue(delete(hl_module, $forward_modules$.getDynamicValue(thread), symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+                    return hl_module;
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Undeclare the forward module named NAME.
+     */
+    @LispMethod(comment = "Undeclare the forward module named NAME.")
     public static SubLObject undeclare_forward_module(final SubLObject name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject hl_module = inference_modules.find_hl_module_by_name(name);
@@ -422,6 +406,55 @@ public final class forward_modules extends SubLTranslatedFile {
             return hl_module;
         }
         return NIL;
+    }
+
+    public static final SubLObject do_forward_modules_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject hl_module = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt1);
+                    hl_module = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_1 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt1);
+                            current_1 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt1);
+                            if (NIL == member(current_1, $list_alt2, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_1 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt1);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                return listS(DO_LIST, list(hl_module, $list_alt6, $DONE, done), append(body, NIL));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_forward_modules(final SubLObject macroform, final SubLObject environment) {
@@ -461,6 +494,13 @@ public final class forward_modules extends SubLTranslatedFile {
         return listS(DO_LIST, list(hl_module, $list6, $DONE, done), append(body, NIL));
     }
 
+    public static final SubLObject do_forward_modules_list_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $forward_modules$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject do_forward_modules_list() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $forward_modules$.getDynamicValue(thread);
@@ -468,6 +508,17 @@ public final class forward_modules extends SubLTranslatedFile {
 
     public static SubLObject forward_examine_asent_triggering_allowedP(final SubLObject examine_asent) {
         return makeBoolean((NIL == default_forward_non_trigger_literal_litP(examine_asent)) && ((NIL == atomic_sentenceP(examine_asent)) || (NIL == relation_evaluation.evaluatable_predicateP(cycl_utilities.atomic_sentence_predicate(examine_asent), UNPROVIDED))));
+    }
+
+    public static final SubLObject forward_module_callback_alt(SubLObject trigger_asent, SubLObject trigger_sense, SubLObject examine_asent, SubLObject examine_sense, SubLObject rule, SubLObject trigger_supports) {
+        if (trigger_supports == UNPROVIDED) {
+            trigger_supports = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            $forward_tactic_specs$.setDynamicValue(cons(list(trigger_asent, trigger_sense, examine_asent, examine_sense, rule, trigger_supports), $forward_tactic_specs$.getDynamicValue(thread)), thread);
+            return NIL;
+        }
     }
 
     public static SubLObject forward_module_callback(final SubLObject trigger_asent, final SubLObject trigger_sense, final SubLObject examine_asent, SubLObject trigger_support, final SubLObject rule, SubLObject trigger_supports) {
@@ -490,6 +541,87 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @param SOURCE-ASENT
+     * 		; an atomic sentence
+     * @param SOUCE-SENSE
+     * 		; sense-p, the sense of SOURCE-ASENT
+     * @param PROPAGATION-MT
+     * 		; the mt in which forward expansions are to be done
+     * @return A list of tuples of the form
+    (EXPANDED-ASENT EXPANDED-SOURCE &optional ADDITIONAL-SUPPORTS)
+    where :
+    EXPANDED-ASENT is an atomic sentence
+    EXPANDED-SENSE ; sense-p, the sense of EXPANDED-ASENT
+    ADDITIONAL-SUPPORTS ; a list of support-p justifying why :
+    SOURCE-ASENT & SOURCE-SENSE => EXPANDED-ASENT & EXPANDED-SENSE
+     */
+    @LispMethod(comment = "@param SOURCE-ASENT\r\n\t\t; an atomic sentence\r\n@param SOUCE-SENSE\r\n\t\t; sense-p, the sense of SOURCE-ASENT\r\n@param PROPAGATION-MT\r\n\t\t; the mt in which forward expansions are to be done\r\n@return A list of tuples of the form\r\n(EXPANDED-ASENT EXPANDED-SOURCE &optional ADDITIONAL-SUPPORTS)\r\nwhere :\r\nEXPANDED-ASENT is an atomic sentence\r\nEXPANDED-SENSE ; sense-p, the sense of EXPANDED-ASENT\r\nADDITIONAL-SUPPORTS ; a list of support-p justifying why :\r\nSOURCE-ASENT & SOURCE-SENSE => EXPANDED-ASENT & EXPANDED-SENSE")
+    public static final SubLObject forward_tactic_specs_alt(SubLObject source_asent, SubLObject source_sense, SubLObject propagation_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_answer = NIL;
+                if (NIL != list_utilities.sublisp_boolean(forward_inference_allowed_rules())) {
+                    {
+                        SubLObject _prev_bind_0 = $forward_tactic_specs$.currentBinding(thread);
+                        try {
+                            $forward_tactic_specs$.bind(NIL, thread);
+                            {
+                                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(propagation_mt);
+                                {
+                                    SubLObject _prev_bind_0_2 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                    try {
+                                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                        {
+                                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_hl_modules(source_asent, source_sense);
+                                            SubLObject forward_hl_module = NIL;
+                                            for (forward_hl_module = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , forward_hl_module = cdolist_list_var.first()) {
+                                                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_hl_module_apply(forward_hl_module, source_asent);
+                                            }
+                                        }
+                                    } finally {
+                                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                        mt_relevance_macros.$mt$.rebind(_prev_bind_0_2, thread);
+                                    }
+                                }
+                                v_answer = nreverse($forward_tactic_specs$.getDynamicValue(thread));
+                            }
+                        } finally {
+                            $forward_tactic_specs$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param SOURCE-ASENT
+     * 		; an atomic sentence
+     * @param SOUCE-SENSE
+     * 		; sense-p, the sense of SOURCE-ASENT
+     * @param PROPAGATION-MT
+     * 		; the mt in which forward expansions are to be done
+     * @return A list of tuples of the form
+    (EXPANDED-ASENT EXPANDED-SOURCE &optional ADDITIONAL-SUPPORTS)
+    where :
+    EXPANDED-ASENT is an atomic sentence
+    EXPANDED-SENSE ; sense-p, the sense of EXPANDED-ASENT
+    ADDITIONAL-SUPPORTS ; a list of support-p justifying why :
+    SOURCE-ASENT & SOURCE-SENSE => EXPANDED-ASENT & EXPANDED-SENSE
+     */
+    @LispMethod(comment = "@param SOURCE-ASENT\r\n\t\t; an atomic sentence\r\n@param SOUCE-SENSE\r\n\t\t; sense-p, the sense of SOURCE-ASENT\r\n@param PROPAGATION-MT\r\n\t\t; the mt in which forward expansions are to be done\r\n@return A list of tuples of the form\r\n(EXPANDED-ASENT EXPANDED-SOURCE &optional ADDITIONAL-SUPPORTS)\r\nwhere :\r\nEXPANDED-ASENT is an atomic sentence\r\nEXPANDED-SENSE ; sense-p, the sense of EXPANDED-ASENT\r\nADDITIONAL-SUPPORTS ; a list of support-p justifying why :\r\nSOURCE-ASENT & SOURCE-SENSE => EXPANDED-ASENT & EXPANDED-SENSE")
     public static SubLObject forward_tactic_specs(final SubLObject source_asent, final SubLObject source_sense, final SubLObject propagation_mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -558,6 +690,72 @@ public final class forward_modules extends SubLTranslatedFile {
         return numL(assertion_handles.assertion_id(forward_tactic_spec_1_rule), assertion_handles.assertion_id(forward_tactic_spec_2_rule));
     }
 
+    /**
+     * Determine the HL modules which could be used to forward expand ASENT with SENSE
+     */
+    @LispMethod(comment = "Determine the HL modules which could be used to forward expand ASENT with SENSE")
+    public static final SubLObject forward_hl_modules_alt(SubLObject asent, SubLObject sense) {
+        {
+            SubLObject predicate = atomic_sentence_predicate(asent);
+            SubLObject hl_modules = NIL;
+            SubLObject supplanted_modules = NIL;
+            SubLObject exclusive_foundP = NIL;
+            SubLObject rest = NIL;
+            for (rest = com.cyc.cycjava.cycl.inference.modules.forward_modules.do_forward_modules_list(); !((NIL != exclusive_foundP) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject hl_module = rest.first();
+                    if (NIL != inference_modules.hl_module_activeP(hl_module, NIL)) {
+                        if (!((NIL != supplanted_modules) && (NIL != member(hl_module, supplanted_modules, UNPROVIDED, UNPROVIDED)))) {
+                            if (((NIL != inference_modules.hl_module_sense_relevant_p(hl_module, sense)) && (NIL != inference_modules.hl_module_predicate_relevant_p(hl_module, predicate))) && (NIL != inference_modules.hl_module_required_pattern_matched_p(hl_module, asent))) {
+                                {
+                                    SubLObject exclusive_func = inference_modules.hl_module_exclusive_func(hl_module);
+                                    if ((NIL == exclusive_func) || (NIL != funcall(exclusive_func, asent))) {
+                                        if (NIL != exclusive_func) {
+                                            {
+                                                SubLObject supplants_info = inference_modules.hl_module_supplants_info(hl_module);
+                                                SubLObject pcase_var = supplants_info;
+                                                if (pcase_var.eql($ALL)) {
+                                                    hl_modules = NIL;
+                                                    exclusive_foundP = T;
+                                                } else {
+                                                    {
+                                                        SubLObject newly_supplanted_module_names = supplants_info;
+                                                        SubLObject cdolist_list_var = newly_supplanted_module_names;
+                                                        SubLObject supplanted_module_name = NIL;
+                                                        for (supplanted_module_name = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , supplanted_module_name = cdolist_list_var.first()) {
+                                                            {
+                                                                SubLObject supplanted_module = inference_modules.find_hl_module_by_name(supplanted_module_name);
+                                                                if (NIL != supplanted_module) {
+                                                                    supplanted_modules = cons(supplanted_module, supplanted_modules);
+                                                                    hl_modules = list_utilities.delete_first(supplanted_module, hl_modules, symbol_function(EQ));
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        {
+                                            SubLObject required_func = inference_modules.hl_module_required_func(hl_module);
+                                            if ((NIL == required_func) || (NIL != funcall(required_func, asent))) {
+                                                hl_modules = cons(hl_module, hl_modules);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(hl_modules);
+        }
+    }
+
+    /**
+     * Determine the HL modules which could be used to forward expand ASENT with SENSE
+     */
+    @LispMethod(comment = "Determine the HL modules which could be used to forward expand ASENT with SENSE")
     public static SubLObject forward_hl_modules(final SubLObject asent, final SubLObject sense) {
         final SubLObject predicate = cycl_utilities.atomic_sentence_predicate(asent);
         SubLObject hl_modules = NIL;
@@ -608,6 +806,14 @@ public final class forward_modules extends SubLTranslatedFile {
         return nreverse(hl_modules);
     }
 
+    public static final SubLObject forward_hl_module_apply_alt(SubLObject forward_hl_module, SubLObject source_asent) {
+        {
+            SubLObject candidate_rules = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_hl_module_rule_select(forward_hl_module, source_asent);
+            SubLObject rules = (NIL != candidate_rules) ? ((SubLObject) (com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_hl_module_rule_filter(forward_hl_module, source_asent, candidate_rules))) : NIL;
+            return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_hl_module_expand(forward_hl_module, source_asent, rules);
+        }
+    }
+
     public static SubLObject forward_hl_module_apply(final SubLObject forward_hl_module, final SubLObject source_asent) {
         final SubLObject candidate_rules = forward_hl_module_rule_select(forward_hl_module, source_asent);
         final SubLObject rules = (NIL != candidate_rules) ? forward_hl_module_rule_filter(forward_hl_module, source_asent, candidate_rules) : NIL;
@@ -618,12 +824,47 @@ public final class forward_modules extends SubLTranslatedFile {
         return makeBoolean((NIL == forward.forward_inference_all_rules_allowedP()) && forward.forward_inference_allowed_rules().isList());
     }
 
+    public static final SubLObject forward_hl_module_rule_select_alt(SubLObject forward_hl_module, SubLObject source_asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != forward_inference_all_rules_allowedP()) {
+                {
+                    SubLObject rule_select_method = inference_modules.hl_module_rule_select_func(forward_hl_module);
+                    return rule_select_method.isFunctionSpec() ? ((SubLObject) (funcall(rule_select_method, source_asent))) : NIL;
+                }
+            } else {
+                return kb_control_vars.$forward_inference_allowed_rules$.getDynamicValue(thread);
+            }
+        }
+    }
+
     public static SubLObject forward_hl_module_rule_select(final SubLObject forward_hl_module, final SubLObject source_asent) {
         if (NIL != forward_inference_rule_select_via_allowed_rulesP()) {
             return forward.forward_inference_allowed_rules();
         }
         final SubLObject rule_select_method = inference_modules.hl_module_rule_select_func(forward_hl_module);
         return rule_select_method.isFunctionSpec() ? funcall(rule_select_method, source_asent) : NIL;
+    }
+
+    public static final SubLObject forward_hl_module_rule_filter_alt(SubLObject forward_hl_module, SubLObject source_asent, SubLObject rules) {
+        {
+            SubLObject rule_filter_method = inference_modules.hl_module_rule_filter_func(forward_hl_module);
+            if (rule_filter_method.isFunctionSpec() && (NIL == forward_inference_all_rules_allowedP())) {
+                {
+                    SubLObject filtered_rules = NIL;
+                    SubLObject cdolist_list_var = rules;
+                    SubLObject rule = NIL;
+                    for (rule = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , rule = cdolist_list_var.first()) {
+                        if (NIL != funcall(rule_filter_method, source_asent, rule)) {
+                            filtered_rules = cons(rule, filtered_rules);
+                        }
+                    }
+                    return nreverse(filtered_rules);
+                }
+            } else {
+                return rules;
+            }
+        }
     }
 
     public static SubLObject forward_hl_module_rule_filter(final SubLObject forward_hl_module, final SubLObject source_asent, SubLObject rules) {
@@ -645,6 +886,22 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return rules;
+    }
+
+    public static final SubLObject forward_hl_module_expand_alt(SubLObject forward_hl_module, SubLObject source_asent, SubLObject rules) {
+        {
+            SubLObject expand_function = inference_modules.hl_module_expand_func(forward_hl_module);
+            if (expand_function.isFunctionSpec()) {
+                {
+                    SubLObject cdolist_list_var = rules;
+                    SubLObject rule = NIL;
+                    for (rule = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , rule = cdolist_list_var.first()) {
+                        funcall(expand_function, source_asent, rule);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_hl_module_expand(final SubLObject forward_hl_module, final SubLObject source_asent, final SubLObject rules) {
@@ -695,6 +952,66 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject all_antecedent_predicate_forward_rules_alt(SubLObject pred) {
+        {
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+            SubLObject direction = NIL;
+            for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator(pred, $NEG, direction)) {
+                    {
+                        SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator(pred, $NEG, direction);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                            {
+                                                SubLObject done_var_3 = NIL;
+                                                SubLObject token_var_4 = NIL;
+                                                while (NIL == done_var_3) {
+                                                    {
+                                                        SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_4);
+                                                        SubLObject valid_5 = makeBoolean(token_var_4 != rule);
+                                                        if (NIL != valid_5) {
+                                                            rules = cons(rule, rules);
+                                                        }
+                                                        done_var_3 = makeBoolean(NIL == valid_5);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            rules = list_utilities.fast_delete_duplicates(rules, symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return rules;
+        }
     }
 
     public static SubLObject all_antecedent_predicate_forward_rules(final SubLObject pred) {
@@ -748,6 +1065,66 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject all_consequent_predicate_forward_rules_alt(SubLObject pred) {
+        {
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+            SubLObject direction = NIL;
+            for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator(pred, $POS, direction)) {
+                    {
+                        SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator(pred, $POS, direction);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                            {
+                                                SubLObject done_var_6 = NIL;
+                                                SubLObject token_var_7 = NIL;
+                                                while (NIL == done_var_6) {
+                                                    {
+                                                        SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_7);
+                                                        SubLObject valid_8 = makeBoolean(token_var_7 != rule);
+                                                        if (NIL != valid_8) {
+                                                            rules = cons(rule, rules);
+                                                        }
+                                                        done_var_6 = makeBoolean(NIL == valid_8);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            rules = list_utilities.fast_delete_duplicates(rules, symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return rules;
+        }
+    }
+
     public static SubLObject all_consequent_predicate_forward_rules(final SubLObject pred) {
         SubLObject rules = NIL;
         SubLObject cdolist_list_var = backward_utilities.relevant_directions();
@@ -797,6 +1174,66 @@ public final class forward_modules extends SubLTranslatedFile {
         } 
         rules = list_utilities.fast_delete_duplicates(rules, symbol_function(EQL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         return rules;
+    }
+
+    public static final SubLObject all_ist_predicate_forward_rules_alt(SubLObject pred) {
+        {
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+            SubLObject direction = NIL;
+            for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                if (NIL != kb_mapping_macros.do_decontextualized_ist_predicate_rule_index_key_validator(pred, NIL, direction)) {
+                    {
+                        SubLObject iterator_var = kb_mapping_macros.new_decontextualized_ist_predicate_rule_final_index_spec_iterator(pred, NIL, direction);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                            {
+                                                SubLObject done_var_9 = NIL;
+                                                SubLObject token_var_10 = NIL;
+                                                while (NIL == done_var_9) {
+                                                    {
+                                                        SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_10);
+                                                        SubLObject valid_11 = makeBoolean(token_var_10 != rule);
+                                                        if (NIL != valid_11) {
+                                                            rules = cons(rule, rules);
+                                                        }
+                                                        done_var_9 = makeBoolean(NIL == valid_11);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            rules = list_utilities.fast_delete_duplicates(rules, symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return rules;
+        }
     }
 
     public static SubLObject all_ist_predicate_forward_rules(final SubLObject pred) {
@@ -857,12 +1294,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_normal_pos_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_antecedent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_normal_pos_rule_select(final SubLObject asent) {
         return all_antecedent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_normal_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_normal_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_normal_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_normal_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_pos_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(asent, $POS, examine_lit, $NEG, rule, UNPROVIDED);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_normal_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -875,6 +1331,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_normal_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_normal_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -896,12 +1375,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_normal_neg_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_consequent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_normal_neg_rule_select(final SubLObject asent) {
         return all_consequent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_normal_neg_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_normal_neg_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_normal_neg_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_normal_neg_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(asent, $NEG, examine_lit, $POS, rule, UNPROVIDED);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_normal_neg_expand(final SubLObject asent, final SubLObject rule) {
@@ -914,6 +1412,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_normal_neg_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_normal_neg_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -933,6 +1454,72 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_isa_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_all_genls(col);
+            SubLObject genl = NIL;
+            for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_12 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_12.first(); NIL != cdolist_list_var_12; cdolist_list_var_12 = cdolist_list_var_12.rest() , direction = cdolist_list_var_12.first()) {
+                        if (NIL != kb_mapping_macros.do_isa_rule_index_key_validator(genl, $NEG, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_isa_rule_final_index_spec_iterator(genl, $NEG, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_13 = NIL;
+                                                        SubLObject token_var_14 = NIL;
+                                                        while (NIL == done_var_13) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_14);
+                                                                SubLObject valid_15 = makeBoolean(token_var_14 != rule);
+                                                                if (NIL != valid_15) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_13 = makeBoolean(NIL == valid_15);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_isa_rule_select(final SubLObject asent) {
@@ -993,8 +1580,43 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_isa_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_isa_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_isa_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_isa_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_isa_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                    try {
+                        $type_filter_forward_dnf$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_isa_expand_int(asent, rule, UNPROVIDED);
+                            SubLObject examine_lit = NIL;
+                            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                                {
+                                    SubLObject genl = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                                    SubLObject forward_asent = list($$isa, arg1, genl);
+                                    SubLObject more_supports = (genl == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLS, list($$genls, arg2, genl), UNPROVIDED, UNPROVIDED));
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                                }
+                            }
+                        }
+                    } finally {
+                        $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_isa_expand(final SubLObject asent, final SubLObject rule) {
@@ -1021,6 +1643,33 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_isa_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$isa == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_col = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_col)) && (NIL != com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_genlP(source_col, rule_col))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_isa_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -1043,12 +1692,46 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_inference_genlP_alt(SubLObject source_col, SubLObject rule_col) {
+        return list_utilities.member_eqP(rule_col, com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_all_genls(source_col));
+    }
+
     public static SubLObject forward_inference_genlP(final SubLObject source_col, final SubLObject rule_col) {
         return list_utilities.member_kbeqP(rule_col, forward_inference_all_genls(source_col));
     }
 
+    public static final SubLObject forward_inference_all_genls_internal_alt(SubLObject col) {
+        return genls.all_genls(col, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject forward_inference_all_genls_internal(final SubLObject col) {
         return genls.all_genls(col, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject forward_inference_all_genls_alt(SubLObject col) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_all_genls_internal(col);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, FORWARD_INFERENCE_ALL_GENLS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), FORWARD_INFERENCE_ALL_GENLS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, FORWARD_INFERENCE_ALL_GENLS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, col, $kw23$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw23$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_all_genls_internal(col)));
+                        memoization_state.caching_state_put(caching_state, col, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject forward_inference_all_genls(final SubLObject col) {
@@ -1099,6 +1782,72 @@ public final class forward_modules extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, col, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject forward_not_isa_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = genls.all_specs(col, UNPROVIDED, UNPROVIDED);
+            SubLObject spec = NIL;
+            for (spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_16 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_16.first(); NIL != cdolist_list_var_16; cdolist_list_var_16 = cdolist_list_var_16.rest() , direction = cdolist_list_var_16.first()) {
+                        if (NIL != kb_mapping_macros.do_isa_rule_index_key_validator(spec, $POS, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_isa_rule_final_index_spec_iterator(spec, $POS, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_17 = NIL;
+                                                        SubLObject token_var_18 = NIL;
+                                                        while (NIL == done_var_17) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_18);
+                                                                SubLObject valid_19 = makeBoolean(token_var_18 != rule);
+                                                                if (NIL != valid_19) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_17 = makeBoolean(NIL == valid_19);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_not_isa_rule_select(final SubLObject asent) {
@@ -1159,8 +1908,43 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_not_isa_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_isa_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_not_isa_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_not_isa_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_not_isa_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                    try {
+                        $type_filter_forward_dnf$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_isa_expand_int(asent, rule, UNPROVIDED);
+                            SubLObject examine_lit = NIL;
+                            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                                {
+                                    SubLObject spec = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                                    SubLObject forward_asent = list($$isa, arg1, spec);
+                                    SubLObject more_supports = (spec == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLS, list($$genls, spec, arg2), UNPROVIDED, UNPROVIDED));
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                                }
+                            }
+                        }
+                    } finally {
+                        $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_not_isa_expand(final SubLObject asent, final SubLObject rule) {
@@ -1187,6 +1971,33 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_not_isa_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$isa == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_col = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_col)) && (NIL != genls.specP(source_col, rule_col, UNPROVIDED, UNPROVIDED))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_not_isa_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -1208,6 +2019,72 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_quoted_isa_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_all_genls(col);
+            SubLObject genl = NIL;
+            for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_20 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_20.first(); NIL != cdolist_list_var_20; cdolist_list_var_20 = cdolist_list_var_20.rest() , direction = cdolist_list_var_20.first()) {
+                        if (NIL != kb_mapping_macros.do_quoted_isa_rule_index_key_validator(genl, $NEG, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_quoted_isa_rule_final_index_spec_iterator(genl, $NEG, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_21 = NIL;
+                                                        SubLObject token_var_22 = NIL;
+                                                        while (NIL == done_var_21) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_22);
+                                                                SubLObject valid_23 = makeBoolean(token_var_22 != rule);
+                                                                if (NIL != valid_23) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_21 = makeBoolean(NIL == valid_23);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_quoted_isa_rule_select(final SubLObject asent) {
@@ -1268,8 +2145,43 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_quoted_isa_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_quoted_isa_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_quoted_isa_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_quoted_isa_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_quoted_isa_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                    try {
+                        $type_filter_forward_dnf$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_quoted_isa_expand_int(asent, rule, UNPROVIDED);
+                            SubLObject examine_lit = NIL;
+                            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                                {
+                                    SubLObject genl = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                                    SubLObject forward_asent = list($$quotedIsa, arg1, genl);
+                                    SubLObject more_supports = (genl == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLS, list($$genls, arg2, genl), UNPROVIDED, UNPROVIDED));
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                                }
+                            }
+                        }
+                    } finally {
+                        $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_quoted_isa_expand(final SubLObject asent, final SubLObject rule) {
@@ -1296,6 +2208,33 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_quoted_isa_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$quotedIsa == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_col = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_col)) && (NIL != com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_genlP(source_col, rule_col))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_quoted_isa_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -1316,6 +2255,72 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_not_quoted_isa_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = genls.all_specs(col, UNPROVIDED, UNPROVIDED);
+            SubLObject spec = NIL;
+            for (spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_24 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_24.first(); NIL != cdolist_list_var_24; cdolist_list_var_24 = cdolist_list_var_24.rest() , direction = cdolist_list_var_24.first()) {
+                        if (NIL != kb_mapping_macros.do_quoted_isa_rule_index_key_validator(spec, $POS, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_quoted_isa_rule_final_index_spec_iterator(spec, $POS, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_25 = NIL;
+                                                        SubLObject token_var_26 = NIL;
+                                                        while (NIL == done_var_25) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_26);
+                                                                SubLObject valid_27 = makeBoolean(token_var_26 != rule);
+                                                                if (NIL != valid_27) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_25 = makeBoolean(NIL == valid_27);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_not_quoted_isa_rule_select(final SubLObject asent) {
@@ -1376,8 +2381,43 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_not_quoted_isa_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_quoted_isa_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_not_quoted_isa_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_not_quoted_isa_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_not_quoted_isa_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                    try {
+                        $type_filter_forward_dnf$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_quoted_isa_expand_int(asent, rule, UNPROVIDED);
+                            SubLObject examine_lit = NIL;
+                            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                                {
+                                    SubLObject spec = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                                    SubLObject forward_asent = list($$quotedIsa, arg1, spec);
+                                    SubLObject more_supports = (spec == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLS, list($$genls, spec, arg2), UNPROVIDED, UNPROVIDED));
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                                }
+                            }
+                        }
+                    } finally {
+                        $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_not_quoted_isa_expand(final SubLObject asent, final SubLObject rule) {
@@ -1404,6 +2444,33 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_not_quoted_isa_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$quotedIsa == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_col = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_col)) && (NIL != genls.specP(source_col, rule_col, UNPROVIDED, UNPROVIDED))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_not_quoted_isa_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -1425,6 +2492,72 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_genls_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_all_genls(col);
+            SubLObject genl = NIL;
+            for (genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_28 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_28.first(); NIL != cdolist_list_var_28; cdolist_list_var_28 = cdolist_list_var_28.rest() , direction = cdolist_list_var_28.first()) {
+                        if (NIL != kb_mapping_macros.do_genls_rule_index_key_validator(genl, $NEG, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_genls_rule_final_index_spec_iterator(genl, $NEG, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_29 = NIL;
+                                                        SubLObject token_var_30 = NIL;
+                                                        while (NIL == done_var_29) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_30);
+                                                                SubLObject valid_31 = makeBoolean(token_var_30 != rule);
+                                                                if (NIL != valid_31) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_29 = makeBoolean(NIL == valid_31);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_genls_rule_select(final SubLObject asent) {
@@ -1485,8 +2618,43 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_genls_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genls_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_genls_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_genls_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_genls_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                    try {
+                        $type_filter_forward_dnf$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genls_expand_int(asent, rule, UNPROVIDED);
+                            SubLObject examine_lit = NIL;
+                            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                                {
+                                    SubLObject genl = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                                    SubLObject forward_asent = list($$genls, arg1, genl);
+                                    SubLObject more_supports = (genl == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLS, list($$genls, arg2, genl), UNPROVIDED, UNPROVIDED));
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                                }
+                            }
+                        }
+                    } finally {
+                        $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_genls_expand(final SubLObject asent, final SubLObject rule) {
@@ -1513,6 +2681,33 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_genls_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$genls == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_col = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_col)) && (NIL != com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_inference_genlP(source_col, rule_col))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_genls_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -1533,6 +2728,72 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_not_genls_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = genls.all_specs(col, UNPROVIDED, UNPROVIDED);
+            SubLObject spec = NIL;
+            for (spec = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_32 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_32.first(); NIL != cdolist_list_var_32; cdolist_list_var_32 = cdolist_list_var_32.rest() , direction = cdolist_list_var_32.first()) {
+                        if (NIL != kb_mapping_macros.do_genls_rule_index_key_validator(spec, $POS, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_genls_rule_final_index_spec_iterator(spec, $POS, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_33 = NIL;
+                                                        SubLObject token_var_34 = NIL;
+                                                        while (NIL == done_var_33) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_34);
+                                                                SubLObject valid_35 = makeBoolean(token_var_34 != rule);
+                                                                if (NIL != valid_35) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_33 = makeBoolean(NIL == valid_35);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_not_genls_rule_select(final SubLObject asent) {
@@ -1593,8 +2854,43 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_not_genls_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_genls_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_not_genls_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_not_genls_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_not_genls_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                    try {
+                        $type_filter_forward_dnf$.bind(T, thread);
+                        {
+                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genls_expand_int(asent, rule, UNPROVIDED);
+                            SubLObject examine_lit = NIL;
+                            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                                {
+                                    SubLObject spec = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                                    SubLObject forward_asent = list($$genls, arg1, spec);
+                                    SubLObject more_supports = (spec == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLS, list($$genls, spec, arg2), UNPROVIDED, UNPROVIDED));
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                                }
+                            }
+                        }
+                    } finally {
+                        $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_not_genls_expand(final SubLObject asent, final SubLObject rule) {
@@ -1619,6 +2915,33 @@ public final class forward_modules extends SubLTranslatedFile {
             forward.$type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_not_genls_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_col = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$genls == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_col = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_col)) && (NIL != genls.specP(source_col, rule_col, UNPROVIDED, UNPROVIDED))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_not_genls_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -1672,6 +2995,72 @@ public final class forward_modules extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, mt, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject forward_genlmt_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject mt = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = all_genl_mts(mt, UNPROVIDED, UNPROVIDED);
+            SubLObject genl_mt = NIL;
+            for (genl_mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl_mt = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_36 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_36.first(); NIL != cdolist_list_var_36; cdolist_list_var_36 = cdolist_list_var_36.rest() , direction = cdolist_list_var_36.first()) {
+                        if (NIL != kb_mapping_macros.do_genl_mt_rule_index_key_validator(genl_mt, $NEG, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_genl_mt_rule_final_index_spec_iterator(genl_mt, $NEG, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_37 = NIL;
+                                                        SubLObject token_var_38 = NIL;
+                                                        while (NIL == done_var_37) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_38);
+                                                                SubLObject valid_39 = makeBoolean(token_var_38 != rule);
+                                                                if (NIL != valid_39) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_37 = makeBoolean(NIL == valid_39);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_genlmt_rule_select(final SubLObject asent) {
@@ -1732,8 +3121,30 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_genlmt_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlmt_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_genlmt_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_genlmt_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_genlmt_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlmt_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject genl_mt = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                    SubLObject forward_asent = list($$genlMt, arg1, genl_mt);
+                    SubLObject more_supports = (genl_mt == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLMT, list($$genlMt, arg2, genl_mt), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_genlmt_expand(final SubLObject asent, final SubLObject rule) {
@@ -1751,6 +3162,33 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_genlmt_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_mt = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$genlMt == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_mt = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_mt)) && (NIL != genl_mtP(source_mt, rule_mt, UNPROVIDED, UNPROVIDED))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_genlmt_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -1804,6 +3242,72 @@ public final class forward_modules extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, mt, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject forward_not_genlmt_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject mt = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = all_spec_mts(mt, UNPROVIDED, UNPROVIDED);
+            SubLObject spec_mt = NIL;
+            for (spec_mt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , spec_mt = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_40 = backward_utilities.relevant_directions();
+                    SubLObject direction = NIL;
+                    for (direction = cdolist_list_var_40.first(); NIL != cdolist_list_var_40; cdolist_list_var_40 = cdolist_list_var_40.rest() , direction = cdolist_list_var_40.first()) {
+                        if (NIL != kb_mapping_macros.do_genl_mt_rule_index_key_validator(spec_mt, $POS, direction)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_genl_mt_rule_final_index_spec_iterator(spec_mt, $POS, direction);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                    {
+                                                        SubLObject done_var_41 = NIL;
+                                                        SubLObject token_var_42 = NIL;
+                                                        while (NIL == done_var_41) {
+                                                            {
+                                                                SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_42);
+                                                                SubLObject valid_43 = makeBoolean(token_var_42 != rule);
+                                                                if (NIL != valid_43) {
+                                                                    rules = cons(rule, rules);
+                                                                }
+                                                                done_var_41 = makeBoolean(NIL == valid_43);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                        try {
+                                                            bind($is_thread_performing_cleanupP$, T);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_not_genlmt_rule_select(final SubLObject asent) {
@@ -1864,8 +3368,30 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_not_genlmt_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_genlmt_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_not_genlmt_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_not_genlmt_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_not_genlmt_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_not_genlmt_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject spec_mt = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                    SubLObject forward_asent = list($$genlMt, spec_mt, arg1);
+                    SubLObject more_supports = (spec_mt == arg2) ? ((SubLObject) (NIL)) : list(make_hl_support($GENLMT, list($$genlMt, spec_mt, arg2), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_not_genlmt_expand(final SubLObject asent, final SubLObject rule) {
@@ -1883,6 +3409,33 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_not_genlmt_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject source_mt = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if ($$genlMt == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_mt = atomic_sentence_arg2(lit, UNPROVIDED);
+                            if ((NIL != variables.fully_bound_p(rule_mt)) && (NIL != spec_mtP(source_mt, rule_mt, UNPROVIDED))) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_not_genlmt_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -1908,12 +3461,34 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_symmetric_pos_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_antecedent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_symmetric_pos_rule_select(final SubLObject asent) {
         return all_antecedent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_symmetric_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_symmetric_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_symmetric_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_symmetric_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_symmetric_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject forward_asent = removal_modules_symmetry.symmetric_literal(asent);
+            SubLObject more_supports = list(make_hl_support($ISA, listS($$isa, pred, $list_alt44), UNPROVIDED, UNPROVIDED));
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_symmetric_pos_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_symmetric_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -1929,6 +3504,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_symmetric_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_symmetric_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -1950,12 +3548,34 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_symmetric_neg_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_consequent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_symmetric_neg_rule_select(final SubLObject asent) {
         return all_consequent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_symmetric_neg_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_symmetric_neg_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_symmetric_neg_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_symmetric_neg_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_symmetric_neg_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject forward_asent = removal_modules_symmetry.symmetric_literal(asent);
+            SubLObject more_supports = list(make_hl_support($ISA, listS($$isa, pred, $list_alt44), UNPROVIDED, UNPROVIDED));
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_symmetric_neg_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_symmetric_neg_expand(final SubLObject asent, final SubLObject rule) {
@@ -1971,6 +3591,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_symmetric_neg_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_symmetric_neg_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -1992,20 +3635,52 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_asymmetric_required_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject pattern = $list_alt49;
+                return makeBoolean((NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread)) && (NIL != formula_pattern_match.formula_matches_pattern(asent, pattern)));
+            }
+        }
+    }
+
     public static SubLObject forward_asymmetric_required(final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject pattern = $list65;
         return makeBoolean((NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread)) && (NIL != formula_pattern_match.formula_matches_pattern(asent, pattern)));
     }
 
+    public static final SubLObject forward_asymmetric_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_antecedent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_asymmetric_rule_select(final SubLObject asent) {
         return all_antecedent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
+    }
+
+    public static final SubLObject forward_asymmetric_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_asymmetric_expand_int(asent, rule, T);
     }
 
     public static SubLObject forward_asymmetric_rule_filter(final SubLObject asent, final SubLObject rule) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != kb_control_vars.$forward_propagate_to_negations$.getDynamicValue(thread)) || (NIL != list_utilities.lengthG(pragma_induction.rule_pos_lits(rule), ONE_INTEGER, UNPROVIDED))) {
             return forward_asymmetric_expand_int(asent, rule, T);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject forward_asymmetric_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject forward_asent = removal_modules_symmetry.symmetric_literal(asent);
+            SubLObject more_supports = list(make_hl_support($ISA, listS($$isa, pred, $list_alt50), UNPROVIDED, UNPROVIDED));
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_asymmetric_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+            }
         }
         return NIL;
     }
@@ -2023,6 +3698,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_asymmetric_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_asymmetric_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -2044,12 +3742,55 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_commutative_pos_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_antecedent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_commutative_pos_rule_select(final SubLObject asent) {
         return all_antecedent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_commutative_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_commutative_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_commutative_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_commutative_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_commutative_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject more_supports = (NIL != inference_trampolines.inference_commutative_predicate_p(pred)) ? ((SubLObject) (list(make_hl_support($ISA, listS($$isa, pred, $list_alt53), UNPROVIDED, UNPROVIDED)))) : list(make_hl_support($ISA, listS($$isa, pred, $list_alt54), UNPROVIDED, UNPROVIDED));
+            SubLObject source_formula_var = asent;
+            if (NIL != el_binary_formula_p(source_formula_var)) {
+                {
+                    SubLObject forward_asent = removal_modules_symmetry.symmetric_asent(source_formula_var);
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_commutative_pos_expand_int(forward_asent, rule, UNPROVIDED);
+                    SubLObject examine_lit = NIL;
+                    for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                    }
+                }
+            } else {
+                {
+                    SubLObject cdolist_list_var = formula_commutative_permutations(source_formula_var, UNPROVIDED);
+                    SubLObject forward_asent = NIL;
+                    for (forward_asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , forward_asent = cdolist_list_var.first()) {
+                        if (!forward_asent.equal(source_formula_var)) {
+                            {
+                                SubLObject cdolist_list_var_44 = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_commutative_pos_expand_int(forward_asent, rule, UNPROVIDED);
+                                SubLObject examine_lit = NIL;
+                                for (examine_lit = cdolist_list_var_44.first(); NIL != cdolist_list_var_44; cdolist_list_var_44 = cdolist_list_var_44.rest() , examine_lit = cdolist_list_var_44.first()) {
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_commutative_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -2087,6 +3828,29 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_commutative_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_commutative_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -2106,12 +3870,55 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_commutative_neg_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_consequent_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_commutative_neg_rule_select(final SubLObject asent) {
         return all_consequent_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_commutative_neg_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_commutative_neg_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_commutative_neg_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_commutative_neg_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_commutative_neg_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject more_supports = (NIL != inference_trampolines.inference_commutative_predicate_p(pred)) ? ((SubLObject) (list(make_hl_support($ISA, listS($$isa, pred, $list_alt53), UNPROVIDED, UNPROVIDED)))) : list(make_hl_support($ISA, listS($$isa, pred, $list_alt54), UNPROVIDED, UNPROVIDED));
+            SubLObject source_formula_var = asent;
+            if (NIL != el_binary_formula_p(source_formula_var)) {
+                {
+                    SubLObject forward_asent = removal_modules_symmetry.symmetric_asent(source_formula_var);
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_commutative_neg_expand_int(asent, rule, UNPROVIDED);
+                    SubLObject examine_lit = NIL;
+                    for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                    }
+                }
+            } else {
+                {
+                    SubLObject cdolist_list_var = formula_commutative_permutations(source_formula_var, UNPROVIDED);
+                    SubLObject forward_asent = NIL;
+                    for (forward_asent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , forward_asent = cdolist_list_var.first()) {
+                        if (!forward_asent.equal(source_formula_var)) {
+                            {
+                                SubLObject cdolist_list_var_45 = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_commutative_neg_expand_int(asent, rule, UNPROVIDED);
+                                SubLObject examine_lit = NIL;
+                                for (examine_lit = cdolist_list_var_45.first(); NIL != cdolist_list_var_45; cdolist_list_var_45 = cdolist_list_var_45.rest() , examine_lit = cdolist_list_var_45.first()) {
+                                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_commutative_neg_expand(final SubLObject asent, final SubLObject rule) {
@@ -2149,6 +3956,29 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_commutative_neg_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = pred;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_commutative_neg_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -2166,6 +3996,164 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_genlpreds_gaf_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject pred = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            {
+                SubLObject genl_preds = delete(pred, all_genl_preds(pred, UNPROVIDED, UNPROVIDED), symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+                SubLObject direction = NIL;
+                for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                    if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator($$genlPreds, $NEG, direction)) {
+                        {
+                            SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator($$genlPreds, $NEG, direction);
+                            SubLObject done_var = NIL;
+                            SubLObject token_var = NIL;
+                            while (NIL == done_var) {
+                                {
+                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                    if (NIL != valid) {
+                                        {
+                                            SubLObject final_index_iterator = NIL;
+                                            try {
+                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                {
+                                                    SubLObject done_var_46 = NIL;
+                                                    SubLObject token_var_47 = NIL;
+                                                    while (NIL == done_var_46) {
+                                                        {
+                                                            SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_47);
+                                                            SubLObject valid_48 = makeBoolean(token_var_47 != rule);
+                                                            if (NIL != valid_48) {
+                                                                {
+                                                                    SubLObject selectedP = NIL;
+                                                                    SubLObject predicate_var = $$genlPreds;
+                                                                    SubLObject assertion_var = rule;
+                                                                    SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                                                                    SubLObject rest = NIL;
+                                                                    for (rest = clauses.neg_lits(cnf_var); !((NIL != selectedP) || (NIL == rest)); rest = rest.rest()) {
+                                                                        {
+                                                                            SubLObject lit = rest.first();
+                                                                            if (predicate_var == atomic_sentence_predicate(lit)) {
+                                                                                {
+                                                                                    SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                                                                    if (NIL != list_utilities.member_eqP(rule_pred, genl_preds)) {
+                                                                                        rules = cons(rule, rules);
+                                                                                        selectedP = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            done_var_46 = makeBoolean(NIL == valid_48);
+                                                        }
+                                                    } 
+                                                }
+                                            } finally {
+                                                {
+                                                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                    try {
+                                                        bind($is_thread_performing_cleanupP$, T);
+                                                        if (NIL != final_index_iterator) {
+                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                        }
+                                                    } finally {
+                                                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    done_var = makeBoolean(NIL == valid);
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject genl_inverses = all_genl_inverses(pred, UNPROVIDED, UNPROVIDED);
+                SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+                SubLObject direction = NIL;
+                for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                    if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator($$genlInverse, $NEG, direction)) {
+                        {
+                            SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator($$genlInverse, $NEG, direction);
+                            SubLObject done_var = NIL;
+                            SubLObject token_var = NIL;
+                            while (NIL == done_var) {
+                                {
+                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                    if (NIL != valid) {
+                                        {
+                                            SubLObject final_index_iterator = NIL;
+                                            try {
+                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                {
+                                                    SubLObject done_var_49 = NIL;
+                                                    SubLObject token_var_50 = NIL;
+                                                    while (NIL == done_var_49) {
+                                                        {
+                                                            SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_50);
+                                                            SubLObject valid_51 = makeBoolean(token_var_50 != rule);
+                                                            if (NIL != valid_51) {
+                                                                {
+                                                                    SubLObject selectedP = NIL;
+                                                                    SubLObject predicate_var = $$genlInverse;
+                                                                    SubLObject assertion_var = rule;
+                                                                    SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                                                                    SubLObject rest = NIL;
+                                                                    for (rest = clauses.neg_lits(cnf_var); !((NIL != selectedP) || (NIL == rest)); rest = rest.rest()) {
+                                                                        {
+                                                                            SubLObject lit = rest.first();
+                                                                            if (predicate_var == atomic_sentence_predicate(lit)) {
+                                                                                {
+                                                                                    SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                                                                    if (NIL != list_utilities.member_eqP(rule_pred, genl_inverses)) {
+                                                                                        rules = cons(rule, rules);
+                                                                                        selectedP = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            done_var_49 = makeBoolean(NIL == valid_51);
+                                                        }
+                                                    } 
+                                                }
+                                            } finally {
+                                                {
+                                                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                    try {
+                                                        bind($is_thread_performing_cleanupP$, T);
+                                                        if (NIL != final_index_iterator) {
+                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                        }
+                                                    } finally {
+                                                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    done_var = makeBoolean(NIL == valid);
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_genlpreds_gaf_rule_select(final SubLObject asent) {
@@ -2358,8 +4346,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject forward_genlpreds_gaf_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlpreds_gaf_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_genlpreds_gaf_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_genlpreds_gaf_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_genlpreds_gaf_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlpreds_gaf_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject examine_pred = atomic_sentence_predicate(examine_lit);
+                    SubLObject genl_pred_or_inverse = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                    SubLObject forward_asent = list(examine_pred, arg1, genl_pred_or_inverse);
+                    SubLObject more_supports = list(make_hl_support($GENLPREDS, list(examine_pred, arg2, genl_pred_or_inverse), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_genlpreds_gaf_expand(final SubLObject asent, final SubLObject rule) {
@@ -2378,6 +4389,55 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_genlpreds_gaf_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            {
+                SubLObject predicate_var = $$genlPreds;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                if ((NIL != variables.fully_bound_p(rule_pred)) && (NIL != genl_predicateP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                                    examine_lits = cons(lit, examine_lits);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject predicate_var = $$genlInverse;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                if ((NIL != variables.fully_bound_p(rule_pred)) && (NIL != genl_inverseP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                                    examine_lits = cons(lit, examine_lits);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_genlpreds_gaf_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -2416,16 +4476,96 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_not_genlpreds_gaf_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_rule_select(asent);
+    }
+
     public static SubLObject forward_not_genlpreds_gaf_rule_select(final SubLObject asent) {
         return forward_normal_neg_rule_select(asent);
+    }
+
+    public static final SubLObject forward_not_genlpreds_gaf_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_rule_filter(asent, rule);
     }
 
     public static SubLObject forward_not_genlpreds_gaf_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_normal_neg_rule_filter(asent, rule);
     }
 
+    public static final SubLObject forward_not_genlpreds_gaf_expand_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_expand(asent, rule);
+    }
+
     public static SubLObject forward_not_genlpreds_gaf_expand(final SubLObject asent, final SubLObject rule) {
         return forward_normal_neg_expand(asent, rule);
+    }
+
+    public static final SubLObject forward_genlpreds_pos_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = delete(pred, all_genl_preds(pred, UNPROVIDED, UNPROVIDED), symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            SubLObject genl_pred = NIL;
+            for (genl_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl_pred = cdolist_list_var.first()) {
+                if (NIL == hl_supports.hl_predicate_p(genl_pred)) {
+                    {
+                        SubLObject cdolist_list_var_52 = backward_utilities.relevant_directions();
+                        SubLObject direction = NIL;
+                        for (direction = cdolist_list_var_52.first(); NIL != cdolist_list_var_52; cdolist_list_var_52 = cdolist_list_var_52.rest() , direction = cdolist_list_var_52.first()) {
+                            if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator(genl_pred, $NEG, direction)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator(genl_pred, $NEG, direction);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                        {
+                                                            SubLObject done_var_53 = NIL;
+                                                            SubLObject token_var_54 = NIL;
+                                                            while (NIL == done_var_53) {
+                                                                {
+                                                                    SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_54);
+                                                                    SubLObject valid_55 = makeBoolean(token_var_54 != rule);
+                                                                    if (NIL != valid_55) {
+                                                                        rules = cons(rule, rules);
+                                                                    }
+                                                                    done_var_53 = makeBoolean(NIL == valid_55);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                            try {
+                                                                bind($is_thread_performing_cleanupP$, T);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_genlpreds_pos_rule_select(final SubLObject asent) {
@@ -2488,8 +4628,30 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_genlpreds_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlpreds_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_genlpreds_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_genlpreds_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_genlpreds_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject args = atomic_sentence_args(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlpreds_pos_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject genl_pred = atomic_sentence_predicate(examine_lit);
+                    SubLObject forward_asent = bq_cons(genl_pred, append(args, NIL));
+                    SubLObject more_supports = list(make_hl_support($GENLPREDS, list($$genlPreds, pred, genl_pred), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_genlpreds_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -2507,6 +4669,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_genlpreds_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    SubLObject rule_pred = atomic_sentence_predicate(lit);
+                    if ((((NIL != variables.fully_bound_p(rule_pred)) && (pred != rule_pred)) && (NIL == hl_supports.hl_predicate_p(rule_pred))) && (NIL != genl_predicateP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_genlpreds_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -2528,6 +4713,164 @@ public final class forward_modules extends SubLTranslatedFile {
             }
         }
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
+    }
+
+    public static final SubLObject forward_genlinverse_gaf_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject pred = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject rules = NIL;
+            {
+                SubLObject genl_preds = delete(pred, all_genl_preds(pred, UNPROVIDED, UNPROVIDED), symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+                SubLObject direction = NIL;
+                for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                    if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator($$genlInverse, $NEG, direction)) {
+                        {
+                            SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator($$genlInverse, $NEG, direction);
+                            SubLObject done_var = NIL;
+                            SubLObject token_var = NIL;
+                            while (NIL == done_var) {
+                                {
+                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                    if (NIL != valid) {
+                                        {
+                                            SubLObject final_index_iterator = NIL;
+                                            try {
+                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                {
+                                                    SubLObject done_var_56 = NIL;
+                                                    SubLObject token_var_57 = NIL;
+                                                    while (NIL == done_var_56) {
+                                                        {
+                                                            SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_57);
+                                                            SubLObject valid_58 = makeBoolean(token_var_57 != rule);
+                                                            if (NIL != valid_58) {
+                                                                {
+                                                                    SubLObject selectedP = NIL;
+                                                                    SubLObject predicate_var = $$genlPreds;
+                                                                    SubLObject assertion_var = rule;
+                                                                    SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                                                                    SubLObject rest = NIL;
+                                                                    for (rest = clauses.neg_lits(cnf_var); !((NIL != selectedP) || (NIL == rest)); rest = rest.rest()) {
+                                                                        {
+                                                                            SubLObject lit = rest.first();
+                                                                            if (predicate_var == atomic_sentence_predicate(lit)) {
+                                                                                {
+                                                                                    SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                                                                    if (NIL != list_utilities.member_eqP(rule_pred, genl_preds)) {
+                                                                                        rules = cons(rule, rules);
+                                                                                        selectedP = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            done_var_56 = makeBoolean(NIL == valid_58);
+                                                        }
+                                                    } 
+                                                }
+                                            } finally {
+                                                {
+                                                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                    try {
+                                                        bind($is_thread_performing_cleanupP$, T);
+                                                        if (NIL != final_index_iterator) {
+                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                        }
+                                                    } finally {
+                                                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    done_var = makeBoolean(NIL == valid);
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject genl_inverses = all_genl_inverses(pred, UNPROVIDED, UNPROVIDED);
+                SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+                SubLObject direction = NIL;
+                for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                    if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator($$genlPreds, $NEG, direction)) {
+                        {
+                            SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator($$genlPreds, $NEG, direction);
+                            SubLObject done_var = NIL;
+                            SubLObject token_var = NIL;
+                            while (NIL == done_var) {
+                                {
+                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                    if (NIL != valid) {
+                                        {
+                                            SubLObject final_index_iterator = NIL;
+                                            try {
+                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                {
+                                                    SubLObject done_var_59 = NIL;
+                                                    SubLObject token_var_60 = NIL;
+                                                    while (NIL == done_var_59) {
+                                                        {
+                                                            SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_60);
+                                                            SubLObject valid_61 = makeBoolean(token_var_60 != rule);
+                                                            if (NIL != valid_61) {
+                                                                {
+                                                                    SubLObject selectedP = NIL;
+                                                                    SubLObject predicate_var = $$genlInverse;
+                                                                    SubLObject assertion_var = rule;
+                                                                    SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                                                                    SubLObject rest = NIL;
+                                                                    for (rest = clauses.neg_lits(cnf_var); !((NIL != selectedP) || (NIL == rest)); rest = rest.rest()) {
+                                                                        {
+                                                                            SubLObject lit = rest.first();
+                                                                            if (predicate_var == atomic_sentence_predicate(lit)) {
+                                                                                {
+                                                                                    SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                                                                    if (NIL != list_utilities.member_eqP(rule_pred, genl_inverses)) {
+                                                                                        rules = cons(rule, rules);
+                                                                                        selectedP = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                            done_var_59 = makeBoolean(NIL == valid_61);
+                                                        }
+                                                    } 
+                                                }
+                                            } finally {
+                                                {
+                                                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                    try {
+                                                        bind($is_thread_performing_cleanupP$, T);
+                                                        if (NIL != final_index_iterator) {
+                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                        }
+                                                    } finally {
+                                                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    done_var = makeBoolean(NIL == valid);
+                                }
+                            } 
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_genlinverse_gaf_rule_select(final SubLObject asent) {
@@ -2660,8 +5003,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_genlinverse_gaf_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlinverse_gaf_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_genlinverse_gaf_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_genlinverse_gaf_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_genlinverse_gaf_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlinverse_gaf_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject examine_pred = atomic_sentence_predicate(examine_lit);
+                    SubLObject genl_pred_or_inverse = atomic_sentence_arg2(examine_lit, UNPROVIDED);
+                    SubLObject forward_asent = list(examine_pred, arg1, genl_pred_or_inverse);
+                    SubLObject more_supports = (examine_pred == $$genlInverse) ? ((SubLObject) (list(make_hl_support($GENLPREDS, list($$genlPreds, arg2, genl_pred_or_inverse), UNPROVIDED, UNPROVIDED)))) : list(make_hl_support($GENLPREDS, list($$genlInverse, arg2, genl_pred_or_inverse), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_genlinverse_gaf_expand(final SubLObject asent, final SubLObject rule) {
@@ -2680,6 +5046,55 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_genlinverse_gaf_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject examine_lits = NIL;
+            {
+                SubLObject predicate_var = $$genlInverse;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                if ((NIL != variables.fully_bound_p(rule_pred)) && (NIL != genl_predicateP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                                    examine_lits = cons(lit, examine_lits);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject predicate_var = $$genlPreds;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject rule_pred = atomic_sentence_arg2(lit, UNPROVIDED);
+                                if ((NIL != variables.fully_bound_p(rule_pred)) && (NIL != genl_inverseP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                                    examine_lits = cons(lit, examine_lits);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_genlinverse_gaf_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -2718,16 +5133,96 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_not_genlinverse_gaf_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_rule_select(asent);
+    }
+
     public static SubLObject forward_not_genlinverse_gaf_rule_select(final SubLObject asent) {
         return forward_normal_neg_rule_select(asent);
+    }
+
+    public static final SubLObject forward_not_genlinverse_gaf_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_rule_filter(asent, rule);
     }
 
     public static SubLObject forward_not_genlinverse_gaf_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_normal_neg_rule_filter(asent, rule);
     }
 
+    public static final SubLObject forward_not_genlinverse_gaf_expand_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_normal_neg_expand(asent, rule);
+    }
+
     public static SubLObject forward_not_genlinverse_gaf_expand(final SubLObject asent, final SubLObject rule) {
         return forward_normal_neg_expand(asent, rule);
+    }
+
+    public static final SubLObject forward_genlinverse_pos_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = all_genl_inverses(pred, UNPROVIDED, UNPROVIDED);
+            SubLObject genl_inverse = NIL;
+            for (genl_inverse = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , genl_inverse = cdolist_list_var.first()) {
+                if (NIL == hl_supports.hl_predicate_p(genl_inverse)) {
+                    {
+                        SubLObject cdolist_list_var_62 = backward_utilities.relevant_directions();
+                        SubLObject direction = NIL;
+                        for (direction = cdolist_list_var_62.first(); NIL != cdolist_list_var_62; cdolist_list_var_62 = cdolist_list_var_62.rest() , direction = cdolist_list_var_62.first()) {
+                            if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator(genl_inverse, $NEG, direction)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator(genl_inverse, $NEG, direction);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                        {
+                                                            SubLObject done_var_63 = NIL;
+                                                            SubLObject token_var_64 = NIL;
+                                                            while (NIL == done_var_63) {
+                                                                {
+                                                                    SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_64);
+                                                                    SubLObject valid_65 = makeBoolean(token_var_64 != rule);
+                                                                    if (NIL != valid_65) {
+                                                                        rules = cons(rule, rules);
+                                                                    }
+                                                                    done_var_63 = makeBoolean(NIL == valid_65);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                            try {
+                                                                bind($is_thread_performing_cleanupP$, T);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_genlinverse_pos_rule_select(final SubLObject asent) {
@@ -2790,8 +5285,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_genlinverse_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlinverse_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_genlinverse_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_genlinverse_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_genlinverse_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_genlinverse_pos_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject genl_inverse = atomic_sentence_predicate(examine_lit);
+                    SubLObject forward_asent = list(genl_inverse, arg2, arg1);
+                    SubLObject more_supports = list(make_hl_support($GENLPREDS, list($$genlInverse, pred, genl_inverse), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_genlinverse_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -2810,6 +5328,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_genlinverse_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    SubLObject rule_pred = atomic_sentence_predicate(lit);
+                    if (((NIL != variables.fully_bound_p(rule_pred)) && (NIL == hl_supports.hl_predicate_p(rule_pred))) && (NIL != genl_inverseP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_genlinverse_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -2863,6 +5404,19 @@ public final class forward_modules extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject forward_negationpreds_required_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread)) {
+                {
+                    SubLObject pattern = $list_alt74;
+                    return formula_pattern_match.formula_matches_pattern(asent, pattern);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject forward_negationpreds_required(final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread)) {
@@ -2870,6 +5424,74 @@ public final class forward_modules extends SubLTranslatedFile {
             return formula_pattern_match.formula_matches_pattern(asent, pattern);
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_negationpreds_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = all_negation_preds(pred, UNPROVIDED);
+            SubLObject negation_pred = NIL;
+            for (negation_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , negation_pred = cdolist_list_var.first()) {
+                if (NIL == hl_supports.hl_predicate_p(negation_pred)) {
+                    {
+                        SubLObject cdolist_list_var_66 = backward_utilities.relevant_directions();
+                        SubLObject direction = NIL;
+                        for (direction = cdolist_list_var_66.first(); NIL != cdolist_list_var_66; cdolist_list_var_66 = cdolist_list_var_66.rest() , direction = cdolist_list_var_66.first()) {
+                            if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator(negation_pred, $POS, direction)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator(negation_pred, $POS, direction);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                        {
+                                                            SubLObject done_var_67 = NIL;
+                                                            SubLObject token_var_68 = NIL;
+                                                            while (NIL == done_var_67) {
+                                                                {
+                                                                    SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_68);
+                                                                    SubLObject valid_69 = makeBoolean(token_var_68 != rule);
+                                                                    if (NIL != valid_69) {
+                                                                        rules = cons(rule, rules);
+                                                                    }
+                                                                    done_var_67 = makeBoolean(NIL == valid_69);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                            try {
+                                                                bind($is_thread_performing_cleanupP$, T);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_negationpreds_rule_select(final SubLObject asent) {
@@ -2933,8 +5555,30 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_negationpreds_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_negationpreds_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_negationpreds_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_negationpreds_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_negationpreds_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject args = atomic_sentence_args(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_negationpreds_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject negation_pred = atomic_sentence_predicate(examine_lit);
+                    SubLObject forward_asent = bq_cons(negation_pred, append(args, NIL));
+                    SubLObject more_supports = list(make_hl_support($NEGATIONPREDS, list($$negationPreds, pred, negation_pred), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_negationpreds_expand(final SubLObject asent, final SubLObject rule) {
@@ -2952,6 +5596,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_negationpreds_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    SubLObject rule_pred = atomic_sentence_predicate(lit);
+                    if (((NIL != variables.fully_bound_p(rule_pred)) && (NIL == hl_supports.hl_predicate_p(rule_pred))) && (NIL != negation_predicateP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_negationpreds_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3005,6 +5672,19 @@ public final class forward_modules extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject forward_negationinverse_required_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread)) {
+                {
+                    SubLObject pattern = $list_alt79;
+                    return formula_pattern_match.formula_matches_pattern(asent, pattern);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject forward_negationinverse_required(final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != kb_control_vars.$forward_propagate_from_negations$.getDynamicValue(thread)) {
@@ -3012,6 +5692,74 @@ public final class forward_modules extends SubLTranslatedFile {
             return formula_pattern_match.formula_matches_pattern(asent, pattern);
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_negationinverse_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = all_negation_inverses(pred, UNPROVIDED, UNPROVIDED);
+            SubLObject negation_inverse = NIL;
+            for (negation_inverse = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , negation_inverse = cdolist_list_var.first()) {
+                if (NIL == hl_supports.hl_predicate_p(negation_inverse)) {
+                    {
+                        SubLObject cdolist_list_var_70 = backward_utilities.relevant_directions();
+                        SubLObject direction = NIL;
+                        for (direction = cdolist_list_var_70.first(); NIL != cdolist_list_var_70; cdolist_list_var_70 = cdolist_list_var_70.rest() , direction = cdolist_list_var_70.first()) {
+                            if (NIL != kb_mapping_macros.do_predicate_rule_index_key_validator(negation_inverse, $POS, direction)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_predicate_rule_final_index_spec_iterator(negation_inverse, $POS, direction);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                                        {
+                                                            SubLObject done_var_71 = NIL;
+                                                            SubLObject token_var_72 = NIL;
+                                                            while (NIL == done_var_71) {
+                                                                {
+                                                                    SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_72);
+                                                                    SubLObject valid_73 = makeBoolean(token_var_72 != rule);
+                                                                    if (NIL != valid_73) {
+                                                                        rules = cons(rule, rules);
+                                                                    }
+                                                                    done_var_71 = makeBoolean(NIL == valid_73);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                            try {
+                                                                bind($is_thread_performing_cleanupP$, T);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_negationinverse_rule_select(final SubLObject asent) {
@@ -3075,8 +5823,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_negationinverse_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_negationinverse_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_negationinverse_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_negationinverse_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_negationinverse_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject arg1 = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg2 = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_negationinverse_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                {
+                    SubLObject negation_inverse = atomic_sentence_predicate(examine_lit);
+                    SubLObject forward_asent = list(negation_inverse, arg2, arg1);
+                    SubLObject more_supports = list(make_hl_support($NEGATIONPREDS, list($$negationInverse, pred, negation_inverse), UNPROVIDED, UNPROVIDED));
+                    com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $NEG, examine_lit, $POS, rule, more_supports);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_negationinverse_expand(final SubLObject asent, final SubLObject rule) {
@@ -3095,6 +5866,29 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_negationinverse_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    SubLObject rule_pred = atomic_sentence_predicate(lit);
+                    if (((NIL != variables.fully_bound_p(rule_pred)) && (NIL == hl_supports.hl_predicate_p(rule_pred))) && (NIL != negation_inverseP(pred, rule_pred, UNPROVIDED, UNPROVIDED))) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_negationinverse_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3118,13 +5912,31 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_eval_exclusive_pos_alt(SubLObject asent) {
+        {
+            SubLObject pattern = $list_alt83;
+            return formula_pattern_match.formula_matches_pattern(asent, pattern);
+        }
+    }
+
     public static SubLObject forward_eval_exclusive_pos(final SubLObject asent) {
         final SubLObject pattern = $list111;
         return formula_pattern_match.formula_matches_pattern(asent, pattern);
     }
 
+    public static final SubLObject forward_eval_expand_pos_alt(SubLObject asent, SubLObject rule) {
+        return NIL;
+    }
+
     public static SubLObject forward_eval_expand_pos(final SubLObject asent, final SubLObject rule) {
         return NIL;
+    }
+
+    public static final SubLObject forward_eval_exclusive_neg_alt(SubLObject asent) {
+        {
+            SubLObject pattern = $list_alt83;
+            return formula_pattern_match.formula_matches_pattern(asent, pattern);
+        }
     }
 
     public static SubLObject forward_eval_exclusive_neg(final SubLObject asent) {
@@ -3132,8 +5944,72 @@ public final class forward_modules extends SubLTranslatedFile {
         return formula_pattern_match.formula_matches_pattern(asent, pattern);
     }
 
+    public static final SubLObject forward_eval_expand_neg_alt(SubLObject asent, SubLObject rule) {
+        return NIL;
+    }
+
     public static SubLObject forward_eval_expand_neg(final SubLObject asent, final SubLObject rule) {
         return NIL;
+    }
+
+    public static final SubLObject forward_term_of_unit_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject function = nat_function(atomic_sentence_arg2(asent, UNPROVIDED));
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+            SubLObject direction = NIL;
+            for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                if (NIL != kb_mapping_macros.do_function_rule_index_key_validator(function, direction)) {
+                    {
+                        SubLObject iterator_var = kb_mapping_macros.new_function_rule_final_index_spec_iterator(function, direction);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                            {
+                                                SubLObject done_var_74 = NIL;
+                                                SubLObject token_var_75 = NIL;
+                                                while (NIL == done_var_74) {
+                                                    {
+                                                        SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_75);
+                                                        SubLObject valid_76 = makeBoolean(token_var_75 != rule);
+                                                        if (NIL != valid_76) {
+                                                            rules = cons(rule, rules);
+                                                        }
+                                                        done_var_74 = makeBoolean(NIL == valid_76);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_term_of_unit_rule_select(final SubLObject asent) {
@@ -3187,8 +6063,23 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_term_of_unit_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_term_of_unit_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_term_of_unit_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_term_of_unit_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_term_of_unit_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_term_of_unit_expand_int(asent, rule, UNPROVIDED);
+            SubLObject examine_lit = NIL;
+            for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(asent, $POS, examine_lit, $NEG, rule, UNPROVIDED);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_term_of_unit_expand(final SubLObject asent, final SubLObject rule) {
@@ -3201,6 +6092,34 @@ public final class forward_modules extends SubLTranslatedFile {
             examine_lit = cdolist_list_var.first();
         } 
         return NIL;
+    }
+
+    public static final SubLObject forward_term_of_unit_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject function = nat_function(atomic_sentence_arg2(asent, UNPROVIDED));
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = $$termOfUnit;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        {
+                            SubLObject rule_function = nat_function(atomic_sentence_arg2(lit, UNPROVIDED));
+                            if (function == rule_function) {
+                                examine_lits = cons(lit, examine_lits);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_term_of_unit_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3226,12 +6145,40 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_nat_function_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_antecedent_predicate_forward_rules($$natFunction);
+    }
+
     public static SubLObject forward_nat_function_rule_select(final SubLObject asent) {
         return all_antecedent_predicate_forward_rules($$natFunction);
     }
 
+    public static final SubLObject forward_nat_function_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_nat_function_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_nat_function_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_nat_function_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_nat_function_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject nart = atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject formula = atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject function = nat_function(formula);
+            if (NIL != function) {
+                {
+                    SubLObject more_supports = removal_modules_natfunction.additional_nat_function_supports();
+                    SubLObject forward_asent = list($$natFunction, nart, function);
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_nat_function_expand_int(asent, rule, UNPROVIDED);
+                    SubLObject examine_lit = NIL;
+                    for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(forward_asent, $POS, examine_lit, $NEG, rule, more_supports);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_nat_function_expand(final SubLObject asent, final SubLObject rule) {
@@ -3251,6 +6198,28 @@ public final class forward_modules extends SubLTranslatedFile {
             } 
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_nat_function_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject examine_lits = NIL;
+            SubLObject predicate_var = $$natFunction;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (predicate_var == atomic_sentence_predicate(lit)) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_nat_function_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3323,9 +6292,75 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_unbound_pred_pos_required_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $unbound_rule_backchain_enabled$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject forward_unbound_pred_pos_required(final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $unbound_rule_backchain_enabled$.getDynamicValue(thread);
+    }
+
+    public static final SubLObject forward_unbound_pred_pos_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+            SubLObject direction = NIL;
+            for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                if (NIL != kb_mapping_macros.do_unbound_predicate_rule_index_key_validator($NEG, direction)) {
+                    {
+                        SubLObject iterator_var = kb_mapping_macros.new_unbound_predicate_rule_final_index_spec_iterator($NEG, direction);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                            {
+                                                SubLObject done_var_77 = NIL;
+                                                SubLObject token_var_78 = NIL;
+                                                while (NIL == done_var_77) {
+                                                    {
+                                                        SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_78);
+                                                        SubLObject valid_79 = makeBoolean(token_var_78 != rule);
+                                                        if (NIL != valid_79) {
+                                                            rules = cons(rule, rules);
+                                                        }
+                                                        done_var_77 = makeBoolean(NIL == valid_79);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_unbound_pred_pos_rule_select(final SubLObject asent) {
@@ -3378,8 +6413,34 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_unbound_pred_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_unbound_pred_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_unbound_pred_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_unbound_pred_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_unbound_pred_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                try {
+                    $type_filter_forward_dnf$.bind(T, thread);
+                    {
+                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_unbound_pred_pos_expand_int(asent, rule, UNPROVIDED);
+                        SubLObject examine_lit = NIL;
+                        for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(asent, $POS, examine_lit, $NEG, rule, UNPROVIDED);
+                        }
+                    }
+                } finally {
+                    $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_unbound_pred_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -3401,6 +6462,27 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject forward_unbound_pred_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (NIL != variables.not_fully_bound_p(atomic_sentence_predicate(lit))) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
+    }
+
     public static SubLObject forward_unbound_pred_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
         if (booleanP == UNPROVIDED) {
             booleanP = NIL;
@@ -3418,9 +6500,75 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_unbound_pred_neg_required_alt(SubLObject asent) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $unbound_rule_backchain_enabled$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject forward_unbound_pred_neg_required(final SubLObject asent) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $unbound_rule_backchain_enabled$.getDynamicValue(thread);
+    }
+
+    public static final SubLObject forward_unbound_pred_neg_rule_select_alt(SubLObject asent) {
+        {
+            SubLObject rules = NIL;
+            SubLObject cdolist_list_var = backward_utilities.relevant_directions();
+            SubLObject direction = NIL;
+            for (direction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , direction = cdolist_list_var.first()) {
+                if (NIL != kb_mapping_macros.do_unbound_predicate_rule_index_key_validator($POS, direction)) {
+                    {
+                        SubLObject iterator_var = kb_mapping_macros.new_unbound_predicate_rule_final_index_spec_iterator($POS, direction);
+                        SubLObject done_var = NIL;
+                        SubLObject token_var = NIL;
+                        while (NIL == done_var) {
+                            {
+                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                if (NIL != valid) {
+                                    {
+                                        SubLObject final_index_iterator = NIL;
+                                        try {
+                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $RULE, NIL, direction);
+                                            {
+                                                SubLObject done_var_80 = NIL;
+                                                SubLObject token_var_81 = NIL;
+                                                while (NIL == done_var_80) {
+                                                    {
+                                                        SubLObject rule = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_81);
+                                                        SubLObject valid_82 = makeBoolean(token_var_81 != rule);
+                                                        if (NIL != valid_82) {
+                                                            rules = cons(rule, rules);
+                                                        }
+                                                        done_var_80 = makeBoolean(NIL == valid_82);
+                                                    }
+                                                } 
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                                try {
+                                                    bind($is_thread_performing_cleanupP$, T);
+                                                    if (NIL != final_index_iterator) {
+                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                    }
+                                                } finally {
+                                                    rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                done_var = makeBoolean(NIL == valid);
+                            }
+                        } 
+                    }
+                }
+            }
+            return rules;
+        }
     }
 
     public static SubLObject forward_unbound_pred_neg_rule_select(final SubLObject asent) {
@@ -3473,8 +6621,34 @@ public final class forward_modules extends SubLTranslatedFile {
         return rules;
     }
 
+    public static final SubLObject forward_unbound_pred_neg_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_unbound_pred_neg_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_unbound_pred_neg_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_unbound_pred_neg_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_unbound_pred_neg_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $type_filter_forward_dnf$.currentBinding(thread);
+                try {
+                    $type_filter_forward_dnf$.bind(T, thread);
+                    {
+                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_unbound_pred_neg_expand_int(asent, rule, UNPROVIDED);
+                        SubLObject examine_lit = NIL;
+                        for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(asent, $NEG, examine_lit, $POS, rule, UNPROVIDED);
+                        }
+                    }
+                } finally {
+                    $type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject forward_unbound_pred_neg_expand(final SubLObject asent, final SubLObject rule) {
@@ -3494,6 +6668,27 @@ public final class forward_modules extends SubLTranslatedFile {
             forward.$type_filter_forward_dnf$.rebind(_prev_bind_0, thread);
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_unbound_pred_neg_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject examine_lits = NIL;
+            SubLObject assertion_var = rule;
+            SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+            SubLObject rest = NIL;
+            for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject lit = rest.first();
+                    if (NIL != variables.not_fully_bound_p(atomic_sentence_predicate(lit))) {
+                        examine_lits = cons(lit, examine_lits);
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_unbound_pred_neg_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3551,12 +6746,40 @@ public final class forward_modules extends SubLTranslatedFile {
         return forward_unbound_pred_pos_expand(asent, rule);
     }
 
+    public static final SubLObject forward_ist_pos_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_ist_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_ist_pos_rule_select(final SubLObject asent) {
         return all_ist_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_ist_pos_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_ist_pos_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_ist_pos_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_ist_pos_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_ist_pos_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject trigger_assertion = current_forward_inference_assertion();
+            if (NIL != trigger_assertion) {
+                {
+                    SubLObject mt = assertions_high.assertion_mt(trigger_assertion);
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_ist_pos_expand_int(asent, rule, UNPROVIDED);
+                    SubLObject examine_lit = NIL;
+                    for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                        {
+                            SubLObject examine_sense = (NIL != el_negation_p(examine_lit)) ? ((SubLObject) ($POS)) : $NEG;
+                            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(make_ist_sentence(mt, asent), $POS, examine_lit, examine_sense, rule, UNPROVIDED);
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_ist_pos_expand(final SubLObject asent, final SubLObject rule) {
@@ -3579,6 +6802,65 @@ public final class forward_modules extends SubLTranslatedFile {
             } 
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_ist_pos_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            {
+                SubLObject predicate_var = $$ist;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject sub_sentence = literal_arg2(lit, UNPROVIDED);
+                                if (NIL == el_negation_p(sub_sentence)) {
+                                    {
+                                        SubLObject sub_pred = literal_predicate(sub_sentence, UNPROVIDED);
+                                        if (pred == sub_pred) {
+                                            examine_lits = cons(lit, examine_lits);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject predicate_var = $$ist;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject sub_sentence = literal_arg2(lit, UNPROVIDED);
+                                if (NIL != el_negation_p(sub_sentence)) {
+                                    {
+                                        SubLObject sub_pred = literal_predicate(sub_sentence, UNPROVIDED);
+                                        if (pred == sub_pred) {
+                                            examine_lits = cons(lit, examine_lits);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_ist_pos_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3620,12 +6902,40 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL != booleanP ? list_utilities.sublisp_boolean(examine_lits) : examine_lits;
     }
 
+    public static final SubLObject forward_ist_neg_rule_select_alt(SubLObject asent) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.all_ist_predicate_forward_rules(atomic_sentence_predicate(asent));
+    }
+
     public static SubLObject forward_ist_neg_rule_select(final SubLObject asent) {
         return all_ist_predicate_forward_rules(cycl_utilities.atomic_sentence_predicate(asent));
     }
 
+    public static final SubLObject forward_ist_neg_rule_filter_alt(SubLObject asent, SubLObject rule) {
+        return com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_ist_neg_expand_int(asent, rule, T);
+    }
+
     public static SubLObject forward_ist_neg_rule_filter(final SubLObject asent, final SubLObject rule) {
         return forward_ist_neg_expand_int(asent, rule, T);
+    }
+
+    public static final SubLObject forward_ist_neg_expand_alt(SubLObject asent, SubLObject rule) {
+        {
+            SubLObject trigger_assertion = current_forward_inference_assertion();
+            if (NIL != trigger_assertion) {
+                {
+                    SubLObject mt = assertions_high.assertion_mt(trigger_assertion);
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_ist_neg_expand_int(asent, rule, UNPROVIDED);
+                    SubLObject examine_lit = NIL;
+                    for (examine_lit = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , examine_lit = cdolist_list_var.first()) {
+                        {
+                            SubLObject examine_sense = (NIL != el_negation_p(examine_lit)) ? ((SubLObject) ($NEG)) : $POS;
+                            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module_callback(make_ist_sentence(mt, make_negation(asent)), $POS, examine_lit, examine_sense, rule, UNPROVIDED);
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject forward_ist_neg_expand(final SubLObject asent, final SubLObject rule) {
@@ -3643,6 +6953,65 @@ public final class forward_modules extends SubLTranslatedFile {
             } 
         }
         return NIL;
+    }
+
+    public static final SubLObject forward_ist_neg_expand_int_alt(SubLObject asent, SubLObject rule, SubLObject booleanP) {
+        if (booleanP == UNPROVIDED) {
+            booleanP = NIL;
+        }
+        {
+            SubLObject pred = atomic_sentence_predicate(asent);
+            SubLObject examine_lits = NIL;
+            {
+                SubLObject predicate_var = $$ist;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.pos_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject sub_sentence = literal_arg2(lit, UNPROVIDED);
+                                if (NIL == el_negation_p(sub_sentence)) {
+                                    {
+                                        SubLObject sub_pred = literal_predicate(sub_sentence, UNPROVIDED);
+                                        if (pred == sub_pred) {
+                                            examine_lits = cons(lit, examine_lits);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject predicate_var = $$ist;
+                SubLObject assertion_var = rule;
+                SubLObject cnf_var = assertions_high.assertion_cnf(assertion_var);
+                SubLObject rest = NIL;
+                for (rest = clauses.neg_lits(cnf_var); !(((NIL != booleanP) && (NIL != examine_lits)) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject lit = rest.first();
+                        if (predicate_var == atomic_sentence_predicate(lit)) {
+                            {
+                                SubLObject sub_sentence = literal_arg2(lit, UNPROVIDED);
+                                if (NIL != el_negation_p(sub_sentence)) {
+                                    {
+                                        SubLObject sub_pred = literal_predicate(sub_sentence, UNPROVIDED);
+                                        if (pred == sub_pred) {
+                                            examine_lits = cons(lit, examine_lits);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL != booleanP ? ((SubLObject) (list_utilities.sublisp_boolean(examine_lits))) : examine_lits;
+        }
     }
 
     public static SubLObject forward_ist_neg_expand_int(final SubLObject asent, final SubLObject rule, SubLObject booleanP) {
@@ -3687,206 +7056,230 @@ public final class forward_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_forward_modules_file() {
-        declareFunction(me, "forward_modules", "FORWARD-MODULES", 0, 0, false);
-        declareFunction(me, "forward_module_count", "FORWARD-MODULE-COUNT", 0, 0, false);
-        declareFunction(me, "forward_module_p", "FORWARD-MODULE-P", 1, 0, false);
-        declareFunction(me, "forward_module", "FORWARD-MODULE", 2, 0, false);
-        declareFunction(me, "undeclare_forward_module", "UNDECLARE-FORWARD-MODULE", 1, 0, false);
-        declareMacro(me, "do_forward_modules", "DO-FORWARD-MODULES");
-        declareFunction(me, "do_forward_modules_list", "DO-FORWARD-MODULES-LIST", 0, 0, false);
-        declareFunction(me, "forward_examine_asent_triggering_allowedP", "FORWARD-EXAMINE-ASENT-TRIGGERING-ALLOWED?", 1, 0, false);
-        declareFunction(me, "forward_module_callback", "FORWARD-MODULE-CALLBACK", 5, 1, false);
-        declareFunction(me, "forward_tactic_specs", "FORWARD-TACTIC-SPECS", 3, 0, false);
-        declareFunction(me, "forward_tactic_spec_rule", "FORWARD-TACTIC-SPEC-RULE", 1, 0, false);
-        declareFunction(me, "forward_tactic_specL", "FORWARD-TACTIC-SPEC<", 2, 0, false);
-        declareFunction(me, "forward_hl_modules", "FORWARD-HL-MODULES", 2, 0, false);
-        declareFunction(me, "forward_hl_module_apply", "FORWARD-HL-MODULE-APPLY", 2, 0, false);
-        declareFunction(me, "forward_inference_rule_select_via_allowed_rulesP", "FORWARD-INFERENCE-RULE-SELECT-VIA-ALLOWED-RULES?", 0, 0, false);
-        declareFunction(me, "forward_hl_module_rule_select", "FORWARD-HL-MODULE-RULE-SELECT", 2, 0, false);
-        declareFunction(me, "forward_hl_module_rule_filter", "FORWARD-HL-MODULE-RULE-FILTER", 3, 0, false);
-        declareFunction(me, "forward_hl_module_expand", "FORWARD-HL-MODULE-EXPAND", 3, 0, false);
-        declareFunction(me, "all_antecedent_predicate_forward_rules", "ALL-ANTECEDENT-PREDICATE-FORWARD-RULES", 1, 0, false);
-        declareFunction(me, "all_consequent_predicate_forward_rules", "ALL-CONSEQUENT-PREDICATE-FORWARD-RULES", 1, 0, false);
-        declareFunction(me, "all_ist_predicate_forward_rules", "ALL-IST-PREDICATE-FORWARD-RULES", 1, 0, false);
-        declareFunction(me, "forward_normal_pos_rule_select", "FORWARD-NORMAL-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_modules", "FORWARD-MODULES", 0, 0, false);
+        declareFunction("forward_module_count", "FORWARD-MODULE-COUNT", 0, 0, false);
+        declareFunction("forward_module_p", "FORWARD-MODULE-P", 1, 0, false);
+        declareFunction("forward_module", "FORWARD-MODULE", 2, 0, false);
+        declareFunction("undeclare_forward_module", "UNDECLARE-FORWARD-MODULE", 1, 0, false);
+        declareMacro("do_forward_modules", "DO-FORWARD-MODULES");
+        declareFunction("do_forward_modules_list", "DO-FORWARD-MODULES-LIST", 0, 0, false);
+        declareFunction("forward_examine_asent_triggering_allowedP", "FORWARD-EXAMINE-ASENT-TRIGGERING-ALLOWED?", 1, 0, false);
+        declareFunction("forward_module_callback", "FORWARD-MODULE-CALLBACK", 5, 1, false);
+        declareFunction("forward_tactic_specs", "FORWARD-TACTIC-SPECS", 3, 0, false);
+        declareFunction("forward_tactic_spec_rule", "FORWARD-TACTIC-SPEC-RULE", 1, 0, false);
+        declareFunction("forward_tactic_specL", "FORWARD-TACTIC-SPEC<", 2, 0, false);
+        declareFunction("forward_hl_modules", "FORWARD-HL-MODULES", 2, 0, false);
+        declareFunction("forward_hl_module_apply", "FORWARD-HL-MODULE-APPLY", 2, 0, false);
+        declareFunction("forward_inference_rule_select_via_allowed_rulesP", "FORWARD-INFERENCE-RULE-SELECT-VIA-ALLOWED-RULES?", 0, 0, false);
+        declareFunction("forward_hl_module_rule_select", "FORWARD-HL-MODULE-RULE-SELECT", 2, 0, false);
+        declareFunction("forward_hl_module_rule_filter", "FORWARD-HL-MODULE-RULE-FILTER", 3, 0, false);
+        declareFunction("forward_hl_module_expand", "FORWARD-HL-MODULE-EXPAND", 3, 0, false);
+        declareFunction("all_antecedent_predicate_forward_rules", "ALL-ANTECEDENT-PREDICATE-FORWARD-RULES", 1, 0, false);
+        declareFunction("all_consequent_predicate_forward_rules", "ALL-CONSEQUENT-PREDICATE-FORWARD-RULES", 1, 0, false);
+        declareFunction("all_ist_predicate_forward_rules", "ALL-IST-PREDICATE-FORWARD-RULES", 1, 0, false);
+        declareFunction("forward_normal_pos_rule_select", "FORWARD-NORMAL-POS-RULE-SELECT", 1, 0, false);
         new forward_modules.$forward_normal_pos_rule_select$UnaryFunction();
-        declareFunction(me, "forward_normal_pos_rule_filter", "FORWARD-NORMAL-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_normal_pos_expand", "FORWARD-NORMAL-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_normal_pos_rule_filter", "FORWARD-NORMAL-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_normal_pos_expand", "FORWARD-NORMAL-POS-EXPAND", 2, 0, false);
         new forward_modules.$forward_normal_pos_expand$BinaryFunction();
-        declareFunction(me, "forward_normal_pos_expand_int", "FORWARD-NORMAL-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_normal_neg_rule_select", "FORWARD-NORMAL-NEG-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_normal_neg_rule_filter", "FORWARD-NORMAL-NEG-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_normal_neg_expand", "FORWARD-NORMAL-NEG-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_normal_neg_expand_int", "FORWARD-NORMAL-NEG-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_isa_rule_select", "FORWARD-ISA-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_normal_pos_expand_int", "FORWARD-NORMAL-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_normal_neg_rule_select", "FORWARD-NORMAL-NEG-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_normal_neg_rule_filter", "FORWARD-NORMAL-NEG-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_normal_neg_expand", "FORWARD-NORMAL-NEG-EXPAND", 2, 0, false);
+        declareFunction("forward_normal_neg_expand_int", "FORWARD-NORMAL-NEG-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_isa_rule_select", "FORWARD-ISA-RULE-SELECT", 1, 0, false);
         new forward_modules.$forward_isa_rule_select$UnaryFunction();
-        declareFunction(me, "forward_isa_rule_filter", "FORWARD-ISA-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_isa_expand", "FORWARD-ISA-EXPAND", 2, 0, false);
+        declareFunction("forward_isa_rule_filter", "FORWARD-ISA-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_isa_expand", "FORWARD-ISA-EXPAND", 2, 0, false);
         new forward_modules.$forward_isa_expand$BinaryFunction();
-        declareFunction(me, "forward_isa_expand_int", "FORWARD-ISA-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_inference_genlP", "FORWARD-INFERENCE-GENL?", 2, 0, false);
-        declareFunction(me, "forward_inference_all_genls_internal", "FORWARD-INFERENCE-ALL-GENLS-INTERNAL", 1, 0, false);
-        declareFunction(me, "forward_inference_all_genls", "FORWARD-INFERENCE-ALL-GENLS", 1, 0, false);
-        declareFunction(me, "clear_cached_all_specs", "CLEAR-CACHED-ALL-SPECS", 0, 0, false);
-        declareFunction(me, "remove_cached_all_specs", "REMOVE-CACHED-ALL-SPECS", 1, 0, false);
-        declareFunction(me, "cached_all_specs_internal", "CACHED-ALL-SPECS-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_specs", "CACHED-ALL-SPECS", 1, 0, false);
-        declareFunction(me, "forward_not_isa_rule_select", "FORWARD-NOT-ISA-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_not_isa_rule_filter", "FORWARD-NOT-ISA-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_not_isa_expand", "FORWARD-NOT-ISA-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_not_isa_expand_int", "FORWARD-NOT-ISA-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_quoted_isa_rule_select", "FORWARD-QUOTED-ISA-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_quoted_isa_rule_filter", "FORWARD-QUOTED-ISA-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_quoted_isa_expand", "FORWARD-QUOTED-ISA-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_quoted_isa_expand_int", "FORWARD-QUOTED-ISA-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_not_quoted_isa_rule_select", "FORWARD-NOT-QUOTED-ISA-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_not_quoted_isa_rule_filter", "FORWARD-NOT-QUOTED-ISA-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_not_quoted_isa_expand", "FORWARD-NOT-QUOTED-ISA-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_not_quoted_isa_expand_int", "FORWARD-NOT-QUOTED-ISA-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_genls_rule_select", "FORWARD-GENLS-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_genls_rule_filter", "FORWARD-GENLS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_genls_expand", "FORWARD-GENLS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genls_expand_int", "FORWARD-GENLS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_not_genls_rule_select", "FORWARD-NOT-GENLS-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_not_genls_rule_filter", "FORWARD-NOT-GENLS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_not_genls_expand", "FORWARD-NOT-GENLS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_not_genls_expand_int", "FORWARD-NOT-GENLS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "clear_cached_all_genl_mts", "CLEAR-CACHED-ALL-GENL-MTS", 0, 0, false);
-        declareFunction(me, "remove_cached_all_genl_mts", "REMOVE-CACHED-ALL-GENL-MTS", 1, 0, false);
-        declareFunction(me, "cached_all_genl_mts_internal", "CACHED-ALL-GENL-MTS-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_genl_mts", "CACHED-ALL-GENL-MTS", 1, 0, false);
-        declareFunction(me, "forward_genlmt_rule_select", "FORWARD-GENLMT-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_genlmt_rule_filter", "FORWARD-GENLMT-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_genlmt_expand", "FORWARD-GENLMT-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlmt_expand_int", "FORWARD-GENLMT-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "clear_cached_all_spec_mts", "CLEAR-CACHED-ALL-SPEC-MTS", 0, 0, false);
-        declareFunction(me, "remove_cached_all_spec_mts", "REMOVE-CACHED-ALL-SPEC-MTS", 1, 0, false);
-        declareFunction(me, "cached_all_spec_mts_internal", "CACHED-ALL-SPEC-MTS-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_spec_mts", "CACHED-ALL-SPEC-MTS", 1, 0, false);
-        declareFunction(me, "forward_not_genlmt_rule_select", "FORWARD-NOT-GENLMT-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_not_genlmt_rule_filter", "FORWARD-NOT-GENLMT-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_not_genlmt_expand", "FORWARD-NOT-GENLMT-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_not_genlmt_expand_int", "FORWARD-NOT-GENLMT-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_symmetric_pos_rule_select", "FORWARD-SYMMETRIC-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_isa_expand_int", "FORWARD-ISA-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_inference_genlP", "FORWARD-INFERENCE-GENL?", 2, 0, false);
+        declareFunction("forward_inference_all_genls_internal", "FORWARD-INFERENCE-ALL-GENLS-INTERNAL", 1, 0, false);
+        declareFunction("forward_inference_all_genls", "FORWARD-INFERENCE-ALL-GENLS", 1, 0, false);
+        declareFunction("clear_cached_all_specs", "CLEAR-CACHED-ALL-SPECS", 0, 0, false);
+        declareFunction("remove_cached_all_specs", "REMOVE-CACHED-ALL-SPECS", 1, 0, false);
+        declareFunction("cached_all_specs_internal", "CACHED-ALL-SPECS-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_specs", "CACHED-ALL-SPECS", 1, 0, false);
+        declareFunction("forward_not_isa_rule_select", "FORWARD-NOT-ISA-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_not_isa_rule_filter", "FORWARD-NOT-ISA-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_not_isa_expand", "FORWARD-NOT-ISA-EXPAND", 2, 0, false);
+        declareFunction("forward_not_isa_expand_int", "FORWARD-NOT-ISA-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_quoted_isa_rule_select", "FORWARD-QUOTED-ISA-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_quoted_isa_rule_filter", "FORWARD-QUOTED-ISA-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_quoted_isa_expand", "FORWARD-QUOTED-ISA-EXPAND", 2, 0, false);
+        declareFunction("forward_quoted_isa_expand_int", "FORWARD-QUOTED-ISA-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_not_quoted_isa_rule_select", "FORWARD-NOT-QUOTED-ISA-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_not_quoted_isa_rule_filter", "FORWARD-NOT-QUOTED-ISA-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_not_quoted_isa_expand", "FORWARD-NOT-QUOTED-ISA-EXPAND", 2, 0, false);
+        declareFunction("forward_not_quoted_isa_expand_int", "FORWARD-NOT-QUOTED-ISA-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_genls_rule_select", "FORWARD-GENLS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_genls_rule_filter", "FORWARD-GENLS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_genls_expand", "FORWARD-GENLS-EXPAND", 2, 0, false);
+        declareFunction("forward_genls_expand_int", "FORWARD-GENLS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_not_genls_rule_select", "FORWARD-NOT-GENLS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_not_genls_rule_filter", "FORWARD-NOT-GENLS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_not_genls_expand", "FORWARD-NOT-GENLS-EXPAND", 2, 0, false);
+        declareFunction("forward_not_genls_expand_int", "FORWARD-NOT-GENLS-EXPAND-INT", 2, 1, false);
+        declareFunction("clear_cached_all_genl_mts", "CLEAR-CACHED-ALL-GENL-MTS", 0, 0, false);
+        declareFunction("remove_cached_all_genl_mts", "REMOVE-CACHED-ALL-GENL-MTS", 1, 0, false);
+        declareFunction("cached_all_genl_mts_internal", "CACHED-ALL-GENL-MTS-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_genl_mts", "CACHED-ALL-GENL-MTS", 1, 0, false);
+        declareFunction("forward_genlmt_rule_select", "FORWARD-GENLMT-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_genlmt_rule_filter", "FORWARD-GENLMT-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_genlmt_expand", "FORWARD-GENLMT-EXPAND", 2, 0, false);
+        declareFunction("forward_genlmt_expand_int", "FORWARD-GENLMT-EXPAND-INT", 2, 1, false);
+        declareFunction("clear_cached_all_spec_mts", "CLEAR-CACHED-ALL-SPEC-MTS", 0, 0, false);
+        declareFunction("remove_cached_all_spec_mts", "REMOVE-CACHED-ALL-SPEC-MTS", 1, 0, false);
+        declareFunction("cached_all_spec_mts_internal", "CACHED-ALL-SPEC-MTS-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_spec_mts", "CACHED-ALL-SPEC-MTS", 1, 0, false);
+        declareFunction("forward_not_genlmt_rule_select", "FORWARD-NOT-GENLMT-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_not_genlmt_rule_filter", "FORWARD-NOT-GENLMT-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_not_genlmt_expand", "FORWARD-NOT-GENLMT-EXPAND", 2, 0, false);
+        declareFunction("forward_not_genlmt_expand_int", "FORWARD-NOT-GENLMT-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_symmetric_pos_rule_select", "FORWARD-SYMMETRIC-POS-RULE-SELECT", 1, 0, false);
         new forward_modules.$forward_symmetric_pos_rule_select$UnaryFunction();
-        declareFunction(me, "forward_symmetric_pos_rule_filter", "FORWARD-SYMMETRIC-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_symmetric_pos_expand", "FORWARD-SYMMETRIC-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_symmetric_pos_expand_int", "FORWARD-SYMMETRIC-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_symmetric_neg_rule_select", "FORWARD-SYMMETRIC-NEG-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_symmetric_neg_rule_filter", "FORWARD-SYMMETRIC-NEG-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_symmetric_neg_expand", "FORWARD-SYMMETRIC-NEG-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_symmetric_neg_expand_int", "FORWARD-SYMMETRIC-NEG-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_asymmetric_required", "FORWARD-ASYMMETRIC-REQUIRED", 1, 0, false);
+        declareFunction("forward_symmetric_pos_rule_filter", "FORWARD-SYMMETRIC-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_symmetric_pos_expand", "FORWARD-SYMMETRIC-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_symmetric_pos_expand_int", "FORWARD-SYMMETRIC-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_symmetric_neg_rule_select", "FORWARD-SYMMETRIC-NEG-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_symmetric_neg_rule_filter", "FORWARD-SYMMETRIC-NEG-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_symmetric_neg_expand", "FORWARD-SYMMETRIC-NEG-EXPAND", 2, 0, false);
+        declareFunction("forward_symmetric_neg_expand_int", "FORWARD-SYMMETRIC-NEG-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_asymmetric_required", "FORWARD-ASYMMETRIC-REQUIRED", 1, 0, false);
         new forward_modules.$forward_asymmetric_required$UnaryFunction();
-        declareFunction(me, "forward_asymmetric_rule_select", "FORWARD-ASYMMETRIC-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_asymmetric_rule_filter", "FORWARD-ASYMMETRIC-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_asymmetric_expand", "FORWARD-ASYMMETRIC-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_asymmetric_expand_int", "FORWARD-ASYMMETRIC-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_commutative_pos_rule_select", "FORWARD-COMMUTATIVE-POS-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_commutative_pos_rule_filter", "FORWARD-COMMUTATIVE-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_commutative_pos_expand", "FORWARD-COMMUTATIVE-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_commutative_pos_expand_int", "FORWARD-COMMUTATIVE-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_commutative_neg_rule_select", "FORWARD-COMMUTATIVE-NEG-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_commutative_neg_rule_filter", "FORWARD-COMMUTATIVE-NEG-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_commutative_neg_expand", "FORWARD-COMMUTATIVE-NEG-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_commutative_neg_expand_int", "FORWARD-COMMUTATIVE-NEG-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_genlpreds_gaf_rule_select", "FORWARD-GENLPREDS-GAF-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "clear_cached_all_genl_preds", "CLEAR-CACHED-ALL-GENL-PREDS", 0, 0, false);
-        declareFunction(me, "remove_cached_all_genl_preds", "REMOVE-CACHED-ALL-GENL-PREDS", 1, 0, false);
-        declareFunction(me, "cached_all_genl_preds_internal", "CACHED-ALL-GENL-PREDS-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_genl_preds", "CACHED-ALL-GENL-PREDS", 1, 0, false);
-        declareFunction(me, "clear_cached_all_genl_inverses", "CLEAR-CACHED-ALL-GENL-INVERSES", 0, 0, false);
-        declareFunction(me, "remove_cached_all_genl_inverses", "REMOVE-CACHED-ALL-GENL-INVERSES", 1, 0, false);
-        declareFunction(me, "cached_all_genl_inverses_internal", "CACHED-ALL-GENL-INVERSES-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_genl_inverses", "CACHED-ALL-GENL-INVERSES", 1, 0, false);
-        declareFunction(me, "forward_genlpreds_gaf_rule_filter", "FORWARD-GENLPREDS-GAF-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_genlpreds_gaf_expand", "FORWARD-GENLPREDS-GAF-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlpreds_gaf_expand_int", "FORWARD-GENLPREDS-GAF-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_not_genlpreds_gaf_rule_select", "FORWARD-NOT-GENLPREDS-GAF-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_not_genlpreds_gaf_rule_filter", "FORWARD-NOT-GENLPREDS-GAF-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_not_genlpreds_gaf_expand", "FORWARD-NOT-GENLPREDS-GAF-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlpreds_pos_rule_select", "FORWARD-GENLPREDS-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_asymmetric_rule_select", "FORWARD-ASYMMETRIC-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_asymmetric_rule_filter", "FORWARD-ASYMMETRIC-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_asymmetric_expand", "FORWARD-ASYMMETRIC-EXPAND", 2, 0, false);
+        declareFunction("forward_asymmetric_expand_int", "FORWARD-ASYMMETRIC-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_commutative_pos_rule_select", "FORWARD-COMMUTATIVE-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_commutative_pos_rule_filter", "FORWARD-COMMUTATIVE-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_commutative_pos_expand", "FORWARD-COMMUTATIVE-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_commutative_pos_expand_int", "FORWARD-COMMUTATIVE-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_commutative_neg_rule_select", "FORWARD-COMMUTATIVE-NEG-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_commutative_neg_rule_filter", "FORWARD-COMMUTATIVE-NEG-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_commutative_neg_expand", "FORWARD-COMMUTATIVE-NEG-EXPAND", 2, 0, false);
+        declareFunction("forward_commutative_neg_expand_int", "FORWARD-COMMUTATIVE-NEG-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_genlpreds_gaf_rule_select", "FORWARD-GENLPREDS-GAF-RULE-SELECT", 1, 0, false);
+        declareFunction("clear_cached_all_genl_preds", "CLEAR-CACHED-ALL-GENL-PREDS", 0, 0, false);
+        declareFunction("remove_cached_all_genl_preds", "REMOVE-CACHED-ALL-GENL-PREDS", 1, 0, false);
+        declareFunction("cached_all_genl_preds_internal", "CACHED-ALL-GENL-PREDS-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_genl_preds", "CACHED-ALL-GENL-PREDS", 1, 0, false);
+        declareFunction("clear_cached_all_genl_inverses", "CLEAR-CACHED-ALL-GENL-INVERSES", 0, 0, false);
+        declareFunction("remove_cached_all_genl_inverses", "REMOVE-CACHED-ALL-GENL-INVERSES", 1, 0, false);
+        declareFunction("cached_all_genl_inverses_internal", "CACHED-ALL-GENL-INVERSES-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_genl_inverses", "CACHED-ALL-GENL-INVERSES", 1, 0, false);
+        declareFunction("forward_genlpreds_gaf_rule_filter", "FORWARD-GENLPREDS-GAF-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_genlpreds_gaf_expand", "FORWARD-GENLPREDS-GAF-EXPAND", 2, 0, false);
+        declareFunction("forward_genlpreds_gaf_expand_int", "FORWARD-GENLPREDS-GAF-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_not_genlpreds_gaf_rule_select", "FORWARD-NOT-GENLPREDS-GAF-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_not_genlpreds_gaf_rule_filter", "FORWARD-NOT-GENLPREDS-GAF-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_not_genlpreds_gaf_expand", "FORWARD-NOT-GENLPREDS-GAF-EXPAND", 2, 0, false);
+        declareFunction("forward_genlpreds_pos_rule_select", "FORWARD-GENLPREDS-POS-RULE-SELECT", 1, 0, false);
         new forward_modules.$forward_genlpreds_pos_rule_select$UnaryFunction();
-        declareFunction(me, "forward_genlpreds_pos_rule_filter", "FORWARD-GENLPREDS-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_genlpreds_pos_expand", "FORWARD-GENLPREDS-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlpreds_pos_expand_int", "FORWARD-GENLPREDS-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_genlinverse_gaf_rule_select", "FORWARD-GENLINVERSE-GAF-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_genlinverse_gaf_rule_filter", "FORWARD-GENLINVERSE-GAF-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_genlinverse_gaf_expand", "FORWARD-GENLINVERSE-GAF-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlinverse_gaf_expand_int", "FORWARD-GENLINVERSE-GAF-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_not_genlinverse_gaf_rule_select", "FORWARD-NOT-GENLINVERSE-GAF-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_not_genlinverse_gaf_rule_filter", "FORWARD-NOT-GENLINVERSE-GAF-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_not_genlinverse_gaf_expand", "FORWARD-NOT-GENLINVERSE-GAF-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlinverse_pos_rule_select", "FORWARD-GENLINVERSE-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_genlpreds_pos_rule_filter", "FORWARD-GENLPREDS-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_genlpreds_pos_expand", "FORWARD-GENLPREDS-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_genlpreds_pos_expand_int", "FORWARD-GENLPREDS-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_genlinverse_gaf_rule_select", "FORWARD-GENLINVERSE-GAF-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_genlinverse_gaf_rule_filter", "FORWARD-GENLINVERSE-GAF-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_genlinverse_gaf_expand", "FORWARD-GENLINVERSE-GAF-EXPAND", 2, 0, false);
+        declareFunction("forward_genlinverse_gaf_expand_int", "FORWARD-GENLINVERSE-GAF-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_not_genlinverse_gaf_rule_select", "FORWARD-NOT-GENLINVERSE-GAF-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_not_genlinverse_gaf_rule_filter", "FORWARD-NOT-GENLINVERSE-GAF-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_not_genlinverse_gaf_expand", "FORWARD-NOT-GENLINVERSE-GAF-EXPAND", 2, 0, false);
+        declareFunction("forward_genlinverse_pos_rule_select", "FORWARD-GENLINVERSE-POS-RULE-SELECT", 1, 0, false);
         new forward_modules.$forward_genlinverse_pos_rule_select$UnaryFunction();
-        declareFunction(me, "forward_genlinverse_pos_rule_filter", "FORWARD-GENLINVERSE-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_genlinverse_pos_expand", "FORWARD-GENLINVERSE-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_genlinverse_pos_expand_int", "FORWARD-GENLINVERSE-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "clear_cached_all_negation_preds", "CLEAR-CACHED-ALL-NEGATION-PREDS", 0, 0, false);
-        declareFunction(me, "remove_cached_all_negation_preds", "REMOVE-CACHED-ALL-NEGATION-PREDS", 1, 0, false);
-        declareFunction(me, "cached_all_negation_preds_internal", "CACHED-ALL-NEGATION-PREDS-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_negation_preds", "CACHED-ALL-NEGATION-PREDS", 1, 0, false);
-        declareFunction(me, "forward_negationpreds_required", "FORWARD-NEGATIONPREDS-REQUIRED", 1, 0, false);
+        declareFunction("forward_genlinverse_pos_rule_filter", "FORWARD-GENLINVERSE-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_genlinverse_pos_expand", "FORWARD-GENLINVERSE-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_genlinverse_pos_expand_int", "FORWARD-GENLINVERSE-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("clear_cached_all_negation_preds", "CLEAR-CACHED-ALL-NEGATION-PREDS", 0, 0, false);
+        declareFunction("remove_cached_all_negation_preds", "REMOVE-CACHED-ALL-NEGATION-PREDS", 1, 0, false);
+        declareFunction("cached_all_negation_preds_internal", "CACHED-ALL-NEGATION-PREDS-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_negation_preds", "CACHED-ALL-NEGATION-PREDS", 1, 0, false);
+        declareFunction("forward_negationpreds_required", "FORWARD-NEGATIONPREDS-REQUIRED", 1, 0, false);
         new forward_modules.$forward_negationpreds_required$UnaryFunction();
-        declareFunction(me, "forward_negationpreds_rule_select", "FORWARD-NEGATIONPREDS-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_negationpreds_rule_filter", "FORWARD-NEGATIONPREDS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_negationpreds_expand", "FORWARD-NEGATIONPREDS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_negationpreds_expand_int", "FORWARD-NEGATIONPREDS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "clear_cached_all_negation_inverses", "CLEAR-CACHED-ALL-NEGATION-INVERSES", 0, 0, false);
-        declareFunction(me, "remove_cached_all_negation_inverses", "REMOVE-CACHED-ALL-NEGATION-INVERSES", 1, 0, false);
-        declareFunction(me, "cached_all_negation_inverses_internal", "CACHED-ALL-NEGATION-INVERSES-INTERNAL", 1, 0, false);
-        declareFunction(me, "cached_all_negation_inverses", "CACHED-ALL-NEGATION-INVERSES", 1, 0, false);
-        declareFunction(me, "forward_negationinverse_required", "FORWARD-NEGATIONINVERSE-REQUIRED", 1, 0, false);
+        declareFunction("forward_negationpreds_rule_select", "FORWARD-NEGATIONPREDS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_negationpreds_rule_filter", "FORWARD-NEGATIONPREDS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_negationpreds_expand", "FORWARD-NEGATIONPREDS-EXPAND", 2, 0, false);
+        declareFunction("forward_negationpreds_expand_int", "FORWARD-NEGATIONPREDS-EXPAND-INT", 2, 1, false);
+        declareFunction("clear_cached_all_negation_inverses", "CLEAR-CACHED-ALL-NEGATION-INVERSES", 0, 0, false);
+        declareFunction("remove_cached_all_negation_inverses", "REMOVE-CACHED-ALL-NEGATION-INVERSES", 1, 0, false);
+        declareFunction("cached_all_negation_inverses_internal", "CACHED-ALL-NEGATION-INVERSES-INTERNAL", 1, 0, false);
+        declareFunction("cached_all_negation_inverses", "CACHED-ALL-NEGATION-INVERSES", 1, 0, false);
+        declareFunction("forward_negationinverse_required", "FORWARD-NEGATIONINVERSE-REQUIRED", 1, 0, false);
         new forward_modules.$forward_negationinverse_required$UnaryFunction();
-        declareFunction(me, "forward_negationinverse_rule_select", "FORWARD-NEGATIONINVERSE-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_negationinverse_rule_filter", "FORWARD-NEGATIONINVERSE-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_negationinverse_expand", "FORWARD-NEGATIONINVERSE-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_negationinverse_expand_int", "FORWARD-NEGATIONINVERSE-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_eval_exclusive_pos", "FORWARD-EVAL-EXCLUSIVE-POS", 1, 0, false);
+        declareFunction("forward_negationinverse_rule_select", "FORWARD-NEGATIONINVERSE-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_negationinverse_rule_filter", "FORWARD-NEGATIONINVERSE-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_negationinverse_expand", "FORWARD-NEGATIONINVERSE-EXPAND", 2, 0, false);
+        declareFunction("forward_negationinverse_expand_int", "FORWARD-NEGATIONINVERSE-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_eval_exclusive_pos", "FORWARD-EVAL-EXCLUSIVE-POS", 1, 0, false);
         new forward_modules.$forward_eval_exclusive_pos$UnaryFunction();
-        declareFunction(me, "forward_eval_expand_pos", "FORWARD-EVAL-EXPAND-POS", 2, 0, false);
-        declareFunction(me, "forward_eval_exclusive_neg", "FORWARD-EVAL-EXCLUSIVE-NEG", 1, 0, false);
-        declareFunction(me, "forward_eval_expand_neg", "FORWARD-EVAL-EXPAND-NEG", 2, 0, false);
-        declareFunction(me, "forward_term_of_unit_rule_select", "FORWARD-TERM-OF-UNIT-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_term_of_unit_rule_filter", "FORWARD-TERM-OF-UNIT-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_term_of_unit_expand", "FORWARD-TERM-OF-UNIT-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_term_of_unit_expand_int", "FORWARD-TERM-OF-UNIT-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_nat_function_rule_select", "FORWARD-NAT-FUNCTION-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_nat_function_rule_filter", "FORWARD-NAT-FUNCTION-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_nat_function_expand", "FORWARD-NAT-FUNCTION-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_nat_function_expand_int", "FORWARD-NAT-FUNCTION-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_gaf_predicate_required", "FORWARD-GAF-PREDICATE-REQUIRED", 1, 0, false);
-        declareFunction(me, "forward_gaf_predicate_rule_select", "FORWARD-GAF-PREDICATE-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_gaf_predicate_rule_filter", "FORWARD-GAF-PREDICATE-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_gaf_predicate_expand", "FORWARD-GAF-PREDICATE-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_gaf_predicate_expand_int", "FORWARD-GAF-PREDICATE-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_unbound_pred_pos_required", "FORWARD-UNBOUND-PRED-POS-REQUIRED", 1, 0, false);
+        declareFunction("forward_eval_expand_pos", "FORWARD-EVAL-EXPAND-POS", 2, 0, false);
+        declareFunction("forward_eval_exclusive_neg", "FORWARD-EVAL-EXCLUSIVE-NEG", 1, 0, false);
+        declareFunction("forward_eval_expand_neg", "FORWARD-EVAL-EXPAND-NEG", 2, 0, false);
+        declareFunction("forward_term_of_unit_rule_select", "FORWARD-TERM-OF-UNIT-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_term_of_unit_rule_filter", "FORWARD-TERM-OF-UNIT-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_term_of_unit_expand", "FORWARD-TERM-OF-UNIT-EXPAND", 2, 0, false);
+        declareFunction("forward_term_of_unit_expand_int", "FORWARD-TERM-OF-UNIT-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_nat_function_rule_select", "FORWARD-NAT-FUNCTION-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_nat_function_rule_filter", "FORWARD-NAT-FUNCTION-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_nat_function_expand", "FORWARD-NAT-FUNCTION-EXPAND", 2, 0, false);
+        declareFunction("forward_nat_function_expand_int", "FORWARD-NAT-FUNCTION-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_gaf_predicate_required", "FORWARD-GAF-PREDICATE-REQUIRED", 1, 0, false);
+        declareFunction("forward_gaf_predicate_rule_select", "FORWARD-GAF-PREDICATE-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_gaf_predicate_rule_filter", "FORWARD-GAF-PREDICATE-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_gaf_predicate_expand", "FORWARD-GAF-PREDICATE-EXPAND", 2, 0, false);
+        declareFunction("forward_gaf_predicate_expand_int", "FORWARD-GAF-PREDICATE-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_unbound_pred_pos_required", "FORWARD-UNBOUND-PRED-POS-REQUIRED", 1, 0, false);
         new forward_modules.$forward_unbound_pred_pos_required$UnaryFunction();
-        declareFunction(me, "forward_unbound_pred_pos_rule_select", "FORWARD-UNBOUND-PRED-POS-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_unbound_pred_pos_rule_filter", "FORWARD-UNBOUND-PRED-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_unbound_pred_pos_expand", "FORWARD-UNBOUND-PRED-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_unbound_pred_pos_expand_int", "FORWARD-UNBOUND-PRED-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_unbound_pred_neg_required", "FORWARD-UNBOUND-PRED-NEG-REQUIRED", 1, 0, false);
-        declareFunction(me, "forward_unbound_pred_neg_rule_select", "FORWARD-UNBOUND-PRED-NEG-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_unbound_pred_neg_rule_filter", "FORWARD-UNBOUND-PRED-NEG-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_unbound_pred_neg_expand", "FORWARD-UNBOUND-PRED-NEG-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_unbound_pred_neg_expand_int", "FORWARD-UNBOUND-PRED-NEG-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_assertive_wff_unbound_pred_pos_required", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-REQUIRED", 1, 0, false);
-        declareFunction(me, "forward_assertive_wff_unbound_pred_pos_rule_select", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_assertive_wff_unbound_pred_pos_rule_filter", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_assertive_wff_unbound_pred_pos_expand", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_ist_pos_rule_select", "FORWARD-IST-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_unbound_pred_pos_rule_select", "FORWARD-UNBOUND-PRED-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_unbound_pred_pos_rule_filter", "FORWARD-UNBOUND-PRED-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_unbound_pred_pos_expand", "FORWARD-UNBOUND-PRED-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_unbound_pred_pos_expand_int", "FORWARD-UNBOUND-PRED-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_unbound_pred_neg_required", "FORWARD-UNBOUND-PRED-NEG-REQUIRED", 1, 0, false);
+        declareFunction("forward_unbound_pred_neg_rule_select", "FORWARD-UNBOUND-PRED-NEG-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_unbound_pred_neg_rule_filter", "FORWARD-UNBOUND-PRED-NEG-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_unbound_pred_neg_expand", "FORWARD-UNBOUND-PRED-NEG-EXPAND", 2, 0, false);
+        declareFunction("forward_unbound_pred_neg_expand_int", "FORWARD-UNBOUND-PRED-NEG-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_assertive_wff_unbound_pred_pos_required", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-REQUIRED", 1, 0, false);
+        declareFunction("forward_assertive_wff_unbound_pred_pos_rule_select", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_assertive_wff_unbound_pred_pos_rule_filter", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_assertive_wff_unbound_pred_pos_expand", "FORWARD-ASSERTIVE-WFF-UNBOUND-PRED-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_ist_pos_rule_select", "FORWARD-IST-POS-RULE-SELECT", 1, 0, false);
         new forward_modules.$forward_ist_pos_rule_select$UnaryFunction();
-        declareFunction(me, "forward_ist_pos_rule_filter", "FORWARD-IST-POS-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_ist_pos_expand", "FORWARD-IST-POS-EXPAND", 2, 0, false);
+        declareFunction("forward_ist_pos_rule_filter", "FORWARD-IST-POS-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_ist_pos_expand", "FORWARD-IST-POS-EXPAND", 2, 0, false);
         new forward_modules.$forward_ist_pos_expand$BinaryFunction();
-        declareFunction(me, "forward_ist_pos_expand_int", "FORWARD-IST-POS-EXPAND-INT", 2, 1, false);
-        declareFunction(me, "forward_ist_neg_rule_select", "FORWARD-IST-NEG-RULE-SELECT", 1, 0, false);
-        declareFunction(me, "forward_ist_neg_rule_filter", "FORWARD-IST-NEG-RULE-FILTER", 2, 0, false);
-        declareFunction(me, "forward_ist_neg_expand", "FORWARD-IST-NEG-EXPAND", 2, 0, false);
-        declareFunction(me, "forward_ist_neg_expand_int", "FORWARD-IST-NEG-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_ist_pos_expand_int", "FORWARD-IST-POS-EXPAND-INT", 2, 1, false);
+        declareFunction("forward_ist_neg_rule_select", "FORWARD-IST-NEG-RULE-SELECT", 1, 0, false);
+        declareFunction("forward_ist_neg_rule_filter", "FORWARD-IST-NEG-RULE-FILTER", 2, 0, false);
+        declareFunction("forward_ist_neg_expand", "FORWARD-IST-NEG-EXPAND", 2, 0, false);
+        declareFunction("forward_ist_neg_expand_int", "FORWARD-IST-NEG-EXPAND-INT", 2, 1, false);
         return NIL;
     }
+
+    static private final SubLList $list_alt1 = list(list(makeSymbol("HL-MODULE"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt2 = list($DONE);
+
+    static private final SubLList $list_alt6 = list(makeSymbol("DO-FORWARD-MODULES-LIST"));
+
+    static private final SubLList $list_alt14 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NORMAL-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NORMAL-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NORMAL-POS-EXPAND"));
+
+    static private final SubLList $list_alt16 = list(makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NORMAL-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NORMAL-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NORMAL-NEG-EXPAND"));
+
+    static private final SubLList $list_alt18 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("isa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-ISA-EXPAND") });
+
+    public static final SubLSymbol $kw23$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLList $list_alt25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("isa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-ISA-EXPAND") });
+
+    static private final SubLList $list_alt27 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("quotedIsa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-QUOTED-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-QUOTED-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-QUOTED-ISA-EXPAND") });
+
+    static private final SubLList $list_alt30 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("quotedIsa"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-QUOTED-ISA-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-QUOTED-ISA-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-QUOTED-ISA-EXPAND") });
+
+    static private final SubLList $list_alt32 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genls"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLS-EXPAND") });
+
+    static private final SubLList $list_alt34 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genls"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLS-EXPAND") });
 
     public static SubLObject init_forward_modules_file() {
         defparameter("*FORWARD-MODULES*", NIL);
@@ -3903,7 +7296,127 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt36 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlMt"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLMT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLMT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLMT-EXPAND") });
+
+    public static final SubLObject setup_forward_modules_file_alt() {
+        register_macro_helper(DO_FORWARD_MODULES_LIST, DO_FORWARD_MODULES);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NORMAL_POS, $list_alt14);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NORMAL_NEG, $list_alt16);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_ISA, $list_alt18);
+        memoization_state.note_memoized_function(FORWARD_INFERENCE_ALL_GENLS);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_ISA, $list_alt25);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_QUOTED_ISA, $list_alt27);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_QUOTED_ISA, $list_alt30);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLS, $list_alt32);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLS, $list_alt34);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLMT, $list_alt36);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLMT, $list_alt40);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_SYMMETRIC_POS, $list_alt42);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_SYMMETRIC_NEG, $list_alt46);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_ASYMMETRIC, $list_alt48);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_COMMUTATIVE_POS, $list_alt52);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_COMMUTATIVE_NEG, $list_alt56);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLPREDS_GAF, $list_alt58);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLPREDS_GAF, $list_alt63);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLPREDS_POS, $list_alt65);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLINVERSE_GAF, $list_alt67);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLINVERSE_GAF, $list_alt69);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLINVERSE_POS, $list_alt71);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NEGATIONPREDS, $list_alt73);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NEGATIONINVERSE, $list_alt78);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_EVAL_POS, $list_alt82);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_EVAL_NEG, $list_alt85);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_TERM_OF_UNIT, $list_alt87);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NAT_FUNCTION, $list_alt90);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_UNBOUND_PRED_POS, $list_alt93);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_UNBOUND_PRED_NEG, $list_alt95);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_IST_POS, $list_alt97);
+        com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_IST_NEG, $list_alt100);
+        return NIL;
+    }
+
     public static SubLObject setup_forward_modules_file() {
+        if (SubLFiles.USE_V1) {
+            register_macro_helper(DO_FORWARD_MODULES_LIST, DO_FORWARD_MODULES);
+            forward_module($FORWARD_NORMAL_POS, $list21);
+            forward_module($FORWARD_NORMAL_NEG, $list23);
+            forward_module($FORWARD_ISA, $list25);
+            memoization_state.note_memoized_function(FORWARD_INFERENCE_ALL_GENLS);
+            forward_module($FORWARD_NOT_ISA, $list31);
+            memoization_state.note_globally_cached_function(CACHED_ALL_SPECS);
+            forward_module($FORWARD_QUOTED_ISA, $list37);
+            forward_module($FORWARD_NOT_QUOTED_ISA, $list40);
+            forward_module($FORWARD_GENLS, $list42);
+            forward_module($FORWARD_NOT_GENLS, $list44);
+            forward_module($FORWARD_GENLMT, $list46);
+            memoization_state.note_globally_cached_function(CACHED_ALL_GENL_MTS);
+            forward_module($FORWARD_NOT_GENLMT, $list53);
+            memoization_state.note_globally_cached_function(CACHED_ALL_SPEC_MTS);
+            forward_module($FORWARD_SYMMETRIC_POS, $list58);
+            forward_module($FORWARD_SYMMETRIC_NEG, $list62);
+            forward_module($FORWARD_ASYMMETRIC, $list64);
+            forward_module($FORWARD_COMMUTATIVE_POS, $list68);
+            forward_module($FORWARD_COMMUTATIVE_NEG, $list72);
+            forward_module($FORWARD_GENLPREDS_GAF, $list74);
+            memoization_state.note_globally_cached_function(CACHED_ALL_GENL_PREDS);
+            memoization_state.note_globally_cached_function(CACHED_ALL_GENL_INVERSES);
+            forward_module($FORWARD_NOT_GENLPREDS_GAF, $list85);
+            forward_module($FORWARD_GENLPREDS_POS, $list87);
+            forward_module($FORWARD_GENLINVERSE_GAF, $list89);
+            forward_module($FORWARD_NOT_GENLINVERSE_GAF, $list91);
+            forward_module($FORWARD_GENLINVERSE_POS, $list93);
+            forward_module($FORWARD_NEGATIONPREDS, $list95);
+            memoization_state.note_globally_cached_function(CACHED_ALL_NEGATION_PREDS);
+            forward_module($FORWARD_NEGATIONINVERSE, $list103);
+            memoization_state.note_globally_cached_function(CACHED_ALL_NEGATION_INVERSES);
+            forward_module($FORWARD_EVAL_POS, $list110);
+            forward_module($FORWARD_EVAL_NEG, $list113);
+            forward_module($FORWARD_TERM_OF_UNIT, $list115);
+            forward_module($FORWARD_NAT_FUNCTION, $list118);
+            forward_module($FORWARD_GAF_PREDICATE, $list121);
+            forward_module($FORWARD_UNBOUND_PRED_POS, $list126);
+            forward_module($FORWARD_UNBOUND_PRED_NEG, $list128);
+            forward_module($FORWARD_ASSERTIVE_WFF_UNBOUND_PRED_POS, $list130);
+            forward_module($FORWARD_IST_POS, $list132);
+            forward_module($FORWARD_IST_NEG, $list135);
+        }
+        if (SubLFiles.USE_V2) {
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NORMAL_POS, $list_alt14);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NORMAL_NEG, $list_alt16);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_ISA, $list_alt18);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_ISA, $list_alt25);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_QUOTED_ISA, $list_alt27);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_QUOTED_ISA, $list_alt30);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLS, $list_alt32);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLS, $list_alt34);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLMT, $list_alt36);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLMT, $list_alt40);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_SYMMETRIC_POS, $list_alt42);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_SYMMETRIC_NEG, $list_alt46);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_ASYMMETRIC, $list_alt48);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_COMMUTATIVE_POS, $list_alt52);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_COMMUTATIVE_NEG, $list_alt56);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLPREDS_GAF, $list_alt58);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLPREDS_GAF, $list_alt63);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLPREDS_POS, $list_alt65);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLINVERSE_GAF, $list_alt67);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NOT_GENLINVERSE_GAF, $list_alt69);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_GENLINVERSE_POS, $list_alt71);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NEGATIONPREDS, $list_alt73);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NEGATIONINVERSE, $list_alt78);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_EVAL_POS, $list_alt82);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_EVAL_NEG, $list_alt85);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_TERM_OF_UNIT, $list_alt87);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_NAT_FUNCTION, $list_alt90);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_UNBOUND_PRED_POS, $list_alt93);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_UNBOUND_PRED_NEG, $list_alt95);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_IST_POS, $list_alt97);
+            com.cyc.cycjava.cycl.inference.modules.forward_modules.forward_module($FORWARD_IST_NEG, $list_alt100);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_forward_modules_file_Previous() {
         register_macro_helper(DO_FORWARD_MODULES_LIST, DO_FORWARD_MODULES);
         forward_module($FORWARD_NORMAL_POS, $list21);
         forward_module($FORWARD_NORMAL_NEG, $list23);
@@ -3949,6 +7462,20 @@ public final class forward_modules extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt40 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlMt"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLMT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLMT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLMT-EXPAND") });
+
+    static private final SubLList $list_alt42 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-SYMMETRIC-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-SYMMETRIC-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-SYMMETRIC-POS-EXPAND") });
+
+    static private final SubLList $list_alt44 = list(reader_make_constant_shell("SymmetricBinaryPredicate"));
+
+    static private final SubLList $list_alt46 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-SYMMETRIC-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-SYMMETRIC-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-SYMMETRIC-NEG-EXPAND") });
+
+    static private final SubLList $list_alt48 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-ASYMMETRIC-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-ASYMMETRIC-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-ASYMMETRIC-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-ASYMMETRIC-EXPAND") });
+
+    static private final SubLList $list_alt49 = list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-ASYMMETRIC-PREDICATE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"));
+
+    static private final SubLList $list_alt50 = list(reader_make_constant_shell("AsymmetricBinaryPredicate"));
+
     @Override
     public void declareFunctions() {
         declare_forward_modules_file();
@@ -3959,161 +7486,14 @@ public final class forward_modules extends SubLTranslatedFile {
         init_forward_modules_file();
     }
 
+    static private final SubLList $list_alt52 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), listS(list($TEST, makeSymbol("NON-HL-PREDICATE-P")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), cons(list($TEST, makeSymbol("INFERENCE-AT-LEAST-PARTIALLY-COMMUTATIVE-PREDICATE-P")), makeKeyword("ANYTHING"))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-COMMUTATIVE-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-COMMUTATIVE-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-COMMUTATIVE-POS-EXPAND") });
+
     @Override
     public void runTopLevelForms() {
         setup_forward_modules_file();
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $forward_normal_pos_rule_select$UnaryFunction extends UnaryFunction {
@@ -4127,6 +7507,10 @@ public final class forward_modules extends SubLTranslatedFile {
         }
     }
 
+    static private final SubLList $list_alt53 = list(reader_make_constant_shell("CommutativePredicate"));
+
+    static private final SubLList $list_alt54 = list(reader_make_constant_shell("PartiallyCommutativePredicate"));
+
     public static final class $forward_normal_pos_expand$BinaryFunction extends BinaryFunction {
         public $forward_normal_pos_expand$BinaryFunction() {
             super(extractFunctionNamed("FORWARD-NORMAL-POS-EXPAND"));
@@ -4137,6 +7521,8 @@ public final class forward_modules extends SubLTranslatedFile {
             return forward_normal_pos_expand(arg1, arg2);
         }
     }
+
+    static private final SubLList $list_alt56 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("AND"), listS(list($TEST, makeSymbol("NON-HL-PREDICATE-P")), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), cons(list($TEST, makeSymbol("INFERENCE-AT-LEAST-PARTIALLY-COMMUTATIVE-PREDICATE-P")), makeKeyword("ANYTHING"))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-COMMUTATIVE-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-COMMUTATIVE-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-COMMUTATIVE-NEG-EXPAND") });
 
     public static final class $forward_isa_rule_select$UnaryFunction extends UnaryFunction {
         public $forward_isa_rule_select$UnaryFunction() {
@@ -4160,6 +7546,8 @@ public final class forward_modules extends SubLTranslatedFile {
         }
     }
 
+    static private final SubLList $list_alt58 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlPreds"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("genlPreds"), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), $FORT, list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?")))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLPREDS-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLPREDS-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLPREDS-GAF-EXPAND") });
+
     public static final class $forward_symmetric_pos_rule_select$UnaryFunction extends UnaryFunction {
         public $forward_symmetric_pos_rule_select$UnaryFunction() {
             super(extractFunctionNamed("FORWARD-SYMMETRIC-POS-RULE-SELECT"));
@@ -4181,6 +7569,8 @@ public final class forward_modules extends SubLTranslatedFile {
             return forward_asymmetric_required(arg1);
         }
     }
+
+    static private final SubLList $list_alt63 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlPreds"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLPREDS-GAF-EXPAND") });
 
     public static final class $forward_genlpreds_pos_rule_select$UnaryFunction extends UnaryFunction {
         public $forward_genlpreds_pos_rule_select$UnaryFunction() {
@@ -4204,6 +7594,8 @@ public final class forward_modules extends SubLTranslatedFile {
         }
     }
 
+    static private final SubLList $list_alt65 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), cons(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLPREDS-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLPREDS-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLPREDS-POS-EXPAND") });
+
     public static final class $forward_negationpreds_required$UnaryFunction extends UnaryFunction {
         public $forward_negationpreds_required$UnaryFunction() {
             super(extractFunctionNamed("FORWARD-NEGATIONPREDS-REQUIRED"));
@@ -4214,6 +7606,8 @@ public final class forward_modules extends SubLTranslatedFile {
             return forward_negationpreds_required(arg1);
         }
     }
+
+    static private final SubLList $list_alt67 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlInverse"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("genlInverse"), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), $FORT, list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?")))), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLINVERSE-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLINVERSE-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLINVERSE-GAF-EXPAND") });
 
     public static final class $forward_negationinverse_required$UnaryFunction extends UnaryFunction {
         public $forward_negationinverse_required$UnaryFunction() {
@@ -4237,6 +7631,8 @@ public final class forward_modules extends SubLTranslatedFile {
         }
     }
 
+    static private final SubLList $list_alt69 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("genlInverse"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NOT-GENLINVERSE-GAF-EXPAND") });
+
     public static final class $forward_unbound_pred_pos_required$UnaryFunction extends UnaryFunction {
         public $forward_unbound_pred_pos_required$UnaryFunction() {
             super(extractFunctionNamed("FORWARD-UNBOUND-PRED-POS-REQUIRED"));
@@ -4247,6 +7643,8 @@ public final class forward_modules extends SubLTranslatedFile {
             return forward_unbound_pred_pos_required(arg1);
         }
     }
+
+    static private final SubLList $list_alt71 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED-PATTERN"), list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-GENL-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING")), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-GENLINVERSE-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-GENLINVERSE-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-GENLINVERSE-POS-EXPAND") });
 
     public static final class $forward_ist_pos_rule_select$UnaryFunction extends UnaryFunction {
         public $forward_ist_pos_rule_select$UnaryFunction() {
@@ -4269,6 +7667,32 @@ public final class forward_modules extends SubLTranslatedFile {
             return forward_ist_pos_expand(arg1, arg2);
         }
     }
+
+    static private final SubLList $list_alt73 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-NEGATIONPREDS-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NEGATIONPREDS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NEGATIONPREDS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NEGATIONPREDS-EXPAND") });
+
+    static private final SubLList $list_alt74 = cons(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-NEGATION-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"));
+
+    static private final SubLList $list_alt78 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-NEGATIONINVERSE-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NEGATIONINVERSE-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NEGATIONINVERSE-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NEGATIONINVERSE-EXPAND") });
+
+    static private final SubLList $list_alt79 = list(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-SOME-NEGATION-PRED-OR-INVERSE?"))), makeKeyword("ANYTHING"), makeKeyword("ANYTHING"));
+
+    static private final SubLList $list_alt82 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("EXCLUSIVE"), makeSymbol("FORWARD-EVAL-EXCLUSIVE-POS"), makeKeyword("EXPAND"), makeSymbol("FORWARD-EVAL-EXPAND-POS"));
+
+    static private final SubLList $list_alt83 = cons(list(makeKeyword("AND"), list($TEST, makeSymbol("NON-HL-PREDICATE-P")), list($TEST, makeSymbol("INFERENCE-EVALUATABLE-PREDICATE?"))), makeKeyword("ANYTHING"));
+
+    static private final SubLList $list_alt85 = list(makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("EXCLUSIVE"), makeSymbol("FORWARD-EVAL-EXCLUSIVE-NEG"), makeKeyword("EXPAND"), makeSymbol("FORWARD-EVAL-EXPAND-NEG"));
+
+    static private final SubLList $list_alt87 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("termOfUnit"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-TERM-OF-UNIT-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-TERM-OF-UNIT-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-TERM-OF-UNIT-EXPAND") });
+
+    static private final SubLList $list_alt90 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("termOfUnit"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-NAT-FUNCTION-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-NAT-FUNCTION-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-NAT-FUNCTION-EXPAND") });
+
+    static private final SubLList $list_alt93 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-UNBOUND-PRED-POS-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-UNBOUND-PRED-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-UNBOUND-PRED-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-UNBOUND-PRED-POS-EXPAND") });
+
+    static private final SubLList $list_alt95 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("REQUIRED"), makeSymbol("FORWARD-UNBOUND-PRED-NEG-REQUIRED"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-UNBOUND-PRED-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-UNBOUND-PRED-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-UNBOUND-PRED-NEG-EXPAND") });
+
+    static private final SubLList $list_alt97 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-IST-POS-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-IST-POS-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-IST-POS-EXPAND"));
+
+    static private final SubLList $list_alt100 = list(makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("RULE-SELECT"), makeSymbol("FORWARD-IST-NEG-RULE-SELECT"), makeKeyword("RULE-FILTER"), makeSymbol("FORWARD-IST-NEG-RULE-FILTER"), makeKeyword("EXPAND"), makeSymbol("FORWARD-IST-NEG-EXPAND"));
 }
 
 /**

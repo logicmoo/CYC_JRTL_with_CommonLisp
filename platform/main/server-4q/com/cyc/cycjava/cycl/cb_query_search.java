@@ -1,10 +1,25 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_parameters;
-import com.cyc.cycjava.cycl.cb_query_search;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.kb_query;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -16,44 +31,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_query_search.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cb_query_search extends SubLTranslatedFile {
+public final class cb_query_search extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_query_search();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_query_search";
+    public static final String myName = "com.cyc.cycjava_2.cycl.cb_query_search";
 
-    public static final String myFingerPrint = "6d0806ad4e231372b21a1a2fd2e68239aa86b23a3f054418d051bb440834701b";
 
     // defparameter
     public static final SubLSymbol $cb_query_search_width$ = makeSymbol("*CB-QUERY-SEARCH-WIDTH*");
@@ -1035,13 +1018,13 @@ public final class cb_query_search extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_query_search_file() {
-        declareFunction(me, "cb_handle_query_search", "CB-HANDLE-QUERY-SEARCH", 0, 1, false);
-        declareFunction(me, "cb_show_handle_query_search", "CB-SHOW-HANDLE-QUERY-SEARCH", 2, 0, false);
-        declareFunction(me, "cb_show_handle_query_search_form", "CB-SHOW-HANDLE-QUERY-SEARCH-FORM", 1, 0, false);
-        declareFunction(me, "show_reified_query_search_results", "SHOW-REIFIED-QUERY-SEARCH-RESULTS", 1, 0, false);
-        declareFunction(me, "get_kbq_gloss", "GET-KBQ-GLOSS", 1, 0, false);
-        declareFunction(me, "cb_query_search_results", "CB-QUERY-SEARCH-RESULTS", 1, 0, false);
-        declareFunction(me, "cb_link_query_search", "CB-LINK-QUERY-SEARCH", 0, 1, false);
+        declareFunction("cb_handle_query_search", "CB-HANDLE-QUERY-SEARCH", 0, 1, false);
+        declareFunction("cb_show_handle_query_search", "CB-SHOW-HANDLE-QUERY-SEARCH", 2, 0, false);
+        declareFunction("cb_show_handle_query_search_form", "CB-SHOW-HANDLE-QUERY-SEARCH-FORM", 1, 0, false);
+        declareFunction("show_reified_query_search_results", "SHOW-REIFIED-QUERY-SEARCH-RESULTS", 1, 0, false);
+        declareFunction("get_kbq_gloss", "GET-KBQ-GLOSS", 1, 0, false);
+        declareFunction("cb_query_search_results", "CB-QUERY-SEARCH-RESULTS", 1, 0, false);
+        declareFunction("cb_link_query_search", "CB-LINK-QUERY-SEARCH", 0, 1, false);
         return NIL;
     }
 

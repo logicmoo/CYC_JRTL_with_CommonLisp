@@ -1,7 +1,22 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.google_charts;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.browser.cb_query;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -18,45 +33,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.google_charts.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.$keyword_package$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class google_charts extends SubLTranslatedFile {
+public final class google_charts extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new google_charts();
 
-    public static final String myName = "com.cyc.cycjava.cycl.google_charts";
+    public static final String myName = "com.cyc.cycjava_2.cycl.google_charts";
 
-    public static final String myFingerPrint = "180962dc9a7733a9217dd3a075733d9b1c0b80bedeeccfa713e10c54205ee009";
 
     // deflexical
     private static final SubLSymbol $html_google_data_table_chart_script$ = makeSymbol("*HTML-GOOGLE-DATA-TABLE-CHART-SCRIPT*");
@@ -743,29 +725,29 @@ public final class google_charts extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_google_charts_file() {
-        declareFunction(me, "html_google_chart", "HTML-GOOGLE-CHART", 1, 0, false);
-        declareFunction(me, "html_google_chart_scripts", "HTML-GOOGLE-CHART-SCRIPTS", 1, 0, false);
-        declareFunction(me, "html_google_data_table_chart_script", "HTML-GOOGLE-DATA-TABLE-CHART-SCRIPT", 2, 0, false);
-        declareFunction(me, "html_google_scatter_chart", "HTML-GOOGLE-SCATTER-CHART", 1, 0, false);
-        declareFunction(me, "html_google_scatter_chart_script", "HTML-GOOGLE-SCATTER-CHART-SCRIPT", 0, 0, false);
-        declareFunction(me, "html_google_line_chart", "HTML-GOOGLE-LINE-CHART", 1, 0, false);
-        declareFunction(me, "html_google_line_chart_script", "HTML-GOOGLE-LINE-CHART-SCRIPT", 0, 0, false);
-        declareFunction(me, "html_google_pie_chart", "HTML-GOOGLE-PIE-CHART", 1, 0, false);
-        declareFunction(me, "html_google_pie_chart_script", "HTML-GOOGLE-PIE-CHART-SCRIPT", 0, 0, false);
-        declareFunction(me, "html_google_data_table_chart", "HTML-GOOGLE-DATA-TABLE-CHART", 2, 0, false);
-        declareFunction(me, "html_output_google_properties", "HTML-OUTPUT-GOOGLE-PROPERTIES", 1, 2, false);
-        declareFunction(me, "html_output_google_property", "HTML-OUTPUT-GOOGLE-PROPERTY", 1, 0, false);
-        declareFunction(me, "clear_google_property_string", "CLEAR-GOOGLE-PROPERTY-STRING", 0, 0, false);
-        declareFunction(me, "remove_google_property_string", "REMOVE-GOOGLE-PROPERTY-STRING", 1, 0, false);
-        declareFunction(me, "google_property_string_internal", "GOOGLE-PROPERTY-STRING-INTERNAL", 1, 0, false);
-        declareFunction(me, "google_property_string", "GOOGLE-PROPERTY-STRING", 1, 0, false);
-        declareFunction(me, "html_output_google_property_value", "HTML-OUTPUT-GOOGLE-PROPERTY-VALUE", 1, 0, false);
-        declareFunction(me, "google_plist_prefix_simplify", "GOOGLE-PLIST-PREFIX-SIMPLIFY", 2, 0, false);
-        declareFunction(me, "clear_google_property_simplify_wrt_prefix", "CLEAR-GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX", 0, 0, false);
-        declareFunction(me, "remove_google_property_simplify_wrt_prefix", "REMOVE-GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX", 2, 0, false);
-        declareFunction(me, "google_property_simplify_wrt_prefix_internal", "GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX-INTERNAL", 2, 0, false);
-        declareFunction(me, "google_property_simplify_wrt_prefix", "GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX", 2, 0, false);
-        declareFunction(me, "inference_answer_timeline_google_chart", "INFERENCE-ANSWER-TIMELINE-GOOGLE-CHART", 1, 1, false);
+        declareFunction("html_google_chart", "HTML-GOOGLE-CHART", 1, 0, false);
+        declareFunction("html_google_chart_scripts", "HTML-GOOGLE-CHART-SCRIPTS", 1, 0, false);
+        declareFunction("html_google_data_table_chart_script", "HTML-GOOGLE-DATA-TABLE-CHART-SCRIPT", 2, 0, false);
+        declareFunction("html_google_scatter_chart", "HTML-GOOGLE-SCATTER-CHART", 1, 0, false);
+        declareFunction("html_google_scatter_chart_script", "HTML-GOOGLE-SCATTER-CHART-SCRIPT", 0, 0, false);
+        declareFunction("html_google_line_chart", "HTML-GOOGLE-LINE-CHART", 1, 0, false);
+        declareFunction("html_google_line_chart_script", "HTML-GOOGLE-LINE-CHART-SCRIPT", 0, 0, false);
+        declareFunction("html_google_pie_chart", "HTML-GOOGLE-PIE-CHART", 1, 0, false);
+        declareFunction("html_google_pie_chart_script", "HTML-GOOGLE-PIE-CHART-SCRIPT", 0, 0, false);
+        declareFunction("html_google_data_table_chart", "HTML-GOOGLE-DATA-TABLE-CHART", 2, 0, false);
+        declareFunction("html_output_google_properties", "HTML-OUTPUT-GOOGLE-PROPERTIES", 1, 2, false);
+        declareFunction("html_output_google_property", "HTML-OUTPUT-GOOGLE-PROPERTY", 1, 0, false);
+        declareFunction("clear_google_property_string", "CLEAR-GOOGLE-PROPERTY-STRING", 0, 0, false);
+        declareFunction("remove_google_property_string", "REMOVE-GOOGLE-PROPERTY-STRING", 1, 0, false);
+        declareFunction("google_property_string_internal", "GOOGLE-PROPERTY-STRING-INTERNAL", 1, 0, false);
+        declareFunction("google_property_string", "GOOGLE-PROPERTY-STRING", 1, 0, false);
+        declareFunction("html_output_google_property_value", "HTML-OUTPUT-GOOGLE-PROPERTY-VALUE", 1, 0, false);
+        declareFunction("google_plist_prefix_simplify", "GOOGLE-PLIST-PREFIX-SIMPLIFY", 2, 0, false);
+        declareFunction("clear_google_property_simplify_wrt_prefix", "CLEAR-GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX", 0, 0, false);
+        declareFunction("remove_google_property_simplify_wrt_prefix", "REMOVE-GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX", 2, 0, false);
+        declareFunction("google_property_simplify_wrt_prefix_internal", "GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX-INTERNAL", 2, 0, false);
+        declareFunction("google_property_simplify_wrt_prefix", "GOOGLE-PROPERTY-SIMPLIFY-WRT-PREFIX", 2, 0, false);
+        declareFunction("inference_answer_timeline_google_chart", "INFERENCE-ANSWER-TIMELINE-GOOGLE-CHART", 1, 1, false);
         return NIL;
     }
 

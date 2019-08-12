@@ -1,26 +1,22 @@
 package com.cyc.cycjava.cycl.nl;
 
 
-import com.cyc.cycjava.cycl.abstract_lexicon;
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.cycl_variables;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.document;
-import com.cyc.cycjava.cycl.document_annotation_widgets;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.methods;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.nl.removal_modules_concept_tagging;
-import com.cyc.cycjava.cycl.nl_api_datastructures;
-import com.cyc.cycjava.cycl.object;
-import com.cyc.cycjava.cycl.unicode_nauts;
-import com.cyc.cycjava.cycl.unification;
-import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -30,36 +26,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.nl.removal_modules_concept_tagging.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_concept_tagging extends SubLTranslatedFile {
+public final class removal_modules_concept_tagging extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_concept_tagging();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl.removal_modules_concept_tagging";
+    public static final String myName = "com.cyc.cycjava_2.cycl.nl.removal_modules_concept_tagging";
 
-    public static final String myFingerPrint = "599702f7b01a5f21cb5a6a2fc311a742b24bd178e24f5ffd36227e26cf1e98ad";
 
     // defparameter
     private static final SubLSymbol $removal_tagging_lexicons$ = makeSymbol("*REMOVAL-TAGGING-LEXICONS*");
@@ -275,13 +247,13 @@ public final class removal_modules_concept_tagging extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_concept_tagging_file() {
-        declareFunction(me, "removal_concept_referenced_in_string_at_args_supported_p", "REMOVAL-CONCEPT-REFERENCED-IN-STRING-AT-ARGS-SUPPORTED-P", 2, 0, false);
-        declareFunction(me, "get_removal_tagging_lexicon", "GET-REMOVAL-TAGGING-LEXICON", 0, 1, false);
-        declareFunction(me, "removal_concept_referenced_in_string_at_expand", "REMOVAL-CONCEPT-REFERENCED-IN-STRING-AT-EXPAND", 1, 1, false);
-        declareFunction(me, "test_concept_tagging_removal", "TEST-CONCEPT-TAGGING-REMOVAL", 1, 0, false);
-        declareFunction(me, "test_concept_tagging_removal_2", "TEST-CONCEPT-TAGGING-REMOVAL-2", 1, 0, false);
-        declareFunction(me, "no_binding_set_unifies", "NO-BINDING-SET-UNIFIES", 2, 0, false);
-        declareFunction(me, "some_binding_set_unifies", "SOME-BINDING-SET-UNIFIES", 2, 0, false);
+        declareFunction("removal_concept_referenced_in_string_at_args_supported_p", "REMOVAL-CONCEPT-REFERENCED-IN-STRING-AT-ARGS-SUPPORTED-P", 2, 0, false);
+        declareFunction("get_removal_tagging_lexicon", "GET-REMOVAL-TAGGING-LEXICON", 0, 1, false);
+        declareFunction("removal_concept_referenced_in_string_at_expand", "REMOVAL-CONCEPT-REFERENCED-IN-STRING-AT-EXPAND", 1, 1, false);
+        declareFunction("test_concept_tagging_removal", "TEST-CONCEPT-TAGGING-REMOVAL", 1, 0, false);
+        declareFunction("test_concept_tagging_removal_2", "TEST-CONCEPT-TAGGING-REMOVAL-2", 1, 0, false);
+        declareFunction("no_binding_set_unifies", "NO-BINDING-SET-UNIFIES", 2, 0, false);
+        declareFunction("some_binding_set_unifies", "SOME-BINDING-SET-UNIFIES", 2, 0, false);
         return NIL;
     }
 

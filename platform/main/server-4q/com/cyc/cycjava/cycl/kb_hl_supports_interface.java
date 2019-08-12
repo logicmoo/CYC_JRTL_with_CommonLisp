@@ -1,8 +1,13 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.kb_hl_supports_interface;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -14,26 +19,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.kb_hl_supports_interface.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class kb_hl_supports_interface extends SubLTranslatedFile {
+public final class kb_hl_supports_interface extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_hl_supports_interface();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_hl_supports_interface";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_hl_supports_interface";
 
-    public static final String myFingerPrint = "c62f5fd04970e3066938be2c199806787b756d8ef725cb0a3ed8f73b5eec0a80";
 
 
 
@@ -375,19 +366,19 @@ public final class kb_hl_supports_interface extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_hl_supports_interface_file() {
-        declareFunction(me, "kb_create_kb_hl_support", "KB-CREATE-KB-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "kb_create_kb_hl_support_remote", "KB-CREATE-KB-HL-SUPPORT-REMOTE", 2, 0, false);
-        declareFunction(me, "kb_create_kb_hl_support_local", "KB-CREATE-KB-HL-SUPPORT-LOCAL", 2, 0, false);
-        declareFunction(me, "kb_remove_kb_hl_support", "KB-REMOVE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "kb_lookup_kb_hl_support", "KB-LOOKUP-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "kb_lookup_kb_hl_supports_mentioning_term", "KB-LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM", 1, 0, false);
-        declareFunction(me, "kb_kb_hl_support_argument", "KB-KB-HL-SUPPORT-ARGUMENT", 1, 0, false);
-        declareFunction(me, "kb_kb_hl_support_arguments", "KB-KB-HL-SUPPORT-ARGUMENTS", 1, 0, false);
-        declareFunction(me, "kb_kb_hl_support_dependents", "KB-KB-HL-SUPPORT-DEPENDENTS", 1, 0, false);
-        declareFunction(me, "kb_rejustify_kb_hl_support", "KB-REJUSTIFY-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "kb_kb_hl_support_set_argument", "KB-KB-HL-SUPPORT-SET-ARGUMENT", 2, 0, false);
-        declareFunction(me, "kb_kb_hl_support_add_dependent", "KB-KB-HL-SUPPORT-ADD-DEPENDENT", 2, 0, false);
-        declareFunction(me, "kb_kb_hl_support_set_dependents", "KB-KB-HL-SUPPORT-SET-DEPENDENTS", 2, 0, false);
+        declareFunction("kb_create_kb_hl_support", "KB-CREATE-KB-HL-SUPPORT", 2, 0, false);
+        declareFunction("kb_create_kb_hl_support_remote", "KB-CREATE-KB-HL-SUPPORT-REMOTE", 2, 0, false);
+        declareFunction("kb_create_kb_hl_support_local", "KB-CREATE-KB-HL-SUPPORT-LOCAL", 2, 0, false);
+        declareFunction("kb_remove_kb_hl_support", "KB-REMOVE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("kb_lookup_kb_hl_support", "KB-LOOKUP-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("kb_lookup_kb_hl_supports_mentioning_term", "KB-LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM", 1, 0, false);
+        declareFunction("kb_kb_hl_support_argument", "KB-KB-HL-SUPPORT-ARGUMENT", 1, 0, false);
+        declareFunction("kb_kb_hl_support_arguments", "KB-KB-HL-SUPPORT-ARGUMENTS", 1, 0, false);
+        declareFunction("kb_kb_hl_support_dependents", "KB-KB-HL-SUPPORT-DEPENDENTS", 1, 0, false);
+        declareFunction("kb_rejustify_kb_hl_support", "KB-REJUSTIFY-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("kb_kb_hl_support_set_argument", "KB-KB-HL-SUPPORT-SET-ARGUMENT", 2, 0, false);
+        declareFunction("kb_kb_hl_support_add_dependent", "KB-KB-HL-SUPPORT-ADD-DEPENDENT", 2, 0, false);
+        declareFunction("kb_kb_hl_support_set_dependents", "KB-KB-HL-SUPPORT-SET-DEPENDENTS", 2, 0, false);
         return NIL;
     }
 

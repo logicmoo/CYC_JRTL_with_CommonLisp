@@ -194,8 +194,7 @@ as a CycL constant name */
   }
 
   public static final SubLObject setup_constant_reader_file() {
-    // CVS_ID("Id: constant-reader.lisp 126640 2008-12-04 13:39:36Z builder ");
-    reader.set_dispatch_macro_character(Characters.CHAR_hash, constant_reader_macro_char(), $sym5$SHARPSIGN_DOLLAR_RMF, UNPROVIDED);
+        reader.set_dispatch_macro_character(Characters.CHAR_hash, constant_reader_macro_char(), $sym5$SHARPSIGN_DOLLAR_RMF, UNPROVIDED);
     return NIL;
   }
 

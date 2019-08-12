@@ -1,68 +1,70 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.extended_numbers;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.extended_numbers.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.$exp1$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class extended_numbers extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      EXTENDED-NUMBERS
+ * source file: /cyc/top/cycl/extended-numbers.lisp
+ * created:     2019/07/03 17:37:52
+ */
+public final class extended_numbers extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new extended_numbers();
 
-    public static final String myName = "com.cyc.cycjava.cycl.extended_numbers";
+ public static final String myName = "com.cyc.cycjava.cycl.extended_numbers";
 
-    public static final String myFingerPrint = "f6e33b34af15215ed123e551dcb50f7ad5cb69084a16422129b7943d6c12298b";
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $fraction_core_constants$ = makeSymbol("*FRACTION-CORE-CONSTANTS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $include_fractions_in_extended_numbersP$ = makeSymbol("*INCLUDE-FRACTIONS-IN-EXTENDED-NUMBERS?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $check_new_vs_old_extended_number_mathP$ = makeSymbol("*CHECK-NEW-VS-OLD-EXTENDED-NUMBER-MATH?*");
 
     // Internal Constants
-    public static final SubLSymbol CYC_EXTENDED_NUMBER_P = makeSymbol("CYC-EXTENDED-NUMBER-P");
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol CYC_EXTENDED_NUMBER_P = makeSymbol("CYC-EXTENDED-NUMBER-P");
 
-    private static final SubLList $list1 = list(reader_make_constant_shell(makeString("SimpleFractionFn")), reader_make_constant_shell(makeString("MixedFractionFn")), reader_make_constant_shell(makeString("DecimalFractionFn")), reader_make_constant_shell(makeString("NegativeMixedFractionFn")));
+    private static final SubLList $list1 = list(reader_make_constant_shell("SimpleFractionFn"), reader_make_constant_shell("MixedFractionFn"), reader_make_constant_shell("DecimalFractionFn"), reader_make_constant_shell("NegativeMixedFractionFn"));
 
     private static final SubLSymbol $sym2$VALID_CONSTANT_ = makeSymbol("VALID-CONSTANT?");
 
     private static final SubLSymbol EXTENDED_NUMBER_P = makeSymbol("EXTENDED-NUMBER-P");
 
-    private static final SubLObject $$PlusInfinity = reader_make_constant_shell(makeString("PlusInfinity"));
 
-    private static final SubLObject $$MinusInfinity = reader_make_constant_shell(makeString("MinusInfinity"));
+
+
 
     private static final SubLSymbol POSSIBLY_INFINITE_OR_EXTENDED_NUMBER_P = makeSymbol("POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-P");
 
@@ -74,32 +76,22 @@ public final class extended_numbers extends SubLTranslatedFile {
 
     private static final SubLString $str10$___MinusFn__S__S_______Old___S___ = makeString("(#$MinusFn ~S ~S)...~% Old: ~S~% New: ~S");
 
-
-
     private static final SubLString $str12$Raising__S_to_the_power__S_would_ = makeString("Raising ~S to the power ~S would result in an imaginary number.");
 
     private static final SubLString $str13$Can_t_do_modulo_with_0_base_ = makeString("Can't do modulo with 0 base.");
 
     private static final SubLString $str14$Looks_like_not_enough_significant = makeString("Looks like not enough significant digits to compute a modulo.");
 
-
-
     private static final SubLSymbol TEST_ZEROP = makeSymbol("TEST-ZEROP");
 
+    private static final SubLList $list23 = list(list(list(ZERO_INTEGER), T), list(list(NIL), NIL), list(list(list(reader_make_constant_shell("SimpleFractionFn"), ZERO_INTEGER, TEN_INTEGER)), NIL));
 
+    // Definitions
+    public static final SubLObject cyc_extended_number_p_alt(SubLObject v_object) {
+        return com.cyc.cycjava.cycl.extended_numbers.extended_number_p(v_object);
+    }
 
-
-
-
-
-
-
-
-
-
-
-    private static final SubLList $list23 = list(list(list(ZERO_INTEGER), T), list(list(NIL), NIL), list(list(list(reader_make_constant_shell(makeString("SimpleFractionFn")), ZERO_INTEGER, TEN_INTEGER)), NIL));
-
+    // Definitions
     public static SubLObject cyc_extended_number_p(final SubLObject v_object) {
         return extended_number_p(v_object);
     }
@@ -118,8 +110,21 @@ public final class extended_numbers extends SubLTranslatedFile {
         return makeBoolean((NIL != $include_fractions_in_extended_numbersP$.getDynamicValue(thread)) && (NIL != kb_control_vars.fraction_kb_loaded_p()));
     }
 
+    public static final SubLObject extended_number_p_alt(SubLObject v_object) {
+        return makeBoolean(v_object.isNumber() || (NIL != scientific_numbers.scientific_number_p(v_object)));
+    }
+
     public static SubLObject extended_number_p(final SubLObject v_object) {
         return makeBoolean((v_object.isNumber() || (NIL != scientific_numbers.scientific_number_p(v_object))) || ((NIL != include_fractions_in_extended_numbersP()) && ((NIL != fraction_utilities.fraction_p(v_object)) || (NIL != collection_defns.fractionP(v_object, UNPROVIDED)))));
+    }
+
+    public static final SubLObject extended_number_zero_p_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_numbers.scientific_number_zero_p(ex_num);
+        } else {
+            return zerop(ex_num);
+        }
     }
 
     public static SubLObject extended_number_zero_p(final SubLObject ex_num) {
@@ -141,6 +146,15 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_minus_p_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_numbers.scientific_number_minus_p(ex_num);
+        } else {
+            return minusp(ex_num);
+        }
+    }
+
     public static SubLObject extended_number_minus_p(final SubLObject ex_num) {
         if (NIL == extended_number_p(ex_num)) {
             return NIL;
@@ -160,6 +174,15 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_plus_p_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_numbers.scientific_number_plus_p(ex_num);
+        } else {
+            return plusp(ex_num);
+        }
+    }
+
     public static SubLObject extended_number_plus_p(final SubLObject ex_num) {
         if (NIL == extended_number_p(ex_num)) {
             return NIL;
@@ -177,6 +200,15 @@ public final class extended_numbers extends SubLTranslatedFile {
             return extended_number_plus_p(math_expression_utilities.fraction_from_el(ex_num));
         }
         return NIL;
+    }
+
+    public static final SubLObject extended_number_non_negative_p_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_numbers.scientific_number_non_negative_p(ex_num);
+        } else {
+            return number_utilities.non_negative_number_p(ex_num);
+        }
     }
 
     public static SubLObject extended_number_non_negative_p(final SubLObject ex_num) {
@@ -214,8 +246,17 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_abs_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_number_utilities.scientific_number_abs(ex_num);
+        } else {
+            return abs(ex_num);
+        }
+    }
+
     public static SubLObject extended_number_abs(final SubLObject ex_num) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
             return scientific_number_utilities.scientific_number_abs(ex_num);
         }
@@ -231,8 +272,17 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_negate_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_number_utilities.scientific_number_negate(ex_num);
+        } else {
+            return minus(ex_num);
+        }
+    }
+
     public static SubLObject extended_number_negate(final SubLObject ex_num) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
             return scientific_number_utilities.scientific_number_negate(ex_num);
         }
@@ -248,8 +298,17 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject copy_extended_number_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_numbers.copy_scientific_number(ex_num);
+        } else {
+            return ex_num;
+        }
+    }
+
     public static SubLObject copy_extended_number(final SubLObject ex_num) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
             return scientific_numbers.copy_scientific_number(ex_num);
         }
@@ -292,7 +351,7 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_minus_p(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_minus_p(ex_num);
         }
@@ -300,7 +359,7 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_plus_p(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_plus_p(ex_num);
         }
@@ -308,7 +367,7 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_abs(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_abs(ex_num);
         }
@@ -319,7 +378,7 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_negate(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_negate(ex_num);
         }
@@ -333,19 +392,52 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject copy_possibly_infinite_or_extended_number(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
             return scientific_numbers.copy_scientific_number(ex_num);
         }
         return ex_num;
     }
 
+    public static final SubLObject extended_numberE_alt(SubLObject ex_num0, SubLObject ex_num1, SubLObject digits) {
+        if (digits == UNPROVIDED) {
+            digits = NIL;
+        }
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_numberE(ex_num0, ex_num1, digits);
+            } else {
+                if (ex_num1.isInteger()) {
+                    return scientific_number_utilities.scientific_number_integerE(ex_num0, ex_num1, digits);
+                } else {
+                    return scientific_number_utilities.scientific_numberE(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED), digits);
+                }
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                if (ex_num0.isInteger()) {
+                    return scientific_number_utilities.integer_scientific_numberE(ex_num0, ex_num1, digits);
+                } else {
+                    return scientific_number_utilities.scientific_numberE(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1, UNPROVIDED);
+                }
+            } else {
+                if (NIL != digits) {
+                    return numE(number_utilities.significant_digits(ex_num0, digits), number_utilities.significant_digits(ex_num1, digits));
+                } else {
+                    return numE(ex_num0, ex_num1);
+                }
+            }
+        }
+    }
+
     public static SubLObject extended_numberE(final SubLObject ex_num0, final SubLObject ex_num1, SubLObject digits) {
         if (digits == UNPROVIDED) {
             digits = NIL;
         }
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if (ex_num0.equal(ex_num1)) {
             return T;
         }
@@ -407,12 +499,45 @@ public final class extended_numbers extends SubLTranslatedFile {
 
     }
 
+    public static final SubLObject extended_numberG_alt(SubLObject ex_num0, SubLObject ex_num1, SubLObject digits) {
+        if (digits == UNPROVIDED) {
+            digits = NIL;
+        }
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_numberG(ex_num0, ex_num1, digits);
+            } else {
+                if (ex_num1.isInteger()) {
+                    return scientific_number_utilities.scientific_number_integerG(ex_num0, ex_num1, digits);
+                } else {
+                    return scientific_number_utilities.scientific_numberG(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED), digits);
+                }
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                if (ex_num0.isInteger()) {
+                    return scientific_number_utilities.integer_scientific_numberG(ex_num0, ex_num1, UNPROVIDED);
+                } else {
+                    return scientific_number_utilities.scientific_numberG(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1, digits);
+                }
+            } else {
+                if (NIL != digits) {
+                    return numG(number_utilities.significant_digits(ex_num0, digits), number_utilities.significant_digits(ex_num1, digits));
+                } else {
+                    return numG(ex_num0, ex_num1);
+                }
+            }
+        }
+    }
+
     public static SubLObject extended_numberG(final SubLObject ex_num0, final SubLObject ex_num1, SubLObject digits) {
         if (digits == UNPROVIDED) {
             digits = NIL;
         }
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         return NIL != include_fractions_in_extended_numbersP() ? extended_numberG_int(ex_num0, ex_num1, digits) : extended_numberG_old(ex_num0, ex_num1, digits);
     }
 
@@ -471,12 +596,45 @@ public final class extended_numbers extends SubLTranslatedFile {
 
     }
 
+    public static final SubLObject extended_numberGE_alt(SubLObject ex_num0, SubLObject ex_num1, SubLObject digits) {
+        if (digits == UNPROVIDED) {
+            digits = NIL;
+        }
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_numberGE(ex_num0, ex_num1, digits);
+            } else {
+                if (ex_num1.isInteger()) {
+                    return scientific_number_utilities.scientific_number_integerGE(ex_num0, ex_num1, digits);
+                } else {
+                    return scientific_number_utilities.scientific_numberGE(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED), digits);
+                }
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                if (ex_num0.isInteger()) {
+                    return scientific_number_utilities.integer_scientific_numberGE(ex_num0, ex_num1, digits);
+                } else {
+                    return scientific_number_utilities.scientific_numberGE(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1, digits);
+                }
+            } else {
+                if (NIL != digits) {
+                    return numGE(number_utilities.significant_digits(ex_num0, digits), number_utilities.significant_digits(ex_num1, digits));
+                } else {
+                    return numGE(ex_num0, ex_num1);
+                }
+            }
+        }
+    }
+
     public static SubLObject extended_numberGE(final SubLObject ex_num0, final SubLObject ex_num1, SubLObject digits) {
         if (digits == UNPROVIDED) {
             digits = NIL;
         }
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         return NIL != include_fractions_in_extended_numbersP() ? extended_numberGE_int(ex_num0, ex_num1, digits) : extended_numberGE_old(ex_num0, ex_num1, digits);
     }
 
@@ -514,11 +672,25 @@ public final class extended_numbers extends SubLTranslatedFile {
 
     }
 
+    public static final SubLObject extended_numberL_alt(SubLObject ex_num0, SubLObject ex_num1, SubLObject digits) {
+        if (digits == UNPROVIDED) {
+            digits = NIL;
+        }
+        return com.cyc.cycjava.cycl.extended_numbers.extended_numberG(ex_num1, ex_num0, digits);
+    }
+
     public static SubLObject extended_numberL(final SubLObject ex_num0, final SubLObject ex_num1, SubLObject digits) {
         if (digits == UNPROVIDED) {
             digits = NIL;
         }
         return extended_numberG(ex_num1, ex_num0, digits);
+    }
+
+    public static final SubLObject extended_numberLE_alt(SubLObject ex_num0, SubLObject ex_num1, SubLObject digits) {
+        if (digits == UNPROVIDED) {
+            digits = NIL;
+        }
+        return com.cyc.cycjava.cycl.extended_numbers.extended_numberGE(ex_num1, ex_num0, digits);
     }
 
     public static SubLObject extended_numberLE(final SubLObject ex_num0, final SubLObject ex_num1, SubLObject digits) {
@@ -571,10 +743,36 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_times_alt(SubLObject ex_num0, SubLObject ex_num1) {
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_number_times(ex_num0, ex_num1);
+            } else {
+                if (ex_num1.isInteger()) {
+                    return scientific_number_utilities.scientific_number_integer_times(ex_num0, ex_num1);
+                } else {
+                    return scientific_number_utilities.scientific_number_times(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED));
+                }
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                if (ex_num0.isInteger()) {
+                    return scientific_number_utilities.integer_scientific_number_times(ex_num0, ex_num1);
+                } else {
+                    return scientific_number_utilities.scientific_number_times(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1);
+                }
+            } else {
+                return multiply(ex_num0, ex_num1);
+            }
+        }
+    }
+
     public static SubLObject extended_number_times(final SubLObject ex_num0, final SubLObject ex_num1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if ((((NIL != $check_new_vs_old_extended_number_mathP$.getDynamicValue(thread)) && (NIL == collection_defns.fractionP(ex_num0, UNPROVIDED))) && (NIL == collection_defns.fractionP(ex_num1, UNPROVIDED))) && (!extended_number_times_int(ex_num0, ex_num1, UNPROVIDED, UNPROVIDED).equal(extended_number_times_old(ex_num0, ex_num1)))) {
             Errors.warn($str7$___TimesFn__S__S_______Old___S___, new SubLObject[]{ ex_num0, ex_num1, extended_number_times_old(ex_num0, ex_num1), extended_number_times_int(ex_num0, ex_num1, UNPROVIDED, UNPROVIDED) });
         }
@@ -630,10 +828,36 @@ public final class extended_numbers extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject extended_number_quotient_alt(SubLObject ex_num0, SubLObject ex_num1) {
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_number_quotient(ex_num0, ex_num1);
+            } else {
+                if (ex_num1.isInteger()) {
+                    return scientific_number_utilities.scientific_number_integer_quotient(ex_num0, ex_num1);
+                } else {
+                    return scientific_number_utilities.scientific_number_quotient(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED));
+                }
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                if (ex_num0.isInteger()) {
+                    return scientific_number_utilities.integer_scientific_number_quotient(ex_num0, ex_num1);
+                } else {
+                    return scientific_number_utilities.scientific_number_quotient(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1);
+                }
+            } else {
+                return divide(ex_num0, ex_num1);
+            }
+        }
+    }
+
     public static SubLObject extended_number_quotient(final SubLObject ex_num0, final SubLObject ex_num1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if ((((NIL != $check_new_vs_old_extended_number_mathP$.getDynamicValue(thread)) && (NIL == collection_defns.fractionP(ex_num0, UNPROVIDED))) && (NIL == collection_defns.fractionP(ex_num1, UNPROVIDED))) && (!extended_number_quotient_int(ex_num0, ex_num1, UNPROVIDED, UNPROVIDED).equal(extended_number_quotient_old(ex_num0, ex_num1)))) {
             Errors.warn($str8$___QuotientFn__S__S_______Old___S, new SubLObject[]{ ex_num0, ex_num1, extended_number_quotient_old(ex_num0, ex_num1), extended_number_quotient_int(ex_num0, ex_num1, UNPROVIDED, UNPROVIDED) });
         }
@@ -678,8 +902,8 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject extended_number_quotient_old(final SubLObject ex_num0, final SubLObject ex_num1) {
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
             if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
                 return scientific_number_utilities.scientific_number_quotient(ex_num0, ex_num1);
@@ -699,10 +923,28 @@ public final class extended_numbers extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject extended_number_plus_alt(SubLObject ex_num0, SubLObject ex_num1) {
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_number_plus(ex_num0, ex_num1);
+            } else {
+                return scientific_number_utilities.scientific_number_plus(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED));
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_number_plus(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1);
+            } else {
+                return add(ex_num0, ex_num1);
+            }
+        }
+    }
+
     public static SubLObject extended_number_plus(final SubLObject ex_num0, final SubLObject ex_num1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if ((((NIL != $check_new_vs_old_extended_number_mathP$.getDynamicValue(thread)) && (NIL == collection_defns.fractionP(ex_num0, UNPROVIDED))) && (NIL == collection_defns.fractionP(ex_num1, UNPROVIDED))) && (!extended_number_plus_int(ex_num0, ex_num1, UNPROVIDED, UNPROVIDED).equal(extended_number_plus_old(ex_num0, ex_num1)))) {
             Errors.warn($str9$___PlusFn__S__S_______Old___S___N, new SubLObject[]{ ex_num0, ex_num1, extended_number_plus_old(ex_num0, ex_num1), extended_number_plus_int(ex_num0, ex_num1, UNPROVIDED, UNPROVIDED) });
         }
@@ -744,8 +986,8 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject extended_number_plus_old(final SubLObject ex_num0, final SubLObject ex_num1) {
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
             if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
                 return scientific_number_utilities.scientific_number_plus(ex_num0, ex_num1);
@@ -759,10 +1001,28 @@ public final class extended_numbers extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject extended_number_minus_alt(SubLObject ex_num0, SubLObject ex_num1) {
+        SubLTrampolineFile.checkType(ex_num0, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(ex_num1, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_number_minus(ex_num0, ex_num1);
+            } else {
+                return scientific_number_utilities.scientific_number_minus(ex_num0, scientific_numbers.scientific_number_from_subl_real(ex_num1, UNPROVIDED));
+            }
+        } else {
+            if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
+                return scientific_number_utilities.scientific_number_minus(scientific_numbers.scientific_number_from_subl_real(ex_num0, UNPROVIDED), ex_num1);
+            } else {
+                return subtract(ex_num0, ex_num1);
+            }
+        }
+    }
+
     public static SubLObject extended_number_minus(final SubLObject ex_num0, final SubLObject ex_num1) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if ((((NIL != $check_new_vs_old_extended_number_mathP$.getDynamicValue(thread)) && (NIL == collection_defns.fractionP(ex_num0, UNPROVIDED))) && (NIL == collection_defns.fractionP(ex_num1, UNPROVIDED))) && (!extended_number_minus_int(ex_num0, ex_num1).equal(extended_number_minus_old(ex_num0, ex_num1)))) {
             Errors.warn($str10$___MinusFn__S__S_______Old___S___, new SubLObject[]{ ex_num0, ex_num1, extended_number_minus_old(ex_num0, ex_num1), extended_number_minus_int(ex_num0, ex_num1) });
         }
@@ -774,8 +1034,8 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject extended_number_minus_old(final SubLObject ex_num0, final SubLObject ex_num1) {
-        assert NIL != extended_number_p(ex_num0) : "extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != extended_number_p(ex_num1) : "extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != extended_number_p(ex_num0) : "! extended_numbers.extended_number_p(ex_num0) " + ("extended_numbers.extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != extended_number_p(ex_num1) : "! extended_numbers.extended_number_p(ex_num1) " + ("extended_numbers.extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num1) ") + ex_num1;
         if (NIL != scientific_numbers.scientific_number_p(ex_num0)) {
             if (NIL != scientific_numbers.scientific_number_p(ex_num1)) {
                 return scientific_number_utilities.scientific_number_minus(ex_num0, ex_num1);
@@ -835,8 +1095,8 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_quotient(final SubLObject ex_num0, final SubLObject ex_num1) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num0) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num0) " + ex_num0;
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num1) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num1) " + ex_num1;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num0) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num0) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num0) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num0) ") + ex_num0;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num1) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num1) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num1) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num1) ") + ex_num1;
         if ((NIL != extended_number_p(ex_num0)) && (NIL != extended_number_p(ex_num1))) {
             return extended_number_quotient(ex_num0, ex_num1);
         }
@@ -856,13 +1116,38 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_min_alt(SubLObject ex_nums) {
+        {
+            SubLObject list_var = ex_nums;
+            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            {
+                SubLObject cdolist_list_var = list_var;
+                SubLObject elem = NIL;
+                for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
+                    SubLTrampolineFile.checkType(elem, EXTENDED_NUMBER_P);
+                }
+            }
+        }
+        {
+            SubLObject possible_min = ex_nums.first();
+            SubLObject cdolist_list_var = ex_nums.rest();
+            SubLObject ex_num = NIL;
+            for (ex_num = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ex_num = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.extended_numbers.extended_numberL(ex_num, possible_min, UNPROVIDED)) {
+                    possible_min = com.cyc.cycjava.cycl.extended_numbers.copy_extended_number(ex_num);
+                }
+            }
+            return possible_min;
+        }
+    }
+
     public static SubLObject extended_number_min(final SubLObject ex_nums) {
-        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) " + ex_nums;
+        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "! list_utilities.non_dotted_list_p(ex_nums) " + ("list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) ") + ex_nums;
         SubLObject cdolist_list_var = ex_nums;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != extended_number_p(elem) : "extended_numbers.extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(elem) " + elem;
+            assert NIL != extended_number_p(elem) : "! extended_numbers.extended_number_p(elem) " + ("extended_numbers.extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(elem) ") + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -880,13 +1165,38 @@ public final class extended_numbers extends SubLTranslatedFile {
         return possible_min;
     }
 
+    public static final SubLObject extended_number_max_alt(SubLObject ex_nums) {
+        {
+            SubLObject list_var = ex_nums;
+            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            {
+                SubLObject cdolist_list_var = list_var;
+                SubLObject elem = NIL;
+                for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
+                    SubLTrampolineFile.checkType(elem, EXTENDED_NUMBER_P);
+                }
+            }
+        }
+        {
+            SubLObject possible_min = ex_nums.first();
+            SubLObject cdolist_list_var = ex_nums.rest();
+            SubLObject ex_num = NIL;
+            for (ex_num = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , ex_num = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.extended_numbers.extended_numberG(ex_num, possible_min, UNPROVIDED)) {
+                    possible_min = com.cyc.cycjava.cycl.extended_numbers.copy_extended_number(ex_num);
+                }
+            }
+            return possible_min;
+        }
+    }
+
     public static SubLObject extended_number_max(final SubLObject ex_nums) {
-        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) " + ex_nums;
+        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "! list_utilities.non_dotted_list_p(ex_nums) " + ("list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) ") + ex_nums;
         SubLObject cdolist_list_var = ex_nums;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != extended_number_p(elem) : "extended_numbers.extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(elem) " + elem;
+            assert NIL != extended_number_p(elem) : "! extended_numbers.extended_number_p(elem) " + ("extended_numbers.extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(elem) ") + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -904,8 +1214,17 @@ public final class extended_numbers extends SubLTranslatedFile {
         return possible_min;
     }
 
+    public static final SubLObject extended_number_sqrt_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_number_utilities.scientific_number_sqrt(ex_num);
+        } else {
+            return sqrt(ex_num);
+        }
+    }
+
     public static SubLObject extended_number_sqrt(final SubLObject ex_num) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
             return scientific_number_utilities.scientific_number_sqrt(ex_num);
         }
@@ -922,11 +1241,24 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_log_alt(SubLObject ex_num, SubLObject base) {
+        if (base == UNPROVIDED) {
+            base = $exp1$.getGlobalValue();
+        }
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        SubLTrampolineFile.checkType(base, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_number_utilities.scientific_number_log(ex_num, base);
+        } else {
+            return log(ex_num, base);
+        }
+    }
+
     public static SubLObject extended_number_log(final SubLObject ex_num, SubLObject base) {
         if (base == UNPROVIDED) {
             base = $exp1$.getGlobalValue();
         }
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
             return scientific_number_utilities.scientific_number_log(ex_num, base);
         }
@@ -943,8 +1275,18 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_expt_alt(SubLObject base, SubLObject ex_num) {
+        SubLTrampolineFile.checkType(base, NUMBERP);
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_number_utilities.scientific_number_expt(base, ex_num);
+        } else {
+            return expt(base, ex_num);
+        }
+    }
+
     public static SubLObject extended_number_expt(final SubLObject base, final SubLObject ex_num) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_zero_p(ex_num)) {
             return ONE_INTEGER;
         }
@@ -980,8 +1322,17 @@ public final class extended_numbers extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject extended_number_exp_alt(SubLObject ex_num) {
+        SubLTrampolineFile.checkType(ex_num, EXTENDED_NUMBER_P);
+        if (NIL != scientific_numbers.scientific_number_p(ex_num)) {
+            return scientific_number_utilities.scientific_number_exp(ex_num);
+        } else {
+            return exp(ex_num);
+        }
+    }
+
     public static SubLObject extended_number_exp(final SubLObject ex_num) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
         if (NIL != power_too_largeP(exp(ONE_INTEGER), ex_num)) {
             relation_evaluation.throw_unevaluatable();
         } else {
@@ -1003,8 +1354,8 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject extended_number_modulo(final SubLObject ex_num, final SubLObject base) {
-        assert NIL != extended_number_p(ex_num) : "extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) " + ex_num;
-        assert NIL != extended_number_p(base) : "extended_numbers.extended_number_p(base) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(base) " + base;
+        assert NIL != extended_number_p(ex_num) : "! extended_numbers.extended_number_p(ex_num) " + ("extended_numbers.extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(ex_num) ") + ex_num;
+        assert NIL != extended_number_p(base) : "! extended_numbers.extended_number_p(base) " + ("extended_numbers.extended_number_p(base) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(base) ") + base;
         if (ex_num.isNumber() && base.isNumber()) {
             return mod(ex_num, base);
         }
@@ -1035,12 +1386,12 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_min(final SubLObject ex_nums) {
-        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) " + ex_nums;
+        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "! list_utilities.non_dotted_list_p(ex_nums) " + ("list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) ") + ex_nums;
         SubLObject cdolist_list_var = ex_nums;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != possibly_infinite_or_extended_number_p(elem) : "extended_numbers.possibly_infinite_or_extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(elem) " + elem;
+            assert NIL != possibly_infinite_or_extended_number_p(elem) : "! extended_numbers.possibly_infinite_or_extended_number_p(elem) " + ("extended_numbers.possibly_infinite_or_extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(elem) ") + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -1059,12 +1410,12 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_max(final SubLObject ex_nums) {
-        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) " + ex_nums;
+        assert NIL != list_utilities.non_dotted_list_p(ex_nums) : "! list_utilities.non_dotted_list_p(ex_nums) " + ("list_utilities.non_dotted_list_p(ex_nums) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(ex_nums) ") + ex_nums;
         SubLObject cdolist_list_var = ex_nums;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != possibly_infinite_or_extended_number_p(elem) : "extended_numbers.possibly_infinite_or_extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(elem) " + elem;
+            assert NIL != possibly_infinite_or_extended_number_p(elem) : "! extended_numbers.possibly_infinite_or_extended_number_p(elem) " + ("extended_numbers.possibly_infinite_or_extended_number_p(elem) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(elem) ") + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -1083,7 +1434,7 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_sqrt(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_sqrt(ex_num);
         }
@@ -1100,8 +1451,8 @@ public final class extended_numbers extends SubLTranslatedFile {
         if (base == UNPROVIDED) {
             base = $exp1$.getGlobalValue();
         }
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
-        assert NIL != extended_number_p(base) : "extended_numbers.extended_number_p(base) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(base) " + base;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
+        assert NIL != extended_number_p(base) : "! extended_numbers.extended_number_p(base) " + ("extended_numbers.extended_number_p(base) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(base) ") + base;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_log(ex_num, base);
         }
@@ -1115,8 +1466,8 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_expt(final SubLObject base, final SubLObject ex_num) {
-        assert NIL != extended_number_p(base) : "extended_numbers.extended_number_p(base) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(base) " + base;
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != extended_number_p(base) : "! extended_numbers.extended_number_p(base) " + ("extended_numbers.extended_number_p(base) " + "CommonSymbols.NIL != extended_numbers.extended_number_p(base) ") + base;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_expt(base, ex_num);
         }
@@ -1134,7 +1485,7 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject possibly_infinite_or_extended_number_exp(final SubLObject ex_num) {
-        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ex_num;
+        assert NIL != possibly_infinite_or_extended_number_p(ex_num) : "! extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + ("extended_numbers.possibly_infinite_or_extended_number_p(ex_num) " + "CommonSymbols.NIL != extended_numbers.possibly_infinite_or_extended_number_p(ex_num) ") + ex_num;
         if (NIL != extended_number_p(ex_num)) {
             return extended_number_exp(ex_num);
         }
@@ -1155,76 +1506,76 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_extended_numbers_file() {
-        declareFunction(me, "cyc_extended_number_p", "CYC-EXTENDED-NUMBER-P", 1, 0, false);
-        declareFunction(me, "initialize_fraction_kb_feature", "INITIALIZE-FRACTION-KB-FEATURE", 0, 0, false);
-        declareFunction(me, "include_fractions_in_extended_numbersP", "INCLUDE-FRACTIONS-IN-EXTENDED-NUMBERS?", 0, 0, false);
-        declareFunction(me, "extended_number_p", "EXTENDED-NUMBER-P", 1, 0, false);
-        declareFunction(me, "extended_number_zero_p", "EXTENDED-NUMBER-ZERO-P", 1, 0, false);
-        declareFunction(me, "extended_number_minus_p", "EXTENDED-NUMBER-MINUS-P", 1, 0, false);
-        declareFunction(me, "extended_number_plus_p", "EXTENDED-NUMBER-PLUS-P", 1, 0, false);
-        declareFunction(me, "extended_number_non_negative_p", "EXTENDED-NUMBER-NON-NEGATIVE-P", 1, 0, false);
-        declareFunction(me, "extended_number_integer_p", "EXTENDED-NUMBER-INTEGER-P", 1, 0, false);
-        declareFunction(me, "extended_number_abs", "EXTENDED-NUMBER-ABS", 1, 0, false);
-        declareFunction(me, "extended_number_negate", "EXTENDED-NUMBER-NEGATE", 1, 0, false);
-        declareFunction(me, "copy_extended_number", "COPY-EXTENDED-NUMBER", 1, 0, false);
-        declareFunction(me, "cyc_positive_infinity_p", "CYC-POSITIVE-INFINITY-P", 1, 0, false);
-        declareFunction(me, "cyc_negative_infinity_p", "CYC-NEGATIVE-INFINITY-P", 1, 0, false);
-        declareFunction(me, "cyc_infinite_number_p", "CYC-INFINITE-NUMBER-P", 1, 0, false);
-        declareFunction(me, "cyc_infinite_range_p", "CYC-INFINITE-RANGE-P", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_p", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-P", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_minus_p", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-MINUS-P", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_plus_p", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-PLUS-P", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_abs", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-ABS", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_negate", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-NEGATE", 1, 0, false);
-        declareFunction(me, "copy_possibly_infinite_or_extended_number", "COPY-POSSIBLY-INFINITE-OR-EXTENDED-NUMBER", 1, 0, false);
-        declareFunction(me, "extended_numberE", "EXTENDED-NUMBER=", 2, 1, false);
-        declareFunction(me, "extended_numberE_int", "EXTENDED-NUMBER=-INT", 2, 1, false);
-        declareFunction(me, "extended_numberE_old", "EXTENDED-NUMBER=-OLD", 2, 1, false);
-        declareFunction(me, "extended_numberG", "EXTENDED-NUMBER>", 2, 1, false);
-        declareFunction(me, "extended_numberG_int", "EXTENDED-NUMBER>-INT", 2, 1, false);
-        declareFunction(me, "extended_numberG_old", "EXTENDED-NUMBER>-OLD", 2, 1, false);
-        declareFunction(me, "extended_numberGE", "EXTENDED-NUMBER>=", 2, 1, false);
-        declareFunction(me, "extended_numberGE_int", "EXTENDED-NUMBER>=-INT", 2, 1, false);
-        declareFunction(me, "extended_numberGE_old", "EXTENDED-NUMBER>=-OLD", 2, 1, false);
-        declareFunction(me, "extended_numberL", "EXTENDED-NUMBER<", 2, 1, false);
-        declareFunction(me, "extended_numberLE", "EXTENDED-NUMBER<=", 2, 1, false);
-        declareFunction(me, "possibly_infinite_or_extended_numberLE", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER<=", 2, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_numberE", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER=", 2, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_numberL", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER<", 2, 0, false);
-        declareFunction(me, "extended_number_to_subl_real", "EXTENDED-NUMBER-TO-SUBL-REAL", 1, 0, false);
-        declareFunction(me, "extended_number_times", "EXTENDED-NUMBER-TIMES", 2, 0, false);
-        declareFunction(me, "extended_number_times_int", "EXTENDED-NUMBER-TIMES-INT", 2, 2, false);
-        declareFunction(me, "extended_number_times_old", "EXTENDED-NUMBER-TIMES-OLD", 2, 0, false);
-        declareFunction(me, "extended_number_quotient", "EXTENDED-NUMBER-QUOTIENT", 2, 0, false);
-        declareFunction(me, "extended_number_quotient_int", "EXTENDED-NUMBER-QUOTIENT-INT", 2, 2, false);
-        declareFunction(me, "extended_number_quotient_old", "EXTENDED-NUMBER-QUOTIENT-OLD", 2, 0, false);
-        declareFunction(me, "extended_number_plus", "EXTENDED-NUMBER-PLUS", 2, 0, false);
-        declareFunction(me, "extended_number_plus_int", "EXTENDED-NUMBER-PLUS-INT", 2, 2, false);
-        declareFunction(me, "scientific_number_significant_digits_for_addition", "SCIENTIFIC-NUMBER-SIGNIFICANT-DIGITS-FOR-ADDITION", 2, 0, false);
-        declareFunction(me, "extended_number_plus_old", "EXTENDED-NUMBER-PLUS-OLD", 2, 0, false);
-        declareFunction(me, "extended_number_minus", "EXTENDED-NUMBER-MINUS", 2, 0, false);
-        declareFunction(me, "extended_number_minus_int", "EXTENDED-NUMBER-MINUS-INT", 2, 0, false);
-        declareFunction(me, "extended_number_minus_old", "EXTENDED-NUMBER-MINUS-OLD", 2, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_times", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-TIMES", 2, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_plus", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-PLUS", 2, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_quotient", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-QUOTIENT", 2, 0, false);
-        declareFunction(me, "extended_number_min", "EXTENDED-NUMBER-MIN", 1, 0, false);
-        declareFunction(me, "extended_number_max", "EXTENDED-NUMBER-MAX", 1, 0, false);
-        declareFunction(me, "extended_number_sqrt", "EXTENDED-NUMBER-SQRT", 1, 0, false);
-        declareFunction(me, "extended_number_log", "EXTENDED-NUMBER-LOG", 1, 1, false);
-        declareFunction(me, "extended_number_expt", "EXTENDED-NUMBER-EXPT", 2, 0, false);
-        declareFunction(me, "extended_number_exp", "EXTENDED-NUMBER-EXP", 1, 0, false);
-        declareFunction(me, "extended_number_modulo", "EXTENDED-NUMBER-MODULO", 2, 0, false);
-        declareFunction(me, "extended_number_approx", "EXTENDED-NUMBER-APPROX", 1, 0, false);
-        declareFunction(me, "fraction_or_number_to_el", "FRACTION-OR-NUMBER-TO-EL", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_min", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-MIN", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_max", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-MAX", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_sqrt", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-SQRT", 1, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_log", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-LOG", 1, 1, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_expt", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-EXPT", 2, 0, false);
-        declareFunction(me, "power_too_largeP", "POWER-TOO-LARGE?", 2, 0, false);
-        declareFunction(me, "possibly_infinite_or_extended_number_exp", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-EXP", 1, 0, false);
-        declareFunction(me, "test_zerop", "TEST-ZEROP", 1, 0, false);
+        declareFunction("cyc_extended_number_p", "CYC-EXTENDED-NUMBER-P", 1, 0, false);
+        declareFunction("initialize_fraction_kb_feature", "INITIALIZE-FRACTION-KB-FEATURE", 0, 0, false);
+        declareFunction("include_fractions_in_extended_numbersP", "INCLUDE-FRACTIONS-IN-EXTENDED-NUMBERS?", 0, 0, false);
+        declareFunction("extended_number_p", "EXTENDED-NUMBER-P", 1, 0, false);
+        declareFunction("extended_number_zero_p", "EXTENDED-NUMBER-ZERO-P", 1, 0, false);
+        declareFunction("extended_number_minus_p", "EXTENDED-NUMBER-MINUS-P", 1, 0, false);
+        declareFunction("extended_number_plus_p", "EXTENDED-NUMBER-PLUS-P", 1, 0, false);
+        declareFunction("extended_number_non_negative_p", "EXTENDED-NUMBER-NON-NEGATIVE-P", 1, 0, false);
+        declareFunction("extended_number_integer_p", "EXTENDED-NUMBER-INTEGER-P", 1, 0, false);
+        declareFunction("extended_number_abs", "EXTENDED-NUMBER-ABS", 1, 0, false);
+        declareFunction("extended_number_negate", "EXTENDED-NUMBER-NEGATE", 1, 0, false);
+        declareFunction("copy_extended_number", "COPY-EXTENDED-NUMBER", 1, 0, false);
+        declareFunction("cyc_positive_infinity_p", "CYC-POSITIVE-INFINITY-P", 1, 0, false);
+        declareFunction("cyc_negative_infinity_p", "CYC-NEGATIVE-INFINITY-P", 1, 0, false);
+        declareFunction("cyc_infinite_number_p", "CYC-INFINITE-NUMBER-P", 1, 0, false);
+        declareFunction("cyc_infinite_range_p", "CYC-INFINITE-RANGE-P", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_p", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-P", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_minus_p", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-MINUS-P", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_plus_p", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-PLUS-P", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_abs", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-ABS", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_negate", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-NEGATE", 1, 0, false);
+        declareFunction("copy_possibly_infinite_or_extended_number", "COPY-POSSIBLY-INFINITE-OR-EXTENDED-NUMBER", 1, 0, false);
+        declareFunction("extended_numberE", "EXTENDED-NUMBER=", 2, 1, false);
+        declareFunction("extended_numberE_int", "EXTENDED-NUMBER=-INT", 2, 1, false);
+        declareFunction("extended_numberE_old", "EXTENDED-NUMBER=-OLD", 2, 1, false);
+        declareFunction("extended_numberG", "EXTENDED-NUMBER>", 2, 1, false);
+        declareFunction("extended_numberG_int", "EXTENDED-NUMBER>-INT", 2, 1, false);
+        declareFunction("extended_numberG_old", "EXTENDED-NUMBER>-OLD", 2, 1, false);
+        declareFunction("extended_numberGE", "EXTENDED-NUMBER>=", 2, 1, false);
+        declareFunction("extended_numberGE_int", "EXTENDED-NUMBER>=-INT", 2, 1, false);
+        declareFunction("extended_numberGE_old", "EXTENDED-NUMBER>=-OLD", 2, 1, false);
+        declareFunction("extended_numberL", "EXTENDED-NUMBER<", 2, 1, false);
+        declareFunction("extended_numberLE", "EXTENDED-NUMBER<=", 2, 1, false);
+        declareFunction("possibly_infinite_or_extended_numberLE", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER<=", 2, 0, false);
+        declareFunction("possibly_infinite_or_extended_numberE", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER=", 2, 0, false);
+        declareFunction("possibly_infinite_or_extended_numberL", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER<", 2, 0, false);
+        declareFunction("extended_number_to_subl_real", "EXTENDED-NUMBER-TO-SUBL-REAL", 1, 0, false);
+        declareFunction("extended_number_times", "EXTENDED-NUMBER-TIMES", 2, 0, false);
+        declareFunction("extended_number_times_int", "EXTENDED-NUMBER-TIMES-INT", 2, 2, false);
+        declareFunction("extended_number_times_old", "EXTENDED-NUMBER-TIMES-OLD", 2, 0, false);
+        declareFunction("extended_number_quotient", "EXTENDED-NUMBER-QUOTIENT", 2, 0, false);
+        declareFunction("extended_number_quotient_int", "EXTENDED-NUMBER-QUOTIENT-INT", 2, 2, false);
+        declareFunction("extended_number_quotient_old", "EXTENDED-NUMBER-QUOTIENT-OLD", 2, 0, false);
+        declareFunction("extended_number_plus", "EXTENDED-NUMBER-PLUS", 2, 0, false);
+        declareFunction("extended_number_plus_int", "EXTENDED-NUMBER-PLUS-INT", 2, 2, false);
+        declareFunction("scientific_number_significant_digits_for_addition", "SCIENTIFIC-NUMBER-SIGNIFICANT-DIGITS-FOR-ADDITION", 2, 0, false);
+        declareFunction("extended_number_plus_old", "EXTENDED-NUMBER-PLUS-OLD", 2, 0, false);
+        declareFunction("extended_number_minus", "EXTENDED-NUMBER-MINUS", 2, 0, false);
+        declareFunction("extended_number_minus_int", "EXTENDED-NUMBER-MINUS-INT", 2, 0, false);
+        declareFunction("extended_number_minus_old", "EXTENDED-NUMBER-MINUS-OLD", 2, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_times", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-TIMES", 2, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_plus", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-PLUS", 2, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_quotient", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-QUOTIENT", 2, 0, false);
+        declareFunction("extended_number_min", "EXTENDED-NUMBER-MIN", 1, 0, false);
+        declareFunction("extended_number_max", "EXTENDED-NUMBER-MAX", 1, 0, false);
+        declareFunction("extended_number_sqrt", "EXTENDED-NUMBER-SQRT", 1, 0, false);
+        declareFunction("extended_number_log", "EXTENDED-NUMBER-LOG", 1, 1, false);
+        declareFunction("extended_number_expt", "EXTENDED-NUMBER-EXPT", 2, 0, false);
+        declareFunction("extended_number_exp", "EXTENDED-NUMBER-EXP", 1, 0, false);
+        declareFunction("extended_number_modulo", "EXTENDED-NUMBER-MODULO", 2, 0, false);
+        declareFunction("extended_number_approx", "EXTENDED-NUMBER-APPROX", 1, 0, false);
+        declareFunction("fraction_or_number_to_el", "FRACTION-OR-NUMBER-TO-EL", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_min", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-MIN", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_max", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-MAX", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_sqrt", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-SQRT", 1, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_log", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-LOG", 1, 1, false);
+        declareFunction("possibly_infinite_or_extended_number_expt", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-EXPT", 2, 0, false);
+        declareFunction("power_too_largeP", "POWER-TOO-LARGE?", 2, 0, false);
+        declareFunction("possibly_infinite_or_extended_number_exp", "POSSIBLY-INFINITE-OR-EXTENDED-NUMBER-EXP", 1, 0, false);
+        declareFunction("test_zerop", "TEST-ZEROP", 1, 0, false);
         return NIL;
     }
 
@@ -1257,34 +1608,6 @@ public final class extended_numbers extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

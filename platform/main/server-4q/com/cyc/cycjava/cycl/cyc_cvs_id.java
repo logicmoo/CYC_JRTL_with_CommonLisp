@@ -1,59 +1,66 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
+
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import com.cyc.cycjava.cycl.cyc_cvs_id;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cyc_cvs_id.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-public final class cyc_cvs_id extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      CYC-CVS-ID
+ * source file: /cyc/top/cycl/cyc-cvs-id.lisp
+ * created:     2019/07/03 17:37:05
+ */
+public final class cyc_cvs_id extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cyc_cvs_id();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cyc_cvs_id";
+ public static final String myName = "com.cyc.cycjava.cycl.cyc_cvs_id";
 
-    public static final String myFingerPrint = "2eb21c5cafffa30579c15615587b57bb09a1d77d70971956497b4820a75bed61";
 
     // defvar
     // Definitions
+    @LispMethod(comment = "defvar")
     public static final SubLSymbol $cvs_id$ = makeSymbol("*CVS-ID*");
 
     public static SubLObject declare_cyc_cvs_id_file() {
-	return NIL;
+        return NIL;
     }
 
     public static SubLObject init_cyc_cvs_id_file() {
-	defvar("*CVS-ID*", NIL);
-	return NIL;
+        defvar("*CVS-ID*", NIL);
+        return NIL;
     }
 
     public static SubLObject setup_cyc_cvs_id_file() {
-	return NIL;
+        return NIL;
     }
 
     @Override
     public void declareFunctions() {
-	declare_cyc_cvs_id_file();
+        declare_cyc_cvs_id_file();
     }
 
     @Override
     public void initializeVariables() {
-	init_cyc_cvs_id_file();
+        init_cyc_cvs_id_file();
     }
 
     @Override
     public void runTopLevelForms() {
-	setup_cyc_cvs_id_file();
+        setup_cyc_cvs_id_file();
     }
 
     static {
-
     }
 }
 

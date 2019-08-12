@@ -524,37 +524,39 @@ final public class SubLThread extends Thread {
         hashtableEqualpKeyEntry.clear();
         valuesArray.clear();
         valuesCount = 0;
-        value1 = SubLNil.NIL;
-        value2 = SubLNil.NIL;
-        value3 = SubLNil.NIL;
-        value4 = SubLNil.NIL;
-        value5 = SubLNil.NIL;
-        value6 = SubLNil.NIL;
-        value7 = SubLNil.NIL;
-        value8 = SubLNil.NIL;
+        final SubLNil nil = SubLNil.NIL;
+	value1 = nil;
+        value2 = nil;
+        value3 = nil;
+        value4 = nil;
+        value5 = nil;
+        value6 = nil;
+        value7 = nil;
+        value8 = nil;
         throwStack.clear();
         env = (Environment) SubLEnvironment.getDefaultEnvironment();
     }
 
     public SubLObject resetMultipleValues() {
         int size = valuesCount;
-        if (size == 0)
-            return SubLNil.NIL;
+        final SubLNil nil = SubLNil.NIL;
+	if (size == 0)
+            return nil;
         valuesCount = 0;
-        value1 = SubLNil.NIL;
-        value2 = SubLNil.NIL;
+        value1 = nil;
+        value2 = nil;
         if (size < 3)
-            return SubLNil.NIL;
-        value3 = SubLNil.NIL;
-        value4 = SubLNil.NIL;
-        value5 = SubLNil.NIL;
-        value6 = SubLNil.NIL;
-        value7 = SubLNil.NIL;
-        value8 = SubLNil.NIL;
+            return nil;
+        value3 = nil;
+        value4 = nil;
+        value5 = nil;
+        value6 = nil;
+        value7 = nil;
+        value8 = nil;
         if (size < 9)
-            return SubLNil.NIL;
+            return nil;
         valuesArray.clear();
-        return SubLNil.NIL;
+        return nil;
     }
 
     public void restoreValuesFromList(List<SubLObject> newValues) {

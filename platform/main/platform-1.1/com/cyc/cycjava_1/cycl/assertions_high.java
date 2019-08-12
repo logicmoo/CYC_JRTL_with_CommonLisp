@@ -691,8 +691,7 @@ and HL sides were entangled. */
   }
 
   public static final SubLObject setup_assertions_high_file() {
-    // CVS_ID("Id: assertions-high.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym19$ASSERTION_CNF, $list22, $str23$Return_the_cnf_of_ASSERTION______, $list24, $list25);
+        utilities_macros.register_cyc_api_function($sym19$ASSERTION_CNF, $list22, $str23$Return_the_cnf_of_ASSERTION______, $list24, $list25);
     utilities_macros.register_cyc_api_function($sym26$ASSERTION_MT, $list22, $str27$Return_the_mt_of_ASSERTION_, $list24, $list28);
     utilities_macros.register_cyc_api_function($sym29$ASSERTION_DIRECTION, $list22, $str30$Return_the_direction_of_ASSERTION, $list24, $list31);
     utilities_macros.register_cyc_api_function($sym32$ASSERTION_TRUTH, $list22, $str33$Return_the_current_truth_of_ASSER, $list24, $list34);

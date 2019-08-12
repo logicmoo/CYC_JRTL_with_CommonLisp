@@ -179,8 +179,7 @@ public  final class shelfs extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_shelfs_file() {
-    // CVS_ID("Id: shelfs.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_shelf_info$.getGlobalValue(), Symbols.symbol_function($sym8$SHELF_INFO_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_shelf_info$.getGlobalValue(), Symbols.symbol_function($sym8$SHELF_INFO_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$SHELF_INFO_KEY, $sym10$_CSETF_SHELF_INFO_KEY);
     Structures.def_csetf($sym11$SHELF_INFO_TEST, $sym12$_CSETF_SHELF_INFO_TEST);
     Structures.def_csetf($sym13$SHELF_INFO_COMPARE, $sym14$_CSETF_SHELF_INFO_COMPARE);

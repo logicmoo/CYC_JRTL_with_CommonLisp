@@ -1,51 +1,25 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.abnormal;
-import com.cyc.cycjava.cycl.inference.harness.after_adding;
-import com.cyc.cycjava.cycl.inference.harness.argumentation;
-import com.cyc.cycjava.cycl.inference.harness.forward;
-import com.cyc.cycjava.cycl.inference.harness.forward_rule_propagation;
-import com.cyc.cycjava.cycl.inference.harness.inference_analysis;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_store;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava.cycl.inference.inference_trampolines;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_genlmt;
-import com.cyc.cycjava.cycl.tms;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-
+import static com.cyc.cycjava.cycl.arguments.*;
+import static com.cyc.cycjava.cycl.assertions_interface.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cycl_utilities.*;
+import static com.cyc.cycjava.cycl.deduction_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.enumeration_types.*;
+import static com.cyc.cycjava.cycl.genl_mts.*;
+import static com.cyc.cycjava.cycl.hl_supports.*;
+import static com.cyc.cycjava.cycl.hlmt.*;
 import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.tms.*;
+import static com.cyc.cycjava.cycl.inference.inference_trampolines.*;
+import static com.cyc.cycjava.cycl.list_utilities.*;
+import static com.cyc.cycjava.cycl.uncanonicalizer.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
@@ -53,7 +27,6 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
@@ -64,53 +37,123 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.inference_trampolines;
+import com.cyc.cycjava.cycl.inference.harness.*;
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_genlmt;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class tms extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      TMS
+ * source file: /cyc/top/cycl/tms.lisp
+ * created:     2019/07/03 17:37:37
+ */
+public final class tms extends SubLTranslatedFile implements V12 {
+    /**
+     * Remove ASSERTION from the KB.
+     */
+    @LispMethod(comment = "Remove ASSERTION from the KB.")
+    public static final SubLObject tms_remove_assertion_int_2(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        kb_indexing.remove_term_indices(assertion);
+        forward.remqueue_forward_assertion(assertion);
+        if (NIL != assertions_high.rule_assertionP(assertion)) {
+            inference_analysis.clear_transformation_rule_statistics(assertion);
+        }
+        wff_utilities.non_wff_remove(assertion);
+        if (NIL == function_terms.tou_assertionP(assertion)) {
+            return assertions_high.remove_assertion(assertion);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject believed_circular_deduction(SubLObject deduction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                SubLObject rest = NIL;
+                for (rest = deductions_high.deduction_supports(deduction); !((NIL != ans) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject support = rest.first();
+                        if (NIL != assertion_handles.assertion_p(support)) {
+                            if (NIL == subl_promotions.memberP(support, $circular_local_assertions$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) {
+                                ans = T;
+                            }
+                        }
+                    }
+                }
+                return makeBoolean(NIL == ans);
+            }
+        }
+    }
+
     public static final SubLFile me = new tms();
 
-    public static final String myName = "com.cyc.cycjava.cycl.tms";
+ public static final String myName = "com.cyc.cycjava.cycl.tms";
 
-    public static final String myFingerPrint = "6c2011185a7b58dbfa01741720eb5ff18bc9217be081892774fec8ff6e68b76a";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $tms_debugP$ = makeSymbol("*TMS-DEBUG?*");
 
-
-
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $tms_forts_to_kill$ = makeSymbol("*TMS-FORTS-TO-KILL*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $tms_remove_assertion_lowP$ = makeSymbol("*TMS-REMOVE-ASSERTION-LOW?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $recursive_tms_bugP$ = makeSymbol("*RECURSIVE-TMS-BUG?*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $use_backchain_forbidden_deduction_stale_wrt_exceptionsP_general_versionP$ = makeSymbol("*USE-BACKCHAIN-FORBIDDEN-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $use_backchain_forbidden_deduction_stale_wrt_exceptions_hackP$ = makeSymbol("*USE-BACKCHAIN-FORBIDDEN-DEDUCTION-STALE-WRT-EXCEPTIONS-HACK?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $circular_deductions$ = makeSymbol("*CIRCULAR-DEDUCTIONS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $circular_assertions$ = makeSymbol("*CIRCULAR-ASSERTIONS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $circular_local_assertions$ = makeSymbol("*CIRCULAR-LOCAL-ASSERTIONS*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $circular_target_assertion$ = makeSymbol("*CIRCULAR-TARGET-ASSERTION*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $circular_complexity_count$ = makeSymbol("*CIRCULAR-COMPLEXITY-COUNT*");
 
     // defparameter
@@ -118,35 +161,24 @@ public final class tms extends SubLTranslatedFile {
      * The maximum number of assertions we'll consider while checking for circularly
      * supported assertions. NIL means no limit
      */
+    @LispMethod(comment = "The maximum number of assertions we\'ll consider while checking for circularly\r\nsupported assertions. NIL means no limit\ndefparameter\nThe maximum number of assertions we\'ll consider while checking for circularly\nsupported assertions. NIL means no limit")
     public static final SubLSymbol $circular_complexity_count_limit$ = makeSymbol("*CIRCULAR-COMPLEXITY-COUNT-LIMIT*");
 
-
-
-    public static final SubLList $list1 = list(list(makeSymbol("ASSERTION")), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-
+    static private final SubLList $list1 = list(list(makeSymbol("ASSERTION")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     public static final SubLSymbol $tms_assertions_being_removed$ = makeSymbol("*TMS-ASSERTIONS-BEING-REMOVED*");
 
-    public static final SubLSymbol ADJOIN = makeSymbol("ADJOIN");
+    private static final SubLSymbol ADJOIN = makeSymbol("ADJOIN");
 
-    public static final SubLList $list5 = list(makeSymbol("*TMS-ASSERTIONS-BEING-REMOVED*"));
+    static private final SubLList $list5 = list(makeSymbol("*TMS-ASSERTIONS-BEING-REMOVED*"));
 
-
-
-    public static final SubLList $list7 = list(list(makeSymbol("DEDUCTION")), makeSymbol("&BODY"), makeSymbol("BODY"));
+    static private final SubLList $list7 = list(list(makeSymbol("DEDUCTION")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     public static final SubLSymbol $tms_deductions_being_removed$ = makeSymbol("*TMS-DEDUCTIONS-BEING-REMOVED*");
 
-    public static final SubLList $list9 = list(makeSymbol("*TMS-DEDUCTIONS-BEING-REMOVED*"));
+    static private final SubLList $list9 = list(makeSymbol("*TMS-DEDUCTIONS-BEING-REMOVED*"));
 
-
-
-    public static final SubLSymbol TMS_NOTE_DEDUCTION_BEING_REMOVED = makeSymbol("TMS-NOTE-DEDUCTION-BEING-REMOVED");
-
-
-
-
+    private static final SubLSymbol TMS_NOTE_DEDUCTION_BEING_REMOVED = makeSymbol("TMS-NOTE-DEDUCTION-BEING-REMOVED");
 
     private static final SubLSymbol KBEQ = makeSymbol("KBEQ");
 
@@ -158,45 +190,15 @@ public final class tms extends SubLTranslatedFile {
 
     private static final SubLList $list18 = list(list(makeSymbol("*TMS-FORTS-TO-KILL*"), makeKeyword("UNINITIALIZED")));
 
-
-
-
-
     private static final SubLSymbol TV_P = makeSymbol("TV-P");
 
-
-
-
-
-
-
-
-
-
-
     private static final SubLString $str27$do_broad_mt_index = makeString("do-broad-mt-index");
-
-
-
-
 
     private static final SubLSymbol $except_propagation_rule$ = makeSymbol("*EXCEPT-PROPAGATION-RULE*");
 
     private static final SubLSymbol $sym31$_EXCEPT_PROPAGATION_RULE__INITIALIZER = makeSymbol("*EXCEPT-PROPAGATION-RULE*-INITIALIZER");
 
-    private static final SubLList $list32 = list(reader_make_constant_shell(makeString("implies")), list(new SubLObject[]{ reader_make_constant_shell(makeString("and")), list(reader_make_constant_shell(makeString("assertionSentence")), makeSymbol("?GENL-GAF"), makeSymbol("?SENTENCE")), list(reader_make_constant_shell(makeString("assertionSentence")), makeSymbol("?SPEC-GAF"), makeSymbol("?SENTENCE")), list(reader_make_constant_shell(makeString("different")), makeSymbol("?SPEC-GAF"), makeSymbol("?GENL-GAF")), list(reader_make_constant_shell(makeString("assertionTruth")), makeSymbol("?GENL-GAF"), makeSymbol("?GENL-TRUTH")), list(reader_make_constant_shell(makeString("assertionTruth")), makeSymbol("?SPEC-GAF"), makeSymbol("?SPEC-TRUTH")), list(reader_make_constant_shell(makeString("different")), makeSymbol("?SPEC-TRUTH"), makeSymbol("?GENL-TRUTH")), list(reader_make_constant_shell(makeString("assertionMt")), makeSymbol("?GENL-GAF"), makeSymbol("?GENL-MT")), list(reader_make_constant_shell(makeString("assertionMt")), makeSymbol("?SPEC-GAF"), makeSymbol("?SPEC-MT")), list(reader_make_constant_shell(makeString("genlMt")), makeSymbol("?SPEC-MT"), makeSymbol("?GENL-MT")) }), list(reader_make_constant_shell(makeString("ist")), makeSymbol("?SPEC-MT"), list(reader_make_constant_shell(makeString("except")), makeSymbol("?GENL-GAF"))));
-
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
-
-    private static final SubLObject $$except = reader_make_constant_shell(makeString("except"));
-
-
-
-
-
-
-
-
+    private static final SubLList $list32 = list(reader_make_constant_shell("implies"), list(new SubLObject[]{ reader_make_constant_shell("and"), list(reader_make_constant_shell("assertionSentence"), makeSymbol("?GENL-GAF"), makeSymbol("?SENTENCE")), list(reader_make_constant_shell("assertionSentence"), makeSymbol("?SPEC-GAF"), makeSymbol("?SENTENCE")), list(reader_make_constant_shell("different"), makeSymbol("?SPEC-GAF"), makeSymbol("?GENL-GAF")), list(reader_make_constant_shell("assertionTruth"), makeSymbol("?GENL-GAF"), makeSymbol("?GENL-TRUTH")), list(reader_make_constant_shell("assertionTruth"), makeSymbol("?SPEC-GAF"), makeSymbol("?SPEC-TRUTH")), list(reader_make_constant_shell("different"), makeSymbol("?SPEC-TRUTH"), makeSymbol("?GENL-TRUTH")), list(reader_make_constant_shell("assertionMt"), makeSymbol("?GENL-GAF"), makeSymbol("?GENL-MT")), list(reader_make_constant_shell("assertionMt"), makeSymbol("?SPEC-GAF"), makeSymbol("?SPEC-MT")), list(reader_make_constant_shell("genlMt"), makeSymbol("?SPEC-MT"), makeSymbol("?GENL-MT")) }), list(reader_make_constant_shell("ist"), makeSymbol("?SPEC-MT"), list(reader_make_constant_shell("except"), makeSymbol("?GENL-GAF"))));
 
 
 
@@ -204,11 +206,11 @@ public final class tms extends SubLTranslatedFile {
 
     private static final SubLString $str41$_S_was_not_an_atomic_CNF_ = makeString("~S was not an atomic CNF.");
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
 
     private static final SubLList $list43 = list(makeSymbol("ARG1"), makeSymbol("ARG2"));
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
 
     private static final SubLSymbol $sym45$RULE_ASSERTION_ = makeSymbol("RULE-ASSERTION?");
 
@@ -224,35 +226,17 @@ public final class tms extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym51$_PRED = makeSymbol("?PRED");
 
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
 
-    private static final SubLObject $$implies = reader_make_constant_shell(makeString("implies"));
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+
+
+
 
     private static final SubLSymbol UNBOUND_PREDICATE_RULE_P = makeSymbol("UNBOUND-PREDICATE-RULE-P");
-
-
 
     private static final SubLSymbol $kw57$CONDITIONAL_SENTENCE_ = makeKeyword("CONDITIONAL-SENTENCE?");
 
     private static final SubLSymbol $MAX_TRANSFORMATION_DEPTH = makeKeyword("MAX-TRANSFORMATION-DEPTH");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol $kw67$ALLOW_UNBOUND_PREDICATE_TRANSFORMATION_ = makeKeyword("ALLOW-UNBOUND-PREDICATE-TRANSFORMATION?");
 
@@ -264,31 +248,21 @@ public final class tms extends SubLTranslatedFile {
 
     private static final SubLString $str71$_tms_deduction_stale_wrt_exceptio = makeString("(tms-deduction-stale-wrt-exceptions?-general-version (find-deduction-by-id ~A)) could not find GAF assertion to repropagate against rule (supported-object=~S)");
 
-
-
     private static final SubLString $str73$Found_deduction__A_supporting_wit = makeString("Found deduction ~A supporting with bindings but no rule?!  Aborting tms wrt exceptions.");
 
     private static final SubLString $str74$Performing_full_TMS_on_mt__S = makeString("Performing full TMS on mt ~S");
-
-
 
     private static final SubLSymbol TMS_RECONSIDER_ASSERTION = makeSymbol("TMS-RECONSIDER-ASSERTION");
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
     private static final SubLString $$$Reconsidering_assertion_arguments = makeString("Reconsidering assertion arguments");
-
-
 
     private static final SubLString $$$Computing_doomed_dependents = makeString("Computing doomed dependents");
 
     private static final SubLString $$$cdolist = makeString("cdolist");
 
     private static final SubLSymbol $sym83$_ = makeSymbol(">");
-
-
 
     private static final SubLString $$$Precaching_indices = makeString("Precaching indices");
 
@@ -304,17 +278,59 @@ public final class tms extends SubLTranslatedFile {
 
     private static final SubLString $str91$__Removing__S = makeString("~%Removing ~S");
 
-
-
     public static SubLObject tms_any_assertion_being_removedP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return list_utilities.sublisp_boolean($tms_assertions_being_removed$.getDynamicValue(thread));
     }
 
+    /**
+     * Return T iff ASSERTION is in the midst of being removed via TMS
+     */
+    @LispMethod(comment = "Return T iff ASSERTION is in the midst of being removed via TMS")
+    public static final SubLObject tms_assertion_being_removedP_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            return subl_promotions.memberP(assertion, $tms_assertions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
+        }
+    }
+
+    /**
+     * Return T iff ASSERTION is in the midst of being removed via TMS
+     */
+    @LispMethod(comment = "Return T iff ASSERTION is in the midst of being removed via TMS")
     public static SubLObject tms_assertion_being_removedP(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         return list_utilities.member_kbeqP(assertion, $tms_assertions_being_removed$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject tms_note_assertion_being_removed_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject assertion = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt1);
+                    assertion = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return listS(CLET, list(list($tms_assertions_being_removed$, listS(ADJOIN, assertion, $list_alt5))), append(body, NIL));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt1);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject tms_note_assertion_being_removed(final SubLObject macroform, final SubLObject environment) {
@@ -336,10 +352,54 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return T iff DEDUCTION is in the midst of being removed via TMS
+     */
+    @LispMethod(comment = "Return T iff DEDUCTION is in the midst of being removed via TMS")
+    public static final SubLObject tms_deduction_being_removedP_alt(SubLObject deduction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(deduction, DEDUCTION_P);
+            return subl_promotions.memberP(deduction, $tms_deductions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
+        }
+    }
+
+    /**
+     * Return T iff DEDUCTION is in the midst of being removed via TMS
+     */
+    @LispMethod(comment = "Return T iff DEDUCTION is in the midst of being removed via TMS")
     public static SubLObject tms_deduction_being_removedP(final SubLObject deduction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
         return list_utilities.member_kbeqP(deduction, $tms_deductions_being_removed$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject tms_note_deduction_being_removed_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt7);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject deduction = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt7);
+                    deduction = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return listS(CLET, list(list($tms_deductions_being_removed$, listS(ADJOIN, deduction, $list_alt9))), append(body, NIL));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt7);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject tms_note_deduction_being_removed(final SubLObject macroform, final SubLObject environment) {
@@ -361,8 +421,48 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return T iff ARGUMENT is known to be in the midst of being removed via TMS
+     */
+    @LispMethod(comment = "Return T iff ARGUMENT is known to be in the midst of being removed via TMS")
+    public static final SubLObject tms_argument_being_removedP_alt(SubLObject argument) {
+        return makeBoolean((NIL != deduction_p(argument)) && (NIL != com.cyc.cycjava.cycl.tms.tms_deduction_being_removedP(argument)));
+    }
+
+    /**
+     * Return T iff ARGUMENT is known to be in the midst of being removed via TMS
+     */
+    @LispMethod(comment = "Return T iff ARGUMENT is known to be in the midst of being removed via TMS")
     public static SubLObject tms_argument_being_removedP(final SubLObject argument) {
         return makeBoolean((NIL != deduction_handles.deduction_p(argument)) && (NIL != tms_deduction_being_removedP(argument)));
+    }
+
+    public static final SubLObject tms_note_argument_being_removed_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt7);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject deduction = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt7);
+                    deduction = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return list(PIF, list(DEDUCTION_P, deduction), listS(TMS_NOTE_DEDUCTION_BEING_REMOVED, list(deduction), append(body, NIL)), bq_cons(PROGN, append(body, NIL)));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt7);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject tms_note_argument_being_removed(final SubLObject macroform, final SubLObject environment) {
@@ -447,12 +547,50 @@ public final class tms extends SubLTranslatedFile {
         return count;
     }
 
+    /**
+     * Unless an asserted argument with TV already exists on ASSERTION,
+     * remove any existing asserted argument for ASSERTION,
+     * and add a new asserted argument with TV.
+     */
+    @LispMethod(comment = "Unless an asserted argument with TV already exists on ASSERTION,\r\nremove any existing asserted argument for ASSERTION,\r\nand add a new asserted argument with TV.\nUnless an asserted argument with TV already exists on ASSERTION,\nremove any existing asserted argument for ASSERTION,\nand add a new asserted argument with TV.")
+    public static final SubLObject tms_possibly_replace_asserted_argument_with_tv_alt(SubLObject assertion, SubLObject tv) {
+        {
+            SubLObject new_asserted_argument = hl_modifiers.possibly_replace_assertion_asserted_argument_with_tv(assertion, tv);
+            if (NIL != new_asserted_argument) {
+                return com.cyc.cycjava.cycl.tms.tms_postprocess_new_argument(assertion, new_asserted_argument);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Unless an asserted argument with TV already exists on ASSERTION,
+     * remove any existing asserted argument for ASSERTION,
+     * and add a new asserted argument with TV.
+     */
+    @LispMethod(comment = "Unless an asserted argument with TV already exists on ASSERTION,\r\nremove any existing asserted argument for ASSERTION,\r\nand add a new asserted argument with TV.\nUnless an asserted argument with TV already exists on ASSERTION,\nremove any existing asserted argument for ASSERTION,\nand add a new asserted argument with TV.")
     public static SubLObject tms_possibly_replace_asserted_argument_with_tv(final SubLObject assertion, final SubLObject tv) {
         final SubLObject new_asserted_argument = assertions_interface.possibly_replace_assertion_asserted_argument_with_tv(assertion, tv);
         if (NIL != new_asserted_argument) {
             return tms_postprocess_new_argument(assertion, new_asserted_argument, UNPROVIDED);
         }
         return NIL;
+    }
+
+    /**
+     * Assumes that ASSERTION does not have any asserted arguments.
+     * Creates a new asserted argument for ASSERTION with TV.
+     */
+    @LispMethod(comment = "Assumes that ASSERTION does not have any asserted arguments.\r\nCreates a new asserted argument for ASSERTION with TV.\nAssumes that ASSERTION does not have any asserted arguments.\nCreates a new asserted argument for ASSERTION with TV.")
+    public static final SubLObject tms_create_asserted_argument_with_tv(SubLObject assertion, SubLObject tv) {
+        {
+            SubLObject new_asserted_argument = hl_modifiers.kb_create_asserted_argument_with_tv(assertion, tv);
+            if (NIL != new_asserted_argument) {
+                return com.cyc.cycjava.cycl.tms.tms_postprocess_new_argument(assertion, new_asserted_argument);
+            } else {
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject tms_create_asserted_argument_with_tv(final SubLObject assertion, final SubLObject tv, SubLObject pre_existing_assertionP) {
@@ -468,6 +606,14 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject tms_add_new_deduction(SubLObject assertion, SubLObject supports, SubLObject tv) {
+        {
+            SubLObject deduction = deductions_high.create_deduction_with_tv(assertion, supports, tv);
+            com.cyc.cycjava.cycl.tms.tms_postprocess_new_argument(assertion, deduction);
+            return deduction;
+        }
+    }
+
     public static SubLObject tms_add_new_deduction(final SubLObject assertion, final SubLObject supports, final SubLObject tv, SubLObject v_bindings, SubLObject pragmatic_support_mts) {
         if (v_bindings == UNPROVIDED) {
             v_bindings = NIL;
@@ -480,11 +626,42 @@ public final class tms extends SubLTranslatedFile {
         return deduction;
     }
 
+    /**
+     * Now that ARGUMENT for ASSERTION has been added to the KB,
+     * perform necessary truth maintenance.  ARGUMENT is assumed to be a new argument,
+     * not a redundant already-existing one.
+     */
+    @LispMethod(comment = "Now that ARGUMENT for ASSERTION has been added to the KB,\r\nperform necessary truth maintenance.  ARGUMENT is assumed to be a new argument,\r\nnot a redundant already-existing one.\nNow that ARGUMENT for ASSERTION has been added to the KB,\nperform necessary truth maintenance.  ARGUMENT is assumed to be a new argument,\nnot a redundant already-existing one.")
+    public static final SubLObject tms_postprocess_new_argument(SubLObject assertion, SubLObject argument) {
+        SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+        {
+            SubLObject successfulP = NIL;
+            try {
+                com.cyc.cycjava.cycl.tms.tms_recompute_assertion_tv(assertion);
+                after_adding.handle_after_addings(argument, assertion);
+                successfulP = T;
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        if (NIL == successfulP) {
+                            com.cyc.cycjava.cycl.tms.tms_remove_argument(argument, assertion);
+                        }
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+        }
+        return argument;
+    }
+
     public static SubLObject tms_postprocess_new_argument(final SubLObject assertion, final SubLObject argument, SubLObject pre_existing_assertionP) {
         if (pre_existing_assertionP == UNPROVIDED) {
             pre_existing_assertionP = T;
         }
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         SubLObject successfulP = NIL;
         try {
             tms_recompute_assertion_tv(assertion, pre_existing_assertionP, UNPROVIDED);
@@ -506,12 +683,80 @@ public final class tms extends SubLTranslatedFile {
         return argument;
     }
 
+    /**
+     * Remove ARGUMENT for ASSERTION from the KB and perform necessary truth maintenance.
+     * Return T if the supported assertion was removed, or it was invalid, else NIL.
+     */
+    @LispMethod(comment = "Remove ARGUMENT for ASSERTION from the KB and perform necessary truth maintenance.\r\nReturn T if the supported assertion was removed, or it was invalid, else NIL.\nRemove ARGUMENT for ASSERTION from the KB and perform necessary truth maintenance.\nReturn T if the supported assertion was removed, or it was invalid, else NIL.")
+    public static final SubLObject tms_remove_argument(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+            if ((NIL != valid_argument(argument, UNPROVIDED)) && (NIL == com.cyc.cycjava.cycl.tms.tms_argument_being_removedP(argument))) {
+                {
+                    SubLObject assertion_removedP = NIL;
+                    if (NIL != deduction_p(argument)) {
+                        {
+                            SubLObject _prev_bind_0 = $tms_deductions_being_removed$.currentBinding(thread);
+                            try {
+                                $tms_deductions_being_removed$.bind(adjoin(argument, $tms_deductions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), thread);
+                                remove_argument(argument, assertion);
+                                if (NIL != assertion_handles.assertion_p(assertion)) {
+                                    if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+                                        assertion_removedP = com.cyc.cycjava.cycl.tms.tms_propagate_removed_argument(argument, assertion);
+                                    } else {
+                                        assertion_removedP = T;
+                                    }
+                                } else {
+                                    if (NIL != hl_support_p(assertion)) {
+                                        {
+                                            SubLObject kb_hl_support = kb_hl_supports.find_kb_hl_support(assertion);
+                                            if (NIL != kb_hl_support) {
+                                                assertion_removedP = kb_hl_supports.tms_possibly_rejustify_kb_hl_support(kb_hl_support);
+                                            } else {
+                                                assertion_removedP = T;
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                $tms_deductions_being_removed$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    } else {
+                        remove_argument(argument, assertion);
+                        if (NIL != assertion_handles.assertion_p(assertion)) {
+                            if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+                                assertion_removedP = com.cyc.cycjava.cycl.tms.tms_propagate_removed_argument(argument, assertion);
+                            } else {
+                                assertion_removedP = T;
+                            }
+                        } else {
+                            if (NIL != hl_support_p(assertion)) {
+                                {
+                                    SubLObject kb_hl_support = kb_hl_supports.find_kb_hl_support(assertion);
+                                    if (NIL != kb_hl_support) {
+                                        assertion_removedP = kb_hl_supports.tms_possibly_rejustify_kb_hl_support(kb_hl_support);
+                                    } else {
+                                        assertion_removedP = T;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return assertion_removedP;
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject tms_remove_argument(final SubLObject argument, final SubLObject support, SubLObject removing_the_last_asserted_argumentP) {
         if (removing_the_last_asserted_argumentP == UNPROVIDED) {
             removing_the_last_asserted_argumentP = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         if ((NIL != arguments.valid_argument(argument, UNPROVIDED)) && (NIL == tms_argument_being_removedP(argument))) {
             SubLObject support_removedP = NIL;
             if (NIL != deduction_handles.deduction_p(argument)) {
@@ -564,6 +809,110 @@ public final class tms extends SubLTranslatedFile {
             return support_removedP;
         }
         return NIL;
+    }
+
+    public static final SubLObject tms_propagate_removed_argument(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject assertion_removedP = NIL;
+                if (NIL != kb_hl_supports.enqueueing_kb_hl_supports_for_tmsP()) {
+                    assertion_removedP = com.cyc.cycjava.cycl.tms.tms_recompute_assertion_tv(assertion);
+                    if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+                        try {
+                            if (NIL != assertion_removedP) {
+                                {
+                                    SubLObject _prev_bind_0 = $tms_assertions_being_removed$.currentBinding(thread);
+                                    try {
+                                        $tms_assertions_being_removed$.bind(adjoin(assertion, $tms_assertions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), thread);
+                                        after_adding.handle_after_removings(argument, assertion);
+                                    } finally {
+                                        $tms_assertions_being_removed$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            } else {
+                                after_adding.handle_after_removings(argument, assertion);
+                            }
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    if (NIL != assertion_removedP) {
+                                        if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
+                                            if (NIL != com.cyc.cycjava.cycl.tms.tms_assertion_being_removedP(assertion)) {
+                                                com.cyc.cycjava.cycl.tms.tms_remove_assertion_int_2(assertion);
+                                            } else {
+                                                com.cyc.cycjava.cycl.tms.tms_remove_assertion_int(assertion);
+                                            }
+                                        }
+                                    } else {
+                                        if ((NIL != $check_for_circular_justs$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.tms.some_belief_justification(assertion, UNPROVIDED))) {
+                                            com.cyc.cycjava.cycl.tms.tms_remove_assertion(assertion);
+                                            assertion_removedP = T;
+                                        }
+                                    }
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    {
+                        SubLObject _prev_bind_0 = kb_hl_supports.$tms_kb_hl_support_queue$.currentBinding(thread);
+                        try {
+                            kb_hl_supports.$tms_kb_hl_support_queue$.bind(queues.create_queue(), thread);
+                            assertion_removedP = com.cyc.cycjava.cycl.tms.tms_recompute_assertion_tv(assertion);
+                            if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+                                try {
+                                    if (NIL != assertion_removedP) {
+                                        {
+                                            SubLObject _prev_bind_0_1 = $tms_assertions_being_removed$.currentBinding(thread);
+                                            try {
+                                                $tms_assertions_being_removed$.bind(adjoin(assertion, $tms_assertions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), thread);
+                                                after_adding.handle_after_removings(argument, assertion);
+                                            } finally {
+                                                $tms_assertions_being_removed$.rebind(_prev_bind_0_1, thread);
+                                            }
+                                        }
+                                    } else {
+                                        after_adding.handle_after_removings(argument, assertion);
+                                    }
+                                } finally {
+                                    {
+                                        SubLObject _prev_bind_0_2 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                        try {
+                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                            if (NIL != assertion_removedP) {
+                                                if (NIL != assertions_high.valid_assertion(assertion, UNPROVIDED)) {
+                                                    if (NIL != com.cyc.cycjava.cycl.tms.tms_assertion_being_removedP(assertion)) {
+                                                        com.cyc.cycjava.cycl.tms.tms_remove_assertion_int_2(assertion);
+                                                    } else {
+                                                        com.cyc.cycjava.cycl.tms.tms_remove_assertion_int(assertion);
+                                                    }
+                                                }
+                                            } else {
+                                                if ((NIL != $check_for_circular_justs$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.tms.some_belief_justification(assertion, UNPROVIDED))) {
+                                                    com.cyc.cycjava.cycl.tms.tms_remove_assertion(assertion);
+                                                    assertion_removedP = T;
+                                                }
+                                            }
+                                        } finally {
+                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_2, thread);
+                                        }
+                                    }
+                                }
+                            }
+                            kb_hl_supports.process_tms_kb_hl_support_queue();
+                        } finally {
+                            kb_hl_supports.$tms_kb_hl_support_queue$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return assertion_removedP;
+            }
+        }
     }
 
     public static SubLObject tms_propagate_removed_argument(final SubLObject argument, final SubLObject assertion, final SubLObject removing_the_last_asserted_argumentP) {
@@ -766,6 +1115,22 @@ public final class tms extends SubLTranslatedFile {
         return assertion_removedP;
     }
 
+    /**
+     * Remove each valid assertion in ASSERTIONS
+     */
+    @LispMethod(comment = "Remove each valid assertion in ASSERTIONS")
+    public static final SubLObject tms_remove_assertion_list_alt(SubLObject assertions) {
+        if (NIL == assertions) {
+            return NIL;
+        } else {
+            return com.cyc.cycjava.cycl.tms.tms_remove_nonempty_assertion_list(assertions);
+        }
+    }
+
+    /**
+     * Remove each valid assertion in ASSERTIONS
+     */
+    @LispMethod(comment = "Remove each valid assertion in ASSERTIONS")
     public static SubLObject tms_remove_assertion_list(final SubLObject assertions) {
         if (NIL == assertions) {
             return NIL;
@@ -773,6 +1138,25 @@ public final class tms extends SubLTranslatedFile {
         return tms_remove_nonempty_assertion_list(assertions);
     }
 
+    /**
+     * Remove each valid assertion in ASSERTIONS
+     */
+    @LispMethod(comment = "Remove each valid assertion in ASSERTIONS")
+    public static final SubLObject tms_remove_nonempty_assertion_list_alt(SubLObject assertions) {
+        {
+            SubLObject cdolist_list_var = assertions;
+            SubLObject assertion = NIL;
+            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.tms.tms_remove_assertion(assertion);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Remove each valid assertion in ASSERTIONS
+     */
+    @LispMethod(comment = "Remove each valid assertion in ASSERTIONS")
     public static SubLObject tms_remove_nonempty_assertion_list(final SubLObject assertions) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != tms_can_kill_forts_for_meP()) {
@@ -804,9 +1188,25 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Remove ASSERTION from the KB and do all necessary truth maintenance.
+     */
+    @LispMethod(comment = "Remove ASSERTION from the KB and do all necessary truth maintenance.")
+    public static final SubLObject tms_remove_assertion_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        if ((NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) && (NIL == com.cyc.cycjava.cycl.tms.tms_assertion_being_removedP(assertion))) {
+            return com.cyc.cycjava.cycl.tms.tms_remove_assertion_int(assertion);
+        }
+        return NIL;
+    }
+
+    /**
+     * Remove ASSERTION from the KB and do all necessary truth maintenance.
+     */
+    @LispMethod(comment = "Remove ASSERTION from the KB and do all necessary truth maintenance.")
     public static SubLObject tms_remove_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
             if (NIL == tms_assertion_being_removedP(assertion)) {
                 return tms_remove_assertion_int(assertion);
@@ -816,6 +1216,70 @@ public final class tms extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject tms_remove_assertion_int_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            kb_modification_event.post_kb_modify_remove_assertion_event(assertion);
+            if (NIL != kb_hl_supports.enqueueing_kb_hl_supports_for_tmsP()) {
+                {
+                    SubLObject _prev_bind_0 = $tms_assertions_being_removed$.currentBinding(thread);
+                    try {
+                        $tms_assertions_being_removed$.bind(adjoin(assertion, $tms_assertions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), thread);
+                        {
+                            SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
+                            if (NIL == v_arguments) {
+                                com.cyc.cycjava.cycl.tms.tms_remove_assertion_int_2(assertion);
+                            } else {
+                                {
+                                    SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
+                                    SubLObject argument = NIL;
+                                    for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                                        com.cyc.cycjava.cycl.tms.tms_remove_argument(argument, assertion);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        $tms_assertions_being_removed$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            } else {
+                {
+                    SubLObject _prev_bind_0 = kb_hl_supports.$tms_kb_hl_support_queue$.currentBinding(thread);
+                    try {
+                        kb_hl_supports.$tms_kb_hl_support_queue$.bind(queues.create_queue(), thread);
+                        {
+                            SubLObject _prev_bind_0_3 = $tms_assertions_being_removed$.currentBinding(thread);
+                            try {
+                                $tms_assertions_being_removed$.bind(adjoin(assertion, $tms_assertions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), thread);
+                                {
+                                    SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
+                                    if (NIL == v_arguments) {
+                                        com.cyc.cycjava.cycl.tms.tms_remove_assertion_int_2(assertion);
+                                    } else {
+                                        {
+                                            SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
+                                            SubLObject argument = NIL;
+                                            for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                                                com.cyc.cycjava.cycl.tms.tms_remove_argument(argument, assertion);
+                                            }
+                                        }
+                                    }
+                                }
+                            } finally {
+                                $tms_assertions_being_removed$.rebind(_prev_bind_0_3, thread);
+                            }
+                        }
+                        kb_hl_supports.process_tms_kb_hl_support_queue();
+                    } finally {
+                        kb_hl_supports.$tms_kb_hl_support_queue$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject tms_remove_assertion_int(final SubLObject assertion) {
@@ -881,7 +1345,7 @@ public final class tms extends SubLTranslatedFile {
     }
 
     public static SubLObject tms_remove_assertion_low(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         kb_indexing.remove_term_indices(assertion);
         forward.remqueue_forward_assertion(assertion);
         if (NIL != assertions_high.rule_assertionP(assertion)) {
@@ -893,9 +1357,43 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Remove DEDUCTION from the KB and do all necessary truth maintenance.
+     */
+    @LispMethod(comment = "Remove DEDUCTION from the KB and do all necessary truth maintenance.")
+    public static final SubLObject tms_remove_deduction_alt(SubLObject deduction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(deduction, DEDUCTION_P);
+            {
+                SubLObject assertion = deductions_high.deduction_assertion(deduction);
+                SubLObject result = NIL;
+                if (NIL != kb_hl_supports.enqueueing_kb_hl_supports_for_tmsP()) {
+                    result = com.cyc.cycjava.cycl.tms.tms_remove_argument(deduction, assertion);
+                } else {
+                    {
+                        SubLObject _prev_bind_0 = kb_hl_supports.$tms_kb_hl_support_queue$.currentBinding(thread);
+                        try {
+                            kb_hl_supports.$tms_kb_hl_support_queue$.bind(queues.create_queue(), thread);
+                            result = com.cyc.cycjava.cycl.tms.tms_remove_argument(deduction, assertion);
+                            kb_hl_supports.process_tms_kb_hl_support_queue();
+                        } finally {
+                            kb_hl_supports.$tms_kb_hl_support_queue$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Remove DEDUCTION from the KB and do all necessary truth maintenance.
+     */
+    @LispMethod(comment = "Remove DEDUCTION from the KB and do all necessary truth maintenance.")
     public static SubLObject tms_remove_deduction(final SubLObject deduction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
         final SubLObject supported_object = deductions_high.deduction_supported_object(deduction);
         SubLObject result = NIL;
         if (NIL != kb_hl_supports_high.enqueueing_kb_hl_supports_for_tmsP()) {
@@ -913,16 +1411,87 @@ public final class tms extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * Change the TV of asserted ARGUMENT for ASSERTION and perform necessary truth maintenance.
+     */
+    @LispMethod(comment = "Change the TV of asserted ARGUMENT for ASSERTION and perform necessary truth maintenance.")
+    public static final SubLObject tms_change_asserted_argument_tv_alt(SubLObject asserted_argument, SubLObject assertion, SubLObject tv) {
+        SubLTrampolineFile.checkType(asserted_argument, ASSERTED_ARGUMENT_P);
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        SubLTrampolineFile.checkType(tv, TV_P);
+        hl_modifiers.replace_assertion_asserted_argument_with_tv(assertion, tv);
+        com.cyc.cycjava.cycl.tms.tms_recompute_assertion_tv(assertion);
+        after_adding.handle_after_removings(asserted_argument, assertion);
+        after_adding.handle_after_addings(asserted_argument, assertion);
+        return asserted_argument;
+    }
+
+    /**
+     * Change the TV of asserted ARGUMENT for ASSERTION and perform necessary truth maintenance.
+     */
+    @LispMethod(comment = "Change the TV of asserted ARGUMENT for ASSERTION and perform necessary truth maintenance.")
     public static SubLObject tms_change_asserted_argument_tv(final SubLObject asserted_argument, final SubLObject assertion, final SubLObject tv) {
-        assert NIL != arguments.asserted_argument_p(asserted_argument) : "arguments.asserted_argument_p(asserted_argument) " + "CommonSymbols.NIL != arguments.asserted_argument_p(asserted_argument) " + asserted_argument;
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
-        assert NIL != enumeration_types.tv_p(tv) : "enumeration_types.tv_p(tv) " + "CommonSymbols.NIL != enumeration_types.tv_p(tv) " + tv;
+        assert NIL != arguments.asserted_argument_p(asserted_argument) : "! arguments.asserted_argument_p(asserted_argument) " + ("arguments.asserted_argument_p(asserted_argument) " + "CommonSymbols.NIL != arguments.asserted_argument_p(asserted_argument) ") + asserted_argument;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != enumeration_types.tv_p(tv) : "! enumeration_types.tv_p(tv) " + ("enumeration_types.tv_p(tv) " + "CommonSymbols.NIL != enumeration_types.tv_p(tv) ") + tv;
         assertions_interface.replace_assertion_asserted_argument_with_tv(assertion, tv);
         tms_recompute_assertion_tv(assertion, UNPROVIDED, UNPROVIDED);
         hl_transcript_tracing.note_hlt_assert(assertion);
         after_adding.handle_after_removings(asserted_argument, assertion);
         after_adding.handle_after_addings(asserted_argument, assertion);
         return asserted_argument;
+    }
+
+    /**
+     * Recompute ASSERTION's tv and perform necessary truth maintenance.
+     * Return T if ASSERTION should be removed, else NIL
+     */
+    @LispMethod(comment = "Recompute ASSERTION\'s tv and perform necessary truth maintenance.\r\nReturn T if ASSERTION should be removed, else NIL\nRecompute ASSERTION\'s tv and perform necessary truth maintenance.\nReturn T if ASSERTION should be removed, else NIL")
+    public static final SubLObject tms_recompute_assertion_tv(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            {
+                SubLObject changedP = NIL;
+                SubLObject removeP = NIL;
+                if (NIL == assertion_utilities.assertion_has_argumentsP(assertion)) {
+                    {
+                        SubLObject _prev_bind_0 = $tms_assertions_being_removed$.currentBinding(thread);
+                        try {
+                            $tms_assertions_being_removed$.bind(adjoin(assertion, $tms_assertions_being_removed$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED), thread);
+                            com.cyc.cycjava.cycl.tms.tms_remove_dependents(assertion);
+                        } finally {
+                            $tms_assertions_being_removed$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    removeP = T;
+                } else {
+                    {
+                        SubLObject old_tv = assertions_high.cyc_assertion_tv(assertion);
+                        SubLObject new_tv = argumentation.compute_assertion_tv(assertion);
+                        if (NIL != $bootstrapping_kbP$.getDynamicValue(thread)) {
+                        } else {
+                            if (old_tv == new_tv) {
+                            } else {
+                                if (tv_truth(old_tv) == tv_truth(new_tv)) {
+                                    com.cyc.cycjava.cycl.tms.tms_recompute_dependents_tv(assertion);
+                                } else {
+                                    com.cyc.cycjava.cycl.tms.tms_remove_dependents(assertion);
+                                    changedP = T;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (NIL != changedP) {
+                    rewrite_of_propagation.perform_rewrite_of_propagation(assertion);
+                    if (assertions_high.assertion_direction(assertion) == $FORWARD) {
+                        forward.queue_forward_assertion(assertion);
+                    }
+                }
+                return removeP;
+            }
+        }
     }
 
     public static SubLObject tms_recompute_assertion_tv(final SubLObject assertion, SubLObject pre_existing_assertionP, SubLObject removing_the_last_asserted_argumentP) {
@@ -933,7 +1502,7 @@ public final class tms extends SubLTranslatedFile {
             removing_the_last_asserted_argumentP = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         SubLObject changedP = NIL;
         SubLObject removeP = NIL;
         if ((NIL != removing_the_last_asserted_argumentP) || (NIL == assertion_utilities.assertion_has_argumentsP(assertion))) {
@@ -969,9 +1538,27 @@ public final class tms extends SubLTranslatedFile {
         return removeP;
     }
 
+    /**
+     * Change the DIRECTION of ASSERTION and queue forward propagation if required.
+     */
+    @LispMethod(comment = "Change the DIRECTION of ASSERTION and queue forward propagation if required.")
+    public static final SubLObject tms_change_direction_alt(SubLObject assertion, SubLObject direction) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        SubLTrampolineFile.checkType(direction, DIRECTION_P);
+        kb_set_assertion_direction(assertion, direction);
+        if (direction == $FORWARD) {
+            forward.queue_forward_assertion(assertion);
+        }
+        return assertion;
+    }
+
+    /**
+     * Change the DIRECTION of ASSERTION and queue forward propagation if required.
+     */
+    @LispMethod(comment = "Change the DIRECTION of ASSERTION and queue forward propagation if required.")
     public static SubLObject tms_change_direction(final SubLObject assertion, final SubLObject direction) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
-        assert NIL != enumeration_types.direction_p(direction) : "enumeration_types.direction_p(direction) " + "CommonSymbols.NIL != enumeration_types.direction_p(direction) " + direction;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        assert NIL != enumeration_types.direction_p(direction) : "! enumeration_types.direction_p(direction) " + ("enumeration_types.direction_p(direction) " + "CommonSymbols.NIL != enumeration_types.direction_p(direction) ") + direction;
         assertions_interface.kb_set_assertion_direction(assertion, direction);
         tms_possibly_schedule_assertion_for_forward_propagation(assertion);
         return assertion;
@@ -983,12 +1570,26 @@ public final class tms extends SubLTranslatedFile {
     }
 
     public static SubLObject tms_possibly_schedule_assertion_for_forward_propagation(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         if (NIL != tms_should_schedule_assertion_for_forward_propagationP(assertion)) {
             forward.queue_forward_assertion(assertion);
             return T;
         }
         return NIL;
+    }
+
+    public static final SubLObject tms_recompute_dependents_alt(SubLObject assertion) {
+        com.cyc.cycjava.cycl.tms.tms_remove_dependents(assertion);
+        com.cyc.cycjava.cycl.tms.tms_recompute_assertion_tv(assertion);
+        {
+            SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
+            SubLObject argument = NIL;
+            for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                after_adding.handle_after_removings(argument, assertion);
+                after_adding.handle_after_addings(argument, assertion);
+            }
+        }
+        return assertion;
     }
 
     public static SubLObject tms_recompute_dependents(final SubLObject assertion) {
@@ -1018,8 +1619,33 @@ public final class tms extends SubLTranslatedFile {
         return assertion;
     }
 
+    /**
+     * Remove all the deductions depending on this ASSERTION.
+     */
+    @LispMethod(comment = "Remove all the deductions depending on this ASSERTION.")
+    public static final SubLObject tms_remove_dependents_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        {
+            SubLObject cdolist_list_var = assertions_high.assertion_dependents(assertion);
+            SubLObject dependent_deduction = NIL;
+            for (dependent_deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , dependent_deduction = cdolist_list_var.first()) {
+                if (NIL != valid_deductionP(dependent_deduction, UNPROVIDED)) {
+                    {
+                        SubLObject deduction_assertion = deductions_high.deduction_assertion(dependent_deduction);
+                        com.cyc.cycjava.cycl.tms.tms_remove_argument(dependent_deduction, deduction_assertion);
+                    }
+                }
+            }
+        }
+        return assertion;
+    }
+
+    /**
+     * Remove all the deductions depending on this ASSERTION.
+     */
+    @LispMethod(comment = "Remove all the deductions depending on this ASSERTION.")
     public static SubLObject tms_remove_dependents(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         final SubLObject set_contents_var = assertions_high.assertion_dependents(assertion);
         SubLObject basis_object;
         SubLObject state;
@@ -1035,8 +1661,28 @@ public final class tms extends SubLTranslatedFile {
         return assertion;
     }
 
+    /**
+     * Recompute the TV of all the deductions depending on this ASSERTION.
+     */
+    @LispMethod(comment = "Recompute the TV of all the deductions depending on this ASSERTION.")
+    public static final SubLObject tms_recompute_dependents_tv_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        {
+            SubLObject cdolist_list_var = assertions_high.assertion_dependents(assertion);
+            SubLObject dependent = NIL;
+            for (dependent = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , dependent = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.tms.tms_recompute_deduction_tv(dependent);
+            }
+        }
+        return assertion;
+    }
+
+    /**
+     * Recompute the TV of all the deductions depending on this ASSERTION.
+     */
+    @LispMethod(comment = "Recompute the TV of all the deductions depending on this ASSERTION.")
     public static SubLObject tms_recompute_dependents_tv(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         final SubLObject set_contents_var = assertions_high.assertion_dependents(assertion);
         SubLObject basis_object;
         SubLObject state;
@@ -1050,8 +1696,25 @@ public final class tms extends SubLTranslatedFile {
         return assertion;
     }
 
+    public static final SubLObject tms_recompute_deduction_tv_alt(SubLObject deduction) {
+        SubLTrampolineFile.checkType(deduction, DEDUCTION_P);
+        {
+            SubLObject old_tv = argument_tv(deduction);
+            SubLObject new_tv = argumentation.compute_deduction_tv(deduction);
+            if (old_tv != new_tv) {
+                {
+                    SubLObject assertion = deductions_high.deduction_assertion(deduction);
+                    if (NIL != assertion_handles.assertion_p(assertion)) {
+                        com.cyc.cycjava.cycl.tms.tms_recompute_assertion_tv(assertion);
+                    }
+                }
+            }
+        }
+        return deduction;
+    }
+
     public static SubLObject tms_recompute_deduction_tv(final SubLObject deduction) {
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
         final SubLObject old_tv = arguments.argument_tv(deduction);
         final SubLObject new_tv = argumentation.compute_deduction_tv(deduction);
         if (!old_tv.eql(new_tv)) {
@@ -1063,12 +1726,140 @@ public final class tms extends SubLTranslatedFile {
         return deduction;
     }
 
+    /**
+     * Removes all arguments for assertions in MT.
+     * If DEDUCTIONS-ONLY? is non-nil, then it only removes deductions.
+     */
+    @LispMethod(comment = "Removes all arguments for assertions in MT.\r\nIf DEDUCTIONS-ONLY? is non-nil, then it only removes deductions.\nRemoves all arguments for assertions in MT.\nIf DEDUCTIONS-ONLY? is non-nil, then it only removes deductions.")
+    public static final SubLObject tms_remove_mt_arguments_alt(SubLObject mt, SubLObject deductions_onlyP) {
+        if (deductions_onlyP == UNPROVIDED) {
+            deductions_onlyP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(mt, HLMT_P);
+            {
+                SubLObject pcase_var = kb_mapping_macros.do_mt_contents_method(mt);
+                if (pcase_var.eql($MT)) {
+                    if (NIL != kb_mapping_macros.do_mt_index_key_validator(mt, NIL)) {
+                        {
+                            SubLObject final_index_spec = kb_mapping_macros.mt_final_index_spec(mt);
+                            SubLObject final_index_iterator = NIL;
+                            try {
+                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, NIL, NIL, NIL);
+                                {
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var);
+                                            SubLObject valid = makeBoolean(token_var != assertion);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
+                                                    SubLObject cdolist_list_var = v_arguments;
+                                                    SubLObject argument = NIL;
+                                                    for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                                                        if ((NIL == deductions_onlyP) || (NIL != deduction_p(argument))) {
+                                                            com.cyc.cycjava.cycl.tms.tms_remove_argument(argument, assertion);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL != final_index_iterator) {
+                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (pcase_var.eql($BROAD_MT)) {
+                        if (NIL != kb_mapping_macros.do_broad_mt_index_key_validator(mt, NIL)) {
+                            {
+                                SubLObject idx = assertion_handles.do_assertions_table();
+                                SubLObject total = id_index_count(idx);
+                                SubLObject sofar = ZERO_INTEGER;
+                                SubLTrampolineFile.checkType($str_alt21$do_broad_mt_index, STRINGP);
+                                {
+                                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                                    try {
+                                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                        $last_percent_progress_prediction$.bind(NIL, thread);
+                                        $within_noting_percent_progress$.bind(T, thread);
+                                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                        noting_percent_progress_preamble($str_alt21$do_broad_mt_index);
+                                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                                            {
+                                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
+                                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
+                                                SubLObject assertion = NIL;
+                                                while (NIL != id) {
+                                                    assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                                    if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
+                                                        note_percent_progress(sofar, total);
+                                                        sofar = add(sofar, ONE_INTEGER);
+                                                        if (NIL != kb_mapping_macros.do_broad_mt_index_match_p(assertion, mt, NIL, NIL)) {
+                                                            {
+                                                                SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
+                                                                SubLObject cdolist_list_var = v_arguments;
+                                                                SubLObject argument = NIL;
+                                                                for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                                                                    if ((NIL == deductions_onlyP) || (NIL != deduction_p(argument))) {
+                                                                        com.cyc.cycjava.cycl.tms.tms_remove_argument(argument, assertion);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    id = do_id_index_next_id(idx, T, id, state_var);
+                                                    state_var = do_id_index_next_state(idx, T, id, state_var);
+                                                } 
+                                            }
+                                        }
+                                        noting_percent_progress_postamble();
+                                    } finally {
+                                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Removes all arguments for assertions in MT.
+     * If DEDUCTIONS-ONLY? is non-nil, then it only removes deductions.
+     */
+    @LispMethod(comment = "Removes all arguments for assertions in MT.\r\nIf DEDUCTIONS-ONLY? is non-nil, then it only removes deductions.\nRemoves all arguments for assertions in MT.\nIf DEDUCTIONS-ONLY? is non-nil, then it only removes deductions.")
     public static SubLObject tms_remove_mt_arguments(final SubLObject mt, SubLObject deductions_onlyP) {
         if (deductions_onlyP == UNPROVIDED) {
             deductions_onlyP = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != hlmt.hlmt_p(mt) : "hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) " + mt;
+        assert NIL != hlmt.hlmt_p(mt) : "! hlmt.hlmt_p(mt) " + ("hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) ") + mt;
         final SubLObject pcase_var = kb_mapping_macros.do_mt_contents_method(mt);
         if (pcase_var.eql($MT)) {
             if (NIL != kb_mapping_macros.do_mt_index_key_validator(mt, NIL)) {
@@ -1116,7 +1907,7 @@ public final class tms extends SubLTranslatedFile {
                 final SubLObject mess = $str27$do_broad_mt_index;
                 final SubLObject total = id_index_count(idx);
                 SubLObject sofar = ZERO_INTEGER;
-                assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+                assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
                 final SubLObject _prev_bind_2 = $last_percent_progress_index$.currentBinding(thread);
                 final SubLObject _prev_bind_3 = $last_percent_progress_prediction$.currentBinding(thread);
                 final SubLObject _prev_bind_4 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1280,6 +2071,20 @@ public final class tms extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject tms_remove_deduction_for_assertion_alt(SubLObject assertion, SubLObject supports, SubLObject truth) {
+        if (truth == UNPROVIDED) {
+            truth = $TRUE;
+        }
+        {
+            SubLObject deduction = deductions_high.find_deduction(assertion, supports, truth);
+            if (NIL != deduction) {
+                com.cyc.cycjava.cycl.tms.tms_remove_argument(deduction, assertion);
+                return T;
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject tms_remove_deduction_for_assertion(final SubLObject assertion, final SubLObject supports, SubLObject truth) {
         if (truth == UNPROVIDED) {
             truth = $TRUE;
@@ -1293,7 +2098,7 @@ public final class tms extends SubLTranslatedFile {
     }
 
     public static SubLObject tms_explicitly_remove_deduction_for_assertion(final SubLObject deduction) {
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
         if ((NIL != deduction_handles.valid_deductionP(deduction, UNPROVIDED)) && (NIL == tms_argument_being_removedP(deduction))) {
             final SubLObject assertion = deductions_high.deduction_supported_object(deduction);
             if (NIL != assertion_handles.assertion_p(assertion)) {
@@ -1302,6 +2107,33 @@ public final class tms extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    /**
+     *
+     *
+     * @return 0 NIL or deduction-p
+     * @return 1 booleanp; whether the deduction is redundant
+     */
+    @LispMethod(comment = "@return 0 NIL or deduction-p\r\n@return 1 booleanp; whether the deduction is redundant")
+    public static final SubLObject tms_add_deduction_for_assertion(SubLObject assertion, SubLObject supports, SubLObject truth) {
+        if (truth == UNPROVIDED) {
+            truth = $TRUE;
+        }
+        if (NIL != com.cyc.cycjava.cycl.tms.tms_direct_circularity(assertion, supports)) {
+            return values(NIL, T);
+        }
+        {
+            SubLObject existing = deductions_high.find_deduction(assertion, supports, truth);
+            if (NIL != existing) {
+                return values(existing, T);
+            }
+        }
+        {
+            SubLObject tv = argumentation.compute_supports_tv(supports, truth);
+            SubLObject new_argument = com.cyc.cycjava.cycl.tms.tms_add_new_deduction(assertion, supports, tv);
+            return values(new_argument, NIL);
+        }
     }
 
     public static SubLObject tms_add_deduction_for_assertion(final SubLObject assertion, final SubLObject supports, SubLObject truth, SubLObject v_bindings, SubLObject pragmatic_support_mts) {
@@ -1325,6 +2157,22 @@ public final class tms extends SubLTranslatedFile {
         final SubLObject new_argument = tms_add_new_deduction(assertion, supports, tv, v_bindings, pragmatic_support_mts);
         tms_invalidate_weaker_redundant_arguments(assertion, new_argument);
         return values(new_argument, NIL);
+    }
+
+    public static final SubLObject tms_add_deduction_for_cnf(SubLObject cnf, SubLObject mt, SubLObject supports, SubLObject truth, SubLObject direction, SubLObject var_names) {
+        if (truth == UNPROVIDED) {
+            truth = $TRUE;
+        }
+        if (direction == UNPROVIDED) {
+            direction = $BACKWARD;
+        }
+        if (var_names == UNPROVIDED) {
+            var_names = NIL;
+        }
+        {
+            SubLObject assertion = assertions_high.find_or_create_assertion(cnf, mt, var_names, direction);
+            return com.cyc.cycjava.cycl.tms.tms_add_deduction_for_assertion(assertion, supports, truth);
+        }
     }
 
     public static SubLObject tms_add_deduction_for_cnf(final SubLObject cnf, final SubLObject mt, final SubLObject supports, SubLObject truth, SubLObject direction, SubLObject var_names, SubLObject v_bindings, SubLObject pragmatic_support_mts) {
@@ -1355,13 +2203,39 @@ public final class tms extends SubLTranslatedFile {
         return values(deduction, redundantP, newly_createdP);
     }
 
+    /**
+     * Return T iff SUPPORTS for ASSERTION include a direct circularity
+     */
+    @LispMethod(comment = "Return T iff SUPPORTS for ASSERTION include a direct circularity")
+    public static final SubLObject tms_direct_circularity_alt(SubLObject assertion, SubLObject supports) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        return member(assertion, supports, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     * Return T iff SUPPORTS for ASSERTION include a direct circularity
+     */
+    @LispMethod(comment = "Return T iff SUPPORTS for ASSERTION include a direct circularity")
     public static SubLObject tms_direct_circularity(final SubLObject assertion, final SubLObject supports) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         return list_utilities.member_kbeqP(assertion, supports);
     }
 
+    /**
+     * Return T iff DEDUCTION is a directly circular argument
+     */
+    @LispMethod(comment = "Return T iff DEDUCTION is a directly circular argument")
+    public static final SubLObject tms_directly_circular_deduction_alt(SubLObject deduction) {
+        SubLTrampolineFile.checkType(deduction, DEDUCTION_P);
+        return com.cyc.cycjava.cycl.tms.tms_direct_circularity(deductions_high.deduction_assertion(deduction), deductions_high.deduction_supports(deduction));
+    }
+
+    /**
+     * Return T iff DEDUCTION is a directly circular argument
+     */
+    @LispMethod(comment = "Return T iff DEDUCTION is a directly circular argument")
     public static SubLObject tms_directly_circular_deduction(final SubLObject deduction) {
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
         return tms_direct_circularity(deductions_high.deduction_assertion(deduction), deductions_high.deduction_supports(deduction));
     }
 
@@ -1470,8 +2344,35 @@ public final class tms extends SubLTranslatedFile {
         return makeBoolean(((NIL != arguments.hl_support_p(v_object)) && ($EQUALITY == arguments.hl_support_module(v_object))) && match.equal(cycl_utilities.formula_arg1(arguments.hl_support_sentence(v_object), UNPROVIDED)));
     }
 
+    /**
+     * Return T iff ATOMIC-CNF can be trivially derived in MT.
+     */
+    @LispMethod(comment = "Return T iff ATOMIC-CNF can be trivially derived in MT.")
+    public static final SubLObject atomic_cnf_trivially_derivable_alt(SubLObject atomic_cnf, SubLObject mt) {
+        SubLTrampolineFile.checkType(atomic_cnf, CNF_P);
+        if (NIL != clause_utilities.pos_atomic_cnf_p(atomic_cnf)) {
+            {
+                SubLObject asent = clause_utilities.atomic_cnf_asent(atomic_cnf);
+                return com.cyc.cycjava.cycl.tms.gaf_trivially_derivable(asent, $TRUE, mt);
+            }
+        } else {
+            if (NIL != clause_utilities.neg_atomic_cnf_p(atomic_cnf)) {
+                {
+                    SubLObject asent = clause_utilities.atomic_cnf_asent(atomic_cnf);
+                    return com.cyc.cycjava.cycl.tms.gaf_trivially_derivable(asent, $FALSE, mt);
+                }
+            } else {
+                return Errors.error($str_alt28$_S_was_not_an_atomic_CNF_, atomic_cnf);
+            }
+        }
+    }
+
+    /**
+     * Return T iff ATOMIC-CNF can be trivially derived in MT.
+     */
+    @LispMethod(comment = "Return T iff ATOMIC-CNF can be trivially derived in MT.")
     public static SubLObject atomic_cnf_trivially_derivable(final SubLObject atomic_cnf, final SubLObject mt) {
-        assert NIL != clauses.cnf_p(atomic_cnf) : "clauses.cnf_p(atomic_cnf) " + "CommonSymbols.NIL != clauses.cnf_p(atomic_cnf) " + atomic_cnf;
+        assert NIL != clauses.cnf_p(atomic_cnf) : "! clauses.cnf_p(atomic_cnf) " + ("clauses.cnf_p(atomic_cnf) " + "CommonSymbols.NIL != clauses.cnf_p(atomic_cnf) ") + atomic_cnf;
         if (NIL != clause_utilities.pos_atomic_cnf_p(atomic_cnf)) {
             final SubLObject asent = clause_utilities.atomic_cnf_asent(atomic_cnf);
             return gaf_trivially_derivable(asent, $TRUE, mt);
@@ -1483,12 +2384,109 @@ public final class tms extends SubLTranslatedFile {
         return Errors.error($str41$_S_was_not_an_atomic_CNF_, atomic_cnf);
     }
 
+    /**
+     * Return T iff GAF with TRUTH can be trivially derived in MT.
+     */
+    @LispMethod(comment = "Return T iff GAF with TRUTH can be trivially derived in MT.")
+    public static final SubLObject gaf_trivially_derivable_alt(SubLObject gaf, SubLObject truth, SubLObject mt) {
+        {
+            SubLObject pcase_var = truth;
+            if (pcase_var.eql($TRUE)) {
+                return com.cyc.cycjava.cycl.tms.true_gaf_trivially_derivable(gaf, mt);
+            } else {
+                if (pcase_var.eql($FALSE)) {
+                    return com.cyc.cycjava.cycl.tms.false_gaf_trivially_derivable(gaf, mt);
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Return T iff GAF with TRUTH can be trivially derived in MT.
+     */
+    @LispMethod(comment = "Return T iff GAF with TRUTH can be trivially derived in MT.")
     public static SubLObject gaf_trivially_derivable(final SubLObject gaf, final SubLObject truth, final SubLObject mt) {
         if (truth.eql($TRUE)) {
             return true_gaf_trivially_derivable(gaf, mt);
         }
         if (truth.eql($FALSE)) {
             return false_gaf_trivially_derivable(gaf, mt);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject true_gaf_trivially_derivable_alt(SubLObject gaf, SubLObject mt) {
+        {
+            SubLObject predicate = literal_predicate(gaf, UNPROVIDED);
+            SubLObject pcase_var = predicate;
+            if (pcase_var.eql($$isa)) {
+                {
+                    SubLObject datum = literal_args(gaf, UNPROVIDED);
+                    SubLObject current = datum;
+                    SubLObject arg1 = NIL;
+                    SubLObject arg2 = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt30);
+                    arg1 = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt30);
+                    arg2 = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        return makeBoolean((NIL != isa.isaP(arg1, arg2, mt, UNPROVIDED)) || (NIL != at_defns.defns_admitP(arg2, arg1, mt)));
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt30);
+                    }
+                }
+            } else {
+                if (pcase_var.eql($$genls)) {
+                    {
+                        SubLObject datum = literal_args(gaf, UNPROVIDED);
+                        SubLObject current = datum;
+                        SubLObject arg1 = NIL;
+                        SubLObject arg2 = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt30);
+                        arg1 = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt30);
+                        arg2 = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            return genls.genlsP(arg1, arg2, mt, UNPROVIDED);
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt30);
+                        }
+                    }
+                } else {
+                    {
+                        SubLObject v_arity = literal_arity(gaf, UNPROVIDED);
+                        SubLObject pcase_var_4 = v_arity;
+                        if (pcase_var_4.eql(TWO_INTEGER)) {
+                            {
+                                SubLObject datum = literal_args(gaf, UNPROVIDED);
+                                SubLObject current = datum;
+                                SubLObject arg1 = NIL;
+                                SubLObject arg2 = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt30);
+                                arg1 = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt30);
+                                arg2 = current.first();
+                                current = current.rest();
+                                if (NIL == current) {
+                                    if (arg1.equal(arg2)) {
+                                        if (NIL != kb_accessors.reflexive_predicateP(predicate)) {
+                                            return T;
+                                        }
+                                    }
+                                } else {
+                                    cdestructuring_bind_error(datum, $list_alt30);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
         return NIL;
     }
@@ -1554,12 +2552,40 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject false_gaf_trivially_derivable_alt(SubLObject gaf, SubLObject mt) {
+        return NIL;
+    }
+
     public static SubLObject false_gaf_trivially_derivable(final SubLObject gaf, final SubLObject mt) {
         return NIL;
     }
 
+    /**
+     * Check that all the supports of all the deductions supporting ASSERTION are still true.
+     * Remove any deduction whose supports are now stale.
+     */
+    @LispMethod(comment = "Check that all the supports of all the deductions supporting ASSERTION are still true.\r\nRemove any deduction whose supports are now stale.\nCheck that all the supports of all the deductions supporting ASSERTION are still true.\nRemove any deduction whose supports are now stale.")
+    public static final SubLObject tms_reconsider_assertion_deductions_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        {
+            SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
+            SubLObject deduction = NIL;
+            for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                if (NIL != valid_deductionP(deduction, UNPROVIDED)) {
+                    com.cyc.cycjava.cycl.tms.tms_reconsider_deduction(deduction);
+                }
+            }
+        }
+        return assertion;
+    }
+
+    /**
+     * Check that all the supports of all the deductions supporting ASSERTION are still true.
+     * Remove any deduction whose supports are now stale.
+     */
+    @LispMethod(comment = "Check that all the supports of all the deductions supporting ASSERTION are still true.\r\nRemove any deduction whose supports are now stale.\nCheck that all the supports of all the deductions supporting ASSERTION are still true.\nRemove any deduction whose supports are now stale.")
     public static SubLObject tms_reconsider_assertion_deductions(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
         SubLObject deduction = NIL;
         deduction = cdolist_list_var.first();
@@ -1573,8 +2599,32 @@ public final class tms extends SubLTranslatedFile {
         return assertion;
     }
 
+    /**
+     * Check that all the deductions involving ASSERTION are still true.
+     * Remove any deduction whose supports are now stale.
+     */
+    @LispMethod(comment = "Check that all the deductions involving ASSERTION are still true.\r\nRemove any deduction whose supports are now stale.\nCheck that all the deductions involving ASSERTION are still true.\nRemove any deduction whose supports are now stale.")
+    public static final SubLObject tms_reconsider_assertion_dependents_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        {
+            SubLObject cdolist_list_var = assertions_high.assertion_dependents(assertion);
+            SubLObject deduction = NIL;
+            for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                if (NIL != valid_deductionP(deduction, UNPROVIDED)) {
+                    com.cyc.cycjava.cycl.tms.tms_reconsider_deduction(deduction);
+                }
+            }
+        }
+        return assertion;
+    }
+
+    /**
+     * Check that all the deductions involving ASSERTION are still true.
+     * Remove any deduction whose supports are now stale.
+     */
+    @LispMethod(comment = "Check that all the deductions involving ASSERTION are still true.\r\nRemove any deduction whose supports are now stale.\nCheck that all the deductions involving ASSERTION are still true.\nRemove any deduction whose supports are now stale.")
     public static SubLObject tms_reconsider_assertion_dependents(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         final SubLObject set_contents_var = assertions_high.assertion_dependents(assertion);
         SubLObject basis_object;
         SubLObject state;
@@ -1588,8 +2638,40 @@ public final class tms extends SubLTranslatedFile {
         return assertion;
     }
 
+    /**
+     * Check that all the supports of DEDUCTION are still true.
+     * Remove DEDUCTION if any are now stale.
+     * If the supports are ok, check that the TV is still OK.
+     * Return T iff the assertion of DEDUCTION got removed as part of this checking.
+     */
+    @LispMethod(comment = "Check that all the supports of DEDUCTION are still true.\r\nRemove DEDUCTION if any are now stale.\r\nIf the supports are ok, check that the TV is still OK.\r\nReturn T iff the assertion of DEDUCTION got removed as part of this checking.\nCheck that all the supports of DEDUCTION are still true.\nRemove DEDUCTION if any are now stale.\nIf the supports are ok, check that the TV is still OK.\nReturn T iff the assertion of DEDUCTION got removed as part of this checking.")
+    public static final SubLObject tms_reconsider_deduction_alt(SubLObject deduction) {
+        SubLTrampolineFile.checkType(deduction, DEDUCTION_P);
+        if (NIL != deductions_high.skolem_deduction_p(deduction)) {
+            return NIL;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.tms.tms_deduction_stale_wrt_supportsP(deduction)) {
+                return com.cyc.cycjava.cycl.tms.tms_remove_deduction(deduction);
+            } else {
+                if (NIL != com.cyc.cycjava.cycl.tms.tms_deduction_stale_wrt_exceptionsP(deduction)) {
+                    return com.cyc.cycjava.cycl.tms.tms_remove_deduction(deduction);
+                } else {
+                    com.cyc.cycjava.cycl.tms.tms_recompute_deduction_tv(deduction);
+                    return NIL;
+                }
+            }
+        }
+    }
+
+    /**
+     * Check that all the supports of DEDUCTION are still true.
+     * Remove DEDUCTION if any are now stale.
+     * If the supports are ok, check that the TV is still OK.
+     * Return T iff the assertion of DEDUCTION got removed as part of this checking.
+     */
+    @LispMethod(comment = "Check that all the supports of DEDUCTION are still true.\r\nRemove DEDUCTION if any are now stale.\r\nIf the supports are ok, check that the TV is still OK.\r\nReturn T iff the assertion of DEDUCTION got removed as part of this checking.\nCheck that all the supports of DEDUCTION are still true.\nRemove DEDUCTION if any are now stale.\nIf the supports are ok, check that the TV is still OK.\nReturn T iff the assertion of DEDUCTION got removed as part of this checking.")
     public static SubLObject tms_reconsider_deduction(final SubLObject deduction) {
-        assert NIL != deduction_handles.deduction_p(deduction) : "deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) " + deduction;
+        assert NIL != deduction_handles.deduction_p(deduction) : "! deduction_handles.deduction_p(deduction) " + ("deduction_handles.deduction_p(deduction) " + "CommonSymbols.NIL != deduction_handles.deduction_p(deduction) ") + deduction;
         if (NIL != deductions_high.skolem_deduction_p(deduction)) {
             return NIL;
         }
@@ -1601,6 +2683,37 @@ public final class tms extends SubLTranslatedFile {
         }
         tms_recompute_deduction_tv(deduction);
         return NIL;
+    }
+
+    public static final SubLObject tms_deduction_stale_wrt_supportsP_alt(SubLObject deduction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject liftingP = deductions_high.lifting_deduction_p(deduction);
+                SubLObject deduction_mt = deductions_high.deduction_mt(deduction);
+                SubLObject staleP = NIL;
+                {
+                    SubLObject _prev_bind_0 = $perform_opaque_support_verification$.currentBinding(thread);
+                    try {
+                        $perform_opaque_support_verification$.bind(T, thread);
+                        {
+                            SubLObject rest = NIL;
+                            for (rest = deductions_high.deduction_supports(deduction); !((NIL != staleP) || (NIL == rest)); rest = rest.rest()) {
+                                {
+                                    SubLObject support = rest.first();
+                                    if ((NIL != com.cyc.cycjava.cycl.tms.stale_support(support)) || ((NIL == liftingP) && (NIL != com.cyc.cycjava.cycl.tms.stale_support_mtP(support, deduction_mt)))) {
+                                        staleP = T;
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        $perform_opaque_support_verification$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return staleP;
+            }
+        }
     }
 
     public static SubLObject tms_deduction_stale_wrt_supportsP(final SubLObject deduction) {
@@ -1628,6 +2741,57 @@ public final class tms extends SubLTranslatedFile {
         return staleP;
     }
 
+    /**
+     * Find all reasons to believe the sentence of the assertion of DEDUCTION,
+     * filter out those which are just lookup of the assertion itself, and if
+     * there are no remaining reasons to believe it, return T, otherwise
+     * conservatively return NIL.
+     *
+     * @unknown this could conceivably return T for reasons other than an exception.
+     */
+    @LispMethod(comment = "Find all reasons to believe the sentence of the assertion of DEDUCTION,\r\nfilter out those which are just lookup of the assertion itself, and if\r\nthere are no remaining reasons to believe it, return T, otherwise\r\nconservatively return NIL.\r\n\r\n@unknown this could conceivably return T for reasons other than an exception.\nFind all reasons to believe the sentence of the assertion of DEDUCTION,\nfilter out those which are just lookup of the assertion itself, and if\nthere are no remaining reasons to believe it, return T, otherwise\nconservatively return NIL.")
+    public static final SubLObject tms_deduction_stale_wrt_exceptionsP_alt(SubLObject deduction) {
+        {
+            SubLObject old_supports = deductions_high.deduction_supports(deduction);
+            SubLObject rules = remove_if_not($sym32$RULE_ASSERTION_, old_supports, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            if ((NIL != find_if($sym33$RULE_HAS_EXCEPTIONS_, rules, UNPROVIDED, UNPROVIDED, UNPROVIDED)) || (NIL != find_if($sym34$RULE_WITH_SOME_PRAGMATIC_SOMEWHERE_, rules, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
+                {
+                    SubLObject assertion = deductions_high.deduction_assertion(deduction);
+                    SubLObject pred = formula_operator(assertions_high.assertion_formula(assertion));
+                    SubLObject sentence = com.cyc.cycjava.cycl.tms.tms_reprove_deduction_query_sentence(assertion);
+                    SubLObject mt = com.cyc.cycjava.cycl.tms.tms_reprove_deduction_query_mt(deduction);
+                    SubLObject truth = deductions_high.deduction_truth(deduction);
+                    SubLObject v_properties = com.cyc.cycjava.cycl.tms.tms_reprove_deduction_query_properties(sentence, mt, pred, truth, rules);
+                    SubLObject justifications = inference_kernel.new_cyc_query(sentence, mt, v_properties);
+                    SubLObject filtered_justifications = NIL;
+                    SubLObject cdolist_list_var = justifications;
+                    SubLObject justification = NIL;
+                    for (justification = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , justification = cdolist_list_var.first()) {
+                        if (NIL == subl_promotions.memberP(assertion, justification, UNPROVIDED, UNPROVIDED)) {
+                            if (NIL == fast_set_difference(rules, justification, UNPROVIDED)) {
+                                filtered_justifications = cons(justification, filtered_justifications);
+                            }
+                        }
+                    }
+                    filtered_justifications = nreverse(filtered_justifications);
+                    if (NIL == filtered_justifications) {
+                        return T;
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Find all reasons to believe the sentence of the assertion of DEDUCTION,
+     * filter out those which are just lookup of the assertion itself, and if
+     * there are no remaining reasons to believe it, return T, otherwise
+     * conservatively return NIL.
+     *
+     * @unknown this could conceivably return T for reasons other than an exception.
+     */
+    @LispMethod(comment = "Find all reasons to believe the sentence of the assertion of DEDUCTION,\r\nfilter out those which are just lookup of the assertion itself, and if\r\nthere are no remaining reasons to believe it, return T, otherwise\r\nconservatively return NIL.\r\n\r\n@unknown this could conceivably return T for reasons other than an exception.\nFind all reasons to believe the sentence of the assertion of DEDUCTION,\nfilter out those which are just lookup of the assertion itself, and if\nthere are no remaining reasons to believe it, return T, otherwise\nconservatively return NIL.")
     public static SubLObject tms_deduction_stale_wrt_exceptionsP(final SubLObject deduction) {
         final SubLObject old_supports = deductions_high.deduction_supports(deduction);
         final SubLObject rules = list_utilities.remove_if_not($sym45$RULE_ASSERTION_, old_supports, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -1704,6 +2868,27 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject tms_reprove_deduction_query_sentence_alt(SubLObject assertion) {
+        {
+            SubLObject formula = assertions_high.assertion_formula(assertion);
+            SubLObject mt = assertions_high.assertion_mt(assertion);
+            SubLObject pred = formula_operator(formula);
+            SubLObject query_sentence = NIL;
+            if (NIL != inference_backchain_forbiddenP(pred, mt)) {
+                {
+                    SubLObject args = formula_args(formula, UNPROVIDED);
+                    SubLObject new_pred_var = $sym35$_PRED;
+                    SubLObject antecedent = make_binary_formula($$genlPreds, pred, new_pred_var);
+                    SubLObject consequent = make_formula(new_pred_var, args, UNPROVIDED);
+                    query_sentence = make_binary_formula($$implies, antecedent, consequent);
+                }
+            } else {
+                query_sentence = formula;
+            }
+            return query_sentence;
+        }
+    }
+
     public static SubLObject tms_reprove_deduction_query_sentence(final SubLObject assertion) {
         final SubLObject formula = assertions_high.assertion_formula(assertion);
         final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -1721,12 +2906,34 @@ public final class tms extends SubLTranslatedFile {
         return query_sentence;
     }
 
+    public static final SubLObject tms_reprove_deduction_query_mt_alt(SubLObject deduction) {
+        {
+            SubLObject assertion = deductions_high.deduction_assertion(deduction);
+            if (NIL != kb_accessors.decontextualized_assertionP(assertion)) {
+                return $$InferencePSC;
+            } else {
+                return deductions_high.deduction_mt(deduction);
+            }
+        }
+    }
+
     public static SubLObject tms_reprove_deduction_query_mt(final SubLObject deduction) {
         final SubLObject supported_object = deductions_high.deduction_supported_object(deduction);
         if (NIL != kb_accessors.decontextualized_assertionP(supported_object)) {
             return $$InferencePSC;
         }
         return deductions_high.deduction_mt(deduction);
+    }
+
+    public static final SubLObject tms_reprove_deduction_query_properties_alt(SubLObject sentence, SubLObject mt, SubLObject predicate, SubLObject truth, SubLObject rules) {
+        {
+            SubLObject rule_count = length(rules);
+            SubLObject conditional_sentenceP = inference_strategist.inference_conditional_sentence_p(sentence);
+            SubLObject allow_unbound_predicate_transformationP = sublisp_boolean(find_if(UNBOUND_PREDICATE_RULE_P, rules, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+            SubLObject allow_evaluatable_predicate_transformationP = makeBoolean(rule_count.isPositive() && ((NIL != relation_evaluation.evaluatable_predicateP(predicate, mt)) || rule_count.numG(ONE_INTEGER)));
+            SubLObject allow_hl_predicate_transformationP = makeBoolean(rule_count.isPositive() && ((NIL != hl_predicate_p(predicate)) || rule_count.numG(ONE_INTEGER)));
+            return list(new SubLObject[]{ $ALLOWED_RULES, rules, $kw41$CONDITIONAL_SENTENCE_, conditional_sentenceP, $MAX_TRANSFORMATION_DEPTH, rule_count, $RESULT_UNIQUENESS, $PROOF, $RETURN, $SUPPORTS, $ANSWER_LANGUAGE, $HL, $CONTINUABLE_, NIL, $PRODUCTIVITY_LIMIT, $POSITIVE_INFINITY, $kw52$ALLOW_UNBOUND_PREDICATE_TRANSFORMATION_, allow_unbound_predicate_transformationP, $kw53$ALLOW_EVALUATABLE_PREDICATE_TRANSFORMATION_, allow_evaluatable_predicate_transformationP, $kw54$ALLOW_HL_PREDICATE_TRANSFORMATION_, allow_hl_predicate_transformationP });
+        }
     }
 
     public static SubLObject tms_reprove_deduction_query_properties(final SubLObject sentence, final SubLObject mt, final SubLObject predicate, final SubLObject truth, final SubLObject rules) {
@@ -1777,7 +2984,7 @@ public final class tms extends SubLTranslatedFile {
             kb_control_vars.$within_assertion_forward_propagationP$.bind(NIL, thread);
             $prefer_forward_skolemization$.bind(NIL, thread);
             final SubLObject environment = forward.get_forward_inference_environment();
-            assert NIL != queues.queue_p(environment) : "queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) " + environment;
+            assert NIL != queues.queue_p(environment) : "! queues.queue_p(environment) " + ("queues.queue_p(environment) " + "CommonSymbols.NIL != queues.queue_p(environment) ") + environment;
             final SubLObject _prev_bind_0_$16 = kb_control_vars.$forward_inference_environment$.currentBinding(thread);
             final SubLObject _prev_bind_1_$17 = $current_forward_problem_store$.currentBinding(thread);
             try {
@@ -1830,9 +3037,17 @@ public final class tms extends SubLTranslatedFile {
         }
     }
 
+    static private final SubLList $list_alt1 = list(list(makeSymbol("ASSERTION")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt5 = list(makeSymbol("*TMS-ASSERTIONS-BEING-REMOVED*"));
+
     public static SubLObject compute_assertibles_queue_for_tms_deduction_stale_wrt_exceptionsP_general_version(final SubLObject trigger_gaf, final SubLObject rule) {
         return forward.forward_propagate_one_support_wrt_rule_and_generate_assertibles_cached(trigger_gaf, rule);
     }
+
+    static private final SubLList $list_alt7 = list(list(makeSymbol("DEDUCTION")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt9 = list(makeSymbol("*TMS-DEDUCTIONS-BEING-REMOVED*"));
 
     public static SubLObject tms_deduction_stale_wrt_exceptionsP_use_deduction_bindings_version(final SubLObject deduction) {
         final SubLObject supports = deductions_high.deduction_supports(deduction);
@@ -1861,8 +3076,59 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt21$do_broad_mt_index = makeString("do-broad-mt-index");
+
+    static private final SubLString $str_alt28$_S_was_not_an_atomic_CNF_ = makeString("~S was not an atomic CNF.");
+
+    static private final SubLList $list_alt30 = list(makeSymbol("ARG1"), makeSymbol("ARG2"));
+
+    static private final SubLSymbol $sym32$RULE_ASSERTION_ = makeSymbol("RULE-ASSERTION?");
+
+    static private final SubLSymbol $sym33$RULE_HAS_EXCEPTIONS_ = makeSymbol("RULE-HAS-EXCEPTIONS?");
+
+    static private final SubLSymbol $sym34$RULE_WITH_SOME_PRAGMATIC_SOMEWHERE_ = makeSymbol("RULE-WITH-SOME-PRAGMATIC-SOMEWHERE?");
+
+    static private final SubLSymbol $sym35$_PRED = makeSymbol("?PRED");
+
+    /**
+     * Check the arguments of ASSERTION to make sure they are still true.
+     * Return T iff ASSERTION got removed from the KB as a result of this checking.
+     */
+    @LispMethod(comment = "Check the arguments of ASSERTION to make sure they are still true.\r\nReturn T iff ASSERTION got removed from the KB as a result of this checking.\nCheck the arguments of ASSERTION to make sure they are still true.\nReturn T iff ASSERTION got removed from the KB as a result of this checking.")
+    public static final SubLObject tms_reconsider_assertion_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        {
+            SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
+            if (NIL != v_arguments) {
+                {
+                    SubLObject removed = NIL;
+                    if (NIL == removed) {
+                        {
+                            SubLObject csome_list_var = v_arguments;
+                            SubLObject argument = NIL;
+                            for (argument = csome_list_var.first(); !((NIL != removed) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , argument = csome_list_var.first()) {
+                                if (NIL != deduction_p(argument)) {
+                                    removed = com.cyc.cycjava.cycl.tms.tms_reconsider_deduction(argument);
+                                }
+                            }
+                        }
+                    }
+                    return removed;
+                }
+            } else {
+                com.cyc.cycjava.cycl.tms.tms_remove_assertion(assertion);
+                return T;
+            }
+        }
+    }
+
+    /**
+     * Check the arguments of ASSERTION to make sure they are still true.
+     * Return T iff ASSERTION got removed from the KB as a result of this checking.
+     */
+    @LispMethod(comment = "Check the arguments of ASSERTION to make sure they are still true.\r\nReturn T iff ASSERTION got removed from the KB as a result of this checking.\nCheck the arguments of ASSERTION to make sure they are still true.\nReturn T iff ASSERTION got removed from the KB as a result of this checking.")
     public static SubLObject tms_reconsider_assertion(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         final SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
         if (NIL != v_arguments) {
             SubLObject removed = NIL;
@@ -1884,16 +3150,105 @@ public final class tms extends SubLTranslatedFile {
         return T;
     }
 
+    public static final SubLSymbol $kw41$CONDITIONAL_SENTENCE_ = makeKeyword("CONDITIONAL-SENTENCE?");
+
+    public static final SubLSymbol $kw52$ALLOW_UNBOUND_PREDICATE_TRANSFORMATION_ = makeKeyword("ALLOW-UNBOUND-PREDICATE-TRANSFORMATION?");
+
+    public static final SubLSymbol $kw53$ALLOW_EVALUATABLE_PREDICATE_TRANSFORMATION_ = makeKeyword("ALLOW-EVALUATABLE-PREDICATE-TRANSFORMATION?");
+
+    public static final SubLSymbol $kw54$ALLOW_HL_PREDICATE_TRANSFORMATION_ = makeKeyword("ALLOW-HL-PREDICATE-TRANSFORMATION?");
+
+    static private final SubLString $str_alt55$Performing_full_TMS_on_mt__S = makeString("Performing full TMS on mt ~S");
+
+    /**
+     * Perform full TMS on all assertions in MT
+     */
+    @LispMethod(comment = "Perform full TMS on all assertions in MT")
+    public static final SubLObject tms_reconsider_mt_alt(SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(mt, HLMT_P);
+            {
+                SubLObject monad_mt = hlmt_monad_mt(mt);
+                if (NIL != kb_indexing.broad_mtP(monad_mt)) {
+                    {
+                        SubLObject idx = assertion_handles.do_assertions_table();
+                        SubLObject mess = format(NIL, $str_alt55$Performing_full_TMS_on_mt__S, mt);
+                        SubLObject total = id_index_count(idx);
+                        SubLObject sofar = ZERO_INTEGER;
+                        SubLTrampolineFile.checkType(mess, STRINGP);
+                        {
+                            SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                            SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                            try {
+                                $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                                $last_percent_progress_prediction$.bind(NIL, thread);
+                                $within_noting_percent_progress$.bind(T, thread);
+                                $percent_progress_start_time$.bind(get_universal_time(), thread);
+                                noting_percent_progress_preamble(mess);
+                                if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                                    {
+                                        SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
+                                        SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
+                                        SubLObject assertion = NIL;
+                                        while (NIL != id) {
+                                            assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                            if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
+                                                note_percent_progress(sofar, total);
+                                                sofar = add(sofar, ONE_INTEGER);
+                                                if (NIL != hlmt_equal(assertions_high.assertion_mt(assertion), mt)) {
+                                                    com.cyc.cycjava.cycl.tms.tms_reconsider_assertion(assertion);
+                                                }
+                                            }
+                                            id = do_id_index_next_id(idx, T, id, state_var);
+                                            state_var = do_id_index_next_state(idx, T, id, state_var);
+                                        } 
+                                    }
+                                }
+                                noting_percent_progress_postamble();
+                            } finally {
+                                $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                                $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                                $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                                $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } else {
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
+                            mt_relevance_macros.$mt$.bind(mt, thread);
+                            kb_mapping.map_mt_index(TMS_RECONSIDER_ASSERTION, monad_mt, NIL, NIL);
+                        } finally {
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return NIL;
+            }
+        }
+    }
+
+    /**
+     * Perform full TMS on all assertions in MT
+     */
+    @LispMethod(comment = "Perform full TMS on all assertions in MT")
     public static SubLObject tms_reconsider_mt(final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != hlmt.hlmt_p(mt) : "hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) " + mt;
+        assert NIL != hlmt.hlmt_p(mt) : "! hlmt.hlmt_p(mt) " + ("hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) ") + mt;
         final SubLObject monad_mt = hlmt.hlmt_monad_mt(mt);
         if (NIL != kb_indexing.broad_mtP(monad_mt)) {
             final SubLObject idx = assertion_handles.do_assertions_table();
             final SubLObject mess = format(NIL, $str74$Performing_full_TMS_on_mt__S, mt);
             final SubLObject total = id_index_count(idx);
             SubLObject sofar = ZERO_INTEGER;
-            assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+            assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
             final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
             final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
             final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -1984,6 +3339,51 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLInteger $int$50 = makeInteger(50);
+
+    static private final SubLString $str_alt63$Removing_circularly_supported_ass = makeString("Removing circularly supported assertions");
+
+    static private final SubLString $str_alt64$_____S_circularly_supported_asser = makeString("~%~%~S circularly supported assertions removed");
+
+    static private final SubLString $str_alt65$__Removing__S = makeString("~%Removing ~S");
+
+    public static final SubLObject tms_reconsider_term_gafs_alt(SubLObject v_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != mt) {
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
+                        mt_relevance_macros.$mt$.bind(mt, thread);
+                        kb_mapping.map_term_gafs(TMS_RECONSIDER_ASSERTION, v_term, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            } else {
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        kb_mapping.map_term_gafs(TMS_RECONSIDER_ASSERTION, v_term, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject tms_reconsider_term_gafs(final SubLObject v_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2015,6 +3415,40 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Perform full TMS on all gaf assertions whose predicate is PRED
+     */
+    @LispMethod(comment = "Perform full TMS on all gaf assertions whose predicate is PRED")
+    public static final SubLObject tms_reconsider_predicate_extent_alt(SubLObject pred, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != mt) {
+                kb_mapping.map_predicate_extent_index(TMS_RECONSIDER_ASSERTION, pred, NIL, mt);
+            } else {
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        kb_mapping.map_predicate_extent_index(TMS_RECONSIDER_ASSERTION, pred, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Perform full TMS on all gaf assertions whose predicate is PRED
+     */
+    @LispMethod(comment = "Perform full TMS on all gaf assertions whose predicate is PRED")
     public static SubLObject tms_reconsider_predicate_extent(final SubLObject pred, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2037,6 +3471,43 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Perform full TMS on all gaf assertions indexed via TERM under ARG PREDICATE MT
+     */
+    @LispMethod(comment = "Perform full TMS on all gaf assertions indexed via TERM under ARG PREDICATE MT")
+    public static final SubLObject tms_reconsider_gaf_args_alt(SubLObject v_term, SubLObject arg, SubLObject predicate, SubLObject mt) {
+        if (predicate == UNPROVIDED) {
+            predicate = NIL;
+        }
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != mt) {
+                kb_mapping.map_gaf_arg_index(TMS_RECONSIDER_ASSERTION, v_term, arg, predicate, NIL, mt);
+            } else {
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        kb_mapping.map_gaf_arg_index(TMS_RECONSIDER_ASSERTION, v_term, arg, predicate, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Perform full TMS on all gaf assertions indexed via TERM under ARG PREDICATE MT
+     */
+    @LispMethod(comment = "Perform full TMS on all gaf assertions indexed via TERM under ARG PREDICATE MT")
     public static SubLObject tms_reconsider_gaf_args(final SubLObject v_term, final SubLObject arg, SubLObject predicate, SubLObject mt) {
         if (predicate == UNPROVIDED) {
             predicate = NIL;
@@ -2062,6 +3533,53 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Perform full TMS on all assertions involving TERM indexed via MT
+     * If MT is nil, all mts are used
+     */
+    @LispMethod(comment = "Perform full TMS on all assertions involving TERM indexed via MT\r\nIf MT is nil, all mts are used\nPerform full TMS on all assertions involving TERM indexed via MT\nIf MT is nil, all mts are used")
+    public static final SubLObject tms_reconsider_term_alt(SubLObject v_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != mt) {
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EQ, thread);
+                        mt_relevance_macros.$mt$.bind(mt, thread);
+                        kb_mapping.map_term(TMS_RECONSIDER_ASSERTION, v_term);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            } else {
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        kb_mapping.map_term(TMS_RECONSIDER_ASSERTION, v_term);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Perform full TMS on all assertions involving TERM indexed via MT
+     * If MT is nil, all mts are used
+     */
+    @LispMethod(comment = "Perform full TMS on all assertions involving TERM indexed via MT\r\nIf MT is nil, all mts are used\nPerform full TMS on all assertions involving TERM indexed via MT\nIf MT is nil, all mts are used")
     public static SubLObject tms_reconsider_term(final SubLObject v_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2093,6 +3611,58 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject tms_reconsider_all_assertions_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = ZERO_INTEGER;
+                SubLObject idx = assertion_handles.do_assertions_table();
+                SubLObject total_5 = id_index_count(idx);
+                SubLObject sofar = ZERO_INTEGER;
+                SubLTrampolineFile.checkType($$$Reconsidering_assertion_arguments, STRINGP);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($$$Reconsidering_assertion_arguments);
+                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                            {
+                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
+                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
+                                SubLObject assertion = NIL;
+                                while (NIL != id) {
+                                    assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                    if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
+                                        note_percent_progress(sofar, total_5);
+                                        sofar = add(sofar, ONE_INTEGER);
+                                        if (NIL != com.cyc.cycjava.cycl.tms.tms_reconsider_assertion(assertion)) {
+                                            total = add(total, ONE_INTEGER);
+                                        }
+                                    }
+                                    id = do_id_index_next_id(idx, T, id, state_var);
+                                    state_var = do_id_index_next_state(idx, T, id, state_var);
+                                } 
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return total;
+            }
+        }
+    }
+
     public static SubLObject tms_reconsider_all_assertions() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject total = ZERO_INTEGER;
@@ -2100,7 +3670,7 @@ public final class tms extends SubLTranslatedFile {
         final SubLObject mess = $$$Reconsidering_assertion_arguments;
         final SubLObject total_$24 = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -2179,8 +3749,29 @@ public final class tms extends SubLTranslatedFile {
         return total;
     }
 
+    /**
+     * Return T iff SUPPORT is no longer true.
+     */
+    @LispMethod(comment = "Return T iff SUPPORT is no longer true.")
+    public static final SubLObject stale_support_alt(SubLObject support) {
+        SubLTrampolineFile.checkType(support, SUPPORT_P);
+        if (NIL != assertion_handles.assertion_p(support)) {
+            return makeBoolean((NIL == assertion_el_formula(support)) || (NIL == assertions_high.valid_assertion(support, UNPROVIDED)));
+        } else {
+            if (NIL != kb_hl_supports.kb_hl_support_p(support)) {
+                return makeBoolean(NIL == kb_hl_supports.verify_kb_hl_support(support));
+            } else {
+                return makeBoolean(NIL == hl_verify(support));
+            }
+        }
+    }
+
+    /**
+     * Return T iff SUPPORT is no longer true.
+     */
+    @LispMethod(comment = "Return T iff SUPPORT is no longer true.")
     public static SubLObject stale_support(final SubLObject support) {
-        assert NIL != arguments.support_p(support) : "arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) " + support;
+        assert NIL != arguments.support_p(support) : "! arguments.support_p(support) " + ("arguments.support_p(support) " + "CommonSymbols.NIL != arguments.support_p(support) ") + support;
         if (NIL != assertion_handles.assertion_p(support)) {
             return makeBoolean((NIL == uncanonicalizer.assertion_el_formula(support)) || (NIL == assertions_high.valid_assertion(support, UNPROVIDED)));
         }
@@ -2190,10 +3781,42 @@ public final class tms extends SubLTranslatedFile {
         return makeBoolean(NIL == hl_supports.hl_verify(support));
     }
 
+    /**
+     * Return T iff the mt of SUPPORT is no longer visible from DEDUCTION-MT.
+     */
+    @LispMethod(comment = "Return T iff the mt of SUPPORT is no longer visible from DEDUCTION-MT.")
+    public static final SubLObject stale_support_mtP_alt(SubLObject support, SubLObject deduction_mt) {
+        return makeBoolean(NIL == com.cyc.cycjava.cycl.tms.support_mt_okP(support, deduction_mt));
+    }
+
+    /**
+     * Return T iff the mt of SUPPORT is no longer visible from DEDUCTION-MT.
+     */
+    @LispMethod(comment = "Return T iff the mt of SUPPORT is no longer visible from DEDUCTION-MT.")
     public static SubLObject stale_support_mtP(final SubLObject support, final SubLObject deduction_mt) {
         return makeBoolean(NIL == support_mt_okP(support, deduction_mt));
     }
 
+    /**
+     * Return T iff the mt of SUPPORT is (still) visible from DEDUCTION-MT.
+     */
+    @LispMethod(comment = "Return T iff the mt of SUPPORT is (still) visible from DEDUCTION-MT.")
+    public static final SubLObject support_mt_okP_alt(SubLObject support, SubLObject deduction_mt) {
+        {
+            SubLObject support_mt = support_mt(support);
+            SubLObject pcase_var = support_mt;
+            if (pcase_var.eql($$InferencePSC) || pcase_var.eql($$EverythingPSC)) {
+                return T;
+            } else {
+                return genl_mtP(deduction_mt, support_mt, UNPROVIDED, UNPROVIDED);
+            }
+        }
+    }
+
+    /**
+     * Return T iff the mt of SUPPORT is (still) visible from DEDUCTION-MT.
+     */
+    @LispMethod(comment = "Return T iff the mt of SUPPORT is (still) visible from DEDUCTION-MT.")
     public static SubLObject support_mt_okP(final SubLObject support, final SubLObject deduction_mt) {
         final SubLObject pcase_var;
         final SubLObject support_mt = pcase_var = arguments.support_mt(support);
@@ -2203,8 +3826,62 @@ public final class tms extends SubLTranslatedFile {
         return genl_mts.genl_mtP(deduction_mt, support_mt, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @return list of deduction-p;
+    Returns a list of the deductions supporting ASSERTION such that :
+    The deduction contains a support which is a rule
+    which has some relevant #$pragmaticRequirement
+    that mentions #$assertedMoreSpecifically
+     */
+    @LispMethod(comment = "@return list of deduction-p;\r\nReturns a list of the deductions supporting ASSERTION such that :\r\nThe deduction contains a support which is a rule\r\nwhich has some relevant #$pragmaticRequirement\r\nthat mentions #$assertedMoreSpecifically")
+    public static final SubLObject assertion_asserted_more_specifically_deductions_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+        {
+            SubLObject deductions = NIL;
+            if (NIL != assertions_high.deduced_assertionP(assertion)) {
+                {
+                    SubLObject mt = assertions_high.assertion_mt(assertion);
+                    SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
+                    SubLObject deduction = NIL;
+                    for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                        if (NIL != deduction_p(deduction)) {
+                            {
+                                SubLObject reconsiderP = NIL;
+                                SubLObject rest = NIL;
+                                for (rest = deductions_high.deduction_supports(deduction); !((NIL != reconsiderP) || (NIL == rest)); rest = rest.rest()) {
+                                    {
+                                        SubLObject support = rest.first();
+                                        if (NIL != kb_indexing.rule_with_some_asserted_more_specifically_pragmaticP(support, mt)) {
+                                            reconsiderP = T;
+                                        }
+                                    }
+                                }
+                                if (NIL != reconsiderP) {
+                                    deductions = cons(deduction, deductions);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return nreverse(deductions);
+        }
+    }
+
+    /**
+     *
+     *
+     * @return list of deduction-p;
+    Returns a list of the deductions supporting ASSERTION such that :
+    The deduction contains a support which is a rule
+    which has some relevant #$pragmaticRequirement
+    that mentions #$assertedMoreSpecifically
+     */
+    @LispMethod(comment = "@return list of deduction-p;\r\nReturns a list of the deductions supporting ASSERTION such that :\r\nThe deduction contains a support which is a rule\r\nwhich has some relevant #$pragmaticRequirement\r\nthat mentions #$assertedMoreSpecifically")
     public static SubLObject assertion_asserted_more_specifically_deductions(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         SubLObject deductions = NIL;
         if (NIL != assertions_high.deduced_assertionP(assertion)) {
             final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -2408,6 +4085,64 @@ public final class tms extends SubLTranslatedFile {
         return subtract(before, after);
     }
 
+    public static final SubLObject remove_circularly_supported_assertions_alt(SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = ZERO_INTEGER;
+                SubLObject idx = assertion_handles.do_assertions_table();
+                SubLObject total_6 = id_index_count(idx);
+                SubLObject sofar = ZERO_INTEGER;
+                SubLTrampolineFile.checkType($str_alt63$Removing_circularly_supported_ass, STRINGP);
+                {
+                    SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $last_percent_progress_prediction$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $within_noting_percent_progress$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = $percent_progress_start_time$.currentBinding(thread);
+                    try {
+                        $last_percent_progress_index$.bind(ZERO_INTEGER, thread);
+                        $last_percent_progress_prediction$.bind(NIL, thread);
+                        $within_noting_percent_progress$.bind(T, thread);
+                        $percent_progress_start_time$.bind(get_universal_time(), thread);
+                        noting_percent_progress_preamble($str_alt63$Removing_circularly_supported_ass);
+                        if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                            {
+                                SubLObject id = do_id_index_next_id(idx, T, NIL, NIL);
+                                SubLObject state_var = do_id_index_next_state(idx, T, id, NIL);
+                                SubLObject assertion = NIL;
+                                while (NIL != id) {
+                                    assertion = do_id_index_state_object(idx, $SKIP, id, state_var);
+                                    if (NIL != do_id_index_id_and_object_validP(id, assertion, $SKIP)) {
+                                        note_percent_progress(sofar, total_6);
+                                        sofar = add(sofar, ONE_INTEGER);
+                                        if (NIL != com.cyc.cycjava.cycl.tms.remove_if_circularly_supported_assertion(assertion, verboseP)) {
+                                            total = add(total, ONE_INTEGER);
+                                        }
+                                    }
+                                    id = do_id_index_next_id(idx, T, id, state_var);
+                                    state_var = do_id_index_next_state(idx, T, id, state_var);
+                                } 
+                            }
+                        }
+                        noting_percent_progress_postamble();
+                    } finally {
+                        $percent_progress_start_time$.rebind(_prev_bind_3, thread);
+                        $within_noting_percent_progress$.rebind(_prev_bind_2, thread);
+                        $last_percent_progress_prediction$.rebind(_prev_bind_1, thread);
+                        $last_percent_progress_index$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != verboseP) {
+                    format(T, $str_alt64$_____S_circularly_supported_asser, total);
+                }
+                return total;
+            }
+        }
+    }
+
     public static SubLObject remove_circularly_supported_assertions(SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -2418,7 +4153,7 @@ public final class tms extends SubLTranslatedFile {
         final SubLObject mess = $str89$Removing_circularly_supported_ass;
         final SubLObject total_$32 = id_index_count(idx);
         SubLObject sofar = ZERO_INTEGER;
-        assert NIL != stringp(mess) : "Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) " + mess;
+        assert NIL != stringp(mess) : "! stringp(mess) " + ("Types.stringp(mess) " + "CommonSymbols.NIL != Types.stringp(mess) ") + mess;
         final SubLObject _prev_bind_0 = $last_percent_progress_index$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $last_percent_progress_prediction$.currentBinding(thread);
         final SubLObject _prev_bind_3 = $within_noting_percent_progress$.currentBinding(thread);
@@ -2500,6 +4235,20 @@ public final class tms extends SubLTranslatedFile {
         return total;
     }
 
+    public static final SubLObject remove_if_circularly_supported_assertion_alt(SubLObject assertion, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = T;
+        }
+        if (NIL == com.cyc.cycjava.cycl.tms.some_belief_justification(assertion, UNPROVIDED)) {
+            if (NIL != verboseP) {
+                format(T, $str_alt65$__Removing__S, assertion);
+            }
+            com.cyc.cycjava.cycl.tms.tms_remove_assertion(assertion);
+            return T;
+        }
+        return NIL;
+    }
+
     public static SubLObject remove_if_circularly_supported_assertion(final SubLObject assertion, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = T;
@@ -2514,8 +4263,84 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Return T iff ASSERTION has been deduced without having to rely on an asserted argument for itself.
+     */
+    @LispMethod(comment = "Return T iff ASSERTION has been deduced without having to rely on an asserted argument for itself.")
+    public static final SubLObject independently_deducible_assertionP_alt(SubLObject assertion) {
+        return makeBoolean(((NIL != assertion_handles.assertion_p(assertion)) && (NIL != assertions_high.deduced_assertionP(assertion))) && (NIL != com.cyc.cycjava.cycl.tms.some_belief_justification(assertion, list(assertion))));
+    }
+
+    /**
+     * Return T iff ASSERTION has been deduced without having to rely on an asserted argument for itself.
+     */
+    @LispMethod(comment = "Return T iff ASSERTION has been deduced without having to rely on an asserted argument for itself.")
     public static SubLObject independently_deducible_assertionP(final SubLObject assertion) {
         return makeBoolean(((NIL != assertion_handles.assertion_p(assertion)) && (NIL != assertions_high.deduced_assertionP(assertion))) && (NIL != some_belief_justification(assertion, list(assertion))));
+    }
+
+    public static final SubLObject some_belief_justification_alt(SubLObject assertion, SubLObject asserted_assertions_to_ignore) {
+        if (asserted_assertions_to_ignore == UNPROVIDED) {
+            asserted_assertions_to_ignore = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            if ((NIL != assertions_high.asserted_assertionP(assertion)) && (NIL == member_eqP(assertion, asserted_assertions_to_ignore))) {
+                return T;
+            } else {
+                if (NIL == assertions_high.assertion_arguments(assertion)) {
+                    return NIL;
+                } else {
+                    {
+                        SubLObject just_found = NIL;
+                        {
+                            SubLObject _prev_bind_0 = $circular_deductions$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = $circular_assertions$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = $circular_local_assertions$.currentBinding(thread);
+                            SubLObject _prev_bind_3 = $circular_target_assertion$.currentBinding(thread);
+                            SubLObject _prev_bind_4 = $circular_complexity_count$.currentBinding(thread);
+                            try {
+                                $circular_deductions$.bind(NIL, thread);
+                                $circular_assertions$.bind(NIL, thread);
+                                $circular_local_assertions$.bind(NIL, thread);
+                                $circular_target_assertion$.bind(assertion, thread);
+                                $circular_complexity_count$.bind(ZERO_INTEGER, thread);
+                                try {
+                                    {
+                                        SubLObject cdolist_list_var = assertions_high.assertion_arguments(assertion);
+                                        SubLObject argument = NIL;
+                                        for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                                            if (NIL != deduction_p(argument)) {
+                                                com.cyc.cycjava.cycl.tms.gather_circular_deduction(argument, asserted_assertions_to_ignore);
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject cdolist_list_var = $circular_assertions$.getDynamicValue(thread);
+                                        SubLObject supported_assertion = NIL;
+                                        for (supported_assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , supported_assertion = cdolist_list_var.first()) {
+                                            if ((NIL != assertions_high.asserted_assertionP(supported_assertion)) && (NIL == member_eqP(supported_assertion, asserted_assertions_to_ignore))) {
+                                                com.cyc.cycjava.cycl.tms.mark_circular_assertion(supported_assertion);
+                                            }
+                                        }
+                                    }
+                                } catch (Throwable ccatch_env_var) {
+                                    just_found = Errors.handleThrowable(ccatch_env_var, $JUST_FOUND);
+                                }
+                            } finally {
+                                $circular_complexity_count$.rebind(_prev_bind_4, thread);
+                                $circular_target_assertion$.rebind(_prev_bind_3, thread);
+                                $circular_local_assertions$.rebind(_prev_bind_2, thread);
+                                $circular_assertions$.rebind(_prev_bind_1, thread);
+                                $circular_deductions$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                        return just_found;
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject some_belief_justification(final SubLObject assertion, SubLObject asserted_assertions_to_ignore) {
@@ -2523,7 +4348,7 @@ public final class tms extends SubLTranslatedFile {
             asserted_assertions_to_ignore = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         if ((NIL != assertions_high.asserted_assertionP(assertion)) && (NIL == list_utilities.member_kbeqP(assertion, asserted_assertions_to_ignore))) {
             return T;
         }
@@ -2579,6 +4404,19 @@ public final class tms extends SubLTranslatedFile {
         return just_found;
     }
 
+    public static final SubLObject inc_circular_complexity_count() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            $circular_complexity_count$.setDynamicValue(add($circular_complexity_count$.getDynamicValue(thread), ONE_INTEGER), thread);
+            if (NIL != $circular_complexity_count_limit$.getDynamicValue(thread)) {
+                if ($circular_complexity_count$.getDynamicValue(thread).numG($circular_complexity_count_limit$.getDynamicValue(thread))) {
+                    sublisp_throw($JUST_FOUND, T);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject inc_circular_complexity_count(SubLObject witness) {
         if (witness == UNPROVIDED) {
             witness = NIL;
@@ -2589,6 +4427,38 @@ public final class tms extends SubLTranslatedFile {
             sublisp_throw($JUST_FOUND, $circular_complexity_count_limit$.getDynamicValue(thread));
         }
         return $circular_complexity_count$.getDynamicValue(thread);
+    }
+
+    public static final SubLObject gather_circular_deduction_alt(SubLObject deduction, SubLObject asserted_assertions_to_ignore) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == subl_promotions.memberP(deduction, $circular_deductions$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) {
+                $circular_deductions$.setDynamicValue(cons(deduction, $circular_deductions$.getDynamicValue(thread)), thread);
+                com.cyc.cycjava.cycl.tms.inc_circular_complexity_count();
+                {
+                    SubLObject cdolist_list_var = deductions_high.deduction_supports(deduction);
+                    SubLObject assertion = NIL;
+                    for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                        if (NIL != assertion_handles.assertion_p(assertion)) {
+                            $circular_assertions$.setDynamicValue(cons(assertion, $circular_assertions$.getDynamicValue(thread)), thread);
+                            com.cyc.cycjava.cycl.tms.inc_circular_complexity_count();
+                            if (!((NIL != assertions_high.asserted_assertionP(assertion)) && (NIL == member_eqP(assertion, asserted_assertions_to_ignore)))) {
+                                {
+                                    SubLObject cdolist_list_var_7 = assertions_high.assertion_arguments(assertion);
+                                    SubLObject argument = NIL;
+                                    for (argument = cdolist_list_var_7.first(); NIL != cdolist_list_var_7; cdolist_list_var_7 = cdolist_list_var_7.rest() , argument = cdolist_list_var_7.first()) {
+                                        if (NIL != deduction_p(argument)) {
+                                            com.cyc.cycjava.cycl.tms.gather_circular_deduction(argument, asserted_assertions_to_ignore);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject gather_circular_deduction(final SubLObject deduction, final SubLObject asserted_assertions_to_ignore) {
@@ -2623,6 +4493,28 @@ public final class tms extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject mark_circular_assertion_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (assertion == $circular_target_assertion$.getDynamicValue(thread)) {
+                sublisp_throw($JUST_FOUND, T);
+            }
+            if (NIL == subl_promotions.memberP(assertion, $circular_local_assertions$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) {
+                $circular_local_assertions$.setDynamicValue(cons(assertion, $circular_local_assertions$.getDynamicValue(thread)), thread);
+                {
+                    SubLObject cdolist_list_var = com.cyc.cycjava.cycl.tms.circular_deductions_with_assertion(assertion);
+                    SubLObject deduction = NIL;
+                    for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                        if (NIL != com.cyc.cycjava.cycl.tms.believed_circular_deduction(deduction)) {
+                            com.cyc.cycjava.cycl.tms.mark_circular_assertion(deductions_high.deduction_assertion(deduction));
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject mark_circular_assertion(final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (assertion.eql($circular_target_assertion$.getDynamicValue(thread))) {
@@ -2642,6 +4534,23 @@ public final class tms extends SubLTranslatedFile {
             } 
         }
         return NIL;
+    }
+
+    public static final SubLObject circular_deductions_with_assertion_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                SubLObject cdolist_list_var = $circular_deductions$.getDynamicValue(thread);
+                SubLObject deduction = NIL;
+                for (deduction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , deduction = cdolist_list_var.first()) {
+                    if (NIL != subl_promotions.memberP(assertion, deductions_high.deduction_supports(deduction), UNPROVIDED, UNPROVIDED)) {
+                        ans = cons(deduction, ans);
+                    }
+                }
+                return nreverse(ans);
+            }
+        }
     }
 
     public static SubLObject circular_deductions_with_assertion(final SubLObject assertion) {
@@ -2674,101 +4583,318 @@ public final class tms extends SubLTranslatedFile {
         return makeBoolean(NIL == witness);
     }
 
+    public static final SubLObject declare_tms_file_alt() {
+        declareFunction("tms_assertion_being_removedP", "TMS-ASSERTION-BEING-REMOVED?", 1, 0, false);
+        declareMacro("tms_note_assertion_being_removed", "TMS-NOTE-ASSERTION-BEING-REMOVED");
+        declareFunction("tms_deduction_being_removedP", "TMS-DEDUCTION-BEING-REMOVED?", 1, 0, false);
+        declareMacro("tms_note_deduction_being_removed", "TMS-NOTE-DEDUCTION-BEING-REMOVED");
+        declareFunction("tms_argument_being_removedP", "TMS-ARGUMENT-BEING-REMOVED?", 1, 0, false);
+        declareMacro("tms_note_argument_being_removed", "TMS-NOTE-ARGUMENT-BEING-REMOVED");
+        declareFunction("tms_possibly_replace_asserted_argument_with_tv", "TMS-POSSIBLY-REPLACE-ASSERTED-ARGUMENT-WITH-TV", 2, 0, false);
+        declareFunction("tms_create_asserted_argument_with_tv", "TMS-CREATE-ASSERTED-ARGUMENT-WITH-TV", 2, 0, false);
+        declareFunction("tms_add_new_deduction", "TMS-ADD-NEW-DEDUCTION", 3, 0, false);
+        declareFunction("tms_postprocess_new_argument", "TMS-POSTPROCESS-NEW-ARGUMENT", 2, 0, false);
+        declareFunction("tms_remove_argument", "TMS-REMOVE-ARGUMENT", 2, 0, false);
+        declareFunction("tms_propagate_removed_argument", "TMS-PROPAGATE-REMOVED-ARGUMENT", 2, 0, false);
+        declareFunction("tms_remove_assertion_list", "TMS-REMOVE-ASSERTION-LIST", 1, 0, false);
+        declareFunction("tms_remove_nonempty_assertion_list", "TMS-REMOVE-NONEMPTY-ASSERTION-LIST", 1, 0, false);
+        declareFunction("tms_remove_assertion", "TMS-REMOVE-ASSERTION", 1, 0, false);
+        declareFunction("tms_remove_assertion_int", "TMS-REMOVE-ASSERTION-INT", 1, 0, false);
+        declareFunction("tms_remove_assertion_int_2", "TMS-REMOVE-ASSERTION-INT-2", 1, 0, false);
+        declareFunction("tms_remove_deduction", "TMS-REMOVE-DEDUCTION", 1, 0, false);
+        declareFunction("tms_change_asserted_argument_tv", "TMS-CHANGE-ASSERTED-ARGUMENT-TV", 3, 0, false);
+        declareFunction("tms_recompute_assertion_tv", "TMS-RECOMPUTE-ASSERTION-TV", 1, 0, false);
+        declareFunction("tms_change_direction", "TMS-CHANGE-DIRECTION", 2, 0, false);
+        declareFunction("tms_recompute_dependents", "TMS-RECOMPUTE-DEPENDENTS", 1, 0, false);
+        declareFunction("tms_remove_dependents", "TMS-REMOVE-DEPENDENTS", 1, 0, false);
+        declareFunction("tms_recompute_dependents_tv", "TMS-RECOMPUTE-DEPENDENTS-TV", 1, 0, false);
+        declareFunction("tms_recompute_deduction_tv", "TMS-RECOMPUTE-DEDUCTION-TV", 1, 0, false);
+        declareFunction("tms_remove_mt_arguments", "TMS-REMOVE-MT-ARGUMENTS", 1, 1, false);
+        declareFunction("tms_remove_deduction_for_assertion", "TMS-REMOVE-DEDUCTION-FOR-ASSERTION", 2, 1, false);
+        declareFunction("tms_add_deduction_for_assertion", "TMS-ADD-DEDUCTION-FOR-ASSERTION", 2, 1, false);
+        declareFunction("tms_add_deduction_for_cnf", "TMS-ADD-DEDUCTION-FOR-CNF", 3, 3, false);
+        declareFunction("tms_direct_circularity", "TMS-DIRECT-CIRCULARITY", 2, 0, false);
+        declareFunction("tms_directly_circular_deduction", "TMS-DIRECTLY-CIRCULAR-DEDUCTION", 1, 0, false);
+        declareFunction("atomic_cnf_trivially_derivable", "ATOMIC-CNF-TRIVIALLY-DERIVABLE", 2, 0, false);
+        declareFunction("gaf_trivially_derivable", "GAF-TRIVIALLY-DERIVABLE", 3, 0, false);
+        declareFunction("true_gaf_trivially_derivable", "TRUE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
+        declareFunction("false_gaf_trivially_derivable", "FALSE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
+        declareFunction("tms_reconsider_assertion_deductions", "TMS-RECONSIDER-ASSERTION-DEDUCTIONS", 1, 0, false);
+        declareFunction("tms_reconsider_assertion_dependents", "TMS-RECONSIDER-ASSERTION-DEPENDENTS", 1, 0, false);
+        declareFunction("tms_reconsider_deduction", "TMS-RECONSIDER-DEDUCTION", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_supportsP", "TMS-DEDUCTION-STALE-WRT-SUPPORTS?", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?", 1, 0, false);
+        declareFunction("tms_reprove_deduction_query_sentence", "TMS-REPROVE-DEDUCTION-QUERY-SENTENCE", 1, 0, false);
+        declareFunction("tms_reprove_deduction_query_mt", "TMS-REPROVE-DEDUCTION-QUERY-MT", 1, 0, false);
+        declareFunction("tms_reprove_deduction_query_properties", "TMS-REPROVE-DEDUCTION-QUERY-PROPERTIES", 5, 0, false);
+        declareFunction("tms_reconsider_assertion", "TMS-RECONSIDER-ASSERTION", 1, 0, false);
+        declareFunction("tms_reconsider_mt", "TMS-RECONSIDER-MT", 1, 0, false);
+        declareFunction("tms_reconsider_term_gafs", "TMS-RECONSIDER-TERM-GAFS", 1, 1, false);
+        declareFunction("tms_reconsider_predicate_extent", "TMS-RECONSIDER-PREDICATE-EXTENT", 1, 1, false);
+        declareFunction("tms_reconsider_gaf_args", "TMS-RECONSIDER-GAF-ARGS", 2, 2, false);
+        declareFunction("tms_reconsider_term", "TMS-RECONSIDER-TERM", 1, 1, false);
+        declareFunction("tms_reconsider_all_assertions", "TMS-RECONSIDER-ALL-ASSERTIONS", 0, 0, false);
+        declareFunction("stale_support", "STALE-SUPPORT", 1, 0, false);
+        declareFunction("stale_support_mtP", "STALE-SUPPORT-MT?", 2, 0, false);
+        declareFunction("support_mt_okP", "SUPPORT-MT-OK?", 2, 0, false);
+        declareFunction("assertion_asserted_more_specifically_deductions", "ASSERTION-ASSERTED-MORE-SPECIFICALLY-DEDUCTIONS", 1, 0, false);
+        declareFunction("remove_circularly_supported_assertions", "REMOVE-CIRCULARLY-SUPPORTED-ASSERTIONS", 0, 1, false);
+        declareFunction("remove_if_circularly_supported_assertion", "REMOVE-IF-CIRCULARLY-SUPPORTED-ASSERTION", 1, 1, false);
+        declareFunction("independently_deducible_assertionP", "INDEPENDENTLY-DEDUCIBLE-ASSERTION?", 1, 0, false);
+        declareFunction("some_belief_justification", "SOME-BELIEF-JUSTIFICATION", 1, 1, false);
+        declareFunction("inc_circular_complexity_count", "INC-CIRCULAR-COMPLEXITY-COUNT", 0, 0, false);
+        declareFunction("gather_circular_deduction", "GATHER-CIRCULAR-DEDUCTION", 2, 0, false);
+        declareFunction("mark_circular_assertion", "MARK-CIRCULAR-ASSERTION", 1, 0, false);
+        declareFunction("circular_deductions_with_assertion", "CIRCULAR-DEDUCTIONS-WITH-ASSERTION", 1, 0, false);
+        declareFunction("believed_circular_deduction", "BELIEVED-CIRCULAR-DEDUCTION", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_tms_file() {
-        declareFunction(me, "tms_any_assertion_being_removedP", "TMS-ANY-ASSERTION-BEING-REMOVED?", 0, 0, false);
-        declareFunction(me, "tms_assertion_being_removedP", "TMS-ASSERTION-BEING-REMOVED?", 1, 0, false);
-        declareMacro(me, "tms_note_assertion_being_removed", "TMS-NOTE-ASSERTION-BEING-REMOVED");
-        declareFunction(me, "tms_deduction_being_removedP", "TMS-DEDUCTION-BEING-REMOVED?", 1, 0, false);
-        declareMacro(me, "tms_note_deduction_being_removed", "TMS-NOTE-DEDUCTION-BEING-REMOVED");
-        declareFunction(me, "tms_argument_being_removedP", "TMS-ARGUMENT-BEING-REMOVED?", 1, 0, false);
-        declareMacro(me, "tms_note_argument_being_removed", "TMS-NOTE-ARGUMENT-BEING-REMOVED");
-        declareFunction(me, "tms_can_kill_forts_for_meP", "TMS-CAN-KILL-FORTS-FOR-ME?", 0, 0, false);
-        declareFunction(me, "tms_please_kill_this_term_for_me", "TMS-PLEASE-KILL-THIS-TERM-FOR-ME", 1, 0, false);
-        declareMacro(me, "tms_killing_forts_later", "TMS-KILLING-FORTS-LATER");
-        declareMacro(me, "tms_without_forts_to_kill_list", "TMS-WITHOUT-FORTS-TO-KILL-LIST");
-        declareFunction(me, "tms_forts_to_kill", "TMS-FORTS-TO-KILL", 0, 0, false);
-        declareFunction(me, "tms_fort_to_killP", "TMS-FORT-TO-KILL?", 1, 0, false);
-        declareFunction(me, "tms_kill_queued_forts", "TMS-KILL-QUEUED-FORTS", 0, 0, false);
-        declareFunction(me, "tms_possibly_replace_asserted_argument_with_tv", "TMS-POSSIBLY-REPLACE-ASSERTED-ARGUMENT-WITH-TV", 2, 0, false);
-        declareFunction(me, "tms_create_asserted_argument_with_tv", "TMS-CREATE-ASSERTED-ARGUMENT-WITH-TV", 2, 1, false);
-        declareFunction(me, "tms_add_new_deduction", "TMS-ADD-NEW-DEDUCTION", 3, 2, false);
-        declareFunction(me, "tms_postprocess_new_argument", "TMS-POSTPROCESS-NEW-ARGUMENT", 2, 1, false);
-        declareFunction(me, "tms_remove_argument", "TMS-REMOVE-ARGUMENT", 2, 1, false);
-        declareFunction(me, "tms_propagate_removed_argument", "TMS-PROPAGATE-REMOVED-ARGUMENT", 3, 0, false);
-        declareFunction(me, "tms_remove_assertion_list", "TMS-REMOVE-ASSERTION-LIST", 1, 0, false);
-        declareFunction(me, "tms_remove_nonempty_assertion_list", "TMS-REMOVE-NONEMPTY-ASSERTION-LIST", 1, 0, false);
-        declareFunction(me, "tms_remove_assertion", "TMS-REMOVE-ASSERTION", 1, 0, false);
-        declareFunction(me, "tms_remove_assertion_int", "TMS-REMOVE-ASSERTION-INT", 1, 0, false);
-        declareFunction(me, "tms_remove_assertion_low", "TMS-REMOVE-ASSERTION-LOW", 1, 0, false);
-        declareFunction(me, "tms_remove_deduction", "TMS-REMOVE-DEDUCTION", 1, 0, false);
-        declareFunction(me, "tms_change_asserted_argument_tv", "TMS-CHANGE-ASSERTED-ARGUMENT-TV", 3, 0, false);
-        declareFunction(me, "tms_recompute_assertion_tv", "TMS-RECOMPUTE-ASSERTION-TV", 1, 2, false);
-        declareFunction(me, "tms_change_direction", "TMS-CHANGE-DIRECTION", 2, 0, false);
-        declareFunction(me, "tms_should_schedule_assertion_for_forward_propagationP", "TMS-SHOULD-SCHEDULE-ASSERTION-FOR-FORWARD-PROPAGATION?", 1, 0, false);
-        declareFunction(me, "tms_possibly_schedule_assertion_for_forward_propagation", "TMS-POSSIBLY-SCHEDULE-ASSERTION-FOR-FORWARD-PROPAGATION", 1, 0, false);
-        declareFunction(me, "tms_recompute_dependents", "TMS-RECOMPUTE-DEPENDENTS", 1, 0, false);
-        declareFunction(me, "tms_handle_after_addings", "TMS-HANDLE-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(me, "tms_remove_dependents", "TMS-REMOVE-DEPENDENTS", 1, 0, false);
-        declareFunction(me, "tms_recompute_dependents_tv", "TMS-RECOMPUTE-DEPENDENTS-TV", 1, 0, false);
-        declareFunction(me, "tms_recompute_deduction_tv", "TMS-RECOMPUTE-DEDUCTION-TV", 1, 0, false);
-        declareFunction(me, "tms_remove_mt_arguments", "TMS-REMOVE-MT-ARGUMENTS", 1, 1, false);
-        declareFunction(me, "except_propagation_ruleX_initializer", "*EXCEPT-PROPAGATION-RULE*-INITIALIZER", 0, 0, false);
-        declareFunction(me, "perform_except_propagation", "PERFORM-EXCEPT-PROPAGATION", 1, 0, false);
-        declareFunction(me, "tms_remove_deduction_for_assertion", "TMS-REMOVE-DEDUCTION-FOR-ASSERTION", 2, 1, false);
-        declareFunction(me, "tms_explicitly_remove_deduction_for_assertion", "TMS-EXPLICITLY-REMOVE-DEDUCTION-FOR-ASSERTION", 1, 0, false);
-        declareFunction(me, "tms_add_deduction_for_assertion", "TMS-ADD-DEDUCTION-FOR-ASSERTION", 2, 3, false);
-        declareFunction(me, "tms_add_deduction_for_cnf", "TMS-ADD-DEDUCTION-FOR-CNF", 3, 5, false);
-        declareFunction(me, "tms_direct_circularity", "TMS-DIRECT-CIRCULARITY", 2, 0, false);
-        declareFunction(me, "tms_directly_circular_deduction", "TMS-DIRECTLY-CIRCULAR-DEDUCTION", 1, 0, false);
-        declareFunction(me, "tms_invalidate_weaker_redundant_arguments", "TMS-INVALIDATE-WEAKER-REDUNDANT-ARGUMENTS", 2, 0, false);
-        declareFunction(me, "tms_weaker_redundant_arguments", "TMS-WEAKER-REDUNDANT-ARGUMENTS", 2, 0, false);
-        declareFunction(me, "tms_remove_weaker_redundant_argument", "TMS-REMOVE-WEAKER-REDUNDANT-ARGUMENT", 2, 0, false);
-        declareFunction(me, "deduction_with_one_tou_supportP", "DEDUCTION-WITH-ONE-TOU-SUPPORT?", 1, 0, false);
-        declareFunction(me, "deduction_with_one_equality_support_matchingP", "DEDUCTION-WITH-ONE-EQUALITY-SUPPORT-MATCHING?", 2, 0, false);
-        declareFunction(me, "equality_support_matchingP", "EQUALITY-SUPPORT-MATCHING?", 2, 0, false);
-        declareFunction(me, "atomic_cnf_trivially_derivable", "ATOMIC-CNF-TRIVIALLY-DERIVABLE", 2, 0, false);
-        declareFunction(me, "gaf_trivially_derivable", "GAF-TRIVIALLY-DERIVABLE", 3, 0, false);
-        declareFunction(me, "true_gaf_trivially_derivable", "TRUE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
-        declareFunction(me, "false_gaf_trivially_derivable", "FALSE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
-        declareFunction(me, "tms_reconsider_assertion_deductions", "TMS-RECONSIDER-ASSERTION-DEDUCTIONS", 1, 0, false);
-        declareFunction(me, "tms_reconsider_assertion_dependents", "TMS-RECONSIDER-ASSERTION-DEPENDENTS", 1, 0, false);
-        declareFunction(me, "tms_reconsider_deduction", "TMS-RECONSIDER-DEDUCTION", 1, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_supportsP", "TMS-DEDUCTION-STALE-WRT-SUPPORTS?", 1, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_exceptionsP", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?", 1, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_exceptionsP_lifting_rule_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-LIFTING-RULE-VERSION", 1, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_exceptionsP_backchain_forbidden_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-BACKCHAIN-FORBIDDEN-VERSION", 1, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_exceptionsP_query_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-QUERY-VERSION", 1, 0, false);
-        declareFunction(me, "tms_reprove_deduction_query_sentence", "TMS-REPROVE-DEDUCTION-QUERY-SENTENCE", 1, 0, false);
-        declareFunction(me, "tms_reprove_deduction_query_mt", "TMS-REPROVE-DEDUCTION-QUERY-MT", 1, 0, false);
-        declareFunction(me, "tms_reprove_deduction_query_properties", "TMS-REPROVE-DEDUCTION-QUERY-PROPERTIES", 5, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_exceptionsP_general_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION", 1, 0, false);
-        declareFunction(me, "compute_assertibles_queue_for_tms_deduction_stale_wrt_exceptionsP_general_version", "COMPUTE-ASSERTIBLES-QUEUE-FOR-TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION", 2, 0, false);
-        declareFunction(me, "tms_deduction_stale_wrt_exceptionsP_use_deduction_bindings_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-USE-DEDUCTION-BINDINGS-VERSION", 1, 0, false);
-        declareFunction(me, "tms_reconsider_assertion", "TMS-RECONSIDER-ASSERTION", 1, 0, false);
-        declareFunction(me, "tms_reconsider_mt", "TMS-RECONSIDER-MT", 1, 0, false);
-        declareFunction(me, "tms_reconsider_term_gafs", "TMS-RECONSIDER-TERM-GAFS", 1, 1, false);
-        declareFunction(me, "tms_reconsider_predicate_extent", "TMS-RECONSIDER-PREDICATE-EXTENT", 1, 1, false);
-        declareFunction(me, "tms_reconsider_gaf_args", "TMS-RECONSIDER-GAF-ARGS", 2, 2, false);
-        declareFunction(me, "tms_reconsider_term", "TMS-RECONSIDER-TERM", 1, 1, false);
-        declareFunction(me, "tms_reconsider_all_assertions", "TMS-RECONSIDER-ALL-ASSERTIONS", 0, 0, false);
-        declareFunction(me, "stale_support", "STALE-SUPPORT", 1, 0, false);
-        declareFunction(me, "stale_support_mtP", "STALE-SUPPORT-MT?", 2, 0, false);
-        declareFunction(me, "support_mt_okP", "SUPPORT-MT-OK?", 2, 0, false);
-        declareFunction(me, "assertion_asserted_more_specifically_deductions", "ASSERTION-ASSERTED-MORE-SPECIFICALLY-DEDUCTIONS", 1, 0, false);
-        declareFunction(me, "bulk_remove_assertions", "BULK-REMOVE-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "remove_circularly_supported_assertions", "REMOVE-CIRCULARLY-SUPPORTED-ASSERTIONS", 0, 1, false);
-        declareFunction(me, "remove_if_circularly_supported_assertion", "REMOVE-IF-CIRCULARLY-SUPPORTED-ASSERTION", 1, 1, false);
-        declareFunction(me, "independently_deducible_assertionP", "INDEPENDENTLY-DEDUCIBLE-ASSERTION?", 1, 0, false);
-        declareFunction(me, "some_belief_justification", "SOME-BELIEF-JUSTIFICATION", 1, 1, false);
-        declareFunction(me, "inc_circular_complexity_count", "INC-CIRCULAR-COMPLEXITY-COUNT", 0, 1, false);
-        declareFunction(me, "gather_circular_deduction", "GATHER-CIRCULAR-DEDUCTION", 2, 0, false);
-        declareFunction(me, "mark_circular_assertion", "MARK-CIRCULAR-ASSERTION", 1, 0, false);
-        declareFunction(me, "circular_deductions_with_assertion", "CIRCULAR-DEDUCTIONS-WITH-ASSERTION", 1, 0, false);
-        declareFunction(me, "believed_circular_deductionP", "BELIEVED-CIRCULAR-DEDUCTION?", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("tms_any_assertion_being_removedP", "TMS-ANY-ASSERTION-BEING-REMOVED?", 0, 0, false);
+            declareFunction("tms_assertion_being_removedP", "TMS-ASSERTION-BEING-REMOVED?", 1, 0, false);
+            declareMacro("tms_note_assertion_being_removed", "TMS-NOTE-ASSERTION-BEING-REMOVED");
+            declareFunction("tms_deduction_being_removedP", "TMS-DEDUCTION-BEING-REMOVED?", 1, 0, false);
+            declareMacro("tms_note_deduction_being_removed", "TMS-NOTE-DEDUCTION-BEING-REMOVED");
+            declareFunction("tms_argument_being_removedP", "TMS-ARGUMENT-BEING-REMOVED?", 1, 0, false);
+            declareMacro("tms_note_argument_being_removed", "TMS-NOTE-ARGUMENT-BEING-REMOVED");
+            declareFunction("tms_can_kill_forts_for_meP", "TMS-CAN-KILL-FORTS-FOR-ME?", 0, 0, false);
+            declareFunction("tms_please_kill_this_term_for_me", "TMS-PLEASE-KILL-THIS-TERM-FOR-ME", 1, 0, false);
+            declareMacro("tms_killing_forts_later", "TMS-KILLING-FORTS-LATER");
+            declareMacro("tms_without_forts_to_kill_list", "TMS-WITHOUT-FORTS-TO-KILL-LIST");
+            declareFunction("tms_forts_to_kill", "TMS-FORTS-TO-KILL", 0, 0, false);
+            declareFunction("tms_fort_to_killP", "TMS-FORT-TO-KILL?", 1, 0, false);
+            declareFunction("tms_kill_queued_forts", "TMS-KILL-QUEUED-FORTS", 0, 0, false);
+            declareFunction("tms_possibly_replace_asserted_argument_with_tv", "TMS-POSSIBLY-REPLACE-ASSERTED-ARGUMENT-WITH-TV", 2, 0, false);
+            declareFunction("tms_create_asserted_argument_with_tv", "TMS-CREATE-ASSERTED-ARGUMENT-WITH-TV", 2, 1, false);
+            declareFunction("tms_add_new_deduction", "TMS-ADD-NEW-DEDUCTION", 3, 2, false);
+            declareFunction("tms_postprocess_new_argument", "TMS-POSTPROCESS-NEW-ARGUMENT", 2, 1, false);
+            declareFunction("tms_remove_argument", "TMS-REMOVE-ARGUMENT", 2, 1, false);
+            declareFunction("tms_propagate_removed_argument", "TMS-PROPAGATE-REMOVED-ARGUMENT", 3, 0, false);
+            declareFunction("tms_remove_assertion_list", "TMS-REMOVE-ASSERTION-LIST", 1, 0, false);
+            declareFunction("tms_remove_nonempty_assertion_list", "TMS-REMOVE-NONEMPTY-ASSERTION-LIST", 1, 0, false);
+            declareFunction("tms_remove_assertion", "TMS-REMOVE-ASSERTION", 1, 0, false);
+            declareFunction("tms_remove_assertion_int", "TMS-REMOVE-ASSERTION-INT", 1, 0, false);
+            declareFunction("tms_remove_assertion_low", "TMS-REMOVE-ASSERTION-LOW", 1, 0, false);
+            declareFunction("tms_remove_deduction", "TMS-REMOVE-DEDUCTION", 1, 0, false);
+            declareFunction("tms_change_asserted_argument_tv", "TMS-CHANGE-ASSERTED-ARGUMENT-TV", 3, 0, false);
+            declareFunction("tms_recompute_assertion_tv", "TMS-RECOMPUTE-ASSERTION-TV", 1, 2, false);
+            declareFunction("tms_change_direction", "TMS-CHANGE-DIRECTION", 2, 0, false);
+            declareFunction("tms_should_schedule_assertion_for_forward_propagationP", "TMS-SHOULD-SCHEDULE-ASSERTION-FOR-FORWARD-PROPAGATION?", 1, 0, false);
+            declareFunction("tms_possibly_schedule_assertion_for_forward_propagation", "TMS-POSSIBLY-SCHEDULE-ASSERTION-FOR-FORWARD-PROPAGATION", 1, 0, false);
+            declareFunction("tms_recompute_dependents", "TMS-RECOMPUTE-DEPENDENTS", 1, 0, false);
+            declareFunction("tms_handle_after_addings", "TMS-HANDLE-AFTER-ADDINGS", 1, 0, false);
+            declareFunction("tms_remove_dependents", "TMS-REMOVE-DEPENDENTS", 1, 0, false);
+            declareFunction("tms_recompute_dependents_tv", "TMS-RECOMPUTE-DEPENDENTS-TV", 1, 0, false);
+            declareFunction("tms_recompute_deduction_tv", "TMS-RECOMPUTE-DEDUCTION-TV", 1, 0, false);
+            declareFunction("tms_remove_mt_arguments", "TMS-REMOVE-MT-ARGUMENTS", 1, 1, false);
+            declareFunction("except_propagation_ruleX_initializer", "*EXCEPT-PROPAGATION-RULE*-INITIALIZER", 0, 0, false);
+            declareFunction("perform_except_propagation", "PERFORM-EXCEPT-PROPAGATION", 1, 0, false);
+            declareFunction("tms_remove_deduction_for_assertion", "TMS-REMOVE-DEDUCTION-FOR-ASSERTION", 2, 1, false);
+            declareFunction("tms_explicitly_remove_deduction_for_assertion", "TMS-EXPLICITLY-REMOVE-DEDUCTION-FOR-ASSERTION", 1, 0, false);
+            declareFunction("tms_add_deduction_for_assertion", "TMS-ADD-DEDUCTION-FOR-ASSERTION", 2, 3, false);
+            declareFunction("tms_add_deduction_for_cnf", "TMS-ADD-DEDUCTION-FOR-CNF", 3, 5, false);
+            declareFunction("tms_direct_circularity", "TMS-DIRECT-CIRCULARITY", 2, 0, false);
+            declareFunction("tms_directly_circular_deduction", "TMS-DIRECTLY-CIRCULAR-DEDUCTION", 1, 0, false);
+            declareFunction("tms_invalidate_weaker_redundant_arguments", "TMS-INVALIDATE-WEAKER-REDUNDANT-ARGUMENTS", 2, 0, false);
+            declareFunction("tms_weaker_redundant_arguments", "TMS-WEAKER-REDUNDANT-ARGUMENTS", 2, 0, false);
+            declareFunction("tms_remove_weaker_redundant_argument", "TMS-REMOVE-WEAKER-REDUNDANT-ARGUMENT", 2, 0, false);
+            declareFunction("deduction_with_one_tou_supportP", "DEDUCTION-WITH-ONE-TOU-SUPPORT?", 1, 0, false);
+            declareFunction("deduction_with_one_equality_support_matchingP", "DEDUCTION-WITH-ONE-EQUALITY-SUPPORT-MATCHING?", 2, 0, false);
+            declareFunction("equality_support_matchingP", "EQUALITY-SUPPORT-MATCHING?", 2, 0, false);
+            declareFunction("atomic_cnf_trivially_derivable", "ATOMIC-CNF-TRIVIALLY-DERIVABLE", 2, 0, false);
+            declareFunction("gaf_trivially_derivable", "GAF-TRIVIALLY-DERIVABLE", 3, 0, false);
+            declareFunction("true_gaf_trivially_derivable", "TRUE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
+            declareFunction("false_gaf_trivially_derivable", "FALSE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
+            declareFunction("tms_reconsider_assertion_deductions", "TMS-RECONSIDER-ASSERTION-DEDUCTIONS", 1, 0, false);
+            declareFunction("tms_reconsider_assertion_dependents", "TMS-RECONSIDER-ASSERTION-DEPENDENTS", 1, 0, false);
+            declareFunction("tms_reconsider_deduction", "TMS-RECONSIDER-DEDUCTION", 1, 0, false);
+            declareFunction("tms_deduction_stale_wrt_supportsP", "TMS-DEDUCTION-STALE-WRT-SUPPORTS?", 1, 0, false);
+            declareFunction("tms_deduction_stale_wrt_exceptionsP", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?", 1, 0, false);
+            declareFunction("tms_deduction_stale_wrt_exceptionsP_lifting_rule_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-LIFTING-RULE-VERSION", 1, 0, false);
+            declareFunction("tms_deduction_stale_wrt_exceptionsP_backchain_forbidden_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-BACKCHAIN-FORBIDDEN-VERSION", 1, 0, false);
+            declareFunction("tms_deduction_stale_wrt_exceptionsP_query_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-QUERY-VERSION", 1, 0, false);
+            declareFunction("tms_reprove_deduction_query_sentence", "TMS-REPROVE-DEDUCTION-QUERY-SENTENCE", 1, 0, false);
+            declareFunction("tms_reprove_deduction_query_mt", "TMS-REPROVE-DEDUCTION-QUERY-MT", 1, 0, false);
+            declareFunction("tms_reprove_deduction_query_properties", "TMS-REPROVE-DEDUCTION-QUERY-PROPERTIES", 5, 0, false);
+            declareFunction("tms_deduction_stale_wrt_exceptionsP_general_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION", 1, 0, false);
+            declareFunction("compute_assertibles_queue_for_tms_deduction_stale_wrt_exceptionsP_general_version", "COMPUTE-ASSERTIBLES-QUEUE-FOR-TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION", 2, 0, false);
+            declareFunction("tms_deduction_stale_wrt_exceptionsP_use_deduction_bindings_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-USE-DEDUCTION-BINDINGS-VERSION", 1, 0, false);
+            declareFunction("tms_reconsider_assertion", "TMS-RECONSIDER-ASSERTION", 1, 0, false);
+            declareFunction("tms_reconsider_mt", "TMS-RECONSIDER-MT", 1, 0, false);
+            declareFunction("tms_reconsider_term_gafs", "TMS-RECONSIDER-TERM-GAFS", 1, 1, false);
+            declareFunction("tms_reconsider_predicate_extent", "TMS-RECONSIDER-PREDICATE-EXTENT", 1, 1, false);
+            declareFunction("tms_reconsider_gaf_args", "TMS-RECONSIDER-GAF-ARGS", 2, 2, false);
+            declareFunction("tms_reconsider_term", "TMS-RECONSIDER-TERM", 1, 1, false);
+            declareFunction("tms_reconsider_all_assertions", "TMS-RECONSIDER-ALL-ASSERTIONS", 0, 0, false);
+            declareFunction("stale_support", "STALE-SUPPORT", 1, 0, false);
+            declareFunction("stale_support_mtP", "STALE-SUPPORT-MT?", 2, 0, false);
+            declareFunction("support_mt_okP", "SUPPORT-MT-OK?", 2, 0, false);
+            declareFunction("assertion_asserted_more_specifically_deductions", "ASSERTION-ASSERTED-MORE-SPECIFICALLY-DEDUCTIONS", 1, 0, false);
+            declareFunction("bulk_remove_assertions", "BULK-REMOVE-ASSERTIONS", 1, 0, false);
+            declareFunction("remove_circularly_supported_assertions", "REMOVE-CIRCULARLY-SUPPORTED-ASSERTIONS", 0, 1, false);
+            declareFunction("remove_if_circularly_supported_assertion", "REMOVE-IF-CIRCULARLY-SUPPORTED-ASSERTION", 1, 1, false);
+            declareFunction("independently_deducible_assertionP", "INDEPENDENTLY-DEDUCIBLE-ASSERTION?", 1, 0, false);
+            declareFunction("some_belief_justification", "SOME-BELIEF-JUSTIFICATION", 1, 1, false);
+            declareFunction("inc_circular_complexity_count", "INC-CIRCULAR-COMPLEXITY-COUNT", 0, 1, false);
+            declareFunction("gather_circular_deduction", "GATHER-CIRCULAR-DEDUCTION", 2, 0, false);
+            declareFunction("mark_circular_assertion", "MARK-CIRCULAR-ASSERTION", 1, 0, false);
+            declareFunction("circular_deductions_with_assertion", "CIRCULAR-DEDUCTIONS-WITH-ASSERTION", 1, 0, false);
+            declareFunction("believed_circular_deductionP", "BELIEVED-CIRCULAR-DEDUCTION?", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("tms_create_asserted_argument_with_tv", "TMS-CREATE-ASSERTED-ARGUMENT-WITH-TV", 2, 0, false);
+            declareFunction("tms_add_new_deduction", "TMS-ADD-NEW-DEDUCTION", 3, 0, false);
+            declareFunction("tms_postprocess_new_argument", "TMS-POSTPROCESS-NEW-ARGUMENT", 2, 0, false);
+            declareFunction("tms_remove_argument", "TMS-REMOVE-ARGUMENT", 2, 0, false);
+            declareFunction("tms_propagate_removed_argument", "TMS-PROPAGATE-REMOVED-ARGUMENT", 2, 0, false);
+            declareFunction("tms_remove_assertion_int_2", "TMS-REMOVE-ASSERTION-INT-2", 1, 0, false);
+            declareFunction("tms_recompute_assertion_tv", "TMS-RECOMPUTE-ASSERTION-TV", 1, 0, false);
+            declareFunction("tms_add_deduction_for_assertion", "TMS-ADD-DEDUCTION-FOR-ASSERTION", 2, 1, false);
+            declareFunction("tms_add_deduction_for_cnf", "TMS-ADD-DEDUCTION-FOR-CNF", 3, 3, false);
+            declareFunction("inc_circular_complexity_count", "INC-CIRCULAR-COMPLEXITY-COUNT", 0, 0, false);
+            declareFunction("believed_circular_deduction", "BELIEVED-CIRCULAR-DEDUCTION", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_tms_file_Previous() {
+        declareFunction("tms_any_assertion_being_removedP", "TMS-ANY-ASSERTION-BEING-REMOVED?", 0, 0, false);
+        declareFunction("tms_assertion_being_removedP", "TMS-ASSERTION-BEING-REMOVED?", 1, 0, false);
+        declareMacro("tms_note_assertion_being_removed", "TMS-NOTE-ASSERTION-BEING-REMOVED");
+        declareFunction("tms_deduction_being_removedP", "TMS-DEDUCTION-BEING-REMOVED?", 1, 0, false);
+        declareMacro("tms_note_deduction_being_removed", "TMS-NOTE-DEDUCTION-BEING-REMOVED");
+        declareFunction("tms_argument_being_removedP", "TMS-ARGUMENT-BEING-REMOVED?", 1, 0, false);
+        declareMacro("tms_note_argument_being_removed", "TMS-NOTE-ARGUMENT-BEING-REMOVED");
+        declareFunction("tms_can_kill_forts_for_meP", "TMS-CAN-KILL-FORTS-FOR-ME?", 0, 0, false);
+        declareFunction("tms_please_kill_this_term_for_me", "TMS-PLEASE-KILL-THIS-TERM-FOR-ME", 1, 0, false);
+        declareMacro("tms_killing_forts_later", "TMS-KILLING-FORTS-LATER");
+        declareMacro("tms_without_forts_to_kill_list", "TMS-WITHOUT-FORTS-TO-KILL-LIST");
+        declareFunction("tms_forts_to_kill", "TMS-FORTS-TO-KILL", 0, 0, false);
+        declareFunction("tms_fort_to_killP", "TMS-FORT-TO-KILL?", 1, 0, false);
+        declareFunction("tms_kill_queued_forts", "TMS-KILL-QUEUED-FORTS", 0, 0, false);
+        declareFunction("tms_possibly_replace_asserted_argument_with_tv", "TMS-POSSIBLY-REPLACE-ASSERTED-ARGUMENT-WITH-TV", 2, 0, false);
+        declareFunction("tms_create_asserted_argument_with_tv", "TMS-CREATE-ASSERTED-ARGUMENT-WITH-TV", 2, 1, false);
+        declareFunction("tms_add_new_deduction", "TMS-ADD-NEW-DEDUCTION", 3, 2, false);
+        declareFunction("tms_postprocess_new_argument", "TMS-POSTPROCESS-NEW-ARGUMENT", 2, 1, false);
+        declareFunction("tms_remove_argument", "TMS-REMOVE-ARGUMENT", 2, 1, false);
+        declareFunction("tms_propagate_removed_argument", "TMS-PROPAGATE-REMOVED-ARGUMENT", 3, 0, false);
+        declareFunction("tms_remove_assertion_list", "TMS-REMOVE-ASSERTION-LIST", 1, 0, false);
+        declareFunction("tms_remove_nonempty_assertion_list", "TMS-REMOVE-NONEMPTY-ASSERTION-LIST", 1, 0, false);
+        declareFunction("tms_remove_assertion", "TMS-REMOVE-ASSERTION", 1, 0, false);
+        declareFunction("tms_remove_assertion_int", "TMS-REMOVE-ASSERTION-INT", 1, 0, false);
+        declareFunction("tms_remove_assertion_low", "TMS-REMOVE-ASSERTION-LOW", 1, 0, false);
+        declareFunction("tms_remove_deduction", "TMS-REMOVE-DEDUCTION", 1, 0, false);
+        declareFunction("tms_change_asserted_argument_tv", "TMS-CHANGE-ASSERTED-ARGUMENT-TV", 3, 0, false);
+        declareFunction("tms_recompute_assertion_tv", "TMS-RECOMPUTE-ASSERTION-TV", 1, 2, false);
+        declareFunction("tms_change_direction", "TMS-CHANGE-DIRECTION", 2, 0, false);
+        declareFunction("tms_should_schedule_assertion_for_forward_propagationP", "TMS-SHOULD-SCHEDULE-ASSERTION-FOR-FORWARD-PROPAGATION?", 1, 0, false);
+        declareFunction("tms_possibly_schedule_assertion_for_forward_propagation", "TMS-POSSIBLY-SCHEDULE-ASSERTION-FOR-FORWARD-PROPAGATION", 1, 0, false);
+        declareFunction("tms_recompute_dependents", "TMS-RECOMPUTE-DEPENDENTS", 1, 0, false);
+        declareFunction("tms_handle_after_addings", "TMS-HANDLE-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("tms_remove_dependents", "TMS-REMOVE-DEPENDENTS", 1, 0, false);
+        declareFunction("tms_recompute_dependents_tv", "TMS-RECOMPUTE-DEPENDENTS-TV", 1, 0, false);
+        declareFunction("tms_recompute_deduction_tv", "TMS-RECOMPUTE-DEDUCTION-TV", 1, 0, false);
+        declareFunction("tms_remove_mt_arguments", "TMS-REMOVE-MT-ARGUMENTS", 1, 1, false);
+        declareFunction("except_propagation_ruleX_initializer", "*EXCEPT-PROPAGATION-RULE*-INITIALIZER", 0, 0, false);
+        declareFunction("perform_except_propagation", "PERFORM-EXCEPT-PROPAGATION", 1, 0, false);
+        declareFunction("tms_remove_deduction_for_assertion", "TMS-REMOVE-DEDUCTION-FOR-ASSERTION", 2, 1, false);
+        declareFunction("tms_explicitly_remove_deduction_for_assertion", "TMS-EXPLICITLY-REMOVE-DEDUCTION-FOR-ASSERTION", 1, 0, false);
+        declareFunction("tms_add_deduction_for_assertion", "TMS-ADD-DEDUCTION-FOR-ASSERTION", 2, 3, false);
+        declareFunction("tms_add_deduction_for_cnf", "TMS-ADD-DEDUCTION-FOR-CNF", 3, 5, false);
+        declareFunction("tms_direct_circularity", "TMS-DIRECT-CIRCULARITY", 2, 0, false);
+        declareFunction("tms_directly_circular_deduction", "TMS-DIRECTLY-CIRCULAR-DEDUCTION", 1, 0, false);
+        declareFunction("tms_invalidate_weaker_redundant_arguments", "TMS-INVALIDATE-WEAKER-REDUNDANT-ARGUMENTS", 2, 0, false);
+        declareFunction("tms_weaker_redundant_arguments", "TMS-WEAKER-REDUNDANT-ARGUMENTS", 2, 0, false);
+        declareFunction("tms_remove_weaker_redundant_argument", "TMS-REMOVE-WEAKER-REDUNDANT-ARGUMENT", 2, 0, false);
+        declareFunction("deduction_with_one_tou_supportP", "DEDUCTION-WITH-ONE-TOU-SUPPORT?", 1, 0, false);
+        declareFunction("deduction_with_one_equality_support_matchingP", "DEDUCTION-WITH-ONE-EQUALITY-SUPPORT-MATCHING?", 2, 0, false);
+        declareFunction("equality_support_matchingP", "EQUALITY-SUPPORT-MATCHING?", 2, 0, false);
+        declareFunction("atomic_cnf_trivially_derivable", "ATOMIC-CNF-TRIVIALLY-DERIVABLE", 2, 0, false);
+        declareFunction("gaf_trivially_derivable", "GAF-TRIVIALLY-DERIVABLE", 3, 0, false);
+        declareFunction("true_gaf_trivially_derivable", "TRUE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
+        declareFunction("false_gaf_trivially_derivable", "FALSE-GAF-TRIVIALLY-DERIVABLE", 2, 0, false);
+        declareFunction("tms_reconsider_assertion_deductions", "TMS-RECONSIDER-ASSERTION-DEDUCTIONS", 1, 0, false);
+        declareFunction("tms_reconsider_assertion_dependents", "TMS-RECONSIDER-ASSERTION-DEPENDENTS", 1, 0, false);
+        declareFunction("tms_reconsider_deduction", "TMS-RECONSIDER-DEDUCTION", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_supportsP", "TMS-DEDUCTION-STALE-WRT-SUPPORTS?", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP_lifting_rule_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-LIFTING-RULE-VERSION", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP_backchain_forbidden_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-BACKCHAIN-FORBIDDEN-VERSION", 1, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP_query_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-QUERY-VERSION", 1, 0, false);
+        declareFunction("tms_reprove_deduction_query_sentence", "TMS-REPROVE-DEDUCTION-QUERY-SENTENCE", 1, 0, false);
+        declareFunction("tms_reprove_deduction_query_mt", "TMS-REPROVE-DEDUCTION-QUERY-MT", 1, 0, false);
+        declareFunction("tms_reprove_deduction_query_properties", "TMS-REPROVE-DEDUCTION-QUERY-PROPERTIES", 5, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP_general_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION", 1, 0, false);
+        declareFunction("compute_assertibles_queue_for_tms_deduction_stale_wrt_exceptionsP_general_version", "COMPUTE-ASSERTIBLES-QUEUE-FOR-TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION", 2, 0, false);
+        declareFunction("tms_deduction_stale_wrt_exceptionsP_use_deduction_bindings_version", "TMS-DEDUCTION-STALE-WRT-EXCEPTIONS?-USE-DEDUCTION-BINDINGS-VERSION", 1, 0, false);
+        declareFunction("tms_reconsider_assertion", "TMS-RECONSIDER-ASSERTION", 1, 0, false);
+        declareFunction("tms_reconsider_mt", "TMS-RECONSIDER-MT", 1, 0, false);
+        declareFunction("tms_reconsider_term_gafs", "TMS-RECONSIDER-TERM-GAFS", 1, 1, false);
+        declareFunction("tms_reconsider_predicate_extent", "TMS-RECONSIDER-PREDICATE-EXTENT", 1, 1, false);
+        declareFunction("tms_reconsider_gaf_args", "TMS-RECONSIDER-GAF-ARGS", 2, 2, false);
+        declareFunction("tms_reconsider_term", "TMS-RECONSIDER-TERM", 1, 1, false);
+        declareFunction("tms_reconsider_all_assertions", "TMS-RECONSIDER-ALL-ASSERTIONS", 0, 0, false);
+        declareFunction("stale_support", "STALE-SUPPORT", 1, 0, false);
+        declareFunction("stale_support_mtP", "STALE-SUPPORT-MT?", 2, 0, false);
+        declareFunction("support_mt_okP", "SUPPORT-MT-OK?", 2, 0, false);
+        declareFunction("assertion_asserted_more_specifically_deductions", "ASSERTION-ASSERTED-MORE-SPECIFICALLY-DEDUCTIONS", 1, 0, false);
+        declareFunction("bulk_remove_assertions", "BULK-REMOVE-ASSERTIONS", 1, 0, false);
+        declareFunction("remove_circularly_supported_assertions", "REMOVE-CIRCULARLY-SUPPORTED-ASSERTIONS", 0, 1, false);
+        declareFunction("remove_if_circularly_supported_assertion", "REMOVE-IF-CIRCULARLY-SUPPORTED-ASSERTION", 1, 1, false);
+        declareFunction("independently_deducible_assertionP", "INDEPENDENTLY-DEDUCIBLE-ASSERTION?", 1, 0, false);
+        declareFunction("some_belief_justification", "SOME-BELIEF-JUSTIFICATION", 1, 1, false);
+        declareFunction("inc_circular_complexity_count", "INC-CIRCULAR-COMPLEXITY-COUNT", 0, 1, false);
+        declareFunction("gather_circular_deduction", "GATHER-CIRCULAR-DEDUCTION", 2, 0, false);
+        declareFunction("mark_circular_assertion", "MARK-CIRCULAR-ASSERTION", 1, 0, false);
+        declareFunction("circular_deductions_with_assertion", "CIRCULAR-DEDUCTIONS-WITH-ASSERTION", 1, 0, false);
+        declareFunction("believed_circular_deductionP", "BELIEVED-CIRCULAR-DEDUCTION?", 1, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_tms_file_alt() {
+        defparameter("*TMS-ASSERTIONS-BEING-REMOVED*", NIL);
+        defparameter("*TMS-DEDUCTIONS-BEING-REMOVED*", NIL);
+        defparameter("*CIRCULAR-DEDUCTIONS*", NIL);
+        defparameter("*CIRCULAR-ASSERTIONS*", NIL);
+        defparameter("*CIRCULAR-TARGET-ASSERTION*", NIL);
+        defparameter("*CIRCULAR-LOCAL-ASSERTIONS*", NIL);
+        defparameter("*CIRCULAR-COMPLEXITY-COUNT*", ZERO_INTEGER);
+        defparameter("*CIRCULAR-COMPLEXITY-COUNT-LIMIT*", $int$50);
         return NIL;
     }
 
     public static SubLObject init_tms_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*TMS-DEBUG?*", NIL);
+            defparameter("*TMS-ASSERTIONS-BEING-REMOVED*", NIL);
+            defparameter("*TMS-DEDUCTIONS-BEING-REMOVED*", NIL);
+            defparameter("*TMS-FORTS-TO-KILL*", $UNINITIALIZED);
+            defparameter("*TMS-REMOVE-ASSERTION-LOW?*", NIL);
+            defparameter("*RECURSIVE-TMS-BUG?*", NIL);
+            defvar("*EXCEPT-PROPAGATION-RULE*", $UNINITIALIZED);
+            defparameter("*USE-BACKCHAIN-FORBIDDEN-DEDUCTION-STALE-WRT-EXCEPTIONS?-GENERAL-VERSION?*", NIL);
+            defparameter("*USE-BACKCHAIN-FORBIDDEN-DEDUCTION-STALE-WRT-EXCEPTIONS-HACK?*", T);
+            defparameter("*CIRCULAR-DEDUCTIONS*", $UNINITIALIZED);
+            defparameter("*CIRCULAR-ASSERTIONS*", $UNINITIALIZED);
+            defparameter("*CIRCULAR-LOCAL-ASSERTIONS*", $UNINITIALIZED);
+            defparameter("*CIRCULAR-TARGET-ASSERTION*", $UNINITIALIZED);
+            defparameter("*CIRCULAR-COMPLEXITY-COUNT*", $UNINITIALIZED);
+            defparameter("*CIRCULAR-COMPLEXITY-COUNT-LIMIT*", $int$250);
+        }
+        if (SubLFiles.USE_V2) {
+            defparameter("*CIRCULAR-DEDUCTIONS*", NIL);
+            defparameter("*CIRCULAR-ASSERTIONS*", NIL);
+            defparameter("*CIRCULAR-TARGET-ASSERTION*", NIL);
+            defparameter("*CIRCULAR-LOCAL-ASSERTIONS*", NIL);
+            defparameter("*CIRCULAR-COMPLEXITY-COUNT*", ZERO_INTEGER);
+            defparameter("*CIRCULAR-COMPLEXITY-COUNT-LIMIT*", $int$50);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_tms_file_Previous() {
         defparameter("*TMS-DEBUG?*", NIL);
         defparameter("*TMS-ASSERTIONS-BEING-REMOVED*", NIL);
         defparameter("*TMS-DEDUCTIONS-BEING-REMOVED*", NIL);
@@ -2808,115 +4934,6 @@ public final class tms extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

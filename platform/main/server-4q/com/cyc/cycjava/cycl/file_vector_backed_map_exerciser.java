@@ -1,7 +1,18 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.file_vector_backed_map_exerciser;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -13,34 +24,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.file_vector_backed_map_exerciser.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class file_vector_backed_map_exerciser extends SubLTranslatedFile {
+public final class file_vector_backed_map_exerciser extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new file_vector_backed_map_exerciser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.file_vector_backed_map_exerciser";
+    public static final String myName = "com.cyc.cycjava_2.cycl.file_vector_backed_map_exerciser";
 
-    public static final String myFingerPrint = "6124b491bb3460ad8ba7ea348eadd55a7b978584bce18f9ad833990abf173d5b";
 
     // deflexical
     public static final SubLSymbol $default_file_vector_backed_map_size$ = makeSymbol("*DEFAULT-FILE-VECTOR-BACKED-MAP-SIZE*");
@@ -177,9 +166,9 @@ public final class file_vector_backed_map_exerciser extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_file_vector_backed_map_exerciser_file() {
-        declareFunction(me, "initialize_file_vector_backed_map", "INITIALIZE-FILE-VECTOR-BACKED-MAP", 0, 0, false);
-        declareFunction(me, "file_vector_backed_map_exerciser_process", "FILE-VECTOR-BACKED-MAP-EXERCISER-PROCESS", 0, 0, false);
-        declareFunction(me, "file_vector_backed_map_exerciser", "FILE-VECTOR-BACKED-MAP-EXERCISER", 2, 2, false);
+        declareFunction("initialize_file_vector_backed_map", "INITIALIZE-FILE-VECTOR-BACKED-MAP", 0, 0, false);
+        declareFunction("file_vector_backed_map_exerciser_process", "FILE-VECTOR-BACKED-MAP-EXERCISER-PROCESS", 0, 0, false);
+        declareFunction("file_vector_backed_map_exerciser", "FILE-VECTOR-BACKED-MAP-EXERCISER", 2, 2, false);
         return NIL;
     }
 

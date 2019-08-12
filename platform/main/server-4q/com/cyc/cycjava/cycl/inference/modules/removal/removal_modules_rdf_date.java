@@ -1,25 +1,28 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_main;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.date_utilities;
-import com.cyc.cycjava.cycl.formula_pattern_match;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rdf_date;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.numeric_date_utilities;
 import com.cyc.cycjava.cycl.rdf.rdf_utilities;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.time_interval_utilities;
-import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -31,48 +34,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rdf_date.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_rdf_date extends SubLTranslatedFile {
+public final class removal_modules_rdf_date extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_rdf_date();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rdf_date";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_rdf_date";
 
-    public static final String myFingerPrint = "fe1b3a19d2bd14ff9e5e7bc9ccff1778373342e2d8257c0e94c5ecd017d01aec";
 
     // defparameter
     private static final SubLSymbol $rdf_date_debugP$ = makeSymbol("*RDF-DATE-DEBUG?*");
@@ -191,7 +158,7 @@ public final class removal_modules_rdf_date extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list57 = list(makeKeyword("DONE"), makeKeyword("ABORT"));
+    private static final SubLList $list57 = list($DONE, makeKeyword("ABORT"));
 
 
 
@@ -213,9 +180,9 @@ public final class removal_modules_rdf_date extends SubLTranslatedFile {
 
     private static final SubLList $list67 = list(reader_make_constant_shell(makeString("DaysDuration")), ONE_INTEGER);
 
-    private static final SubLList $list68 = list(reader_make_constant_shell(makeString("TimeIntervalInclusiveFn")), list(makeKeyword("TEST"), makeSymbol("SOMETIME-INTERVAL-P")), list(makeKeyword("TEST"), makeSymbol("SOMETIME-INTERVAL-P")));
+    private static final SubLList $list68 = list(reader_make_constant_shell(makeString("TimeIntervalInclusiveFn")), list($TEST, makeSymbol("SOMETIME-INTERVAL-P")), list($TEST, makeSymbol("SOMETIME-INTERVAL-P")));
 
-    private static final SubLList $list69 = list(list(makeKeyword("OR"), reader_make_constant_shell(makeString("IntervalStartedByFn-Inclusive")), reader_make_constant_shell(makeString("IntervalEndedByFn-Inclusive"))), list(makeKeyword("TEST"), makeSymbol("SOMETIME-INTERVAL-P")));
+    private static final SubLList $list69 = list(list(makeKeyword("OR"), reader_make_constant_shell(makeString("IntervalStartedByFn-Inclusive")), reader_make_constant_shell(makeString("IntervalEndedByFn-Inclusive"))), list($TEST, makeSymbol("SOMETIME-INTERVAL-P")));
 
     private static final SubLObject $$SomeTimeInIntervalFn = reader_make_constant_shell(makeString("SomeTimeInIntervalFn"));
 
@@ -758,34 +725,34 @@ public final class removal_modules_rdf_date extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_rdf_date_file() {
-        declareFunction(me, "removal_rdf_date_unify_arg1", "REMOVAL-RDF-DATE-UNIFY-ARG1", 1, 1, false);
-        declareFunction(me, "removal_rdf_date_unify_arg2", "REMOVAL-RDF-DATE-UNIFY-ARG2", 1, 1, false);
-        declareFunction(me, "removal_rdf_date_check_expand", "REMOVAL-RDF-DATE-CHECK-EXPAND", 1, 1, false);
-        declareFunction(me, "construct_time_literal", "CONSTRUCT-TIME-LITERAL", 1, 0, false);
-        declareFunction(me, "removal_time_interval_spec_check_expand", "REMOVAL-TIME-INTERVAL-SPEC-CHECK-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_time_interval_spec_unify_arg1", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG1", 1, 1, false);
-        declareFunction(me, "removal_time_interval_spec_unify_arg2", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG2", 1, 1, false);
-        declareFunction(me, "cycl_time_interval_to_rdf", "CYCL-TIME-INTERVAL-TO-RDF", 1, 1, false);
-        declareFunction(me, "output_time_interval_terminus_range", "OUTPUT-TIME-INTERVAL-TERMINUS-RANGE", 4, 0, false);
-        declareFunction(me, "output_time_interval_terminus", "OUTPUT-TIME-INTERVAL-TERMINUS", 3, 0, false);
-        declareFunction(me, "output_duration_range_spec", "OUTPUT-DURATION-RANGE-SPEC", 5, 0, false);
-        declareFunction(me, "output_duration_spec", "OUTPUT-DURATION-SPEC", 2, 0, false);
-        declareFunction(me, "earliest_possible_start_day", "EARLIEST-POSSIBLE-START-DAY", 1, 0, false);
-        declareFunction(me, "earliest_possible_end_day", "EARLIEST-POSSIBLE-END-DAY", 1, 0, false);
-        declareFunction(me, "latest_possible_start_day", "LATEST-POSSIBLE-START-DAY", 1, 0, false);
-        declareFunction(me, "latest_possible_end_day", "LATEST-POSSIBLE-END-DAY", 1, 0, false);
-        declareFunction(me, "cycl_date_to_rdf", "CYCL-DATE-TO-RDF", 1, 0, false);
-        declareFunction(me, "rdf_time_interval_to_cycl", "RDF-TIME-INTERVAL-TO-CYCL", 1, 0, false);
-        declareFunction(me, "duration_tokens_p", "DURATION-TOKENS-P", 1, 0, false);
-        declareFunction(me, "rdf_time_interval_tokens_to_cycl", "RDF-TIME-INTERVAL-TOKENS-TO-CYCL", 1, 0, false);
-        declareFunction(me, "make_possibly_indefinite_time_interval", "MAKE-POSSIBLY-INDEFINITE-TIME-INTERVAL", 2, 0, false);
-        declareFunction(me, "sometimify_interval", "SOMETIMIFY-INTERVAL", 1, 0, false);
-        declareFunction(me, "sometime_interval_p", "SOMETIME-INTERVAL-P", 1, 0, false);
-        declareFunction(me, "possibly_indefinite_time_intervals_equalP", "POSSIBLY-INDEFINITE-TIME-INTERVALS-EQUAL?", 2, 0, false);
-        declareFunction(me, "rdf_time_interval_to_cycl_results_okayP", "RDF-TIME-INTERVAL-TO-CYCL-RESULTS-OKAY?", 2, 0, false);
-        declareFunction(me, "indeterminate_time_intervals_equalP", "INDETERMINATE-TIME-INTERVALS-EQUAL?", 2, 0, false);
-        declareFunction(me, "anonymize_sometimes", "ANONYMIZE-SOMETIMES", 1, 0, false);
-        declareFunction(me, "get_sometime_dummy", "GET-SOMETIME-DUMMY", 1, 0, false);
+        declareFunction("removal_rdf_date_unify_arg1", "REMOVAL-RDF-DATE-UNIFY-ARG1", 1, 1, false);
+        declareFunction("removal_rdf_date_unify_arg2", "REMOVAL-RDF-DATE-UNIFY-ARG2", 1, 1, false);
+        declareFunction("removal_rdf_date_check_expand", "REMOVAL-RDF-DATE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("construct_time_literal", "CONSTRUCT-TIME-LITERAL", 1, 0, false);
+        declareFunction("removal_time_interval_spec_check_expand", "REMOVAL-TIME-INTERVAL-SPEC-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_time_interval_spec_unify_arg1", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG1", 1, 1, false);
+        declareFunction("removal_time_interval_spec_unify_arg2", "REMOVAL-TIME-INTERVAL-SPEC-UNIFY-ARG2", 1, 1, false);
+        declareFunction("cycl_time_interval_to_rdf", "CYCL-TIME-INTERVAL-TO-RDF", 1, 1, false);
+        declareFunction("output_time_interval_terminus_range", "OUTPUT-TIME-INTERVAL-TERMINUS-RANGE", 4, 0, false);
+        declareFunction("output_time_interval_terminus", "OUTPUT-TIME-INTERVAL-TERMINUS", 3, 0, false);
+        declareFunction("output_duration_range_spec", "OUTPUT-DURATION-RANGE-SPEC", 5, 0, false);
+        declareFunction("output_duration_spec", "OUTPUT-DURATION-SPEC", 2, 0, false);
+        declareFunction("earliest_possible_start_day", "EARLIEST-POSSIBLE-START-DAY", 1, 0, false);
+        declareFunction("earliest_possible_end_day", "EARLIEST-POSSIBLE-END-DAY", 1, 0, false);
+        declareFunction("latest_possible_start_day", "LATEST-POSSIBLE-START-DAY", 1, 0, false);
+        declareFunction("latest_possible_end_day", "LATEST-POSSIBLE-END-DAY", 1, 0, false);
+        declareFunction("cycl_date_to_rdf", "CYCL-DATE-TO-RDF", 1, 0, false);
+        declareFunction("rdf_time_interval_to_cycl", "RDF-TIME-INTERVAL-TO-CYCL", 1, 0, false);
+        declareFunction("duration_tokens_p", "DURATION-TOKENS-P", 1, 0, false);
+        declareFunction("rdf_time_interval_tokens_to_cycl", "RDF-TIME-INTERVAL-TOKENS-TO-CYCL", 1, 0, false);
+        declareFunction("make_possibly_indefinite_time_interval", "MAKE-POSSIBLY-INDEFINITE-TIME-INTERVAL", 2, 0, false);
+        declareFunction("sometimify_interval", "SOMETIMIFY-INTERVAL", 1, 0, false);
+        declareFunction("sometime_interval_p", "SOMETIME-INTERVAL-P", 1, 0, false);
+        declareFunction("possibly_indefinite_time_intervals_equalP", "POSSIBLY-INDEFINITE-TIME-INTERVALS-EQUAL?", 2, 0, false);
+        declareFunction("rdf_time_interval_to_cycl_results_okayP", "RDF-TIME-INTERVAL-TO-CYCL-RESULTS-OKAY?", 2, 0, false);
+        declareFunction("indeterminate_time_intervals_equalP", "INDETERMINATE-TIME-INTERVALS-EQUAL?", 2, 0, false);
+        declareFunction("anonymize_sometimes", "ANONYMIZE-SOMETIMES", 1, 0, false);
+        declareFunction("get_sometime_dummy", "GET-SOMETIME-DUMMY", 1, 0, false);
         return NIL;
     }
 

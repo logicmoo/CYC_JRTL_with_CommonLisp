@@ -661,8 +661,7 @@ members of VARIABLE-KEEP-LIST. */
   }
 
   public static final SubLObject setup_bindings_file() {
-    // CVS_ID("Id: bindings.lisp 127732 2009-04-28 22:41:37Z jantos ");
-    memoization_state.note_globally_cached_function($sym0$HL_IDENTITY_BINDING);
+        memoization_state.note_globally_cached_function($sym0$HL_IDENTITY_BINDING);
     memoization_state.note_globally_cached_function($sym4$HL_IDENTITY_BINDINGS);
     subl_macro_promotions.declare_defglobal($sym25$_DUMMY_BINDING_);
     return NIL;

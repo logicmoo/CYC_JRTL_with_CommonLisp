@@ -221,8 +221,7 @@ public  final class negation_predicate extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_negation_predicate_file() {
-    // CVS_ID("Id: negation-predicate.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_kb_function($sym10$NEGATION_PREDICATE_AFTER_ADDING);
+        utilities_macros.register_kb_function($sym10$NEGATION_PREDICATE_AFTER_ADDING);
     utilities_macros.register_kb_function($sym11$NEGATION_INVERSE_AFTER_ADDING);
     utilities_macros.register_kb_function($sym12$ADD_NEGATION_INVERSE);
     utilities_macros.register_kb_function($sym13$NEGATION_PREDICATE_AFTER_REMOVING);

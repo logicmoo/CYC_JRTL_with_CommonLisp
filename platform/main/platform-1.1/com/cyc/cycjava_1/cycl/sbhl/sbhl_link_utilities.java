@@ -195,8 +195,7 @@ public  final class sbhl_link_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_link_utilities_file() {
-    // CVS_ID("Id: sbhl-link-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

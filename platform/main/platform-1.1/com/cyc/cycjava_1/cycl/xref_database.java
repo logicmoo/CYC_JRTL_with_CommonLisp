@@ -562,8 +562,7 @@ public  final class xref_database extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_xref_database_file() {
-    // CVS_ID("Id: xref-database.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_xref_module$.getGlobalValue(), Symbols.symbol_function($sym7$XREF_MODULE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_xref_module$.getGlobalValue(), Symbols.symbol_function($sym7$XREF_MODULE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$XREF_M_NAME, $sym9$_CSETF_XREF_M_NAME);
     Structures.def_csetf($sym10$XREF_M_XREF_SYSTEM, $sym11$_CSETF_XREF_M_XREF_SYSTEM);
     Structures.def_csetf($sym12$XREF_M_FEATURES, $sym13$_CSETF_XREF_M_FEATURES);

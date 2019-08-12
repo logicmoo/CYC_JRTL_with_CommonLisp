@@ -1515,8 +1515,7 @@ into DNF using the straightforward algorithm. */
   }
 
   public static final SubLObject setup_clausifier_file() {
-    // CVS_ID("Id: clausifier.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    memoization_state.note_globally_cached_function($sym68$CACHED_CNF_CLAUSAL_FORM);
+        memoization_state.note_globally_cached_function($sym68$CACHED_CNF_CLAUSAL_FORM);
     return NIL;
   }
 

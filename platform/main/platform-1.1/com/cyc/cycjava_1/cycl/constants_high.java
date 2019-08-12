@@ -334,8 +334,7 @@ info item is a list of guid-string and name. */
   }
 
   public static final SubLObject setup_constants_high_file() {
-    // CVS_ID("Id: constants-high.lisp 127284 2009-02-27 19:58:11Z daves ");
-    utilities_macros.register_cyc_api_function($sym2$CREATE_CONSTANT, $list3, $str4$Return_a_new_constant_named_NAME_, $list5, $list6);
+        utilities_macros.register_cyc_api_function($sym2$CREATE_CONSTANT, $list3, $str4$Return_a_new_constant_named_NAME_, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym8$FIND_OR_CREATE_CONSTANT, $list3, $str9$Return_the_constant_with_NAME_if_, $list10, $list6);
     utilities_macros.register_cyc_api_function($sym13$GENTEMP_CONSTANT, $list14, $str15$Create_and_return_a_temporary_con, $list16, $list6);
     utilities_macros.register_cyc_api_function($sym21$REMOVE_CONSTANT, $list22, $str23$Remove_CONSTANT_from_the_KB_, $list24, $list25);

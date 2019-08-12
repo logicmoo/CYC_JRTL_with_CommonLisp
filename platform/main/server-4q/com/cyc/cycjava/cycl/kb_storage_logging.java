@@ -1,7 +1,20 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.kb_storage_logging;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -15,37 +28,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.kb_storage_logging.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class kb_storage_logging extends SubLTranslatedFile {
+public final class kb_storage_logging extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_storage_logging();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_storage_logging";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_storage_logging";
 
-    public static final String myFingerPrint = "31f823cef1582165bb1be7a11413dba1f275ae92fc2ad90f8680d73ffd5566d5";
 
 
 
@@ -70,7 +58,6 @@ public final class kb_storage_logging extends SubLTranslatedFile {
 
     private static final SubLSymbol WITH_KB_STORAGE_CLIENT = makeSymbol("WITH-KB-STORAGE-CLIENT");
 
-    private static final SubLSymbol $LOAD = makeKeyword("LOAD");
 
     private static final SubLSymbol $PAGE_OUT = makeKeyword("PAGE-OUT");
 
@@ -416,26 +403,26 @@ public final class kb_storage_logging extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_storage_logging_file() {
-        declareMacro(me, "with_kb_storage_client", "WITH-KB-STORAGE-CLIENT");
-        declareFunction(me, "add_kb_storage_logging_add_tag", "ADD-KB-STORAGE-LOGGING-ADD-TAG", 1, 0, false);
-        declareFunction(me, "has_kb_storage_clientP", "HAS-KB-STORAGE-CLIENT?", 0, 0, false);
-        declareFunction(me, "kb_storage_logging_p", "KB-STORAGE-LOGGING-P", 0, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_load", "MAYBE-KB-STORAGE-LOG-LOAD", 1, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_page_out", "MAYBE-KB-STORAGE-LOG-PAGE-OUT", 1, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_mutate", "MAYBE-KB-STORAGE-LOG-MUTATE", 1, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_shutdown", "MAYBE-KB-STORAGE-LOG-SHUTDOWN", 0, 0, false);
-        declareFunction(me, "start_kb_storage_logging", "START-KB-STORAGE-LOGGING", 1, 0, false);
-        declareFunction(me, "stop_kb_storage_logging", "STOP-KB-STORAGE-LOGGING", 0, 0, false);
-        declareFunction(me, "kb_storage_logger_main", "KB-STORAGE-LOGGER-MAIN", 1, 0, false);
-        declareFunction(me, "possibly_emit_kb_storage_logger_timestamp", "POSSIBLY-EMIT-KB-STORAGE-LOGGER-TIMESTAMP", 1, 0, false);
-        declareFunction(me, "log_kb_storage_message", "LOG-KB-STORAGE-MESSAGE", 4, 0, false);
-        declareMacro(me, "with_kb_storage_client_from_object", "WITH-KB-STORAGE-CLIENT-FROM-OBJECT");
-        declareFunction(me, "derive_kb_storage_logging_tag_from_object", "DERIVE-KB-STORAGE-LOGGING-TAG-FROM-OBJECT", 1, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_load_in_context", "MAYBE-KB-STORAGE-LOG-LOAD-IN-CONTEXT", 2, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_page_out_in_context", "MAYBE-KB-STORAGE-LOG-PAGE-OUT-IN-CONTEXT", 2, 0, false);
-        declareFunction(me, "maybe_kb_storage_log_mutate_in_context", "MAYBE-KB-STORAGE-LOG-MUTATE-IN-CONTEXT", 2, 0, false);
-        declareFunction(me, "register_kb_storage_logging_tag", "REGISTER-KB-STORAGE-LOGGING-TAG", 2, 0, false);
-        declareFunction(me, "lookup_kb_storage_logging_tag", "LOOKUP-KB-STORAGE-LOGGING-TAG", 1, 1, false);
+        declareMacro("with_kb_storage_client", "WITH-KB-STORAGE-CLIENT");
+        declareFunction("add_kb_storage_logging_add_tag", "ADD-KB-STORAGE-LOGGING-ADD-TAG", 1, 0, false);
+        declareFunction("has_kb_storage_clientP", "HAS-KB-STORAGE-CLIENT?", 0, 0, false);
+        declareFunction("kb_storage_logging_p", "KB-STORAGE-LOGGING-P", 0, 0, false);
+        declareFunction("maybe_kb_storage_log_load", "MAYBE-KB-STORAGE-LOG-LOAD", 1, 0, false);
+        declareFunction("maybe_kb_storage_log_page_out", "MAYBE-KB-STORAGE-LOG-PAGE-OUT", 1, 0, false);
+        declareFunction("maybe_kb_storage_log_mutate", "MAYBE-KB-STORAGE-LOG-MUTATE", 1, 0, false);
+        declareFunction("maybe_kb_storage_log_shutdown", "MAYBE-KB-STORAGE-LOG-SHUTDOWN", 0, 0, false);
+        declareFunction("start_kb_storage_logging", "START-KB-STORAGE-LOGGING", 1, 0, false);
+        declareFunction("stop_kb_storage_logging", "STOP-KB-STORAGE-LOGGING", 0, 0, false);
+        declareFunction("kb_storage_logger_main", "KB-STORAGE-LOGGER-MAIN", 1, 0, false);
+        declareFunction("possibly_emit_kb_storage_logger_timestamp", "POSSIBLY-EMIT-KB-STORAGE-LOGGER-TIMESTAMP", 1, 0, false);
+        declareFunction("log_kb_storage_message", "LOG-KB-STORAGE-MESSAGE", 4, 0, false);
+        declareMacro("with_kb_storage_client_from_object", "WITH-KB-STORAGE-CLIENT-FROM-OBJECT");
+        declareFunction("derive_kb_storage_logging_tag_from_object", "DERIVE-KB-STORAGE-LOGGING-TAG-FROM-OBJECT", 1, 0, false);
+        declareFunction("maybe_kb_storage_log_load_in_context", "MAYBE-KB-STORAGE-LOG-LOAD-IN-CONTEXT", 2, 0, false);
+        declareFunction("maybe_kb_storage_log_page_out_in_context", "MAYBE-KB-STORAGE-LOG-PAGE-OUT-IN-CONTEXT", 2, 0, false);
+        declareFunction("maybe_kb_storage_log_mutate_in_context", "MAYBE-KB-STORAGE-LOG-MUTATE-IN-CONTEXT", 2, 0, false);
+        declareFunction("register_kb_storage_logging_tag", "REGISTER-KB-STORAGE-LOGGING-TAG", 2, 0, false);
+        declareFunction("lookup_kb_storage_logging_tag", "LOOKUP-KB-STORAGE-LOGGING-TAG", 1, 1, false);
         return NIL;
     }
 

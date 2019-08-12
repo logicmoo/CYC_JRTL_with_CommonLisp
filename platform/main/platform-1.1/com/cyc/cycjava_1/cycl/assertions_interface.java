@@ -767,8 +767,7 @@ public  final class assertions_interface extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_assertions_interface_file() {
-    // CVS_ID("Id: assertions-interface.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym2$KB_CREATE_ASSERTION, $list4, $str5$Create_a_new_assertion_with_CNF_i, $list6, $list7);
+        utilities_macros.register_cyc_api_function($sym2$KB_CREATE_ASSERTION, $list4, $str5$Create_a_new_assertion_with_CNF_i, $list6, $list7);
     utilities_macros.register_cyc_api_function($sym10$KB_REMOVE_ASSERTION, $list12, $str13$Remove_ASSERTION_from_the_KB_, $list14, $list15);
     utilities_macros.register_cyc_api_function($sym16$KB_ASSERTION_CNF, $list12, $str17$Return_the_CNF_for_ASSERTION_, $list14, $list18);
     utilities_macros.register_cyc_api_function($sym19$KB_POSSIBLY_ASSERTION_CNF, $list12, $str20$Return_the_CNF_for_ASSERTION_or_N, $list14, $list21);

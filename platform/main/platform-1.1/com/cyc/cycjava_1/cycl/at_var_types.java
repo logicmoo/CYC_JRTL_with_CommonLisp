@@ -2689,8 +2689,7 @@ constraints from the variables to the ground terms. */
   }
 
   public static final SubLObject setup_at_var_types_file() {
-    // CVS_ID("Id: at-var-types.lisp 128593 2009-08-21 15:54:07Z pace ");
-    memoization_state.note_globally_cached_function($sym5$AT_VAR_TYPE_DNFS_INT_CACHED);
+        memoization_state.note_globally_cached_function($sym5$AT_VAR_TYPE_DNFS_INT_CACHED);
     memoization_state.note_memoized_function($sym35$POS_LIT_VARIABLE_ISA_CONSTRAINTS_MEMOIZED);
     memoization_state.note_memoized_function($sym42$AT_MIN_COLS_MEMOIZED);
     memoization_state.note_globally_cached_function($sym52$AT_ARGN_INT_CACHED);

@@ -217,8 +217,7 @@ public  final class inference_lookahead_productivity extends SubLTranslatedFile 
   }
 
   public static final SubLObject setup_inference_lookahead_productivity_file() {
-    // CVS_ID("Id: inference-lookahead-productivity.lisp 128499 2009-08-06 15:49:24Z pace ");
-    memoization_state.note_memoized_function($sym0$MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY);
+        memoization_state.note_memoized_function($sym0$MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY);
     return NIL;
   }
 

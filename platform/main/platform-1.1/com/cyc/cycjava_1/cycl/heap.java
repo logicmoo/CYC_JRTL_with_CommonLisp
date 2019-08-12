@@ -212,8 +212,7 @@ public  final class heap extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_heap_file() {
-    // CVS_ID("Id: heap.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_heap_impl$.getGlobalValue(), Symbols.symbol_function($sym7$HEAP_IMPL_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_heap_impl$.getGlobalValue(), Symbols.symbol_function($sym7$HEAP_IMPL_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$HEAP_IMPL_NEXT, $sym9$_CSETF_HEAP_IMPL_NEXT);
     Structures.def_csetf($sym10$HEAP_IMPL_NODES, $sym11$_CSETF_HEAP_IMPL_NODES);
     Structures.def_csetf($sym12$HEAP_IMPL_PREDICATE, $sym13$_CSETF_HEAP_IMPL_PREDICATE);

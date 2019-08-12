@@ -1,74 +1,51 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.arity;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.cardinality_estimates;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.hl_supports;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_gp_mapping;
-import com.cyc.cycjava.cycl.kb_indexing;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.pred_relevance_macros;
-import com.cyc.cycjava.cycl.system_parameters;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$negation_by_failure$;
 import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.*;
+import static com.cyc.cycjava.cycl.forts.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_conceptually_related extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      REMOVAL-MODULES-CONCEPTUALLY-RELATED
+ * source file: /cyc/top/cycl/inference/modules/removal/removal-modules-conceptually-related.lisp
+ * created:     2019/07/03 17:37:46
+ */
+public final class removal_modules_conceptually_related extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_conceptually_related();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related";
 
-    public static final String myFingerPrint = "2ba04d75e6613f80b13183db713fc9c04c4683f5c4869c614497bdf6201aa819";
 
     // defparameter
     // Definitions
@@ -76,6 +53,7 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
      * An absolute upper bound on the generality-estimate of terms used to gather
      * conceptual relation. NIL means 'no limit'.
      */
+    @LispMethod(comment = "An absolute upper bound on the generality-estimate of terms used to gather\r\nconceptual relation. NIL means \'no limit\'.\ndefparameter\nAn absolute upper bound on the generality-estimate of terms used to gather\nconceptual relation. NIL means \'no limit\'.")
     public static final SubLSymbol $conceptually_related_generality_threshold$ = makeSymbol("*CONCEPTUALLY-RELATED-GENERALITY-THRESHOLD*");
 
     // defparameter
@@ -84,109 +62,302 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
      * used to gather conceptual relation and the term used to start the search. NIL
      * means 'no limit'.
      */
+    @LispMethod(comment = "An upper bound on the ratio allowed between the generality-estimate of terms\r\nused to gather conceptual relation and the term used to start the search. NIL\r\nmeans \'no limit\'.\ndefparameter\nAn upper bound on the ratio allowed between the generality-estimate of terms\nused to gather conceptual relation and the term used to start the search. NIL\nmeans \'no limit\'.")
     public static final SubLSymbol $conceptually_related_generality_ratio$ = makeSymbol("*CONCEPTUALLY-RELATED-GENERALITY-RATIO*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $conceptually_related_answer$ = makeSymbol("*CONCEPTUALLY-RELATED-ANSWER*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $conceptually_related_answer_table$ = makeSymbol("*CONCEPTUALLY-RELATED-ANSWER-TABLE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $conceptually_related_mapping_table$ = makeSymbol("*CONCEPTUALLY-RELATED-MAPPING-TABLE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $conceptually_related_target$ = makeSymbol("*CONCEPTUALLY-RELATED-TARGET*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $conceptually_related_start$ = makeSymbol("*CONCEPTUALLY-RELATED-START*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $conceptually_related_start_generality$ = makeSymbol("*CONCEPTUALLY-RELATED-START-GENERALITY*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_conceptually_related_cost$ = makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_all_conceptually_related_cost$ = makeSymbol("*DEFAULT-ALL-CONCEPTUALLY-RELATED-COST*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_max_conceptually_related_to_cost$ = makeSymbol("*DEFAULT-MAX-CONCEPTUALLY-RELATED-TO-COST*");
 
 
 
 
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
 
 
 
+    static private final SubLSymbol $sym10$HLMT_EQUAL_ = makeSymbol("HLMT-EQUAL?");
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
-
-
-
-    private static final SubLObject $$conceptuallyRelated = reader_make_constant_shell(makeString("conceptuallyRelated"));
+    static private final SubLSymbol $sym11$SPEC_MT_ = makeSymbol("SPEC-MT?");
 
 
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
-
-    public static final SubLSymbol $sym10$HLMT_EQUAL_ = makeSymbol("HLMT-EQUAL?");
-
-    public static final SubLSymbol $sym11$SPEC_MT_ = makeSymbol("SPEC-MT?");
-
-
-
-
-
-    private static final SubLObject $$genlInverse = reader_make_constant_shell(makeString("genlInverse"));
-
-    public static final SubLList $list15 = list(reader_make_constant_shell(makeString("conceptuallyRelated")));
-
-
-
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
-
-
-
-
+    static private final SubLList $list15 = list(reader_make_constant_shell("conceptuallyRelated"));
 
 
 
     private static final SubLSymbol $REMOVAL_CONCEPTUALLY_RELATED = makeKeyword("REMOVAL-CONCEPTUALLY-RELATED");
 
-    private static final SubLList $list22 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("FORT"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <fort> <fully bound>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated #$Dog #$DogFood)") });
+    private static final SubLList $list22 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), $FORT, makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <fort> <fully bound>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated #$Dog #$DogFood)") });
 
-    private static final SubLInteger $int$40 = makeInteger(40);
+
 
     private static final SubLSymbol $REMOVAL_ALL_CONCEPTUALLY_RELATED = makeKeyword("REMOVAL-ALL-CONCEPTUALLY-RELATED");
 
-    public static final SubLList $list25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("FORT"), makeKeyword("VARIABLE")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-ALL-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <fort> <variable>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated #$Dog ?WHAT)") });
+    static private final SubLList $list25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), $FORT, makeKeyword("VARIABLE")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-ALL-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <fort> <variable>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated #$Dog ?WHAT)") });
 
     private static final SubLSymbol $REMOVAL_MAX_CONCEPTUALLY_RELATED_TO = makeKeyword("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO");
 
-    public static final SubLList $list27 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("VARIABLE"), makeKeyword("FORT")), makeKeyword("COST"), makeSymbol("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST"), makeKeyword("COMPLETENESS"), makeKeyword("GROSSLY-INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <variable> <fort>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated ?WHAT #$DogFood)") });
+    static private final SubLList $list27 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), makeKeyword("VARIABLE"), $FORT), $COST, makeSymbol("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST"), makeKeyword("COMPLETENESS"), makeKeyword("GROSSLY-INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <variable> <fort>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated ?WHAT #$DogFood)") });
 
     private static final SubLSymbol $MAX_CONCEPTUALLY_RELATED_TO_POS = makeKeyword("MAX-CONCEPTUALLY-RELATED-TO-POS");
 
-    private static final SubLList $list29 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("VARIABLE"), makeKeyword("FORT")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("GROSSLY-DISPREFERRED"));
-
-
+    private static final SubLList $list29 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), makeKeyword("VARIABLE"), $FORT), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("GROSSLY-DISPREFERRED"));
 
     private static final SubLSymbol $REMOVAL_NOT_CONCEPTUALLY_RELATED = makeKeyword("REMOVAL-NOT-CONCEPTUALLY-RELATED");
 
-    private static final SubLList $list32 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("conceptuallyRelated")), makeKeyword("FORT"), makeKeyword("FORT")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$conceptuallyRelated <fort> <fort>))"), makeKeyword("EXAMPLE"), makeString("(#$not (#$conceptuallyRelated #$Dog #$Animal))") });
+    private static final SubLList $list32 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), $FORT, $FORT), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$conceptuallyRelated <fort> <fort>))"), makeKeyword("EXAMPLE"), makeString("(#$not (#$conceptuallyRelated #$Dog #$Animal))") });
+
+    public static final SubLObject new_conceptually_related_mapping_table_alt() {
+        return make_hash_table(TWENTY_INTEGER, UNPROVIDED, UNPROVIDED);
+    }
 
     public static SubLObject new_conceptually_related_mapping_table() {
         return make_hash_table(TWENTY_INTEGER, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject new_conceptually_related_answer_table_alt() {
+        return make_hash_table(TEN_INTEGER, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject new_conceptually_related_answer_table() {
         return make_hash_table(TEN_INTEGER, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     * Return T iff SOURCE is conceptually related to TARGET in MT.
+     *
+     * @param CHECK-SUPERIORS-OF-SOURCE?
+     * 		booleanp; If non-NIL, also check to see if any isa or genls of SOURCE is conceptually related to TARGET.
+     */
+    @LispMethod(comment = "Return T iff SOURCE is conceptually related to TARGET in MT.\r\n\r\n@param CHECK-SUPERIORS-OF-SOURCE?\r\n\t\tbooleanp; If non-NIL, also check to see if any isa or genls of SOURCE is conceptually related to TARGET.")
+    public static final SubLObject conceptually_relatedP_alt(SubLObject source, SubLObject target, SubLObject mt, SubLObject check_superiors_of_sourceP) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (check_superiors_of_sourceP == UNPROVIDED) {
+            check_superiors_of_sourceP = T;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(source, FORT_P);
+            {
+                SubLObject v_answer = NIL;
+                {
+                    SubLObject _prev_bind_0 = $conceptually_related_mapping_table$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $conceptually_related_target$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $conceptually_related_answer$.currentBinding(thread);
+                    try {
+                        $conceptually_related_mapping_table$.bind(com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.new_conceptually_related_mapping_table(), thread);
+                        $conceptually_related_target$.bind(target, thread);
+                        $conceptually_related_answer$.bind(NIL, thread);
+                        {
+                            SubLObject catch_var = NIL;
+                            try {
+                                {
+                                    SubLObject mt_var = mt;
+                                    {
+                                        SubLObject _prev_bind_0_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_2 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                        SubLObject _prev_bind_2_3 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                        try {
+                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                            com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_immediate_conceptually_related(source);
+                                            if (NIL != check_superiors_of_sourceP) {
+                                                {
+                                                    SubLObject isa_col = NIL;
+                                                    SubLObject pred_var = $$isa;
+                                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(source, ONE_INTEGER, pred_var)) {
+                                                        {
+                                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(source, ONE_INTEGER, pred_var);
+                                                            SubLObject done_var = NIL;
+                                                            SubLObject token_var = NIL;
+                                                            while (NIL == done_var) {
+                                                                {
+                                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                                    if (NIL != valid) {
+                                                                        {
+                                                                            SubLObject final_index_iterator = NIL;
+                                                                            try {
+                                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                                {
+                                                                                    SubLObject done_var_4 = NIL;
+                                                                                    SubLObject token_var_5 = NIL;
+                                                                                    while (NIL == done_var_4) {
+                                                                                        {
+                                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_5);
+                                                                                            SubLObject valid_6 = makeBoolean(token_var_5 != assertion);
+                                                                                            if (NIL != valid_6) {
+                                                                                                isa_col = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_7 = $conceptually_related_start$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_1_8 = $conceptually_related_start_generality$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        $conceptually_related_start$.bind(isa_col, thread);
+                                                                                                        $conceptually_related_start_generality$.bind(NIL, thread);
+                                                                                                        com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_superior_conceptually_related(isa_col);
+                                                                                                    } finally {
+                                                                                                        $conceptually_related_start_generality$.rebind(_prev_bind_1_8, thread);
+                                                                                                        $conceptually_related_start$.rebind(_prev_bind_0_7, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                            done_var_4 = makeBoolean(NIL == valid_6);
+                                                                                        }
+                                                                                    } 
+                                                                                }
+                                                                            } finally {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_9 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                    try {
+                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                        if (NIL != final_index_iterator) {
+                                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                        }
+                                                                                    } finally {
+                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_9, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var = makeBoolean(NIL == valid);
+                                                                }
+                                                            } 
+                                                        }
+                                                    }
+                                                }
+                                                {
+                                                    SubLObject _prev_bind_0_10 = $conceptually_related_start$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_11 = $conceptually_related_start_generality$.currentBinding(thread);
+                                                    try {
+                                                        $conceptually_related_start$.bind(source, thread);
+                                                        $conceptually_related_start_generality$.bind(NIL, thread);
+                                                        {
+                                                            SubLObject genl_col = NIL;
+                                                            SubLObject pred_var = $$genls;
+                                                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(source, ONE_INTEGER, pred_var)) {
+                                                                {
+                                                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(source, ONE_INTEGER, pred_var);
+                                                                    SubLObject done_var = NIL;
+                                                                    SubLObject token_var = NIL;
+                                                                    while (NIL == done_var) {
+                                                                        {
+                                                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                                            if (NIL != valid) {
+                                                                                {
+                                                                                    SubLObject final_index_iterator = NIL;
+                                                                                    try {
+                                                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                                        {
+                                                                                            SubLObject done_var_12 = NIL;
+                                                                                            SubLObject token_var_13 = NIL;
+                                                                                            while (NIL == done_var_12) {
+                                                                                                {
+                                                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_13);
+                                                                                                    SubLObject valid_14 = makeBoolean(token_var_13 != assertion);
+                                                                                                    if (NIL != valid_14) {
+                                                                                                        genl_col = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                                                        com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_superior_conceptually_related(genl_col);
+                                                                                                    }
+                                                                                                    done_var_12 = makeBoolean(NIL == valid_14);
+                                                                                                }
+                                                                                            } 
+                                                                                        }
+                                                                                    } finally {
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_15 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                            try {
+                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                if (NIL != final_index_iterator) {
+                                                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                                }
+                                                                                            } finally {
+                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_15, thread);
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var = makeBoolean(NIL == valid);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        $conceptually_related_start_generality$.rebind(_prev_bind_1_11, thread);
+                                                        $conceptually_related_start$.rebind(_prev_bind_0_10, thread);
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2_3, thread);
+                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1_2, thread);
+                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0_1, thread);
+                                        }
+                                    }
+                                }
+                            } catch (Throwable ccatch_env_var) {
+                                catch_var = Errors.handleThrowable(ccatch_env_var, $MAPPING_DONE);
+                            }
+                            v_answer = $conceptually_related_answer$.getDynamicValue(thread);
+                        }
+                    } finally {
+                        $conceptually_related_answer$.rebind(_prev_bind_2, thread);
+                        $conceptually_related_target$.rebind(_prev_bind_1, thread);
+                        $conceptually_related_mapping_table$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    /**
+     * Return T iff SOURCE is conceptually related to TARGET in MT.
+     *
+     * @param CHECK-SUPERIORS-OF-SOURCE?
+     * 		booleanp; If non-NIL, also check to see if any isa or genls of SOURCE is conceptually related to TARGET.
+     */
+    @LispMethod(comment = "Return T iff SOURCE is conceptually related to TARGET in MT.\r\n\r\n@param CHECK-SUPERIORS-OF-SOURCE?\r\n\t\tbooleanp; If non-NIL, also check to see if any isa or genls of SOURCE is conceptually related to TARGET.")
     public static SubLObject conceptually_relatedP(SubLObject source, final SubLObject target, SubLObject mt, SubLObject check_superiors_of_sourceP) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -195,7 +366,7 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             check_superiors_of_sourceP = T;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(source) : "forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) " + source;
+        assert NIL != forts.fort_p(source) : "! forts.fort_p(source) " + ("forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) ") + source;
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = $conceptually_related_mapping_table$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $conceptually_related_target$.currentBinding(thread);
@@ -337,12 +508,48 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return v_answer;
     }
 
+    /**
+     * Return T iff TARGET is conceptually related to SOURCE in MT.
+     * If non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.
+     */
+    @LispMethod(comment = "Return T iff TARGET is conceptually related to SOURCE in MT.\r\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.\nReturn T iff TARGET is conceptually related to SOURCE in MT.\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.")
+    public static final SubLObject check_conceptually_related_limited_alt(SubLObject source, SubLObject threshold, SubLObject ratio, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(source, FORT_P);
+            {
+                SubLObject v_answer = NIL;
+                {
+                    SubLObject _prev_bind_0 = $conceptually_related_generality_threshold$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $conceptually_related_generality_ratio$.currentBinding(thread);
+                    try {
+                        $conceptually_related_generality_threshold$.bind(threshold, thread);
+                        $conceptually_related_generality_ratio$.bind(ratio, thread);
+                        v_answer = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.all_conceptually_related(source, mt);
+                    } finally {
+                        $conceptually_related_generality_ratio$.rebind(_prev_bind_1, thread);
+                        $conceptually_related_generality_threshold$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    /**
+     * Return T iff TARGET is conceptually related to SOURCE in MT.
+     * If non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.
+     */
+    @LispMethod(comment = "Return T iff TARGET is conceptually related to SOURCE in MT.\r\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.\nReturn T iff TARGET is conceptually related to SOURCE in MT.\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.")
     public static SubLObject check_conceptually_related_limited(SubLObject source, final SubLObject threshold, final SubLObject ratio, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(source) : "forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) " + source;
+        assert NIL != forts.fort_p(source) : "! forts.fort_p(source) " + ("forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) ") + source;
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = $conceptually_related_generality_threshold$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $conceptually_related_generality_ratio$.currentBinding(thread);
@@ -355,6 +562,21 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             $conceptually_related_generality_threshold$.rebind(_prev_bind_0, thread);
         }
         return v_answer;
+    }/**
+     * Return T iff TARGET is conceptually related to SOURCE in MT.
+     * If non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.
+     */
+
+
+    public static final SubLObject check_conceptually_related_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (v_term.equal($conceptually_related_target$.getDynamicValue(thread))) {
+                $conceptually_related_answer$.setDynamicValue(T, thread);
+                mapping_finished();
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject check_conceptually_related(final SubLObject v_term) {
@@ -364,6 +586,158 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             mapping_finished();
         }
         return NIL;
+    }
+
+    public static final SubLObject check_immediate_conceptually_related_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == gethash(v_term, $conceptually_related_mapping_table$.getDynamicValue(thread), UNPROVIDED)) {
+                sethash(v_term, $conceptually_related_mapping_table$.getDynamicValue(thread), T);
+                if (NIL != fort_p(v_term)) {
+                    {
+                        SubLObject _prev_bind_0 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = pred_relevance_macros.$pred$.currentBinding(thread);
+                        try {
+                            pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_PRED, thread);
+                            pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                            {
+                                SubLObject pred_var = NIL;
+                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, ONE_INTEGER, pred_var)) {
+                                    {
+                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, ONE_INTEGER, pred_var);
+                                        SubLObject done_var = NIL;
+                                        SubLObject token_var = NIL;
+                                        while (NIL == done_var) {
+                                            {
+                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                if (NIL != valid) {
+                                                    {
+                                                        SubLObject final_index_iterator = NIL;
+                                                        try {
+                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                            {
+                                                                SubLObject done_var_16 = NIL;
+                                                                SubLObject token_var_17 = NIL;
+                                                                while (NIL == done_var_16) {
+                                                                    {
+                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_17);
+                                                                        SubLObject valid_18 = makeBoolean(token_var_17 != assertion);
+                                                                        if (NIL != valid_18) {
+                                                                            {
+                                                                                SubLObject related = kb_gp_mapping.dgaivgp_arg(assertion, TWO_INTEGER);
+                                                                                com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_conceptually_related(related);
+                                                                            }
+                                                                        }
+                                                                        done_var_16 = makeBoolean(NIL == valid_18);
+                                                                    }
+                                                                } 
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_19 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL != final_index_iterator) {
+                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_19, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                done_var = makeBoolean(NIL == valid);
+                                            }
+                                        } 
+                                    }
+                                }
+                            }
+                        } finally {
+                            pred_relevance_macros.$pred$.rebind(_prev_bind_1, thread);
+                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (NIL != kb_gp_mapping.dgaigp_binaryP($$conceptuallyRelated)) {
+                        {
+                            SubLObject _prev_bind_0 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = pred_relevance_macros.$pred$.currentBinding(thread);
+                            try {
+                                pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_INVERSE, thread);
+                                pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, arity.binary_arg_swap(ONE_INTEGER), pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, arity.binary_arg_swap(ONE_INTEGER), pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_20 = NIL;
+                                                                    SubLObject token_var_21 = NIL;
+                                                                    while (NIL == done_var_20) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_21);
+                                                                            SubLObject valid_22 = makeBoolean(token_var_21 != assertion);
+                                                                            if (NIL != valid_22) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_23 = kb_gp_mapping.$mapping_arg_swap$.currentBinding(thread);
+                                                                                    try {
+                                                                                        kb_gp_mapping.$mapping_arg_swap$.bind(makeBoolean(NIL == kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)), thread);
+                                                                                        {
+                                                                                            SubLObject related = kb_gp_mapping.dgaivgp_arg(assertion, TWO_INTEGER);
+                                                                                            com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_conceptually_related(related);
+                                                                                        }
+                                                                                    } finally {
+                                                                                        kb_gp_mapping.$mapping_arg_swap$.rebind(_prev_bind_0_23, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_20 = makeBoolean(NIL == valid_22);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_24 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_24, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                pred_relevance_macros.$pred$.rebind(_prev_bind_1, thread);
+                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject check_immediate_conceptually_related(final SubLObject v_term) {
@@ -482,6 +856,73 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    public static final SubLObject check_superior_conceptually_related_alt(SubLObject collection) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == gethash(collection, $conceptually_related_mapping_table$.getDynamicValue(thread), UNPROVIDED)) {
+                if (NIL != com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.conceptual_generality_acceptable(collection)) {
+                    com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_immediate_conceptually_related(collection);
+                    if (NIL != fort_p(collection)) {
+                        {
+                            SubLObject genl_col = NIL;
+                            SubLObject pred_var = $$genls;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(collection, ONE_INTEGER, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(collection, ONE_INTEGER, pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                        {
+                                                            SubLObject done_var_25 = NIL;
+                                                            SubLObject token_var_26 = NIL;
+                                                            while (NIL == done_var_25) {
+                                                                {
+                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_26);
+                                                                    SubLObject valid_27 = makeBoolean(token_var_26 != assertion);
+                                                                    if (NIL != valid_27) {
+                                                                        genl_col = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                        com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.check_superior_conceptually_related(genl_col);
+                                                                    }
+                                                                    done_var_25 = makeBoolean(NIL == valid_27);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject check_superior_conceptually_related(final SubLObject collection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == gethash(collection, $conceptually_related_mapping_table$.getDynamicValue(thread), UNPROVIDED)) && (NIL != conceptual_generality_acceptable(collection))) {
@@ -533,6 +974,46 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    /**
+     * Return T iff COLLECTION is of acceptable generality
+     */
+    @LispMethod(comment = "Return T iff COLLECTION is of acceptable generality")
+    public static final SubLObject conceptual_generality_acceptable_alt(SubLObject collection) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (!((NIL != $conceptually_related_generality_threshold$.getDynamicValue(thread)) || (NIL != $conceptually_related_generality_ratio$.getDynamicValue(thread)))) {
+                return T;
+            }
+            if (NIL == fort_p(collection)) {
+                return NIL;
+            }
+            {
+                SubLObject generality = cardinality_estimates.generality_estimate(collection);
+                if (NIL == $conceptually_related_start_generality$.getDynamicValue(thread)) {
+                    $conceptually_related_start_generality$.setDynamicValue(cardinality_estimates.generality_estimate($conceptually_related_start$.getDynamicValue(thread)), thread);
+                }
+                if ((NIL != $conceptually_related_generality_threshold$.getDynamicValue(thread)) && generality.numLE($conceptually_related_generality_threshold$.getDynamicValue(thread))) {
+                    return T;
+                } else {
+                    if (NIL == $conceptually_related_generality_ratio$.getDynamicValue(thread)) {
+                        return T;
+                    } else {
+                        if ($conceptually_related_generality_ratio$.getDynamicValue(thread).numE(ZERO_INTEGER)) {
+                            return NIL;
+                        } else {
+                            if ($conceptually_related_start_generality$.getDynamicValue(thread).numE(ZERO_INTEGER)) {
+                                return NIL;
+                            } else {
+                                return numLE(generality, multiply($conceptually_related_generality_ratio$.getDynamicValue(thread), $conceptually_related_start_generality$.getDynamicValue(thread)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return T iff COLLECTION is of acceptable generality")
     public static SubLObject conceptual_generality_acceptable(final SubLObject collection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == $conceptually_related_generality_threshold$.getDynamicValue(thread)) && (NIL == $conceptually_related_generality_ratio$.getDynamicValue(thread))) {
@@ -558,14 +1039,200 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             return NIL;
         }
         return numLE(generality, multiply($conceptually_related_generality_ratio$.getDynamicValue(thread), $conceptually_related_start_generality$.getDynamicValue(thread)));
+    }/**
+     * Return T iff COLLECTION is of acceptable generality
+     */
+
+
+    /**
+     * Return a list of all terms conceptually related to SOURCE in MT.
+     */
+    @LispMethod(comment = "Return a list of all terms conceptually related to SOURCE in MT.")
+    public static final SubLObject all_conceptually_related_alt(SubLObject source, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(source, FORT_P);
+            {
+                SubLObject v_answer = NIL;
+                {
+                    SubLObject _prev_bind_0 = $conceptually_related_mapping_table$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $conceptually_related_answer_table$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $conceptually_related_answer$.currentBinding(thread);
+                    try {
+                        $conceptually_related_mapping_table$.bind(com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.new_conceptually_related_mapping_table(), thread);
+                        $conceptually_related_answer_table$.bind(com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.new_conceptually_related_answer_table(), thread);
+                        $conceptually_related_answer$.bind(NIL, thread);
+                        {
+                            SubLObject mt_var = mt;
+                            {
+                                SubLObject _prev_bind_0_28 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                SubLObject _prev_bind_1_29 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                SubLObject _prev_bind_2_30 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                try {
+                                    mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                    com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_immediate_conceptually_related(source);
+                                    {
+                                        SubLObject isa_col = NIL;
+                                        SubLObject pred_var = $$isa;
+                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(source, ONE_INTEGER, pred_var)) {
+                                            {
+                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(source, ONE_INTEGER, pred_var);
+                                                SubLObject done_var = NIL;
+                                                SubLObject token_var = NIL;
+                                                while (NIL == done_var) {
+                                                    {
+                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                        if (NIL != valid) {
+                                                            {
+                                                                SubLObject final_index_iterator = NIL;
+                                                                try {
+                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                    {
+                                                                        SubLObject done_var_31 = NIL;
+                                                                        SubLObject token_var_32 = NIL;
+                                                                        while (NIL == done_var_31) {
+                                                                            {
+                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_32);
+                                                                                SubLObject valid_33 = makeBoolean(token_var_32 != assertion);
+                                                                                if (NIL != valid_33) {
+                                                                                    isa_col = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_34 = $conceptually_related_start$.currentBinding(thread);
+                                                                                        SubLObject _prev_bind_1_35 = $conceptually_related_start_generality$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $conceptually_related_start$.bind(isa_col, thread);
+                                                                                            $conceptually_related_start_generality$.bind(NIL, thread);
+                                                                                            com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_superior_conceptually_related(isa_col);
+                                                                                        } finally {
+                                                                                            $conceptually_related_start_generality$.rebind(_prev_bind_1_35, thread);
+                                                                                            $conceptually_related_start$.rebind(_prev_bind_0_34, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                done_var_31 = makeBoolean(NIL == valid_33);
+                                                                            }
+                                                                        } 
+                                                                    }
+                                                                } finally {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_36 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                        try {
+                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                            if (NIL != final_index_iterator) {
+                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                            }
+                                                                        } finally {
+                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_36, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        done_var = makeBoolean(NIL == valid);
+                                                    }
+                                                } 
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject _prev_bind_0_37 = $conceptually_related_start$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_38 = $conceptually_related_start_generality$.currentBinding(thread);
+                                        try {
+                                            $conceptually_related_start$.bind(source, thread);
+                                            $conceptually_related_start_generality$.bind(NIL, thread);
+                                            {
+                                                SubLObject genl_col = NIL;
+                                                SubLObject pred_var = $$genls;
+                                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(source, ONE_INTEGER, pred_var)) {
+                                                    {
+                                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(source, ONE_INTEGER, pred_var);
+                                                        SubLObject done_var = NIL;
+                                                        SubLObject token_var = NIL;
+                                                        while (NIL == done_var) {
+                                                            {
+                                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                                if (NIL != valid) {
+                                                                    {
+                                                                        SubLObject final_index_iterator = NIL;
+                                                                        try {
+                                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                            {
+                                                                                SubLObject done_var_39 = NIL;
+                                                                                SubLObject token_var_40 = NIL;
+                                                                                while (NIL == done_var_39) {
+                                                                                    {
+                                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_40);
+                                                                                        SubLObject valid_41 = makeBoolean(token_var_40 != assertion);
+                                                                                        if (NIL != valid_41) {
+                                                                                            genl_col = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                                            com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_superior_conceptually_related(genl_col);
+                                                                                        }
+                                                                                        done_var_39 = makeBoolean(NIL == valid_41);
+                                                                                    }
+                                                                                } 
+                                                                            }
+                                                                        } finally {
+                                                                            {
+                                                                                SubLObject _prev_bind_0_42 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                try {
+                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                    if (NIL != final_index_iterator) {
+                                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                                    }
+                                                                                } finally {
+                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_42, thread);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                                done_var = makeBoolean(NIL == valid);
+                                                            }
+                                                        } 
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            $conceptually_related_start_generality$.rebind(_prev_bind_1_38, thread);
+                                            $conceptually_related_start$.rebind(_prev_bind_0_37, thread);
+                                        }
+                                    }
+                                } finally {
+                                    mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2_30, thread);
+                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1_29, thread);
+                                    mt_relevance_macros.$mt$.rebind(_prev_bind_0_28, thread);
+                                }
+                            }
+                            v_answer = nreverse($conceptually_related_answer$.getDynamicValue(thread));
+                        }
+                    } finally {
+                        $conceptually_related_answer$.rebind(_prev_bind_2, thread);
+                        $conceptually_related_answer_table$.rebind(_prev_bind_1, thread);
+                        $conceptually_related_mapping_table$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_answer;
+            }
+        }
     }
 
+    /**
+     * Return a list of all terms conceptually related to SOURCE in MT.
+     */
+    @LispMethod(comment = "Return a list of all terms conceptually related to SOURCE in MT.")
     public static SubLObject all_conceptually_related(SubLObject source, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(source) : "forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) " + source;
+        assert NIL != forts.fort_p(source) : "! forts.fort_p(source) " + ("forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) ") + source;
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = $conceptually_related_mapping_table$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $conceptually_related_answer_table$.currentBinding(thread);
@@ -697,12 +1364,44 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return v_answer;
     }
 
+    /**
+     * Return a list of all terms conceptually related to SOURCE in MT.
+     * If non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.
+     */
+    @LispMethod(comment = "Return a list of all terms conceptually related to SOURCE in MT.\r\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.\nReturn a list of all terms conceptually related to SOURCE in MT.\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.")
+    public static final SubLObject all_conceptually_related_limited_alt(SubLObject source, SubLObject threshold, SubLObject ratio, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(source, FORT_P);
+            {
+                SubLObject v_answer = NIL;
+                {
+                    SubLObject _prev_bind_0 = $conceptually_related_generality_threshold$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $conceptually_related_generality_ratio$.currentBinding(thread);
+                    try {
+                        $conceptually_related_generality_threshold$.bind(threshold, thread);
+                        $conceptually_related_generality_ratio$.bind(ratio, thread);
+                        v_answer = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.all_conceptually_related(source, mt);
+                    } finally {
+                        $conceptually_related_generality_ratio$.rebind(_prev_bind_1, thread);
+                        $conceptually_related_generality_threshold$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return a list of all terms conceptually related to SOURCE in MT.\r\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.\nReturn a list of all terms conceptually related to SOURCE in MT.\nIf non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.")
     public static SubLObject all_conceptually_related_limited(SubLObject source, final SubLObject threshold, final SubLObject ratio, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(source) : "forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) " + source;
+        assert NIL != forts.fort_p(source) : "! forts.fort_p(source) " + ("forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) ") + source;
         SubLObject v_answer = NIL;
         final SubLObject _prev_bind_0 = $conceptually_related_generality_threshold$.currentBinding(thread);
         final SubLObject _prev_bind_2 = $conceptually_related_generality_ratio$.currentBinding(thread);
@@ -715,6 +1414,21 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             $conceptually_related_generality_threshold$.rebind(_prev_bind_0, thread);
         }
         return v_answer;
+    }/**
+     * Return a list of all terms conceptually related to SOURCE in MT.
+     * If non-nil, THRESHOLD and RATIO limit the generality of terms used in determining conceptual relation.
+     */
+
+
+    public static final SubLObject mark_conceptually_related_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == gethash(v_term, $conceptually_related_answer_table$.getDynamicValue(thread), UNPROVIDED)) {
+                sethash(v_term, $conceptually_related_answer_table$.getDynamicValue(thread), T);
+                $conceptually_related_answer$.setDynamicValue(cons(v_term, $conceptually_related_answer$.getDynamicValue(thread)), thread);
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject mark_conceptually_related(final SubLObject v_term) {
@@ -724,6 +1438,158 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             $conceptually_related_answer$.setDynamicValue(cons(v_term, $conceptually_related_answer$.getDynamicValue(thread)), thread);
         }
         return NIL;
+    }
+
+    public static final SubLObject mark_immediate_conceptually_related_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == gethash(v_term, $conceptually_related_mapping_table$.getDynamicValue(thread), UNPROVIDED)) {
+                sethash(v_term, $conceptually_related_mapping_table$.getDynamicValue(thread), T);
+                if (NIL != fort_p(v_term)) {
+                    {
+                        SubLObject _prev_bind_0 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = pred_relevance_macros.$pred$.currentBinding(thread);
+                        try {
+                            pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_PRED, thread);
+                            pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                            {
+                                SubLObject pred_var = NIL;
+                                if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, ONE_INTEGER, pred_var)) {
+                                    {
+                                        SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, ONE_INTEGER, pred_var);
+                                        SubLObject done_var = NIL;
+                                        SubLObject token_var = NIL;
+                                        while (NIL == done_var) {
+                                            {
+                                                SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                if (NIL != valid) {
+                                                    {
+                                                        SubLObject final_index_iterator = NIL;
+                                                        try {
+                                                            final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                            {
+                                                                SubLObject done_var_43 = NIL;
+                                                                SubLObject token_var_44 = NIL;
+                                                                while (NIL == done_var_43) {
+                                                                    {
+                                                                        SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_44);
+                                                                        SubLObject valid_45 = makeBoolean(token_var_44 != assertion);
+                                                                        if (NIL != valid_45) {
+                                                                            {
+                                                                                SubLObject related = kb_gp_mapping.dgaivgp_arg(assertion, TWO_INTEGER);
+                                                                                com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_conceptually_related(related);
+                                                                            }
+                                                                        }
+                                                                        done_var_43 = makeBoolean(NIL == valid_45);
+                                                                    }
+                                                                } 
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_46 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL != final_index_iterator) {
+                                                                        kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_46, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                done_var = makeBoolean(NIL == valid);
+                                            }
+                                        } 
+                                    }
+                                }
+                            }
+                        } finally {
+                            pred_relevance_macros.$pred$.rebind(_prev_bind_1, thread);
+                            pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (NIL != kb_gp_mapping.dgaigp_binaryP($$conceptuallyRelated)) {
+                        {
+                            SubLObject _prev_bind_0 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = pred_relevance_macros.$pred$.currentBinding(thread);
+                            try {
+                                pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_INVERSE, thread);
+                                pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(v_term, arity.binary_arg_swap(ONE_INTEGER), pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(v_term, arity.binary_arg_swap(ONE_INTEGER), pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_47 = NIL;
+                                                                    SubLObject token_var_48 = NIL;
+                                                                    while (NIL == done_var_47) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_48);
+                                                                            SubLObject valid_49 = makeBoolean(token_var_48 != assertion);
+                                                                            if (NIL != valid_49) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_50 = kb_gp_mapping.$mapping_arg_swap$.currentBinding(thread);
+                                                                                    try {
+                                                                                        kb_gp_mapping.$mapping_arg_swap$.bind(makeBoolean(NIL == kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)), thread);
+                                                                                        {
+                                                                                            SubLObject related = kb_gp_mapping.dgaivgp_arg(assertion, TWO_INTEGER);
+                                                                                            com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_conceptually_related(related);
+                                                                                        }
+                                                                                    } finally {
+                                                                                        kb_gp_mapping.$mapping_arg_swap$.rebind(_prev_bind_0_50, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_47 = makeBoolean(NIL == valid_49);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_51 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_51, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                pred_relevance_macros.$pred$.rebind(_prev_bind_1, thread);
+                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject mark_immediate_conceptually_related(final SubLObject v_term) {
@@ -842,6 +1708,73 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    public static final SubLObject mark_superior_conceptually_related_alt(SubLObject collection) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == gethash(collection, $conceptually_related_mapping_table$.getDynamicValue(thread), UNPROVIDED)) {
+                if (NIL != com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.conceptual_generality_acceptable(collection)) {
+                    com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_immediate_conceptually_related(collection);
+                    if (NIL != fort_p(collection)) {
+                        {
+                            SubLObject genl_col = NIL;
+                            SubLObject pred_var = $$genls;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(collection, ONE_INTEGER, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(collection, ONE_INTEGER, pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                        {
+                                                            SubLObject done_var_52 = NIL;
+                                                            SubLObject token_var_53 = NIL;
+                                                            while (NIL == done_var_52) {
+                                                                {
+                                                                    SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_53);
+                                                                    SubLObject valid_54 = makeBoolean(token_var_53 != assertion);
+                                                                    if (NIL != valid_54) {
+                                                                        genl_col = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                        com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.mark_superior_conceptually_related(genl_col);
+                                                                    }
+                                                                    done_var_52 = makeBoolean(NIL == valid_54);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject mark_superior_conceptually_related(final SubLObject collection) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL == gethash(collection, $conceptually_related_mapping_table$.getDynamicValue(thread), UNPROVIDED)) && (NIL != conceptual_generality_acceptable(collection))) {
@@ -893,12 +1826,192 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    /**
+     * Return a list of the max terms which are conceptually related to TARGET in MT.
+     */
+    @LispMethod(comment = "Return a list of the max terms which are conceptually related to TARGET in MT.")
+    public static final SubLObject max_conceptually_related_to_alt(SubLObject target, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(target, FORT_P);
+            {
+                SubLObject ans = NIL;
+                SubLObject mt_var = mt;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject _prev_bind_0_55 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                            SubLObject _prev_bind_1_56 = pred_relevance_macros.$pred$.currentBinding(thread);
+                            try {
+                                pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_PRED, thread);
+                                pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(target, TWO_INTEGER, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(target, TWO_INTEGER, pred_var);
+                                            SubLObject done_var = NIL;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_57 = NIL;
+                                                                    SubLObject token_var_58 = NIL;
+                                                                    while (NIL == done_var_57) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_58);
+                                                                            SubLObject valid_59 = makeBoolean(token_var_58 != assertion);
+                                                                            if (NIL != valid_59) {
+                                                                                {
+                                                                                    SubLObject related_to = kb_gp_mapping.dgaivgp_arg(assertion, ONE_INTEGER);
+                                                                                    SubLObject item_var = related_to;
+                                                                                    if (NIL == member(item_var, ans, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                                                        ans = cons(item_var, ans);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_57 = makeBoolean(NIL == valid_59);
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_60 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_60, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean(NIL == valid);
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                pred_relevance_macros.$pred$.rebind(_prev_bind_1_56, thread);
+                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0_55, thread);
+                            }
+                        }
+                        if (NIL != kb_gp_mapping.dgaigp_binaryP($$conceptuallyRelated)) {
+                            {
+                                SubLObject _prev_bind_0_61 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                                SubLObject _prev_bind_1_62 = pred_relevance_macros.$pred$.currentBinding(thread);
+                                try {
+                                    pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_INVERSE, thread);
+                                    pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                                    {
+                                        SubLObject pred_var = NIL;
+                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(target, arity.binary_arg_swap(TWO_INTEGER), pred_var)) {
+                                            {
+                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(target, arity.binary_arg_swap(TWO_INTEGER), pred_var);
+                                                SubLObject done_var = NIL;
+                                                SubLObject token_var = NIL;
+                                                while (NIL == done_var) {
+                                                    {
+                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                        if (NIL != valid) {
+                                                            {
+                                                                SubLObject final_index_iterator = NIL;
+                                                                try {
+                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                    {
+                                                                        SubLObject done_var_63 = NIL;
+                                                                        SubLObject token_var_64 = NIL;
+                                                                        while (NIL == done_var_63) {
+                                                                            {
+                                                                                SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_64);
+                                                                                SubLObject valid_65 = makeBoolean(token_var_64 != assertion);
+                                                                                if (NIL != valid_65) {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_66 = kb_gp_mapping.$mapping_arg_swap$.currentBinding(thread);
+                                                                                        try {
+                                                                                            kb_gp_mapping.$mapping_arg_swap$.bind(makeBoolean(NIL == kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)), thread);
+                                                                                            {
+                                                                                                SubLObject related_to = kb_gp_mapping.dgaivgp_arg(assertion, ONE_INTEGER);
+                                                                                                SubLObject item_var = related_to;
+                                                                                                if (NIL == member(item_var, ans, symbol_function(EQUAL), symbol_function(IDENTITY))) {
+                                                                                                    ans = cons(item_var, ans);
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            kb_gp_mapping.$mapping_arg_swap$.rebind(_prev_bind_0_66, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                done_var_63 = makeBoolean(NIL == valid_65);
+                                                                            }
+                                                                        } 
+                                                                    }
+                                                                } finally {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_67 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                        try {
+                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                            if (NIL != final_index_iterator) {
+                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                            }
+                                                                        } finally {
+                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_67, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        done_var = makeBoolean(NIL == valid);
+                                                    }
+                                                } 
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    pred_relevance_macros.$pred$.rebind(_prev_bind_1_62, thread);
+                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0_61, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(ans);
+            }
+        }
+    }
+
+    @LispMethod(comment = "Return a list of the max terms which are conceptually related to TARGET in MT.")
     public static SubLObject max_conceptually_related_to(final SubLObject target, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(target) : "forts.fort_p(target) " + "CommonSymbols.NIL != forts.fort_p(target) " + target;
+        assert NIL != forts.fort_p(target) : "! forts.fort_p(target) " + ("forts.fort_p(target) " + "CommonSymbols.NIL != forts.fort_p(target) ") + target;
         SubLObject ans = NIL;
         final SubLObject mt_var = mt;
         final SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -1026,8 +2139,40 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return nreverse(ans);
+    }/**
+     * Return a list of the max terms which are conceptually related to TARGET in MT.
+     */
+
+
+    /**
+     * Return T iff TARGET is known to not be conceptually related to SOURCE in MT.
+     */
+    @LispMethod(comment = "Return T iff TARGET is known to not be conceptually related to SOURCE in MT.")
+    public static final SubLObject not_conceptually_relatedP_alt(SubLObject source, SubLObject target, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if ((NIL != fort_p(source)) && (NIL != fort_p(target))) {
+                    {
+                        SubLObject _prev_bind_0 = system_parameters.$suspend_sbhl_type_checkingP$.currentBinding(thread);
+                        try {
+                            system_parameters.$suspend_sbhl_type_checkingP$.bind(T, thread);
+                            ans = makeBoolean((((NIL != genls.genlsP(source, target, mt, UNPROVIDED)) || (NIL != genls.genlsP(target, source, mt, UNPROVIDED))) || (NIL != isa.isaP(source, target, mt, UNPROVIDED))) || (NIL != isa.isaP(target, source, mt, UNPROVIDED)));
+                        } finally {
+                            system_parameters.$suspend_sbhl_type_checkingP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return ans;
+            }
+        }
     }
 
+    @LispMethod(comment = "Return T iff TARGET is known to not be conceptually related to SOURCE in MT.")
     public static SubLObject not_conceptually_relatedP(SubLObject source, final SubLObject target, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -1044,8 +2189,49 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             }
         }
         return ans;
+    }/**
+     * Return T iff TARGET is known to not be conceptually related to SOURCE in MT.
+     */
+
+
+    /**
+     *
+     *
+     * @return LISTP of maximal mts in which SOURCE is conceptually related to TARGET.
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return LISTP of maximal mts in which SOURCE is conceptually related to TARGET.\r\n@unknown baxter")
+    public static final SubLObject max_floor_mts_of_conceptually_related_paths_alt(SubLObject source, SubLObject target) {
+        {
+            SubLObject mts = NIL;
+            SubLObject v_arguments = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.why_conceptually_relatedP_internal(source, target, $$InferencePSC, NIL);
+            SubLObject cdolist_list_var = v_arguments;
+            SubLObject argument = NIL;
+            for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                {
+                    SubLObject cdolist_list_var_68 = hl_supports.max_floor_mts_of_justification(argument);
+                    SubLObject mt = NIL;
+                    for (mt = cdolist_list_var_68.first(); NIL != cdolist_list_var_68; cdolist_list_var_68 = cdolist_list_var_68.rest() , mt = cdolist_list_var_68.first()) {
+                        {
+                            SubLObject item_var = mt;
+                            if (NIL == member(item_var, mts, symbol_function($sym10$HLMT_EQUAL_), symbol_function(IDENTITY))) {
+                                mts = cons(item_var, mts);
+                            }
+                        }
+                    }
+                }
+            }
+            return list_utilities.remove_subsumed_items(mts, symbol_function($sym11$SPEC_MT_), UNPROVIDED);
+        }
     }
 
+    /**
+     *
+     *
+     * @return LISTP of maximal mts in which SOURCE is conceptually related to TARGET.
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return LISTP of maximal mts in which SOURCE is conceptually related to TARGET.\r\n@unknown baxter")
     public static SubLObject max_floor_mts_of_conceptually_related_paths(SubLObject source, final SubLObject target) {
         SubLObject mts = NIL;
         SubLObject cdolist_list_var;
@@ -1070,15 +2256,289 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return list_utilities.remove_subsumed_items(mts, symbol_function($sym11$SPEC_MT_), UNPROVIDED);
     }
 
+    /**
+     * Return one argument for why SOURCE is conceptually related to TARGET in MT
+     */
+    @LispMethod(comment = "Return one argument for why SOURCE is conceptually related to TARGET in MT")
+    public static final SubLObject why_conceptually_relatedP_alt(SubLObject source, SubLObject target, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        SubLTrampolineFile.checkType(source, FORT_P);
+        SubLTrampolineFile.checkType(target, FORT_P);
+        return com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.why_conceptually_relatedP_internal(source, target, mt, T).first();
+    }
+
+    @LispMethod(comment = "Return one argument for why SOURCE is conceptually related to TARGET in MT")
     public static SubLObject why_conceptually_relatedP(SubLObject source, final SubLObject target, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        assert NIL != forts.fort_p(source) : "forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) " + source;
-        assert NIL != forts.fort_p(target) : "forts.fort_p(target) " + "CommonSymbols.NIL != forts.fort_p(target) " + target;
+        assert NIL != forts.fort_p(source) : "! forts.fort_p(source) " + ("forts.fort_p(source) " + "CommonSymbols.NIL != forts.fort_p(source) ") + source;
+        assert NIL != forts.fort_p(target) : "! forts.fort_p(target) " + ("forts.fort_p(target) " + "CommonSymbols.NIL != forts.fort_p(target) ") + target;
         return why_conceptually_relatedP_internal(source, target, mt, T).first();
+    }/**
+     * Return one argument for why SOURCE is conceptually related to TARGET in MT
+     */
+
+
+    /**
+     * Return list of arguments for why SOURCE is conceptually related to TARGET in MT
+     */
+    @LispMethod(comment = "Return list of arguments for why SOURCE is conceptually related to TARGET in MT")
+    public static final SubLObject why_conceptually_relatedP_internal_alt(SubLObject source, SubLObject target, SubLObject mt, SubLObject one_is_enoughP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_arguments = NIL;
+                SubLObject doneP = NIL;
+                SubLObject mt_var = mt;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject _prev_bind_0_69 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                            SubLObject _prev_bind_1_70 = pred_relevance_macros.$pred$.currentBinding(thread);
+                            try {
+                                pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_PRED, thread);
+                                pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                                {
+                                    SubLObject pred_var = NIL;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(target, TWO_INTEGER, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(target, TWO_INTEGER, pred_var);
+                                            SubLObject done_var = doneP;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_71 = doneP;
+                                                                    SubLObject token_var_72 = NIL;
+                                                                    while (NIL == done_var_71) {
+                                                                        {
+                                                                            SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_72);
+                                                                            SubLObject valid_73 = makeBoolean(token_var_72 != ass);
+                                                                            if (NIL != valid_73) {
+                                                                                {
+                                                                                    SubLObject predicate = assertions_high.gaf_predicate(ass);
+                                                                                    SubLObject arg1 = assertions_high.gaf_arg1(ass);
+                                                                                    SubLObject arg2 = assertions_high.gaf_arg2(ass);
+                                                                                    SubLObject source_genl = (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) ? ((SubLObject) (arg2)) : arg1;
+                                                                                    SubLObject argument = NIL;
+                                                                                    SubLObject found = NIL;
+                                                                                    if (source == source_genl) {
+                                                                                        found = T;
+                                                                                        doneP = one_is_enoughP;
+                                                                                    } else {
+                                                                                        if (NIL != genls.genlsP(source, source_genl, UNPROVIDED, UNPROVIDED)) {
+                                                                                            found = T;
+                                                                                            doneP = one_is_enoughP;
+                                                                                            {
+                                                                                                SubLObject formula = list($$genls, source, source_genl);
+                                                                                                argument = cons(arguments.make_hl_support($GENLS, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                            }
+                                                                                        } else {
+                                                                                            if (NIL != isa.isaP(source, source_genl, UNPROVIDED, UNPROVIDED)) {
+                                                                                                found = T;
+                                                                                                doneP = one_is_enoughP;
+                                                                                                {
+                                                                                                    SubLObject formula = list($$isa, source, source_genl);
+                                                                                                    argument = cons(arguments.make_hl_support($ISA, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                    if (NIL != found) {
+                                                                                        argument = cons(ass, argument);
+                                                                                        if (predicate != $$conceptuallyRelated) {
+                                                                                            if (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) {
+                                                                                                {
+                                                                                                    SubLObject formula = listS($$genlInverse, predicate, $list_alt15);
+                                                                                                    argument = cons(arguments.make_hl_support($GENLPREDS, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                }
+                                                                                            } else {
+                                                                                                {
+                                                                                                    SubLObject formula = listS($$genlPreds, predicate, $list_alt15);
+                                                                                                    argument = cons(arguments.make_hl_support($GENLPREDS, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        v_arguments = cons(argument, v_arguments);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_71 = makeBoolean((NIL == valid_73) || (NIL != doneP));
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_74 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_74, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean((NIL == valid) || (NIL != doneP));
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                pred_relevance_macros.$pred$.rebind(_prev_bind_1_70, thread);
+                                pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0_69, thread);
+                            }
+                        }
+                        if (NIL != kb_gp_mapping.dgaigp_binaryP($$conceptuallyRelated)) {
+                            {
+                                SubLObject _prev_bind_0_75 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                                SubLObject _prev_bind_1_76 = pred_relevance_macros.$pred$.currentBinding(thread);
+                                try {
+                                    pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_SPEC_INVERSE, thread);
+                                    pred_relevance_macros.$pred$.bind($$conceptuallyRelated, thread);
+                                    {
+                                        SubLObject pred_var = NIL;
+                                        if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(target, arity.binary_arg_swap(TWO_INTEGER), pred_var)) {
+                                            {
+                                                SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(target, arity.binary_arg_swap(TWO_INTEGER), pred_var);
+                                                SubLObject done_var = doneP;
+                                                SubLObject token_var = NIL;
+                                                while (NIL == done_var) {
+                                                    {
+                                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                        if (NIL != valid) {
+                                                            {
+                                                                SubLObject final_index_iterator = NIL;
+                                                                try {
+                                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                    {
+                                                                        SubLObject done_var_77 = doneP;
+                                                                        SubLObject token_var_78 = NIL;
+                                                                        while (NIL == done_var_77) {
+                                                                            {
+                                                                                SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_78);
+                                                                                SubLObject valid_79 = makeBoolean(token_var_78 != ass);
+                                                                                if (NIL != valid_79) {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_80 = kb_gp_mapping.$mapping_arg_swap$.currentBinding(thread);
+                                                                                        try {
+                                                                                            kb_gp_mapping.$mapping_arg_swap$.bind(makeBoolean(NIL == kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)), thread);
+                                                                                            {
+                                                                                                SubLObject predicate = assertions_high.gaf_predicate(ass);
+                                                                                                SubLObject arg1 = assertions_high.gaf_arg1(ass);
+                                                                                                SubLObject arg2 = assertions_high.gaf_arg2(ass);
+                                                                                                SubLObject source_genl = (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) ? ((SubLObject) (arg2)) : arg1;
+                                                                                                SubLObject argument = NIL;
+                                                                                                SubLObject found = NIL;
+                                                                                                if (source == source_genl) {
+                                                                                                    found = T;
+                                                                                                    doneP = one_is_enoughP;
+                                                                                                } else {
+                                                                                                    if (NIL != genls.genlsP(source, source_genl, UNPROVIDED, UNPROVIDED)) {
+                                                                                                        found = T;
+                                                                                                        doneP = one_is_enoughP;
+                                                                                                        {
+                                                                                                            SubLObject formula = list($$genls, source, source_genl);
+                                                                                                            argument = cons(arguments.make_hl_support($GENLS, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        if (NIL != isa.isaP(source, source_genl, UNPROVIDED, UNPROVIDED)) {
+                                                                                                            found = T;
+                                                                                                            doneP = one_is_enoughP;
+                                                                                                            {
+                                                                                                                SubLObject formula = list($$isa, source, source_genl);
+                                                                                                                argument = cons(arguments.make_hl_support($ISA, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                if (NIL != found) {
+                                                                                                    argument = cons(ass, argument);
+                                                                                                    if (predicate != $$conceptuallyRelated) {
+                                                                                                        if (NIL != kb_gp_mapping.$mapping_arg_swap$.getDynamicValue(thread)) {
+                                                                                                            {
+                                                                                                                SubLObject formula = listS($$genlInverse, predicate, $list_alt15);
+                                                                                                                argument = cons(arguments.make_hl_support($GENLPREDS, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                            }
+                                                                                                        } else {
+                                                                                                            {
+                                                                                                                SubLObject formula = listS($$genlPreds, predicate, $list_alt15);
+                                                                                                                argument = cons(arguments.make_hl_support($GENLPREDS, formula, UNPROVIDED, UNPROVIDED), argument);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                    v_arguments = cons(argument, v_arguments);
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            kb_gp_mapping.$mapping_arg_swap$.rebind(_prev_bind_0_80, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                done_var_77 = makeBoolean((NIL == valid_79) || (NIL != doneP));
+                                                                            }
+                                                                        } 
+                                                                    }
+                                                                } finally {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_81 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                        try {
+                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                            if (NIL != final_index_iterator) {
+                                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                            }
+                                                                        } finally {
+                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_81, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                        done_var = makeBoolean((NIL == valid) || (NIL != doneP));
+                                                    }
+                                                } 
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    pred_relevance_macros.$pred$.rebind(_prev_bind_1_76, thread);
+                                    pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_0_75, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_arguments;
+            }
+        }
     }
 
+    @LispMethod(comment = "Return list of arguments for why SOURCE is conceptually related to TARGET in MT")
     public static SubLObject why_conceptually_relatedP_internal(SubLObject source, final SubLObject target, final SubLObject mt, final SubLObject one_is_enoughP) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject v_arguments = NIL;
@@ -1272,11 +2732,43 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
         }
         return v_arguments;
+    }/**
+     * Return list of arguments for why SOURCE is conceptually related to TARGET in MT
+     */
+
+
+    /**
+     * Stub. Should provide return as a list of assertions and/or hl-supports.
+     */
+    @LispMethod(comment = "Stub. Should provide return as a list of assertions and/or hl-supports.")
+    public static final SubLObject why_not_conceptually_relatedP_alt(SubLObject source, SubLObject target, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        return NIL;
     }
 
+    @LispMethod(comment = "Stub. Should provide return as a list of assertions and/or hl-supports.")
     public static SubLObject why_not_conceptually_relatedP(SubLObject source, final SubLObject target, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
+        }
+        return NIL;
+    }/**
+     * Stub. Should provide return as a list of assertions and/or hl-supports.
+     */
+
+
+    public static final SubLObject removal_conceptually_related_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            SubLObject source = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject target = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+            if (NIL != com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.conceptually_relatedP(source, target, UNPROVIDED, UNPROVIDED)) {
+                backward.removal_add_node(arguments.make_hl_support($CONCEPTUALLY_RELATED, asent, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            }
         }
         return NIL;
     }
@@ -1291,6 +2783,35 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
             backward.removal_add_node(arguments.make_hl_support($CONCEPTUALLY_RELATED, asent, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject removal_all_conceptually_related_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject source = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject variable = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+                SubLObject v_related_concepts = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.all_conceptually_related(source, UNPROVIDED);
+                SubLObject cdolist_list_var = v_related_concepts;
+                SubLObject related_concept = NIL;
+                for (related_concept = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , related_concept = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_bindings = unification_utilities.term_unify(variable, related_concept, T, T);
+                        SubLObject unify_justification = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject formula = list($$conceptuallyRelated, source, related_concept);
+                            backward.removal_add_node(arguments.make_hl_support($CONCEPTUALLY_RELATED, formula, UNPROVIDED, UNPROVIDED), v_bindings, unify_justification);
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject removal_all_conceptually_related_expand(final SubLObject asent, SubLObject sense) {
@@ -1317,12 +2838,51 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    public static final SubLObject removal_max_conceptually_related_to_cost_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return max($default_max_conceptually_related_to_cost$.getDynamicValue(thread), kb_indexing.relevant_num_gaf_arg_index(cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED), TWO_INTEGER, $$conceptuallyRelated));
+        }
+    }
+
     public static SubLObject removal_max_conceptually_related_to_cost(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
         return max($default_max_conceptually_related_to_cost$.getDynamicValue(thread), kb_indexing.relevant_num_gaf_arg_index(cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED), TWO_INTEGER, $$conceptuallyRelated));
+    }
+
+    public static final SubLObject removal_max_conceptually_related_to_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject variable = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject target = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+                SubLObject v_related_concepts = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.max_conceptually_related_to(target, UNPROVIDED);
+                SubLObject cdolist_list_var = v_related_concepts;
+                SubLObject related_concept = NIL;
+                for (related_concept = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , related_concept = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject v_bindings = unification_utilities.term_unify(variable, related_concept, T, T);
+                        SubLObject unify_justification = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject formula = list($$conceptuallyRelated, related_concept, target);
+                            backward.removal_add_node(arguments.make_hl_support($CONCEPTUALLY_RELATED, formula, UNPROVIDED, UNPROVIDED), v_bindings, unify_justification);
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject removal_max_conceptually_related_to_expand(final SubLObject asent, SubLObject sense) {
@@ -1349,6 +2909,27 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    public static final SubLObject removal_not_conceptually_related_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject source = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject target = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+                if ((NIL != $negation_by_failure$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.conceptually_relatedP(source, target, UNPROVIDED, UNPROVIDED))) {
+                    backward.removal_add_node(arguments.make_hl_support($MINIMIZE, cycl_utilities.negate(asent), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                } else {
+                    if (NIL != com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_conceptually_related.not_conceptually_relatedP(source, target, UNPROVIDED)) {
+                        backward.removal_add_node(arguments.make_hl_support($CONCEPTUALLY_RELATED, cycl_utilities.negate(asent), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject removal_not_conceptually_related_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -1367,30 +2948,30 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
     }
 
     public static SubLObject declare_removal_modules_conceptually_related_file() {
-        declareFunction(me, "new_conceptually_related_mapping_table", "NEW-CONCEPTUALLY-RELATED-MAPPING-TABLE", 0, 0, false);
-        declareFunction(me, "new_conceptually_related_answer_table", "NEW-CONCEPTUALLY-RELATED-ANSWER-TABLE", 0, 0, false);
-        declareFunction(me, "conceptually_relatedP", "CONCEPTUALLY-RELATED?", 2, 2, false);
-        declareFunction(me, "check_conceptually_related_limited", "CHECK-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
-        declareFunction(me, "check_conceptually_related", "CHECK-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(me, "check_immediate_conceptually_related", "CHECK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(me, "check_superior_conceptually_related", "CHECK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(me, "conceptual_generality_acceptable", "CONCEPTUAL-GENERALITY-ACCEPTABLE", 1, 0, false);
-        declareFunction(me, "all_conceptually_related", "ALL-CONCEPTUALLY-RELATED", 1, 1, false);
-        declareFunction(me, "all_conceptually_related_limited", "ALL-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
-        declareFunction(me, "mark_conceptually_related", "MARK-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(me, "mark_immediate_conceptually_related", "MARK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(me, "mark_superior_conceptually_related", "MARK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
-        declareFunction(me, "max_conceptually_related_to", "MAX-CONCEPTUALLY-RELATED-TO", 1, 1, false);
-        declareFunction(me, "not_conceptually_relatedP", "NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
-        declareFunction(me, "max_floor_mts_of_conceptually_related_paths", "MAX-FLOOR-MTS-OF-CONCEPTUALLY-RELATED-PATHS", 2, 0, false);
-        declareFunction(me, "why_conceptually_relatedP", "WHY-CONCEPTUALLY-RELATED?", 2, 1, false);
-        declareFunction(me, "why_conceptually_relatedP_internal", "WHY-CONCEPTUALLY-RELATED?-INTERNAL", 4, 0, false);
-        declareFunction(me, "why_not_conceptually_relatedP", "WHY-NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
-        declareFunction(me, "removal_conceptually_related_expand", "REMOVAL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_all_conceptually_related_expand", "REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_max_conceptually_related_to_cost", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST", 1, 1, false);
-        declareFunction(me, "removal_max_conceptually_related_to_expand", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_not_conceptually_related_expand", "REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
+        declareFunction("new_conceptually_related_mapping_table", "NEW-CONCEPTUALLY-RELATED-MAPPING-TABLE", 0, 0, false);
+        declareFunction("new_conceptually_related_answer_table", "NEW-CONCEPTUALLY-RELATED-ANSWER-TABLE", 0, 0, false);
+        declareFunction("conceptually_relatedP", "CONCEPTUALLY-RELATED?", 2, 2, false);
+        declareFunction("check_conceptually_related_limited", "CHECK-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
+        declareFunction("check_conceptually_related", "CHECK-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("check_immediate_conceptually_related", "CHECK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("check_superior_conceptually_related", "CHECK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("conceptual_generality_acceptable", "CONCEPTUAL-GENERALITY-ACCEPTABLE", 1, 0, false);
+        declareFunction("all_conceptually_related", "ALL-CONCEPTUALLY-RELATED", 1, 1, false);
+        declareFunction("all_conceptually_related_limited", "ALL-CONCEPTUALLY-RELATED-LIMITED", 3, 1, false);
+        declareFunction("mark_conceptually_related", "MARK-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("mark_immediate_conceptually_related", "MARK-IMMEDIATE-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("mark_superior_conceptually_related", "MARK-SUPERIOR-CONCEPTUALLY-RELATED", 1, 0, false);
+        declareFunction("max_conceptually_related_to", "MAX-CONCEPTUALLY-RELATED-TO", 1, 1, false);
+        declareFunction("not_conceptually_relatedP", "NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
+        declareFunction("max_floor_mts_of_conceptually_related_paths", "MAX-FLOOR-MTS-OF-CONCEPTUALLY-RELATED-PATHS", 2, 0, false);
+        declareFunction("why_conceptually_relatedP", "WHY-CONCEPTUALLY-RELATED?", 2, 1, false);
+        declareFunction("why_conceptually_relatedP_internal", "WHY-CONCEPTUALLY-RELATED?-INTERNAL", 4, 0, false);
+        declareFunction("why_not_conceptually_relatedP", "WHY-NOT-CONCEPTUALLY-RELATED?", 2, 1, false);
+        declareFunction("removal_conceptually_related_expand", "REMOVAL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
+        declareFunction("removal_all_conceptually_related_expand", "REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
+        declareFunction("removal_max_conceptually_related_to_cost", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST", 1, 1, false);
+        declareFunction("removal_max_conceptually_related_to_expand", "REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND", 1, 1, false);
+        declareFunction("removal_not_conceptually_related_expand", "REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND", 1, 1, false);
         return NIL;
     }
 
@@ -1409,7 +2990,38 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
         return NIL;
     }
 
+    public static final SubLObject setup_removal_modules_conceptually_related_file_alt() {
+        inference_modules.register_solely_specific_removal_module_predicate($$conceptuallyRelated);
+        inference_modules.inference_removal_module($REMOVAL_CONCEPTUALLY_RELATED, $list_alt20);
+        inference_modules.inference_removal_module($REMOVAL_ALL_CONCEPTUALLY_RELATED, $list_alt23);
+        inference_modules.inference_removal_module($REMOVAL_MAX_CONCEPTUALLY_RELATED_TO, $list_alt25);
+        preference_modules.inference_preference_module($MAX_CONCEPTUALLY_RELATED_TO_POS, $list_alt27);
+        inference_modules.inference_removal_module($REMOVAL_NOT_CONCEPTUALLY_RELATED, $list_alt30);
+        return NIL;
+    }
+
     public static SubLObject setup_removal_modules_conceptually_related_file() {
+        if (SubLFiles.USE_V1) {
+            inference_modules.register_solely_specific_removal_module_predicate($$conceptuallyRelated);
+            preference_modules.doomed_unless_either_arg_bindable($POS, $$conceptuallyRelated);
+            preference_modules.doomed_unless_all_args_bindable($NEG, $$conceptuallyRelated);
+            inference_modules.inference_removal_module($REMOVAL_CONCEPTUALLY_RELATED, $list22);
+            inference_modules.inference_removal_module($REMOVAL_ALL_CONCEPTUALLY_RELATED, $list25);
+            inference_modules.inference_removal_module($REMOVAL_MAX_CONCEPTUALLY_RELATED_TO, $list27);
+            preference_modules.inference_preference_module($MAX_CONCEPTUALLY_RELATED_TO_POS, $list29);
+            inference_modules.inference_removal_module($REMOVAL_NOT_CONCEPTUALLY_RELATED, $list32);
+        }
+        if (SubLFiles.USE_V2) {
+            inference_modules.inference_removal_module($REMOVAL_CONCEPTUALLY_RELATED, $list_alt20);
+            inference_modules.inference_removal_module($REMOVAL_ALL_CONCEPTUALLY_RELATED, $list_alt23);
+            inference_modules.inference_removal_module($REMOVAL_MAX_CONCEPTUALLY_RELATED_TO, $list_alt25);
+            preference_modules.inference_preference_module($MAX_CONCEPTUALLY_RELATED_TO_POS, $list_alt27);
+            inference_modules.inference_removal_module($REMOVAL_NOT_CONCEPTUALLY_RELATED, $list_alt30);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_removal_modules_conceptually_related_file_Previous() {
         inference_modules.register_solely_specific_removal_module_predicate($$conceptuallyRelated);
         preference_modules.doomed_unless_either_arg_bindable($POS, $$conceptuallyRelated);
         preference_modules.doomed_unless_all_args_bindable($NEG, $$conceptuallyRelated);
@@ -1437,52 +3049,19 @@ public final class removal_modules_conceptually_related extends SubLTranslatedFi
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt15 = list(reader_make_constant_shell("conceptuallyRelated"));
+
+    static private final SubLList $list_alt20 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), $FORT, makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <fort> <fully bound>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated #$Dog #$DogFood)") });
+
+    static private final SubLList $list_alt23 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), $FORT, makeKeyword("VARIABLE")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-ALL-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ALL-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <fort> <variable>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated #$Dog ?WHAT)") });
+
+    static private final SubLList $list_alt25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), makeKeyword("VARIABLE"), $FORT), $COST, makeSymbol("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-COST"), makeKeyword("COMPLETENESS"), makeKeyword("GROSSLY-INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-MAX-CONCEPTUALLY-RELATED-TO-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$conceptuallyRelated <variable> <fort>)"), makeKeyword("EXAMPLE"), makeString("(#$conceptuallyRelated ?WHAT #$DogFood)") });
+
+    static private final SubLList $list_alt27 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), makeKeyword("VARIABLE"), $FORT), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("GROSSLY-DISPREFERRED"));
+
+    static private final SubLList $list_alt30 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("conceptuallyRelated"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("conceptuallyRelated"), $FORT, $FORT), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-CONCEPTUALLY-RELATED-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-NOT-CONCEPTUALLY-RELATED-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$conceptuallyRelated <fort> <fort>))"), makeKeyword("EXAMPLE"), makeString("(#$not (#$conceptuallyRelated #$Dog #$Animal))") });
 }
 
 /**

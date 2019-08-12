@@ -396,8 +396,7 @@ public  final class cycl_variables extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cycl_variables_file() {
-    // CVS_ID("Id: cycl-variables.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym2$EL_VAR_, $list3, $str4$Return_T_iff_OBJECT_is_a_symbol_w, NIL, $list5);
+        utilities_macros.register_cyc_api_function($sym2$EL_VAR_, $list3, $str4$Return_T_iff_OBJECT_is_a_symbol_w, NIL, $list5);
     access_macros.define_obsolete_register($sym11$VARIABLE_SYMBOL_, $list12);
     generic_testing.define_test_case_table_int($sym18$VALID_EL_VAR_NAME_, list(new SubLObject[] {$kw19$TEST, NIL, $kw20$OWNER, NIL, $kw21$CLASSES, NIL, $kw22$KB, $kw23$TINY, $kw24$WORKING_, T}), $list25);
     return NIL;

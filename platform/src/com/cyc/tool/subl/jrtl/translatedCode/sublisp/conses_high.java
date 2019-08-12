@@ -9,6 +9,16 @@
  */
 package com.cyc.tool.subl.jrtl.translatedCode.sublisp;
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -22,37 +32,8 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class conses_high extends SubLTranslatedFile {
     public static class $union$BinaryFunction extends BinaryFunction {
@@ -66,7 +47,7 @@ public class conses_high extends SubLTranslatedFile {
 	}
     }
 
-    private static final SubLObject $list391 = list(((SubLObject) (makeSymbol("INLINE-SET-SYMBOL"))), ((SubLObject) (makeSymbol("INLINE-GET-SYMBOL"))), ((SubLObject) (makeSymbol("INLINE-METHOD"))));
+    private static final SubLObject $list391 = list(((makeSymbol("INLINE-SET-SYMBOL"))), ((makeSymbol("INLINE-GET-SYMBOL"))), ((makeSymbol("INLINE-METHOD"))));
 
     public static SubLObject _assoc_2(SubLObject item, SubLObject alist) {
 	SubLObject rest = SubLNil.NIL;
@@ -992,44 +973,44 @@ public class conses_high extends SubLTranslatedFile {
 
     public static final SubLObject symbol_in_tree_p(final SubLObject symbol, final SubLObject tree) {
 	if (NIL == tree) {
-	    return ((SubLObject) (NIL));
+	    return ((NIL));
 	}
 	if (tree.isSymbol()) {
 	    return eq(symbol, tree);
 	}
 	if (tree.isCons()) {
-	    return ((SubLObject) (makeBoolean((NIL != symbol_in_tree_p(symbol, tree.first())) || (NIL != symbol_in_tree_p(symbol, tree.rest())))));
+	    return ((makeBoolean((NIL != symbol_in_tree_p(symbol, tree.first())) || (NIL != symbol_in_tree_p(symbol, tree.rest())))));
 	}
-	return ((SubLObject) (NIL));
+	return ((NIL));
     }
 
     public static final SubLObject unquoted_symbol_in_tree_p(final SubLObject symbol, final SubLObject tree) {
 	if (NIL == tree) {
-	    return ((SubLObject) (NIL));
+	    return ((NIL));
 	}
 	if (tree.isSymbol()) {
 	    return eq(symbol, tree);
 	}
 	if (!tree.isCons()) {
-	    return ((SubLObject) (NIL));
+	    return ((NIL));
 	}
-	if (NIL == member(tree.first(), ((SubLObject) ($list391)), ((SubLObject) (UNPROVIDED)), ((SubLObject) (UNPROVIDED)))) {
-	    return ((SubLObject) (makeBoolean((NIL != symbol_in_tree_p(symbol, tree.first())) || (NIL != symbol_in_tree_p(symbol, tree.rest())))));
+	if (NIL == member(tree.first(), (($list391)), ((UNPROVIDED)), ((UNPROVIDED)))) {
+	    return ((makeBoolean((NIL != symbol_in_tree_p(symbol, tree.first())) || (NIL != symbol_in_tree_p(symbol, tree.rest())))));
 	}
 	if ((tree.rest().isCons() && cadr(tree).isCons()) && cddr(tree).isList()) {
 	    SubLObject cdolist_list_var = cddr(tree);
-	    SubLObject arg = ((SubLObject) (NIL));
+	    SubLObject arg = ((NIL));
 	    arg = cdolist_list_var.first();
 	    while (NIL != cdolist_list_var) {
 		if (NIL != unquoted_symbol_in_tree_p(symbol, arg)) {
-		    return ((SubLObject) (T));
+		    return ((T));
 		}
 		cdolist_list_var = cdolist_list_var.rest();
 		arg = cdolist_list_var.first();
 	    }
-	    return ((SubLObject) (NIL));
+	    return ((NIL));
 	}
-	return ((SubLObject) (makeBoolean((NIL != symbol_in_tree_p(symbol, tree.first())) || (NIL != symbol_in_tree_p(symbol, tree.rest())))));
+	return ((makeBoolean((NIL != symbol_in_tree_p(symbol, tree.first())) || (NIL != symbol_in_tree_p(symbol, tree.rest())))));
     }
 
     public static SubLObject _tree_equal_2(SubLObject tree1, SubLObject tree2) {
@@ -1297,120 +1278,120 @@ public class conses_high extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_conses_high_file() {
-	declareFunction(myName, "_recons", "_RECONS", 3, 0, false);
-	declareFunction(myName, "_ncons", "_NCONS", 3, 0, false);
-	declareFunction(myName, "_cons_length", "_CONS-LENGTH", 1, 0, false);
-	declareFunction(myName, "caar", "CAAR", 1, 0, false);
-	declareFunction(myName, "cadr", "CADR", 1, 0, false);
-	declareFunction(myName, "cdar", "CDAR", 1, 0, false);
-	declareFunction(myName, "cddr", "CDDR", 1, 0, false);
-	declareFunction(myName, "_tree_equal_2", "_TREE-EQUAL-2", 2, 0, false);
-	declareFunction(myName, "_tree_equal_3", "_TREE-EQUAL-3", 3, 0, false);
-	declareFunction(myName, "tree_equal", "TREE-EQUAL", 2, 1, false);
-	declareFunction(myName, "endp", "ENDP", 1, 0, false);
-	declareFunction(myName, "list_length", "LIST-LENGTH", 1, 0, false);
-	declareFunction(myName, "first", "FIRST", 1, 0, false);
-	declareFunction(myName, "second", "SECOND", 1, 0, false);
-	declareFunction(myName, "third", "THIRD", 1, 0, false);
-	declareFunction(myName, "fourth", "FOURTH", 1, 0, false);
-	declareFunction(myName, "fifth", "FIFTH", 1, 0, false);
-	declareFunction(myName, "sixth", "SIXTH", 1, 0, false);
-	declareFunction(myName, "seventh", "SEVENTH", 1, 0, false);
-	declareFunction(myName, "eighth", "EIGHTH", 1, 0, false);
-	declareFunction(myName, "ninth", "NINTH", 1, 0, false);
-	declareFunction(myName, "tenth", "TENTH", 1, 0, false);
-	declareFunction(myName, "rest", "REST", 1, 0, false);
-	declareFunction(myName, "nthcdr", "NTHCDR", 2, 0, false);
-	declareFunction(myName, "copy_list", "COPY-LIST", 1, 0, false);
-	declareFunction(myName, "copy_alist", "COPY-ALIST", 1, 0, false);
-	declareFunction(myName, "copy_tree", "COPY-TREE", 1, 0, false);
-	declareFunction(myName, "revappend", "REVAPPEND", 2, 0, false);
-	declareFunction(myName, "nreconc", "NRECONC", 2, 0, false);
-	declareFunction(myName, "ldiff", "LDIFF", 2, 0, false);
-	declareFunction(myName, "_subst_3", "_SUBST-3", 3, 0, false);
-	declareFunction(myName, "_subst_4", "_SUBST-4", 4, 0, false);
-	declareFunction(myName, "_subst_5", "_SUBST-5", 5, 0, false);
-	declareFunction(myName, "subst", "SUBST", 3, 2, false);
-	declareFunction(myName, "_subst_if_3", "_SUBST-IF-3", 3, 0, false);
-	declareFunction(myName, "_subst_if_4", "_SUBST-IF-4", 4, 0, false);
-	declareFunction(myName, "subst_if", "SUBST-IF", 3, 1, false);
-	declareFunction(myName, "_nsubst_3", "_NSUBST-3", 3, 0, false);
-	declareFunction(myName, "_nsubst_4", "_NSUBST-4", 4, 0, false);
-	declareFunction(myName, "_nsubst_5", "_NSUBST-5", 5, 0, false);
-	declareFunction(myName, "nsubst", "NSUBST", 3, 2, false);
-	declareFunction(myName, "_nsubst_if_3", "_NSUBST-IF-3", 3, 0, false);
-	declareFunction(myName, "_nsubst_if_4", "_NSUBST-IF-4", 4, 0, false);
-	declareFunction(myName, "nsubst_if", "NSUBST-IF", 3, 1, false);
-	declareFunction(myName, "_sublis_2", "_SUBLIS-2", 2, 0, false);
-	declareFunction(myName, "_sublis_3", "_SUBLIS-3", 3, 0, false);
-	declareFunction(myName, "_sublis_4", "_SUBLIS-4", 4, 0, false);
-	declareFunction(myName, "sublis", "SUBLIS", 2, 2, false);
-	declareFunction(myName, "_nsublis_2", "_NSUBLIS-2", 2, 0, false);
-	declareFunction(myName, "_nsublis_3", "_NSUBLIS-3", 3, 0, false);
-	declareFunction(myName, "_nsublis_4", "_NSUBLIS-4", 4, 0, false);
-	declareFunction(myName, "nsublis", "NSUBLIS", 2, 2, false);
-	declareFunction(myName, "_member_2", "_MEMBER-2", 2, 0, false);
-	declareFunction(myName, "_member_3", "_MEMBER-3", 3, 0, false);
-	declareFunction(myName, "_member_4", "_MEMBER-4", 4, 0, false);
-	declareFunction(myName, "member", "MEMBER", 2, 2, false);
-	declareFunction(myName, "_member_if_2", "_MEMBER-IF-2", 2, 0, false);
-	declareFunction(myName, "_member_if_3", "_MEMBER-IF-3", 3, 0, false);
-	declareFunction(myName, "member_if", "MEMBER-IF", 2, 1, false);
-	declareFunction(myName, "tailp", "TAILP", 2, 0, false);
-	declareFunction(myName, "adjoin", "ADJOIN", 2, 2, false);
-	declareFunction(myName, "_union_2", "_UNION-2", 2, 0, false);
-	declareFunction(myName, "_union_3", "_UNION-3", 3, 0, false);
-	declareFunction(myName, "_union_4", "_UNION-4", 4, 0, false);
-	declareFunction(myName, "union", "UNION", 2, 2, false);
+	declareFunction("_recons", "_RECONS", 3, 0, false);
+	declareFunction("_ncons", "_NCONS", 3, 0, false);
+	declareFunction("_cons_length", "_CONS-LENGTH", 1, 0, false);
+	declareFunction("caar", "CAAR", 1, 0, false);
+	declareFunction("cadr", "CADR", 1, 0, false);
+	declareFunction("cdar", "CDAR", 1, 0, false);
+	declareFunction("cddr", "CDDR", 1, 0, false);
+	declareFunction("_tree_equal_2", "_TREE-EQUAL-2", 2, 0, false);
+	declareFunction("_tree_equal_3", "_TREE-EQUAL-3", 3, 0, false);
+	declareFunction("tree_equal", "TREE-EQUAL", 2, 1, false);
+	declareFunction("endp", "ENDP", 1, 0, false);
+	declareFunction("list_length", "LIST-LENGTH", 1, 0, false);
+	declareFunction("first", "FIRST", 1, 0, false);
+	declareFunction("second", "SECOND", 1, 0, false);
+	declareFunction("third", "THIRD", 1, 0, false);
+	declareFunction("fourth", "FOURTH", 1, 0, false);
+	declareFunction("fifth", "FIFTH", 1, 0, false);
+	declareFunction("sixth", "SIXTH", 1, 0, false);
+	declareFunction("seventh", "SEVENTH", 1, 0, false);
+	declareFunction("eighth", "EIGHTH", 1, 0, false);
+	declareFunction("ninth", "NINTH", 1, 0, false);
+	declareFunction("tenth", "TENTH", 1, 0, false);
+	declareFunction("rest", "REST", 1, 0, false);
+	declareFunction("nthcdr", "NTHCDR", 2, 0, false);
+	declareFunction("copy_list", "COPY-LIST", 1, 0, false);
+	declareFunction("copy_alist", "COPY-ALIST", 1, 0, false);
+	declareFunction("copy_tree", "COPY-TREE", 1, 0, false);
+	declareFunction("revappend", "REVAPPEND", 2, 0, false);
+	declareFunction("nreconc", "NRECONC", 2, 0, false);
+	declareFunction("ldiff", "LDIFF", 2, 0, false);
+	declareFunction("_subst_3", "_SUBST-3", 3, 0, false);
+	declareFunction("_subst_4", "_SUBST-4", 4, 0, false);
+	declareFunction("_subst_5", "_SUBST-5", 5, 0, false);
+	declareFunction("subst", "SUBST", 3, 2, false);
+	declareFunction("_subst_if_3", "_SUBST-IF-3", 3, 0, false);
+	declareFunction("_subst_if_4", "_SUBST-IF-4", 4, 0, false);
+	declareFunction("subst_if", "SUBST-IF", 3, 1, false);
+	declareFunction("_nsubst_3", "_NSUBST-3", 3, 0, false);
+	declareFunction("_nsubst_4", "_NSUBST-4", 4, 0, false);
+	declareFunction("_nsubst_5", "_NSUBST-5", 5, 0, false);
+	declareFunction("nsubst", "NSUBST", 3, 2, false);
+	declareFunction("_nsubst_if_3", "_NSUBST-IF-3", 3, 0, false);
+	declareFunction("_nsubst_if_4", "_NSUBST-IF-4", 4, 0, false);
+	declareFunction("nsubst_if", "NSUBST-IF", 3, 1, false);
+	declareFunction("_sublis_2", "_SUBLIS-2", 2, 0, false);
+	declareFunction("_sublis_3", "_SUBLIS-3", 3, 0, false);
+	declareFunction("_sublis_4", "_SUBLIS-4", 4, 0, false);
+	declareFunction("sublis", "SUBLIS", 2, 2, false);
+	declareFunction("_nsublis_2", "_NSUBLIS-2", 2, 0, false);
+	declareFunction("_nsublis_3", "_NSUBLIS-3", 3, 0, false);
+	declareFunction("_nsublis_4", "_NSUBLIS-4", 4, 0, false);
+	declareFunction("nsublis", "NSUBLIS", 2, 2, false);
+	declareFunction("_member_2", "_MEMBER-2", 2, 0, false);
+	declareFunction("_member_3", "_MEMBER-3", 3, 0, false);
+	declareFunction("_member_4", "_MEMBER-4", 4, 0, false);
+	declareFunction("member", "MEMBER", 2, 2, false);
+	declareFunction("_member_if_2", "_MEMBER-IF-2", 2, 0, false);
+	declareFunction("_member_if_3", "_MEMBER-IF-3", 3, 0, false);
+	declareFunction("member_if", "MEMBER-IF", 2, 1, false);
+	declareFunction("tailp", "TAILP", 2, 0, false);
+	declareFunction("adjoin", "ADJOIN", 2, 2, false);
+	declareFunction("_union_2", "_UNION-2", 2, 0, false);
+	declareFunction("_union_3", "_UNION-3", 3, 0, false);
+	declareFunction("_union_4", "_UNION-4", 4, 0, false);
+	declareFunction("union", "UNION", 2, 2, false);
 	new conses_high.$union$BinaryFunction();
-	declareFunction(myName, "_nunion_2", "_NUNION-2", 2, 0, false);
-	declareFunction(myName, "_nunion_3", "_NUNION-3", 3, 0, false);
-	declareFunction(myName, "_nunion_4", "_NUNION-4", 4, 0, false);
-	declareFunction(myName, "nunion", "NUNION", 2, 2, false);
-	declareFunction(myName, "_intersection_2", "_INTERSECTION-2", 2, 0, false);
-	declareFunction(myName, "_intersection_3", "_INTERSECTION-3", 3, 0, false);
-	declareFunction(myName, "_intersection_4", "_INTERSECTION-4", 4, 0, false);
-	declareFunction(myName, "intersection", "INTERSECTION", 2, 2, false);
-	declareFunction(myName, "_nintersection_2", "_NINTERSECTION-2", 2, 0, false);
-	declareFunction(myName, "_nintersection_3", "_NINTERSECTION-3", 3, 0, false);
-	declareFunction(myName, "_nintersection_4", "_NINTERSECTION-4", 4, 0, false);
-	declareFunction(myName, "nintersection", "NINTERSECTION", 2, 2, false);
-	declareFunction(myName, "_set_difference_2", "_SET-DIFFERENCE-2", 2, 0, false);
-	declareFunction(myName, "_set_difference_3", "_SET-DIFFERENCE-3", 3, 0, false);
-	declareFunction(myName, "_set_difference_4", "_SET-DIFFERENCE-4", 4, 0, false);
-	declareFunction(myName, "set_difference", "SET-DIFFERENCE", 2, 2, false);
-	declareFunction(myName, "_nset_difference_2", "_NSET-DIFFERENCE-2", 2, 0, false);
-	declareFunction(myName, "_nset_difference_3", "_NSET-DIFFERENCE-3", 3, 0, false);
-	declareFunction(myName, "_nset_difference_4", "_NSET-DIFFERENCE-4", 4, 0, false);
-	declareFunction(myName, "nset_difference", "NSET-DIFFERENCE", 2, 2, false);
-	declareFunction(myName, "set_exclusive_or", "SET-EXCLUSIVE-OR", 2, 2, false);
-	declareFunction(myName, "nset_exclusive_or", "NSET-EXCLUSIVE-OR", 2, 2, false);
-	declareFunction(myName, "_subsetp_2", "_SUBSETP-2", 2, 0, false);
-	declareFunction(myName, "_subsetp_3", "_SUBSETP-3", 3, 0, false);
-	declareFunction(myName, "_subsetp_4", "_SUBSETP-4", 4, 0, false);
-	declareFunction(myName, "subsetp", "SUBSETP", 2, 2, false);
-	declareFunction(myName, "acons", "ACONS", 3, 0, false);
-	declareFunction(myName, "pairlis", "PAIRLIS", 2, 1, false);
-	declareFunction(myName, "_assoc_2", "_ASSOC-2", 2, 0, false);
-	declareFunction(myName, "_assoc_3", "_ASSOC-3", 3, 0, false);
-	declareFunction(myName, "_assoc_4", "_ASSOC-4", 4, 0, false);
-	declareFunction(myName, "assoc", "ASSOC", 2, 2, false);
-	declareFunction(myName, "assoc_if", "ASSOC-IF", 2, 0, false);
-	declareFunction(myName, "_rassoc_2", "_RASSOC-2", 2, 0, false);
-	declareFunction(myName, "_rassoc_3", "_RASSOC-3", 3, 0, false);
-	declareFunction(myName, "_rassoc_4", "_RASSOC-4", 4, 0, false);
-	declareFunction(myName, "rassoc", "RASSOC", 2, 2, false);
-	declareFunction(myName, "rassoc_if", "RASSOC-IF", 2, 0, false);
-	declareFunction(myName, "getf", "GETF", 2, 1, false);
-	declareFunction(myName, "putf", "PUTF", 3, 0, false);
-	declareFunction(myName, "remf", "REMF", 2, 0, false);
-	declareFunction(myName, "last", "LAST", 1, 1, false);
-	declareFunction(myName, "circular_list_p", "CIRCULAR-LIST-P", 1, 0, false);
-	declareFunction(myName, "non_circular_list_p", "NON-CIRCULAR-LIST-P", 1, 0, false);
-	declareFunction(myName, "butlast", "BUTLAST", 1, 1, false);
-	declareFunction(myName, "nbutlast", "NBUTLAST", 1, 1, false);
-	declareFunction(myName, "symbol_in_tree_p", "SYMBOL-IN-TREE-P", 2, 0, false);
-	declareFunction(myName, "unquoted_symbol_in_tree_p", "UNQUOTED-SYMBOL-IN-TREE-P", 2, 0, false);
+	declareFunction("_nunion_2", "_NUNION-2", 2, 0, false);
+	declareFunction("_nunion_3", "_NUNION-3", 3, 0, false);
+	declareFunction("_nunion_4", "_NUNION-4", 4, 0, false);
+	declareFunction("nunion", "NUNION", 2, 2, false);
+	declareFunction("_intersection_2", "_INTERSECTION-2", 2, 0, false);
+	declareFunction("_intersection_3", "_INTERSECTION-3", 3, 0, false);
+	declareFunction("_intersection_4", "_INTERSECTION-4", 4, 0, false);
+	declareFunction("intersection", "INTERSECTION", 2, 2, false);
+	declareFunction("_nintersection_2", "_NINTERSECTION-2", 2, 0, false);
+	declareFunction("_nintersection_3", "_NINTERSECTION-3", 3, 0, false);
+	declareFunction("_nintersection_4", "_NINTERSECTION-4", 4, 0, false);
+	declareFunction("nintersection", "NINTERSECTION", 2, 2, false);
+	declareFunction("_set_difference_2", "_SET-DIFFERENCE-2", 2, 0, false);
+	declareFunction("_set_difference_3", "_SET-DIFFERENCE-3", 3, 0, false);
+	declareFunction("_set_difference_4", "_SET-DIFFERENCE-4", 4, 0, false);
+	declareFunction("set_difference", "SET-DIFFERENCE", 2, 2, false);
+	declareFunction("_nset_difference_2", "_NSET-DIFFERENCE-2", 2, 0, false);
+	declareFunction("_nset_difference_3", "_NSET-DIFFERENCE-3", 3, 0, false);
+	declareFunction("_nset_difference_4", "_NSET-DIFFERENCE-4", 4, 0, false);
+	declareFunction("nset_difference", "NSET-DIFFERENCE", 2, 2, false);
+	declareFunction("set_exclusive_or", "SET-EXCLUSIVE-OR", 2, 2, false);
+	declareFunction("nset_exclusive_or", "NSET-EXCLUSIVE-OR", 2, 2, false);
+	declareFunction("_subsetp_2", "_SUBSETP-2", 2, 0, false);
+	declareFunction("_subsetp_3", "_SUBSETP-3", 3, 0, false);
+	declareFunction("_subsetp_4", "_SUBSETP-4", 4, 0, false);
+	declareFunction("subsetp", "SUBSETP", 2, 2, false);
+	declareFunction("acons", "ACONS", 3, 0, false);
+	declareFunction("pairlis", "PAIRLIS", 2, 1, false);
+	declareFunction("_assoc_2", "_ASSOC-2", 2, 0, false);
+	declareFunction("_assoc_3", "_ASSOC-3", 3, 0, false);
+	declareFunction("_assoc_4", "_ASSOC-4", 4, 0, false);
+	declareFunction("assoc", "ASSOC", 2, 2, false);
+	declareFunction("assoc_if", "ASSOC-IF", 2, 0, false);
+	declareFunction("_rassoc_2", "_RASSOC-2", 2, 0, false);
+	declareFunction("_rassoc_3", "_RASSOC-3", 3, 0, false);
+	declareFunction("_rassoc_4", "_RASSOC-4", 4, 0, false);
+	declareFunction("rassoc", "RASSOC", 2, 2, false);
+	declareFunction("rassoc_if", "RASSOC-IF", 2, 0, false);
+	declareFunction("getf", "GETF", 2, 1, false);
+	declareFunction("putf", "PUTF", 3, 0, false);
+	declareFunction("remf", "REMF", 2, 0, false);
+	declareFunction("last", "LAST", 1, 1, false);
+	declareFunction("circular_list_p", "CIRCULAR-LIST-P", 1, 0, false);
+	declareFunction("non_circular_list_p", "NON-CIRCULAR-LIST-P", 1, 0, false);
+	declareFunction("butlast", "BUTLAST", 1, 1, false);
+	declareFunction("nbutlast", "NBUTLAST", 1, 1, false);
+	declareFunction("symbol_in_tree_p", "SYMBOL-IN-TREE-P", 2, 0, false);
+	declareFunction("unquoted_symbol_in_tree_p", "UNQUOTED-SYMBOL-IN-TREE-P", 2, 0, false);
 	return SubLNil.NIL;
     }
 
@@ -1570,6 +1551,9 @@ public class conses_high extends SubLTranslatedFile {
 
 	if (key == UNPROVIDED)
 	    key = symbol_function(IDENTITY);
+
+	if (null == list)
+	    return SubLNil.NIL;
 
 	assert SubLNil.NIL != listp(list) : list;
 	assert SubLNil.NIL != function_spec_p(test) : test;

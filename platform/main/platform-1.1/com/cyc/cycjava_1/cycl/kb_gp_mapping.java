@@ -285,8 +285,7 @@ public  final class kb_gp_mapping extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_gp_mapping_file() {
-    // CVS_ID("Id: kb-gp-mapping.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym11$DGAIGP_BINARY_, $sym16$DO_GAF_ARG_INDEX_GP);
+        access_macros.register_macro_helper($sym11$DGAIGP_BINARY_, $sym16$DO_GAF_ARG_INDEX_GP);
     access_macros.register_macro_helper($sym19$DGAIVGP_ARG, $sym20$DO_GAF_ARG_INDEX_VALUES_GP);
     return NIL;
   }

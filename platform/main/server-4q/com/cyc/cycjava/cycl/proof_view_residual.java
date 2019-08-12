@@ -1,35 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_proof;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava.cycl.proof_view_residual;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.proof_view_residual.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
@@ -39,15 +11,30 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_link;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_proof;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_join_ordered;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_residual_transformation;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class proof_view_residual extends SubLTranslatedFile {
+public final class proof_view_residual extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new proof_view_residual();
 
-    public static final String myName = "com.cyc.cycjava.cycl.proof_view_residual";
+    public static final String myName = "com.cyc.cycjava_2.cycl.proof_view_residual";
 
-    public static final String myFingerPrint = "3624112c1fcb0d981d33d01e3dffd442ca7036703096b7dd94e3ff78e7f903d4";
 
     // defparameter
     private static final SubLSymbol $proof_view_relocated_proofs$ = makeSymbol("*PROOF-VIEW-RELOCATED-PROOFS*");
@@ -568,23 +555,23 @@ public final class proof_view_residual extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_proof_view_residual_file() {
-        declareFunction(me, "proof_view_add_entries_for_residual_transformation_proof", "PROOF-VIEW-ADD-ENTRIES-FOR-RESIDUAL-TRANSFORMATION-PROOF", 7, 0, false);
-        declareFunction(me, "proof_view_suppress_proof_conclusionP", "PROOF-VIEW-SUPPRESS-PROOF-CONCLUSION?", 3, 0, false);
-        declareFunction(me, "proof_view_add_relocated_proof", "PROOF-VIEW-ADD-RELOCATED-PROOF", 1, 0, false);
-        declareFunction(me, "proof_view_proof_relocated_p", "PROOF-VIEW-PROOF-RELOCATED-P", 1, 0, false);
-        declareFunction(me, "proof_view_get_relocated_proofs", "PROOF-VIEW-GET-RELOCATED-PROOFS", 0, 0, false);
-        declareFunction(me, "pick_residual_proof_subproof_attachment_point", "PICK-RESIDUAL-PROOF-SUBPROOF-ATTACHMENT-POINT", 3, 0, false);
-        declareFunction(me, "maybe_reconsider_parent_proof_view_entry", "MAYBE-RECONSIDER-PARENT-PROOF-VIEW-ENTRY", 2, 0, false);
-        declareFunction(me, "proof_view_child_with_residual_transformation_dependent_proof", "PROOF-VIEW-CHILD-WITH-RESIDUAL-TRANSFORMATION-DEPENDENT-PROOF", 2, 0, false);
-        declareFunction(me, "reconsider_residual_proof_subproof_attachment_point", "RECONSIDER-RESIDUAL-PROOF-SUBPROOF-ATTACHMENT-POINT", 2, 0, false);
-        declareFunction(me, "pick_residual_proof_subproof_attachment_point_internal", "PICK-RESIDUAL-PROOF-SUBPROOF-ATTACHMENT-POINT-INTERNAL", 3, 0, false);
-        declareFunction(me, "residual_transformation_proof_entry_good_fitP", "RESIDUAL-TRANSFORMATION-PROOF-ENTRY-GOOD-FIT?", 2, 0, false);
-        declareFunction(me, "proof_view_conjunctive_removal_proof_p", "PROOF-VIEW-CONJUNCTIVE-REMOVAL-PROOF-P", 2, 0, false);
-        declareFunction(me, "pph_residual_transformation_proof_conclusion", "PPH-RESIDUAL-TRANSFORMATION-PROOF-CONCLUSION", 2, 0, false);
-        declareFunction(me, "pph_residual_transformation_proof_non_focal_conclusion", "PPH-RESIDUAL-TRANSFORMATION-PROOF-NON-FOCAL-CONCLUSION", 1, 0, false);
-        declareFunction(me, "residual_transformation_proof_proved_transformed_conjuncts", "RESIDUAL-TRANSFORMATION-PROOF-PROVED-TRANSFORMED-CONJUNCTS", 2, 0, false);
-        declareFunction(me, "pph_residual_transformation_proof_subproofs_for_conclusion", "PPH-RESIDUAL-TRANSFORMATION-PROOF-SUBPROOFS-FOR-CONCLUSION", 2, 0, false);
-        declareFunction(me, "construct_inference_proof_view_int2", "CONSTRUCT-INFERENCE-PROOF-VIEW-INT2", 7, 0, false);
+        declareFunction("proof_view_add_entries_for_residual_transformation_proof", "PROOF-VIEW-ADD-ENTRIES-FOR-RESIDUAL-TRANSFORMATION-PROOF", 7, 0, false);
+        declareFunction("proof_view_suppress_proof_conclusionP", "PROOF-VIEW-SUPPRESS-PROOF-CONCLUSION?", 3, 0, false);
+        declareFunction("proof_view_add_relocated_proof", "PROOF-VIEW-ADD-RELOCATED-PROOF", 1, 0, false);
+        declareFunction("proof_view_proof_relocated_p", "PROOF-VIEW-PROOF-RELOCATED-P", 1, 0, false);
+        declareFunction("proof_view_get_relocated_proofs", "PROOF-VIEW-GET-RELOCATED-PROOFS", 0, 0, false);
+        declareFunction("pick_residual_proof_subproof_attachment_point", "PICK-RESIDUAL-PROOF-SUBPROOF-ATTACHMENT-POINT", 3, 0, false);
+        declareFunction("maybe_reconsider_parent_proof_view_entry", "MAYBE-RECONSIDER-PARENT-PROOF-VIEW-ENTRY", 2, 0, false);
+        declareFunction("proof_view_child_with_residual_transformation_dependent_proof", "PROOF-VIEW-CHILD-WITH-RESIDUAL-TRANSFORMATION-DEPENDENT-PROOF", 2, 0, false);
+        declareFunction("reconsider_residual_proof_subproof_attachment_point", "RECONSIDER-RESIDUAL-PROOF-SUBPROOF-ATTACHMENT-POINT", 2, 0, false);
+        declareFunction("pick_residual_proof_subproof_attachment_point_internal", "PICK-RESIDUAL-PROOF-SUBPROOF-ATTACHMENT-POINT-INTERNAL", 3, 0, false);
+        declareFunction("residual_transformation_proof_entry_good_fitP", "RESIDUAL-TRANSFORMATION-PROOF-ENTRY-GOOD-FIT?", 2, 0, false);
+        declareFunction("proof_view_conjunctive_removal_proof_p", "PROOF-VIEW-CONJUNCTIVE-REMOVAL-PROOF-P", 2, 0, false);
+        declareFunction("pph_residual_transformation_proof_conclusion", "PPH-RESIDUAL-TRANSFORMATION-PROOF-CONCLUSION", 2, 0, false);
+        declareFunction("pph_residual_transformation_proof_non_focal_conclusion", "PPH-RESIDUAL-TRANSFORMATION-PROOF-NON-FOCAL-CONCLUSION", 1, 0, false);
+        declareFunction("residual_transformation_proof_proved_transformed_conjuncts", "RESIDUAL-TRANSFORMATION-PROOF-PROVED-TRANSFORMED-CONJUNCTS", 2, 0, false);
+        declareFunction("pph_residual_transformation_proof_subproofs_for_conclusion", "PPH-RESIDUAL-TRANSFORMATION-PROOF-SUBPROOFS-FOR-CONCLUSION", 2, 0, false);
+        declareFunction("construct_inference_proof_view_int2", "CONSTRUCT-INFERENCE-PROOF-VIEW-INT2", 7, 0, false);
         return NIL;
     }
 

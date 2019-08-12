@@ -884,8 +884,7 @@ those strings by #$oldConstantName. */
   }
 
   public static final SubLObject setup_ke_file() {
-    // CVS_ID("Id: ke.lisp 128886 2009-10-02 20:44:38Z daves ");
-    access_macros.register_external_symbol($sym0$KE_CREATE);
+        access_macros.register_external_symbol($sym0$KE_CREATE);
     utilities_macros.register_cyc_api_function($sym11$KE_CREATE_NOW, $list12, $str13$Create_new_constant_now_and_add_o, NIL, $list14);
     access_macros.register_external_symbol($sym15$KE_MERGE);
     access_macros.register_external_symbol($sym25$KE_KILL);

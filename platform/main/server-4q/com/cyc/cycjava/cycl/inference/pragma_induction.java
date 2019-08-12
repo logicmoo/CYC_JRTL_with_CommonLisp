@@ -1,45 +1,8 @@
 package com.cyc.cycjava.cycl.inference;
 
 
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.at_var_types;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cardinality_estimates;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.formula_pattern_match;
-import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
-import com.cyc.cycjava.cycl.inference.pragma_induction;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.unification;
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.pragma_induction.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
@@ -49,15 +12,24 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_transformation;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class pragma_induction extends SubLTranslatedFile {
+public final class pragma_induction extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pragma_induction();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.pragma_induction";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.pragma_induction";
 
-    public static final String myFingerPrint = "a7f50c107406abe08f5c8aafded9d8760dddf40bdc39d70c8deba4d1155fc588";
 
     // defparameter
     private static final SubLSymbol $ontology_contraint_gain_threshold$ = makeSymbol("*ONTOLOGY-CONTRAINT-GAIN-THRESHOLD*");
@@ -644,27 +616,27 @@ public final class pragma_induction extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_pragma_induction_file() {
-        declareFunction(me, "some_suggested_pragma_sentences_for_ruleP", "SOME-SUGGESTED-PRAGMA-SENTENCES-FOR-RULE?", 1, 0, false);
-        declareFunction(me, "rule_suggested_pragma_sentences", "RULE-SUGGESTED-PRAGMA-SENTENCES", 1, 1, false);
-        declareFunction(me, "possibly_suggest_ontology_constraints_wrt_rule", "POSSIBLY-SUGGEST-ONTOLOGY-CONSTRAINTS-WRT-RULE", 2, 1, false);
-        declareFunction(me, "possibly_suggest_forward_non_trigger_literals", "POSSIBLY-SUGGEST-FORWARD-NON-TRIGGER-LITERALS", 2, 1, false);
-        declareFunction(me, "possibly_suggest_different_literals", "POSSIBLY-SUGGEST-DIFFERENT-LITERALS", 2, 1, false);
-        declareFunction(me, "rule_pragmatic_dnf_for_strengthening_literals", "RULE-PRAGMATIC-DNF-FOR-STRENGTHENING-LITERALS", 1, 1, false);
-        declareFunction(me, "rule_antecedent_variables_min_constraints_alist", "RULE-ANTECEDENT-VARIABLES-MIN-CONSTRAINTS-ALIST", 1, 1, false);
-        declareFunction(me, "rule_antecedent_literal_variables_min_constraints_alist", "RULE-ANTECEDENT-LITERAL-VARIABLES-MIN-CONSTRAINTS-ALIST", 2, 1, false);
-        declareFunction(me, "rule_pragmatic_pos_lits_for_strengthening_literal", "RULE-PRAGMATIC-POS-LITS-FOR-STRENGTHENING-LITERAL", 2, 2, false);
-        declareFunction(me, "nsort_variable_alist", "NSORT-VARIABLE-ALIST", 1, 0, false);
-        declareFunction(me, "rule_open_isa_literals", "RULE-OPEN-ISA-LITERALS", 1, 0, false);
-        declareFunction(me, "rule_open_genls_literals", "RULE-OPEN-GENLS-LITERALS", 1, 0, false);
-        declareFunction(me, "rule_suggested_antecedent_ontology_variable_constraints", "RULE-SUGGESTED-ANTECEDENT-ONTOLOGY-VARIABLE-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "generality_estimate_restriction_ratio", "GENERALITY-ESTIMATE-RESTRICTION-RATIO", 2, 0, false);
-        declareFunction(me, "rule_antecedent_ontology_variable_baseline_constraints", "RULE-ANTECEDENT-ONTOLOGY-VARIABLE-BASELINE-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "rule_antecedent_ontology_variable_potential_constraints", "RULE-ANTECEDENT-ONTOLOGY-VARIABLE-POTENTIAL-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "rule_antecedent_ontology_variables", "RULE-ANTECEDENT-ONTOLOGY-VARIABLES", 1, 0, false);
-        declareFunction(me, "rule_antecedent_ontology_literals", "RULE-ANTECEDENT-ONTOLOGY-LITERALS", 1, 0, false);
-        declareFunction(me, "rule_antecedent_dnf", "RULE-ANTECEDENT-DNF", 1, 0, false);
-        declareFunction(me, "rule_neg_lits", "RULE-NEG-LITS", 1, 0, false);
-        declareFunction(me, "rule_pos_lits", "RULE-POS-LITS", 1, 0, false);
+        declareFunction("some_suggested_pragma_sentences_for_ruleP", "SOME-SUGGESTED-PRAGMA-SENTENCES-FOR-RULE?", 1, 0, false);
+        declareFunction("rule_suggested_pragma_sentences", "RULE-SUGGESTED-PRAGMA-SENTENCES", 1, 1, false);
+        declareFunction("possibly_suggest_ontology_constraints_wrt_rule", "POSSIBLY-SUGGEST-ONTOLOGY-CONSTRAINTS-WRT-RULE", 2, 1, false);
+        declareFunction("possibly_suggest_forward_non_trigger_literals", "POSSIBLY-SUGGEST-FORWARD-NON-TRIGGER-LITERALS", 2, 1, false);
+        declareFunction("possibly_suggest_different_literals", "POSSIBLY-SUGGEST-DIFFERENT-LITERALS", 2, 1, false);
+        declareFunction("rule_pragmatic_dnf_for_strengthening_literals", "RULE-PRAGMATIC-DNF-FOR-STRENGTHENING-LITERALS", 1, 1, false);
+        declareFunction("rule_antecedent_variables_min_constraints_alist", "RULE-ANTECEDENT-VARIABLES-MIN-CONSTRAINTS-ALIST", 1, 1, false);
+        declareFunction("rule_antecedent_literal_variables_min_constraints_alist", "RULE-ANTECEDENT-LITERAL-VARIABLES-MIN-CONSTRAINTS-ALIST", 2, 1, false);
+        declareFunction("rule_pragmatic_pos_lits_for_strengthening_literal", "RULE-PRAGMATIC-POS-LITS-FOR-STRENGTHENING-LITERAL", 2, 2, false);
+        declareFunction("nsort_variable_alist", "NSORT-VARIABLE-ALIST", 1, 0, false);
+        declareFunction("rule_open_isa_literals", "RULE-OPEN-ISA-LITERALS", 1, 0, false);
+        declareFunction("rule_open_genls_literals", "RULE-OPEN-GENLS-LITERALS", 1, 0, false);
+        declareFunction("rule_suggested_antecedent_ontology_variable_constraints", "RULE-SUGGESTED-ANTECEDENT-ONTOLOGY-VARIABLE-CONSTRAINTS", 1, 0, false);
+        declareFunction("generality_estimate_restriction_ratio", "GENERALITY-ESTIMATE-RESTRICTION-RATIO", 2, 0, false);
+        declareFunction("rule_antecedent_ontology_variable_baseline_constraints", "RULE-ANTECEDENT-ONTOLOGY-VARIABLE-BASELINE-CONSTRAINTS", 1, 0, false);
+        declareFunction("rule_antecedent_ontology_variable_potential_constraints", "RULE-ANTECEDENT-ONTOLOGY-VARIABLE-POTENTIAL-CONSTRAINTS", 1, 0, false);
+        declareFunction("rule_antecedent_ontology_variables", "RULE-ANTECEDENT-ONTOLOGY-VARIABLES", 1, 0, false);
+        declareFunction("rule_antecedent_ontology_literals", "RULE-ANTECEDENT-ONTOLOGY-LITERALS", 1, 0, false);
+        declareFunction("rule_antecedent_dnf", "RULE-ANTECEDENT-DNF", 1, 0, false);
+        declareFunction("rule_neg_lits", "RULE-NEG-LITS", 1, 0, false);
+        declareFunction("rule_pos_lits", "RULE-POS-LITS", 1, 0, false);
         return NIL;
     }
 

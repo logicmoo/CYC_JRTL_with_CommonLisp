@@ -358,8 +358,7 @@ be useful but small enough to be manageable. */
   }
 
   public static final SubLObject setup_leviathan_file() {
-    // CVS_ID("Id: leviathan.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_globally_cached_function($sym33$CACHED_LOAD_ALL_HAYSTACKS);
+        memoization_state.note_globally_cached_function($sym33$CACHED_LOAD_ALL_HAYSTACKS);
     memoization_state.note_globally_cached_function($sym43$CACHED_LOAD_ALL_INSTANTIATED_HAYSTACKS);
     memoization_state.note_globally_cached_function($sym50$CACHED_LOAD_ALL_CRIPPLED_HAYSTACKS);
     subl_macro_promotions.declare_defglobal($sym147$_RULE_BINDINGS_WFF_TABLE_);

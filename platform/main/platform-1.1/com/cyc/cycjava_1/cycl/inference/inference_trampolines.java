@@ -1468,8 +1468,7 @@ we need to be conservative and only look for universally true backchain control 
   }
 
   public static final SubLObject setup_inference_trampolines_file() {
-    // CVS_ID("Id: inference-trampolines.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_memoized_function($sym1$INFERENCE_PARTIALLY_COMMUTATIVE_PREDICATE_P);
+        memoization_state.note_memoized_function($sym1$INFERENCE_PARTIALLY_COMMUTATIVE_PREDICATE_P);
     memoization_state.note_globally_cached_function($sym3$INDETERMINATE_TERM_P);
     memoization_state.note_memoized_function($sym7$MEMOIZED_INFERENCE_INDETERMINATE_TERM_);
     memoization_state.note_memoized_function($sym8$INFERENCE_ALL_GENL_PREDICATES);

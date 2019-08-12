@@ -1,8 +1,23 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.simple_queue_service;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -15,44 +30,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.simple_queue_service.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class simple_queue_service extends SubLTranslatedFile {
+public final class simple_queue_service extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new simple_queue_service();
 
-    public static final String myName = "com.cyc.cycjava.cycl.simple_queue_service";
+    public static final String myName = "com.cyc.cycjava_2.cycl.simple_queue_service";
 
-    public static final String myFingerPrint = "8a633f7fc1f744f97c3487a29ecd721fce19eee1662d42050efbbf3ec06cc557";
 
     // defparameter
     private static final SubLSymbol $local_sqs_relay_host$ = makeSymbol("*LOCAL-SQS-RELAY-HOST*");
@@ -204,7 +187,7 @@ public final class simple_queue_service extends SubLTranslatedFile {
 
     private static final SubLList $list61 = list(makeKeyword("SENTENCE"));
 
-    private static final SubLList $list62 = list(makeKeyword("ELMT"));
+    private static final SubLList $list62 = list($ELMT);
 
 
 
@@ -1933,84 +1916,84 @@ public final class simple_queue_service extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_simple_queue_service_file() {
-        declareFunction(me, "success_sqs_response_p", "SUCCESS-SQS-RESPONSE-P", 1, 0, false);
-        declareFunction(me, "sqs_response_p", "SQS-RESPONSE-P", 1, 0, false);
-        declareFunction(me, "sqs_response_status", "SQS-RESPONSE-STATUS", 1, 0, false);
-        declareFunction(me, "sqs_response_reply", "SQS-RESPONSE-REPLY", 1, 0, false);
-        declareFunction(me, "sqs_empty_message_p", "SQS-EMPTY-MESSAGE-P", 1, 0, false);
-        declareFunction(me, "process_sqs_error_response", "PROCESS-SQS-ERROR-RESPONSE", 1, 0, false);
-        declareFunction(me, "get_sqs_version", "GET-SQS-VERSION", 0, 0, false);
-        declareFunction(me, "is_sqs_availableP", "IS-SQS-AVAILABLE?", 0, 0, false);
-        declareFunction(me, "sqs_list_queues", "SQS-LIST-QUEUES", 0, 0, false);
-        declareFunction(me, "is_known_sqs_queueP", "IS-KNOWN-SQS-QUEUE?", 1, 0, false);
-        declareFunction(me, "sqs_create_queue", "SQS-CREATE-QUEUE", 1, 2, false);
-        declareFunction(me, "sqs_delete_queue", "SQS-DELETE-QUEUE", 1, 2, false);
-        declareFunction(me, "sqs_post_message", "SQS-POST-MESSAGE", 2, 0, false);
-        declareFunction(me, "sqs_post_message_pieces", "SQS-POST-MESSAGE-PIECES", 2, 0, false);
-        declareFunction(me, "sqs_get_message", "SQS-GET-MESSAGE", 1, 2, false);
-        declareFunction(me, "sqs_message_body_from_message", "SQS-MESSAGE-BODY-FROM-MESSAGE", 1, 1, false);
-        declareFunction(me, "sqs_get_message_content", "SQS-GET-MESSAGE-CONTENT", 1, 2, false);
-        declareFunction(me, "sqs_pending_message_estimate", "SQS-PENDING-MESSAGE-ESTIMATE", 1, 0, false);
-        declareFunction(me, "s3_put_file", "S3-PUT-FILE", 3, 0, false);
-        declareFunction(me, "s3_get_file_contents", "S3-GET-FILE-CONTENTS", 2, 0, false);
-        declareFunction(me, "s3_get_file", "S3-GET-FILE", 3, 0, false);
-        declareFunction(me, "communicate_with_local_sqs_relayer", "COMMUNICATE-WITH-LOCAL-SQS-RELAYER", 1, 0, false);
-        declareMacro(me, "with_sqs_message_to_string", "WITH-SQS-MESSAGE-TO-STRING");
-        declareFunction(me, "get_sqs_version_command", "GET-SQS-VERSION-COMMAND", 0, 0, false);
-        declareFunction(me, "get_sqs_create_queue_command", "GET-SQS-CREATE-QUEUE-COMMAND", 1, 2, false);
-        declareFunction(me, "get_sqs_delete_queue_command", "GET-SQS-DELETE-QUEUE-COMMAND", 1, 2, false);
-        declareFunction(me, "get_sqs_enqueue_command", "GET-SQS-ENQUEUE-COMMAND", 2, 0, false);
-        declareFunction(me, "clear_get_empty_sqs_enqueue_command_fragments", "CLEAR-GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS", 0, 0, false);
-        declareFunction(me, "remove_get_empty_sqs_enqueue_command_fragments", "REMOVE-GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS", 1, 0, false);
-        declareFunction(me, "get_empty_sqs_enqueue_command_fragments_internal", "GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS-INTERNAL", 1, 0, false);
-        declareFunction(me, "get_empty_sqs_enqueue_command_fragments", "GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS", 1, 0, false);
-        declareFunction(me, "get_sqs_dequeue_command", "GET-SQS-DEQUEUE-COMMAND", 1, 2, false);
-        declareFunction(me, "get_sqs_pending_message_estimate_command", "GET-SQS-PENDING-MESSAGE-ESTIMATE-COMMAND", 1, 0, false);
-        declareFunction(me, "get_sqs_list_queues_command", "GET-SQS-LIST-QUEUES-COMMAND", 0, 0, false);
-        declareFunction(me, "get_s3_putfile_command", "GET-S3-PUTFILE-COMMAND", 3, 0, false);
-        declareFunction(me, "get_s3_getfile_command", "GET-S3-GETFILE-COMMAND", 2, 0, false);
-        declareFunction(me, "get_sqs_queue_access_attribute_list", "GET-SQS-QUEUE-ACCESS-ATTRIBUTE-LIST", 1, 2, false);
-        declareFunction(me, "get_sqs_queue_attribute_list", "GET-SQS-QUEUE-ATTRIBUTE-LIST", 1, 0, false);
-        declareFunction(me, "get_sqs_time_out_info_attribute_list", "GET-SQS-TIME-OUT-INFO-ATTRIBUTE-LIST", 0, 2, false);
-        declareFunction(me, "get_s3_file_attribute_list", "GET-S3-FILE-ATTRIBUTE-LIST", 2, 0, false);
-        declareFunction(me, "new_sqs_iterator", "NEW-SQS-ITERATOR", 1, 2, false);
-        declareFunction(me, "make_sqs_iterator_state", "MAKE-SQS-ITERATOR-STATE", 3, 0, false);
-        declareFunction(me, "sqs_iterator_doneP", "SQS-ITERATOR-DONE?", 1, 0, false);
-        declareFunction(me, "sqs_iterator_next", "SQS-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "new_sqs_accumulator", "NEW-SQS-ACCUMULATOR", 1, 2, false);
-        declareFunction(me, "make_sqs_accumulator_state", "MAKE-SQS-ACCUMULATOR-STATE", 3, 0, false);
-        declareFunction(me, "sqs_accumulator_reset", "SQS-ACCUMULATOR-RESET", 1, 0, false);
-        declareFunction(me, "sqs_accumulator_add", "SQS-ACCUMULATOR-ADD", 2, 0, false);
-        declareFunction(me, "sqs_accumulator_get_posts", "SQS-ACCUMULATOR-GET-POSTS", 1, 0, false);
-        declareFunction(me, "sqs_accumulator_size", "SQS-ACCUMULATOR-SIZE", 1, 0, false);
-        declareFunction(me, "sqs_accumulator_contents", "SQS-ACCUMULATOR-CONTENTS", 1, 1, false);
-        declareFunction(me, "sqs_accumulator_it", "SQS-ACCUMULATOR-IT", 1, 0, false);
-        declareFunction(me, "accumulate_assertion_description", "ACCUMULATE-ASSERTION-DESCRIPTION", 3, 1, false);
-        declareFunction(me, "encapsulate_assertion_description", "ENCAPSULATE-ASSERTION-DESCRIPTION", 3, 0, false);
-        declareMacro(me, "unencapsulate_assertion_description", "UNENCAPSULATE-ASSERTION-DESCRIPTION");
-        declareFunction(me, "handle_assertion_descriptions", "HANDLE-ASSERTION-DESCRIPTIONS", 1, 1, false);
-        declareFunction(me, "handle_assertion_description", "HANDLE-ASSERTION-DESCRIPTION", 1, 1, false);
-        declareFunction(me, "new_externalizing_accumulator", "NEW-EXTERNALIZING-ACCUMULATOR", 1, 0, false);
-        declareFunction(me, "new_internalizing_iterator", "NEW-INTERNALIZING-ITERATOR", 1, 0, false);
-        declareFunction(me, "new_segment_accumulator", "NEW-SEGMENT-ACCUMULATOR", 1, 2, false);
-        declareFunction(me, "make_segment_accumulator_state", "MAKE-SEGMENT-ACCUMULATOR-STATE", 3, 0, false);
-        declareFunction(me, "sgmt_accumulator_size", "SGMT-ACCUMULATOR-SIZE", 1, 0, false);
-        declareFunction(me, "sgmt_accumulator_reset", "SGMT-ACCUMULATOR-RESET", 1, 0, false);
-        declareFunction(me, "sgmt_accumulator_add", "SGMT-ACCUMULATOR-ADD", 2, 0, false);
-        declareFunction(me, "sgmt_accumulator_add_internal", "SGMT-ACCUMULATOR-ADD-INTERNAL", 2, 1, false);
-        declareFunction(me, "sgmt_accumulator_contents", "SGMT-ACCUMULATOR-CONTENTS", 1, 1, false);
-        declareFunction(me, "sgmt_accumulator_it", "SGMT-ACCUMULATOR-IT", 1, 0, false);
-        declareFunction(me, "sgmt_accumulator_possibly_flush_encoding_stream", "SGMT-ACCUMULATOR-POSSIBLY-FLUSH-ENCODING-STREAM", 1, 0, false);
-        declareFunction(me, "sgmt_accumulator_flush_encoding_stream", "SGMT-ACCUMULATOR-FLUSH-ENCODING-STREAM", 2, 0, false);
-        declareFunction(me, "sgmt_accumulator_flush_encoding_stream_up_to", "SGMT-ACCUMULATOR-FLUSH-ENCODING-STREAM-UP-TO", 3, 0, false);
-        declareFunction(me, "new_sqs_segment_iterator", "NEW-SQS-SEGMENT-ITERATOR", 1, 0, false);
-        declareFunction(me, "make_sqs_segment_iterator_state", "MAKE-SQS-SEGMENT-ITERATOR-STATE", 1, 0, false);
-        declareFunction(me, "sqs_sgmnt_it_done", "SQS-SGMNT-IT-DONE", 1, 0, false);
-        declareFunction(me, "sqs_sgmnt_it_next", "SQS-SGMNT-IT-NEXT", 1, 0, false);
-        declareFunction(me, "new_iterator_from_segment_contents", "NEW-ITERATOR-FROM-SEGMENT-CONTENTS", 1, 0, false);
-        declareFunction(me, "monitor_all_sqs_queues", "MONITOR-ALL-SQS-QUEUES", 0, 1, false);
-        declareFunction(me, "drain_some_sqs_queues", "DRAIN-SOME-SQS-QUEUES", 0, 1, false);
-        declareMacro(me, "configure_sqs_queue_name", "CONFIGURE-SQS-QUEUE-NAME");
+        declareFunction("success_sqs_response_p", "SUCCESS-SQS-RESPONSE-P", 1, 0, false);
+        declareFunction("sqs_response_p", "SQS-RESPONSE-P", 1, 0, false);
+        declareFunction("sqs_response_status", "SQS-RESPONSE-STATUS", 1, 0, false);
+        declareFunction("sqs_response_reply", "SQS-RESPONSE-REPLY", 1, 0, false);
+        declareFunction("sqs_empty_message_p", "SQS-EMPTY-MESSAGE-P", 1, 0, false);
+        declareFunction("process_sqs_error_response", "PROCESS-SQS-ERROR-RESPONSE", 1, 0, false);
+        declareFunction("get_sqs_version", "GET-SQS-VERSION", 0, 0, false);
+        declareFunction("is_sqs_availableP", "IS-SQS-AVAILABLE?", 0, 0, false);
+        declareFunction("sqs_list_queues", "SQS-LIST-QUEUES", 0, 0, false);
+        declareFunction("is_known_sqs_queueP", "IS-KNOWN-SQS-QUEUE?", 1, 0, false);
+        declareFunction("sqs_create_queue", "SQS-CREATE-QUEUE", 1, 2, false);
+        declareFunction("sqs_delete_queue", "SQS-DELETE-QUEUE", 1, 2, false);
+        declareFunction("sqs_post_message", "SQS-POST-MESSAGE", 2, 0, false);
+        declareFunction("sqs_post_message_pieces", "SQS-POST-MESSAGE-PIECES", 2, 0, false);
+        declareFunction("sqs_get_message", "SQS-GET-MESSAGE", 1, 2, false);
+        declareFunction("sqs_message_body_from_message", "SQS-MESSAGE-BODY-FROM-MESSAGE", 1, 1, false);
+        declareFunction("sqs_get_message_content", "SQS-GET-MESSAGE-CONTENT", 1, 2, false);
+        declareFunction("sqs_pending_message_estimate", "SQS-PENDING-MESSAGE-ESTIMATE", 1, 0, false);
+        declareFunction("s3_put_file", "S3-PUT-FILE", 3, 0, false);
+        declareFunction("s3_get_file_contents", "S3-GET-FILE-CONTENTS", 2, 0, false);
+        declareFunction("s3_get_file", "S3-GET-FILE", 3, 0, false);
+        declareFunction("communicate_with_local_sqs_relayer", "COMMUNICATE-WITH-LOCAL-SQS-RELAYER", 1, 0, false);
+        declareMacro("with_sqs_message_to_string", "WITH-SQS-MESSAGE-TO-STRING");
+        declareFunction("get_sqs_version_command", "GET-SQS-VERSION-COMMAND", 0, 0, false);
+        declareFunction("get_sqs_create_queue_command", "GET-SQS-CREATE-QUEUE-COMMAND", 1, 2, false);
+        declareFunction("get_sqs_delete_queue_command", "GET-SQS-DELETE-QUEUE-COMMAND", 1, 2, false);
+        declareFunction("get_sqs_enqueue_command", "GET-SQS-ENQUEUE-COMMAND", 2, 0, false);
+        declareFunction("clear_get_empty_sqs_enqueue_command_fragments", "CLEAR-GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS", 0, 0, false);
+        declareFunction("remove_get_empty_sqs_enqueue_command_fragments", "REMOVE-GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS", 1, 0, false);
+        declareFunction("get_empty_sqs_enqueue_command_fragments_internal", "GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS-INTERNAL", 1, 0, false);
+        declareFunction("get_empty_sqs_enqueue_command_fragments", "GET-EMPTY-SQS-ENQUEUE-COMMAND-FRAGMENTS", 1, 0, false);
+        declareFunction("get_sqs_dequeue_command", "GET-SQS-DEQUEUE-COMMAND", 1, 2, false);
+        declareFunction("get_sqs_pending_message_estimate_command", "GET-SQS-PENDING-MESSAGE-ESTIMATE-COMMAND", 1, 0, false);
+        declareFunction("get_sqs_list_queues_command", "GET-SQS-LIST-QUEUES-COMMAND", 0, 0, false);
+        declareFunction("get_s3_putfile_command", "GET-S3-PUTFILE-COMMAND", 3, 0, false);
+        declareFunction("get_s3_getfile_command", "GET-S3-GETFILE-COMMAND", 2, 0, false);
+        declareFunction("get_sqs_queue_access_attribute_list", "GET-SQS-QUEUE-ACCESS-ATTRIBUTE-LIST", 1, 2, false);
+        declareFunction("get_sqs_queue_attribute_list", "GET-SQS-QUEUE-ATTRIBUTE-LIST", 1, 0, false);
+        declareFunction("get_sqs_time_out_info_attribute_list", "GET-SQS-TIME-OUT-INFO-ATTRIBUTE-LIST", 0, 2, false);
+        declareFunction("get_s3_file_attribute_list", "GET-S3-FILE-ATTRIBUTE-LIST", 2, 0, false);
+        declareFunction("new_sqs_iterator", "NEW-SQS-ITERATOR", 1, 2, false);
+        declareFunction("make_sqs_iterator_state", "MAKE-SQS-ITERATOR-STATE", 3, 0, false);
+        declareFunction("sqs_iterator_doneP", "SQS-ITERATOR-DONE?", 1, 0, false);
+        declareFunction("sqs_iterator_next", "SQS-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("new_sqs_accumulator", "NEW-SQS-ACCUMULATOR", 1, 2, false);
+        declareFunction("make_sqs_accumulator_state", "MAKE-SQS-ACCUMULATOR-STATE", 3, 0, false);
+        declareFunction("sqs_accumulator_reset", "SQS-ACCUMULATOR-RESET", 1, 0, false);
+        declareFunction("sqs_accumulator_add", "SQS-ACCUMULATOR-ADD", 2, 0, false);
+        declareFunction("sqs_accumulator_get_posts", "SQS-ACCUMULATOR-GET-POSTS", 1, 0, false);
+        declareFunction("sqs_accumulator_size", "SQS-ACCUMULATOR-SIZE", 1, 0, false);
+        declareFunction("sqs_accumulator_contents", "SQS-ACCUMULATOR-CONTENTS", 1, 1, false);
+        declareFunction("sqs_accumulator_it", "SQS-ACCUMULATOR-IT", 1, 0, false);
+        declareFunction("accumulate_assertion_description", "ACCUMULATE-ASSERTION-DESCRIPTION", 3, 1, false);
+        declareFunction("encapsulate_assertion_description", "ENCAPSULATE-ASSERTION-DESCRIPTION", 3, 0, false);
+        declareMacro("unencapsulate_assertion_description", "UNENCAPSULATE-ASSERTION-DESCRIPTION");
+        declareFunction("handle_assertion_descriptions", "HANDLE-ASSERTION-DESCRIPTIONS", 1, 1, false);
+        declareFunction("handle_assertion_description", "HANDLE-ASSERTION-DESCRIPTION", 1, 1, false);
+        declareFunction("new_externalizing_accumulator", "NEW-EXTERNALIZING-ACCUMULATOR", 1, 0, false);
+        declareFunction("new_internalizing_iterator", "NEW-INTERNALIZING-ITERATOR", 1, 0, false);
+        declareFunction("new_segment_accumulator", "NEW-SEGMENT-ACCUMULATOR", 1, 2, false);
+        declareFunction("make_segment_accumulator_state", "MAKE-SEGMENT-ACCUMULATOR-STATE", 3, 0, false);
+        declareFunction("sgmt_accumulator_size", "SGMT-ACCUMULATOR-SIZE", 1, 0, false);
+        declareFunction("sgmt_accumulator_reset", "SGMT-ACCUMULATOR-RESET", 1, 0, false);
+        declareFunction("sgmt_accumulator_add", "SGMT-ACCUMULATOR-ADD", 2, 0, false);
+        declareFunction("sgmt_accumulator_add_internal", "SGMT-ACCUMULATOR-ADD-INTERNAL", 2, 1, false);
+        declareFunction("sgmt_accumulator_contents", "SGMT-ACCUMULATOR-CONTENTS", 1, 1, false);
+        declareFunction("sgmt_accumulator_it", "SGMT-ACCUMULATOR-IT", 1, 0, false);
+        declareFunction("sgmt_accumulator_possibly_flush_encoding_stream", "SGMT-ACCUMULATOR-POSSIBLY-FLUSH-ENCODING-STREAM", 1, 0, false);
+        declareFunction("sgmt_accumulator_flush_encoding_stream", "SGMT-ACCUMULATOR-FLUSH-ENCODING-STREAM", 2, 0, false);
+        declareFunction("sgmt_accumulator_flush_encoding_stream_up_to", "SGMT-ACCUMULATOR-FLUSH-ENCODING-STREAM-UP-TO", 3, 0, false);
+        declareFunction("new_sqs_segment_iterator", "NEW-SQS-SEGMENT-ITERATOR", 1, 0, false);
+        declareFunction("make_sqs_segment_iterator_state", "MAKE-SQS-SEGMENT-ITERATOR-STATE", 1, 0, false);
+        declareFunction("sqs_sgmnt_it_done", "SQS-SGMNT-IT-DONE", 1, 0, false);
+        declareFunction("sqs_sgmnt_it_next", "SQS-SGMNT-IT-NEXT", 1, 0, false);
+        declareFunction("new_iterator_from_segment_contents", "NEW-ITERATOR-FROM-SEGMENT-CONTENTS", 1, 0, false);
+        declareFunction("monitor_all_sqs_queues", "MONITOR-ALL-SQS-QUEUES", 0, 1, false);
+        declareFunction("drain_some_sqs_queues", "DRAIN-SOME-SQS-QUEUES", 0, 1, false);
+        declareMacro("configure_sqs_queue_name", "CONFIGURE-SQS-QUEUE-NAME");
         return NIL;
     }
 

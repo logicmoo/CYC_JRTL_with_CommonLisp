@@ -753,8 +753,7 @@ public  final class cfasl_kb_methods extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cfasl_kb_methods_file() {
-    // CVS_ID("Id: cfasl-kb-methods.lisp 126640 2008-12-04 13:39:36Z builder ");
-    cfasl.register_cfasl_input_function($cfasl_opcode_constant$.getGlobalValue(), $sym4$CFASL_INPUT_CONSTANT);
+        cfasl.register_cfasl_input_function($cfasl_opcode_constant$.getGlobalValue(), $sym4$CFASL_INPUT_CONSTANT);
     cfasl.register_cfasl_input_function($cfasl_opcode_complete_constant$.getGlobalValue(), $sym6$CFASL_INPUT_COMPLETE_CONSTANT);
     Structures.register_method(cfasl.$cfasl_output_object_method_table$.getGlobalValue(), constant_handles.$dtp_constant$.getGlobalValue(), Symbols.symbol_function($sym7$CFASL_OUTPUT_OBJECT_CONSTANT_METHOD));
     subl_macro_promotions.declare_defglobal($sym8$_SAMPLE_INVALID_CONSTANT_);

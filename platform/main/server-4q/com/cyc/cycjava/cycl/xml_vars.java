@@ -1,7 +1,16 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.xml_vars;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -11,86 +20,94 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.xml_vars.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_ampersand;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quote;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class xml_vars extends SubLTranslatedFile {
+public final class xml_vars extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new xml_vars();
 
-    public static final String myName = "com.cyc.cycjava.cycl.xml_vars";
+ public static final String myName = "com.cyc.cycjava.cycl.xml_vars";
 
-    public static final String myFingerPrint = "5c4c9d5b45a7d51db7bdae896b700a0549269c925a01c6d241a047684b7326c5";
 
     // defparameter
+    // Definitions
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $xml_stream$ = makeSymbol("*XML-STREAM*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $xml_entity_table$ = makeSymbol("*XML-ENTITY-TABLE*");
 
     // deflexical
+    /**
+     * Cf. http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char
+     */
+    @LispMethod(comment = "Cf. http://www.w3.org/TR/2000/REC-xml-20001006#NT-Char\ndeflexical")
     public static final SubLSymbol $xml_valid_char_code_ranges$ = makeSymbol("*XML-VALID-CHAR-CODE-RANGES*");
 
     // deflexical
     /**
      * The five entities that can be used without declaring them in an XML document.
      */
+    @LispMethod(comment = "The five entities that can be used without declaring them in an XML document.\ndeflexical")
     public static final SubLSymbol $xml_predefined_entities$ = makeSymbol("*XML-PREDEFINED-ENTITIES*");
 
     // defparameter
     /**
      * SEQUENCEP of entity names (without & and ;) defined in the current document
      */
+    @LispMethod(comment = "SEQUENCEP of entity names (without & and ;) defined in the current document\ndefparameter")
     public static final SubLSymbol $xml_document_entity_names$ = makeSymbol("*XML-DOCUMENT-ENTITY-NAMES*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $xml_default_namespace$ = makeSymbol("*XML-DEFAULT-NAMESPACE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $formula_template_namespace$ = makeSymbol("*FORMULA-TEMPLATE-NAMESPACE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $formula_template_include_namespaceP$ = makeSymbol("*FORMULA-TEMPLATE-INCLUDE-NAMESPACE?*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cycl_query_namespace$ = makeSymbol("*CYCL-QUERY-NAMESPACE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $cycl_query_include_namespaceP$ = makeSymbol("*CYCL-QUERY-INCLUDE-NAMESPACE?*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cycml_namespace$ = makeSymbol("*CYCML-NAMESPACE*");
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(cons(CHAR_ampersand, makeString("amp")), cons(CHAR_less, makeString("lt")), cons(CHAR_greater, makeString("gt")), cons(CHAR_quotation, makeString("quot")), cons(CHAR_quote, makeString("apos")));
+
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $cycml_include_namespaceP$ = makeSymbol("*CYCML-INCLUDE-NAMESPACE?*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $proof_view_namespace$ = makeSymbol("*PROOF-VIEW-NAMESPACE*");
 
+    static private final SubLList $list_alt1 = list(list(NINE_INTEGER, NINE_INTEGER), list(TEN_INTEGER, TEN_INTEGER), list(THIRTEEN_INTEGER, THIRTEEN_INTEGER), list(makeInteger(32), makeInteger(32)), list(makeInteger(33), makeInteger(55295)), list(makeInteger(57344), makeInteger(65533)), list(makeInteger(65536), makeInteger(1114111)));
+
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $proof_view_include_namespaceP$ = makeSymbol("*PROOF-VIEW-INCLUDE-NAMESPACE?*");
 
     // Internal Constants
-    public static final SubLList $list0 = list(cons(CHAR_ampersand, makeString("amp")), cons(CHAR_less, makeString("lt")), cons(CHAR_greater, makeString("gt")), cons(CHAR_quotation, makeString("quot")), cons(CHAR_quote, makeString("apos")));
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(cons(CHAR_ampersand, makeString("amp")), cons(CHAR_less, makeString("lt")), cons(CHAR_greater, makeString("gt")), cons(CHAR_quotation, makeString("quot")), cons(CHAR_quote, makeString("apos")));
 
-    public static final SubLList $list1 = list(list(NINE_INTEGER, NINE_INTEGER), list(TEN_INTEGER, TEN_INTEGER), list(THIRTEEN_INTEGER, THIRTEEN_INTEGER), list(makeInteger(32), makeInteger(32)), list(makeInteger(33), makeInteger(55295)), list(makeInteger(57344), makeInteger(65533)), list(makeInteger(65536), makeInteger(1114111)));
+    static private final SubLList $list_alt2 = list(cons(makeString("quot"), makeInteger(34)), cons(makeString("amp"), makeInteger(38)), cons(makeString("apos"), makeInteger(39)), cons(makeString("lt"), makeInteger(60)), cons(makeString("gt"), makeInteger(62)));
 
-    public static final SubLList $list2 = list(cons(makeString("quot"), makeInteger(34)), cons(makeString("amp"), makeInteger(38)), cons(makeString("apos"), makeInteger(39)), cons(makeString("lt"), makeInteger(60)), cons(makeString("gt"), makeInteger(62)));
+    static private final SubLList $list1 = list(list(NINE_INTEGER, NINE_INTEGER), list(TEN_INTEGER, TEN_INTEGER), list(THIRTEEN_INTEGER, THIRTEEN_INTEGER), list(makeInteger(32), makeInteger(32)), list(makeInteger(33), makeInteger(55295)), list(makeInteger(57344), makeInteger(65533)), list(makeInteger(65536), makeInteger(1114111)));
+
+    static private final SubLList $list2 = list(cons(makeString("quot"), makeInteger(34)), cons(makeString("amp"), makeInteger(38)), cons(makeString("apos"), makeInteger(39)), cons(makeString("lt"), makeInteger(60)), cons(makeString("gt"), makeInteger(62)));
 
     private static final SubLString $str3$http___www_opencyc_org_xml_formul = makeString("http://www.opencyc.org/xml/formulaTemplate/");
 
@@ -121,10 +138,10 @@ public final class xml_vars extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_xml_vars_file() {
-        declareFunction(me, "formula_template_namespace", "FORMULA-TEMPLATE-NAMESPACE", 0, 0, false);
-        declareFunction(me, "cycl_query_namespace", "CYCL-QUERY-NAMESPACE", 0, 0, false);
-        declareFunction(me, "cycml_namespace", "CYCML-NAMESPACE", 0, 0, false);
-        declareFunction(me, "proof_view_namespace", "PROOF-VIEW-NAMESPACE", 0, 0, false);
+        declareFunction("formula_template_namespace", "FORMULA-TEMPLATE-NAMESPACE", 0, 0, false);
+        declareFunction("cycl_query_namespace", "CYCL-QUERY-NAMESPACE", 0, 0, false);
+        declareFunction("cycml_namespace", "CYCML-NAMESPACE", 0, 0, false);
+        declareFunction("proof_view_namespace", "PROOF-VIEW-NAMESPACE", 0, 0, false);
         return NIL;
     }
 
@@ -166,28 +183,6 @@ public final class xml_vars extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

@@ -139,8 +139,7 @@ public  final class kb_hl_support_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_hl_support_manager_file() {
-    // CVS_ID("Id: kb-hl-support-manager.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_KB_HL_SUPPORT_CONTENT_MANAGER_);
+        subl_macro_promotions.declare_defglobal($sym0$_KB_HL_SUPPORT_CONTENT_MANAGER_);
     subl_macro_promotions.declare_defglobal($sym5$_KB_HL_SUPPORT_CONTENTS_FROM_IDS_);
     access_macros.define_obsolete_register($sym6$POSSIBLY_INITIALIZE_KB_HL_SUPPORT_MANAGER_FROM_LEGACY_WORLD, NIL);
     return NIL;

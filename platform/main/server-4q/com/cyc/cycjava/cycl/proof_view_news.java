@@ -1,14 +1,31 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cfasl;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_analysis;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.proof_view_news;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -28,53 +45,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.proof_view_news.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class proof_view_news extends SubLTranslatedFile {
+public final class proof_view_news extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new proof_view_news();
 
-    public static final String myName = "com.cyc.cycjava.cycl.proof_view_news";
+    public static final String myName = "com.cyc.cycjava_2.cycl.proof_view_news";
 
-    public static final String myFingerPrint = "cf720921a547811791c4f6d1349c4a978bae957210ac2533e6361f1776c8e197";
 
     // defparameter
     public static final SubLSymbol $proof_view_story_label$ = makeSymbol("*PROOF-VIEW-STORY-LABEL*");
@@ -1413,55 +1389,55 @@ public final class proof_view_news extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_proof_view_news_file() {
-        declareFunction(me, "headline_for_proof_conclusion", "HEADLINE-FOR-PROOF-CONCLUSION", 1, 0, false);
-        declareFunction(me, "proof_view_add_story_section", "PROOF-VIEW-ADD-STORY-SECTION", 1, 0, false);
-        declareFunction(me, "proof_view_get_story_root_entry", "PROOF-VIEW-GET-STORY-ROOT-ENTRY", 1, 0, false);
-        declareFunction(me, "proof_view_build_story_section", "PROOF-VIEW-BUILD-STORY-SECTION", 1, 0, false);
-        declareFunction(me, "maybe_add_proof_view_headline", "MAYBE-ADD-PROOF-VIEW-HEADLINE", 1, 0, false);
-        declareFunction(me, "proof_view_headline_content", "PROOF-VIEW-HEADLINE-CONTENT", 1, 1, false);
-        declareFunction(me, "proof_view_headline_conjunct_score", "PROOF-VIEW-HEADLINE-CONJUNCT-SCORE", 1, 0, false);
-        declareFunction(me, "proof_view_sentence_meaninginess_internal", "PROOF-VIEW-SENTENCE-MEANINGINESS-INTERNAL", 1, 2, false);
-        declareFunction(me, "proof_view_sentence_meaninginess", "PROOF-VIEW-SENTENCE-MEANINGINESS", 1, 2, false);
-        declareFunction(me, "maybe_add_proof_view_subheadline", "MAYBE-ADD-PROOF-VIEW-SUBHEADLINE", 2, 0, false);
-        declareFunction(me, "proof_view_subheadline_content", "PROOF-VIEW-SUBHEADLINE-CONTENT", 3, 0, false);
-        declareFunction(me, "maybe_add_proof_view_lede", "MAYBE-ADD-PROOF-VIEW-LEDE", 1, 0, false);
-        declareFunction(me, "proof_view_lede_content", "PROOF-VIEW-LEDE-CONTENT", 2, 0, false);
-        declareFunction(me, "maybe_add_proof_view_story_significance", "MAYBE-ADD-PROOF-VIEW-STORY-SIGNIFICANCE", 1, 0, false);
-        declareFunction(me, "maybe_add_proof_view_story_actors_brief_background", "MAYBE-ADD-PROOF-VIEW-STORY-ACTORS-BRIEF-BACKGROUND", 2, 0, false);
-        declareFunction(me, "proof_view_maybe_enqueue_unincluded_fact", "PROOF-VIEW-MAYBE-ENQUEUE-UNINCLUDED-FACT", 3, 0, false);
-        declareFunction(me, "fact_okay_for_proof_view_actor_brief_backgroundP", "FACT-OKAY-FOR-PROOF-VIEW-ACTOR-BRIEF-BACKGROUND?", 1, 0, false);
-        declareFunction(me, "proof_view_get_seen_story_sentences", "PROOF-VIEW-GET-SEEN-STORY-SENTENCES", 1, 0, false);
-        declareFunction(me, "maybe_add_proof_view_story_details", "MAYBE-ADD-PROOF-VIEW-STORY-DETAILS", 1, 0, false);
-        declareFunction(me, "choose_next_proof_view_story_detail", "CHOOSE-NEXT-PROOF-VIEW-STORY-DETAIL", 2, 0, false);
-        declareFunction(me, "proof_view_story_detail_score", "PROOF-VIEW-STORY-DETAIL-SCORE", 1, 0, false);
-        declareFunction(me, "proof_view_story_detail_score_wrt_last_sentence_internal", "PROOF-VIEW-STORY-DETAIL-SCORE-WRT-LAST-SENTENCE-INTERNAL", 3, 0, false);
-        declareFunction(me, "proof_view_story_detail_score_wrt_last_sentence", "PROOF-VIEW-STORY-DETAIL-SCORE-WRT-LAST-SENTENCE", 3, 0, false);
-        declareFunction(me, "compute_proof_view_story_detail_score", "COMPUTE-PROOF-VIEW-STORY-DETAIL-SCORE", 3, 0, false);
-        declareFunction(me, "sort_proof_view_story_details", "SORT-PROOF-VIEW-STORY-DETAILS", 1, 0, false);
-        declareFunction(me, "proof_view_get_story_sentences_so_far", "PROOF-VIEW-GET-STORY-SENTENCES-SO-FAR", 1, 0, false);
-        declareFunction(me, "proof_view_add_story_sentence", "PROOF-VIEW-ADD-STORY-SENTENCE", 2, 0, false);
-        declareFunction(me, "proof_add_unincluded_story_facts_paragraph", "PROOF-ADD-UNINCLUDED-STORY-FACTS-PARAGRAPH", 2, 0, false);
-        declareFunction(me, "proof_view_add_story_paragraph", "PROOF-VIEW-ADD-STORY-PARAGRAPH", 2, 0, false);
-        declareFunction(me, "proof_view_story_fact_coheres_with_last_factP", "PROOF-VIEW-STORY-FACT-COHERES-WITH-LAST-FACT?", 2, 0, false);
-        declareFunction(me, "proof_view_story_fact_terms", "PROOF-VIEW-STORY-FACT-TERMS", 1, 0, false);
-        declareFunction(me, "proof_view_story_fact_requires_own_paragraphP", "PROOF-VIEW-STORY-FACT-REQUIRES-OWN-PARAGRAPH?", 1, 0, false);
-        declareFunction(me, "detailed_entry_gather_story_entries", "DETAILED-ENTRY-GATHER-STORY-ENTRIES", 1, 2, false);
-        declareFunction(me, "proof_view_story_include_detailed_entryP", "PROOF-VIEW-STORY-INCLUDE-DETAILED-ENTRY?", 1, 0, false);
-        declareFunction(me, "proof_view_story_include_detailed_entry_objectP", "PROOF-VIEW-STORY-INCLUDE-DETAILED-ENTRY-OBJECT?", 2, 0, false);
-        declareFunction(me, "show_proof_view_story_section", "SHOW-PROOF-VIEW-STORY-SECTION", 1, 1, false);
-        declareFunction(me, "html_output_proof_view_story_headline", "HTML-OUTPUT-PROOF-VIEW-STORY-HEADLINE", 2, 1, false);
-        declareFunction(me, "html_output_proof_view_story_subheadline", "HTML-OUTPUT-PROOF-VIEW-STORY-SUBHEADLINE", 2, 1, false);
-        declareFunction(me, "html_output_proof_view_story_paragraph", "HTML-OUTPUT-PROOF-VIEW-STORY-PARAGRAPH", 2, 1, false);
-        declareFunction(me, "launch_news_troller_daemon", "LAUNCH-NEWS-TROLLER-DAEMON", 0, 0, false);
-        declareFunction(me, "halt_news_troller_daemon", "HALT-NEWS-TROLLER-DAEMON", 0, 0, false);
-        declareFunction(me, "troll_for_news", "TROLL-FOR-NEWS", 0, 2, false);
-        declareFunction(me, "query_sentence_has_no_obvious_headlineP", "QUERY-SENTENCE-HAS-NO-OBVIOUS-HEADLINE?", 1, 0, false);
-        declareFunction(me, "news_troller_query_forbidden_termP", "NEWS-TROLLER-QUERY-FORBIDDEN-TERM?", 1, 0, false);
-        declareFunction(me, "filename_from_news_proof_view", "FILENAME-FROM-NEWS-PROOF-VIEW", 2, 0, false);
-        declareFunction(me, "invalid_file_name_char", "INVALID-FILE-NAME-CHAR", 1, 0, false);
-        declareFunction(me, "construct_news_story_proof_view", "CONSTRUCT-NEWS-STORY-PROOF-VIEW", 2, 2, false);
-        declareFunction(me, "output_proof_view_news_story", "OUTPUT-PROOF-VIEW-NEWS-STORY", 1, 0, false);
-        declareFunction(me, "maybe_output_news_story", "MAYBE-OUTPUT-NEWS-STORY", 1, 0, false);
+        declareFunction("headline_for_proof_conclusion", "HEADLINE-FOR-PROOF-CONCLUSION", 1, 0, false);
+        declareFunction("proof_view_add_story_section", "PROOF-VIEW-ADD-STORY-SECTION", 1, 0, false);
+        declareFunction("proof_view_get_story_root_entry", "PROOF-VIEW-GET-STORY-ROOT-ENTRY", 1, 0, false);
+        declareFunction("proof_view_build_story_section", "PROOF-VIEW-BUILD-STORY-SECTION", 1, 0, false);
+        declareFunction("maybe_add_proof_view_headline", "MAYBE-ADD-PROOF-VIEW-HEADLINE", 1, 0, false);
+        declareFunction("proof_view_headline_content", "PROOF-VIEW-HEADLINE-CONTENT", 1, 1, false);
+        declareFunction("proof_view_headline_conjunct_score", "PROOF-VIEW-HEADLINE-CONJUNCT-SCORE", 1, 0, false);
+        declareFunction("proof_view_sentence_meaninginess_internal", "PROOF-VIEW-SENTENCE-MEANINGINESS-INTERNAL", 1, 2, false);
+        declareFunction("proof_view_sentence_meaninginess", "PROOF-VIEW-SENTENCE-MEANINGINESS", 1, 2, false);
+        declareFunction("maybe_add_proof_view_subheadline", "MAYBE-ADD-PROOF-VIEW-SUBHEADLINE", 2, 0, false);
+        declareFunction("proof_view_subheadline_content", "PROOF-VIEW-SUBHEADLINE-CONTENT", 3, 0, false);
+        declareFunction("maybe_add_proof_view_lede", "MAYBE-ADD-PROOF-VIEW-LEDE", 1, 0, false);
+        declareFunction("proof_view_lede_content", "PROOF-VIEW-LEDE-CONTENT", 2, 0, false);
+        declareFunction("maybe_add_proof_view_story_significance", "MAYBE-ADD-PROOF-VIEW-STORY-SIGNIFICANCE", 1, 0, false);
+        declareFunction("maybe_add_proof_view_story_actors_brief_background", "MAYBE-ADD-PROOF-VIEW-STORY-ACTORS-BRIEF-BACKGROUND", 2, 0, false);
+        declareFunction("proof_view_maybe_enqueue_unincluded_fact", "PROOF-VIEW-MAYBE-ENQUEUE-UNINCLUDED-FACT", 3, 0, false);
+        declareFunction("fact_okay_for_proof_view_actor_brief_backgroundP", "FACT-OKAY-FOR-PROOF-VIEW-ACTOR-BRIEF-BACKGROUND?", 1, 0, false);
+        declareFunction("proof_view_get_seen_story_sentences", "PROOF-VIEW-GET-SEEN-STORY-SENTENCES", 1, 0, false);
+        declareFunction("maybe_add_proof_view_story_details", "MAYBE-ADD-PROOF-VIEW-STORY-DETAILS", 1, 0, false);
+        declareFunction("choose_next_proof_view_story_detail", "CHOOSE-NEXT-PROOF-VIEW-STORY-DETAIL", 2, 0, false);
+        declareFunction("proof_view_story_detail_score", "PROOF-VIEW-STORY-DETAIL-SCORE", 1, 0, false);
+        declareFunction("proof_view_story_detail_score_wrt_last_sentence_internal", "PROOF-VIEW-STORY-DETAIL-SCORE-WRT-LAST-SENTENCE-INTERNAL", 3, 0, false);
+        declareFunction("proof_view_story_detail_score_wrt_last_sentence", "PROOF-VIEW-STORY-DETAIL-SCORE-WRT-LAST-SENTENCE", 3, 0, false);
+        declareFunction("compute_proof_view_story_detail_score", "COMPUTE-PROOF-VIEW-STORY-DETAIL-SCORE", 3, 0, false);
+        declareFunction("sort_proof_view_story_details", "SORT-PROOF-VIEW-STORY-DETAILS", 1, 0, false);
+        declareFunction("proof_view_get_story_sentences_so_far", "PROOF-VIEW-GET-STORY-SENTENCES-SO-FAR", 1, 0, false);
+        declareFunction("proof_view_add_story_sentence", "PROOF-VIEW-ADD-STORY-SENTENCE", 2, 0, false);
+        declareFunction("proof_add_unincluded_story_facts_paragraph", "PROOF-ADD-UNINCLUDED-STORY-FACTS-PARAGRAPH", 2, 0, false);
+        declareFunction("proof_view_add_story_paragraph", "PROOF-VIEW-ADD-STORY-PARAGRAPH", 2, 0, false);
+        declareFunction("proof_view_story_fact_coheres_with_last_factP", "PROOF-VIEW-STORY-FACT-COHERES-WITH-LAST-FACT?", 2, 0, false);
+        declareFunction("proof_view_story_fact_terms", "PROOF-VIEW-STORY-FACT-TERMS", 1, 0, false);
+        declareFunction("proof_view_story_fact_requires_own_paragraphP", "PROOF-VIEW-STORY-FACT-REQUIRES-OWN-PARAGRAPH?", 1, 0, false);
+        declareFunction("detailed_entry_gather_story_entries", "DETAILED-ENTRY-GATHER-STORY-ENTRIES", 1, 2, false);
+        declareFunction("proof_view_story_include_detailed_entryP", "PROOF-VIEW-STORY-INCLUDE-DETAILED-ENTRY?", 1, 0, false);
+        declareFunction("proof_view_story_include_detailed_entry_objectP", "PROOF-VIEW-STORY-INCLUDE-DETAILED-ENTRY-OBJECT?", 2, 0, false);
+        declareFunction("show_proof_view_story_section", "SHOW-PROOF-VIEW-STORY-SECTION", 1, 1, false);
+        declareFunction("html_output_proof_view_story_headline", "HTML-OUTPUT-PROOF-VIEW-STORY-HEADLINE", 2, 1, false);
+        declareFunction("html_output_proof_view_story_subheadline", "HTML-OUTPUT-PROOF-VIEW-STORY-SUBHEADLINE", 2, 1, false);
+        declareFunction("html_output_proof_view_story_paragraph", "HTML-OUTPUT-PROOF-VIEW-STORY-PARAGRAPH", 2, 1, false);
+        declareFunction("launch_news_troller_daemon", "LAUNCH-NEWS-TROLLER-DAEMON", 0, 0, false);
+        declareFunction("halt_news_troller_daemon", "HALT-NEWS-TROLLER-DAEMON", 0, 0, false);
+        declareFunction("troll_for_news", "TROLL-FOR-NEWS", 0, 2, false);
+        declareFunction("query_sentence_has_no_obvious_headlineP", "QUERY-SENTENCE-HAS-NO-OBVIOUS-HEADLINE?", 1, 0, false);
+        declareFunction("news_troller_query_forbidden_termP", "NEWS-TROLLER-QUERY-FORBIDDEN-TERM?", 1, 0, false);
+        declareFunction("filename_from_news_proof_view", "FILENAME-FROM-NEWS-PROOF-VIEW", 2, 0, false);
+        declareFunction("invalid_file_name_char", "INVALID-FILE-NAME-CHAR", 1, 0, false);
+        declareFunction("construct_news_story_proof_view", "CONSTRUCT-NEWS-STORY-PROOF-VIEW", 2, 2, false);
+        declareFunction("output_proof_view_news_story", "OUTPUT-PROOF-VIEW-NEWS-STORY", 1, 0, false);
+        declareFunction("maybe_output_news_story", "MAYBE-OUTPUT-NEWS-STORY", 1, 0, false);
         return NIL;
     }
 

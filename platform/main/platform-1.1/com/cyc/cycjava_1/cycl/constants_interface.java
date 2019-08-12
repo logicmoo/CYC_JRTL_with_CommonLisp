@@ -261,8 +261,7 @@ public  final class constants_interface extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_constants_interface_file() {
-    // CVS_ID("Id: constants-interface.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym2$KB_CREATE_CONSTANT, $list4, $str5$Return_a_new_constant_named_NAME_, $list6, $list7);
+        utilities_macros.register_cyc_api_function($sym2$KB_CREATE_CONSTANT, $list4, $str5$Return_a_new_constant_named_NAME_, $list6, $list7);
     utilities_macros.register_cyc_api_function($sym10$KB_REMOVE_CONSTANT, $list12, $str13$Remove_CONSTANT_from_the_KB_, $list14, $list15);
     utilities_macros.register_cyc_api_function($sym17$KB_LOOKUP_CONSTANT_BY_NAME, $list18, $str19$Return_the_constant_named_NAME__i, $list20, $list21);
     utilities_macros.register_cyc_api_function($sym22$KB_CONSTANT_NAME, $list12, $str23$Return_the_name_for_CONSTANT_, $list14, $list24);

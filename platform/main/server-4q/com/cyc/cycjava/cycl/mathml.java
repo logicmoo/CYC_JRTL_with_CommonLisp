@@ -1,57 +1,19 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.mathml;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.cb_utilities.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
 import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.mathml.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_period;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
@@ -62,15 +24,25 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class mathml extends SubLTranslatedFile {
+public final class mathml extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new mathml();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mathml";
+    public static final String myName = "com.cyc.cycjava_2.cycl.mathml";
 
-    public static final String myFingerPrint = "1abbbb5ccd16a45db8574d36464824fb4dc1e23657eb4469e8dffe84a6723332";
 
     // deflexical
     public static final SubLSymbol $mathml_namespace$ = makeSymbol("*MATHML-NAMESPACE*");
@@ -100,7 +72,7 @@ public final class mathml extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list2 = list(makeString("math"), list(makeSymbol("QUOTE"), list(makeString("overflow"), makeString("linebreak"))), NIL, NIL, NIL, makeSymbol("*MATHML-NAMESPACE*"));
+    private static final SubLList $list2 = list(makeString("math"), list(QUOTE, list(makeString("overflow"), makeString("linebreak"))), NIL, NIL, NIL, makeSymbol("*MATHML-NAMESPACE*"));
 
     private static final SubLSymbol XML_ELEMENT = makeSymbol("XML-ELEMENT");
 
@@ -3074,35 +3046,35 @@ public final class mathml extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_mathml_file() {
-        declareMacro(me, "serializing_mathml", "SERIALIZING-MATHML");
-        declareMacro(me, "mathml_row", "MATHML-ROW");
-        declareMacro(me, "with_stacked_math", "WITH-STACKED-MATH");
-        declareFunction(me, "serialize_mathml", "SERIALIZE-MATHML", 1, 0, false);
-        declareFunction(me, "lookup_mathml_atom", "LOOKUP-MATHML-ATOM", 1, 0, false);
-        declareFunction(me, "serialize_mathml_atom", "SERIALIZE-MATHML-ATOM", 1, 0, false);
-        declareFunction(me, "clear_html_glyph_code_for_denot", "CLEAR-HTML-GLYPH-CODE-FOR-DENOT", 0, 0, false);
-        declareFunction(me, "remove_html_glyph_code_for_denot", "REMOVE-HTML-GLYPH-CODE-FOR-DENOT", 1, 0, false);
-        declareFunction(me, "html_glyph_code_for_denot_internal", "HTML-GLYPH-CODE-FOR-DENOT-INTERNAL", 1, 0, false);
-        declareFunction(me, "html_glyph_code_for_denot", "HTML-GLYPH-CODE-FOR-DENOT", 1, 0, false);
-        declareFunction(me, "clear_serializable_units_of_measure_mathml", "CLEAR-SERIALIZABLE-UNITS-OF-MEASURE-MATHML", 0, 0, false);
-        declareFunction(me, "remove_serializable_units_of_measure_mathml", "REMOVE-SERIALIZABLE-UNITS-OF-MEASURE-MATHML", 0, 0, false);
-        declareFunction(me, "serializable_units_of_measure_mathml_internal", "SERIALIZABLE-UNITS-OF-MEASURE-MATHML-INTERNAL", 0, 0, false);
-        declareFunction(me, "serializable_units_of_measure_mathml", "SERIALIZABLE-UNITS-OF-MEASURE-MATHML", 0, 0, false);
-        declareFunction(me, "serialize_mathml_int", "SERIALIZE-MATHML-INT", 1, 0, false);
-        declareFunction(me, "math_expr_digit_count", "MATH-EXPR-DIGIT-COUNT", 1, 0, false);
-        declareFunction(me, "serialize_mathml_decimal", "SERIALIZE-MATHML-DECIMAL", 1, 0, false);
-        declareFunction(me, "serialize_mathml_repeating_decimal", "SERIALIZE-MATHML-REPEATING-DECIMAL", 3, 0, false);
-        declareFunction(me, "serialize_mathml_non_repeating_decimal", "SERIALIZE-MATHML-NON-REPEATING-DECIMAL", 2, 0, false);
-        declareFunction(me, "serialize_mathml_quantity", "SERIALIZE-MATHML-QUANTITY", 1, 0, false);
-        declareFunction(me, "serialize_mathml_simple_fraction", "SERIALIZE-MATHML-SIMPLE-FRACTION", 2, 0, false);
-        declareFunction(me, "serialize_mathml_simple_stacked_math_expression", "SERIALIZE-MATHML-SIMPLE-STACKED-MATH-EXPRESSION", 1, 0, false);
-        declareFunction(me, "padded_expression_p", "PADDED-EXPRESSION-P", 1, 0, false);
-        declareFunction(me, "serialize_mathml_carries", "SERIALIZE-MATHML-CARRIES", 1, 0, false);
-        declareFunction(me, "max_carry_index", "MAX-CARRY-INDEX", 1, 0, false);
-        declareFunction(me, "serialize_mathml_strikethrough", "SERIALIZE-MATHML-STRIKETHROUGH", 1, 0, false);
-        declareFunction(me, "serialize_mathml_long_division", "SERIALIZE-MATHML-LONG-DIVISION", 1, 0, false);
-        declareFunction(me, "mathml_demo", "MATHML-DEMO", 0, 0, false);
-        declareFunction(me, "serialize_mathml_to_string", "SERIALIZE-MATHML-TO-STRING", 1, 0, false);
+        declareMacro("serializing_mathml", "SERIALIZING-MATHML");
+        declareMacro("mathml_row", "MATHML-ROW");
+        declareMacro("with_stacked_math", "WITH-STACKED-MATH");
+        declareFunction("serialize_mathml", "SERIALIZE-MATHML", 1, 0, false);
+        declareFunction("lookup_mathml_atom", "LOOKUP-MATHML-ATOM", 1, 0, false);
+        declareFunction("serialize_mathml_atom", "SERIALIZE-MATHML-ATOM", 1, 0, false);
+        declareFunction("clear_html_glyph_code_for_denot", "CLEAR-HTML-GLYPH-CODE-FOR-DENOT", 0, 0, false);
+        declareFunction("remove_html_glyph_code_for_denot", "REMOVE-HTML-GLYPH-CODE-FOR-DENOT", 1, 0, false);
+        declareFunction("html_glyph_code_for_denot_internal", "HTML-GLYPH-CODE-FOR-DENOT-INTERNAL", 1, 0, false);
+        declareFunction("html_glyph_code_for_denot", "HTML-GLYPH-CODE-FOR-DENOT", 1, 0, false);
+        declareFunction("clear_serializable_units_of_measure_mathml", "CLEAR-SERIALIZABLE-UNITS-OF-MEASURE-MATHML", 0, 0, false);
+        declareFunction("remove_serializable_units_of_measure_mathml", "REMOVE-SERIALIZABLE-UNITS-OF-MEASURE-MATHML", 0, 0, false);
+        declareFunction("serializable_units_of_measure_mathml_internal", "SERIALIZABLE-UNITS-OF-MEASURE-MATHML-INTERNAL", 0, 0, false);
+        declareFunction("serializable_units_of_measure_mathml", "SERIALIZABLE-UNITS-OF-MEASURE-MATHML", 0, 0, false);
+        declareFunction("serialize_mathml_int", "SERIALIZE-MATHML-INT", 1, 0, false);
+        declareFunction("math_expr_digit_count", "MATH-EXPR-DIGIT-COUNT", 1, 0, false);
+        declareFunction("serialize_mathml_decimal", "SERIALIZE-MATHML-DECIMAL", 1, 0, false);
+        declareFunction("serialize_mathml_repeating_decimal", "SERIALIZE-MATHML-REPEATING-DECIMAL", 3, 0, false);
+        declareFunction("serialize_mathml_non_repeating_decimal", "SERIALIZE-MATHML-NON-REPEATING-DECIMAL", 2, 0, false);
+        declareFunction("serialize_mathml_quantity", "SERIALIZE-MATHML-QUANTITY", 1, 0, false);
+        declareFunction("serialize_mathml_simple_fraction", "SERIALIZE-MATHML-SIMPLE-FRACTION", 2, 0, false);
+        declareFunction("serialize_mathml_simple_stacked_math_expression", "SERIALIZE-MATHML-SIMPLE-STACKED-MATH-EXPRESSION", 1, 0, false);
+        declareFunction("padded_expression_p", "PADDED-EXPRESSION-P", 1, 0, false);
+        declareFunction("serialize_mathml_carries", "SERIALIZE-MATHML-CARRIES", 1, 0, false);
+        declareFunction("max_carry_index", "MAX-CARRY-INDEX", 1, 0, false);
+        declareFunction("serialize_mathml_strikethrough", "SERIALIZE-MATHML-STRIKETHROUGH", 1, 0, false);
+        declareFunction("serialize_mathml_long_division", "SERIALIZE-MATHML-LONG-DIVISION", 1, 0, false);
+        declareFunction("mathml_demo", "MATHML-DEMO", 0, 0, false);
+        declareFunction("serialize_mathml_to_string", "SERIALIZE-MATHML-TO-STRING", 1, 0, false);
         return NIL;
     }
 

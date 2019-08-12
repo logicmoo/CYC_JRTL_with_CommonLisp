@@ -925,8 +925,7 @@ public  final class kb_object_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_object_manager_file() {
-    // CVS_ID("Id: kb-object-manager.lisp 128689 2009-09-02 19:44:42Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_kb_object_manager$.getGlobalValue(), Symbols.symbol_function($sym10$KB_OBJECT_MANAGER_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_kb_object_manager$.getGlobalValue(), Symbols.symbol_function($sym10$KB_OBJECT_MANAGER_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym11$KBOM_NAME, $sym12$_CSETF_KBOM_NAME);
     Structures.def_csetf($sym13$KBOM_CONTENT_LOCK, $sym14$_CSETF_KBOM_CONTENT_LOCK);
     Structures.def_csetf($sym15$KBOM_LRU_SIZE_PERCENTAGE, $sym16$_CSETF_KBOM_LRU_SIZE_PERCENTAGE);

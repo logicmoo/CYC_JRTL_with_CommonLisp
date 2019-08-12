@@ -198,8 +198,7 @@ public  final class deductions_high extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_deductions_high_file() {
-    // CVS_ID("Id: deductions-high.lisp 127912 2009-06-02 17:55:55Z pace ");
-    utilities_macros.register_cyc_api_function($sym12$DEDUCTION_ASSERTION, $list13, $str14$Return_the_support_for_which_DEDU, $list15, $list16);
+        utilities_macros.register_cyc_api_function($sym12$DEDUCTION_ASSERTION, $list13, $str14$Return_the_support_for_which_DEDU, $list15, $list16);
     utilities_macros.register_cyc_api_function($sym18$DEDUCTION_TRUTH, $list13, $str19$Return_the_truth_of_DEDUCTION____, $list15, $list20);
     utilities_macros.register_cyc_api_function($sym21$DEDUCTION_STRENGTH, $list13, $str22$Return_the_current_argumentation_, $list15, $list23);
     return NIL;

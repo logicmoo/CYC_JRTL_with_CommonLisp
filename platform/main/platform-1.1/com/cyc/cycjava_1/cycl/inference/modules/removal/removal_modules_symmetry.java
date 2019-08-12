@@ -545,8 +545,7 @@ public  final class removal_modules_symmetry extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_symmetry_file() {
-    // CVS_ID("Id: removal-modules-symmetry.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.define_obsolete_register($sym0$SYMMETRIC_LITERAL, $list1);
+        access_macros.define_obsolete_register($sym0$SYMMETRIC_LITERAL, $list1);
     inference_modules.inference_removal_module($kw34$REMOVAL_SYMMETRIC_LOOKUP_POS, $list35);
     inference_modules.inference_removal_module($kw36$REMOVAL_SYMMETRIC_LOOKUP_NEG, $list37);
     inference_modules.inference_removal_module($kw39$REMOVAL_COMMUTATIVE_LOOKUP_POS, $list40);

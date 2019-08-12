@@ -1,44 +1,12 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.backward_utilities;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.clause_utilities;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.relation_evaluation;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
@@ -48,32 +16,47 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_evaluate extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      REMOVAL-MODULES-EVALUATE
+ * source file: /cyc/top/cycl/inference/modules/removal/removal-modules-evaluate.lisp
+ * created:     2019/07/03 17:37:45
+ */
+public final class removal_modules_evaluate extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_evaluate();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate";
 
-    public static final String myFingerPrint = "e55ba8005ac332b4b4026fee30507b5dfa05435156c6a03af4574f3d388749e7";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_evaluate_bind_cost$ = makeSymbol("*DEFAULT-EVALUATE-BIND-COST*");
-
-    private static final SubLObject $$evaluate = reader_make_constant_shell(makeString("evaluate"));
-
-
 
 
 
     private static final SubLSymbol $REMOVAL_EVALUATE_BIND = makeKeyword("REMOVAL-EVALUATE-BIND");
 
-    public static final SubLList $list4 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("evaluate")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("evaluate")), makeKeyword("ANYTHING"), list(makeKeyword("AND"), makeKeyword("FULLY-BOUND"), list(makeKeyword("TEST"), makeSymbol("EVALUATABLE-EXPRESSION?")))), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-EVALUATE-BIND-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-EVALUATE-BIND-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$evaluate <whatever> (<evaluatable function . <fully bound>))\n using the #$evaluationDefn for the function"), makeKeyword("EXAMPLE"), makeString("(#$evaluate ?SUM (#$PlusFn 1 2))\n (#$evaluate 3 (#$PlusFn 1 2))") });
+    static private final SubLList $list4 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("evaluate"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("evaluate"), makeKeyword("ANYTHING"), list(makeKeyword("AND"), makeKeyword("FULLY-BOUND"), list($TEST, makeSymbol("EVALUATABLE-EXPRESSION?")))), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-EVALUATE-BIND-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-EVALUATE-BIND-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$evaluate <whatever> (<evaluatable function . <fully bound>))\n using the #$evaluationDefn for the function"), makeKeyword("EXAMPLE"), makeString("(#$evaluate ?SUM (#$PlusFn 1 2))\n (#$evaluate 3 (#$PlusFn 1 2))") });
 
     private static final SubLSymbol $REMOVAL_EVALUATE_NEG_CHECK = makeKeyword("REMOVAL-EVALUATE-NEG-CHECK");
 
-    public static final SubLList $list6 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("evaluate")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("evaluate")), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), makeKeyword("FULLY-BOUND"), list(makeKeyword("TEST"), makeSymbol("EVALUATABLE-EXPRESSION?")))), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-EVALUATE-BIND-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-EVALUATE-NEG-CHECK-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$evaluate <fully bound> (<evaluatable function . <fully bound>)))\nusing the #$evaluationDefn for the function"), makeKeyword("EXAMPLE"), makeString("(#$not (#$evaluate 4 (#$PlusFn 1 2)))") });
+    static private final SubLList $list6 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("evaluate"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("evaluate"), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), makeKeyword("FULLY-BOUND"), list($TEST, makeSymbol("EVALUATABLE-EXPRESSION?")))), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-EVALUATE-BIND-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-EVALUATE-NEG-CHECK-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$evaluate <fully bound> (<evaluatable function . <fully bound>)))\nusing the #$evaluationDefn for the function"), makeKeyword("EXAMPLE"), makeString("(#$not (#$evaluate 4 (#$PlusFn 1 2)))") });
 
     private static final SubLSymbol $REMOVAL_EVALUATE_BIND_CONJUNCTION = makeKeyword("REMOVAL-EVALUATE-BIND-CONJUNCTION");
 
@@ -93,8 +76,51 @@ public final class removal_modules_evaluate extends SubLTranslatedFile {
 
     private static final SubLSymbol REMOVAL_EVALUATE_BIND_CONJUNCTION_EXPAND = makeSymbol("REMOVAL-EVALUATE-BIND-CONJUNCTION-EXPAND");
 
+    // Definitions
+    public static final SubLObject make_evaluate_sentence_alt(SubLObject result, SubLObject expression) {
+        return make_binary_formula($$evaluate, result, expression);
+    }
+
+    // Definitions
     public static SubLObject make_evaluate_sentence(final SubLObject result, final SubLObject expression) {
         return make_binary_formula($$evaluate, result, expression);
+    }
+
+    public static final SubLObject removal_evaluate_bind_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject expression = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+                thread.resetMultipleValues();
+                {
+                    SubLObject v_answer = relation_evaluation.cyc_evaluate(expression);
+                    SubLObject validP = thread.secondMultipleValue();
+                    SubLObject contextualizedP = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL != validP) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject v_bindings = unification_utilities.term_unify(arg1, v_answer, T, T);
+                            SubLObject unify_justification = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            if (NIL != v_bindings) {
+                                {
+                                    SubLObject subst_arg1 = bindings.apply_bindings(v_bindings, arg1);
+                                    SubLObject sentence = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_evaluate.make_evaluate_sentence(subst_arg1, expression);
+                                    SubLObject support = removal_modules_evaluation.make_eval_support(sentence, contextualizedP);
+                                    backward.removal_add_node(support, v_bindings, unify_justification);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject removal_evaluate_bind_expand(final SubLObject asent, SubLObject sense) {
@@ -124,6 +150,48 @@ public final class removal_modules_evaluate extends SubLTranslatedFile {
         return NIL;
     }
 
+    private static final SubLSymbol $EVALUATE_DELAY_UNTIL_ARG2_CLOSED = makeKeyword("EVALUATE-DELAY-UNTIL-ARG2-CLOSED");
+
+    static private final SubLList $list_alt2 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("evaluate"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("evaluate"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
+
+    static private final SubLList $list_alt4 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("evaluate"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("evaluate"), makeKeyword("ANYTHING"), list(makeKeyword("AND"), makeKeyword("FULLY-BOUND"), list($TEST, makeSymbol("EVALUATABLE-EXPRESSION?")))), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-EVALUATE-BIND-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-EVALUATE-BIND-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$evaluate <whatever> (<evaluatable function . <fully bound>))\n using the #$evaluationDefn for the function"), makeKeyword("EXAMPLE"), makeString("(#$evaluate ?SUM (#$PlusFn 1 2))\n (#$evaluate 3 (#$PlusFn 1 2))") });
+
+    public static final SubLObject removal_evaluate_neg_check_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg1 = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+                SubLObject expression = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+                thread.resetMultipleValues();
+                {
+                    SubLObject v_answer = relation_evaluation.cyc_evaluate(expression);
+                    SubLObject validP = thread.secondMultipleValue();
+                    SubLObject contextualizedP = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL != validP) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject v_bindings = unification_utilities.term_unify(arg1, v_answer, UNPROVIDED, UNPROVIDED);
+                            SubLObject unify_justification = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            if (NIL == v_bindings) {
+                                {
+                                    SubLObject sentence = cycl_utilities.negate(asent);
+                                    SubLObject support = removal_modules_evaluation.make_eval_support(sentence, contextualizedP);
+                                    backward.removal_add_node(support, UNPROVIDED, UNPROVIDED);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject removal_evaluate_neg_check_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -149,6 +217,8 @@ public final class removal_modules_evaluate extends SubLTranslatedFile {
         }
         return NIL;
     }
+
+    static private final SubLList $list_alt6 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("evaluate"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("evaluate"), makeKeyword("FULLY-BOUND"), list(makeKeyword("AND"), makeKeyword("FULLY-BOUND"), list($TEST, makeSymbol("EVALUATABLE-EXPRESSION?")))), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-EVALUATE-BIND-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-EVALUATE-NEG-CHECK-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$evaluate <fully bound> (<evaluatable function . <fully bound>)))\nusing the #$evaluationDefn for the function"), makeKeyword("EXAMPLE"), makeString("(#$not (#$evaluate 4 (#$PlusFn 1 2)))") });
 
     public static SubLObject removal_evaluate_bind_conjunction_applicability(final SubLObject contextualized_dnf_clause) {
         if ((NIL != list_utilities.every_in_list($sym9$EVALUATION_RELATED_ASENT_, clauses.pos_lits(contextualized_dnf_clause), CONTEXTUALIZED_ASENT_ASENT)) && (NIL != total_evaluation_related_conjunction_solvableP(contextualized_dnf_clause, UNPROVIDED, UNPROVIDED))) {
@@ -417,16 +487,16 @@ public final class removal_modules_evaluate extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_evaluate_file() {
-        declareFunction(me, "make_evaluate_sentence", "MAKE-EVALUATE-SENTENCE", 2, 0, false);
-        declareFunction(me, "removal_evaluate_bind_expand", "REMOVAL-EVALUATE-BIND-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_evaluate_neg_check_expand", "REMOVAL-EVALUATE-NEG-CHECK-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_evaluate_bind_conjunction_applicability", "REMOVAL-EVALUATE-BIND-CONJUNCTION-APPLICABILITY", 1, 0, false);
-        declareFunction(me, "total_evaluation_related_conjunction_solvableP", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLVABLE?", 1, 2, false);
-        declareFunction(me, "evaluation_related_contextualized_asent_solvableP", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLVABLE?", 3, 0, false);
-        declareFunction(me, "evaluation_related_asentP", "EVALUATION-RELATED-ASENT?", 1, 0, false);
-        declareFunction(me, "removal_evaluate_bind_conjunction_expand", "REMOVAL-EVALUATE-BIND-CONJUNCTION-EXPAND", 1, 0, false);
-        declareFunction(me, "total_evaluation_related_conjunction_solution", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLUTION", 1, 3, false);
-        declareFunction(me, "evaluation_related_contextualized_asent_solution", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLUTION", 3, 0, false);
+        declareFunction("make_evaluate_sentence", "MAKE-EVALUATE-SENTENCE", 2, 0, false);
+        declareFunction("removal_evaluate_bind_expand", "REMOVAL-EVALUATE-BIND-EXPAND", 1, 1, false);
+        declareFunction("removal_evaluate_neg_check_expand", "REMOVAL-EVALUATE-NEG-CHECK-EXPAND", 1, 1, false);
+        declareFunction("removal_evaluate_bind_conjunction_applicability", "REMOVAL-EVALUATE-BIND-CONJUNCTION-APPLICABILITY", 1, 0, false);
+        declareFunction("total_evaluation_related_conjunction_solvableP", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLVABLE?", 1, 2, false);
+        declareFunction("evaluation_related_contextualized_asent_solvableP", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLVABLE?", 3, 0, false);
+        declareFunction("evaluation_related_asentP", "EVALUATION-RELATED-ASENT?", 1, 0, false);
+        declareFunction("removal_evaluate_bind_conjunction_expand", "REMOVAL-EVALUATE-BIND-CONJUNCTION-EXPAND", 1, 0, false);
+        declareFunction("total_evaluation_related_conjunction_solution", "TOTAL-EVALUATION-RELATED-CONJUNCTION-SOLUTION", 1, 3, false);
+        declareFunction("evaluation_related_contextualized_asent_solution", "EVALUATION-RELATED-CONTEXTUALIZED-ASENT-SOLUTION", 3, 0, false);
         return NIL;
     }
 
@@ -435,7 +505,32 @@ public final class removal_modules_evaluate extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_removal_modules_evaluate_file_alt() {
+        inference_modules.register_solely_specific_removal_module_predicate($$evaluate);
+        preference_modules.inference_preference_module($EVALUATE_DELAY_UNTIL_ARG2_CLOSED, $list_alt2);
+        inference_modules.inference_removal_module($REMOVAL_EVALUATE_BIND, $list_alt4);
+        inference_modules.inference_removal_module($REMOVAL_EVALUATE_NEG_CHECK, $list_alt6);
+        return NIL;
+    }
+
     public static SubLObject setup_removal_modules_evaluate_file() {
+        if (SubLFiles.USE_V1) {
+            inference_modules.register_solely_specific_removal_module_predicate($$evaluate);
+            preference_modules.doomed_unless_arg_bindable($POS, $$evaluate, TWO_INTEGER);
+            preference_modules.doomed_unless_all_args_bindable($NEG, $$evaluate);
+            inference_modules.inference_removal_module($REMOVAL_EVALUATE_BIND, $list4);
+            inference_modules.inference_removal_module($REMOVAL_EVALUATE_NEG_CHECK, $list6);
+            inference_modules.inference_conjunctive_removal_module($REMOVAL_EVALUATE_BIND_CONJUNCTION, $list8);
+            note_funcall_helper_function(REMOVAL_EVALUATE_BIND_CONJUNCTION_APPLICABILITY);
+            note_funcall_helper_function(REMOVAL_EVALUATE_BIND_CONJUNCTION_EXPAND);
+        }
+        if (SubLFiles.USE_V2) {
+            preference_modules.inference_preference_module($EVALUATE_DELAY_UNTIL_ARG2_CLOSED, $list_alt2);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_removal_modules_evaluate_file_Previous() {
         inference_modules.register_solely_specific_removal_module_predicate($$evaluate);
         preference_modules.doomed_unless_arg_bindable($POS, $$evaluate, TWO_INTEGER);
         preference_modules.doomed_unless_all_args_bindable($NEG, $$evaluate);
@@ -463,24 +558,6 @@ public final class removal_modules_evaluate extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

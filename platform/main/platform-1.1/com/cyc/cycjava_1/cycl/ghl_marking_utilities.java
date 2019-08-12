@@ -106,8 +106,7 @@ public  final class ghl_marking_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_ghl_marking_utilities_file() {
-    // CVS_ID("Id: ghl-marking-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

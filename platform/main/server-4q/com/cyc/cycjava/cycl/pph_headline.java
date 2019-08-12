@@ -1,7 +1,19 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.pph_headline;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -13,50 +25,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.pph_headline.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quote;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class pph_headline extends SubLTranslatedFile {
+public final class pph_headline extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_headline();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_headline";
+    public static final String myName = "com.cyc.cycjava_2.cycl.pph_headline";
 
-    public static final String myFingerPrint = "bc36e815edd9d5b9cc8af10c242728857b2a66051613ce36d194a2e38b0426d3";
 
     private static final SubLObject $$EnglishHeadlineParaphraseMt = reader_make_constant_shell(makeString("EnglishHeadlineParaphraseMt"));
 
@@ -415,15 +389,15 @@ public final class pph_headline extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_pph_headline_file() {
-        declareFunction(me, "generate_english_headline_string", "GENERATE-ENGLISH-HEADLINE-STRING", 1, 2, false);
-        declareFunction(me, "pph_headline_remove_extraneous_determiners", "PPH-HEADLINE-REMOVE-EXTRANEOUS-DETERMINERS", 1, 0, false);
-        declareFunction(me, "pph_finished_phrase_update_from_dtrs", "PPH-FINISHED-PHRASE-UPDATE-FROM-DTRS", 1, 0, false);
-        declareFunction(me, "pph_headline_remove_extraneous_copulas", "PPH-HEADLINE-REMOVE-EXTRANEOUS-COPULAS", 1, 0, false);
-        declareFunction(me, "pph_headline_tweak_head_verb_tense", "PPH-HEADLINE-TWEAK-HEAD-VERB-TENSE", 1, 0, false);
-        declareFunction(me, "pph_detp_cycl_unnewsworthyP", "PPH-DETP-CYCL-UNNEWSWORTHY?", 1, 0, false);
-        declareFunction(me, "apply_headline_capitalization", "APPLY-HEADLINE-CAPITALIZATION", 1, 0, false);
-        declareFunction(me, "print_headlines", "PRINT-HEADLINES", 0, 1, false);
-        declareFunction(me, "print_headline_test_case_table", "PRINT-HEADLINE-TEST-CASE-TABLE", 0, 1, false);
+        declareFunction("generate_english_headline_string", "GENERATE-ENGLISH-HEADLINE-STRING", 1, 2, false);
+        declareFunction("pph_headline_remove_extraneous_determiners", "PPH-HEADLINE-REMOVE-EXTRANEOUS-DETERMINERS", 1, 0, false);
+        declareFunction("pph_finished_phrase_update_from_dtrs", "PPH-FINISHED-PHRASE-UPDATE-FROM-DTRS", 1, 0, false);
+        declareFunction("pph_headline_remove_extraneous_copulas", "PPH-HEADLINE-REMOVE-EXTRANEOUS-COPULAS", 1, 0, false);
+        declareFunction("pph_headline_tweak_head_verb_tense", "PPH-HEADLINE-TWEAK-HEAD-VERB-TENSE", 1, 0, false);
+        declareFunction("pph_detp_cycl_unnewsworthyP", "PPH-DETP-CYCL-UNNEWSWORTHY?", 1, 0, false);
+        declareFunction("apply_headline_capitalization", "APPLY-HEADLINE-CAPITALIZATION", 1, 0, false);
+        declareFunction("print_headlines", "PRINT-HEADLINES", 0, 1, false);
+        declareFunction("print_headline_test_case_table", "PRINT-HEADLINE-TEST-CASE-TABLE", 0, 1, false);
         return NIL;
     }
 

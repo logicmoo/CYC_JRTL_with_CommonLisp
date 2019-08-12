@@ -1,8 +1,40 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.file_vector;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.file_utilities.*;
+import static com.cyc.cycjava.cycl.format_nil.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -26,95 +58,63 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.file_vector.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_readably$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class file_vector extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      FILE-VECTOR
+ * source file: /cyc/top/cycl/file-vector.lisp
+ * created:     2019/07/03 17:37:16
+ */
+public final class file_vector extends SubLTranslatedFile implements V12 {
+    com.cyc.cycjava.cycl.file_vector me2;
+
     public static final SubLFile me = new file_vector();
 
-    public static final String myName = "com.cyc.cycjava.cycl.file_vector";
+ public static final String myName = "com.cyc.cycjava.cycl.file_vector";
 
-    public static final String myFingerPrint = "919d8aec2e2bd23ef0fcb67835d72ee80b26c98a28299f76efa22b0e8bed648c";
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_fvector$ = makeSymbol("*DTP-FVECTOR*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $default_file_vector_data_stream_buffer_size$ = makeSymbol("*DEFAULT-FILE-VECTOR-DATA-STREAM-BUFFER-SIZE*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $default_file_vector_index_stream_buffer_size$ = makeSymbol("*DEFAULT-FILE-VECTOR-INDEX-STREAM-BUFFER-SIZE*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $max_4byte_integer$ = makeSymbol("*MAX-4BYTE-INTEGER*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $max_8byte_integer$ = makeSymbol("*MAX-8BYTE-INTEGER*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     public static final SubLSymbol $memory_map_chunk_size$ = makeSymbol("*MEMORY-MAP-CHUNK-SIZE*");
 
     // Internal Constants
-    public static final SubLSymbol FVECTOR = makeSymbol("FVECTOR");
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol FVECTOR = makeSymbol("FVECTOR");
 
-    public static final SubLSymbol FVECTOR_P = makeSymbol("FVECTOR-P");
+    private static final SubLSymbol FVECTOR_P = makeSymbol("FVECTOR-P");
 
-    public static final SubLList $list2 = list(makeSymbol("DATA-STREAM"), makeSymbol("INDEX-STREAM"), makeSymbol("WIDE-MARK"));
+    static private final SubLList $list2 = list(makeSymbol("DATA-STREAM"), makeSymbol("INDEX-STREAM"), makeSymbol("WIDE-MARK"));
 
-    public static final SubLList $list3 = list(makeKeyword("DATA-STREAM"), makeKeyword("INDEX-STREAM"), makeKeyword("WIDE-MARK"));
+    static private final SubLList $list3 = list(makeKeyword("DATA-STREAM"), makeKeyword("INDEX-STREAM"), makeKeyword("WIDE-MARK"));
 
-    public static final SubLList $list4 = list(makeSymbol("FVECTOR-DATA-STREAM"), makeSymbol("FVECTOR-INDEX-STREAM"), makeSymbol("FVECTOR-WIDE-MARK"));
+    static private final SubLList $list4 = list(makeSymbol("FVECTOR-DATA-STREAM"), makeSymbol("FVECTOR-INDEX-STREAM"), makeSymbol("FVECTOR-WIDE-MARK"));
 
-    public static final SubLList $list5 = list(makeSymbol("_CSETF-FVECTOR-DATA-STREAM"), makeSymbol("_CSETF-FVECTOR-INDEX-STREAM"), makeSymbol("_CSETF-FVECTOR-WIDE-MARK"));
+    static private final SubLList $list5 = list(makeSymbol("_CSETF-FVECTOR-DATA-STREAM"), makeSymbol("_CSETF-FVECTOR-INDEX-STREAM"), makeSymbol("_CSETF-FVECTOR-WIDE-MARK"));
 
-    public static final SubLSymbol PRINT_FVECTOR = makeSymbol("PRINT-FVECTOR");
+    private static final SubLSymbol PRINT_FVECTOR = makeSymbol("PRINT-FVECTOR");
 
-    public static final SubLSymbol FVECTOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("FVECTOR-PRINT-FUNCTION-TRAMPOLINE");
+    private static final SubLSymbol FVECTOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("FVECTOR-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list8 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("FVECTOR-P"));
 
@@ -130,21 +130,9 @@ public final class file_vector extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_FVECTOR_WIDE_MARK = makeSymbol("_CSETF-FVECTOR-WIDE-MARK");
 
-
-
-
-
-
-
     private static final SubLString $str18$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_FVECTOR = makeSymbol("MAKE-FVECTOR");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_FVECTOR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-FVECTOR-METHOD");
 
@@ -156,29 +144,11 @@ public final class file_vector extends SubLTranslatedFile {
 
     private static final SubLInteger $int$1024 = makeInteger(1024);
 
-
-
-
-
     private static final SubLString $str30$Invalid_data_filename__A_ = makeString("Invalid data filename ~A.");
 
     private static final SubLString $str31$Invalid_index_filename__A_ = makeString("Invalid index filename ~A.");
 
-
-
-
-
-
-
-
-
     private static final SubLSymbol $IF_DOES_NOT_EXIST = makeKeyword("IF-DOES-NOT-EXIST");
-
-
-
-
-
-
 
     private static final SubLSymbol FILE_VECTOR_P = makeSymbol("FILE-VECTOR-P");
 
@@ -187,18 +157,6 @@ public final class file_vector extends SubLTranslatedFile {
     private static final SubLString $str42$Unable_to_open__S = makeString("Unable to open ~S");
 
     private static final SubLSymbol FVECTOR_RAW_BYTE_SIZE_TO_LENGTH = makeSymbol("FVECTOR-RAW-BYTE-SIZE-TO-LENGTH");
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLList $list50 = list(list(list(FOUR_INTEGER), ONE_INTEGER), list(list(EIGHT_INTEGER), TWO_INTEGER), list(list(TWELVE_INTEGER), THREE_INTEGER), list(list(SIXTEEN_INTEGER), FOUR_INTEGER), list(list(FOUR_INTEGER, TWO_INTEGER), ONE_INTEGER), list(list(EIGHT_INTEGER, TWO_INTEGER), TWO_INTEGER), list(list(SIXTEEN_INTEGER, TWO_INTEGER), THREE_INTEGER), list(list(makeInteger(24), TWO_INTEGER), FOUR_INTEGER));
 
@@ -218,33 +176,19 @@ public final class file_vector extends SubLTranslatedFile {
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-
-
-
-
     private static final SubLList $list61 = list(list(makeSymbol("FVECTOR"), makeSymbol("&OPTIONAL"), makeSymbol("INDEX")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     private static final SubLSymbol $sym62$MEMENTO = makeUninternedSymbol("MEMENTO");
 
-
-
     private static final SubLSymbol BEGIN_FILE_VECTOR_EXCURSION = makeSymbol("BEGIN-FILE-VECTOR-EXCURSION");
-
-
-
-
 
     private static final SubLSymbol END_FILE_VECTOR_EXCURSION = makeSymbol("END-FILE-VECTOR-EXCURSION");
 
     private static final SubLList $list68 = list(list(makeSymbol("FVECTOR"), makeSymbol("DATA-FILE"), makeSymbol("INDEX-FILE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-
-
     private static final SubLSymbol NEW_FILE_VECTOR = makeSymbol("NEW-FILE-VECTOR");
 
     private static final SubLList $list71 = list(makeKeyword("OUTPUT"), makeSymbol("*DEFAULT-BIG-STREAM-BUFFER-SIZE*"), makeSymbol("*DEFAULT-BIG-STREAM-BUFFER-SIZE*"));
-
-
 
     private static final SubLSymbol CLOSE_FILE_VECTOR = makeSymbol("CLOSE-FILE-VECTOR");
 
@@ -262,15 +206,7 @@ public final class file_vector extends SubLTranslatedFile {
 
     private static final SubLSymbol GATHER_FILE_VECTOR_STATISTICS = makeSymbol("GATHER-FILE-VECTOR-STATISTICS");
 
-
-
-
-
     private static final SubLList $list83 = list(makeKeyword("REVERSAL"), makeKeyword("TOMBSTONE"));
-
-
-
-
 
     private static final SubLSymbol $sym86$FILE_VECTOR_STATS_INDICATE_DENSE_INDEX_SPACE_ = makeSymbol("FILE-VECTOR-STATS-INDICATE-DENSE-INDEX-SPACE?");
 
@@ -279,8 +215,6 @@ public final class file_vector extends SubLTranslatedFile {
     private static final SubLInteger $int$1000000 = makeInteger(0xf4240);
 
     private static final SubLSymbol FILE_VECTOR_MEMORY_MAP = makeSymbol("FILE-VECTOR-MEMORY-MAP");
-
-
 
     private static final SubLList $list91 = cons(makeSymbol("INDEX"), makeSymbol("ADDRESS"));
 
@@ -293,8 +227,6 @@ public final class file_vector extends SubLTranslatedFile {
     private static final SubLList $list95 = cons(makeSymbol("ADDRESS-B"), makeSymbol("INDEX-B"));
 
     private static final SubLList $list96 = list(list(list(NIL, NIL), T), list(list(cons(makeInteger(62), ZERO_INTEGER), NIL), T), list(list(NIL, cons(makeInteger(62), ZERO_INTEGER)), NIL), list(list(cons(ZERO_INTEGER, ONE_INTEGER), cons(ZERO_INTEGER, TWO_INTEGER)), T), list(list(cons(ZERO_INTEGER, THREE_INTEGER), cons(ZERO_INTEGER, TWO_INTEGER)), NIL), list(list(cons(makeInteger(80), THREE_INTEGER), cons(makeInteger(90), FOUR_INTEGER)), T), list(list(cons(makeInteger(90), FOUR_INTEGER), cons(makeInteger(80), THREE_INTEGER)), NIL));
-
-
 
     private static final SubLString $str98$Data_Address__A_is_past_the_end_o = makeString("Data Address ~A is past the end of the data stream (~A) of ~A.");
 
@@ -317,8 +249,6 @@ public final class file_vector extends SubLTranslatedFile {
     private static final SubLString $$$_entries_from_ = makeString(" entries from ");
 
     private static final SubLString $str108$_____ = makeString(" ....");
-
-
 
     private static final SubLString $str110$Writing_wide_mark_ = makeString("Writing wide-mark ");
 
@@ -358,14 +288,11 @@ public final class file_vector extends SubLTranslatedFile {
 
     private static final SubLString $str128$The_expected_address__A_was_____a = makeString("The expected address ~A was =/= actual address ~A.");
 
-    // static final boolean assertionsDisabledInClass =
-    // !com/cyc/cycjava/cycl/desiredAssertionStatus();
-    static {
 
 
-
-
-
+    public static SubLObject fvector_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        com.cyc.cycjava.cycl.file_vector.print_fvector(v_object, stream, ZERO_INTEGER);
+        return NIL;
     }
 
     public static SubLObject fvector_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
@@ -373,38 +300,89 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static SubLObject fvector_p_alt(SubLObject v_object) {
+        return v_object.getClass() == file_vector.$fvector_native.class ? ((SubLObject) (T)) : NIL;
+    }
+
     public static SubLObject fvector_p(final SubLObject v_object) {
         return v_object.getClass() == file_vector.$fvector_native.class ? T : NIL;
     }
 
+    public static final SubLObject fvector_data_stream_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, file_vector.FVECTOR_P);
+        return (($fvector_native)v_object).$data_stream;
+    }
+
     public static SubLObject fvector_data_stream(final SubLObject v_object) {
-        assert NIL != fvector_p(v_object) : "file_vector.fvector_p(v_object) " + "CommonSymbols.NIL != file_vector.fvector_p(v_object) " + v_object;
+        assert NIL != fvector_p(v_object) : "! file_vector.fvector_p(v_object) " + "!fvector_p: " + v_object;
         return v_object.getField2();
     }
 
+    public static final SubLObject fvector_index_stream_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, file_vector.FVECTOR_P);
+        return (($fvector_native)v_object).$index_stream;
+    }
+
     public static SubLObject fvector_index_stream(final SubLObject v_object) {
-        assert NIL != fvector_p(v_object) : "file_vector.fvector_p(v_object) " + "CommonSymbols.NIL != file_vector.fvector_p(v_object) " + v_object;
+        assert NIL != fvector_p(v_object) : "! file_vector.fvector_p(v_object) " + "!fvector_p: " + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject fvector_wide_mark(final SubLObject v_object) {
-        assert NIL != fvector_p(v_object) : "file_vector.fvector_p(v_object) " + "CommonSymbols.NIL != file_vector.fvector_p(v_object) " + v_object;
+        assert NIL != fvector_p(v_object) : "! file_vector.fvector_p(v_object) " + "!fvector_p: " + v_object;
         return v_object.getField4();
     }
 
+    public static final SubLObject _csetf_fvector_data_stream_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, file_vector.FVECTOR_P);
+        return (($fvector_native)v_object).$data_stream = (value);
+    }
+
     public static SubLObject _csetf_fvector_data_stream(final SubLObject v_object, final SubLObject value) {
-        assert NIL != fvector_p(v_object) : "file_vector.fvector_p(v_object) " + "CommonSymbols.NIL != file_vector.fvector_p(v_object) " + v_object;
+        assert NIL != fvector_p(v_object) : "! file_vector.fvector_p(v_object) " + "!fvector_p: " + v_object;
         return v_object.setField2(value);
     }
 
+    public static final SubLObject _csetf_fvector_index_stream_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, file_vector.FVECTOR_P);
+        return (($fvector_native)v_object).$index_stream = (value);
+    }
+
     public static SubLObject _csetf_fvector_index_stream(final SubLObject v_object, final SubLObject value) {
-        assert NIL != fvector_p(v_object) : "file_vector.fvector_p(v_object) " + "CommonSymbols.NIL != file_vector.fvector_p(v_object) " + v_object;
+        assert NIL != fvector_p(v_object) : "! file_vector.fvector_p(v_object) " + "!fvector_p: " + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_fvector_wide_mark(final SubLObject v_object, final SubLObject value) {
-        assert NIL != fvector_p(v_object) : "file_vector.fvector_p(v_object) " + "CommonSymbols.NIL != file_vector.fvector_p(v_object) " + v_object;
+        assert NIL != fvector_p(v_object) : "! file_vector.fvector_p(v_object) " + "!fvector_p: " + v_object;
         return v_object.setField4(value);
+    }
+
+    public static SubLObject make_fvector_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new file_vector.$fvector_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($DATA_STREAM)) {
+                        com.cyc.cycjava.cycl.file_vector._csetf_fvector_data_stream(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($INDEX_STREAM)) {
+                            com.cyc.cycjava.cycl.file_vector._csetf_fvector_index_stream(v_new, current_value);
+                        } else {
+                            Errors.error($str_alt14$Invalid_slot__S_for_construction_, current_arg);
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_fvector(SubLObject arglist) {
@@ -450,6 +428,29 @@ public final class file_vector extends SubLTranslatedFile {
         return visit_defstruct_fvector(obj, visitor_fn);
     }
 
+    public static SubLObject print_fvector_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $print_readably$.getDynamicValue(thread)) {
+                print_not_readable(v_object, stream);
+            } else {
+                {
+                    SubLObject v_object_1 = v_object;
+                    SubLObject stream_2 = stream;
+                    write_string($str_alt15$__, stream_2, UNPROVIDED, UNPROVIDED);
+                    write(type_of(v_object_1), new SubLObject[]{ $STREAM, stream_2 });
+                    write_char(CHAR_space, stream_2);
+                    write_string($str_alt17$Data__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(com.cyc.cycjava.cycl.file_vector.fvector_data_stream(v_object), stream);
+                    write_string($str_alt18$Index__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(com.cyc.cycjava.cycl.file_vector.fvector_index_stream(v_object), stream);
+                    write_char(CHAR_greater, stream_2);
+                }
+            }
+            return v_object;
+        }
+    }
+
     public static SubLObject print_fvector(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $print_readably$.getDynamicValue(thread)) {
@@ -466,6 +467,15 @@ public final class file_vector extends SubLTranslatedFile {
             print_macros.print_unreadable_object_postamble(stream, v_object, NIL, NIL);
         }
         return v_object;
+    }
+
+    public static SubLObject new_fvector(SubLObject data_stream, SubLObject index_stream) {
+        {
+            SubLObject fvector = com.cyc.cycjava.cycl.file_vector.make_fvector(UNPROVIDED);
+            com.cyc.cycjava.cycl.file_vector._csetf_fvector_data_stream(fvector, data_stream);
+            com.cyc.cycjava.cycl.file_vector._csetf_fvector_index_stream(fvector, index_stream);
+            return fvector;
+        }
     }
 
     public static SubLObject new_fvector(final SubLObject data_stream, final SubLObject index_stream, SubLObject wide_mark) {
@@ -488,8 +498,50 @@ public final class file_vector extends SubLTranslatedFile {
         return fvector;
     }
 
+    /**
+     * Return T iff object is a FILE-VECTOR datastructure.
+     */
+    @LispMethod(comment = "Return T iff object is a FILE-VECTOR datastructure.")
+    public static SubLObject file_vector_p_alt(SubLObject v_object) {
+        return com.cyc.cycjava.cycl.file_vector.fvector_p(v_object);
+    }
+
+    /**
+     * Return T iff object is a FILE-VECTOR datastructure.
+     */
+    @LispMethod(comment = "Return T iff object is a FILE-VECTOR datastructure.")
     public static SubLObject file_vector_p(final SubLObject v_object) {
         return fvector_p(v_object);
+    }
+
+    /**
+     * Creates a new FILE-VECTOR-P if it can open the two files for DIRECTION
+     */
+    @LispMethod(comment = "Creates a new FILE-VECTOR-P if it can open the two files for DIRECTION")
+    public static SubLObject new_file_vector(SubLObject data_filename, SubLObject index_filename, SubLObject direction) {
+        if (direction == UNPROVIDED) {
+            direction = $INPUT;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject data_stream = NIL;
+                SubLObject index_stream = NIL;
+                data_stream = compatibility.open_binary(data_filename, direction, UNPROVIDED);
+                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                    if (NIL == open_stream_p(data_stream)) {
+                        Errors.error(Errors.error($str_alt21$Invalid_data_filename__A_, data_filename));
+                    }
+                }
+                index_stream = compatibility.open_binary(index_filename, direction, UNPROVIDED);
+                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                    if (NIL == open_stream_p(index_stream)) {
+                        Errors.error(Errors.error($str_alt22$Invalid_index_filename__A_, index_filename));
+                    }
+                }
+                return com.cyc.cycjava.cycl.file_vector.create_file_vector(data_stream, index_stream);
+            }
+        }
     }
 
     public static SubLObject new_file_vector(final SubLObject data_filename, final SubLObject index_filename, SubLObject direction, SubLObject data_stream_buffer_size, SubLObject index_stream_buffer_size, SubLObject enable_memory_mappingP) {
@@ -625,6 +677,10 @@ public final class file_vector extends SubLTranslatedFile {
         return fvector;
     }
 
+    public static SubLObject create_file_vector_alt(SubLObject data_stream, SubLObject index_stream) {
+        return com.cyc.cycjava.cycl.file_vector.new_fvector(data_stream, index_stream);
+    }
+
     public static SubLObject create_file_vector(final SubLObject data_stream, final SubLObject index_stream) {
         return new_fvector(data_stream, index_stream, UNPROVIDED);
     }
@@ -655,12 +711,69 @@ public final class file_vector extends SubLTranslatedFile {
         return save_file_vector_wide_mark(get_file_vector_wide_mark(fvector), wide_mark_filename);
     }
 
+    static private final SubLList $list_alt2 = list(makeSymbol("DATA-STREAM"), makeSymbol("INDEX-STREAM"));
+
+    static private final SubLList $list_alt3 = list(makeKeyword("DATA-STREAM"), makeKeyword("INDEX-STREAM"));
+
+    static private final SubLList $list_alt4 = list(makeSymbol("FVECTOR-DATA-STREAM"), makeSymbol("FVECTOR-INDEX-STREAM"));
+
+    /**
+     *
+     *
+     * @unknown Implementation of this method would require that the
+    file vector objects be upgraded to contain both the file names
+    and the direction (since cloning a writeable file vector
+    could become an absolute disaster).
+     */
+    @LispMethod(comment = "@unknown Implementation of this method would require that the\r\nfile vector objects be upgraded to contain both the file names\r\nand the direction (since cloning a writeable file vector\r\ncould become an absolute disaster).")
+    public static SubLObject clone_file_vector_alt(SubLObject fvector) {
+        return Errors.error($str_alt23$Cannot_clone__A__This_method_is_c, fvector);
+    }
+
+    /**
+     *
+     *
+     * @unknown Implementation of this method would require that the
+    file vector objects be upgraded to contain both the file names
+    and the direction (since cloning a writeable file vector
+    could become an absolute disaster).
+     */
+    @LispMethod(comment = "@unknown Implementation of this method would require that the\r\nfile vector objects be upgraded to contain both the file names\r\nand the direction (since cloning a writeable file vector\r\ncould become an absolute disaster).")
     public static SubLObject clone_file_vector(final SubLObject fvector) {
         return Errors.error($str41$Cannot_clone__A__This_method_is_c, fvector);
     }
 
+    static private final SubLList $list_alt5 = list(makeSymbol("_CSETF-FVECTOR-DATA-STREAM"), makeSymbol("_CSETF-FVECTOR-INDEX-STREAM"));
+
+    /**
+     * Close the streams associated with the file vector under question.
+     */
+    @LispMethod(comment = "Close the streams associated with the file vector under question.")
+    public static SubLObject close_file_vector_alt(SubLObject fvector) {
+        SubLTrampolineFile.checkType(fvector, FILE_VECTOR_P);
+        {
+            SubLObject data_stream = com.cyc.cycjava.cycl.file_vector.fvector_data_stream(fvector);
+            if (NIL != open_stream_p(data_stream)) {
+                close(data_stream, UNPROVIDED);
+            }
+            com.cyc.cycjava.cycl.file_vector._csetf_fvector_data_stream(fvector, NIL);
+        }
+        {
+            SubLObject index_stream = com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector);
+            if (NIL != open_stream_p(index_stream)) {
+                close(index_stream, UNPROVIDED);
+            }
+            com.cyc.cycjava.cycl.file_vector._csetf_fvector_index_stream(fvector, NIL);
+        }
+        return fvector;
+    }
+
+    /**
+     * Close the streams associated with the file vector under question.
+     */
+    @LispMethod(comment = "Close the streams associated with the file vector under question.")
     public static SubLObject close_file_vector(final SubLObject fvector) {
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
         final SubLObject data_stream = fvector_data_stream(fvector);
         if (NIL != open_stream_p(data_stream)) {
             close(data_stream, UNPROVIDED);
@@ -680,48 +793,182 @@ public final class file_vector extends SubLTranslatedFile {
         return v_file_vector;
     }
 
+    static private final SubLString $str_alt14$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLString $str_alt15$__ = makeString("#<");
+
+    static private final SubLString $str_alt17$Data__ = makeString("Data: ");
+
+    static private final SubLString $str_alt18$Index__ = makeString("Index: ");
+
+    static private final SubLString $str_alt21$Invalid_data_filename__A_ = makeString("Invalid data filename ~A.");
+
     public static SubLObject file_vector_enable_memory_mapping(final SubLObject v_file_vector) {
         _csetf_fvector_data_stream(v_file_vector, file_utilities.enable_file_stream_memory_mapping(fvector_data_stream(v_file_vector)));
         _csetf_fvector_index_stream(v_file_vector, file_utilities.enable_file_stream_memory_mapping(fvector_index_stream(v_file_vector)));
         return v_file_vector;
     }
 
+    static private final SubLString $str_alt22$Invalid_index_filename__A_ = makeString("Invalid index filename ~A.");
+
+    static private final SubLString $str_alt23$Cannot_clone__A__This_method_is_c = makeString("Cannot clone ~A: This method is currently not implemented.");
+
     public static SubLObject file_vector_memory_mappedP(final SubLObject v_file_vector) {
         return makeBoolean((NIL != file_utilities.file_stream_memory_mappedP(fvector_data_stream(v_file_vector))) && (NIL != file_utilities.file_stream_memory_mappedP(fvector_index_stream(v_file_vector))));
     }
 
+    static private final SubLString $str_alt25$Unable_to_open__S = makeString("Unable to open ~S");
+
+    static private final SubLList $list_alt27 = list(list(makeSymbol("FVECTOR"), makeSymbol("DATA-FILE"), makeSymbol("INDEX-FILE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    /**
+     * Return the STREAMP that is used for the data.
+     */
+    @LispMethod(comment = "Return the STREAMP that is used for the data.")
+    public static SubLObject get_file_vector_data_stream_alt(SubLObject fvector) {
+        SubLTrampolineFile.checkType(fvector, FILE_VECTOR_P);
+        return com.cyc.cycjava.cycl.file_vector.fvector_data_stream(fvector);
+    }
+
+    /**
+     * Return the STREAMP that is used for the data.
+     */
+    @LispMethod(comment = "Return the STREAMP that is used for the data.")
     public static SubLObject get_file_vector_data_stream(final SubLObject fvector) {
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
         return fvector_data_stream(fvector);
     }
 
+    static private final SubLList $list_alt33 = list(makeKeyword("OUTPUT"));
+
+    static private final SubLList $list_alt36 = list(makeKeyword("INPUT"));
+
+    /**
+     * Return the STREAMP that is used for the indexing.
+     */
+    @LispMethod(comment = "Return the STREAMP that is used for the indexing.")
+    public static SubLObject get_file_vector_index_stream_alt(SubLObject fvector) {
+        SubLTrampolineFile.checkType(fvector, FILE_VECTOR_P);
+        return com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector);
+    }
+
+    /**
+     * Return the STREAMP that is used for the indexing.
+     */
+    @LispMethod(comment = "Return the STREAMP that is used for the indexing.")
     public static SubLObject get_file_vector_index_stream(final SubLObject fvector) {
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
         return fvector_index_stream(fvector);
     }
 
+    static private final SubLList $list_alt39 = list(makeSymbol("FVECTOR"), makeSymbol("CURRENT"), makeSymbol("SIZE"), makeSymbol("TUPLE"));
+
     public static SubLObject wide_file_vectorP(final SubLObject fvector) {
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
         return list_utilities.sublisp_boolean(get_file_vector_wide_mark(fvector));
     }
+
+    static private final SubLString $$$rck = makeString("rck");
 
     public static SubLObject narrow_file_vectorP(final SubLObject fvector) {
         return makeBoolean(NIL == wide_file_vectorP(fvector));
     }
 
+    static private final SubLList $list_alt48 = list(list(list(TEN_INTEGER), TEN_INTEGER), list(list(makeInteger(23)), makeInteger(23)));
+
+    /**
+     * Return the FIXNUMP number of entries in the file vector
+     */
+    @LispMethod(comment = "Return the FIXNUMP number of entries in the file vector")
+    public static SubLObject file_vector_length_alt(SubLObject fvector) {
+        SubLTrampolineFile.checkType(fvector, FILE_VECTOR_P);
+        return com.cyc.cycjava.cycl.file_vector.fvector_raw_byte_size_to_length(file_length(com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector)));
+    }
+
+    /**
+     * Return the FIXNUMP number of entries in the file vector
+     */
+    @LispMethod(comment = "Return the FIXNUMP number of entries in the file vector")
     public static SubLObject file_vector_length(final SubLObject fvector) {
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
         return file_vector_length_from_index_stream(fvector_index_stream(fvector), get_file_vector_wide_mark(fvector));
     }
 
+    static private final SubLString $str_alt49$_tmp_ = makeString("/tmp/");
+
+    static private final SubLString $str_alt51$The_next_index_is_supposed_to_be_ = makeString("The next index is supposed to be ~A, but it is ~A.");
+
+    static private final SubLString $str_alt52$Position_ = makeString("Position ");
+
+    static private final SubLString $str_alt53$On_step___A__the_iteration_result = makeString("On step #~A, the iteration result was no longer valid.");
+
+    /**
+     * A helper function that allows getting the index without allocating the file-vector object.
+     */
+    @LispMethod(comment = "A helper function that allows getting the index without allocating the file-vector object.")
+    public static SubLObject file_vector_length_from_index_alt(SubLObject index_filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == Filesys.probe_file(index_filename)) {
+                Errors.error($str_alt22$Invalid_index_filename__A_, index_filename);
+            }
+            {
+                SubLObject length = NIL;
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(index_filename, $INPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt25$Unable_to_open__S, index_filename);
+                    }
+                    {
+                        SubLObject index_stream = stream;
+                        SubLObject bytes = file_length(index_stream);
+                        length = com.cyc.cycjava.cycl.file_vector.fvector_raw_byte_size_to_length(bytes);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return length;
+            }
+        }
+    }
+
+    /**
+     * A helper function that allows getting the index without allocating the file-vector object.
+     */
+    @LispMethod(comment = "A helper function that allows getting the index without allocating the file-vector object.")
     public static SubLObject file_vector_length_from_index(final SubLObject index_filename) {
         return file_vector_length_from_index_int(index_filename, NIL);
     }
+
+    static private final SubLList $list_alt54 = cons(makeSymbol("ACTUAL-INDEX"), makeSymbol("ACTUAL-ADDRESS"));
 
     public static SubLObject wide_file_vector_length_from_index(final SubLObject index_filename, final SubLObject wide_mark_filename) {
         final SubLObject wide_mark = load_file_vector_wide_mark(wide_mark_filename);
         return file_vector_length_from_index_int(index_filename, wide_mark);
     }
+
+    static private final SubLString $str_alt55$The_expected_index__A_was_____act = makeString("The expected index ~A was =/= actual index ~A.");
+
+    static private final SubLString $str_alt56$The_expected_address__A_was_____a = makeString("The expected address ~A was =/= actual address ~A.");
 
     public static SubLObject file_vector_length_from_index_int(final SubLObject index_filename, final SubLObject wide_mark) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -808,8 +1055,30 @@ public final class file_vector extends SubLTranslatedFile {
         return file_length(data_stream);
     }
 
+    /**
+     * Returns the index that the file vector will next write to or read from.
+     * Thus, on a file vector just opened this will return 0.
+     *
+     * @return FIXNUMP the next index
+     */
+    @LispMethod(comment = "Returns the index that the file vector will next write to or read from.\r\nThus, on a file vector just opened this will return 0.\r\n\r\n@return FIXNUMP the next index\nReturns the index that the file vector will next write to or read from.\nThus, on a file vector just opened this will return 0.")
+    public static SubLObject file_vector_next_index_alt(SubLObject fvector) {
+        return com.cyc.cycjava.cycl.file_vector.fvector_raw_byte_size_to_length(file_position(com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector), UNPROVIDED));
+    }
+
+    /**
+     * Returns the index that the file vector will next write to or read from.
+     * Thus, on a file vector just opened this will return 0.
+     *
+     * @return FIXNUMP the next index
+     */
+    @LispMethod(comment = "Returns the index that the file vector will next write to or read from.\r\nThus, on a file vector just opened this will return 0.\r\n\r\n@return FIXNUMP the next index\nReturns the index that the file vector will next write to or read from.\nThus, on a file vector just opened this will return 0.")
     public static SubLObject file_vector_next_index(final SubLObject fvector) {
         return fvector_raw_byte_size_to_length(file_position(fvector_index_stream(fvector), UNPROVIDED), get_file_vector_wide_mark(fvector));
+    }
+
+    public static SubLObject fvector_raw_byte_size_to_length(SubLObject bytes) {
+        return integerDivide(bytes, FOUR_INTEGER);
     }
 
     public static SubLObject fvector_raw_byte_size_to_length(final SubLObject bytes, SubLObject wide_mark) {
@@ -831,11 +1100,42 @@ public final class file_vector extends SubLTranslatedFile {
         return add(wide_mark, length_of_wide_part);
     }
 
+    /**
+     * Position the data stream of the file vector. If an INDEX is supplied,
+     * the data stream is positioned to the data offset stored in the index file
+     * for that nth entry. If no index is supplied, it is positioned to the next
+     * value in the index-stream (e.g. in the case of a loop).
+     *
+     * @return OPEN-STREAM-P the data stream
+     */
+    @LispMethod(comment = "Position the data stream of the file vector. If an INDEX is supplied,\r\nthe data stream is positioned to the data offset stored in the index file\r\nfor that nth entry. If no index is supplied, it is positioned to the next\r\nvalue in the index-stream (e.g. in the case of a loop).\r\n\r\n@return OPEN-STREAM-P the data stream\nPosition the data stream of the file vector. If an INDEX is supplied,\nthe data stream is positioned to the data offset stored in the index file\nfor that nth entry. If no index is supplied, it is positioned to the next\nvalue in the index-stream (e.g. in the case of a loop).")
+    public static SubLObject position_file_vector_alt(SubLObject fvector, SubLObject index) {
+        if (index == UNPROVIDED) {
+            index = NIL;
+        }
+        SubLTrampolineFile.checkType(fvector, FILE_VECTOR_P);
+        {
+            SubLObject data_stream = com.cyc.cycjava.cycl.file_vector.fvector_data_stream(fvector);
+            SubLObject data_address = com.cyc.cycjava.cycl.file_vector.read_file_vector_index_entry(fvector, index);
+            compatibility.set_file_position(data_stream, data_address);
+            return data_stream;
+        }
+    }
+
+    /**
+     * Position the data stream of the file vector. If an INDEX is supplied,
+     * the data stream is positioned to the data offset stored in the index file
+     * for that nth entry. If no index is supplied, it is positioned to the next
+     * value in the index-stream (e.g. in the case of a loop).
+     *
+     * @return OPEN-STREAM-P the data stream
+     */
+    @LispMethod(comment = "Position the data stream of the file vector. If an INDEX is supplied,\r\nthe data stream is positioned to the data offset stored in the index file\r\nfor that nth entry. If no index is supplied, it is positioned to the next\r\nvalue in the index-stream (e.g. in the case of a loop).\r\n\r\n@return OPEN-STREAM-P the data stream\nPosition the data stream of the file vector. If an INDEX is supplied,\nthe data stream is positioned to the data offset stored in the index file\nfor that nth entry. If no index is supplied, it is positioned to the next\nvalue in the index-stream (e.g. in the case of a loop).")
     public static SubLObject position_file_vector(final SubLObject fvector, SubLObject index) {
         if (index == UNPROVIDED) {
             index = NIL;
         }
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
         final SubLObject data_stream = fvector_data_stream(fvector);
         final SubLObject data_address = read_file_vector_index_entry(fvector, index);
         compatibility.set_file_position(data_stream, data_address);
@@ -865,6 +1165,40 @@ public final class file_vector extends SubLTranslatedFile {
         return fvector;
     }
 
+    /**
+     * fetch a specific entry from the file vector index. Move first to the
+     * specified INDEX if provided.
+     *
+     * @return NON-NEGATIVE-INTEGER-P the file position in the data stream
+     */
+    @LispMethod(comment = "fetch a specific entry from the file vector index. Move first to the\r\nspecified INDEX if provided.\r\n\r\n@return NON-NEGATIVE-INTEGER-P the file position in the data stream\nfetch a specific entry from the file vector index. Move first to the\nspecified INDEX if provided.")
+    public static SubLObject read_file_vector_index_entry_alt(SubLObject fvector, SubLObject index) {
+        if (index == UNPROVIDED) {
+            index = NIL;
+        }
+        if (NIL != index) {
+            SubLTrampolineFile.checkType(index, NON_NEGATIVE_INTEGER_P);
+        }
+        {
+            SubLObject index_stream = com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector);
+            SubLObject data_address = NIL;
+            SubLObject index_address = NIL;
+            if (NIL != index) {
+                index_address = multiply(index, FOUR_INTEGER);
+                compatibility.set_file_position(index_stream, index_address);
+            }
+            data_address = file_hash_table.read_fht_uint4(index_stream);
+            return data_address;
+        }
+    }
+
+    /**
+     * fetch a specific entry from the file vector index. Move first to the
+     * specified INDEX if provided.
+     *
+     * @return NON-NEGATIVE-INTEGER-P the file position in the data stream
+     */
+    @LispMethod(comment = "fetch a specific entry from the file vector index. Move first to the\r\nspecified INDEX if provided.\r\n\r\n@return NON-NEGATIVE-INTEGER-P the file position in the data stream\nfetch a specific entry from the file vector index. Move first to the\nspecified INDEX if provided.")
     public static SubLObject read_file_vector_index_entry(final SubLObject fvector, SubLObject index) {
         if (index == UNPROVIDED) {
             index = NIL;
@@ -967,6 +1301,56 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Write the contents of whatever to the datafile. The index file is updated via
+     * (UPDATE-FILE-VECTOR-INDEX fvector) calls in the body. Each call to
+     * UPDATE-FILE-VECTOR-INDEX should be the equivalent of having completed one
+     * array cell.
+     */
+    @LispMethod(comment = "Write the contents of whatever to the datafile. The index file is updated via\r\n(UPDATE-FILE-VECTOR-INDEX fvector) calls in the body. Each call to\r\nUPDATE-FILE-VECTOR-INDEX should be the equivalent of having completed one\r\narray cell.\nWrite the contents of whatever to the datafile. The index file is updated via\n(UPDATE-FILE-VECTOR-INDEX fvector) calls in the body. Each call to\nUPDATE-FILE-VECTOR-INDEX should be the equivalent of having completed one\narray cell.")
+    public static SubLObject with_output_to_file_vector_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt27);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject fvector = NIL;
+                    SubLObject data_file = NIL;
+                    SubLObject index_file = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt27);
+                    fvector = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt27);
+                    data_file = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt27);
+                    index_file = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return list(CLET, list(fvector), list(CUNWIND_PROTECT, list(PROGN, list(CSETQ, fvector, listS(NEW_FILE_VECTOR, data_file, index_file, $list_alt33)), bq_cons(PROGN, append(body, NIL))), list(PWHEN, list(FILE_VECTOR_P, fvector), list(CLOSE_FILE_VECTOR, fvector))));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt27);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Write the contents of whatever to the datafile. The index file is updated via
+     * (UPDATE-FILE-VECTOR-INDEX fvector) calls in the body. Each call to
+     * UPDATE-FILE-VECTOR-INDEX should be the equivalent of having completed one
+     * array cell.
+     */
+    @LispMethod(comment = "Write the contents of whatever to the datafile. The index file is updated via\r\n(UPDATE-FILE-VECTOR-INDEX fvector) calls in the body. Each call to\r\nUPDATE-FILE-VECTOR-INDEX should be the equivalent of having completed one\r\narray cell.\nWrite the contents of whatever to the datafile. The index file is updated via\n(UPDATE-FILE-VECTOR-INDEX fvector) calls in the body. Each call to\nUPDATE-FILE-VECTOR-INDEX should be the equivalent of having completed one\narray cell.")
     public static SubLObject with_output_to_file_vector(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -994,11 +1378,42 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static SubLObject update_file_vector_index_alt(SubLObject fvector) {
+        {
+            SubLObject index_stream = com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector);
+            SubLObject data_stream = com.cyc.cycjava.cycl.file_vector.fvector_data_stream(fvector);
+            force_output(data_stream);
+            {
+                SubLObject address = file_position(data_stream, UNPROVIDED);
+                file_hash_table.write_fht_uint4(index_stream, address);
+            }
+        }
+        return fvector;
+    }
+
     public static SubLObject update_file_vector_index(final SubLObject fvector) {
         force_output(fvector_data_stream(fvector));
         return update_file_vector_index_linear(fvector);
     }
 
+    /**
+     * The linear version of update-file-vector-index that with the assumption that the index is being written out completely, can forgo the force-output safety for a massive speed increase.
+     */
+    @LispMethod(comment = "The linear version of update-file-vector-index that with the assumption that the index is being written out completely, can forgo the force-output safety for a massive speed increase.")
+    public static SubLObject update_file_vector_index_linear_alt(SubLObject fvector) {
+        {
+            SubLObject index_stream = com.cyc.cycjava.cycl.file_vector.fvector_index_stream(fvector);
+            SubLObject data_stream = com.cyc.cycjava.cycl.file_vector.fvector_data_stream(fvector);
+            SubLObject address = file_position(data_stream, UNPROVIDED);
+            file_hash_table.write_fht_uint4(index_stream, address);
+        }
+        return fvector;
+    }
+
+    /**
+     * The linear version of update-file-vector-index that with the assumption that the index is being written out completely, can forgo the force-output safety for a massive speed increase.
+     */
+    @LispMethod(comment = "The linear version of update-file-vector-index that with the assumption that the index is being written out completely, can forgo the force-output safety for a massive speed increase.")
     public static SubLObject update_file_vector_index_linear(final SubLObject fvector) {
         final SubLObject data_stream = fvector_data_stream(fvector);
         final SubLObject address = file_position(data_stream, UNPROVIDED);
@@ -1053,6 +1468,54 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Read the contents of the data stream in the offset order specified by the index
+     * stream. The index file is used to reposition the data-file via calls to
+     * POSITION-FILE-VECTOR; see also the arguments on POSITION-FILE-VECTOR.
+     */
+    @LispMethod(comment = "Read the contents of the data stream in the offset order specified by the index\r\nstream. The index file is used to reposition the data-file via calls to\r\nPOSITION-FILE-VECTOR; see also the arguments on POSITION-FILE-VECTOR.\nRead the contents of the data stream in the offset order specified by the index\nstream. The index file is used to reposition the data-file via calls to\nPOSITION-FILE-VECTOR; see also the arguments on POSITION-FILE-VECTOR.")
+    public static SubLObject with_input_from_file_vector_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt27);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject fvector = NIL;
+                    SubLObject data_file = NIL;
+                    SubLObject index_file = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt27);
+                    fvector = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt27);
+                    data_file = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt27);
+                    index_file = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject body = current;
+                            return list(CLET, list(fvector), list(CUNWIND_PROTECT, list(PROGN, list(CSETQ, fvector, listS(NEW_FILE_VECTOR, data_file, index_file, $list_alt36)), bq_cons(PROGN, append(body, NIL))), list(PWHEN, list(FILE_VECTOR_P, fvector), list(CLOSE_FILE_VECTOR, fvector))));
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt27);
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Read the contents of the data stream in the offset order specified by the index
+     * stream. The index file is used to reposition the data-file via calls to
+     * POSITION-FILE-VECTOR; see also the arguments on POSITION-FILE-VECTOR.
+     */
+    @LispMethod(comment = "Read the contents of the data stream in the offset order specified by the index\r\nstream. The index file is used to reposition the data-file via calls to\r\nPOSITION-FILE-VECTOR; see also the arguments on POSITION-FILE-VECTOR.\nRead the contents of the data stream in the offset order specified by the index\nstream. The index file is used to reposition the data-file via calls to\nPOSITION-FILE-VECTOR; see also the arguments on POSITION-FILE-VECTOR.")
     public static SubLObject with_input_from_file_vector(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -1080,8 +1543,37 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Allocate a new file vector iterator. The iterator walks the
+     * index file, returning tuples of the form (index . address).
+     * For efficiency reason, the tuple is resourced.
+     *
+     * @return ITERATOR-P
+     */
+    @LispMethod(comment = "Allocate a new file vector iterator. The iterator walks the\r\nindex file, returning tuples of the form (index . address).\r\nFor efficiency reason, the tuple is resourced.\r\n\r\n@return ITERATOR-P\nAllocate a new file vector iterator. The iterator walks the\nindex file, returning tuples of the form (index . address).\nFor efficiency reason, the tuple is resourced.")
+    public static SubLObject new_file_vector_index_iterator_alt(SubLObject fvector) {
+        return iteration.new_iterator(com.cyc.cycjava.cycl.file_vector.make_file_vector_index_iterator_state(fvector), FVECTOR_INDEX_ITERATOR_DONE, FVECTOR_INDEX_ITERATOR_NEXT, UNPROVIDED);
+    }
+
+    /**
+     * Allocate a new file vector iterator. The iterator walks the
+     * index file, returning tuples of the form (index . address).
+     * For efficiency reason, the tuple is resourced.
+     *
+     * @return ITERATOR-P
+     */
+    @LispMethod(comment = "Allocate a new file vector iterator. The iterator walks the\r\nindex file, returning tuples of the form (index . address).\r\nFor efficiency reason, the tuple is resourced.\r\n\r\n@return ITERATOR-P\nAllocate a new file vector iterator. The iterator walks the\nindex file, returning tuples of the form (index . address).\nFor efficiency reason, the tuple is resourced.")
     public static SubLObject new_file_vector_index_iterator(final SubLObject fvector) {
         return iteration.new_iterator(make_file_vector_index_iterator_state(fvector), FVECTOR_INDEX_ITERATOR_DONE, FVECTOR_INDEX_ITERATOR_NEXT, UNPROVIDED);
+    }
+
+    public static SubLObject make_file_vector_index_iterator_state_alt(SubLObject fvector) {
+        {
+            SubLObject size = com.cyc.cycjava.cycl.file_vector.file_vector_length(fvector);
+            SubLObject current = ZERO_INTEGER;
+            SubLObject tuple = cons(MINUS_ONE_INTEGER, MINUS_ONE_INTEGER);
+            return list(fvector, current, size, tuple);
+        }
     }
 
     public static SubLObject make_file_vector_index_iterator_state(final SubLObject fvector) {
@@ -1089,6 +1581,35 @@ public final class file_vector extends SubLTranslatedFile {
         final SubLObject current = ZERO_INTEGER;
         final SubLObject tuple = cons(MINUS_ONE_INTEGER, MINUS_ONE_INTEGER);
         return list(fvector, current, size, tuple);
+    }
+
+    public static SubLObject fvector_index_iterator_done_alt(SubLObject state) {
+        {
+            SubLObject datum = state;
+            SubLObject current = datum;
+            SubLObject fvector = NIL;
+            SubLObject current_3 = NIL;
+            SubLObject size = NIL;
+            SubLObject tuple = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            fvector = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            current_3 = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            size = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            tuple = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                return numLE(size, current_3);
+            } else {
+                cdestructuring_bind_error(datum, $list_alt39);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject fvector_index_iterator_done(final SubLObject state) {
@@ -1115,6 +1636,59 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @unknown READ-FILE-VECTOR-INDEX-ENTRY is expected to be fast iff
+    the index values come in ascending order. Writing the code this
+    way makes it robust against others monkeying with the file vector,
+    because in the worst case it repositions the index entry.
+     */
+    @LispMethod(comment = "@unknown READ-FILE-VECTOR-INDEX-ENTRY is expected to be fast iff\r\nthe index values come in ascending order. Writing the code this\r\nway makes it robust against others monkeying with the file vector,\r\nbecause in the worst case it repositions the index entry.")
+    public static SubLObject fvector_index_iterator_next_alt(SubLObject state) {
+        {
+            SubLObject datum = state;
+            SubLObject current = datum;
+            SubLObject fvector = NIL;
+            SubLObject current_4 = NIL;
+            SubLObject size = NIL;
+            SubLObject tuple = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            fvector = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            current_4 = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            size = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            tuple = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject address = com.cyc.cycjava.cycl.file_vector.read_file_vector_index_entry(fvector, current_4);
+                    rplaca(tuple, current_4);
+                    rplacd(tuple, address);
+                    set_nth(ONE_INTEGER, state, add(current_4, ONE_INTEGER));
+                    return values(tuple, state);
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list_alt39);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @unknown READ-FILE-VECTOR-INDEX-ENTRY is expected to be fast iff
+    the index values come in ascending order. Writing the code this
+    way makes it robust against others monkeying with the file vector,
+    because in the worst case it repositions the index entry.
+     */
+    @LispMethod(comment = "@unknown READ-FILE-VECTOR-INDEX-ENTRY is expected to be fast iff\r\nthe index values come in ascending order. Writing the code this\r\nway makes it robust against others monkeying with the file vector,\r\nbecause in the worst case it repositions the index entry.")
     public static SubLObject fvector_index_iterator_next(final SubLObject state) {
         SubLObject fvector = NIL;
         SubLObject current_$3 = NIL;
@@ -1346,8 +1920,8 @@ public final class file_vector extends SubLTranslatedFile {
 
     public static SubLObject find_file_vector_data_address_in_index(final SubLObject fvector, final SubLObject data_address) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != file_vector_p(fvector) : "file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) " + fvector;
-        assert NIL != subl_promotions.non_negative_integer_p(data_address) : "subl_promotions.non_negative_integer_p(data_address) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(data_address) " + data_address;
+        assert NIL != file_vector_p(fvector) : "! file_vector.file_vector_p(fvector) " + ("file_vector.file_vector_p(fvector) " + "CommonSymbols.NIL != file_vector.file_vector_p(fvector) ") + fvector;
+        assert NIL != subl_promotions.non_negative_integer_p(data_address) : "! subl_promotions.non_negative_integer_p(data_address) " + ("subl_promotions.non_negative_integer_p(data_address) " + "CommonSymbols.NIL != subl_promotions.non_negative_integer_p(data_address) ") + data_address;
         final SubLObject max_data_position = file_length(get_file_vector_data_stream(fvector));
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (!data_address.numLE(max_data_position))) {
             Errors.error($str98$Data_Address__A_is_past_the_end_o, data_address, max_data_position, fvector);
@@ -1871,6 +2445,172 @@ public final class file_vector extends SubLTranslatedFile {
         return wide_mark_filename;
     }
 
+    public static SubLObject test_file_vector_writing_and_positioning_alt(SubLObject count) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject addresses = NIL;
+                SubLObject data_file = make_temp_filename($str_alt49$_tmp_);
+                try {
+                    {
+                        SubLObject index_file = make_temp_filename($str_alt49$_tmp_);
+                        try {
+                            {
+                                SubLObject fvector = NIL;
+                                try {
+                                    fvector = com.cyc.cycjava.cycl.file_vector.new_file_vector(data_file, index_file, $OUTPUT);
+                                    {
+                                        SubLObject data_stream = com.cyc.cycjava.cycl.file_vector.get_file_vector_data_stream(fvector);
+                                        SubLObject i = NIL;
+                                        for (i = ZERO_INTEGER; i.numL(count); i = add(i, ONE_INTEGER)) {
+                                            {
+                                                SubLObject next_index = com.cyc.cycjava.cycl.file_vector.file_vector_next_index(fvector);
+                                                if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                                                    if (!i.numE(next_index)) {
+                                                        Errors.error(Errors.error($str_alt51$The_next_index_is_supposed_to_be_, i, next_index));
+                                                    }
+                                                }
+                                            }
+                                            com.cyc.cycjava.cycl.file_vector.update_file_vector_index_linear(fvector);
+                                            cfasl_output(cconcatenate($str_alt52$Position_, format_nil_a_no_copy(i)), data_stream);
+                                        }
+                                    }
+                                } finally {
+                                    {
+                                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                        try {
+                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                            if (NIL != com.cyc.cycjava.cycl.file_vector.file_vector_p(fvector)) {
+                                                com.cyc.cycjava.cycl.file_vector.close_file_vector(fvector);
+                                            }
+                                        } finally {
+                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                }
+                            }
+                            addresses = nreverse(addresses);
+                            {
+                                SubLObject fvector = NIL;
+                                try {
+                                    fvector = com.cyc.cycjava.cycl.file_vector.new_file_vector(data_file, index_file, $INPUT);
+                                    {
+                                        SubLObject iterator = com.cyc.cycjava.cycl.file_vector.new_file_vector_index_iterator(fvector);
+                                        SubLObject list_var = NIL;
+                                        SubLObject expected_address = NIL;
+                                        SubLObject expected_index = NIL;
+                                        for (list_var = addresses, expected_address = list_var.first(), expected_index = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , expected_address = list_var.first() , expected_index = add(ONE_INTEGER, expected_index)) {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject tuple = iteration.iteration_next(iterator);
+                                                SubLObject validP = thread.secondMultipleValue();
+                                                thread.resetMultipleValues();
+                                                if (NIL == validP) {
+                                                    Errors.error($str_alt53$On_step___A__the_iteration_result, expected_index);
+                                                }
+                                                {
+                                                    SubLObject datum = tuple;
+                                                    SubLObject current = datum;
+                                                    SubLObject actual_index = NIL;
+                                                    SubLObject actual_address = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt54);
+                                                    actual_index = current.first();
+                                                    current = current.rest();
+                                                    actual_address = current;
+                                                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                                                        if (!actual_index.numE(expected_index)) {
+                                                            Errors.error($str_alt55$The_expected_index__A_was_____act, expected_index, actual_index);
+                                                        }
+                                                    }
+                                                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                                                        if (!expected_address.numE(actual_address)) {
+                                                            Errors.error($str_alt56$The_expected_address__A_was_____a, expected_address, actual_address);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    {
+                                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                        try {
+                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                            if (NIL != com.cyc.cycjava.cycl.file_vector.file_vector_p(fvector)) {
+                                                com.cyc.cycjava.cycl.file_vector.close_file_vector(fvector);
+                                            }
+                                        } finally {
+                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                }
+                            }
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    {
+                                        SubLObject ignore_errors_tag = NIL;
+                                        try {
+                                            {
+                                                SubLObject _prev_bind_0_5 = Errors.$error_handler$.currentBinding(thread);
+                                                try {
+                                                    Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                                                    try {
+                                                        Filesys.delete_file(index_file);
+                                                    } catch (Throwable catch_var) {
+                                                        Errors.handleThrowable(catch_var, NIL);
+                                                    }
+                                                } finally {
+                                                    Errors.$error_handler$.rebind(_prev_bind_0_5, thread);
+                                                }
+                                            }
+                                        } catch (Throwable ccatch_env_var) {
+                                            ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                                        }
+                                    }
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            {
+                                SubLObject ignore_errors_tag = NIL;
+                                try {
+                                    {
+                                        SubLObject _prev_bind_0_6 = Errors.$error_handler$.currentBinding(thread);
+                                        try {
+                                            Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                                            try {
+                                                Filesys.delete_file(data_file);
+                                            } catch (Throwable catch_var) {
+                                                Errors.handleThrowable(catch_var, NIL);
+                                            }
+                                        } finally {
+                                            Errors.$error_handler$.rebind(_prev_bind_0_6, thread);
+                                        }
+                                    }
+                                } catch (Throwable ccatch_env_var) {
+                                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                                }
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return count;
+        }
+    }
+
     public static SubLObject test_file_vector_writing_and_positioning(final SubLObject count) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject data_file = file_utilities.make_temp_filename($str114$_tmp_);
@@ -2174,90 +2914,220 @@ public final class file_vector extends SubLTranslatedFile {
         return count;
     }
 
+    public static SubLObject declare_file_vector_file_alt() {
+        declareFunction("fvector_print_function_trampoline", "FVECTOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("fvector_p", "FVECTOR-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.file_vector.$fvector_p$UnaryFunction();
+        declareFunction("fvector_data_stream", "FVECTOR-DATA-STREAM", 1, 0, false);
+        declareFunction("fvector_index_stream", "FVECTOR-INDEX-STREAM", 1, 0, false);
+        declareFunction("_csetf_fvector_data_stream", "_CSETF-FVECTOR-DATA-STREAM", 2, 0, false);
+        declareFunction("_csetf_fvector_index_stream", "_CSETF-FVECTOR-INDEX-STREAM", 2, 0, false);
+        declareFunction("make_fvector", "MAKE-FVECTOR", 0, 1, false);
+        declareFunction("print_fvector", "PRINT-FVECTOR", 3, 0, false);
+        declareFunction("new_fvector", "NEW-FVECTOR", 2, 0, false);
+        declareFunction("file_vector_p", "FILE-VECTOR-P", 1, 0, false);
+        declareFunction("new_file_vector", "NEW-FILE-VECTOR", 2, 1, false);
+        declareFunction("create_file_vector", "CREATE-FILE-VECTOR", 2, 0, false);
+        declareFunction("clone_file_vector", "CLONE-FILE-VECTOR", 1, 0, false);
+        declareFunction("close_file_vector", "CLOSE-FILE-VECTOR", 1, 0, false);
+        declareFunction("get_file_vector_data_stream", "GET-FILE-VECTOR-DATA-STREAM", 1, 0, false);
+        declareFunction("get_file_vector_index_stream", "GET-FILE-VECTOR-INDEX-STREAM", 1, 0, false);
+        declareFunction("file_vector_length", "FILE-VECTOR-LENGTH", 1, 0, false);
+        declareFunction("file_vector_length_from_index", "FILE-VECTOR-LENGTH-FROM-INDEX", 1, 0, false);
+        declareFunction("file_vector_next_index", "FILE-VECTOR-NEXT-INDEX", 1, 0, false);
+        declareFunction("fvector_raw_byte_size_to_length", "FVECTOR-RAW-BYTE-SIZE-TO-LENGTH", 1, 0, false);
+        declareFunction("position_file_vector", "POSITION-FILE-VECTOR", 1, 1, false);
+        declareFunction("read_file_vector_index_entry", "READ-FILE-VECTOR-INDEX-ENTRY", 1, 1, false);
+        declareMacro("with_output_to_file_vector", "WITH-OUTPUT-TO-FILE-VECTOR");
+        declareFunction("update_file_vector_index", "UPDATE-FILE-VECTOR-INDEX", 1, 0, false);
+        declareFunction("update_file_vector_index_linear", "UPDATE-FILE-VECTOR-INDEX-LINEAR", 1, 0, false);
+        declareMacro("with_input_from_file_vector", "WITH-INPUT-FROM-FILE-VECTOR");
+        declareFunction("new_file_vector_index_iterator", "NEW-FILE-VECTOR-INDEX-ITERATOR", 1, 0, false);
+        declareFunction("make_file_vector_index_iterator_state", "MAKE-FILE-VECTOR-INDEX-ITERATOR-STATE", 1, 0, false);
+        declareFunction("fvector_index_iterator_done", "FVECTOR-INDEX-ITERATOR-DONE", 1, 0, false);
+        declareFunction("fvector_index_iterator_next", "FVECTOR-INDEX-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("test_file_vector_writing_and_positioning", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_file_vector_file() {
-        declareFunction(me, "fvector_print_function_trampoline", "FVECTOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "fvector_p", "FVECTOR-P", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("fvector_print_function_trampoline", "FVECTOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("fvector_p", "FVECTOR-P", 1, 0, false);
+            new file_vector.$fvector_p$UnaryFunction();
+            declareFunction("fvector_data_stream", "FVECTOR-DATA-STREAM", 1, 0, false);
+            declareFunction("fvector_index_stream", "FVECTOR-INDEX-STREAM", 1, 0, false);
+            declareFunction("fvector_wide_mark", "FVECTOR-WIDE-MARK", 1, 0, false);
+            declareFunction("_csetf_fvector_data_stream", "_CSETF-FVECTOR-DATA-STREAM", 2, 0, false);
+            declareFunction("_csetf_fvector_index_stream", "_CSETF-FVECTOR-INDEX-STREAM", 2, 0, false);
+            declareFunction("_csetf_fvector_wide_mark", "_CSETF-FVECTOR-WIDE-MARK", 2, 0, false);
+            declareFunction("make_fvector", "MAKE-FVECTOR", 0, 1, false);
+            declareFunction("visit_defstruct_fvector", "VISIT-DEFSTRUCT-FVECTOR", 2, 0, false);
+            declareFunction("visit_defstruct_object_fvector_method", "VISIT-DEFSTRUCT-OBJECT-FVECTOR-METHOD", 2, 0, false);
+            declareFunction("print_fvector", "PRINT-FVECTOR", 3, 0, false);
+            declareFunction("new_fvector", "NEW-FVECTOR", 2, 1, false);
+            declareFunction("get_file_vector_wide_mark", "GET-FILE-VECTOR-WIDE-MARK", 1, 0, false);
+            declareFunction("specify_file_vector_wide_mark", "SPECIFY-FILE-VECTOR-WIDE-MARK", 2, 0, false);
+            declareFunction("file_vector_p", "FILE-VECTOR-P", 1, 0, false);
+            declareFunction("new_file_vector", "NEW-FILE-VECTOR", 2, 4, false);
+            declareFunction("open_file_vector_for_rewrite", "OPEN-FILE-VECTOR-FOR-REWRITE", 3, 3, false);
+            declareFunction("open_file_vector_for_append", "OPEN-FILE-VECTOR-FOR-APPEND", 3, 3, false);
+            declareFunction("new_wide_input_file_vector", "NEW-WIDE-INPUT-FILE-VECTOR", 3, 3, false);
+            declareFunction("create_file_vector", "CREATE-FILE-VECTOR", 2, 0, false);
+            declareFunction("create_wide_file_vector", "CREATE-WIDE-FILE-VECTOR", 3, 0, false);
+            declareFunction("load_file_vector_wide_mark", "LOAD-FILE-VECTOR-WIDE-MARK", 1, 0, false);
+            declareFunction("possibly_load_file_vector_wide_mark", "POSSIBLY-LOAD-FILE-VECTOR-WIDE-MARK", 1, 0, false);
+            declareFunction("save_file_vector_wide_mark", "SAVE-FILE-VECTOR-WIDE-MARK", 2, 0, false);
+            declareFunction("persist_file_vector_wide_mark", "PERSIST-FILE-VECTOR-WIDE-MARK", 2, 0, false);
+            declareFunction("clone_file_vector", "CLONE-FILE-VECTOR", 1, 0, false);
+            declareFunction("close_file_vector", "CLOSE-FILE-VECTOR", 1, 0, false);
+            declareFunction("file_vector_change_stream_buffer_sizes", "FILE-VECTOR-CHANGE-STREAM-BUFFER-SIZES", 3, 0, false);
+            declareFunction("file_vector_enable_memory_mapping", "FILE-VECTOR-ENABLE-MEMORY-MAPPING", 1, 0, false);
+            declareFunction("file_vector_memory_mappedP", "FILE-VECTOR-MEMORY-MAPPED?", 1, 0, false);
+            declareFunction("get_file_vector_data_stream", "GET-FILE-VECTOR-DATA-STREAM", 1, 0, false);
+            declareFunction("get_file_vector_index_stream", "GET-FILE-VECTOR-INDEX-STREAM", 1, 0, false);
+            declareFunction("wide_file_vectorP", "WIDE-FILE-VECTOR?", 1, 0, false);
+            declareFunction("narrow_file_vectorP", "NARROW-FILE-VECTOR?", 1, 0, false);
+            declareFunction("file_vector_length", "FILE-VECTOR-LENGTH", 1, 0, false);
+            declareFunction("file_vector_length_from_index", "FILE-VECTOR-LENGTH-FROM-INDEX", 1, 0, false);
+            declareFunction("wide_file_vector_length_from_index", "WIDE-FILE-VECTOR-LENGTH-FROM-INDEX", 2, 0, false);
+            declareFunction("file_vector_length_from_index_int", "FILE-VECTOR-LENGTH-FROM-INDEX-INT", 2, 0, false);
+            declareFunction("file_vector_length_from_index_stream", "FILE-VECTOR-LENGTH-FROM-INDEX-STREAM", 2, 0, false);
+            declareFunction("file_vector_data_size", "FILE-VECTOR-DATA-SIZE", 1, 0, false);
+            declareFunction("file_vector_data_size_from_filename", "FILE-VECTOR-DATA-SIZE-FROM-FILENAME", 1, 0, false);
+            declareFunction("file_vector_data_size_from_data_stream", "FILE-VECTOR-DATA-SIZE-FROM-DATA-STREAM", 1, 0, false);
+            declareFunction("file_vector_next_index", "FILE-VECTOR-NEXT-INDEX", 1, 0, false);
+            declareFunction("fvector_raw_byte_size_to_length", "FVECTOR-RAW-BYTE-SIZE-TO-LENGTH", 1, 1, false);
+            declareFunction("position_file_vector", "POSITION-FILE-VECTOR", 1, 1, false);
+            declareFunction("position_file_vector_index_for_update", "POSITION-FILE-VECTOR-INDEX-FOR-UPDATE", 2, 0, false);
+            declareFunction("position_file_vector_index", "POSITION-FILE-VECTOR-INDEX", 2, 0, false);
+            declareFunction("read_file_vector_index_entry", "READ-FILE-VECTOR-INDEX-ENTRY", 1, 1, false);
+            declareFunction("wide_fvector_index_to_file_position", "WIDE-FVECTOR-INDEX-TO-FILE-POSITION", 2, 0, false);
+            declareFunction("fvector_file_position_to_index", "FVECTOR-FILE-POSITION-TO-INDEX", 1, 1, false);
+            declareFunction("begin_file_vector_excursion", "BEGIN-FILE-VECTOR-EXCURSION", 1, 1, false);
+            declareFunction("end_file_vector_excursion", "END-FILE-VECTOR-EXCURSION", 2, 0, false);
+            declareFunction("fvector_make_memento", "FVECTOR-MAKE-MEMENTO", 2, 0, false);
+            declareMacro("with_file_vector_excursion", "WITH-FILE-VECTOR-EXCURSION");
+            declareMacro("with_output_to_file_vector", "WITH-OUTPUT-TO-FILE-VECTOR");
+            declareFunction("update_file_vector_index", "UPDATE-FILE-VECTOR-INDEX", 1, 0, false);
+            declareFunction("update_file_vector_index_linear", "UPDATE-FILE-VECTOR-INDEX-LINEAR", 1, 0, false);
+            declareFunction("overwrite_file_vector_index", "OVERWRITE-FILE-VECTOR-INDEX", 1, 0, false);
+            declareFunction("write_file_vector_index_entry", "WRITE-FILE-VECTOR-INDEX-ENTRY", 2, 0, false);
+            declareFunction("place_file_vector_index_tombstone", "PLACE-FILE-VECTOR-INDEX-TOMBSTONE", 1, 0, false);
+            declareFunction("place_file_vector_index_tombstone_linear", "PLACE-FILE-VECTOR-INDEX-TOMBSTONE-LINEAR", 1, 0, false);
+            declareMacro("with_input_from_file_vector", "WITH-INPUT-FROM-FILE-VECTOR");
+            declareFunction("new_file_vector_index_iterator", "NEW-FILE-VECTOR-INDEX-ITERATOR", 1, 0, false);
+            declareFunction("make_file_vector_index_iterator_state", "MAKE-FILE-VECTOR-INDEX-ITERATOR-STATE", 1, 0, false);
+            declareFunction("fvector_index_iterator_done", "FVECTOR-INDEX-ITERATOR-DONE", 1, 0, false);
+            declareFunction("fvector_index_iterator_next", "FVECTOR-INDEX-ITERATOR-NEXT", 1, 0, false);
+            declareFunction("gather_file_vector_statistics_for_filenames", "GATHER-FILE-VECTOR-STATISTICS-FOR-FILENAMES", 2, 0, false);
+            declareFunction("gather_file_vector_statistics", "GATHER-FILE-VECTOR-STATISTICS", 1, 0, false);
+            declareFunction("file_vector_stats_indicate_dense_index_spaceP", "FILE-VECTOR-STATS-INDICATE-DENSE-INDEX-SPACE?", 1, 0, false);
+            declareFunction("file_vector_memory_map_for_files", "FILE-VECTOR-MEMORY-MAP-FOR-FILES", 3, 0, false);
+            declareFunction("file_vector_memory_map", "FILE-VECTOR-MEMORY-MAP", 2, 0, false);
+            declareFunction("fvectmemmap_flush_buffer", "FVECTMEMMAP-FLUSH-BUFFER", 3, 0, false);
+            declareFunction("fvect_mem_mapL", "FVECT-MEM-MAP<", 2, 0, false);
+            declareFunction("find_file_vector_data_address_in_index", "FIND-FILE-VECTOR-DATA-ADDRESS-IN-INDEX", 2, 0, false);
+            declareFunction("widen_file_vector_index_at_mark", "WIDEN-FILE-VECTOR-INDEX-AT-MARK", 3, 0, false);
+            declareFunction("widen_file_vector_index", "WIDEN-FILE-VECTOR-INDEX", 3, 1, false);
+            declareFunction("recover_narrow_file_vector_index", "RECOVER-NARROW-FILE-VECTOR-INDEX", 3, 0, false);
+            declareFunction("recover_wide_file_vector_mark", "RECOVER-WIDE-FILE-VECTOR-MARK", 2, 0, false);
+            declareFunction("test_file_vector_writing_and_positioning", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING", 1, 0, false);
+            declareFunction("test_wide_file_vector_writing_and_positioning", "TEST-WIDE-FILE-VECTOR-WRITING-AND-POSITIONING", 2, 0, false);
+            declareFunction("test_file_vector_writing_and_positioning_internal", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING-INTERNAL", 4, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("new_fvector", "NEW-FVECTOR", 2, 0, false);
+            declareFunction("new_file_vector", "NEW-FILE-VECTOR", 2, 1, false);
+            declareFunction("fvector_raw_byte_size_to_length", "FVECTOR-RAW-BYTE-SIZE-TO-LENGTH", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_file_vector_file_Previous() {
+        declareFunction("fvector_print_function_trampoline", "FVECTOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("fvector_p", "FVECTOR-P", 1, 0, false);
         new file_vector.$fvector_p$UnaryFunction();
-        declareFunction(me, "fvector_data_stream", "FVECTOR-DATA-STREAM", 1, 0, false);
-        declareFunction(me, "fvector_index_stream", "FVECTOR-INDEX-STREAM", 1, 0, false);
-        declareFunction(me, "fvector_wide_mark", "FVECTOR-WIDE-MARK", 1, 0, false);
-        declareFunction(me, "_csetf_fvector_data_stream", "_CSETF-FVECTOR-DATA-STREAM", 2, 0, false);
-        declareFunction(me, "_csetf_fvector_index_stream", "_CSETF-FVECTOR-INDEX-STREAM", 2, 0, false);
-        declareFunction(me, "_csetf_fvector_wide_mark", "_CSETF-FVECTOR-WIDE-MARK", 2, 0, false);
-        declareFunction(me, "make_fvector", "MAKE-FVECTOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_fvector", "VISIT-DEFSTRUCT-FVECTOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_fvector_method", "VISIT-DEFSTRUCT-OBJECT-FVECTOR-METHOD", 2, 0, false);
-        declareFunction(me, "print_fvector", "PRINT-FVECTOR", 3, 0, false);
-        declareFunction(me, "new_fvector", "NEW-FVECTOR", 2, 1, false);
-        declareFunction(me, "get_file_vector_wide_mark", "GET-FILE-VECTOR-WIDE-MARK", 1, 0, false);
-        declareFunction(me, "specify_file_vector_wide_mark", "SPECIFY-FILE-VECTOR-WIDE-MARK", 2, 0, false);
-        declareFunction(me, "file_vector_p", "FILE-VECTOR-P", 1, 0, false);
-        declareFunction(me, "new_file_vector", "NEW-FILE-VECTOR", 2, 4, false);
-        declareFunction(me, "open_file_vector_for_rewrite", "OPEN-FILE-VECTOR-FOR-REWRITE", 3, 3, false);
-        declareFunction(me, "open_file_vector_for_append", "OPEN-FILE-VECTOR-FOR-APPEND", 3, 3, false);
-        declareFunction(me, "new_wide_input_file_vector", "NEW-WIDE-INPUT-FILE-VECTOR", 3, 3, false);
-        declareFunction(me, "create_file_vector", "CREATE-FILE-VECTOR", 2, 0, false);
-        declareFunction(me, "create_wide_file_vector", "CREATE-WIDE-FILE-VECTOR", 3, 0, false);
-        declareFunction(me, "load_file_vector_wide_mark", "LOAD-FILE-VECTOR-WIDE-MARK", 1, 0, false);
-        declareFunction(me, "possibly_load_file_vector_wide_mark", "POSSIBLY-LOAD-FILE-VECTOR-WIDE-MARK", 1, 0, false);
-        declareFunction(me, "save_file_vector_wide_mark", "SAVE-FILE-VECTOR-WIDE-MARK", 2, 0, false);
-        declareFunction(me, "persist_file_vector_wide_mark", "PERSIST-FILE-VECTOR-WIDE-MARK", 2, 0, false);
-        declareFunction(me, "clone_file_vector", "CLONE-FILE-VECTOR", 1, 0, false);
-        declareFunction(me, "close_file_vector", "CLOSE-FILE-VECTOR", 1, 0, false);
-        declareFunction(me, "file_vector_change_stream_buffer_sizes", "FILE-VECTOR-CHANGE-STREAM-BUFFER-SIZES", 3, 0, false);
-        declareFunction(me, "file_vector_enable_memory_mapping", "FILE-VECTOR-ENABLE-MEMORY-MAPPING", 1, 0, false);
-        declareFunction(me, "file_vector_memory_mappedP", "FILE-VECTOR-MEMORY-MAPPED?", 1, 0, false);
-        declareFunction(me, "get_file_vector_data_stream", "GET-FILE-VECTOR-DATA-STREAM", 1, 0, false);
-        declareFunction(me, "get_file_vector_index_stream", "GET-FILE-VECTOR-INDEX-STREAM", 1, 0, false);
-        declareFunction(me, "wide_file_vectorP", "WIDE-FILE-VECTOR?", 1, 0, false);
-        declareFunction(me, "narrow_file_vectorP", "NARROW-FILE-VECTOR?", 1, 0, false);
-        declareFunction(me, "file_vector_length", "FILE-VECTOR-LENGTH", 1, 0, false);
-        declareFunction(me, "file_vector_length_from_index", "FILE-VECTOR-LENGTH-FROM-INDEX", 1, 0, false);
-        declareFunction(me, "wide_file_vector_length_from_index", "WIDE-FILE-VECTOR-LENGTH-FROM-INDEX", 2, 0, false);
-        declareFunction(me, "file_vector_length_from_index_int", "FILE-VECTOR-LENGTH-FROM-INDEX-INT", 2, 0, false);
-        declareFunction(me, "file_vector_length_from_index_stream", "FILE-VECTOR-LENGTH-FROM-INDEX-STREAM", 2, 0, false);
-        declareFunction(me, "file_vector_data_size", "FILE-VECTOR-DATA-SIZE", 1, 0, false);
-        declareFunction(me, "file_vector_data_size_from_filename", "FILE-VECTOR-DATA-SIZE-FROM-FILENAME", 1, 0, false);
-        declareFunction(me, "file_vector_data_size_from_data_stream", "FILE-VECTOR-DATA-SIZE-FROM-DATA-STREAM", 1, 0, false);
-        declareFunction(me, "file_vector_next_index", "FILE-VECTOR-NEXT-INDEX", 1, 0, false);
-        declareFunction(me, "fvector_raw_byte_size_to_length", "FVECTOR-RAW-BYTE-SIZE-TO-LENGTH", 1, 1, false);
-        declareFunction(me, "position_file_vector", "POSITION-FILE-VECTOR", 1, 1, false);
-        declareFunction(me, "position_file_vector_index_for_update", "POSITION-FILE-VECTOR-INDEX-FOR-UPDATE", 2, 0, false);
-        declareFunction(me, "position_file_vector_index", "POSITION-FILE-VECTOR-INDEX", 2, 0, false);
-        declareFunction(me, "read_file_vector_index_entry", "READ-FILE-VECTOR-INDEX-ENTRY", 1, 1, false);
-        declareFunction(me, "wide_fvector_index_to_file_position", "WIDE-FVECTOR-INDEX-TO-FILE-POSITION", 2, 0, false);
-        declareFunction(me, "fvector_file_position_to_index", "FVECTOR-FILE-POSITION-TO-INDEX", 1, 1, false);
-        declareFunction(me, "begin_file_vector_excursion", "BEGIN-FILE-VECTOR-EXCURSION", 1, 1, false);
-        declareFunction(me, "end_file_vector_excursion", "END-FILE-VECTOR-EXCURSION", 2, 0, false);
-        declareFunction(me, "fvector_make_memento", "FVECTOR-MAKE-MEMENTO", 2, 0, false);
-        declareMacro(me, "with_file_vector_excursion", "WITH-FILE-VECTOR-EXCURSION");
-        declareMacro(me, "with_output_to_file_vector", "WITH-OUTPUT-TO-FILE-VECTOR");
-        declareFunction(me, "update_file_vector_index", "UPDATE-FILE-VECTOR-INDEX", 1, 0, false);
-        declareFunction(me, "update_file_vector_index_linear", "UPDATE-FILE-VECTOR-INDEX-LINEAR", 1, 0, false);
-        declareFunction(me, "overwrite_file_vector_index", "OVERWRITE-FILE-VECTOR-INDEX", 1, 0, false);
-        declareFunction(me, "write_file_vector_index_entry", "WRITE-FILE-VECTOR-INDEX-ENTRY", 2, 0, false);
-        declareFunction(me, "place_file_vector_index_tombstone", "PLACE-FILE-VECTOR-INDEX-TOMBSTONE", 1, 0, false);
-        declareFunction(me, "place_file_vector_index_tombstone_linear", "PLACE-FILE-VECTOR-INDEX-TOMBSTONE-LINEAR", 1, 0, false);
-        declareMacro(me, "with_input_from_file_vector", "WITH-INPUT-FROM-FILE-VECTOR");
-        declareFunction(me, "new_file_vector_index_iterator", "NEW-FILE-VECTOR-INDEX-ITERATOR", 1, 0, false);
-        declareFunction(me, "make_file_vector_index_iterator_state", "MAKE-FILE-VECTOR-INDEX-ITERATOR-STATE", 1, 0, false);
-        declareFunction(me, "fvector_index_iterator_done", "FVECTOR-INDEX-ITERATOR-DONE", 1, 0, false);
-        declareFunction(me, "fvector_index_iterator_next", "FVECTOR-INDEX-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "gather_file_vector_statistics_for_filenames", "GATHER-FILE-VECTOR-STATISTICS-FOR-FILENAMES", 2, 0, false);
-        declareFunction(me, "gather_file_vector_statistics", "GATHER-FILE-VECTOR-STATISTICS", 1, 0, false);
-        declareFunction(me, "file_vector_stats_indicate_dense_index_spaceP", "FILE-VECTOR-STATS-INDICATE-DENSE-INDEX-SPACE?", 1, 0, false);
-        declareFunction(me, "file_vector_memory_map_for_files", "FILE-VECTOR-MEMORY-MAP-FOR-FILES", 3, 0, false);
-        declareFunction(me, "file_vector_memory_map", "FILE-VECTOR-MEMORY-MAP", 2, 0, false);
-        declareFunction(me, "fvectmemmap_flush_buffer", "FVECTMEMMAP-FLUSH-BUFFER", 3, 0, false);
-        declareFunction(me, "fvect_mem_mapL", "FVECT-MEM-MAP<", 2, 0, false);
-        declareFunction(me, "find_file_vector_data_address_in_index", "FIND-FILE-VECTOR-DATA-ADDRESS-IN-INDEX", 2, 0, false);
-        declareFunction(me, "widen_file_vector_index_at_mark", "WIDEN-FILE-VECTOR-INDEX-AT-MARK", 3, 0, false);
-        declareFunction(me, "widen_file_vector_index", "WIDEN-FILE-VECTOR-INDEX", 3, 1, false);
-        declareFunction(me, "recover_narrow_file_vector_index", "RECOVER-NARROW-FILE-VECTOR-INDEX", 3, 0, false);
-        declareFunction(me, "recover_wide_file_vector_mark", "RECOVER-WIDE-FILE-VECTOR-MARK", 2, 0, false);
-        declareFunction(me, "test_file_vector_writing_and_positioning", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING", 1, 0, false);
-        declareFunction(me, "test_wide_file_vector_writing_and_positioning", "TEST-WIDE-FILE-VECTOR-WRITING-AND-POSITIONING", 2, 0, false);
-        declareFunction(me, "test_file_vector_writing_and_positioning_internal", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING-INTERNAL", 4, 0, false);
+        declareFunction("fvector_data_stream", "FVECTOR-DATA-STREAM", 1, 0, false);
+        declareFunction("fvector_index_stream", "FVECTOR-INDEX-STREAM", 1, 0, false);
+        declareFunction("fvector_wide_mark", "FVECTOR-WIDE-MARK", 1, 0, false);
+        declareFunction("_csetf_fvector_data_stream", "_CSETF-FVECTOR-DATA-STREAM", 2, 0, false);
+        declareFunction("_csetf_fvector_index_stream", "_CSETF-FVECTOR-INDEX-STREAM", 2, 0, false);
+        declareFunction("_csetf_fvector_wide_mark", "_CSETF-FVECTOR-WIDE-MARK", 2, 0, false);
+        declareFunction("make_fvector", "MAKE-FVECTOR", 0, 1, false);
+        declareFunction("visit_defstruct_fvector", "VISIT-DEFSTRUCT-FVECTOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_fvector_method", "VISIT-DEFSTRUCT-OBJECT-FVECTOR-METHOD", 2, 0, false);
+        declareFunction("print_fvector", "PRINT-FVECTOR", 3, 0, false);
+        declareFunction("new_fvector", "NEW-FVECTOR", 2, 1, false);
+        declareFunction("get_file_vector_wide_mark", "GET-FILE-VECTOR-WIDE-MARK", 1, 0, false);
+        declareFunction("specify_file_vector_wide_mark", "SPECIFY-FILE-VECTOR-WIDE-MARK", 2, 0, false);
+        declareFunction("file_vector_p", "FILE-VECTOR-P", 1, 0, false);
+        declareFunction("new_file_vector", "NEW-FILE-VECTOR", 2, 4, false);
+        declareFunction("open_file_vector_for_rewrite", "OPEN-FILE-VECTOR-FOR-REWRITE", 3, 3, false);
+        declareFunction("open_file_vector_for_append", "OPEN-FILE-VECTOR-FOR-APPEND", 3, 3, false);
+        declareFunction("new_wide_input_file_vector", "NEW-WIDE-INPUT-FILE-VECTOR", 3, 3, false);
+        declareFunction("create_file_vector", "CREATE-FILE-VECTOR", 2, 0, false);
+        declareFunction("create_wide_file_vector", "CREATE-WIDE-FILE-VECTOR", 3, 0, false);
+        declareFunction("load_file_vector_wide_mark", "LOAD-FILE-VECTOR-WIDE-MARK", 1, 0, false);
+        declareFunction("possibly_load_file_vector_wide_mark", "POSSIBLY-LOAD-FILE-VECTOR-WIDE-MARK", 1, 0, false);
+        declareFunction("save_file_vector_wide_mark", "SAVE-FILE-VECTOR-WIDE-MARK", 2, 0, false);
+        declareFunction("persist_file_vector_wide_mark", "PERSIST-FILE-VECTOR-WIDE-MARK", 2, 0, false);
+        declareFunction("clone_file_vector", "CLONE-FILE-VECTOR", 1, 0, false);
+        declareFunction("close_file_vector", "CLOSE-FILE-VECTOR", 1, 0, false);
+        declareFunction("file_vector_change_stream_buffer_sizes", "FILE-VECTOR-CHANGE-STREAM-BUFFER-SIZES", 3, 0, false);
+        declareFunction("file_vector_enable_memory_mapping", "FILE-VECTOR-ENABLE-MEMORY-MAPPING", 1, 0, false);
+        declareFunction("file_vector_memory_mappedP", "FILE-VECTOR-MEMORY-MAPPED?", 1, 0, false);
+        declareFunction("get_file_vector_data_stream", "GET-FILE-VECTOR-DATA-STREAM", 1, 0, false);
+        declareFunction("get_file_vector_index_stream", "GET-FILE-VECTOR-INDEX-STREAM", 1, 0, false);
+        declareFunction("wide_file_vectorP", "WIDE-FILE-VECTOR?", 1, 0, false);
+        declareFunction("narrow_file_vectorP", "NARROW-FILE-VECTOR?", 1, 0, false);
+        declareFunction("file_vector_length", "FILE-VECTOR-LENGTH", 1, 0, false);
+        declareFunction("file_vector_length_from_index", "FILE-VECTOR-LENGTH-FROM-INDEX", 1, 0, false);
+        declareFunction("wide_file_vector_length_from_index", "WIDE-FILE-VECTOR-LENGTH-FROM-INDEX", 2, 0, false);
+        declareFunction("file_vector_length_from_index_int", "FILE-VECTOR-LENGTH-FROM-INDEX-INT", 2, 0, false);
+        declareFunction("file_vector_length_from_index_stream", "FILE-VECTOR-LENGTH-FROM-INDEX-STREAM", 2, 0, false);
+        declareFunction("file_vector_data_size", "FILE-VECTOR-DATA-SIZE", 1, 0, false);
+        declareFunction("file_vector_data_size_from_filename", "FILE-VECTOR-DATA-SIZE-FROM-FILENAME", 1, 0, false);
+        declareFunction("file_vector_data_size_from_data_stream", "FILE-VECTOR-DATA-SIZE-FROM-DATA-STREAM", 1, 0, false);
+        declareFunction("file_vector_next_index", "FILE-VECTOR-NEXT-INDEX", 1, 0, false);
+        declareFunction("fvector_raw_byte_size_to_length", "FVECTOR-RAW-BYTE-SIZE-TO-LENGTH", 1, 1, false);
+        declareFunction("position_file_vector", "POSITION-FILE-VECTOR", 1, 1, false);
+        declareFunction("position_file_vector_index_for_update", "POSITION-FILE-VECTOR-INDEX-FOR-UPDATE", 2, 0, false);
+        declareFunction("position_file_vector_index", "POSITION-FILE-VECTOR-INDEX", 2, 0, false);
+        declareFunction("read_file_vector_index_entry", "READ-FILE-VECTOR-INDEX-ENTRY", 1, 1, false);
+        declareFunction("wide_fvector_index_to_file_position", "WIDE-FVECTOR-INDEX-TO-FILE-POSITION", 2, 0, false);
+        declareFunction("fvector_file_position_to_index", "FVECTOR-FILE-POSITION-TO-INDEX", 1, 1, false);
+        declareFunction("begin_file_vector_excursion", "BEGIN-FILE-VECTOR-EXCURSION", 1, 1, false);
+        declareFunction("end_file_vector_excursion", "END-FILE-VECTOR-EXCURSION", 2, 0, false);
+        declareFunction("fvector_make_memento", "FVECTOR-MAKE-MEMENTO", 2, 0, false);
+        declareMacro("with_file_vector_excursion", "WITH-FILE-VECTOR-EXCURSION");
+        declareMacro("with_output_to_file_vector", "WITH-OUTPUT-TO-FILE-VECTOR");
+        declareFunction("update_file_vector_index", "UPDATE-FILE-VECTOR-INDEX", 1, 0, false);
+        declareFunction("update_file_vector_index_linear", "UPDATE-FILE-VECTOR-INDEX-LINEAR", 1, 0, false);
+        declareFunction("overwrite_file_vector_index", "OVERWRITE-FILE-VECTOR-INDEX", 1, 0, false);
+        declareFunction("write_file_vector_index_entry", "WRITE-FILE-VECTOR-INDEX-ENTRY", 2, 0, false);
+        declareFunction("place_file_vector_index_tombstone", "PLACE-FILE-VECTOR-INDEX-TOMBSTONE", 1, 0, false);
+        declareFunction("place_file_vector_index_tombstone_linear", "PLACE-FILE-VECTOR-INDEX-TOMBSTONE-LINEAR", 1, 0, false);
+        declareMacro("with_input_from_file_vector", "WITH-INPUT-FROM-FILE-VECTOR");
+        declareFunction("new_file_vector_index_iterator", "NEW-FILE-VECTOR-INDEX-ITERATOR", 1, 0, false);
+        declareFunction("make_file_vector_index_iterator_state", "MAKE-FILE-VECTOR-INDEX-ITERATOR-STATE", 1, 0, false);
+        declareFunction("fvector_index_iterator_done", "FVECTOR-INDEX-ITERATOR-DONE", 1, 0, false);
+        declareFunction("fvector_index_iterator_next", "FVECTOR-INDEX-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("gather_file_vector_statistics_for_filenames", "GATHER-FILE-VECTOR-STATISTICS-FOR-FILENAMES", 2, 0, false);
+        declareFunction("gather_file_vector_statistics", "GATHER-FILE-VECTOR-STATISTICS", 1, 0, false);
+        declareFunction("file_vector_stats_indicate_dense_index_spaceP", "FILE-VECTOR-STATS-INDICATE-DENSE-INDEX-SPACE?", 1, 0, false);
+        declareFunction("file_vector_memory_map_for_files", "FILE-VECTOR-MEMORY-MAP-FOR-FILES", 3, 0, false);
+        declareFunction("file_vector_memory_map", "FILE-VECTOR-MEMORY-MAP", 2, 0, false);
+        declareFunction("fvectmemmap_flush_buffer", "FVECTMEMMAP-FLUSH-BUFFER", 3, 0, false);
+        declareFunction("fvect_mem_mapL", "FVECT-MEM-MAP<", 2, 0, false);
+        declareFunction("find_file_vector_data_address_in_index", "FIND-FILE-VECTOR-DATA-ADDRESS-IN-INDEX", 2, 0, false);
+        declareFunction("widen_file_vector_index_at_mark", "WIDEN-FILE-VECTOR-INDEX-AT-MARK", 3, 0, false);
+        declareFunction("widen_file_vector_index", "WIDEN-FILE-VECTOR-INDEX", 3, 1, false);
+        declareFunction("recover_narrow_file_vector_index", "RECOVER-NARROW-FILE-VECTOR-INDEX", 3, 0, false);
+        declareFunction("recover_wide_file_vector_mark", "RECOVER-WIDE-FILE-VECTOR-MARK", 2, 0, false);
+        declareFunction("test_file_vector_writing_and_positioning", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING", 1, 0, false);
+        declareFunction("test_wide_file_vector_writing_and_positioning", "TEST-WIDE-FILE-VECTOR-WRITING-AND-POSITIONING", 2, 0, false);
+        declareFunction("test_file_vector_writing_and_positioning_internal", "TEST-FILE-VECTOR-WRITING-AND-POSITIONING-INTERNAL", 4, 0, false);
         return NIL;
     }
 
@@ -2271,7 +3141,45 @@ public final class file_vector extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static SubLObject setup_file_vector_file_alt() {
+        register_method($print_object_method_table$.getGlobalValue(), $dtp_fvector$.getGlobalValue(), symbol_function(FVECTOR_PRINT_FUNCTION_TRAMPOLINE));
+        def_csetf(FVECTOR_DATA_STREAM, _CSETF_FVECTOR_DATA_STREAM);
+        def_csetf(FVECTOR_INDEX_STREAM, _CSETF_FVECTOR_INDEX_STREAM);
+        identity(FVECTOR);
+        define_test_case_table_int(TEST_FILE_VECTOR_WRITING_AND_POSITIONING, list(new SubLObject[]{ $TEST, EQL, $OWNER, $$$rck, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt48);
+        return NIL;
+    }
+
     public static SubLObject setup_file_vector_file() {
+        if (SubLFiles.USE_V1) {
+            register_method($print_object_method_table$.getGlobalValue(), $dtp_fvector$.getGlobalValue(), symbol_function(FVECTOR_PRINT_FUNCTION_TRAMPOLINE));
+            SubLSpecialOperatorDeclarations.proclaim($list8);
+            def_csetf(FVECTOR_DATA_STREAM, _CSETF_FVECTOR_DATA_STREAM);
+            def_csetf(FVECTOR_INDEX_STREAM, _CSETF_FVECTOR_INDEX_STREAM);
+            def_csetf(FVECTOR_WIDE_MARK, _CSETF_FVECTOR_WIDE_MARK);
+            identity(FVECTOR);
+            register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_fvector$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_FVECTOR_METHOD));
+            define_test_case_table_int(FVECTOR_RAW_BYTE_SIZE_TO_LENGTH, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list50);
+            define_test_case_table_int(WIDE_FVECTOR_INDEX_TO_FILE_POSITION, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list55);
+            register_external_symbol(GATHER_FILE_VECTOR_STATISTICS_FOR_FILENAMES);
+            register_external_symbol(GATHER_FILE_VECTOR_STATISTICS);
+            register_external_symbol($sym86$FILE_VECTOR_STATS_INDICATE_DENSE_INDEX_SPACE_);
+            register_external_symbol(FILE_VECTOR_MEMORY_MAP_FOR_FILES);
+            register_external_symbol(FILE_VECTOR_MEMORY_MAP);
+            note_funcall_helper_function($sym92$FVECT_MEM_MAP_);
+            define_test_case_table_int($sym92$FVECT_MEM_MAP_, list(new SubLObject[]{ $TEST, NIL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list96);
+            register_external_symbol(RECOVER_NARROW_FILE_VECTOR_INDEX);
+            register_external_symbol(RECOVER_WIDE_FILE_VECTOR_MARK);
+            define_test_case_table_int(TEST_FILE_VECTOR_WRITING_AND_POSITIONING, list(new SubLObject[]{ $TEST, EQL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list113);
+            define_test_case_table_int(TEST_WIDE_FILE_VECTOR_WRITING_AND_POSITIONING, list(new SubLObject[]{ $TEST, EQL, $OWNER, NIL, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list118);
+        }
+        if (SubLFiles.USE_V2) {
+            define_test_case_table_int(TEST_FILE_VECTOR_WRITING_AND_POSITIONING, list(new SubLObject[]{ $TEST, EQL, $OWNER, $$$rck, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt48);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_file_vector_file_Previous() {
         register_method($print_object_method_table$.getGlobalValue(), $dtp_fvector$.getGlobalValue(), symbol_function(FVECTOR_PRINT_FUNCTION_TRAMPOLINE));
         SubLSpecialOperatorDeclarations.proclaim($list8);
         def_csetf(FVECTOR_DATA_STREAM, _CSETF_FVECTOR_DATA_STREAM);

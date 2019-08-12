@@ -978,8 +978,7 @@ Handles dotted pairs. */
   }
 
   public static final SubLObject setup_kb_utilities_file() {
-    // CVS_ID("Id: kb-utilities.lisp 128428 2009-07-28 19:56:06Z goolsbey ");
-    Storage.register_low_memory_callback(Symbols.symbol_function($sym71$SWAP_OUT_ALL_PRISTINE_KB_OBJECTS));
+        Storage.register_low_memory_callback(Symbols.symbol_function($sym71$SWAP_OUT_ALL_PRISTINE_KB_OBJECTS));
     access_macros.register_external_symbol($sym72$SHOW_NEW_KB_STATE);
     access_macros.register_external_symbol($sym80$CLEAR_NEW_KB_STATE);
     access_macros.register_external_symbol($sym85$HL_INTERNAL_ID_STRING_P);

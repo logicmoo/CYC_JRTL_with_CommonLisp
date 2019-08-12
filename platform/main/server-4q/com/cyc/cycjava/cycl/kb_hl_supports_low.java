@@ -1,9 +1,35 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.kb_hl_supports_low;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
@@ -20,56 +46,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.kb_hl_supports_low.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class kb_hl_supports_low extends SubLTranslatedFile {
+import com.cyc.tool.subl.util.SubLTranslatedFile; 
+ public final class kb_hl_supports_low extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_hl_supports_low();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_hl_supports_low";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_hl_supports_low";
 
-    public static final String myFingerPrint = "ef4ec4dd73d19f4a51b014da2528c91923c373007fe0bd928819319662b20f24";
 
     // defconstant
     public static final SubLSymbol $dtp_kb_hl_support_content$ = makeSymbol("*DTP-KB-HL-SUPPORT-CONTENT*");
@@ -160,26 +142,26 @@ public final class kb_hl_supports_low extends SubLTranslatedFile {
     }
 
     public static SubLObject kb_hl_support_content_p(final SubLObject v_object) {
-        return v_object.getClass() == kb_hl_supports_low.$kb_hl_support_content_native.class ? T : NIL;
+        return v_object.getClass() == $kb_hl_support_content_native.class ? T : NIL;
     }
 
     public static SubLObject kb_hlsc_argument(final SubLObject v_object) {
-        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p(v_object) " + "CommonSymbols.NIL != kb_hl_supports_low.kb_hl_support_content_p(v_object) " + v_object;
+        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject kb_hlsc_dependents(final SubLObject v_object) {
-        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p(v_object) " + "CommonSymbols.NIL != kb_hl_supports_low.kb_hl_support_content_p(v_object) " + v_object;
+        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject _csetf_kb_hlsc_argument(final SubLObject v_object, final SubLObject value) {
-        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p(v_object) " + "CommonSymbols.NIL != kb_hl_supports_low.kb_hl_support_content_p(v_object) " + v_object;
+        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_kb_hlsc_dependents(final SubLObject v_object, final SubLObject value) {
-        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p(v_object) " + "CommonSymbols.NIL != kb_hl_supports_low.kb_hl_support_content_p(v_object) " + v_object;
+        assert NIL != kb_hl_support_content_p(v_object) : "kb_hl_supports_low.kb_hl_support_content_p error :" + v_object;
         return v_object.setField3(value);
     }
 
@@ -187,7 +169,7 @@ public final class kb_hl_supports_low extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new kb_hl_supports_low.$kb_hl_support_content_native();
+        final SubLObject v_new = new $kb_hl_support_content_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1161,62 +1143,62 @@ public final class kb_hl_supports_low extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_hl_supports_low_file() {
-        declareFunction(me, "kb_hl_support_content_print_function_trampoline", "KB-HL-SUPPORT-CONTENT-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "kb_hl_support_content_p", "KB-HL-SUPPORT-CONTENT-P", 1, 0, false);
+        declareFunction("kb_hl_support_content_print_function_trampoline", "KB-HL-SUPPORT-CONTENT-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("kb_hl_support_content_p", "KB-HL-SUPPORT-CONTENT-P", 1, 0, false);
         new kb_hl_supports_low.$kb_hl_support_content_p$UnaryFunction();
-        declareFunction(me, "kb_hlsc_argument", "KB-HLSC-ARGUMENT", 1, 0, false);
-        declareFunction(me, "kb_hlsc_dependents", "KB-HLSC-DEPENDENTS", 1, 0, false);
-        declareFunction(me, "_csetf_kb_hlsc_argument", "_CSETF-KB-HLSC-ARGUMENT", 2, 0, false);
-        declareFunction(me, "_csetf_kb_hlsc_dependents", "_CSETF-KB-HLSC-DEPENDENTS", 2, 0, false);
-        declareFunction(me, "make_kb_hl_support_content", "MAKE-KB-HL-SUPPORT-CONTENT", 0, 1, false);
-        declareFunction(me, "visit_defstruct_kb_hl_support_content", "VISIT-DEFSTRUCT-KB-HL-SUPPORT-CONTENT", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_kb_hl_support_content_method", "VISIT-DEFSTRUCT-OBJECT-KB-HL-SUPPORT-CONTENT-METHOD", 2, 0, false);
-        declareFunction(me, "new_kb_hl_support_content", "NEW-KB-HL-SUPPORT-CONTENT", 0, 0, false);
-        declareFunction(me, "free_kb_hl_support_content", "FREE-KB-HL-SUPPORT-CONTENT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_content_get_argument", "KB-HL-SUPPORT-CONTENT-GET-ARGUMENT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_content_get_dependents", "KB-HL-SUPPORT-CONTENT-GET-DEPENDENTS", 1, 0, false);
-        declareFunction(me, "kb_hl_support_content_set_argument", "KB-HL-SUPPORT-CONTENT-SET-ARGUMENT", 2, 0, false);
-        declareFunction(me, "kb_hl_support_content_set_dependents", "KB-HL-SUPPORT-CONTENT-SET-DEPENDENTS", 2, 0, false);
-        declareFunction(me, "dump_kb_hl_support_content", "DUMP-KB-HL-SUPPORT-CONTENT", 2, 0, false);
-        declareFunction(me, "load_kb_hl_support_content", "LOAD-KB-HL-SUPPORT-CONTENT", 2, 0, false);
-        declareFunction(me, "kb_create_kb_hl_support_kb_store", "KB-CREATE-KB-HL-SUPPORT-KB-STORE", 2, 0, false);
-        declareFunction(me, "kb_create_kb_hl_support_int", "KB-CREATE-KB-HL-SUPPORT-INT", 4, 0, false);
-        declareFunction(me, "kb_create_kb_hl_support_cyc", "KB-CREATE-KB-HL-SUPPORT-CYC", 1, 0, false);
-        declareFunction(me, "kb_hl_support_content", "KB-HL-SUPPORT-CONTENT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_hl_support_int", "KB-HL-SUPPORT-HL-SUPPORT-INT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_add_dependent_int", "KB-HL-SUPPORT-ADD-DEPENDENT-INT", 2, 0, false);
-        declareFunction(me, "kb_hl_support_remove_dependent_int", "KB-HL-SUPPORT-REMOVE-DEPENDENT-INT", 2, 0, false);
-        declareFunction(me, "kb_hl_support_clear_dependents_int", "KB-HL-SUPPORT-CLEAR-DEPENDENTS-INT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_remove_argument_int", "KB-HL-SUPPORT-REMOVE-ARGUMENT-INT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_reset_argument_int", "KB-HL-SUPPORT-RESET-ARGUMENT-INT", 2, 0, false);
-        declareFunction(me, "kb_hl_support_reset_justification", "KB-HL-SUPPORT-RESET-JUSTIFICATION", 2, 0, false);
-        declareFunction(me, "rejustify_kb_hl_support_int", "REJUSTIFY-KB-HL-SUPPORT-INT", 1, 0, false);
-        declareFunction(me, "remove_kb_hl_support_int", "REMOVE-KB-HL-SUPPORT-INT", 1, 0, false);
-        declareFunction(me, "valid_kb_hl_support_contentP", "VALID-KB-HL-SUPPORT-CONTENT?", 1, 1, false);
-        declareFunction(me, "kb_hl_support_content_validP", "KB-HL-SUPPORT-CONTENT-VALID?", 1, 1, false);
-        declareFunction(me, "note_kb_hl_support_creation_started", "NOTE-KB-HL-SUPPORT-CREATION-STARTED", 2, 0, false);
-        declareFunction(me, "note_kb_hl_support_creation_complete", "NOTE-KB-HL-SUPPORT-CREATION-COMPLETE", 1, 0, false);
-        declareFunction(me, "find_kb_hl_support_during_creation_int", "FIND-KB-HL-SUPPORT-DURING-CREATION-INT", 1, 0, false);
-        declareFunction(me, "destroy_kb_hl_support_int", "DESTROY-KB-HL-SUPPORT-INT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_index_unindexed_termP", "KB-HL-SUPPORT-INDEX-UNINDEXED-TERM?", 1, 0, false);
+        declareFunction("kb_hlsc_argument", "KB-HLSC-ARGUMENT", 1, 0, false);
+        declareFunction("kb_hlsc_dependents", "KB-HLSC-DEPENDENTS", 1, 0, false);
+        declareFunction("_csetf_kb_hlsc_argument", "_CSETF-KB-HLSC-ARGUMENT", 2, 0, false);
+        declareFunction("_csetf_kb_hlsc_dependents", "_CSETF-KB-HLSC-DEPENDENTS", 2, 0, false);
+        declareFunction("make_kb_hl_support_content", "MAKE-KB-HL-SUPPORT-CONTENT", 0, 1, false);
+        declareFunction("visit_defstruct_kb_hl_support_content", "VISIT-DEFSTRUCT-KB-HL-SUPPORT-CONTENT", 2, 0, false);
+        declareFunction("visit_defstruct_object_kb_hl_support_content_method", "VISIT-DEFSTRUCT-OBJECT-KB-HL-SUPPORT-CONTENT-METHOD", 2, 0, false);
+        declareFunction("new_kb_hl_support_content", "NEW-KB-HL-SUPPORT-CONTENT", 0, 0, false);
+        declareFunction("free_kb_hl_support_content", "FREE-KB-HL-SUPPORT-CONTENT", 1, 0, false);
+        declareFunction("kb_hl_support_content_get_argument", "KB-HL-SUPPORT-CONTENT-GET-ARGUMENT", 1, 0, false);
+        declareFunction("kb_hl_support_content_get_dependents", "KB-HL-SUPPORT-CONTENT-GET-DEPENDENTS", 1, 0, false);
+        declareFunction("kb_hl_support_content_set_argument", "KB-HL-SUPPORT-CONTENT-SET-ARGUMENT", 2, 0, false);
+        declareFunction("kb_hl_support_content_set_dependents", "KB-HL-SUPPORT-CONTENT-SET-DEPENDENTS", 2, 0, false);
+        declareFunction("dump_kb_hl_support_content", "DUMP-KB-HL-SUPPORT-CONTENT", 2, 0, false);
+        declareFunction("load_kb_hl_support_content", "LOAD-KB-HL-SUPPORT-CONTENT", 2, 0, false);
+        declareFunction("kb_create_kb_hl_support_kb_store", "KB-CREATE-KB-HL-SUPPORT-KB-STORE", 2, 0, false);
+        declareFunction("kb_create_kb_hl_support_int", "KB-CREATE-KB-HL-SUPPORT-INT", 4, 0, false);
+        declareFunction("kb_create_kb_hl_support_cyc", "KB-CREATE-KB-HL-SUPPORT-CYC", 1, 0, false);
+        declareFunction("kb_hl_support_content", "KB-HL-SUPPORT-CONTENT", 1, 0, false);
+        declareFunction("kb_hl_support_hl_support_int", "KB-HL-SUPPORT-HL-SUPPORT-INT", 1, 0, false);
+        declareFunction("kb_hl_support_add_dependent_int", "KB-HL-SUPPORT-ADD-DEPENDENT-INT", 2, 0, false);
+        declareFunction("kb_hl_support_remove_dependent_int", "KB-HL-SUPPORT-REMOVE-DEPENDENT-INT", 2, 0, false);
+        declareFunction("kb_hl_support_clear_dependents_int", "KB-HL-SUPPORT-CLEAR-DEPENDENTS-INT", 1, 0, false);
+        declareFunction("kb_hl_support_remove_argument_int", "KB-HL-SUPPORT-REMOVE-ARGUMENT-INT", 1, 0, false);
+        declareFunction("kb_hl_support_reset_argument_int", "KB-HL-SUPPORT-RESET-ARGUMENT-INT", 2, 0, false);
+        declareFunction("kb_hl_support_reset_justification", "KB-HL-SUPPORT-RESET-JUSTIFICATION", 2, 0, false);
+        declareFunction("rejustify_kb_hl_support_int", "REJUSTIFY-KB-HL-SUPPORT-INT", 1, 0, false);
+        declareFunction("remove_kb_hl_support_int", "REMOVE-KB-HL-SUPPORT-INT", 1, 0, false);
+        declareFunction("valid_kb_hl_support_contentP", "VALID-KB-HL-SUPPORT-CONTENT?", 1, 1, false);
+        declareFunction("kb_hl_support_content_validP", "KB-HL-SUPPORT-CONTENT-VALID?", 1, 1, false);
+        declareFunction("note_kb_hl_support_creation_started", "NOTE-KB-HL-SUPPORT-CREATION-STARTED", 2, 0, false);
+        declareFunction("note_kb_hl_support_creation_complete", "NOTE-KB-HL-SUPPORT-CREATION-COMPLETE", 1, 0, false);
+        declareFunction("find_kb_hl_support_during_creation_int", "FIND-KB-HL-SUPPORT-DURING-CREATION-INT", 1, 0, false);
+        declareFunction("destroy_kb_hl_support_int", "DESTROY-KB-HL-SUPPORT-INT", 1, 0, false);
+        declareFunction("kb_hl_support_index_unindexed_termP", "KB-HL-SUPPORT-INDEX-UNINDEXED-TERM?", 1, 0, false);
         new kb_hl_supports_low.$kb_hl_support_index_unindexed_termP$UnaryFunction();
-        declareFunction(me, "kb_hl_support_index_indexed_term_p", "KB-HL-SUPPORT-INDEX-INDEXED-TERM-P", 1, 0, false);
-        declareFunction(me, "kb_hl_support_index_indexed_terms", "KB-HL-SUPPORT-INDEX-INDEXED-TERMS", 1, 0, false);
-        declareFunction(me, "lookup_kb_hl_support_int", "LOOKUP-KB-HL-SUPPORT-INT", 1, 0, false);
-        declareFunction(me, "lookup_kb_hl_supports_mentioning_term_int", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM-INT", 1, 0, false);
-        declareFunction(me, "lookup_kb_hl_supports_mentioning_term_in_sentence", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM-IN-SENTENCE", 1, 0, false);
-        declareFunction(me, "lookup_kb_hl_supports_mentioning_indexed_term_in_sentence", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-INDEXED-TERM-IN-SENTENCE", 1, 0, false);
-        declareFunction(me, "lookup_kb_hl_supports_mentioning_unindexed_term_in_sentence", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-UNINDEXED-TERM-IN-SENTENCE", 1, 0, false);
-        declareFunction(me, "lookup_kb_hl_supports_mentioning_term_in_mt", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM-IN-MT", 1, 0, false);
-        declareFunction(me, "index_kb_hl_support", "INDEX-KB-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "unindex_kb_hl_support", "UNINDEX-KB-HL-SUPPORT", 1, 1, false);
-        declareFunction(me, "unindex_kb_hl_support_with_hl_support", "UNINDEX-KB-HL-SUPPORT-WITH-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "unindex_kb_hl_support_without_hl_support", "UNINDEX-KB-HL-SUPPORT-WITHOUT-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "clear_kb_hl_support_index", "CLEAR-KB-HL-SUPPORT-INDEX", 0, 0, false);
-        declareFunction(me, "reindex_all_kb_hl_supports", "REINDEX-ALL-KB-HL-SUPPORTS", 0, 0, false);
-        declareFunction(me, "destroy_duplicate_kb_hl_supports", "DESTROY-DUPLICATE-KB-HL-SUPPORTS", 0, 0, false);
-        declareFunction(me, "destroy_duplicate_kb_hl_support", "DESTROY-DUPLICATE-KB-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "kb_hl_support_has_dependentsP", "KB-HL-SUPPORT-HAS-DEPENDENTS?", 1, 0, false);
+        declareFunction("kb_hl_support_index_indexed_term_p", "KB-HL-SUPPORT-INDEX-INDEXED-TERM-P", 1, 0, false);
+        declareFunction("kb_hl_support_index_indexed_terms", "KB-HL-SUPPORT-INDEX-INDEXED-TERMS", 1, 0, false);
+        declareFunction("lookup_kb_hl_support_int", "LOOKUP-KB-HL-SUPPORT-INT", 1, 0, false);
+        declareFunction("lookup_kb_hl_supports_mentioning_term_int", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM-INT", 1, 0, false);
+        declareFunction("lookup_kb_hl_supports_mentioning_term_in_sentence", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM-IN-SENTENCE", 1, 0, false);
+        declareFunction("lookup_kb_hl_supports_mentioning_indexed_term_in_sentence", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-INDEXED-TERM-IN-SENTENCE", 1, 0, false);
+        declareFunction("lookup_kb_hl_supports_mentioning_unindexed_term_in_sentence", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-UNINDEXED-TERM-IN-SENTENCE", 1, 0, false);
+        declareFunction("lookup_kb_hl_supports_mentioning_term_in_mt", "LOOKUP-KB-HL-SUPPORTS-MENTIONING-TERM-IN-MT", 1, 0, false);
+        declareFunction("index_kb_hl_support", "INDEX-KB-HL-SUPPORT", 2, 0, false);
+        declareFunction("unindex_kb_hl_support", "UNINDEX-KB-HL-SUPPORT", 1, 1, false);
+        declareFunction("unindex_kb_hl_support_with_hl_support", "UNINDEX-KB-HL-SUPPORT-WITH-HL-SUPPORT", 2, 0, false);
+        declareFunction("unindex_kb_hl_support_without_hl_support", "UNINDEX-KB-HL-SUPPORT-WITHOUT-HL-SUPPORT", 1, 0, false);
+        declareFunction("clear_kb_hl_support_index", "CLEAR-KB-HL-SUPPORT-INDEX", 0, 0, false);
+        declareFunction("reindex_all_kb_hl_supports", "REINDEX-ALL-KB-HL-SUPPORTS", 0, 0, false);
+        declareFunction("destroy_duplicate_kb_hl_supports", "DESTROY-DUPLICATE-KB-HL-SUPPORTS", 0, 0, false);
+        declareFunction("destroy_duplicate_kb_hl_support", "DESTROY-DUPLICATE-KB-HL-SUPPORT", 2, 0, false);
+        declareFunction("kb_hl_support_has_dependentsP", "KB-HL-SUPPORT-HAS-DEPENDENTS?", 1, 0, false);
         return NIL;
     }
 
@@ -1307,7 +1289,7 @@ public final class kb_hl_supports_low extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $kb_hl_support_content_native() {
+        private $kb_hl_support_content_native() {
             this.$argument = Lisp.NIL;
             this.$dependents = Lisp.NIL;
         }
@@ -1338,7 +1320,7 @@ public final class kb_hl_supports_low extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(kb_hl_supports_low.$kb_hl_support_content_native.class, KB_HL_SUPPORT_CONTENT, KB_HL_SUPPORT_CONTENT_P, $list2, $list3, new String[]{ "$argument", "$dependents" }, $list4, $list5, DEFAULT_STRUCT_PRINT_FUNCTION);
+            structDecl = makeStructDeclNative($kb_hl_support_content_native.class, KB_HL_SUPPORT_CONTENT, KB_HL_SUPPORT_CONTENT_P, $list2, $list3, new String[]{ "$argument", "$dependents" }, $list4, $list5, DEFAULT_STRUCT_PRINT_FUNCTION);
         }
     }
 

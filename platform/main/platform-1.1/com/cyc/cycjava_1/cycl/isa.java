@@ -644,8 +644,7 @@ public  final class isa extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_isa_file() {
-    // CVS_ID("Id: isa.lisp 128593 2009-08-21 15:54:07Z pace ");
-    utilities_macros.register_cyc_api_function($sym2$MIN_ISA, $list3, $str4$Returns_most_specific_collections, $list5, $list6);
+        utilities_macros.register_cyc_api_function($sym2$MIN_ISA, $list3, $str4$Returns_most_specific_collections, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym8$MAX_NOT_ISA, $list3, $str9$Returns_most_general_collections_, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym12$INSTANCES, $list13, $str14$Returns_the_asserted_instances_of, $list15, $list6);
     utilities_macros.register_cyc_api_function($sym16$MAX_INSTANCES, $list17, $str18$Returns_the_maximal_among_the_ass, $list15, $list6);

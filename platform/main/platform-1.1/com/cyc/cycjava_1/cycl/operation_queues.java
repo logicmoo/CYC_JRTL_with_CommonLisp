@@ -365,8 +365,7 @@ and so should not be straightforwardly written to the HL transcript */
   }
 
   public static final SubLObject setup_operation_queues_file() {
-    // CVS_ID("Id: operation-queues.lisp 127077 2009-02-11 00:20:29Z tbrussea ");
-    subl_macro_promotions.declare_defglobal($sym0$_LOCAL_QUEUE_);
+        subl_macro_promotions.declare_defglobal($sym0$_LOCAL_QUEUE_);
     subl_macro_promotions.declare_defglobal($sym3$_REMOTE_QUEUE_);
     subl_macro_promotions.declare_defglobal($sym5$_TRANSCRIPT_QUEUE_);
     subl_macro_promotions.declare_defglobal($sym7$_HL_TRANSCRIPT_QUEUE_);

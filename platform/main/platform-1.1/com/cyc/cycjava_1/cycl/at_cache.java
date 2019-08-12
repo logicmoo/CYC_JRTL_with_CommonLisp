@@ -504,8 +504,7 @@ public  final class at_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_cache_file() {
-    // CVS_ID("Id: at-cache.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_ARG_TYPE_CACHE_);
+        subl_macro_promotions.declare_defglobal($sym0$_ARG_TYPE_CACHE_);
     subl_macro_promotions.declare_defglobal($sym3$_ARG_TYPE_CACHE_INITIALIZED__);
     utilities_macros.register_kb_function($sym28$CYC_ADD_TO_ARG_TYPE_CACHE);
     utilities_macros.register_kb_function($sym29$CYC_REMOVE_FROM_ARG_TYPE_CACHE);

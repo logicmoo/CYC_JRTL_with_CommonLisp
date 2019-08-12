@@ -251,8 +251,7 @@ public  final class set_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_set_utilities_file() {
-    // CVS_ID("Id: set-utilities.lisp 127562 2009-04-08 21:47:09Z daves ");
-    access_macros.define_obsolete_register($sym9$MAKE_SET_FROM_LIST, $list10);
+        access_macros.define_obsolete_register($sym9$MAKE_SET_FROM_LIST, $list10);
     return NIL;
   }
 

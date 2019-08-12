@@ -118,8 +118,7 @@ public  final class removal_modules_termofunit extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_termofunit_file() {
-    // CVS_ID("Id: removal-modules-termofunit.lisp 127348 2009-03-10 21:59:00Z goolsbey ");
-    inference_modules.register_solely_specific_removal_module_predicate($const0$termOfUnit);
+        inference_modules.register_solely_specific_removal_module_predicate($const0$termOfUnit);
     inference_modules.inference_removal_module_use_meta_removal($const0$termOfUnit, $kw1$META_REMOVAL_COMPLETELY_ENUMERABLE_POS);
     inference_modules.inference_removal_module_use_meta_removal($const0$termOfUnit, $kw2$META_REMOVAL_COMPLETELY_DECIDABLE_POS);
     preference_modules.inference_preference_module($kw3$NAT_LOOKUP_POS, $list4);

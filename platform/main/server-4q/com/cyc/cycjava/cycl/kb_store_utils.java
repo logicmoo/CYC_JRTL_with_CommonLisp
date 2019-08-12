@@ -1,31 +1,23 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.kb_store_utils;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.kb_store_utils.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class kb_store_utils extends SubLTranslatedFile {
+public final class kb_store_utils extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_store_utils();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_store_utils";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_store_utils";
 
-    public static final String myFingerPrint = "83c7eb429f8e71ff80a80579226455fc1f848b8a07ff8a5fc9d40460238255ab";
 
 
 
@@ -211,43 +203,43 @@ public final class kb_store_utils extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_store_utils_file() {
-        declareFunction(me, "clear_kb_store_entity_manager", "CLEAR-KB-STORE-ENTITY-MANAGER", 0, 0, false);
-        declareFunction(me, "start_kb_store_transaction", "START-KB-STORE-TRANSACTION", 0, 0, false);
-        declareFunction(me, "commit_kb_store_transaction", "COMMIT-KB-STORE-TRANSACTION", 0, 0, false);
-        declareFunction(me, "rollback_kb_store_transaction", "ROLLBACK-KB-STORE-TRANSACTION", 0, 0, false);
-        declareFunction(me, "flush_kb_store_transaction", "FLUSH-KB-STORE-TRANSACTION", 0, 0, false);
-        declareFunction(me, "is_inside_kb_store_transactionP", "IS-INSIDE-KB-STORE-TRANSACTION?", 0, 0, false);
-        declareMacro(me, "with_kb_store_ephemeral_transaction", "WITH-KB-STORE-EPHEMERAL-TRANSACTION");
-        declareMacro(me, "with_kb_store_transaction", "WITH-KB-STORE-TRANSACTION");
-        declareFunction(me, "possibly_start_kb_store_transaction", "POSSIBLY-START-KB-STORE-TRANSACTION", 1, 0, false);
-        declareFunction(me, "possibly_rollback_kb_store_transaction", "POSSIBLY-ROLLBACK-KB-STORE-TRANSACTION", 1, 0, false);
-        declareFunction(me, "possibly_commit_kb_store_transaction", "POSSIBLY-COMMIT-KB-STORE-TRANSACTION", 1, 0, false);
-        declareFunction(me, "possibly_rollback_or_commit_kb_store_transaction", "POSSIBLY-ROLLBACK-OR-COMMIT-KB-STORE-TRANSACTION", 2, 0, false);
-        declareFunction(me, "alexandria_prefetch_kb_content", "ALEXANDRIA-PREFETCH-KB-CONTENT", 0, 0, false);
-        declareFunction(me, "alexandria_initialize_after_cardinality", "ALEXANDRIA-INITIALIZE-AFTER-CARDINALITY", 0, 0, false);
-        declareFunction(me, "is_pragmatic_mtP", "IS-PRAGMATIC-MT?", 1, 0, false);
-        declareFunction(me, "backup_db", "BACKUP-DB", 1, 0, false);
-        declareFunction(me, "avoid_using_kb_status_bits", "AVOID-USING-KB-STATUS-BITS", 1, 0, false);
-        declareFunction(me, "avoid_using_simple_indexing", "AVOID-USING-SIMPLE-INDEXING", 1, 0, false);
-        declareFunction(me, "get_alexandria_kb_num", "GET-ALEXANDRIA-KB-NUM", 0, 0, false);
-        declareFunction(me, "set_alexandria_kb_num", "SET-ALEXANDRIA-KB-NUM", 1, 0, false);
-        declareFunction(me, "get_alexandria_kb_op_num", "GET-ALEXANDRIA-KB-OP-NUM", 0, 0, false);
-        declareFunction(me, "set_alexandria_kb_op_num", "SET-ALEXANDRIA-KB-OP-NUM", 1, 0, false);
-        declareFunction(me, "load_alexandria_special_objects", "LOAD-ALEXANDRIA-SPECIAL-OBJECTS", 0, 0, false);
-        declareFunction(me, "persist_alexandria_special_objects", "PERSIST-ALEXANDRIA-SPECIAL-OBJECTS", 1, 0, false);
-        declareFunction(me, "alexandria_defns_make_hash_table", "ALEXANDRIA-DEFNS-MAKE-HASH-TABLE", 2, 0, false);
-        declareFunction(me, "alexandria_defns_cache_definedP", "ALEXANDRIA-DEFNS-CACHE-DEFINED?", 1, 0, false);
-        declareFunction(me, "alexandria_defns_cache_hash_table_p", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-P", 1, 0, false);
-        declareFunction(me, "alexandria_defns_cache_hash_table_empty_p", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-EMPTY-P", 1, 0, false);
-        declareFunction(me, "alexandria_defns_cache_clrhash", "ALEXANDRIA-DEFNS-CACHE-CLRHASH", 1, 0, false);
-        declareFunction(me, "alexandria_defns_cache_gethash", "ALEXANDRIA-DEFNS-CACHE-GETHASH", 2, 0, false);
-        declareFunction(me, "alexandria_defns_cache_sethash", "ALEXANDRIA-DEFNS-CACHE-SETHASH", 3, 0, false);
-        declareFunction(me, "alexandria_defns_cache_remhash", "ALEXANDRIA-DEFNS-CACHE-REMHASH", 2, 0, false);
-        declareFunction(me, "alexandria_defns_cache_remove_value_from_hash", "ALEXANDRIA-DEFNS-CACHE-REMOVE-VALUE-FROM-HASH", 3, 0, false);
-        declareFunction(me, "alexandria_defns_cache_push_hash", "ALEXANDRIA-DEFNS-CACHE-PUSH-HASH", 3, 0, false);
-        declareFunction(me, "alexandria_defns_cache_gethash_without_values", "ALEXANDRIA-DEFNS-CACHE-GETHASH-WITHOUT-VALUES", 2, 0, false);
-        declareFunction(me, "alexandria_defns_cache_hash_table_to_alist", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-TO-ALIST", 1, 0, false);
-        declareFunction(me, "alexandria_defns_cache_hash_table_count", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-COUNT", 1, 0, false);
+        declareFunction("clear_kb_store_entity_manager", "CLEAR-KB-STORE-ENTITY-MANAGER", 0, 0, false);
+        declareFunction("start_kb_store_transaction", "START-KB-STORE-TRANSACTION", 0, 0, false);
+        declareFunction("commit_kb_store_transaction", "COMMIT-KB-STORE-TRANSACTION", 0, 0, false);
+        declareFunction("rollback_kb_store_transaction", "ROLLBACK-KB-STORE-TRANSACTION", 0, 0, false);
+        declareFunction("flush_kb_store_transaction", "FLUSH-KB-STORE-TRANSACTION", 0, 0, false);
+        declareFunction("is_inside_kb_store_transactionP", "IS-INSIDE-KB-STORE-TRANSACTION?", 0, 0, false);
+        declareMacro("with_kb_store_ephemeral_transaction", "WITH-KB-STORE-EPHEMERAL-TRANSACTION");
+        declareMacro("with_kb_store_transaction", "WITH-KB-STORE-TRANSACTION");
+        declareFunction("possibly_start_kb_store_transaction", "POSSIBLY-START-KB-STORE-TRANSACTION", 1, 0, false);
+        declareFunction("possibly_rollback_kb_store_transaction", "POSSIBLY-ROLLBACK-KB-STORE-TRANSACTION", 1, 0, false);
+        declareFunction("possibly_commit_kb_store_transaction", "POSSIBLY-COMMIT-KB-STORE-TRANSACTION", 1, 0, false);
+        declareFunction("possibly_rollback_or_commit_kb_store_transaction", "POSSIBLY-ROLLBACK-OR-COMMIT-KB-STORE-TRANSACTION", 2, 0, false);
+        declareFunction("alexandria_prefetch_kb_content", "ALEXANDRIA-PREFETCH-KB-CONTENT", 0, 0, false);
+        declareFunction("alexandria_initialize_after_cardinality", "ALEXANDRIA-INITIALIZE-AFTER-CARDINALITY", 0, 0, false);
+        declareFunction("is_pragmatic_mtP", "IS-PRAGMATIC-MT?", 1, 0, false);
+        declareFunction("backup_db", "BACKUP-DB", 1, 0, false);
+        declareFunction("avoid_using_kb_status_bits", "AVOID-USING-KB-STATUS-BITS", 1, 0, false);
+        declareFunction("avoid_using_simple_indexing", "AVOID-USING-SIMPLE-INDEXING", 1, 0, false);
+        declareFunction("get_alexandria_kb_num", "GET-ALEXANDRIA-KB-NUM", 0, 0, false);
+        declareFunction("set_alexandria_kb_num", "SET-ALEXANDRIA-KB-NUM", 1, 0, false);
+        declareFunction("get_alexandria_kb_op_num", "GET-ALEXANDRIA-KB-OP-NUM", 0, 0, false);
+        declareFunction("set_alexandria_kb_op_num", "SET-ALEXANDRIA-KB-OP-NUM", 1, 0, false);
+        declareFunction("load_alexandria_special_objects", "LOAD-ALEXANDRIA-SPECIAL-OBJECTS", 0, 0, false);
+        declareFunction("persist_alexandria_special_objects", "PERSIST-ALEXANDRIA-SPECIAL-OBJECTS", 1, 0, false);
+        declareFunction("alexandria_defns_make_hash_table", "ALEXANDRIA-DEFNS-MAKE-HASH-TABLE", 2, 0, false);
+        declareFunction("alexandria_defns_cache_definedP", "ALEXANDRIA-DEFNS-CACHE-DEFINED?", 1, 0, false);
+        declareFunction("alexandria_defns_cache_hash_table_p", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-P", 1, 0, false);
+        declareFunction("alexandria_defns_cache_hash_table_empty_p", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-EMPTY-P", 1, 0, false);
+        declareFunction("alexandria_defns_cache_clrhash", "ALEXANDRIA-DEFNS-CACHE-CLRHASH", 1, 0, false);
+        declareFunction("alexandria_defns_cache_gethash", "ALEXANDRIA-DEFNS-CACHE-GETHASH", 2, 0, false);
+        declareFunction("alexandria_defns_cache_sethash", "ALEXANDRIA-DEFNS-CACHE-SETHASH", 3, 0, false);
+        declareFunction("alexandria_defns_cache_remhash", "ALEXANDRIA-DEFNS-CACHE-REMHASH", 2, 0, false);
+        declareFunction("alexandria_defns_cache_remove_value_from_hash", "ALEXANDRIA-DEFNS-CACHE-REMOVE-VALUE-FROM-HASH", 3, 0, false);
+        declareFunction("alexandria_defns_cache_push_hash", "ALEXANDRIA-DEFNS-CACHE-PUSH-HASH", 3, 0, false);
+        declareFunction("alexandria_defns_cache_gethash_without_values", "ALEXANDRIA-DEFNS-CACHE-GETHASH-WITHOUT-VALUES", 2, 0, false);
+        declareFunction("alexandria_defns_cache_hash_table_to_alist", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-TO-ALIST", 1, 0, false);
+        declareFunction("alexandria_defns_cache_hash_table_count", "ALEXANDRIA-DEFNS-CACHE-HASH-TABLE-COUNT", 1, 0, false);
         return NIL;
     }
 

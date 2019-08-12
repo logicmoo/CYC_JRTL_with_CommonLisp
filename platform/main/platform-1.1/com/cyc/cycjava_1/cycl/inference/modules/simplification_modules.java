@@ -403,8 +403,7 @@ public  final class simplification_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_simplification_modules_file() {
-    // CVS_ID("Id: simplification-modules.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_conjunctive_removal_module($kw1$REMOVAL_SIMPLIFICATION_CONJUNCTION_DUPLICATE_LITERALS_VIA_FUNCTIO, $list2);
+        inference_modules.inference_conjunctive_removal_module($kw1$REMOVAL_SIMPLIFICATION_CONJUNCTION_DUPLICATE_LITERALS_VIA_FUNCTIO, $list2);
     utilities_macros.note_funcall_helper_function($sym4$SIMPLIFICATION_DUPLICATE_LITERALS_VIA_FUNCTIONALITY_POS_LITS_APPL);
     memoization_state.note_memoized_function($sym6$ASENT_PRED_INTER_ARG_DEPENDENT_CARDINALITIES);
     memoization_state.note_memoized_function($sym11$ANY_SPEC__MEMOIZED);

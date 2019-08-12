@@ -516,8 +516,7 @@ public  final class modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_modules_file() {
-    // CVS_ID("Id: modules.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_module$.getGlobalValue(), Symbols.symbol_function($sym12$MODULE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_module$.getGlobalValue(), Symbols.symbol_function($sym12$MODULE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym13$MODULE_BASIS, $sym14$_CSETF_MODULE_BASIS);
     Structures.def_csetf($sym15$MODULE_NAME, $sym16$_CSETF_MODULE_NAME);
     Structures.def_csetf($sym17$MODULE_SYSTEM, $sym18$_CSETF_MODULE_SYSTEM);

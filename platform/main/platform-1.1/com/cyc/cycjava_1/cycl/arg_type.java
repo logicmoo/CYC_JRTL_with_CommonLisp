@@ -2246,8 +2246,7 @@ public  final class arg_type extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_arg_type_file() {
-    // CVS_ID("Id: arg-type.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    memoization_state.note_globally_cached_function($sym3$CACHED_RELATION_ARG_OK_);
+        memoization_state.note_globally_cached_function($sym3$CACHED_RELATION_ARG_OK_);
     memoization_state.note_memoized_function($sym37$MEMOIZED_DEFINING_MTS_OK_);
     memoization_state.note_globally_cached_function($sym72$CACHED_FORMAT_OK_);
     memoization_state.note_memoized_function($sym74$MEMOIZED_FORMAT_OK_);

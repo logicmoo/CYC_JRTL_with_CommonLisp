@@ -252,8 +252,7 @@ of an inference unit test, so they can be optionally cleaned up later. */
   }
 
   public static final SubLObject setup_inference_unit_tests_file() {
-    // CVS_ID("Id: inference-unit-tests.lisp 128656 2009-08-31 17:37:30Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_inference_unit_test$.getGlobalValue(), Symbols.symbol_function($sym8$INFERENCE_UNIT_TEST_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_inference_unit_test$.getGlobalValue(), Symbols.symbol_function($sym8$INFERENCE_UNIT_TEST_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$IUT_NAME, $sym10$_CSETF_IUT_NAME);
     Structures.def_csetf($sym11$IUT_COMMENT, $sym12$_CSETF_IUT_COMMENT);
     Structures.def_csetf($sym13$IUT_SENTENCE, $sym14$_CSETF_IUT_SENTENCE);

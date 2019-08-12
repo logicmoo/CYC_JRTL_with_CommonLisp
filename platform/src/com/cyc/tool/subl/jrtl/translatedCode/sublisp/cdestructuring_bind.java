@@ -79,22 +79,22 @@ public class cdestructuring_bind extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cdestructuring_bind_file() {
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "cdestructuring_bind", "CDESTRUCTURING-BIND");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "cdestructuring_bind_error", "CDESTRUCTURING-BIND-ERROR", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_must_consp", "DESTRUCTURING-BIND-MUST-CONSP", 3, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_must_listp", "DESTRUCTURING-BIND-MUST-LISTP", 3, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "property_list_member", "PROPERTY-LIST-MEMBER", 2, 0, false);
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "bogus_unless", "BOGUS-UNLESS");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_Xwhole", "DESTRUCTURING-BIND-&WHOLE", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_required_args", "DESTRUCTURING-BIND-REQUIRED-ARGS", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_Xoptional", "DESTRUCTURING-BIND-&OPTIONAL", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_end_of_the_line", "DESTRUCTURING-BIND-END-OF-THE-LINE", 3, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_more_Xoptional", "DESTRUCTURING-BIND-MORE-&OPTIONAL", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_Xrest", "DESTRUCTURING-BIND-&REST", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_Xkey", "DESTRUCTURING-BIND-&KEY", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_more_Xkey", "DESTRUCTURING-BIND-MORE-&KEY", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_Xaux", "DESTRUCTURING-BIND-&AUX", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind", "destructuring_bind_more_Xaux", "DESTRUCTURING-BIND-MORE-&AUX", 4, 0, false);
+        declareMacro("cdestructuring_bind", "CDESTRUCTURING-BIND");
+        declareFunction("cdestructuring_bind_error", "CDESTRUCTURING-BIND-ERROR", 2, 0, false);
+        declareFunction("destructuring_bind_must_consp", "DESTRUCTURING-BIND-MUST-CONSP", 3, 0, false);
+        declareFunction("destructuring_bind_must_listp", "DESTRUCTURING-BIND-MUST-LISTP", 3, 0, false);
+        declareFunction("property_list_member", "PROPERTY-LIST-MEMBER", 2, 0, false);
+        declareMacro("bogus_unless", "BOGUS-UNLESS");
+        declareFunction("destructuring_bind_Xwhole", "DESTRUCTURING-BIND-&WHOLE", 4, 0, false);
+        declareFunction("destructuring_bind_required_args", "DESTRUCTURING-BIND-REQUIRED-ARGS", 4, 0, false);
+        declareFunction("destructuring_bind_Xoptional", "DESTRUCTURING-BIND-&OPTIONAL", 4, 0, false);
+        declareFunction("destructuring_bind_end_of_the_line", "DESTRUCTURING-BIND-END-OF-THE-LINE", 3, 0, false);
+        declareFunction("destructuring_bind_more_Xoptional", "DESTRUCTURING-BIND-MORE-&OPTIONAL", 4, 0, false);
+        declareFunction("destructuring_bind_Xrest", "DESTRUCTURING-BIND-&REST", 4, 0, false);
+        declareFunction("destructuring_bind_Xkey", "DESTRUCTURING-BIND-&KEY", 4, 0, false);
+        declareFunction("destructuring_bind_more_Xkey", "DESTRUCTURING-BIND-MORE-&KEY", 4, 0, false);
+        declareFunction("destructuring_bind_Xaux", "DESTRUCTURING-BIND-&AUX", 4, 0, false);
+        declareFunction("destructuring_bind_more_Xaux", "DESTRUCTURING-BIND-MORE-&AUX", 4, 0, false);
         return SubLNil.NIL;
     }
 

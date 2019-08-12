@@ -548,8 +548,7 @@ Treats NIL as 0. */
   }
 
   public static final SubLObject setup_dictionary_utilities_file() {
-    // CVS_ID("Id: dictionary-utilities.lisp 128806 2009-09-18 16:00:16Z rck ");
-    utilities_macros.note_funcall_helper_function($sym44$DICTIONARY_KEYS_SORTER_COMPARISON_PREDICATE);
+        utilities_macros.note_funcall_helper_function($sym44$DICTIONARY_KEYS_SORTER_COMPARISON_PREDICATE);
     generic_testing.define_test_case_table_int($sym46$TEST_DICTIONARY_KEYS_SORTED_BY_VALUES, list(new SubLObject[] {$kw47$TEST, Symbols.symbol_function(EQUAL), $kw48$OWNER, NIL, $kw49$CLASSES, NIL, $kw50$KB, $kw51$TINY, $kw52$WORKING_, T}), $list53);
     generic_testing.define_test_case_table_int($sym54$TEST_MAP_DICTIONARY_VALUES, list(new SubLObject[] {$kw47$TEST, Symbols.symbol_function(EQUAL), $kw48$OWNER, NIL, $kw49$CLASSES, NIL, $kw50$KB, $kw51$TINY, $kw52$WORKING_, T}), $list55);
     subl_macro_promotions.declare_defglobal($sym68$_SUB_DICTIONARY_NOT_FOUND_);

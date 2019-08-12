@@ -577,8 +577,7 @@ public  final class removal_modules_conjunctive_pruning extends SubLTranslatedFi
   }
 
   public static final SubLObject setup_removal_modules_conjunctive_pruning_file() {
-    // CVS_ID("Id: removal-modules-conjunctive-pruning.lisp 127711 2009-04-24 19:32:42Z pace ");
-    inference_modules.inference_conjunctive_removal_module($kw1$RESIDUAL_TRANSFORMATION_NON_WFF, $list2);
+        inference_modules.inference_conjunctive_removal_module($kw1$RESIDUAL_TRANSFORMATION_NON_WFF, $list2);
     memoization_state.note_memoized_function($sym3$SUPPORTING_RESIDUAL_CONJUNCTION_PROBLEM_MINIMAL_PROBLEM_QUERY);
     utilities_macros.note_funcall_helper_function($sym11$RESIDUAL_TRANSFORMATION_NON_WFF_APPLICABILITY);
     utilities_macros.note_funcall_helper_function($sym13$RESIDUAL_TRANSFORMATION_NON_WFF_EXPAND);

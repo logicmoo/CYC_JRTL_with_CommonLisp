@@ -543,8 +543,7 @@ i.e. contains no HL variables. */
   }
 
   public static final SubLObject setup_term_file() {
-    // CVS_ID("Id: term.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym0$EL_FORT_P, $list1, $str2$Returns_t_iff_OBJECT_is_a_fort_or, NIL, $list3);
+        utilities_macros.register_cyc_api_function($sym0$EL_FORT_P, $list1, $str2$Returns_t_iff_OBJECT_is_a_fort_or, NIL, $list3);
     utilities_macros.register_cyc_api_function($sym4$HL_TERM_P, $list5, $str6$Returns_T_if_the_OBJ_is_a_valid_C, NIL, $list3);
     memoization_state.note_memoized_function($sym19$MEMOIZED_VALID_FN_TERM_WRT_NESTING_);
     return NIL;

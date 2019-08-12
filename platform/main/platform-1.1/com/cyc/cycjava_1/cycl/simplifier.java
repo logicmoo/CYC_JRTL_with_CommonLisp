@@ -1195,8 +1195,7 @@ public  final class simplifier extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_simplifier_file() {
-    // CVS_ID("Id: simplifier.lisp 127691 2009-04-21 15:59:50Z pace ");
-    generic_testing.define_test_case_table_int($sym33$SIMPLIFY_IST_SENTENCE, list(new SubLObject[] {$kw34$TEST, NIL, $kw35$OWNER, NIL, $kw36$CLASSES, NIL, $kw37$KB, $kw38$TINY, $kw39$WORKING_, T}), $list40);
+        generic_testing.define_test_case_table_int($sym33$SIMPLIFY_IST_SENTENCE, list(new SubLObject[] {$kw34$TEST, NIL, $kw35$OWNER, NIL, $kw36$CLASSES, NIL, $kw37$KB, $kw38$TINY, $kw39$WORKING_, T}), $list40);
     return NIL;
   }
 

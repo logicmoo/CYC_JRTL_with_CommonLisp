@@ -738,8 +738,7 @@ public  final class keyhash extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_keyhash_file() {
-    // CVS_ID("Id: keyhash.lisp 128862 2009-09-30 16:02:44Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_keyhash$.getGlobalValue(), Symbols.symbol_function($sym8$KEYHASH_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_keyhash$.getGlobalValue(), Symbols.symbol_function($sym8$KEYHASH_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$KHASH_NODES, $sym10$_CSETF_KHASH_NODES);
     Structures.def_csetf($sym11$KHASH_TEST, $sym12$_CSETF_KHASH_TEST);
     Structures.def_csetf($sym13$KHASH_COUNT, $sym14$_CSETF_KHASH_COUNT);

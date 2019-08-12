@@ -1018,8 +1018,7 @@ public  final class removal_modules_function_corresponding_predicate extends Sub
   }
 
   public static final SubLObject setup_removal_modules_function_corresponding_predicate_file() {
-    // CVS_ID("Id: removal-modules-function-corresponding-predicate.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_USE_FCP_REMOVAL_MODULE__);
+        subl_macro_promotions.declare_defglobal($sym0$_USE_FCP_REMOVAL_MODULE__);
     inference_modules.inference_removal_module($kw29$REMOVAL_FCP_CHECK, $list30);
     inference_modules.inference_removal_module($kw32$REMOVAL_FCP_FIND_NAT, $list33);
     inference_modules.inference_removal_module($kw35$REMOVAL_EVALUATABLE_FCP_UNIFY, $list36);

@@ -970,8 +970,7 @@ have no supporting-mapped-problems are links to goal. */
   }
 
   public static final SubLObject setup_inference_datastructures_problem_link_file() {
-    // CVS_ID("Id: inference-datastructures-problem-link.lisp 128378 2009-07-22 17:22:05Z jantos ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_problem_link$.getGlobalValue(), Symbols.symbol_function($sym8$PROBLEM_LINK_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_problem_link$.getGlobalValue(), Symbols.symbol_function($sym8$PROBLEM_LINK_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$PROB_LINK_SUID, $sym10$_CSETF_PROB_LINK_SUID);
     Structures.def_csetf($sym11$PROB_LINK_TYPE, $sym12$_CSETF_PROB_LINK_TYPE);
     Structures.def_csetf($sym13$PROB_LINK_SUPPORTED_OBJECT, $sym14$_CSETF_PROB_LINK_SUPPORTED_OBJECT);

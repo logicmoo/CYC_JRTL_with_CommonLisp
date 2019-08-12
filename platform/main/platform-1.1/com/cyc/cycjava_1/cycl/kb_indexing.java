@@ -3766,8 +3766,7 @@ Relevant mts are assumed scoped from the outside. */
   }
 
   public static final SubLObject setup_kb_indexing_file() {
-    // CVS_ID("Id: kb-indexing.lisp 128471 2009-08-03 20:26:07Z pace ");
-    utilities_macros.register_cyc_api_function($sym2$NUM_GAF_ARG_INDEX, $list3, $str4$Return_the_number_of_gafs_indexed, NIL, $list5);
+        utilities_macros.register_cyc_api_function($sym2$NUM_GAF_ARG_INDEX, $list3, $str4$Return_the_number_of_gafs_indexed, NIL, $list5);
     utilities_macros.register_cyc_api_function($sym7$RELEVANT_NUM_GAF_ARG_INDEX, $list8, $str9$Return_the_assertion_count_at_rel, NIL, $list5);
     memoization_state.note_globally_cached_function($sym11$KEY_GAF_ARG_INDEX_CACHED);
     utilities_macros.register_cyc_api_function($sym6$KEY_GAF_ARG_INDEX, $list8, $str16$Return_a_list_of_the_keys_to_the_, NIL, $list17);

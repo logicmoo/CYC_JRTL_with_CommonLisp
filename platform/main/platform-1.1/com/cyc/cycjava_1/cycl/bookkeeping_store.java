@@ -547,8 +547,7 @@ This index also serves as the store for these bookkeeping assertions. */
   }
 
   public static final SubLObject setup_bookkeeping_store_file() {
-    // CVS_ID("Id: bookkeeping-store.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    hl_storage_modules.register_solely_specific_hl_storage_module_predicate($const6$myCreator);
+        hl_storage_modules.register_solely_specific_hl_storage_module_predicate($const6$myCreator);
     hl_storage_modules.hl_storage_module($kw7$MY_CREATOR, $list8);
     hl_storage_modules.register_solely_specific_hl_storage_module_predicate($const10$myCreationTime);
     hl_storage_modules.hl_storage_module($kw11$MY_CREATION_TIME, $list12);

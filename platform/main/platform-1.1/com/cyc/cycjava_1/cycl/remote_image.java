@@ -161,8 +161,7 @@ public  final class remote_image extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_remote_image_file() {
-    // CVS_ID("Id: remote-image.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_remote_image$.getGlobalValue(), Symbols.symbol_function($sym10$REMOTE_IMAGE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_remote_image$.getGlobalValue(), Symbols.symbol_function($sym10$REMOTE_IMAGE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym11$RMT_IMG_MACHINE, $sym12$_CSETF_RMT_IMG_MACHINE);
     Structures.def_csetf($sym13$RMT_IMG_PORT, $sym14$_CSETF_RMT_IMG_PORT);
     Structures.def_csetf($sym15$RMT_IMG_PROTOCOL, $sym16$_CSETF_RMT_IMG_PROTOCOL);

@@ -1005,8 +1005,7 @@ public  final class removal_tactician_motivation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_tactician_motivation_file() {
-    // CVS_ID("Id: inference-removal-tactician-motivation.lisp 127279 2009-02-27 16:30:30Z pace ");
-    utilities_macros.note_funcall_helper_function($sym16$REMOVAL_STRATEGY_NOTE_NEW_TACTIC);
+        utilities_macros.note_funcall_helper_function($sym16$REMOVAL_STRATEGY_NOTE_NEW_TACTIC);
     utilities_macros.note_funcall_helper_function($sym18$REMOVAL_STRATEGY_NOTE_SPLIT_TACTICS_STRATEGICALLY_POSSIBLE);
     utilities_macros.note_funcall_helper_function($sym37$REMOVAL_STRATEGY_CONSIDER_THAT_PROBLEM_COULD_BE_STRATEGICALLY_PEN);
     return NIL;

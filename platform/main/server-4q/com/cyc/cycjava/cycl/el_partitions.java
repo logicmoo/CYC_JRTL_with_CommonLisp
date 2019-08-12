@@ -1,9 +1,39 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.el_partitions;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.cycjava.cycl.inference.harness.hl_prototypes;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -26,82 +56,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_partitions.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.$print_length$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.$print_level$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOURTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINETEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THIRTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_pretty$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_readably$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class el_partitions extends SubLTranslatedFile {
+import com.cyc.tool.subl.util.SubLTranslatedFile; 
+ public final class el_partitions extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new el_partitions();
 
-    public static final String myName = "com.cyc.cycjava.cycl.el_partitions";
+    public static final String myName = "com.cyc.cycjava_2.cycl.el_partitions";
 
-    public static final String myFingerPrint = "dd5356a0ed437d6abb178de9da8071b2d38625c576c60b83444be2875200cb17";
 
     // deflexical
     public static final SubLSymbol $default_pickling_stream_buffer_size$ = makeSymbol("*DEFAULT-PICKLING-STREAM-BUFFER-SIZE*");
@@ -272,7 +232,7 @@ public final class el_partitions extends SubLTranslatedFile {
 
     private static final SubLSymbol ITERATION_NEXT_WITHOUT_VALUES = makeSymbol("ITERATION-NEXT-WITHOUT-VALUES");
 
-    private static final SubLList $list70 = list(makeKeyword("DONE"));
+    private static final SubLList $list70 = list($DONE);
 
 
 
@@ -332,7 +292,7 @@ public final class el_partitions extends SubLTranslatedFile {
 
     private static final SubLList $list99 = list(makeSymbol("ID"), makeSymbol("TL-IST-FORMULA"), makeSymbol("HASH"), makeSymbol("EXTRA"), makeSymbol("WEAK-IST-FORMULA"));
 
-    private static final SubLList $list100 = list(makeKeyword("ID"), makeKeyword("TL-IST-FORMULA"), makeKeyword("HASH"), makeKeyword("EXTRA"), makeKeyword("WEAK-IST-FORMULA"));
+    private static final SubLList $list100 = list(makeKeyword("ID"), makeKeyword("TL-IST-FORMULA"), $HASH, makeKeyword("EXTRA"), makeKeyword("WEAK-IST-FORMULA"));
 
     private static final SubLList $list101 = list(makeSymbol("ELPART-AS-DESC-ID"), makeSymbol("ELPART-AS-DESC-TL-IST-FORMULA"), makeSymbol("ELPART-AS-DESC-HASH"), makeSymbol("ELPART-AS-DESC-EXTRA"), makeSymbol("ELPART-AS-DESC-WEAK-IST-FORMULA"));
 
@@ -368,7 +328,6 @@ public final class el_partitions extends SubLTranslatedFile {
 
     private static final SubLSymbol $TL_IST_FORMULA = makeKeyword("TL-IST-FORMULA");
 
-    private static final SubLSymbol $HASH = makeKeyword("HASH");
 
 
 
@@ -1571,56 +1530,56 @@ public final class el_partitions extends SubLTranslatedFile {
     }
 
     public static SubLObject elpart_as_desc_p(final SubLObject v_object) {
-        return v_object.getClass() == el_partitions.$elpart_as_desc_native.class ? T : NIL;
+        return v_object.getClass() == $elpart_as_desc_native.class ? T : NIL;
     }
 
     public static SubLObject elpart_as_desc_id(final SubLObject v_object) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject elpart_as_desc_tl_ist_formula(final SubLObject v_object) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject elpart_as_desc_hash(final SubLObject v_object) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject elpart_as_desc_extra(final SubLObject v_object) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject elpart_as_desc_weak_ist_formula(final SubLObject v_object) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject _csetf_elpart_as_desc_id(final SubLObject v_object, final SubLObject value) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_elpart_as_desc_tl_ist_formula(final SubLObject v_object, final SubLObject value) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_elpart_as_desc_hash(final SubLObject v_object, final SubLObject value) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_elpart_as_desc_extra(final SubLObject v_object, final SubLObject value) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_elpart_as_desc_weak_ist_formula(final SubLObject v_object, final SubLObject value) {
-        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p(v_object) " + "CommonSymbols.NIL != el_partitions.elpart_as_desc_p(v_object) " + v_object;
+        assert NIL != elpart_as_desc_p(v_object) : "el_partitions.elpart_as_desc_p error :" + v_object;
         return v_object.setField6(value);
     }
 
@@ -1628,7 +1587,7 @@ public final class el_partitions extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new el_partitions.$elpart_as_desc_native();
+        final SubLObject v_new = new $elpart_as_desc_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -2474,66 +2433,66 @@ public final class el_partitions extends SubLTranslatedFile {
     }
 
     public static SubLObject el_partition_data_sink_p(final SubLObject v_object) {
-        return v_object.getClass() == el_partitions.$el_partition_data_sink_native.class ? T : NIL;
+        return v_object.getClass() == $el_partition_data_sink_native.class ? T : NIL;
     }
 
     public static SubLObject elpart_dsink_state(final SubLObject v_object) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject elpart_dsink_branch_cdel_fn(final SubLObject v_object) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject elpart_dsink_branch_asdel_fn(final SubLObject v_object) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject elpart_dsink_tip_ccreate_fn(final SubLObject v_object) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject elpart_dsink_tip_ascreate_fn(final SubLObject v_object) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject elpart_dsink_tip_asreassert_fn(final SubLObject v_object) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.getField7();
     }
 
     public static SubLObject _csetf_elpart_dsink_state(final SubLObject v_object, final SubLObject value) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_elpart_dsink_branch_cdel_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_elpart_dsink_branch_asdel_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_elpart_dsink_tip_ccreate_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_elpart_dsink_tip_ascreate_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_elpart_dsink_tip_asreassert_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p(v_object) " + "CommonSymbols.NIL != el_partitions.el_partition_data_sink_p(v_object) " + v_object;
+        assert NIL != el_partition_data_sink_p(v_object) : "el_partitions.el_partition_data_sink_p error :" + v_object;
         return v_object.setField7(value);
     }
 
@@ -2541,7 +2500,7 @@ public final class el_partitions extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new el_partitions.$el_partition_data_sink_native();
+        final SubLObject v_new = new $el_partition_data_sink_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -2974,124 +2933,124 @@ public final class el_partitions extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_el_partitions_file() {
-        declareMacro(me, "with_pickling_stream_buffer_size", "WITH-PICKLING-STREAM-BUFFER-SIZE");
-        declareMacro(me, "with_pickling_pacficiation", "WITH-PICKLING-PACFICIATION");
-        declareFunction(me, "el_partition_relevant_constantP", "EL-PARTITION-RELEVANT-CONSTANT?", 1, 0, false);
-        declareFunction(me, "el_partition_relevant_assertionP", "EL-PARTITION-RELEVANT-ASSERTION?", 1, 0, false);
-        declareFunction(me, "pickle_constants", "PICKLE-CONSTANTS", 1, 0, false);
-        declareMacro(me, "do_pickled_constants", "DO-PICKLED-CONSTANTS");
-        declareFunction(me, "pickle_assertions", "PICKLE-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "pickling_index_filename", "PICKLING-INDEX-FILENAME", 1, 0, false);
-        declareFunction(me, "pickling_data_filename", "PICKLING-DATA-FILENAME", 1, 0, false);
-        declareFunction(me, "assertion_to_pickling_format", "ASSERTION-TO-PICKLING-FORMAT", 1, 0, false);
-        declareFunction(me, "unpickle_assertion_pickling_format", "UNPICKLE-ASSERTION-PICKLING-FORMAT", 1, 0, false);
-        declareFunction(me, "convert_guid_to_pickling_format", "CONVERT-GUID-TO-PICKLING-FORMAT", 1, 0, false);
-        declareFunction(me, "pickled_guid_format_p", "PICKLED-GUID-FORMAT-P", 1, 0, false);
-        declareFunction(me, "restore_guid_from_pickling_format", "RESTORE-GUID-FROM-PICKLING-FORMAT", 1, 0, false);
-        declareFunction(me, "new_relevant_assertions_id_space", "NEW-RELEVANT-ASSERTIONS-ID-SPACE", 0, 1, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb", "COMPARE-PICKLED-KB-TO-CURRENT-KB", 3, 0, false);
-        declareFunction(me, "enumerate_additions_to_current_kb", "ENUMERATE-ADDITIONS-TO-CURRENT-KB", 1, 0, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_constants", "COMPARE-PICKLED-KB-TO-CURRENT-KB-CONSTANTS", 2, 0, false);
-        declareMacro(me, "update_as_iteration_state", "UPDATE-AS-ITERATION-STATE");
-        declareMacro(me, "decrement_tip_index", "DECREMENT-TIP-INDEX");
-        declareFunction(me, "find_most_recent_assertion_shared_with_branch", "FIND-MOST-RECENT-ASSERTION-SHARED-WITH-BRANCH", 1, 0, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_assertions", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS", 2, 0, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_assertions_internal", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-INTERNAL", 2, 1, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_assertions_scan_forward_fast", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-SCAN-FORWARD-FAST", 2, 1, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_assertions_scan_forward_steady", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-SCAN-FORWARD-STEADY", 2, 1, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_assertions_novel_forward", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-NOVEL-FORWARD", 2, 1, false);
-        declareFunction(me, "compare_pickled_kb_to_current_kb_assertions_classic_backward", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-CLASSIC-BACKWARD", 2, 1, false);
-        declareFunction(me, "enumerate_tip_assertions_from_current_kb", "ENUMERATE-TIP-ASSERTIONS-FROM-CURRENT-KB", 2, 0, false);
-        declareFunction(me, "enumerate_branch_assertions_absent_from_current_kb", "ENUMERATE-BRANCH-ASSERTIONS-ABSENT-FROM-CURRENT-KB", 3, 0, false);
-        declareFunction(me, "elpart_as_desc_print_function_trampoline", "ELPART-AS-DESC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "elpart_as_desc_p", "ELPART-AS-DESC-P", 1, 0, false);
+        declareMacro("with_pickling_stream_buffer_size", "WITH-PICKLING-STREAM-BUFFER-SIZE");
+        declareMacro("with_pickling_pacficiation", "WITH-PICKLING-PACFICIATION");
+        declareFunction("el_partition_relevant_constantP", "EL-PARTITION-RELEVANT-CONSTANT?", 1, 0, false);
+        declareFunction("el_partition_relevant_assertionP", "EL-PARTITION-RELEVANT-ASSERTION?", 1, 0, false);
+        declareFunction("pickle_constants", "PICKLE-CONSTANTS", 1, 0, false);
+        declareMacro("do_pickled_constants", "DO-PICKLED-CONSTANTS");
+        declareFunction("pickle_assertions", "PICKLE-ASSERTIONS", 1, 0, false);
+        declareFunction("pickling_index_filename", "PICKLING-INDEX-FILENAME", 1, 0, false);
+        declareFunction("pickling_data_filename", "PICKLING-DATA-FILENAME", 1, 0, false);
+        declareFunction("assertion_to_pickling_format", "ASSERTION-TO-PICKLING-FORMAT", 1, 0, false);
+        declareFunction("unpickle_assertion_pickling_format", "UNPICKLE-ASSERTION-PICKLING-FORMAT", 1, 0, false);
+        declareFunction("convert_guid_to_pickling_format", "CONVERT-GUID-TO-PICKLING-FORMAT", 1, 0, false);
+        declareFunction("pickled_guid_format_p", "PICKLED-GUID-FORMAT-P", 1, 0, false);
+        declareFunction("restore_guid_from_pickling_format", "RESTORE-GUID-FROM-PICKLING-FORMAT", 1, 0, false);
+        declareFunction("new_relevant_assertions_id_space", "NEW-RELEVANT-ASSERTIONS-ID-SPACE", 0, 1, false);
+        declareFunction("compare_pickled_kb_to_current_kb", "COMPARE-PICKLED-KB-TO-CURRENT-KB", 3, 0, false);
+        declareFunction("enumerate_additions_to_current_kb", "ENUMERATE-ADDITIONS-TO-CURRENT-KB", 1, 0, false);
+        declareFunction("compare_pickled_kb_to_current_kb_constants", "COMPARE-PICKLED-KB-TO-CURRENT-KB-CONSTANTS", 2, 0, false);
+        declareMacro("update_as_iteration_state", "UPDATE-AS-ITERATION-STATE");
+        declareMacro("decrement_tip_index", "DECREMENT-TIP-INDEX");
+        declareFunction("find_most_recent_assertion_shared_with_branch", "FIND-MOST-RECENT-ASSERTION-SHARED-WITH-BRANCH", 1, 0, false);
+        declareFunction("compare_pickled_kb_to_current_kb_assertions", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS", 2, 0, false);
+        declareFunction("compare_pickled_kb_to_current_kb_assertions_internal", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-INTERNAL", 2, 1, false);
+        declareFunction("compare_pickled_kb_to_current_kb_assertions_scan_forward_fast", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-SCAN-FORWARD-FAST", 2, 1, false);
+        declareFunction("compare_pickled_kb_to_current_kb_assertions_scan_forward_steady", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-SCAN-FORWARD-STEADY", 2, 1, false);
+        declareFunction("compare_pickled_kb_to_current_kb_assertions_novel_forward", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-NOVEL-FORWARD", 2, 1, false);
+        declareFunction("compare_pickled_kb_to_current_kb_assertions_classic_backward", "COMPARE-PICKLED-KB-TO-CURRENT-KB-ASSERTIONS-CLASSIC-BACKWARD", 2, 1, false);
+        declareFunction("enumerate_tip_assertions_from_current_kb", "ENUMERATE-TIP-ASSERTIONS-FROM-CURRENT-KB", 2, 0, false);
+        declareFunction("enumerate_branch_assertions_absent_from_current_kb", "ENUMERATE-BRANCH-ASSERTIONS-ABSENT-FROM-CURRENT-KB", 3, 0, false);
+        declareFunction("elpart_as_desc_print_function_trampoline", "ELPART-AS-DESC-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("elpart_as_desc_p", "ELPART-AS-DESC-P", 1, 0, false);
         new el_partitions.$elpart_as_desc_p$UnaryFunction();
-        declareFunction(me, "elpart_as_desc_id", "ELPART-AS-DESC-ID", 1, 0, false);
-        declareFunction(me, "elpart_as_desc_tl_ist_formula", "ELPART-AS-DESC-TL-IST-FORMULA", 1, 0, false);
-        declareFunction(me, "elpart_as_desc_hash", "ELPART-AS-DESC-HASH", 1, 0, false);
-        declareFunction(me, "elpart_as_desc_extra", "ELPART-AS-DESC-EXTRA", 1, 0, false);
-        declareFunction(me, "elpart_as_desc_weak_ist_formula", "ELPART-AS-DESC-WEAK-IST-FORMULA", 1, 0, false);
-        declareFunction(me, "_csetf_elpart_as_desc_id", "_CSETF-ELPART-AS-DESC-ID", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_as_desc_tl_ist_formula", "_CSETF-ELPART-AS-DESC-TL-IST-FORMULA", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_as_desc_hash", "_CSETF-ELPART-AS-DESC-HASH", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_as_desc_extra", "_CSETF-ELPART-AS-DESC-EXTRA", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_as_desc_weak_ist_formula", "_CSETF-ELPART-AS-DESC-WEAK-IST-FORMULA", 2, 0, false);
-        declareFunction(me, "make_elpart_as_desc", "MAKE-ELPART-AS-DESC", 0, 1, false);
-        declareFunction(me, "visit_defstruct_elpart_as_desc", "VISIT-DEFSTRUCT-ELPART-AS-DESC", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_elpart_as_desc_method", "VISIT-DEFSTRUCT-OBJECT-ELPART-AS-DESC-METHOD", 2, 0, false);
-        declareFunction(me, "print_elpart_as_desc", "PRINT-ELPART-AS-DESC", 3, 0, false);
-        declareFunction(me, "identify_branch_assertions_absent_from_current_kb", "IDENTIFY-BRANCH-ASSERTIONS-ABSENT-FROM-CURRENT-KB", 2, 0, false);
-        declareFunction(me, "identify_branch_assertions_absent_from_current_kb_int", "IDENTIFY-BRANCH-ASSERTIONS-ABSENT-FROM-CURRENT-KB-INT", 2, 0, false);
-        declareFunction(me, "find_start_of_el_partition_relevant_assertions", "FIND-START-OF-EL-PARTITION-RELEVANT-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "fetch_branch_limit_information_for_pickled_kb", "FETCH-BRANCH-LIMIT-INFORMATION-FOR-PICKLED-KB", 1, 0, false);
-        declareFunction(me, "enumerate_branch_assertions_missing_from_current_kb", "ENUMERATE-BRANCH-ASSERTIONS-MISSING-FROM-CURRENT-KB", 6, 0, false);
-        declareFunction(me, "same_elpart_as_descP", "SAME-ELPART-AS-DESC?", 2, 0, false);
-        declareFunction(me, "enummiss_find_previous_relevant_assertion", "ENUMMISS-FIND-PREVIOUS-RELEVANT-ASSERTION", 1, 0, false);
-        declareFunction(me, "enummiss_find_next_relevant_assertion", "ENUMMISS-FIND-NEXT-RELEVANT-ASSERTION", 1, 0, false);
-        declareFunction(me, "enummiss_fetch_specific_assertion_information", "ENUMMISS-FETCH-SPECIFIC-ASSERTION-INFORMATION", 3, 0, false);
-        declareFunction(me, "enummiss_compute_specific_assertion_information", "ENUMMISS-COMPUTE-SPECIFIC-ASSERTION-INFORMATION", 2, 0, false);
-        declareFunction(me, "enummiss_clear_specific_assertion_information", "ENUMMISS-CLEAR-SPECIFIC-ASSERTION-INFORMATION", 1, 0, false);
-        declareFunction(me, "enummiss_compute_weakened_ist_formula", "ENUMMISS-COMPUTE-WEAKENED-IST-FORMULA", 1, 0, false);
-        declareFunction(me, "enummiss_tl_hp_notation", "ENUMMISS-TL-HP-NOTATION", 1, 0, false);
-        declareFunction(me, "enumerate_missing_assertions_before_shared", "ENUMERATE-MISSING-ASSERTIONS-BEFORE-SHARED", 3, 0, false);
-        declareFunction(me, "scan_enumerate_branch_assertions_missing_from_current_kb", "SCAN-ENUMERATE-BRANCH-ASSERTIONS-MISSING-FROM-CURRENT-KB", 2, 1, false);
-        declareFunction(me, "scan_enummiss_load_branch_assertion", "SCAN-ENUMMISS-LOAD-BRANCH-ASSERTION", 4, 0, false);
-        declareFunction(me, "scan_enummiss_corresponding_relevant_tip_assertion", "SCAN-ENUMMISS-CORRESPONDING-RELEVANT-TIP-ASSERTION", 4, 0, false);
-        declareFunction(me, "scan_enummiss_corresponding_tip_assertion", "SCAN-ENUMMISS-CORRESPONDING-TIP-ASSERTION", 4, 0, false);
-        declareFunction(me, "scan_enummiss_load_tip_assertion", "SCAN-ENUMMISS-LOAD-TIP-ASSERTION", 3, 0, false);
-        declareFunction(me, "scan_enummiss_classify_situation", "SCAN-ENUMMISS-CLASSIFY-SITUATION", 2, 0, false);
-        declareFunction(me, "test_helper_get_assertion", "TEST-HELPER-GET-ASSERTION", 2, 0, false);
-        declareFunction(me, "test_helper_classify_situation", "TEST-HELPER-CLASSIFY-SITUATION", 2, 0, false);
-        declareFunction(me, "test_el_partition_simple_scan_algorithm", "TEST-EL-PARTITION-SIMPLE-SCAN-ALGORITHM", 2, 0, false);
-        declareFunction(me, "generate_el_partition_simple_scan_case", "GENERATE-EL-PARTITION-SIMPLE-SCAN-CASE", 3, 0, false);
-        declareFunction(me, "test_random_el_partition_simple_scan_cases", "TEST-RANDOM-EL-PARTITION-SIMPLE-SCAN-CASES", 4, 0, false);
-        declareFunction(me, "el_partition_data_sink_print_function_trampoline", "EL-PARTITION-DATA-SINK-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "el_partition_data_sink_p", "EL-PARTITION-DATA-SINK-P", 1, 0, false);
+        declareFunction("elpart_as_desc_id", "ELPART-AS-DESC-ID", 1, 0, false);
+        declareFunction("elpart_as_desc_tl_ist_formula", "ELPART-AS-DESC-TL-IST-FORMULA", 1, 0, false);
+        declareFunction("elpart_as_desc_hash", "ELPART-AS-DESC-HASH", 1, 0, false);
+        declareFunction("elpart_as_desc_extra", "ELPART-AS-DESC-EXTRA", 1, 0, false);
+        declareFunction("elpart_as_desc_weak_ist_formula", "ELPART-AS-DESC-WEAK-IST-FORMULA", 1, 0, false);
+        declareFunction("_csetf_elpart_as_desc_id", "_CSETF-ELPART-AS-DESC-ID", 2, 0, false);
+        declareFunction("_csetf_elpart_as_desc_tl_ist_formula", "_CSETF-ELPART-AS-DESC-TL-IST-FORMULA", 2, 0, false);
+        declareFunction("_csetf_elpart_as_desc_hash", "_CSETF-ELPART-AS-DESC-HASH", 2, 0, false);
+        declareFunction("_csetf_elpart_as_desc_extra", "_CSETF-ELPART-AS-DESC-EXTRA", 2, 0, false);
+        declareFunction("_csetf_elpart_as_desc_weak_ist_formula", "_CSETF-ELPART-AS-DESC-WEAK-IST-FORMULA", 2, 0, false);
+        declareFunction("make_elpart_as_desc", "MAKE-ELPART-AS-DESC", 0, 1, false);
+        declareFunction("visit_defstruct_elpart_as_desc", "VISIT-DEFSTRUCT-ELPART-AS-DESC", 2, 0, false);
+        declareFunction("visit_defstruct_object_elpart_as_desc_method", "VISIT-DEFSTRUCT-OBJECT-ELPART-AS-DESC-METHOD", 2, 0, false);
+        declareFunction("print_elpart_as_desc", "PRINT-ELPART-AS-DESC", 3, 0, false);
+        declareFunction("identify_branch_assertions_absent_from_current_kb", "IDENTIFY-BRANCH-ASSERTIONS-ABSENT-FROM-CURRENT-KB", 2, 0, false);
+        declareFunction("identify_branch_assertions_absent_from_current_kb_int", "IDENTIFY-BRANCH-ASSERTIONS-ABSENT-FROM-CURRENT-KB-INT", 2, 0, false);
+        declareFunction("find_start_of_el_partition_relevant_assertions", "FIND-START-OF-EL-PARTITION-RELEVANT-ASSERTIONS", 1, 0, false);
+        declareFunction("fetch_branch_limit_information_for_pickled_kb", "FETCH-BRANCH-LIMIT-INFORMATION-FOR-PICKLED-KB", 1, 0, false);
+        declareFunction("enumerate_branch_assertions_missing_from_current_kb", "ENUMERATE-BRANCH-ASSERTIONS-MISSING-FROM-CURRENT-KB", 6, 0, false);
+        declareFunction("same_elpart_as_descP", "SAME-ELPART-AS-DESC?", 2, 0, false);
+        declareFunction("enummiss_find_previous_relevant_assertion", "ENUMMISS-FIND-PREVIOUS-RELEVANT-ASSERTION", 1, 0, false);
+        declareFunction("enummiss_find_next_relevant_assertion", "ENUMMISS-FIND-NEXT-RELEVANT-ASSERTION", 1, 0, false);
+        declareFunction("enummiss_fetch_specific_assertion_information", "ENUMMISS-FETCH-SPECIFIC-ASSERTION-INFORMATION", 3, 0, false);
+        declareFunction("enummiss_compute_specific_assertion_information", "ENUMMISS-COMPUTE-SPECIFIC-ASSERTION-INFORMATION", 2, 0, false);
+        declareFunction("enummiss_clear_specific_assertion_information", "ENUMMISS-CLEAR-SPECIFIC-ASSERTION-INFORMATION", 1, 0, false);
+        declareFunction("enummiss_compute_weakened_ist_formula", "ENUMMISS-COMPUTE-WEAKENED-IST-FORMULA", 1, 0, false);
+        declareFunction("enummiss_tl_hp_notation", "ENUMMISS-TL-HP-NOTATION", 1, 0, false);
+        declareFunction("enumerate_missing_assertions_before_shared", "ENUMERATE-MISSING-ASSERTIONS-BEFORE-SHARED", 3, 0, false);
+        declareFunction("scan_enumerate_branch_assertions_missing_from_current_kb", "SCAN-ENUMERATE-BRANCH-ASSERTIONS-MISSING-FROM-CURRENT-KB", 2, 1, false);
+        declareFunction("scan_enummiss_load_branch_assertion", "SCAN-ENUMMISS-LOAD-BRANCH-ASSERTION", 4, 0, false);
+        declareFunction("scan_enummiss_corresponding_relevant_tip_assertion", "SCAN-ENUMMISS-CORRESPONDING-RELEVANT-TIP-ASSERTION", 4, 0, false);
+        declareFunction("scan_enummiss_corresponding_tip_assertion", "SCAN-ENUMMISS-CORRESPONDING-TIP-ASSERTION", 4, 0, false);
+        declareFunction("scan_enummiss_load_tip_assertion", "SCAN-ENUMMISS-LOAD-TIP-ASSERTION", 3, 0, false);
+        declareFunction("scan_enummiss_classify_situation", "SCAN-ENUMMISS-CLASSIFY-SITUATION", 2, 0, false);
+        declareFunction("test_helper_get_assertion", "TEST-HELPER-GET-ASSERTION", 2, 0, false);
+        declareFunction("test_helper_classify_situation", "TEST-HELPER-CLASSIFY-SITUATION", 2, 0, false);
+        declareFunction("test_el_partition_simple_scan_algorithm", "TEST-EL-PARTITION-SIMPLE-SCAN-ALGORITHM", 2, 0, false);
+        declareFunction("generate_el_partition_simple_scan_case", "GENERATE-EL-PARTITION-SIMPLE-SCAN-CASE", 3, 0, false);
+        declareFunction("test_random_el_partition_simple_scan_cases", "TEST-RANDOM-EL-PARTITION-SIMPLE-SCAN-CASES", 4, 0, false);
+        declareFunction("el_partition_data_sink_print_function_trampoline", "EL-PARTITION-DATA-SINK-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("el_partition_data_sink_p", "EL-PARTITION-DATA-SINK-P", 1, 0, false);
         new el_partitions.$el_partition_data_sink_p$UnaryFunction();
-        declareFunction(me, "elpart_dsink_state", "ELPART-DSINK-STATE", 1, 0, false);
-        declareFunction(me, "elpart_dsink_branch_cdel_fn", "ELPART-DSINK-BRANCH-CDEL-FN", 1, 0, false);
-        declareFunction(me, "elpart_dsink_branch_asdel_fn", "ELPART-DSINK-BRANCH-ASDEL-FN", 1, 0, false);
-        declareFunction(me, "elpart_dsink_tip_ccreate_fn", "ELPART-DSINK-TIP-CCREATE-FN", 1, 0, false);
-        declareFunction(me, "elpart_dsink_tip_ascreate_fn", "ELPART-DSINK-TIP-ASCREATE-FN", 1, 0, false);
-        declareFunction(me, "elpart_dsink_tip_asreassert_fn", "ELPART-DSINK-TIP-ASREASSERT-FN", 1, 0, false);
-        declareFunction(me, "_csetf_elpart_dsink_state", "_CSETF-ELPART-DSINK-STATE", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_dsink_branch_cdel_fn", "_CSETF-ELPART-DSINK-BRANCH-CDEL-FN", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_dsink_branch_asdel_fn", "_CSETF-ELPART-DSINK-BRANCH-ASDEL-FN", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_dsink_tip_ccreate_fn", "_CSETF-ELPART-DSINK-TIP-CCREATE-FN", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_dsink_tip_ascreate_fn", "_CSETF-ELPART-DSINK-TIP-ASCREATE-FN", 2, 0, false);
-        declareFunction(me, "_csetf_elpart_dsink_tip_asreassert_fn", "_CSETF-ELPART-DSINK-TIP-ASREASSERT-FN", 2, 0, false);
-        declareFunction(me, "make_el_partition_data_sink", "MAKE-EL-PARTITION-DATA-SINK", 0, 1, false);
-        declareFunction(me, "visit_defstruct_el_partition_data_sink", "VISIT-DEFSTRUCT-EL-PARTITION-DATA-SINK", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_el_partition_data_sink_method", "VISIT-DEFSTRUCT-OBJECT-EL-PARTITION-DATA-SINK-METHOD", 2, 0, false);
-        declareFunction(me, "new_el_partition_data_sink", "NEW-EL-PARTITION-DATA-SINK", 6, 0, false);
-        declareFunction(me, "note_el_partition_branch_constant_delete", "NOTE-EL-PARTITION-BRANCH-CONSTANT-DELETE", 3, 0, false);
-        declareFunction(me, "note_el_partition_branch_assertion_delete", "NOTE-EL-PARTITION-BRANCH-ASSERTION-DELETE", 2, 0, false);
-        declareFunction(me, "note_el_partition_tip_constant_create", "NOTE-EL-PARTITION-TIP-CONSTANT-CREATE", 2, 0, false);
-        declareFunction(me, "note_el_partition_tip_assertion_create", "NOTE-EL-PARTITION-TIP-ASSERTION-CREATE", 2, 0, false);
-        declareFunction(me, "note_el_partition_tip_assertion_reassert", "NOTE-EL-PARTITION-TIP-ASSERTION-REASSERT", 2, 2, false);
-        declareFunction(me, "get_el_partition_data_sink_state", "GET-EL-PARTITION-DATA-SINK-STATE", 1, 0, false);
-        declareMacro(me, "with_el_partition_creator", "WITH-EL-PARTITION-CREATOR");
-        declareMacro(me, "with_el_partition_creation_purpose", "WITH-EL-PARTITION-CREATION-PURPOSE");
-        declareMacro(me, "with_el_partition_mt", "WITH-EL-PARTITION-MT");
-        declareMacro(me, "with_el_partition_direction", "WITH-EL-PARTITION-DIRECTION");
-        declareMacro(me, "without_el_partition_creation_purpose", "WITHOUT-EL-PARTITION-CREATION-PURPOSE");
-        declareFunction(me, "new_transcript_el_partition_data_sink", "NEW-TRANSCRIPT-EL-PARTITION-DATA-SINK", 1, 0, false);
-        declareFunction(me, "transcript_data_sink_branch_constant_delete", "TRANSCRIPT-DATA-SINK-BRANCH-CONSTANT-DELETE", 3, 0, false);
-        declareFunction(me, "transcript_data_sink_branch_assertion_delete", "TRANSCRIPT-DATA-SINK-BRANCH-ASSERTION-DELETE", 2, 0, false);
-        declareFunction(me, "transcript_data_sink_tip_constant_create", "TRANSCRIPT-DATA-SINK-TIP-CONSTANT-CREATE", 2, 0, false);
-        declareFunction(me, "transcript_data_sink_tip_assertion_create", "TRANSCRIPT-DATA-SINK-TIP-ASSERTION-CREATE", 2, 0, false);
-        declareFunction(me, "transcript_data_sink_tip_assertion_reassert", "TRANSCRIPT-DATA-SINK-TIP-ASSERTION-REASSERT", 2, 2, false);
-        declareFunction(me, "transcript_data_sink_tip_constant_timestamp", "TRANSCRIPT-DATA-SINK-TIP-CONSTANT-TIMESTAMP", 2, 0, false);
-        declareFunction(me, "transcript_data_sink_tip_assertion_timestamp", "TRANSCRIPT-DATA-SINK-TIP-ASSERTION-TIMESTAMP", 2, 0, false);
-        declareFunction(me, "transcript_data_sink_clean_fort", "TRANSCRIPT-DATA-SINK-CLEAN-FORT", 1, 0, false);
-        declareFunction(me, "transcript_data_sink_form_prologue", "TRANSCRIPT-DATA-SINK-FORM-PROLOGUE", 1, 0, false);
-        declareFunction(me, "transcript_data_sink_form_epilogue", "TRANSCRIPT-DATA-SINK-FORM-EPILOGUE", 1, 0, false);
-        declareFunction(me, "new_debug_el_partition_data_sink", "NEW-DEBUG-EL-PARTITION-DATA-SINK", 0, 1, false);
-        declareFunction(me, "debug_data_sink_branch_constant_delete", "DEBUG-DATA-SINK-BRANCH-CONSTANT-DELETE", 3, 0, false);
-        declareFunction(me, "debug_data_sink_branch_assertion_delete", "DEBUG-DATA-SINK-BRANCH-ASSERTION-DELETE", 2, 0, false);
-        declareFunction(me, "debug_data_sink_tip_constant_create", "DEBUG-DATA-SINK-TIP-CONSTANT-CREATE", 2, 0, false);
-        declareFunction(me, "debug_data_sink_tip_assertion_create", "DEBUG-DATA-SINK-TIP-ASSERTION-CREATE", 2, 0, false);
-        declareFunction(me, "debug_data_sink_tip_assertion_reassert", "DEBUG-DATA-SINK-TIP-ASSERTION-REASSERT", 2, 2, false);
+        declareFunction("elpart_dsink_state", "ELPART-DSINK-STATE", 1, 0, false);
+        declareFunction("elpart_dsink_branch_cdel_fn", "ELPART-DSINK-BRANCH-CDEL-FN", 1, 0, false);
+        declareFunction("elpart_dsink_branch_asdel_fn", "ELPART-DSINK-BRANCH-ASDEL-FN", 1, 0, false);
+        declareFunction("elpart_dsink_tip_ccreate_fn", "ELPART-DSINK-TIP-CCREATE-FN", 1, 0, false);
+        declareFunction("elpart_dsink_tip_ascreate_fn", "ELPART-DSINK-TIP-ASCREATE-FN", 1, 0, false);
+        declareFunction("elpart_dsink_tip_asreassert_fn", "ELPART-DSINK-TIP-ASREASSERT-FN", 1, 0, false);
+        declareFunction("_csetf_elpart_dsink_state", "_CSETF-ELPART-DSINK-STATE", 2, 0, false);
+        declareFunction("_csetf_elpart_dsink_branch_cdel_fn", "_CSETF-ELPART-DSINK-BRANCH-CDEL-FN", 2, 0, false);
+        declareFunction("_csetf_elpart_dsink_branch_asdel_fn", "_CSETF-ELPART-DSINK-BRANCH-ASDEL-FN", 2, 0, false);
+        declareFunction("_csetf_elpart_dsink_tip_ccreate_fn", "_CSETF-ELPART-DSINK-TIP-CCREATE-FN", 2, 0, false);
+        declareFunction("_csetf_elpart_dsink_tip_ascreate_fn", "_CSETF-ELPART-DSINK-TIP-ASCREATE-FN", 2, 0, false);
+        declareFunction("_csetf_elpart_dsink_tip_asreassert_fn", "_CSETF-ELPART-DSINK-TIP-ASREASSERT-FN", 2, 0, false);
+        declareFunction("make_el_partition_data_sink", "MAKE-EL-PARTITION-DATA-SINK", 0, 1, false);
+        declareFunction("visit_defstruct_el_partition_data_sink", "VISIT-DEFSTRUCT-EL-PARTITION-DATA-SINK", 2, 0, false);
+        declareFunction("visit_defstruct_object_el_partition_data_sink_method", "VISIT-DEFSTRUCT-OBJECT-EL-PARTITION-DATA-SINK-METHOD", 2, 0, false);
+        declareFunction("new_el_partition_data_sink", "NEW-EL-PARTITION-DATA-SINK", 6, 0, false);
+        declareFunction("note_el_partition_branch_constant_delete", "NOTE-EL-PARTITION-BRANCH-CONSTANT-DELETE", 3, 0, false);
+        declareFunction("note_el_partition_branch_assertion_delete", "NOTE-EL-PARTITION-BRANCH-ASSERTION-DELETE", 2, 0, false);
+        declareFunction("note_el_partition_tip_constant_create", "NOTE-EL-PARTITION-TIP-CONSTANT-CREATE", 2, 0, false);
+        declareFunction("note_el_partition_tip_assertion_create", "NOTE-EL-PARTITION-TIP-ASSERTION-CREATE", 2, 0, false);
+        declareFunction("note_el_partition_tip_assertion_reassert", "NOTE-EL-PARTITION-TIP-ASSERTION-REASSERT", 2, 2, false);
+        declareFunction("get_el_partition_data_sink_state", "GET-EL-PARTITION-DATA-SINK-STATE", 1, 0, false);
+        declareMacro("with_el_partition_creator", "WITH-EL-PARTITION-CREATOR");
+        declareMacro("with_el_partition_creation_purpose", "WITH-EL-PARTITION-CREATION-PURPOSE");
+        declareMacro("with_el_partition_mt", "WITH-EL-PARTITION-MT");
+        declareMacro("with_el_partition_direction", "WITH-EL-PARTITION-DIRECTION");
+        declareMacro("without_el_partition_creation_purpose", "WITHOUT-EL-PARTITION-CREATION-PURPOSE");
+        declareFunction("new_transcript_el_partition_data_sink", "NEW-TRANSCRIPT-EL-PARTITION-DATA-SINK", 1, 0, false);
+        declareFunction("transcript_data_sink_branch_constant_delete", "TRANSCRIPT-DATA-SINK-BRANCH-CONSTANT-DELETE", 3, 0, false);
+        declareFunction("transcript_data_sink_branch_assertion_delete", "TRANSCRIPT-DATA-SINK-BRANCH-ASSERTION-DELETE", 2, 0, false);
+        declareFunction("transcript_data_sink_tip_constant_create", "TRANSCRIPT-DATA-SINK-TIP-CONSTANT-CREATE", 2, 0, false);
+        declareFunction("transcript_data_sink_tip_assertion_create", "TRANSCRIPT-DATA-SINK-TIP-ASSERTION-CREATE", 2, 0, false);
+        declareFunction("transcript_data_sink_tip_assertion_reassert", "TRANSCRIPT-DATA-SINK-TIP-ASSERTION-REASSERT", 2, 2, false);
+        declareFunction("transcript_data_sink_tip_constant_timestamp", "TRANSCRIPT-DATA-SINK-TIP-CONSTANT-TIMESTAMP", 2, 0, false);
+        declareFunction("transcript_data_sink_tip_assertion_timestamp", "TRANSCRIPT-DATA-SINK-TIP-ASSERTION-TIMESTAMP", 2, 0, false);
+        declareFunction("transcript_data_sink_clean_fort", "TRANSCRIPT-DATA-SINK-CLEAN-FORT", 1, 0, false);
+        declareFunction("transcript_data_sink_form_prologue", "TRANSCRIPT-DATA-SINK-FORM-PROLOGUE", 1, 0, false);
+        declareFunction("transcript_data_sink_form_epilogue", "TRANSCRIPT-DATA-SINK-FORM-EPILOGUE", 1, 0, false);
+        declareFunction("new_debug_el_partition_data_sink", "NEW-DEBUG-EL-PARTITION-DATA-SINK", 0, 1, false);
+        declareFunction("debug_data_sink_branch_constant_delete", "DEBUG-DATA-SINK-BRANCH-CONSTANT-DELETE", 3, 0, false);
+        declareFunction("debug_data_sink_branch_assertion_delete", "DEBUG-DATA-SINK-BRANCH-ASSERTION-DELETE", 2, 0, false);
+        declareFunction("debug_data_sink_tip_constant_create", "DEBUG-DATA-SINK-TIP-CONSTANT-CREATE", 2, 0, false);
+        declareFunction("debug_data_sink_tip_assertion_create", "DEBUG-DATA-SINK-TIP-ASSERTION-CREATE", 2, 0, false);
+        declareFunction("debug_data_sink_tip_assertion_reassert", "DEBUG-DATA-SINK-TIP-ASSERTION-REASSERT", 2, 2, false);
         return NIL;
     }
 
@@ -3428,7 +3387,7 @@ public final class el_partitions extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $elpart_as_desc_native() {
+        private $elpart_as_desc_native() {
             this.$id = Lisp.NIL;
             this.$tl_ist_formula = Lisp.NIL;
             this.$hash = Lisp.NIL;
@@ -3492,7 +3451,7 @@ public final class el_partitions extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(el_partitions.$elpart_as_desc_native.class, ELPART_AS_DESC, ELPART_AS_DESC_P, $list99, $list100, new String[]{ "$id", "$tl_ist_formula", "$hash", "$extra", "$weak_ist_formula" }, $list101, $list102, PRINT_ELPART_AS_DESC);
+            structDecl = makeStructDeclNative($elpart_as_desc_native.class, ELPART_AS_DESC, ELPART_AS_DESC_P, $list99, $list100, new String[]{ "$id", "$tl_ist_formula", "$hash", "$extra", "$weak_ist_formula" }, $list101, $list102, PRINT_ELPART_AS_DESC);
         }
     }
 
@@ -3522,7 +3481,7 @@ public final class el_partitions extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $el_partition_data_sink_native() {
+        private $el_partition_data_sink_native() {
             this.$state = Lisp.NIL;
             this.$branch_cdel_fn = Lisp.NIL;
             this.$branch_asdel_fn = Lisp.NIL;
@@ -3597,7 +3556,7 @@ public final class el_partitions extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(el_partitions.$el_partition_data_sink_native.class, EL_PARTITION_DATA_SINK, EL_PARTITION_DATA_SINK_P, $list167, $list168, new String[]{ "$state", "$branch_cdel_fn", "$branch_asdel_fn", "$tip_ccreate_fn", "$tip_ascreate_fn", "$tip_asreassert_fn" }, $list169, $list170, DEFAULT_STRUCT_PRINT_FUNCTION);
+            structDecl = makeStructDeclNative($el_partition_data_sink_native.class, EL_PARTITION_DATA_SINK, EL_PARTITION_DATA_SINK_P, $list167, $list168, new String[]{ "$state", "$branch_cdel_fn", "$branch_asdel_fn", "$tip_ccreate_fn", "$tip_ascreate_fn", "$tip_asreassert_fn" }, $list169, $list170, DEFAULT_STRUCT_PRINT_FUNCTION);
         }
     }
 

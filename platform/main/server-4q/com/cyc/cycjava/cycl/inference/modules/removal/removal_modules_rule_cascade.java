@@ -1,27 +1,23 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_vars;
-import com.cyc.cycjava.cycl.deductions_high;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.hl_storage_modules;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.forward;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rule_cascade;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_control_vars;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.sort_variants;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.uncanonicalizer;
-import com.cyc.cycjava.cycl.unification_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -31,42 +27,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$expensive_hl_module_check_cost$;
-import static com.cyc.cycjava.cycl.control_vars.$prefer_forward_skolemization$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rule_cascade.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$current_forward_problem_store$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_rule_cascade extends SubLTranslatedFile {
+public final class removal_modules_rule_cascade extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_rule_cascade();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_rule_cascade";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_rule_cascade";
 
-    public static final String myFingerPrint = "324e66cf9f465ddafc373a1404059dac34b10b65081f2ffc7aab2b8a270a329f";
 
     // defparameter
     private static final SubLSymbol $default_first_implied_dependent_of_sentence_check_cost$ = makeSymbol("*DEFAULT-FIRST-IMPLIED-DEPENDENT-OF-SENTENCE-CHECK-COST*");
@@ -395,9 +361,9 @@ public final class removal_modules_rule_cascade extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_rule_cascade_file() {
-        declareFunction(me, "removal_first_implied_dependent_of_sentence_check_expand", "REMOVAL-FIRST-IMPLIED-DEPENDENT-OF-SENTENCE-CHECK-EXPAND", 1, 1, false);
-        declareFunction(me, "sorted_rules_in_cascade", "SORTED-RULES-IN-CASCADE", 1, 0, false);
-        declareFunction(me, "cascade_rule_L", "CASCADE-RULE-<", 2, 0, false);
+        declareFunction("removal_first_implied_dependent_of_sentence_check_expand", "REMOVAL-FIRST-IMPLIED-DEPENDENT-OF-SENTENCE-CHECK-EXPAND", 1, 1, false);
+        declareFunction("sorted_rules_in_cascade", "SORTED-RULES-IN-CASCADE", 1, 0, false);
+        declareFunction("cascade_rule_L", "CASCADE-RULE-<", 2, 0, false);
         return NIL;
     }
 

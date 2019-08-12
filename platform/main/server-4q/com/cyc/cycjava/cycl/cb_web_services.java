@@ -1,7 +1,25 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_web_services;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.inference.ask_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -12,36 +30,20 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.cb_web_services.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      CB-WEB-SERVICES
+ * source file: /cyc/top/cycl/cb-web-services.lisp
+ * created:     2019/07/03 17:38:06
+ */
+public final class cb_web_services extends SubLTranslatedFile implements V12 {
+    static private final SubLString $str_alt4$ = makeString("");
 
-public final class cb_web_services extends SubLTranslatedFile {
     public static final SubLFile me = new cb_web_services();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_web_services";
+ public static final String myName = "com.cyc.cycjava.cycl.cb_web_services";
 
-    public static final String myFingerPrint = "88dcc4d675c94f7a0801793c64857832772785ab2bcd5a70ad60706f7bc6f426";
 
     private static final SubLString $$$createType = makeString("createType");
 
@@ -51,31 +53,27 @@ public final class cb_web_services extends SubLTranslatedFile {
 
     private static final SubLString $str3$spec_pred = makeString("spec-pred");
 
-
-
-
-
     private static final SubLString $$$baseType = makeString("baseType");
 
-    private static final SubLObject $$EnglishMt = reader_make_constant_shell(makeString("EnglishMt"));
+
 
     private static final SubLString $$$instance = makeString("instance");
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
 
     private static final SubLString $$$spec = makeString("spec");
 
-    private static final SubLList $list11 = list(reader_make_constant_shell(makeString("Collection")));
+    private static final SubLList $list11 = list(reader_make_constant_shell("Collection"));
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
 
     private static final SubLString $str13$spec_mt = makeString("spec-mt");
 
-    private static final SubLList $list14 = list(reader_make_constant_shell(makeString("Microtheory")));
+    private static final SubLList $list14 = list(reader_make_constant_shell("Microtheory"));
 
-    private static final SubLObject $$UniversalVocabularyMt = reader_make_constant_shell(makeString("UniversalVocabularyMt"));
 
-    private static final SubLObject $$genlMt = reader_make_constant_shell(makeString("genlMt"));
+
+
 
     private static final SubLString $$$concept = makeString("concept");
 
@@ -83,39 +81,35 @@ public final class cb_web_services extends SubLTranslatedFile {
 
     private static final SubLString $$$url = makeString("url");
 
-
-
+    @LispMethod(comment = "Internal Constants")
+    // Internal Constants
     private static final SubLSymbol XML_TERM_CREATE = makeSymbol("XML-TERM-CREATE");
 
+    private static final SubLList $list23 = list(reader_make_constant_shell("Predicate"));
 
 
-    private static final SubLList $list23 = list(reader_make_constant_shell(makeString("Predicate")));
-
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
-
-    private static final SubLObject $$argIsa = reader_make_constant_shell(makeString("argIsa"));
 
 
 
     private static final SubLSymbol $sym27$_X = makeSymbol("?X");
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
+
 
     private static final SubLList $list29 = list(makeSymbol("?X"));
 
-    private static final SubLList $list30 = list(list(reader_make_constant_shell(makeString("isa")), makeSymbol("?X"), reader_make_constant_shell(makeString("PredicateTypeByArity"))));
+    private static final SubLList $list30 = list(list(reader_make_constant_shell("isa"), makeSymbol("?X"), reader_make_constant_shell("PredicateTypeByArity")));
 
-    private static final SubLObject $const31$AtemporalNecessarilyEssentialColl = reader_make_constant_shell(makeString("AtemporalNecessarilyEssentialCollectionType"));
+    private static final SubLObject $const31$AtemporalNecessarilyEssentialColl = reader_make_constant_shell("AtemporalNecessarilyEssentialCollectionType");
 
     private static final SubLSymbol $sym32$_MT = makeSymbol("?MT");
 
-    private static final SubLObject $$defaultDefiningMtForInstances = reader_make_constant_shell(makeString("defaultDefiningMtForInstances"));
+
 
     private static final SubLList $list34 = list(makeSymbol("?MT"));
 
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
-    private static final SubLObject $$defaultDefiningMtForSpecs = reader_make_constant_shell(makeString("defaultDefiningMtForSpecs"));
+
+
 
     private static final SubLString $$$assert = makeString("assert");
 
@@ -123,23 +117,19 @@ public final class cb_web_services extends SubLTranslatedFile {
 
     private static final SubLString $$$action = makeString("action");
 
-    private static final SubLObject $$genStringAssertion = reader_make_constant_shell(makeString("genStringAssertion"));
+
 
     private static final SubLSymbol XML_SET_GENSTRING_ASSERTION = makeSymbol("XML-SET-GENSTRING-ASSERTION");
 
     private static final SubLString $$$strength = makeString("strength");
 
-    private static final SubLList $list43 = list(cons(makeString("context"), reader_make_constant_shell(makeString("ContextuallyDependentLexicalMapping"))), cons(makeString("primary"), reader_make_constant_shell(makeString("PrimaryLexicalMapping"))), cons(makeString("default"), makeKeyword("DEFAULT")), cons(makeString("vanishing"), reader_make_constant_shell(makeString("VanishinglyRareLexicalMapping"))));
+    private static final SubLList $list43 = list(cons(makeString("context"), reader_make_constant_shell("ContextuallyDependentLexicalMapping")), cons(makeString("primary"), reader_make_constant_shell("PrimaryLexicalMapping")), cons(makeString("default"), makeKeyword("DEFAULT")), cons(makeString("vanishing"), reader_make_constant_shell("VanishinglyRareLexicalMapping")));
 
 
-
-    private static final SubLObject $$strengthOfLexicalMapping = reader_make_constant_shell(makeString("strengthOfLexicalMapping"));
 
     private static final SubLSymbol XML_SET_LEXICAL_MAPPING_STRENGTH = makeSymbol("XML-SET-LEXICAL-MAPPING-STRENGTH");
 
 
-
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
     private static final SubLString $$$term = makeString("term");
 
@@ -153,50 +143,115 @@ public final class cb_web_services extends SubLTranslatedFile {
 
     private static final SubLSymbol XML_SET_BOOKMARK = makeSymbol("XML-SET-BOOKMARK");
 
-    private static final SubLObject $$cyclistReadilyAvailableTerms = reader_make_constant_shell(makeString("cyclistReadilyAvailableTerms"));
 
-    private static final SubLObject $$MtSpace = reader_make_constant_shell(makeString("MtSpace"));
 
-    private static final SubLObject $$CyclistsMt = reader_make_constant_shell(makeString("CyclistsMt"));
 
-    private static final SubLObject $$MtTimeWithGranularityDimFn = reader_make_constant_shell(makeString("MtTimeWithGranularityDimFn"));
 
-    private static final SubLObject $$TimeIntervalInclusiveFn = reader_make_constant_shell(makeString("TimeIntervalInclusiveFn"));
 
-    private static final SubLList $list60 = list(reader_make_constant_shell(makeString("Now")));
 
-    private static final SubLList $list61 = list(reader_make_constant_shell(makeString("TimePoint")));
+
+
+
+
+    private static final SubLList $list60 = list(reader_make_constant_shell("Now"));
+
+    private static final SubLList $list61 = list(reader_make_constant_shell("TimePoint"));
 
     private static final SubLSymbol $sym62$_ASSERT = makeSymbol("?ASSERT");
 
-    private static final SubLObject $$assertionSentence = reader_make_constant_shell(makeString("assertionSentence"));
 
-    private static final SubLList $list64 = list(list(reader_make_constant_shell(makeString("assertionMt")), makeSymbol("?ASSERT"), makeSymbol("?MT")), list(reader_make_constant_shell(makeString("mtTimeIndex")), makeSymbol("?MT"), makeSymbol("?INTERVAL")), list(reader_make_constant_shell(makeString("temporallySubsumes")), makeSymbol("?INTERVAL"), reader_make_constant_shell(makeString("Now"))));
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+    private static final SubLList $list64 = list(list(reader_make_constant_shell("assertionMt"), makeSymbol("?ASSERT"), makeSymbol("?MT")), list(reader_make_constant_shell("mtTimeIndex"), makeSymbol("?MT"), makeSymbol("?INTERVAL")), list(reader_make_constant_shell("temporallySubsumes"), makeSymbol("?INTERVAL"), reader_make_constant_shell("Now")));
+
+
 
     private static final SubLList $list66 = list(makeKeyword("ANSWER-LANGUAGE"), makeKeyword("HL"));
 
     private static final SubLSymbol $sym67$_INT = makeSymbol("?INT");
 
-    private static final SubLObject $$thereExists = reader_make_constant_shell(makeString("thereExists"));
+
 
     private static final SubLSymbol $sym69$_WHEN = makeSymbol("?WHEN");
 
-    private static final SubLList $list70 = list(reader_make_constant_shell(makeString("indexicalReferent")), reader_make_constant_shell(makeString("Now-Indexical")), makeSymbol("?WHEN"));
+    private static final SubLList $list70 = list(reader_make_constant_shell("indexicalReferent"), reader_make_constant_shell("Now-Indexical"), makeSymbol("?WHEN"));
 
-    private static final SubLObject $$equals = reader_make_constant_shell(makeString("equals"));
 
-    private static final SubLObject $$TemporalIntersectionFn = reader_make_constant_shell(makeString("TemporalIntersectionFn"));
 
-    private static final SubLList $list73 = list(list(reader_make_constant_shell(makeString("IntervalEndedByFn")), makeSymbol("?WHEN")));
+
+
+    private static final SubLList $list73 = list(list(reader_make_constant_shell("IntervalEndedByFn"), makeSymbol("?WHEN")));
+
+    static private final SubLString $str_alt1$text_xml = makeString("text/xml");
 
     private static final SubLList $list74 = list(makeSymbol("?INT"));
 
     private static final SubLSymbol $sym75$_EXIT = makeSymbol("%EXIT");
 
-    private static final SubLList $list76 = list(reader_make_constant_shell(makeString("MtSpace")), reader_make_constant_shell(makeString("CyclistsMt")), list(reader_make_constant_shell(makeString("MtTimeWithGranularityDimFn")), reader_make_constant_shell(makeString("Now")), reader_make_constant_shell(makeString("TimePoint"))));
+    private static final SubLList $list76 = list(reader_make_constant_shell("MtSpace"), reader_make_constant_shell("CyclistsMt"), list(reader_make_constant_shell("MtTimeWithGranularityDimFn"), reader_make_constant_shell("Now"), reader_make_constant_shell("TimePoint")));
 
+    // Definitions
+    /**
+     * currently, 'createType' can be either 'spec' or 'instance'
+     */
+    @LispMethod(comment = "currently, \'createType\' can be either \'spec\' or \'instance\'")
+    public static final SubLObject xml_term_create_alt(SubLObject args) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject create_type = html_extract_input($$$createType, args);
+                SubLObject user_sugg_name = html_extract_input($$$name, args);
+                SubLObject const_name = constants_high.suggest_constant_name(user_sugg_name, $str_alt4$, $str_alt4$, T, UNPROVIDED);
+                SubLObject new_term = ke.ke_create_now(const_name, UNPROVIDED);
+                SubLObject base_type = kb_utilities.find_object_by_compact_hl_external_id_string(html_extract_input($$$baseType, args));
+                SubLObject mt = com.cyc.cycjava.cycl.cb_web_services.get_defining_mt_for_type(create_type, base_type);
+                SubLObject lexical_mt = $$EnglishMt;
+                if (create_type.equalp($$$instance)) {
+                    ke.ke_assert(list($$isa, new_term, base_type), mt, UNPROVIDED, UNPROVIDED);
+                }
+                if (create_type.equalp($$$spec)) {
+                    ke.ke_assert(listS($$isa, new_term, $list_alt10), mt, UNPROVIDED, UNPROVIDED);
+                    ke.ke_assert(list($$genls, new_term, base_type), mt, UNPROVIDED, UNPROVIDED);
+                }
+                {
+                    SubLObject cdolist_list_var = auto_lexifier.auto_lexify(user_sugg_name, new_term, lexical_mt, mt);
+                    SubLObject lexical_formula = NIL;
+                    for (lexical_formula = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lexical_formula = cdolist_list_var.first()) {
+                        ke.ke_assert(lexical_formula, lexical_mt, UNPROVIDED, UNPROVIDED);
+                    }
+                }
+                {
+                    SubLObject _prev_bind_0 = xml_vars.$xml_stream$.currentBinding(thread);
+                    try {
+                        xml_vars.$xml_stream$.bind(html_macros.$html_stream$.getDynamicValue(thread), thread);
+                        {
+                            SubLObject _prev_bind_0_1 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                            try {
+                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                xml_utilities.xml_start_tag_internal($$$concept, list($$$externalId, kb_utilities.compact_hl_external_id_string(new_term), $$$url, com.cyc.cycjava.cycl.cb_web_services.url_encoded_cb_form(new_term)), NIL);
+                            } finally {
+                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1, thread);
+                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_1, thread);
+                            }
+                        }
+                        xml_utilities.xml_terpri();
+                        xml_utilities.xml_end_tag_internal($$$concept);
+                    } finally {
+                        xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                cb_tools.cb_add_to_constant_history(new_term);
+                return NIL;
+            }
+        }
+    }
+
+    // Definitions
+    /**
+     * currently, 'createType' can be either 'spec' or 'instance'
+     */
+    @LispMethod(comment = "currently, \'createType\' can be either \'spec\' or \'instance\'")
     public static SubLObject xml_term_create(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject create_type = html_extract_input($$$createType, args);
@@ -270,6 +325,14 @@ public final class cb_web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt10 = list(reader_make_constant_shell("Collection"));
+
+    public static final SubLObject $const15$AtemporalNecessarilyEssentialColl = reader_make_constant_shell("AtemporalNecessarilyEssentialCollectionType");
+
+    static private final SubLSymbol $sym17$_MT = makeSymbol("?MT");
+
+    static private final SubLList $list_alt19 = list(makeSymbol("?MT"));
+
     public static SubLObject create_spec_pred(final SubLObject genl_pred, final SubLObject spec_pred) {
         ke.ke_assert(listS($$isa, spec_pred, $list23), $$UniversalVocabularyMt, UNPROVIDED, UNPROVIDED);
         rkf_assertion_utilities.rkf_assert_with_implicature(list($$genlPreds, spec_pred, genl_pred), $$UniversalVocabularyMt, UNPROVIDED);
@@ -317,6 +380,39 @@ public final class cb_web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject url_encoded_cb_form_alt(SubLObject v_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject s = NIL;
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_stream$.currentBinding(thread);
+                    try {
+                        html_macros.$html_stream$.bind(NIL, thread);
+                        try {
+                            html_macros.$html_stream$.setDynamicValue(make_private_string_output_stream(), thread);
+                            cb_form(v_term, UNPROVIDED, UNPROVIDED);
+                            s = get_output_stream_string(html_macros.$html_stream$.getDynamicValue(thread));
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0_2 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    close(html_macros.$html_stream$.getDynamicValue(thread), UNPROVIDED);
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_2, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        html_macros.$html_stream$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return web_utilities.html_url_encode(s, UNPROVIDED);
+            }
+        }
+    }
+
     public static SubLObject url_encoded_cb_form(final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject s = NIL;
@@ -342,6 +438,27 @@ public final class cb_web_services extends SubLTranslatedFile {
             html_macros.$html_stream$.rebind(_prev_bind_0, thread);
         }
         return web_utilities.html_url_encode(s, UNPROVIDED);
+    }
+
+    public static final SubLObject get_defining_mt_for_type_alt(SubLObject create_type, SubLObject cycl_type) {
+        {
+            SubLObject mt = NIL;
+            if (create_type.equal($$$instance) && (NIL != isa.isaP(create_type, $const15$AtemporalNecessarilyEssentialColl, UNPROVIDED, UNPROVIDED))) {
+                mt = $$UniversalVocabularyMt;
+            } else {
+                if (create_type.equal($$$instance)) {
+                    mt = query_variable($sym17$_MT, listS($$defaultDefiningMtForInstances, cycl_type, $list_alt19), $$BaseKB, UNPROVIDED).first();
+                } else {
+                    if (create_type.equal($$$instance)) {
+                        mt = query_variable($sym17$_MT, listS($$defaultDefiningMtForSpecs, cycl_type, $list_alt19), $$BaseKB, UNPROVIDED).first();
+                    }
+                }
+            }
+            if (NIL == mt) {
+                mt = $$UniversalVocabularyMt;
+            }
+            return mt;
+        }
     }
 
     public static SubLObject get_defining_mt_for_type(final SubLObject create_type, final SubLObject cycl_type) {
@@ -526,17 +643,17 @@ public final class cb_web_services extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_web_services_file() {
-        declareFunction(me, "xml_term_create", "XML-TERM-CREATE", 1, 0, false);
-        declareFunction(me, "create_spec_pred", "CREATE-SPEC-PRED", 2, 0, false);
-        declareFunction(me, "url_encoded_cb_form", "URL-ENCODED-CB-FORM", 1, 0, false);
-        declareFunction(me, "get_defining_mt_for_type", "GET-DEFINING-MT-FOR-TYPE", 2, 0, false);
-        declareFunction(me, "xml_set_genstring_assertion", "XML-SET-GENSTRING-ASSERTION", 1, 0, false);
-        declareFunction(me, "xml_set_lexical_mapping_strength", "XML-SET-LEXICAL-MAPPING-STRENGTH", 1, 0, false);
-        declareFunction(me, "unassert_all", "UNASSERT-ALL", 1, 0, false);
-        declareFunction(me, "xml_set_bookmark", "XML-SET-BOOKMARK", 1, 0, false);
-        declareFunction(me, "make_term_readily_available", "MAKE-TERM-READILY-AVAILABLE", 2, 0, false);
-        declareFunction(me, "make_term_unavailable", "MAKE-TERM-UNAVAILABLE", 2, 0, false);
-        declareFunction(me, "currently_bookmarkedP", "CURRENTLY-BOOKMARKED?", 1, 1, false);
+        declareFunction("xml_term_create", "XML-TERM-CREATE", 1, 0, false);
+        declareFunction("create_spec_pred", "CREATE-SPEC-PRED", 2, 0, false);
+        declareFunction("url_encoded_cb_form", "URL-ENCODED-CB-FORM", 1, 0, false);
+        declareFunction("get_defining_mt_for_type", "GET-DEFINING-MT-FOR-TYPE", 2, 0, false);
+        declareFunction("xml_set_genstring_assertion", "XML-SET-GENSTRING-ASSERTION", 1, 0, false);
+        declareFunction("xml_set_lexical_mapping_strength", "XML-SET-LEXICAL-MAPPING-STRENGTH", 1, 0, false);
+        declareFunction("unassert_all", "UNASSERT-ALL", 1, 0, false);
+        declareFunction("xml_set_bookmark", "XML-SET-BOOKMARK", 1, 0, false);
+        declareFunction("make_term_readily_available", "MAKE-TERM-READILY-AVAILABLE", 2, 0, false);
+        declareFunction("make_term_unavailable", "MAKE-TERM-UNAVAILABLE", 2, 0, false);
+        declareFunction("currently_bookmarkedP", "CURRENTLY-BOOKMARKED?", 1, 1, false);
         return NIL;
     }
 
@@ -544,7 +661,27 @@ public final class cb_web_services extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_cb_web_services_file_alt() {
+        html_macros.note_handler_mime_type(XML_TERM_CREATE, $str_alt1$text_xml);
+        html_macros.note_html_handler_function(XML_TERM_CREATE);
+        return NIL;
+    }
+
     public static SubLObject setup_cb_web_services_file() {
+        if (SubLFiles.USE_V1) {
+            html_macros.note_cgi_handler_function(XML_TERM_CREATE, $XML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_SET_GENSTRING_ASSERTION, $XML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_SET_LEXICAL_MAPPING_STRENGTH, $XML_HANDLER);
+            html_macros.note_cgi_handler_function(XML_SET_BOOKMARK, $XML_HANDLER);
+        }
+        if (SubLFiles.USE_V2) {
+            html_macros.note_handler_mime_type(XML_TERM_CREATE, $str_alt1$text_xml);
+            html_macros.note_html_handler_function(XML_TERM_CREATE);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_cb_web_services_file_Previous() {
         html_macros.note_cgi_handler_function(XML_TERM_CREATE, $XML_HANDLER);
         html_macros.note_cgi_handler_function(XML_SET_GENSTRING_ASSERTION, $XML_HANDLER);
         html_macros.note_cgi_handler_function(XML_SET_LEXICAL_MAPPING_STRENGTH, $XML_HANDLER);
@@ -568,84 +705,6 @@ public final class cb_web_services extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

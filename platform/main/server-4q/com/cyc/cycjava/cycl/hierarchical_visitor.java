@@ -1,7 +1,26 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.hierarchical_visitor;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -18,62 +37,50 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.hierarchical_visitor.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_readably$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class hierarchical_visitor extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      HIERARCHICAL-VISITOR
+ * source file: /cyc/top/cycl/hierarchical-visitor.lisp
+ * created:     2019/07/03 17:37:15
+ */
+public final class hierarchical_visitor extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hierarchical_visitor();
 
-    public static final String myName = "com.cyc.cycjava.cycl.hierarchical_visitor";
+ public static final String myName = "com.cyc.cycjava.cycl.hierarchical_visitor";
 
-    public static final String myFingerPrint = "daa21d8cd23bf8098ebf592338c37940844ef721fbdf7f0bed361f074e99e2de";
 
     // deflexical
+    @LispMethod(comment = "The default value to use for a hierarchical visitor when\r\nthe callback is not supposed to do anything.\ndeflexical\nThe default value to use for a hierarchical visitor when\nthe callback is not supposed to do anything.")
+    // Definitions
+    /**
+     * The default value to use for a hierarchical visitor when
+     * the callback is not supposed to do anything.
+     */
     public static final SubLSymbol $default_hierarchical_visitor_noop_callback$ = makeSymbol("*DEFAULT-HIERARCHICAL-VISITOR-NOOP-CALLBACK*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_hierarchical_visitor$ = makeSymbol("*DTP-HIERARCHICAL-VISITOR*");
 
+    private static final SubLSymbol HIERARCHICAL_VISITOR = makeSymbol("HIERARCHICAL-VISITOR");
 
+    private static final SubLSymbol HIERARCHICAL_VISITOR_P = makeSymbol("HIERARCHICAL-VISITOR-P");
 
-    public static final SubLSymbol HIERARCHICAL_VISITOR = makeSymbol("HIERARCHICAL-VISITOR");
+    static private final SubLList $list3 = list(makeSymbol("BEGIN-PATH-FN"), makeSymbol("END-PATH-FN"), makeSymbol("ACCEPT-NODE-FN"), makeSymbol("BEGIN-VISIT-FN"), makeSymbol("END-VISIT-FN"), makeSymbol("PARAM"));
 
-    public static final SubLSymbol HIERARCHICAL_VISITOR_P = makeSymbol("HIERARCHICAL-VISITOR-P");
+    static private final SubLList $list4 = list(makeKeyword("BEGIN-PATH-FN"), makeKeyword("END-PATH-FN"), makeKeyword("ACCEPT-NODE-FN"), makeKeyword("BEGIN-VISIT-FN"), makeKeyword("END-VISIT-FN"), makeKeyword("PARAM"));
 
-    public static final SubLList $list3 = list(makeSymbol("BEGIN-PATH-FN"), makeSymbol("END-PATH-FN"), makeSymbol("ACCEPT-NODE-FN"), makeSymbol("BEGIN-VISIT-FN"), makeSymbol("END-VISIT-FN"), makeSymbol("PARAM"));
+    static private final SubLList $list5 = list(makeSymbol("HIER-VISIT-BEGIN-PATH-FN"), makeSymbol("HIER-VISIT-END-PATH-FN"), makeSymbol("HIER-VISIT-ACCEPT-NODE-FN"), makeSymbol("HIER-VISIT-BEGIN-VISIT-FN"), makeSymbol("HIER-VISIT-END-VISIT-FN"), makeSymbol("HIER-VISIT-PARAM"));
 
-    public static final SubLList $list4 = list(makeKeyword("BEGIN-PATH-FN"), makeKeyword("END-PATH-FN"), makeKeyword("ACCEPT-NODE-FN"), makeKeyword("BEGIN-VISIT-FN"), makeKeyword("END-VISIT-FN"), makeKeyword("PARAM"));
+    static private final SubLList $list6 = list(makeSymbol("_CSETF-HIER-VISIT-BEGIN-PATH-FN"), makeSymbol("_CSETF-HIER-VISIT-END-PATH-FN"), makeSymbol("_CSETF-HIER-VISIT-ACCEPT-NODE-FN"), makeSymbol("_CSETF-HIER-VISIT-BEGIN-VISIT-FN"), makeSymbol("_CSETF-HIER-VISIT-END-VISIT-FN"), makeSymbol("_CSETF-HIER-VISIT-PARAM"));
 
-    public static final SubLList $list5 = list(makeSymbol("HIER-VISIT-BEGIN-PATH-FN"), makeSymbol("HIER-VISIT-END-PATH-FN"), makeSymbol("HIER-VISIT-ACCEPT-NODE-FN"), makeSymbol("HIER-VISIT-BEGIN-VISIT-FN"), makeSymbol("HIER-VISIT-END-VISIT-FN"), makeSymbol("HIER-VISIT-PARAM"));
+    private static final SubLSymbol PRINT_HIERACHICAL_VISITOR = makeSymbol("PRINT-HIERACHICAL-VISITOR");
 
-    public static final SubLList $list6 = list(makeSymbol("_CSETF-HIER-VISIT-BEGIN-PATH-FN"), makeSymbol("_CSETF-HIER-VISIT-END-PATH-FN"), makeSymbol("_CSETF-HIER-VISIT-ACCEPT-NODE-FN"), makeSymbol("_CSETF-HIER-VISIT-BEGIN-VISIT-FN"), makeSymbol("_CSETF-HIER-VISIT-END-VISIT-FN"), makeSymbol("_CSETF-HIER-VISIT-PARAM"));
-
-    public static final SubLSymbol PRINT_HIERACHICAL_VISITOR = makeSymbol("PRINT-HIERACHICAL-VISITOR");
-
-    public static final SubLSymbol HIERARCHICAL_VISITOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("HIERARCHICAL-VISITOR-PRINT-FUNCTION-TRAMPOLINE");
+    private static final SubLSymbol HIERARCHICAL_VISITOR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("HIERARCHICAL-VISITOR-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list9 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("HIERARCHICAL-VISITOR-P"));
 
@@ -111,17 +118,9 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
 
     private static final SubLSymbol $END_VISIT_FN = makeKeyword("END-VISIT-FN");
 
-
-
     private static final SubLString $str28$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_HIERARCHICAL_VISITOR = makeSymbol("MAKE-HIERARCHICAL-VISITOR");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_HIERARCHICAL_VISITOR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-HIERARCHICAL-VISITOR-METHOD");
 
@@ -161,80 +160,192 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
 
     private static final SubLString $str51$GATHER_VISITED_NODE_PATHS_FN_expe = makeString("GATHER-VISITED-NODE-PATHS-FN expects a SET-P of expected paths as visitor paramter.");
 
+    public static final SubLObject hierarchical_visitor_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_hierachical_visitor(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject hierarchical_visitor_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_hierachical_visitor(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject hierarchical_visitor_p(final SubLObject v_object) {
-        return v_object.getClass() == hierarchical_visitor.$hierarchical_visitor_native.class ? T : NIL;
+    public static final SubLObject hierarchical_visitor_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.hierarchical_visitor.$hierarchical_visitor_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject hier_visit_begin_path_fn(final SubLObject v_object) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hierarchical_visitor_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.hierarchical_visitor.$hierarchical_visitor_native.class ? T : NIL;
+    }
+
+    public static final SubLObject hier_visit_begin_path_fn_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.getField2();
     }
 
-    public static SubLObject hier_visit_end_path_fn(final SubLObject v_object) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hier_visit_begin_path_fn(final SubLObject v_object) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject hier_visit_end_path_fn_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.getField3();
     }
 
-    public static SubLObject hier_visit_accept_node_fn(final SubLObject v_object) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hier_visit_end_path_fn(final SubLObject v_object) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject hier_visit_accept_node_fn_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.getField4();
     }
 
-    public static SubLObject hier_visit_begin_visit_fn(final SubLObject v_object) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hier_visit_accept_node_fn(final SubLObject v_object) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject hier_visit_begin_visit_fn_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.getField5();
     }
 
-    public static SubLObject hier_visit_end_visit_fn(final SubLObject v_object) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hier_visit_begin_visit_fn(final SubLObject v_object) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject hier_visit_end_visit_fn_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.getField6();
     }
 
-    public static SubLObject hier_visit_param(final SubLObject v_object) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hier_visit_end_visit_fn(final SubLObject v_object) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.getField6();
+    }
+
+    public static final SubLObject hier_visit_param_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.getField7();
     }
 
-    public static SubLObject _csetf_hier_visit_begin_path_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject hier_visit_param(final SubLObject v_object) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.getField7();
+    }
+
+    public static final SubLObject _csetf_hier_visit_begin_path_fn_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_hier_visit_end_path_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject _csetf_hier_visit_begin_path_fn(final SubLObject v_object, final SubLObject value) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_hier_visit_end_path_fn_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_hier_visit_accept_node_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject _csetf_hier_visit_end_path_fn(final SubLObject v_object, final SubLObject value) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_hier_visit_accept_node_fn_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_hier_visit_begin_visit_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject _csetf_hier_visit_accept_node_fn(final SubLObject v_object, final SubLObject value) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_hier_visit_begin_visit_fn_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.setField5(value);
     }
 
-    public static SubLObject _csetf_hier_visit_end_visit_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject _csetf_hier_visit_begin_visit_fn(final SubLObject v_object, final SubLObject value) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject _csetf_hier_visit_end_visit_fn_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.setField6(value);
     }
 
-    public static SubLObject _csetf_hier_visit_param(final SubLObject v_object, final SubLObject value) {
-        assert NIL != hierarchical_visitor_p(v_object) : "hierarchical_visitor.hierarchical_visitor_p(v_object) " + "CommonSymbols.NIL != hierarchical_visitor.hierarchical_visitor_p(v_object) " + v_object;
+    public static SubLObject _csetf_hier_visit_end_visit_fn(final SubLObject v_object, final SubLObject value) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.setField6(value);
+    }
+
+    public static final SubLObject _csetf_hier_visit_param_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, HIERARCHICAL_VISITOR_P);
         return v_object.setField7(value);
+    }
+
+    public static SubLObject _csetf_hier_visit_param(final SubLObject v_object, final SubLObject value) {
+        assert NIL != hierarchical_visitor_p(v_object) : "! hierarchical_visitor.hierarchical_visitor_p(v_object) " + "hierarchical_visitor.hierarchical_visitor_p error :" + v_object;
+        return v_object.setField7(value);
+    }
+
+    public static final SubLObject make_hierarchical_visitor_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.hierarchical_visitor.$hierarchical_visitor_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($BEGIN_PATH_FN)) {
+                        _csetf_hier_visit_begin_path_fn(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($END_PATH_FN)) {
+                            _csetf_hier_visit_end_path_fn(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($ACCEPT_NODE_FN)) {
+                                _csetf_hier_visit_accept_node_fn(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($BEGIN_VISIT_FN)) {
+                                    _csetf_hier_visit_begin_visit_fn(v_new, current_value);
+                                } else {
+                                    if (pcase_var.eql($END_VISIT_FN)) {
+                                        _csetf_hier_visit_end_visit_fn(v_new, current_value);
+                                    } else {
+                                        if (pcase_var.eql($PARAM)) {
+                                            _csetf_hier_visit_param(v_new, current_value);
+                                        } else {
+                                            Errors.error($str_alt27$Invalid_slot__S_for_construction_, current_arg);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_hierarchical_visitor(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new hierarchical_visitor.$hierarchical_visitor_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.hierarchical_visitor.$hierarchical_visitor_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -288,6 +399,39 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
         return visit_defstruct_hierarchical_visitor(obj, visitor_fn);
     }
 
+    public static final SubLObject print_hierachical_visitor_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $print_readably$.getDynamicValue(thread)) {
+                print_not_readable(v_object, stream);
+            } else {
+                {
+                    SubLObject v_object_1 = v_object;
+                    SubLObject stream_2 = stream;
+                    write_string($str_alt28$__, stream_2, UNPROVIDED, UNPROVIDED);
+                    write(type_of(v_object_1), new SubLObject[]{ $STREAM, stream_2 });
+                    write_char(CHAR_space, stream_2);
+                    write_string($str_alt30$__Visit__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(hier_visit_begin_visit_fn(v_object), stream);
+                    write_string($str_alt31$__Path__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(hier_visit_begin_path_fn(v_object), stream);
+                    write_string($str_alt32$_Node__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(hier_visit_accept_node_fn(v_object), stream);
+                    write_string($str_alt33$_, stream, UNPROVIDED, UNPROVIDED);
+                    princ(hier_visit_end_path_fn(v_object), stream);
+                    write_string($str_alt34$__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(hier_visit_end_path_fn(v_object), stream);
+                    write_string($str_alt35$__Param__, stream, UNPROVIDED, UNPROVIDED);
+                    princ(hier_visit_param(v_object), stream);
+                    write_char(CHAR_space, stream_2);
+                    write(pointer(v_object_1), new SubLObject[]{ $STREAM, stream_2, $BASE, SIXTEEN_INTEGER });
+                    write_char(CHAR_greater, stream_2);
+                }
+            }
+            return v_object;
+        }
+    }
+
     public static SubLObject print_hierachical_visitor(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != $print_readably$.getDynamicValue(thread)) {
@@ -311,6 +455,30 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
         return v_object;
     }
 
+    /**
+     * Create a new hierarchical visitor object.
+     */
+    @LispMethod(comment = "Create a new hierarchical visitor object.")
+    public static final SubLObject new_hiearchical_visitor_alt(SubLObject begin_visit_fn, SubLObject begin_path_fn, SubLObject accept_node_fn, SubLObject end_path_fn, SubLObject end_visit_fn, SubLObject param) {
+        if (param == UNPROVIDED) {
+            param = NIL;
+        }
+        {
+            SubLObject hier_visit = make_hierarchical_visitor(UNPROVIDED);
+            _csetf_hier_visit_begin_visit_fn(hier_visit, begin_visit_fn);
+            _csetf_hier_visit_begin_path_fn(hier_visit, begin_path_fn);
+            _csetf_hier_visit_accept_node_fn(hier_visit, accept_node_fn);
+            _csetf_hier_visit_end_path_fn(hier_visit, end_path_fn);
+            _csetf_hier_visit_end_visit_fn(hier_visit, end_visit_fn);
+            _csetf_hier_visit_param(hier_visit, param);
+            return hier_visit;
+        }
+    }
+
+    /**
+     * Create a new hierarchical visitor object.
+     */
+    @LispMethod(comment = "Create a new hierarchical visitor object.")
     public static SubLObject new_hiearchical_visitor(final SubLObject begin_visit_fn, final SubLObject begin_path_fn, final SubLObject accept_node_fn, final SubLObject end_path_fn, final SubLObject end_visit_fn, SubLObject param) {
         if (param == UNPROVIDED) {
             param = NIL;
@@ -325,6 +493,23 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
         return hier_visit;
     }
 
+    /**
+     * Make a hierarchical visitor that skips the begin/end visit notification and
+     * requires no parameter.
+     */
+    @LispMethod(comment = "Make a hierarchical visitor that skips the begin/end visit notification and\r\nrequires no parameter.\nMake a hierarchical visitor that skips the begin/end visit notification and\nrequires no parameter.")
+    public static final SubLObject new_simple_hierarchical_visitor_alt(SubLObject begin_path_fn, SubLObject accept_node_fn, SubLObject end_path_fn, SubLObject param) {
+        if (param == UNPROVIDED) {
+            param = NIL;
+        }
+        return new_hiearchical_visitor($default_hierarchical_visitor_noop_callback$.getGlobalValue(), begin_path_fn, accept_node_fn, end_path_fn, $default_hierarchical_visitor_noop_callback$.getGlobalValue(), param);
+    }
+
+    /**
+     * Make a hierarchical visitor that skips the begin/end visit notification and
+     * requires no parameter.
+     */
+    @LispMethod(comment = "Make a hierarchical visitor that skips the begin/end visit notification and\r\nrequires no parameter.\nMake a hierarchical visitor that skips the begin/end visit notification and\nrequires no parameter.")
     public static SubLObject new_simple_hierarchical_visitor(final SubLObject begin_path_fn, final SubLObject accept_node_fn, final SubLObject end_path_fn, SubLObject param) {
         if (param == UNPROVIDED) {
             param = NIL;
@@ -332,60 +517,187 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
         return new_hiearchical_visitor($default_hierarchical_visitor_noop_callback$.getGlobalValue(), begin_path_fn, accept_node_fn, end_path_fn, $default_hierarchical_visitor_noop_callback$.getGlobalValue(), param);
     }
 
+    /**
+     * Inform the hierarchical visitor that the visit is about to begin.
+     * The result of the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Inform the hierarchical visitor that the visit is about to begin.\r\nThe result of the responsible callback is the result of the call.\nInform the hierarchical visitor that the visit is about to begin.\nThe result of the responsible callback is the result of the call.")
+    public static final SubLObject hierarchical_visitor_begin_visit_alt(SubLObject hier_visitor) {
+        return funcall(hier_visit_begin_visit_fn(hier_visitor), hier_visitor);
+    }
+
+    /**
+     * Inform the hierarchical visitor that the visit is about to begin.
+     * The result of the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Inform the hierarchical visitor that the visit is about to begin.\r\nThe result of the responsible callback is the result of the call.\nInform the hierarchical visitor that the visit is about to begin.\nThe result of the responsible callback is the result of the call.")
     public static SubLObject hierarchical_visitor_begin_visit(final SubLObject hier_visitor) {
         return funcall(hier_visit_begin_visit_fn(hier_visitor), hier_visitor);
     }
 
+    /**
+     * Inform the hierarchical visitor that the visit is about to begin.
+     * The result of the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Inform the hierarchical visitor that the visit is about to begin.\r\nThe result of the responsible callback is the result of the call.\nInform the hierarchical visitor that the visit is about to begin.\nThe result of the responsible callback is the result of the call.")
+    public static final SubLObject hierarchical_visitor_end_visit_alt(SubLObject hier_visitor) {
+        return funcall(hier_visit_end_visit_fn(hier_visitor), hier_visitor);
+    }
+
+    /**
+     * Inform the hierarchical visitor that the visit is about to begin.
+     * The result of the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Inform the hierarchical visitor that the visit is about to begin.\r\nThe result of the responsible callback is the result of the call.\nInform the hierarchical visitor that the visit is about to begin.\nThe result of the responsible callback is the result of the call.")
     public static SubLObject hierarchical_visitor_end_visit(final SubLObject hier_visitor) {
         return funcall(hier_visit_end_visit_fn(hier_visitor), hier_visitor);
     }
 
+    /**
+     * Shows the hierarchical visitor the current leaf node. The result of
+     * the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Shows the hierarchical visitor the current leaf node. The result of\r\nthe responsible callback is the result of the call.\nShows the hierarchical visitor the current leaf node. The result of\nthe responsible callback is the result of the call.")
+    public static final SubLObject show_hierarchical_visitor_node_alt(SubLObject hier_visitor, SubLObject node) {
+        return funcall(hier_visit_accept_node_fn(hier_visitor), hier_visitor, node);
+    }
+
+    @LispMethod(comment = "Shows the hierarchical visitor the current leaf node. The result of\r\nthe responsible callback is the result of the call.\nShows the hierarchical visitor the current leaf node. The result of\nthe responsible callback is the result of the call.")
     public static SubLObject show_hierarchical_visitor_node(final SubLObject hier_visitor, final SubLObject node) {
         return funcall(hier_visit_accept_node_fn(hier_visitor), hier_visitor, node);
     }
 
+    /**
+     * Shows the hierarchical visitor the current path whose children are
+     * about to begin. The result of the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Shows the hierarchical visitor the current path whose children are\r\nabout to begin. The result of the responsible callback is the result of the call.\nShows the hierarchical visitor the current path whose children are\nabout to begin. The result of the responsible callback is the result of the call.")
+    public static final SubLObject show_hierarchical_visitor_path_begin_alt(SubLObject hier_visitor, SubLObject path) {
+        return funcall(hier_visit_begin_path_fn(hier_visitor), hier_visitor, path);
+    }
+
+    @LispMethod(comment = "Shows the hierarchical visitor the current path whose children are\r\nabout to begin. The result of the responsible callback is the result of the call.\nShows the hierarchical visitor the current path whose children are\nabout to begin. The result of the responsible callback is the result of the call.")
     public static SubLObject show_hierarchical_visitor_path_begin(final SubLObject hier_visitor, final SubLObject path) {
         return funcall(hier_visit_begin_path_fn(hier_visitor), hier_visitor, path);
     }
 
+    /**
+     * Shows the hierarchical visitor the current path whose children were just
+     * all shown. The result of the responsible callback is the result of the call.
+     */
+    @LispMethod(comment = "Shows the hierarchical visitor the current path whose children were just\r\nall shown. The result of the responsible callback is the result of the call.\nShows the hierarchical visitor the current path whose children were just\nall shown. The result of the responsible callback is the result of the call.")
+    public static final SubLObject show_hierarchical_visitor_path_end_alt(SubLObject hier_visitor, SubLObject path) {
+        return funcall(hier_visit_end_path_fn(hier_visitor), hier_visitor, path);
+    }
+
+    @LispMethod(comment = "Shows the hierarchical visitor the current path whose children were just\r\nall shown. The result of the responsible callback is the result of the call.\nShows the hierarchical visitor the current path whose children were just\nall shown. The result of the responsible callback is the result of the call.")
     public static SubLObject show_hierarchical_visitor_path_end(final SubLObject hier_visitor, final SubLObject path) {
         return funcall(hier_visit_end_path_fn(hier_visitor), hier_visitor, path);
     }
 
+    /**
+     * Mutate the hierarchical visitor to have a new parameter than the
+     * one the visitor was instantiated with. This method is intended for use
+     * by the visitor itself, e.g. for initialization during the
+     * begin-visit callback.
+     *
+     * @return the old value of the parameter
+     */
+    @LispMethod(comment = "Mutate the hierarchical visitor to have a new parameter than the\r\none the visitor was instantiated with. This method is intended for use\r\nby the visitor itself, e.g. for initialization during the\r\nbegin-visit callback.\r\n\r\n@return the old value of the parameter\nMutate the hierarchical visitor to have a new parameter than the\none the visitor was instantiated with. This method is intended for use\nby the visitor itself, e.g. for initialization during the\nbegin-visit callback.")
+    public static final SubLObject set_hierarchical_visitor_parameter_alt(SubLObject hier_visitor, SubLObject new_param) {
+        {
+            SubLObject old_param = get_hierarchical_visitor_parameter(hier_visitor);
+            _csetf_hier_visit_param(hier_visitor, new_param);
+            return old_param;
+        }
+    }
+
+    @LispMethod(comment = "Mutate the hierarchical visitor to have a new parameter than the\r\none the visitor was instantiated with. This method is intended for use\r\nby the visitor itself, e.g. for initialization during the\r\nbegin-visit callback.\r\n\r\n@return the old value of the parameter\nMutate the hierarchical visitor to have a new parameter than the\none the visitor was instantiated with. This method is intended for use\nby the visitor itself, e.g. for initialization during the\nbegin-visit callback.")
     public static SubLObject set_hierarchical_visitor_parameter(final SubLObject hier_visitor, final SubLObject new_param) {
         final SubLObject old_param = get_hierarchical_visitor_parameter(hier_visitor);
         _csetf_hier_visit_param(hier_visitor, new_param);
         return old_param;
     }
 
+    /**
+     * Provide access to the parameter for the hierarchical visitor.
+     * This method is expected to be called from within the callback
+     * of the hierarchical visitor.
+     *
+     * @return the parameter provided during the visitor construction
+     */
+    @LispMethod(comment = "Provide access to the parameter for the hierarchical visitor.\r\nThis method is expected to be called from within the callback\r\nof the hierarchical visitor.\r\n\r\n@return the parameter provided during the visitor construction\nProvide access to the parameter for the hierarchical visitor.\nThis method is expected to be called from within the callback\nof the hierarchical visitor.")
+    public static final SubLObject get_hierarchical_visitor_parameter_alt(SubLObject hier_visitor) {
+        return hier_visit_param(hier_visitor);
+    }
+
+    @LispMethod(comment = "Provide access to the parameter for the hierarchical visitor.\r\nThis method is expected to be called from within the callback\r\nof the hierarchical visitor.\r\n\r\n@return the parameter provided during the visitor construction\nProvide access to the parameter for the hierarchical visitor.\nThis method is expected to be called from within the callback\nof the hierarchical visitor.")
     public static SubLObject get_hierarchical_visitor_parameter(final SubLObject hier_visitor) {
         return hier_visit_param(hier_visitor);
     }
 
+    /**
+     * A print visitor that merely traces the values being passed in.
+     */
+    @LispMethod(comment = "A print visitor that merely traces the values being passed in.")
+    public static final SubLObject new_hierarchical_print_visitor_alt() {
+        return new_hiearchical_visitor(PRINT_HIER_VISITOR_BEGIN_VISIT, PRINT_HIER_VISITOR_BEGIN_PATH, PRINT_HIER_VISITOR_ACCEPT_NODE, PRINT_HIER_VISITOR_END_PATH, PRINT_HIER_VISITOR_END_VISIT, UNPROVIDED);
+    }
+
+    @LispMethod(comment = "A print visitor that merely traces the values being passed in.")
     public static SubLObject new_hierarchical_print_visitor() {
         return new_hiearchical_visitor(PRINT_HIER_VISITOR_BEGIN_VISIT, PRINT_HIER_VISITOR_BEGIN_PATH, PRINT_HIER_VISITOR_ACCEPT_NODE, PRINT_HIER_VISITOR_END_PATH, PRINT_HIER_VISITOR_END_VISIT, UNPROVIDED);
+    }
+
+    public static final SubLObject print_hier_visitor_begin_visit_alt(SubLObject visitor) {
+        return format(T, $str_alt42$__Begin_visit_of__A___, visitor);
     }
 
     public static SubLObject print_hier_visitor_begin_visit(final SubLObject visitor) {
         return format(T, $str45$__Begin_visit_of__A___, visitor);
     }
 
+    public static final SubLObject print_hier_visitor_end_visit_alt(SubLObject visitor) {
+        return format(T, $str_alt43$__End_visit_of__A___, visitor);
+    }
+
     public static SubLObject print_hier_visitor_end_visit(final SubLObject visitor) {
         return format(T, $str46$__End_visit_of__A___, visitor);
+    }
+
+    public static final SubLObject print_hier_visitor_begin_path_alt(SubLObject visitor, SubLObject path) {
+        return format(T, $str_alt44$__Begin_path__A__, path);
     }
 
     public static SubLObject print_hier_visitor_begin_path(final SubLObject visitor, final SubLObject path) {
         return format(T, $str47$__Begin_path__A__, path);
     }
 
+    public static final SubLObject print_hier_visitor_end_path_alt(SubLObject visitor, SubLObject path) {
+        return format(T, $str_alt45$__End_path__A__, path);
+    }
+
     public static SubLObject print_hier_visitor_end_path(final SubLObject visitor, final SubLObject path) {
         return format(T, $str48$__End_path__A__, path);
+    }
+
+    public static final SubLObject print_hier_visitor_accept_node_alt(SubLObject visitor, SubLObject node) {
+        return format(T, $str_alt46$__Node__A__, node, visitor);
     }
 
     public static SubLObject print_hier_visitor_accept_node(final SubLObject visitor, final SubLObject node) {
         return format(T, $str49$__Node__A__, node, visitor);
     }
 
+    /**
+     * A visitor that does nothing with each element.
+     */
+    @LispMethod(comment = "A visitor that does nothing with each element.")
+    public static final SubLObject new_no_op_hierarchical_visitor_alt() {
+        return new_simple_hierarchical_visitor($default_hierarchical_visitor_noop_callback$.getGlobalValue(), $default_hierarchical_visitor_noop_callback$.getGlobalValue(), $default_hierarchical_visitor_noop_callback$.getGlobalValue(), UNPROVIDED);
+    }
+
+    @LispMethod(comment = "A visitor that does nothing with each element.")
     public static SubLObject new_no_op_hierarchical_visitor() {
         return new_simple_hierarchical_visitor($default_hierarchical_visitor_noop_callback$.getGlobalValue(), $default_hierarchical_visitor_noop_callback$.getGlobalValue(), $default_hierarchical_visitor_noop_callback$.getGlobalValue(), UNPROVIDED);
     }
@@ -430,53 +742,73 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_hierarchical_visitor_file() {
-        declareFunction(me, "hierarchical_visitor_print_function_trampoline", "HIERARCHICAL-VISITOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "hierarchical_visitor_p", "HIERARCHICAL-VISITOR-P", 1, 0, false);
+        declareFunction("hierarchical_visitor_print_function_trampoline", "HIERARCHICAL-VISITOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("hierarchical_visitor_p", "HIERARCHICAL-VISITOR-P", 1, 0, false);
         new hierarchical_visitor.$hierarchical_visitor_p$UnaryFunction();
-        declareFunction(me, "hier_visit_begin_path_fn", "HIER-VISIT-BEGIN-PATH-FN", 1, 0, false);
-        declareFunction(me, "hier_visit_end_path_fn", "HIER-VISIT-END-PATH-FN", 1, 0, false);
-        declareFunction(me, "hier_visit_accept_node_fn", "HIER-VISIT-ACCEPT-NODE-FN", 1, 0, false);
-        declareFunction(me, "hier_visit_begin_visit_fn", "HIER-VISIT-BEGIN-VISIT-FN", 1, 0, false);
-        declareFunction(me, "hier_visit_end_visit_fn", "HIER-VISIT-END-VISIT-FN", 1, 0, false);
-        declareFunction(me, "hier_visit_param", "HIER-VISIT-PARAM", 1, 0, false);
-        declareFunction(me, "_csetf_hier_visit_begin_path_fn", "_CSETF-HIER-VISIT-BEGIN-PATH-FN", 2, 0, false);
-        declareFunction(me, "_csetf_hier_visit_end_path_fn", "_CSETF-HIER-VISIT-END-PATH-FN", 2, 0, false);
-        declareFunction(me, "_csetf_hier_visit_accept_node_fn", "_CSETF-HIER-VISIT-ACCEPT-NODE-FN", 2, 0, false);
-        declareFunction(me, "_csetf_hier_visit_begin_visit_fn", "_CSETF-HIER-VISIT-BEGIN-VISIT-FN", 2, 0, false);
-        declareFunction(me, "_csetf_hier_visit_end_visit_fn", "_CSETF-HIER-VISIT-END-VISIT-FN", 2, 0, false);
-        declareFunction(me, "_csetf_hier_visit_param", "_CSETF-HIER-VISIT-PARAM", 2, 0, false);
-        declareFunction(me, "make_hierarchical_visitor", "MAKE-HIERARCHICAL-VISITOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_hierarchical_visitor", "VISIT-DEFSTRUCT-HIERARCHICAL-VISITOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_hierarchical_visitor_method", "VISIT-DEFSTRUCT-OBJECT-HIERARCHICAL-VISITOR-METHOD", 2, 0, false);
-        declareFunction(me, "print_hierachical_visitor", "PRINT-HIERACHICAL-VISITOR", 3, 0, false);
-        declareFunction(me, "new_hiearchical_visitor", "NEW-HIEARCHICAL-VISITOR", 5, 1, false);
-        declareFunction(me, "new_simple_hierarchical_visitor", "NEW-SIMPLE-HIERARCHICAL-VISITOR", 3, 1, false);
-        declareFunction(me, "hierarchical_visitor_begin_visit", "HIERARCHICAL-VISITOR-BEGIN-VISIT", 1, 0, false);
-        declareFunction(me, "hierarchical_visitor_end_visit", "HIERARCHICAL-VISITOR-END-VISIT", 1, 0, false);
-        declareFunction(me, "show_hierarchical_visitor_node", "SHOW-HIERARCHICAL-VISITOR-NODE", 2, 0, false);
-        declareFunction(me, "show_hierarchical_visitor_path_begin", "SHOW-HIERARCHICAL-VISITOR-PATH-BEGIN", 2, 0, false);
-        declareFunction(me, "show_hierarchical_visitor_path_end", "SHOW-HIERARCHICAL-VISITOR-PATH-END", 2, 0, false);
-        declareFunction(me, "set_hierarchical_visitor_parameter", "SET-HIERARCHICAL-VISITOR-PARAMETER", 2, 0, false);
-        declareFunction(me, "get_hierarchical_visitor_parameter", "GET-HIERARCHICAL-VISITOR-PARAMETER", 1, 0, false);
-        declareFunction(me, "new_hierarchical_print_visitor", "NEW-HIERARCHICAL-PRINT-VISITOR", 0, 0, false);
-        declareFunction(me, "print_hier_visitor_begin_visit", "PRINT-HIER-VISITOR-BEGIN-VISIT", 1, 0, false);
-        declareFunction(me, "print_hier_visitor_end_visit", "PRINT-HIER-VISITOR-END-VISIT", 1, 0, false);
-        declareFunction(me, "print_hier_visitor_begin_path", "PRINT-HIER-VISITOR-BEGIN-PATH", 2, 0, false);
-        declareFunction(me, "print_hier_visitor_end_path", "PRINT-HIER-VISITOR-END-PATH", 2, 0, false);
-        declareFunction(me, "print_hier_visitor_accept_node", "PRINT-HIER-VISITOR-ACCEPT-NODE", 2, 0, false);
-        declareFunction(me, "new_no_op_hierarchical_visitor", "NEW-NO-OP-HIERARCHICAL-VISITOR", 0, 0, false);
-        declareFunction(me, "new_node_only_hierarchical_visitor", "NEW-NODE-ONLY-HIERARCHICAL-VISITOR", 1, 1, false);
-        declareFunction(me, "prin1_visited_node_paths_fn", "PRIN1-VISITED-NODE-PATHS-FN", 2, 0, false);
-        declareFunction(me, "checking_off_visited_nodes_fn", "CHECKING-OFF-VISITED-NODES-FN", 2, 0, false);
-        declareFunction(me, "gather_visited_node_paths_fn", "GATHER-VISITED-NODE-PATHS-FN", 2, 0, false);
+        declareFunction("hier_visit_begin_path_fn", "HIER-VISIT-BEGIN-PATH-FN", 1, 0, false);
+        declareFunction("hier_visit_end_path_fn", "HIER-VISIT-END-PATH-FN", 1, 0, false);
+        declareFunction("hier_visit_accept_node_fn", "HIER-VISIT-ACCEPT-NODE-FN", 1, 0, false);
+        declareFunction("hier_visit_begin_visit_fn", "HIER-VISIT-BEGIN-VISIT-FN", 1, 0, false);
+        declareFunction("hier_visit_end_visit_fn", "HIER-VISIT-END-VISIT-FN", 1, 0, false);
+        declareFunction("hier_visit_param", "HIER-VISIT-PARAM", 1, 0, false);
+        declareFunction("_csetf_hier_visit_begin_path_fn", "_CSETF-HIER-VISIT-BEGIN-PATH-FN", 2, 0, false);
+        declareFunction("_csetf_hier_visit_end_path_fn", "_CSETF-HIER-VISIT-END-PATH-FN", 2, 0, false);
+        declareFunction("_csetf_hier_visit_accept_node_fn", "_CSETF-HIER-VISIT-ACCEPT-NODE-FN", 2, 0, false);
+        declareFunction("_csetf_hier_visit_begin_visit_fn", "_CSETF-HIER-VISIT-BEGIN-VISIT-FN", 2, 0, false);
+        declareFunction("_csetf_hier_visit_end_visit_fn", "_CSETF-HIER-VISIT-END-VISIT-FN", 2, 0, false);
+        declareFunction("_csetf_hier_visit_param", "_CSETF-HIER-VISIT-PARAM", 2, 0, false);
+        declareFunction("make_hierarchical_visitor", "MAKE-HIERARCHICAL-VISITOR", 0, 1, false);
+        declareFunction("visit_defstruct_hierarchical_visitor", "VISIT-DEFSTRUCT-HIERARCHICAL-VISITOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_hierarchical_visitor_method", "VISIT-DEFSTRUCT-OBJECT-HIERARCHICAL-VISITOR-METHOD", 2, 0, false);
+        declareFunction("print_hierachical_visitor", "PRINT-HIERACHICAL-VISITOR", 3, 0, false);
+        declareFunction("new_hiearchical_visitor", "NEW-HIEARCHICAL-VISITOR", 5, 1, false);
+        declareFunction("new_simple_hierarchical_visitor", "NEW-SIMPLE-HIERARCHICAL-VISITOR", 3, 1, false);
+        declareFunction("hierarchical_visitor_begin_visit", "HIERARCHICAL-VISITOR-BEGIN-VISIT", 1, 0, false);
+        declareFunction("hierarchical_visitor_end_visit", "HIERARCHICAL-VISITOR-END-VISIT", 1, 0, false);
+        declareFunction("show_hierarchical_visitor_node", "SHOW-HIERARCHICAL-VISITOR-NODE", 2, 0, false);
+        declareFunction("show_hierarchical_visitor_path_begin", "SHOW-HIERARCHICAL-VISITOR-PATH-BEGIN", 2, 0, false);
+        declareFunction("show_hierarchical_visitor_path_end", "SHOW-HIERARCHICAL-VISITOR-PATH-END", 2, 0, false);
+        declareFunction("set_hierarchical_visitor_parameter", "SET-HIERARCHICAL-VISITOR-PARAMETER", 2, 0, false);
+        declareFunction("get_hierarchical_visitor_parameter", "GET-HIERARCHICAL-VISITOR-PARAMETER", 1, 0, false);
+        declareFunction("new_hierarchical_print_visitor", "NEW-HIERARCHICAL-PRINT-VISITOR", 0, 0, false);
+        declareFunction("print_hier_visitor_begin_visit", "PRINT-HIER-VISITOR-BEGIN-VISIT", 1, 0, false);
+        declareFunction("print_hier_visitor_end_visit", "PRINT-HIER-VISITOR-END-VISIT", 1, 0, false);
+        declareFunction("print_hier_visitor_begin_path", "PRINT-HIER-VISITOR-BEGIN-PATH", 2, 0, false);
+        declareFunction("print_hier_visitor_end_path", "PRINT-HIER-VISITOR-END-PATH", 2, 0, false);
+        declareFunction("print_hier_visitor_accept_node", "PRINT-HIER-VISITOR-ACCEPT-NODE", 2, 0, false);
+        declareFunction("new_no_op_hierarchical_visitor", "NEW-NO-OP-HIERARCHICAL-VISITOR", 0, 0, false);
+        declareFunction("new_node_only_hierarchical_visitor", "NEW-NODE-ONLY-HIERARCHICAL-VISITOR", 1, 1, false);
+        declareFunction("prin1_visited_node_paths_fn", "PRIN1-VISITED-NODE-PATHS-FN", 2, 0, false);
+        declareFunction("checking_off_visited_nodes_fn", "CHECKING-OFF-VISITED-NODES-FN", 2, 0, false);
+        declareFunction("gather_visited_node_paths_fn", "GATHER-VISITED-NODE-PATHS-FN", 2, 0, false);
         return NIL;
     }
+
+    static private final SubLList $list_alt3 = list(makeSymbol("BEGIN-PATH-FN"), makeSymbol("END-PATH-FN"), makeSymbol("ACCEPT-NODE-FN"), makeSymbol("BEGIN-VISIT-FN"), makeSymbol("END-VISIT-FN"), makeSymbol("PARAM"));
+
+    static private final SubLList $list_alt4 = list(makeKeyword("BEGIN-PATH-FN"), makeKeyword("END-PATH-FN"), makeKeyword("ACCEPT-NODE-FN"), makeKeyword("BEGIN-VISIT-FN"), makeKeyword("END-VISIT-FN"), makeKeyword("PARAM"));
+
+    static private final SubLList $list_alt5 = list(makeSymbol("HIER-VISIT-BEGIN-PATH-FN"), makeSymbol("HIER-VISIT-END-PATH-FN"), makeSymbol("HIER-VISIT-ACCEPT-NODE-FN"), makeSymbol("HIER-VISIT-BEGIN-VISIT-FN"), makeSymbol("HIER-VISIT-END-VISIT-FN"), makeSymbol("HIER-VISIT-PARAM"));
+
+    static private final SubLList $list_alt6 = list(makeSymbol("_CSETF-HIER-VISIT-BEGIN-PATH-FN"), makeSymbol("_CSETF-HIER-VISIT-END-PATH-FN"), makeSymbol("_CSETF-HIER-VISIT-ACCEPT-NODE-FN"), makeSymbol("_CSETF-HIER-VISIT-BEGIN-VISIT-FN"), makeSymbol("_CSETF-HIER-VISIT-END-VISIT-FN"), makeSymbol("_CSETF-HIER-VISIT-PARAM"));
+
+    static private final SubLString $str_alt27$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLString $str_alt28$__ = makeString("#<");
+
+    static private final SubLString $str_alt30$__Visit__ = makeString(" (Visit: ");
 
     public static SubLObject init_hierarchical_visitor_file() {
         deflexical("*DEFAULT-HIERARCHICAL-VISITOR-NOOP-CALLBACK*", symbol_function(FALSE));
         defconstant("*DTP-HIERARCHICAL-VISITOR*", HIERARCHICAL_VISITOR);
         return NIL;
     }
+
+    static private final SubLString $str_alt31$__Path__ = makeString(" (Path: ");
+
+    static private final SubLString $str_alt32$_Node__ = makeString(" Node: ");
+
+    static private final SubLString $str_alt33$_ = makeString(" ");
 
     public static SubLObject setup_hierarchical_visitor_file() {
         register_method($print_object_method_table$.getGlobalValue(), $dtp_hierarchical_visitor$.getGlobalValue(), symbol_function(HIERARCHICAL_VISITOR_PRINT_FUNCTION_TRAMPOLINE));
@@ -492,15 +824,29 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt34$__ = makeString(") ");
+
+    static private final SubLString $str_alt35$__Param__ = makeString(") Param: ");
+
+    static private final SubLString $str_alt42$__Begin_visit_of__A___ = makeString("~&Begin visit of ~A.~%");
+
+    static private final SubLString $str_alt43$__End_visit_of__A___ = makeString("~&End visit of ~A.~%");
+
+    static private final SubLString $str_alt44$__Begin_path__A__ = makeString("~&Begin path ~A~%");
+
     @Override
     public void declareFunctions() {
         declare_hierarchical_visitor_file();
     }
 
+    static private final SubLString $str_alt45$__End_path__A__ = makeString("~&End path ~A~%");
+
     @Override
     public void initializeVariables() {
         init_hierarchical_visitor_file();
     }
+
+    static private final SubLString $str_alt46$__Node__A__ = makeString("~&Node ~A~%");
 
     @Override
     public void runTopLevelForms() {
@@ -508,61 +854,6 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $hierarchical_visitor_native extends SubLStructNative {
@@ -581,12 +872,12 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
         private static final SubLStructDeclNative structDecl;
 
         public $hierarchical_visitor_native() {
-            this.$begin_path_fn = Lisp.NIL;
-            this.$end_path_fn = Lisp.NIL;
-            this.$accept_node_fn = Lisp.NIL;
-            this.$begin_visit_fn = Lisp.NIL;
-            this.$end_visit_fn = Lisp.NIL;
-            this.$param = Lisp.NIL;
+            hierarchical_visitor.$hierarchical_visitor_native.this.$begin_path_fn = Lisp.NIL;
+            hierarchical_visitor.$hierarchical_visitor_native.this.$end_path_fn = Lisp.NIL;
+            hierarchical_visitor.$hierarchical_visitor_native.this.$accept_node_fn = Lisp.NIL;
+            hierarchical_visitor.$hierarchical_visitor_native.this.$begin_visit_fn = Lisp.NIL;
+            hierarchical_visitor.$hierarchical_visitor_native.this.$end_visit_fn = Lisp.NIL;
+            hierarchical_visitor.$hierarchical_visitor_native.this.$param = Lisp.NIL;
         }
 
         @Override
@@ -596,66 +887,66 @@ public final class hierarchical_visitor extends SubLTranslatedFile {
 
         @Override
         public SubLObject getField2() {
-            return this.$begin_path_fn;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$begin_path_fn;
         }
 
         @Override
         public SubLObject getField3() {
-            return this.$end_path_fn;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$end_path_fn;
         }
 
         @Override
         public SubLObject getField4() {
-            return this.$accept_node_fn;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$accept_node_fn;
         }
 
         @Override
         public SubLObject getField5() {
-            return this.$begin_visit_fn;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$begin_visit_fn;
         }
 
         @Override
         public SubLObject getField6() {
-            return this.$end_visit_fn;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$end_visit_fn;
         }
 
         @Override
         public SubLObject getField7() {
-            return this.$param;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$param;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return this.$begin_path_fn = value;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$begin_path_fn = value;
         }
 
         @Override
         public SubLObject setField3(final SubLObject value) {
-            return this.$end_path_fn = value;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$end_path_fn = value;
         }
 
         @Override
         public SubLObject setField4(final SubLObject value) {
-            return this.$accept_node_fn = value;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$accept_node_fn = value;
         }
 
         @Override
         public SubLObject setField5(final SubLObject value) {
-            return this.$begin_visit_fn = value;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$begin_visit_fn = value;
         }
 
         @Override
         public SubLObject setField6(final SubLObject value) {
-            return this.$end_visit_fn = value;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$end_visit_fn = value;
         }
 
         @Override
         public SubLObject setField7(final SubLObject value) {
-            return this.$param = value;
+            return hierarchical_visitor.$hierarchical_visitor_native.this.$param = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(hierarchical_visitor.$hierarchical_visitor_native.class, HIERARCHICAL_VISITOR, HIERARCHICAL_VISITOR_P, $list3, $list4, new String[]{ "$begin_path_fn", "$end_path_fn", "$accept_node_fn", "$begin_visit_fn", "$end_visit_fn", "$param" }, $list5, $list6, PRINT_HIERACHICAL_VISITOR);
+            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.hierarchical_visitor.$hierarchical_visitor_native.class, HIERARCHICAL_VISITOR, HIERARCHICAL_VISITOR_P, $list3, $list4, new String[]{ "$begin_path_fn", "$end_path_fn", "$accept_node_fn", "$begin_visit_fn", "$end_visit_fn", "$param" }, $list5, $list6, PRINT_HIERACHICAL_VISITOR);
         }
     }
 

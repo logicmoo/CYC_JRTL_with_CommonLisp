@@ -538,8 +538,7 @@ public  final class assertion_handles extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_assertion_handles_file() {
-    // CVS_ID("Id: assertion-handles.lisp 128690 2009-09-02 19:44:47Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_ASSERTION_FROM_ID_);
+        subl_macro_promotions.declare_defglobal($sym0$_ASSERTION_FROM_ID_);
     utilities_macros.register_cyc_api_macro($sym9$DO_ASSERTIONS, $list1, $str10$Iterate_over_all_HL_assertion_dat);
     access_macros.register_macro_helper($sym15$DO_ASSERTIONS_TABLE, $sym9$DO_ASSERTIONS);
     access_macros.register_macro_helper($sym16$CREATE_ASSERTION_DUMP_ID_TABLE, $sym17$WITH_ASSERTION_DUMP_ID_TABLE);

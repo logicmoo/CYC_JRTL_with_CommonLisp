@@ -3771,8 +3771,7 @@ Also finds the nart version of a non-atomic mt before returning it, if one exist
   }
 
   public static final SubLObject setup_czer_main_file() {
-    // CVS_ID("Id: czer-main.lisp 127936 2009-06-03 16:17:34Z pace ");
-    utilities_macros.register_cyc_api_function($sym1$EL_TO_HL, $list2, $str3$Translate_el_expression_FORMULA_i, $list4, NIL);
+        utilities_macros.register_cyc_api_function($sym1$EL_TO_HL, $list2, $str3$Translate_el_expression_FORMULA_i, $list4, NIL);
     utilities_macros.register_cyc_api_function($sym5$EL_TO_HL_QUERY, $list2, $str6$Translate_el_query_FORMULA_into_i, $list4, NIL);
     utilities_macros.register_cyc_api_function($sym7$CANONICALIZE_TERM, $list8, $str9$Converts_the_EL_term_TERM_to_its_, NIL, NIL);
     memoization_state.note_memoized_function($sym10$CANONICALIZE_TERM_MEMOIZED_INT);

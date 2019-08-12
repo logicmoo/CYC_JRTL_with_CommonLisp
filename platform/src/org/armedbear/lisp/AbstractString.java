@@ -32,110 +32,96 @@
  */
 package org.armedbear.lisp;
 
-public abstract class AbstractString
-    extends
-      com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString
-{
-  /**
-   *
-   */
-  protected AbstractString()
-  {}
-
-  @Override
-  public LispObject typep(LispObject type)
-  {
-    if( type instanceof Symbol )
-    {
-      if( type == Symbol.STRING )
-        return T;
-      if( type == Symbol.BASE_STRING )
-        return T;
+public abstract class AbstractString extends com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString {
+    /**
+     *
+     */
+    protected AbstractString() {
     }
-    if( type == BuiltInClass.STRING )
-      return T;
-    if( type == BuiltInClass.BASE_STRING )
-      return T;
-    return super.typep( type );
-  }
 
-  @Override
-  public final boolean stringp()
-  {
-    return true;
-  }
-
-  @Override
-  public LispObject getElementType()
-  {
-    return Symbol.CHARACTER;
-  }
-
-  @Override
-  public final boolean isSimpleVector()
-  {
-    return false;
-  }
-
-  @Override
-  public final LispObject STRING()
-  {
-    return this;
-  }
-
-  public abstract void fill(char c);
-
-  @Override
-  public abstract char charAt(int index);
-
-  public abstract void setCharAt(int index, char c);
-
-  public final String printObject(int beginIndex, int endIndex)
-  {
-    if( beginIndex < 0 )
-      beginIndex = 0;
-    final int limit;
-    limit = length();
-    if( endIndex > limit )
-      endIndex = limit;
-    final LispThread thread = LispThread.currentThread();
-    if( Symbol.PRINT_ESCAPE.symbolValue( thread ) != NIL || isPrintReadable(thread) )
-    {
-      StringBuilder sb = new StringBuilder( "\"" );
-      for( int i = beginIndex; i < endIndex; i++ )
-      {
-        char c = charAt( i );
-        if( c == '\"' || c == '\\' )
-          sb.append( '\\' );
-        sb.append( c );
-      }
-      sb.append( '"' );
-      return sb.toString();
+    @Override
+    public LispObject typep(LispObject type) {
+	if (type instanceof Symbol) {
+	    if (type == Symbol.STRING)
+		return T;
+	    if (type == Symbol.BASE_STRING)
+		return T;
+	}
+	if (type == BuiltInClass.STRING)
+	    return T;
+	if (type == BuiltInClass.BASE_STRING)
+	    return T;
+	return super.typep(type);
     }
-    else
-      return getStringValue().substring( beginIndex, endIndex );
-  }
 
-  @Override
-  public String printObjectImpl()
-  {
-    return printObject( 0, length() );
-  }
+    @Override
+    public final boolean stringp() {
+	return true;
+    }
 
-  @Override
-  public String toString()
-  {
-    int length = length();
-    StringBuilder sb = new StringBuilder( length );
-    for( int i = 0; i < length; ++i )
-    {
-      sb.append( charAt( i ) );
+    @Override
+    public LispObject getElementType() {
+	return Symbol.CHARACTER;
     }
-    String string = sb.toString();
-    if( Lisp.insideToString == 0 )
-    {
-      Debug.assertViolation( "calling toString in a STR " + string + ".. use getStringValue() instead" );
+
+    @Override
+    public final boolean isSimpleVector() {
+	return false;
     }
-    return string;
-  }
+
+    @Override
+    public final LispObject STRING() {
+	return this;
+    }
+
+    public abstract void fill(char c);
+
+    @Override
+    public abstract char charAt(int index);
+
+    public abstract void setCharAt(int index, char c);
+
+    public final String printObject(int beginIndex, int endIndex) {
+	if (beginIndex < 0)
+	    beginIndex = 0;
+	final int limit;
+	limit = length();
+	if (endIndex > limit)
+	    endIndex = limit;
+	final LispThread thread = LispThread.currentThread();
+
+	if (!Lisp.isTooSoon()) {
+	    if (Symbol.PRINT_ESCAPE.symbolValue(thread) != NIL || isPrintReadable(thread)) {
+		StringBuilder sb = new StringBuilder("\"");
+		for (int i = beginIndex; i < endIndex; i++) {
+		    char c = charAt(i);
+		    if (c == '\"' || c == '\\')
+			sb.append('\\');
+		    sb.append(c);
+		}
+		sb.append('"');
+		return sb.toString();
+	    }
+	}
+	return getStringValue().substring(beginIndex, endIndex);
+    }
+
+    @Override
+    public String printObjectImpl() {
+	return printObject(0, length());
+    }
+
+    @Override
+    public String toString() {
+	int length = length();
+	StringBuilder sb = new StringBuilder(length);
+	for (int i = 0; i < length; ++i) {
+	    sb.append(charAt(i));
+	}
+	String string = sb.toString();
+	if (Lisp.insideToString == 0) {
+	    Debug.assertViolation("calling toString in a STR " + string + ".. use getStringValue() instead");
+	}
+	return string;
+    }
 }

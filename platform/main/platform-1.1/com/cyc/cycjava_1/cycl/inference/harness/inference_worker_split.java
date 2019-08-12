@@ -1244,8 +1244,7 @@ into a problem query.
   }
 
   public static final SubLObject setup_inference_worker_split_file() {
-    // CVS_ID("Id: inference-worker-split.lisp 128648 2009-08-27 17:23:55Z pace ");
-    subl_macro_promotions.declare_defglobal($sym22$_DETERMINE_NEW_SPLIT_TACTICS_MODULE_);
+        subl_macro_promotions.declare_defglobal($sym22$_DETERMINE_NEW_SPLIT_TACTICS_MODULE_);
     return NIL;
   }
 

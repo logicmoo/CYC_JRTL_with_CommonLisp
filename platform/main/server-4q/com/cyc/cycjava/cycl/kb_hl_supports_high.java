@@ -1,11 +1,32 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.kb_hl_supports_high;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -21,51 +42,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.random;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.kb_hl_supports_high.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class kb_hl_supports_high extends SubLTranslatedFile {
+public final class kb_hl_supports_high extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_hl_supports_high();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_hl_supports_high";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_hl_supports_high";
 
-    public static final String myFingerPrint = "a2892ef968c17916d346dbdb58376b22508e749fb7d7a4a2c8432b2d184a3bbe";
 
     // defparameter
     public static final SubLSymbol $unreify_kb_hl_supportsP$ = makeSymbol("*UNREIFY-KB-HL-SUPPORTS?*");
@@ -81,7 +63,7 @@ public final class kb_hl_supports_high extends SubLTranslatedFile {
 
     private static final SubLList $list0 = list(list(makeSymbol("ARGUMENT-VAR"), makeSymbol("KB-HL-SUPPORT"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list1 = list(makeKeyword("DONE"));
+    private static final SubLList $list1 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
@@ -103,7 +85,7 @@ public final class kb_hl_supports_high extends SubLTranslatedFile {
 
     private static final SubLList $list11 = list(list(makeSymbol("VAR"), makeSymbol("&KEY"), makeSymbol("NUM"), list(makeSymbol("PROGRESS-MESSAGE"), makeString("mapping kb-hl-supports for sweep")), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list12 = list(makeKeyword("NUM"), makeKeyword("PROGRESS-MESSAGE"), makeKeyword("DONE"));
+    private static final SubLList $list12 = list(makeKeyword("NUM"), makeKeyword("PROGRESS-MESSAGE"), $DONE);
 
 
 
@@ -151,7 +133,7 @@ public final class kb_hl_supports_high extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list36 = list(list(makeSymbol("*KB-HL-SUPPORT-DUMP-ID-TABLE*"), list(makeSymbol("CREATE-KB-HL-SUPPORT-DUMP-ID-TABLE"))), list(makeSymbol("*CFASL-KB-HL-SUPPORT-HANDLE-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("KB-HL-SUPPORT-DUMP-ID"))));
+    private static final SubLList $list36 = list(list(makeSymbol("*KB-HL-SUPPORT-DUMP-ID-TABLE*"), list(makeSymbol("CREATE-KB-HL-SUPPORT-DUMP-ID-TABLE"))), list(makeSymbol("*CFASL-KB-HL-SUPPORT-HANDLE-FUNC*"), list(QUOTE, makeSymbol("KB-HL-SUPPORT-DUMP-ID"))));
 
 
 
@@ -2603,96 +2585,96 @@ public final class kb_hl_supports_high extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_hl_supports_high_file() {
-        declareMacro(me, "do_kb_hl_support_arguments", "DO-KB-HL-SUPPORT-ARGUMENTS");
-        declareMacro(me, "do_kb_hl_support_dependents", "DO-KB-HL-SUPPORT-DEPENDENTS");
-        declareMacro(me, "do_kb_hl_support_supports", "DO-KB-HL-SUPPORT-SUPPORTS");
-        declareMacro(me, "do_recent_kb_hl_supports", "DO-RECENT-KB-HL-SUPPORTS");
-        declareFunction(me, "create_kb_hl_support", "CREATE-KB-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "find_kb_hl_support", "FIND-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "find_kb_hl_supports_mentioning_term", "FIND-KB-HL-SUPPORTS-MENTIONING-TERM", 1, 0, false);
-        declareFunction(me, "find_or_create_kb_hl_support", "FIND-OR-CREATE-KB-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "find_or_possibly_create_kb_hl_support", "FIND-OR-POSSIBLY-CREATE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "possibly_create_kb_hl_support", "POSSIBLY-CREATE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_hl_support", "KB-HL-SUPPORT-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_justification", "KB-HL-SUPPORT-JUSTIFICATION", 1, 0, false);
-        declareFunction(me, "kb_hl_support_module", "KB-HL-SUPPORT-MODULE", 1, 0, false);
-        declareFunction(me, "kb_hl_support_sentence", "KB-HL-SUPPORT-SENTENCE", 1, 0, false);
-        declareFunction(me, "kb_hl_support_mt", "KB-HL-SUPPORT-MT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_tv", "KB-HL-SUPPORT-TV", 1, 0, false);
-        declareFunction(me, "kb_hl_support_el_sentence", "KB-HL-SUPPORT-EL-SENTENCE", 1, 0, false);
-        declareFunction(me, "kb_hl_support_ist_sentence", "KB-HL-SUPPORT-IST-SENTENCE", 1, 0, false);
-        declareFunction(me, "kb_hl_support_el_ist_sentence", "KB-HL-SUPPORT-EL-IST-SENTENCE", 1, 0, false);
-        declareFunction(me, "kb_hl_support_elmt", "KB-HL-SUPPORT-ELMT", 1, 0, false);
-        declareFunction(me, "kb_hl_support_cons", "KB-HL-SUPPORT-CONS", 1, 0, false);
-        declareFunction(me, "kb_hl_support_justification_size", "KB-HL-SUPPORT-JUSTIFICATION-SIZE", 1, 0, false);
-        declareFunction(me, "kb_hl_support_uselessP", "KB-HL-SUPPORT-USELESS?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_unjustifiedP", "KB-HL-SUPPORT-UNJUSTIFIED?", 1, 0, false);
-        declareFunction(me, "should_remove_kb_hl_supportP", "SHOULD-REMOVE-KB-HL-SUPPORT?", 1, 0, false);
-        declareFunction(me, "possibly_remove_kb_hl_support", "POSSIBLY-REMOVE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "eliminate_kb_hl_supports_invalid_dependents", "ELIMINATE-KB-HL-SUPPORTS-INVALID-DEPENDENTS", 0, 1, false);
-        declareFunction(me, "eliminate_kb_hl_support_invalid_dependents", "ELIMINATE-KB-HL-SUPPORT-INVALID-DEPENDENTS", 1, 1, false);
-        declareFunction(me, "destroy_kb_hl_supports_with_invalid_hl_supports", "DESTROY-KB-HL-SUPPORTS-WITH-INVALID-HL-SUPPORTS", 0, 0, false);
-        declareFunction(me, "possibly_reify_hl_supports", "POSSIBLY-REIFY-HL-SUPPORTS", 1, 0, false);
-        declareFunction(me, "possibly_reify_hl_support", "POSSIBLY-REIFY-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "possibly_unreify_kb_hl_supports", "POSSIBLY-UNREIFY-KB-HL-SUPPORTS", 1, 0, false);
-        declareFunction(me, "unreify_kb_hl_supports", "UNREIFY-KB-HL-SUPPORTS", 1, 0, false);
-        declareFunction(me, "unreify_kb_hl_support", "UNREIFY-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "random_kb_hl_support", "RANDOM-KB-HL-SUPPORT", 0, 1, false);
-        declareFunction(me, "sample_kb_hl_supports", "SAMPLE-KB-HL-SUPPORTS", 0, 3, false);
-        declareFunction(me, "kb_hl_supports_around_kb_hl_support", "KB-HL-SUPPORTS-AROUND-KB-HL-SUPPORT", 1, 3, false);
-        declareFunction(me, "kb_hl_supports_around", "KB-HL-SUPPORTS-AROUND", 1, 3, false);
-        declareFunction(me, "kb_hl_support_dump_id", "KB-HL-SUPPORT-DUMP-ID", 1, 0, false);
-        declareFunction(me, "find_kb_hl_support_by_dump_id", "FIND-KB-HL-SUPPORT-BY-DUMP-ID", 1, 0, false);
-        declareMacro(me, "with_kb_hl_support_dump_id_table", "WITH-KB-HL-SUPPORT-DUMP-ID-TABLE");
-        declareFunction(me, "dump_kb_hl_support_indexing_int", "DUMP-KB-HL-SUPPORT-INDEXING-INT", 1, 0, false);
-        declareFunction(me, "load_kb_hl_support_indexing_int", "LOAD-KB-HL-SUPPORT-INDEXING-INT", 1, 0, false);
-        declareFunction(me, "invalid_kb_hl_supportP", "INVALID-KB-HL-SUPPORT?", 1, 0, false);
-        declareFunction(me, "invalid_kb_hl_support_robustP", "INVALID-KB-HL-SUPPORT-ROBUST?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_has_problemsP", "KB-HL-SUPPORT-HAS-PROBLEMS?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_not_findable_by_hl_supportP", "KB-HL-SUPPORT-NOT-FINDABLE-BY-HL-SUPPORT?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_circularP", "KB-HL-SUPPORT-CIRCULAR?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_circularP_int", "KB-HL-SUPPORT-CIRCULAR?-INT", 2, 0, false);
-        declareFunction(me, "kb_hl_support_has_invalid_dependentP", "KB-HL-SUPPORT-HAS-INVALID-DEPENDENT?", 1, 1, false);
-        declareFunction(me, "kb_hl_support_has_invalid_argumentP", "KB-HL-SUPPORT-HAS-INVALID-ARGUMENT?", 1, 1, false);
-        declareFunction(me, "kb_hl_support_has_invalid_hl_supportP", "KB-HL-SUPPORT-HAS-INVALID-HL-SUPPORT?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_has_missing_backpointerP", "KB-HL-SUPPORT-HAS-MISSING-BACKPOINTER?", 1, 0, false);
-        declareFunction(me, "kb_hl_support_has_dependent_with_supportP", "KB-HL-SUPPORT-HAS-DEPENDENT-WITH-SUPPORT?", 2, 0, false);
-        declareFunction(me, "kb_hl_supports_not_findable_by_hl_support", "KB-HL-SUPPORTS-NOT-FINDABLE-BY-HL-SUPPORT", 0, 0, false);
-        declareFunction(me, "circular_kb_hl_supports", "CIRCULAR-KB-HL-SUPPORTS", 0, 0, false);
-        declareFunction(me, "duplicate_kb_hl_supports", "DUPLICATE-KB-HL-SUPPORTS", 0, 0, false);
-        declareFunction(me, "kb_hl_supports_with_invalid_dependents", "KB-HL-SUPPORTS-WITH-INVALID-DEPENDENTS", 0, 1, false);
-        declareFunction(me, "kb_hl_supports_with_invalid_arguments", "KB-HL-SUPPORTS-WITH-INVALID-ARGUMENTS", 0, 1, false);
-        declareFunction(me, "kb_hl_supports_with_invalid_hl_supports", "KB-HL-SUPPORTS-WITH-INVALID-HL-SUPPORTS", 0, 0, false);
-        declareFunction(me, "kb_hl_supports_with_missing_backpointers", "KB-HL-SUPPORTS-WITH-MISSING-BACKPOINTERS", 0, 0, false);
-        declareFunction(me, "verify_kb_hl_supports", "VERIFY-KB-HL-SUPPORTS", 0, 2, false);
-        declareFunction(me, "verify_kb_hl_support_indexing", "VERIFY-KB-HL-SUPPORT-INDEXING", 0, 1, false);
-        declareFunction(me, "report_kb_hl_support_indexing_failures", "REPORT-KB-HL-SUPPORT-INDEXING-FAILURES", 2, 1, false);
-        declareFunction(me, "verify_kb_hl_supports_non_circular", "VERIFY-KB-HL-SUPPORTS-NON-CIRCULAR", 0, 1, false);
-        declareFunction(me, "report_circular_kb_hl_supports", "REPORT-CIRCULAR-KB-HL-SUPPORTS", 2, 1, false);
-        declareFunction(me, "verify_kb_hl_support_uniqueness", "VERIFY-KB-HL-SUPPORT-UNIQUENESS", 0, 1, false);
-        declareFunction(me, "report_duplicate_kb_hl_supports", "REPORT-DUPLICATE-KB-HL-SUPPORTS", 2, 1, false);
-        declareFunction(me, "verify_kb_hl_support_dependents", "VERIFY-KB-HL-SUPPORT-DEPENDENTS", 0, 1, false);
-        declareFunction(me, "report_kb_hl_supports_with_invalid_dependents", "REPORT-KB-HL-SUPPORTS-WITH-INVALID-DEPENDENTS", 2, 1, false);
-        declareFunction(me, "verify_kb_hl_support_arguments", "VERIFY-KB-HL-SUPPORT-ARGUMENTS", 0, 1, false);
-        declareFunction(me, "report_kb_hl_supports_with_invalid_arguments", "REPORT-KB-HL-SUPPORTS-WITH-INVALID-ARGUMENTS", 2, 1, false);
-        declareFunction(me, "verify_kb_hl_support_hl_supports", "VERIFY-KB-HL-SUPPORT-HL-SUPPORTS", 0, 1, false);
-        declareFunction(me, "report_kb_hl_supports_with_invalid_hl_supports", "REPORT-KB-HL-SUPPORTS-WITH-INVALID-HL-SUPPORTS", 2, 1, false);
-        declareFunction(me, "verify_kb_hl_support_backpointers", "VERIFY-KB-HL-SUPPORT-BACKPOINTERS", 0, 1, false);
-        declareFunction(me, "report_kb_hl_supports_with_missing_backpointers", "REPORT-KB-HL-SUPPORTS-WITH-MISSING-BACKPOINTERS", 2, 1, false);
-        declareFunction(me, "enqueueing_kb_hl_supports_for_tmsP_int", "ENQUEUEING-KB-HL-SUPPORTS-FOR-TMS?-INT", 0, 0, false);
-        declareFunction(me, "enqueueing_kb_hl_supports_for_tmsP", "ENQUEUEING-KB-HL-SUPPORTS-FOR-TMS?", 0, 0, false);
-        declareMacro(me, "with_kb_hl_support_rejustification", "WITH-KB-HL-SUPPORT-REJUSTIFICATION");
-        declareFunction(me, "process_tms_kb_hl_support_queue", "PROCESS-TMS-KB-HL-SUPPORT-QUEUE", 0, 0, false);
-        declareFunction(me, "enqueue_kb_hl_support_for_tms", "ENQUEUE-KB-HL-SUPPORT-FOR-TMS", 1, 0, false);
-        declareFunction(me, "rejustify_or_remove_kb_hl_support", "REJUSTIFY-OR-REMOVE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "tms_possibly_rejustify_kb_hl_support", "TMS-POSSIBLY-REJUSTIFY-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "possibly_rejustify_kb_hl_support", "POSSIBLY-REJUSTIFY-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "verify_kb_hl_support", "VERIFY-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "handle_unverifiable_kb_hl_support", "HANDLE-UNVERIFIABLE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "tms_remove_kb_hl_supports_mentioning_term", "TMS-REMOVE-KB-HL-SUPPORTS-MENTIONING-TERM", 1, 0, false);
-        declareFunction(me, "tms_remove_kb_hl_support", "TMS-REMOVE-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "bootstrap_kb_hl_supports", "BOOTSTRAP-KB-HL-SUPPORTS", 0, 1, false);
-        declareFunction(me, "bootstrap_kb_hl_supports_for_deduction", "BOOTSTRAP-KB-HL-SUPPORTS-FOR-DEDUCTION", 1, 0, false);
+        declareMacro("do_kb_hl_support_arguments", "DO-KB-HL-SUPPORT-ARGUMENTS");
+        declareMacro("do_kb_hl_support_dependents", "DO-KB-HL-SUPPORT-DEPENDENTS");
+        declareMacro("do_kb_hl_support_supports", "DO-KB-HL-SUPPORT-SUPPORTS");
+        declareMacro("do_recent_kb_hl_supports", "DO-RECENT-KB-HL-SUPPORTS");
+        declareFunction("create_kb_hl_support", "CREATE-KB-HL-SUPPORT", 2, 0, false);
+        declareFunction("find_kb_hl_support", "FIND-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("find_kb_hl_supports_mentioning_term", "FIND-KB-HL-SUPPORTS-MENTIONING-TERM", 1, 0, false);
+        declareFunction("find_or_create_kb_hl_support", "FIND-OR-CREATE-KB-HL-SUPPORT", 2, 0, false);
+        declareFunction("find_or_possibly_create_kb_hl_support", "FIND-OR-POSSIBLY-CREATE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("possibly_create_kb_hl_support", "POSSIBLY-CREATE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("kb_hl_support_hl_support", "KB-HL-SUPPORT-HL-SUPPORT", 1, 0, false);
+        declareFunction("kb_hl_support_justification", "KB-HL-SUPPORT-JUSTIFICATION", 1, 0, false);
+        declareFunction("kb_hl_support_module", "KB-HL-SUPPORT-MODULE", 1, 0, false);
+        declareFunction("kb_hl_support_sentence", "KB-HL-SUPPORT-SENTENCE", 1, 0, false);
+        declareFunction("kb_hl_support_mt", "KB-HL-SUPPORT-MT", 1, 0, false);
+        declareFunction("kb_hl_support_tv", "KB-HL-SUPPORT-TV", 1, 0, false);
+        declareFunction("kb_hl_support_el_sentence", "KB-HL-SUPPORT-EL-SENTENCE", 1, 0, false);
+        declareFunction("kb_hl_support_ist_sentence", "KB-HL-SUPPORT-IST-SENTENCE", 1, 0, false);
+        declareFunction("kb_hl_support_el_ist_sentence", "KB-HL-SUPPORT-EL-IST-SENTENCE", 1, 0, false);
+        declareFunction("kb_hl_support_elmt", "KB-HL-SUPPORT-ELMT", 1, 0, false);
+        declareFunction("kb_hl_support_cons", "KB-HL-SUPPORT-CONS", 1, 0, false);
+        declareFunction("kb_hl_support_justification_size", "KB-HL-SUPPORT-JUSTIFICATION-SIZE", 1, 0, false);
+        declareFunction("kb_hl_support_uselessP", "KB-HL-SUPPORT-USELESS?", 1, 0, false);
+        declareFunction("kb_hl_support_unjustifiedP", "KB-HL-SUPPORT-UNJUSTIFIED?", 1, 0, false);
+        declareFunction("should_remove_kb_hl_supportP", "SHOULD-REMOVE-KB-HL-SUPPORT?", 1, 0, false);
+        declareFunction("possibly_remove_kb_hl_support", "POSSIBLY-REMOVE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("eliminate_kb_hl_supports_invalid_dependents", "ELIMINATE-KB-HL-SUPPORTS-INVALID-DEPENDENTS", 0, 1, false);
+        declareFunction("eliminate_kb_hl_support_invalid_dependents", "ELIMINATE-KB-HL-SUPPORT-INVALID-DEPENDENTS", 1, 1, false);
+        declareFunction("destroy_kb_hl_supports_with_invalid_hl_supports", "DESTROY-KB-HL-SUPPORTS-WITH-INVALID-HL-SUPPORTS", 0, 0, false);
+        declareFunction("possibly_reify_hl_supports", "POSSIBLY-REIFY-HL-SUPPORTS", 1, 0, false);
+        declareFunction("possibly_reify_hl_support", "POSSIBLY-REIFY-HL-SUPPORT", 1, 0, false);
+        declareFunction("possibly_unreify_kb_hl_supports", "POSSIBLY-UNREIFY-KB-HL-SUPPORTS", 1, 0, false);
+        declareFunction("unreify_kb_hl_supports", "UNREIFY-KB-HL-SUPPORTS", 1, 0, false);
+        declareFunction("unreify_kb_hl_support", "UNREIFY-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("random_kb_hl_support", "RANDOM-KB-HL-SUPPORT", 0, 1, false);
+        declareFunction("sample_kb_hl_supports", "SAMPLE-KB-HL-SUPPORTS", 0, 3, false);
+        declareFunction("kb_hl_supports_around_kb_hl_support", "KB-HL-SUPPORTS-AROUND-KB-HL-SUPPORT", 1, 3, false);
+        declareFunction("kb_hl_supports_around", "KB-HL-SUPPORTS-AROUND", 1, 3, false);
+        declareFunction("kb_hl_support_dump_id", "KB-HL-SUPPORT-DUMP-ID", 1, 0, false);
+        declareFunction("find_kb_hl_support_by_dump_id", "FIND-KB-HL-SUPPORT-BY-DUMP-ID", 1, 0, false);
+        declareMacro("with_kb_hl_support_dump_id_table", "WITH-KB-HL-SUPPORT-DUMP-ID-TABLE");
+        declareFunction("dump_kb_hl_support_indexing_int", "DUMP-KB-HL-SUPPORT-INDEXING-INT", 1, 0, false);
+        declareFunction("load_kb_hl_support_indexing_int", "LOAD-KB-HL-SUPPORT-INDEXING-INT", 1, 0, false);
+        declareFunction("invalid_kb_hl_supportP", "INVALID-KB-HL-SUPPORT?", 1, 0, false);
+        declareFunction("invalid_kb_hl_support_robustP", "INVALID-KB-HL-SUPPORT-ROBUST?", 1, 0, false);
+        declareFunction("kb_hl_support_has_problemsP", "KB-HL-SUPPORT-HAS-PROBLEMS?", 1, 0, false);
+        declareFunction("kb_hl_support_not_findable_by_hl_supportP", "KB-HL-SUPPORT-NOT-FINDABLE-BY-HL-SUPPORT?", 1, 0, false);
+        declareFunction("kb_hl_support_circularP", "KB-HL-SUPPORT-CIRCULAR?", 1, 0, false);
+        declareFunction("kb_hl_support_circularP_int", "KB-HL-SUPPORT-CIRCULAR?-INT", 2, 0, false);
+        declareFunction("kb_hl_support_has_invalid_dependentP", "KB-HL-SUPPORT-HAS-INVALID-DEPENDENT?", 1, 1, false);
+        declareFunction("kb_hl_support_has_invalid_argumentP", "KB-HL-SUPPORT-HAS-INVALID-ARGUMENT?", 1, 1, false);
+        declareFunction("kb_hl_support_has_invalid_hl_supportP", "KB-HL-SUPPORT-HAS-INVALID-HL-SUPPORT?", 1, 0, false);
+        declareFunction("kb_hl_support_has_missing_backpointerP", "KB-HL-SUPPORT-HAS-MISSING-BACKPOINTER?", 1, 0, false);
+        declareFunction("kb_hl_support_has_dependent_with_supportP", "KB-HL-SUPPORT-HAS-DEPENDENT-WITH-SUPPORT?", 2, 0, false);
+        declareFunction("kb_hl_supports_not_findable_by_hl_support", "KB-HL-SUPPORTS-NOT-FINDABLE-BY-HL-SUPPORT", 0, 0, false);
+        declareFunction("circular_kb_hl_supports", "CIRCULAR-KB-HL-SUPPORTS", 0, 0, false);
+        declareFunction("duplicate_kb_hl_supports", "DUPLICATE-KB-HL-SUPPORTS", 0, 0, false);
+        declareFunction("kb_hl_supports_with_invalid_dependents", "KB-HL-SUPPORTS-WITH-INVALID-DEPENDENTS", 0, 1, false);
+        declareFunction("kb_hl_supports_with_invalid_arguments", "KB-HL-SUPPORTS-WITH-INVALID-ARGUMENTS", 0, 1, false);
+        declareFunction("kb_hl_supports_with_invalid_hl_supports", "KB-HL-SUPPORTS-WITH-INVALID-HL-SUPPORTS", 0, 0, false);
+        declareFunction("kb_hl_supports_with_missing_backpointers", "KB-HL-SUPPORTS-WITH-MISSING-BACKPOINTERS", 0, 0, false);
+        declareFunction("verify_kb_hl_supports", "VERIFY-KB-HL-SUPPORTS", 0, 2, false);
+        declareFunction("verify_kb_hl_support_indexing", "VERIFY-KB-HL-SUPPORT-INDEXING", 0, 1, false);
+        declareFunction("report_kb_hl_support_indexing_failures", "REPORT-KB-HL-SUPPORT-INDEXING-FAILURES", 2, 1, false);
+        declareFunction("verify_kb_hl_supports_non_circular", "VERIFY-KB-HL-SUPPORTS-NON-CIRCULAR", 0, 1, false);
+        declareFunction("report_circular_kb_hl_supports", "REPORT-CIRCULAR-KB-HL-SUPPORTS", 2, 1, false);
+        declareFunction("verify_kb_hl_support_uniqueness", "VERIFY-KB-HL-SUPPORT-UNIQUENESS", 0, 1, false);
+        declareFunction("report_duplicate_kb_hl_supports", "REPORT-DUPLICATE-KB-HL-SUPPORTS", 2, 1, false);
+        declareFunction("verify_kb_hl_support_dependents", "VERIFY-KB-HL-SUPPORT-DEPENDENTS", 0, 1, false);
+        declareFunction("report_kb_hl_supports_with_invalid_dependents", "REPORT-KB-HL-SUPPORTS-WITH-INVALID-DEPENDENTS", 2, 1, false);
+        declareFunction("verify_kb_hl_support_arguments", "VERIFY-KB-HL-SUPPORT-ARGUMENTS", 0, 1, false);
+        declareFunction("report_kb_hl_supports_with_invalid_arguments", "REPORT-KB-HL-SUPPORTS-WITH-INVALID-ARGUMENTS", 2, 1, false);
+        declareFunction("verify_kb_hl_support_hl_supports", "VERIFY-KB-HL-SUPPORT-HL-SUPPORTS", 0, 1, false);
+        declareFunction("report_kb_hl_supports_with_invalid_hl_supports", "REPORT-KB-HL-SUPPORTS-WITH-INVALID-HL-SUPPORTS", 2, 1, false);
+        declareFunction("verify_kb_hl_support_backpointers", "VERIFY-KB-HL-SUPPORT-BACKPOINTERS", 0, 1, false);
+        declareFunction("report_kb_hl_supports_with_missing_backpointers", "REPORT-KB-HL-SUPPORTS-WITH-MISSING-BACKPOINTERS", 2, 1, false);
+        declareFunction("enqueueing_kb_hl_supports_for_tmsP_int", "ENQUEUEING-KB-HL-SUPPORTS-FOR-TMS?-INT", 0, 0, false);
+        declareFunction("enqueueing_kb_hl_supports_for_tmsP", "ENQUEUEING-KB-HL-SUPPORTS-FOR-TMS?", 0, 0, false);
+        declareMacro("with_kb_hl_support_rejustification", "WITH-KB-HL-SUPPORT-REJUSTIFICATION");
+        declareFunction("process_tms_kb_hl_support_queue", "PROCESS-TMS-KB-HL-SUPPORT-QUEUE", 0, 0, false);
+        declareFunction("enqueue_kb_hl_support_for_tms", "ENQUEUE-KB-HL-SUPPORT-FOR-TMS", 1, 0, false);
+        declareFunction("rejustify_or_remove_kb_hl_support", "REJUSTIFY-OR-REMOVE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("tms_possibly_rejustify_kb_hl_support", "TMS-POSSIBLY-REJUSTIFY-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("possibly_rejustify_kb_hl_support", "POSSIBLY-REJUSTIFY-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("verify_kb_hl_support", "VERIFY-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("handle_unverifiable_kb_hl_support", "HANDLE-UNVERIFIABLE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("tms_remove_kb_hl_supports_mentioning_term", "TMS-REMOVE-KB-HL-SUPPORTS-MENTIONING-TERM", 1, 0, false);
+        declareFunction("tms_remove_kb_hl_support", "TMS-REMOVE-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("bootstrap_kb_hl_supports", "BOOTSTRAP-KB-HL-SUPPORTS", 0, 1, false);
+        declareFunction("bootstrap_kb_hl_supports_for_deduction", "BOOTSTRAP-KB-HL-SUPPORTS-FOR-DEDUCTION", 1, 0, false);
         return NIL;
     }
 

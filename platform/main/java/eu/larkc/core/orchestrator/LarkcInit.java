@@ -52,7 +52,7 @@ public final class LarkcInit extends SubLTranslatedFile {
 
 	@Override
 	public void declareFunctions() {
-		declareFunction(myName, "initializeLarkc", "INITIALIZE-LARKC", 0, 0, false);
+		declareFunction("initializeLarkc", "INITIALIZE-LARKC", 0, 0, false);
 	}
 
 	@Override

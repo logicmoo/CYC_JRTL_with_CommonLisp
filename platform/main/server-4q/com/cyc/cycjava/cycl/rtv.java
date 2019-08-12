@@ -1,7 +1,21 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.rtv;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -13,40 +27,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.rtv.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class rtv extends SubLTranslatedFile {
+public final class rtv extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new rtv();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rtv";
+    public static final String myName = "com.cyc.cycjava_2.cycl.rtv";
 
-    public static final String myFingerPrint = "926e01ddcbd7ea171aa9e67acc3ac782936a8a0e10e5123130cc518c939df40d";
 
     // defvar
     private static final SubLSymbol $rtv_intersection_table$ = makeSymbol("*RTV-INTERSECTION-TABLE*");
@@ -90,7 +76,7 @@ public final class rtv extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list17 = list(list(makeSymbol("QUOTE"), list(ONE_INTEGER, TWO_INTEGER)));
+    private static final SubLList $list17 = list(list(QUOTE, list(ONE_INTEGER, TWO_INTEGER)));
 
 
 
@@ -1177,41 +1163,41 @@ public final class rtv extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_rtv_file() {
-        declareFunction(me, "new_rtv_intersection_table", "NEW-RTV-INTERSECTION-TABLE", 0, 1, false);
-        declareFunction(me, "rtv_union", "RTV-UNION", 2, 0, false);
-        declareFunction(me, "rtv_intersection", "RTV-INTERSECTION", 2, 0, false);
-        declareFunction(me, "rtv_sort", "RTV-SORT", 1, 1, false);
-        declareMacro(me, "do_rtv_links", "DO-RTV-LINKS");
-        declareFunction(me, "rtv_accessible_edges_internal", "RTV-ACCESSIBLE-EDGES-INTERNAL", 2, 0, false);
-        declareFunction(me, "rtv_accessible_edges", "RTV-ACCESSIBLE-EDGES", 2, 0, false);
-        declareMacro(me, "do_rtv_edge_map_nodes", "DO-RTV-EDGE-MAP-NODES");
-        declareMacro(me, "do_rtv_edge_map_links", "DO-RTV-EDGE-MAP-LINKS");
-        declareFunction(me, "rtv_walk_from_nodes", "RTV-WALK-FROM-NODES", 4, 1, false);
-        declareFunction(me, "rtv_walk_from_nodes_internal", "RTV-WALK-FROM-NODES-INTERNAL", 4, 0, false);
-        declareFunction(me, "rtv_walk_between_nodes", "RTV-WALK-BETWEEN-NODES", 5, 1, false);
-        declareFunction(me, "rtv_length_to_islands", "RTV-LENGTH-TO-ISLANDS", 3, 0, false);
-        declareFunction(me, "rtv_walk_between_nodes_recursive", "RTV-WALK-BETWEEN-NODES-RECURSIVE", 5, 0, false);
-        declareFunction(me, "rtv_walk_between_nodes_directly", "RTV-WALK-BETWEEN-NODES-DIRECTLY", 4, 0, false);
-        declareFunction(me, "rtv_walk_between_nodes_internal", "RTV-WALK-BETWEEN-NODES-INTERNAL", 5, 0, false);
-        declareFunction(me, "rtv_walk_between_nodes_of_length", "RTV-WALK-BETWEEN-NODES-OF-LENGTH", 5, 0, false);
-        declareFunction(me, "rtv_walk_node_levels", "RTV-WALK-NODE-LEVELS", 4, 0, false);
-        declareFunction(me, "rtv_walk_node_levels_recursive", "RTV-WALK-NODE-LEVELS-RECURSIVE", 5, 0, false);
-        declareFunction(me, "rtv_directly_connected_node_subsets", "RTV-DIRECTLY-CONNECTED-NODE-SUBSETS", 3, 0, false);
-        declareFunction(me, "rtv_walk_relevant_edge_map", "RTV-WALK-RELEVANT-EDGE-MAP", 2, 0, false);
-        declareFunction(me, "rtv_walk_relevant_edge_map_recursive", "RTV-WALK-RELEVANT-EDGE-MAP-RECURSIVE", 3, 0, false);
-        declareFunction(me, "rtv_walk_possibly_add_relevant_edge_to_map", "RTV-WALK-POSSIBLY-ADD-RELEVANT-EDGE-TO-MAP", 4, 0, false);
-        declareFunction(me, "rtv_walk_across_node_levels", "RTV-WALK-ACROSS-NODE-LEVELS", 3, 0, false);
-        declareFunction(me, "rtv_walk_across_node_levels_recursive", "RTV-WALK-ACROSS-NODE-LEVELS-RECURSIVE", 7, 0, false);
-        declareFunction(me, "rtv_update_result_set_from_path", "RTV-UPDATE-RESULT-SET-FROM-PATH", 5, 0, false);
-        declareFunction(me, "new_rtv_all_nodes_from_node", "NEW-RTV-ALL-NODES-FROM-NODE", 3, 1, false);
-        declareFunction(me, "rtv_all_nodes_from_nodes", "RTV-ALL-NODES-FROM-NODES", 3, 1, false);
-        declareFunction(me, "rtv_all_nodes_between_two_nodes", "RTV-ALL-NODES-BETWEEN-TWO-NODES", 4, 1, false);
-        declareFunction(me, "rtv_all_nodes_between_nodes", "RTV-ALL-NODES-BETWEEN-NODES", 4, 1, false);
-        declareFunction(me, "new_rtv_all_edges_from_node", "NEW-RTV-ALL-EDGES-FROM-NODE", 3, 1, false);
-        declareFunction(me, "rtv_all_edges_from_nodes", "RTV-ALL-EDGES-FROM-NODES", 3, 1, false);
-        declareFunction(me, "rtv_all_edges_between_two_nodes", "RTV-ALL-EDGES-BETWEEN-TWO-NODES", 4, 1, false);
-        declareFunction(me, "rtv_all_edges_between_nodes", "RTV-ALL-EDGES-BETWEEN-NODES", 4, 1, false);
-        declareFunction(me, "rtv_all_edges_among", "RTV-ALL-EDGES-AMONG", 2, 1, false);
+        declareFunction("new_rtv_intersection_table", "NEW-RTV-INTERSECTION-TABLE", 0, 1, false);
+        declareFunction("rtv_union", "RTV-UNION", 2, 0, false);
+        declareFunction("rtv_intersection", "RTV-INTERSECTION", 2, 0, false);
+        declareFunction("rtv_sort", "RTV-SORT", 1, 1, false);
+        declareMacro("do_rtv_links", "DO-RTV-LINKS");
+        declareFunction("rtv_accessible_edges_internal", "RTV-ACCESSIBLE-EDGES-INTERNAL", 2, 0, false);
+        declareFunction("rtv_accessible_edges", "RTV-ACCESSIBLE-EDGES", 2, 0, false);
+        declareMacro("do_rtv_edge_map_nodes", "DO-RTV-EDGE-MAP-NODES");
+        declareMacro("do_rtv_edge_map_links", "DO-RTV-EDGE-MAP-LINKS");
+        declareFunction("rtv_walk_from_nodes", "RTV-WALK-FROM-NODES", 4, 1, false);
+        declareFunction("rtv_walk_from_nodes_internal", "RTV-WALK-FROM-NODES-INTERNAL", 4, 0, false);
+        declareFunction("rtv_walk_between_nodes", "RTV-WALK-BETWEEN-NODES", 5, 1, false);
+        declareFunction("rtv_length_to_islands", "RTV-LENGTH-TO-ISLANDS", 3, 0, false);
+        declareFunction("rtv_walk_between_nodes_recursive", "RTV-WALK-BETWEEN-NODES-RECURSIVE", 5, 0, false);
+        declareFunction("rtv_walk_between_nodes_directly", "RTV-WALK-BETWEEN-NODES-DIRECTLY", 4, 0, false);
+        declareFunction("rtv_walk_between_nodes_internal", "RTV-WALK-BETWEEN-NODES-INTERNAL", 5, 0, false);
+        declareFunction("rtv_walk_between_nodes_of_length", "RTV-WALK-BETWEEN-NODES-OF-LENGTH", 5, 0, false);
+        declareFunction("rtv_walk_node_levels", "RTV-WALK-NODE-LEVELS", 4, 0, false);
+        declareFunction("rtv_walk_node_levels_recursive", "RTV-WALK-NODE-LEVELS-RECURSIVE", 5, 0, false);
+        declareFunction("rtv_directly_connected_node_subsets", "RTV-DIRECTLY-CONNECTED-NODE-SUBSETS", 3, 0, false);
+        declareFunction("rtv_walk_relevant_edge_map", "RTV-WALK-RELEVANT-EDGE-MAP", 2, 0, false);
+        declareFunction("rtv_walk_relevant_edge_map_recursive", "RTV-WALK-RELEVANT-EDGE-MAP-RECURSIVE", 3, 0, false);
+        declareFunction("rtv_walk_possibly_add_relevant_edge_to_map", "RTV-WALK-POSSIBLY-ADD-RELEVANT-EDGE-TO-MAP", 4, 0, false);
+        declareFunction("rtv_walk_across_node_levels", "RTV-WALK-ACROSS-NODE-LEVELS", 3, 0, false);
+        declareFunction("rtv_walk_across_node_levels_recursive", "RTV-WALK-ACROSS-NODE-LEVELS-RECURSIVE", 7, 0, false);
+        declareFunction("rtv_update_result_set_from_path", "RTV-UPDATE-RESULT-SET-FROM-PATH", 5, 0, false);
+        declareFunction("new_rtv_all_nodes_from_node", "NEW-RTV-ALL-NODES-FROM-NODE", 3, 1, false);
+        declareFunction("rtv_all_nodes_from_nodes", "RTV-ALL-NODES-FROM-NODES", 3, 1, false);
+        declareFunction("rtv_all_nodes_between_two_nodes", "RTV-ALL-NODES-BETWEEN-TWO-NODES", 4, 1, false);
+        declareFunction("rtv_all_nodes_between_nodes", "RTV-ALL-NODES-BETWEEN-NODES", 4, 1, false);
+        declareFunction("new_rtv_all_edges_from_node", "NEW-RTV-ALL-EDGES-FROM-NODE", 3, 1, false);
+        declareFunction("rtv_all_edges_from_nodes", "RTV-ALL-EDGES-FROM-NODES", 3, 1, false);
+        declareFunction("rtv_all_edges_between_two_nodes", "RTV-ALL-EDGES-BETWEEN-TWO-NODES", 4, 1, false);
+        declareFunction("rtv_all_edges_between_nodes", "RTV-ALL-EDGES-BETWEEN-NODES", 4, 1, false);
+        declareFunction("rtv_all_edges_among", "RTV-ALL-EDGES-AMONG", 2, 1, false);
         return NIL;
     }
 

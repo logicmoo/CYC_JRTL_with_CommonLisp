@@ -609,8 +609,7 @@ SUPPORTED-PROBLEM, with bindings PROOF-BINDINGS and direct supports PROOF-DIRECT
   }
 
   public static final SubLObject setup_inference_datastructures_proof_file() {
-    // CVS_ID("Id: inference-datastructures-proof.lisp 128924 2009-10-07 17:48:12Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_proof$.getGlobalValue(), Symbols.symbol_function($sym8$PROOF_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_proof$.getGlobalValue(), Symbols.symbol_function($sym8$PROOF_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$PRF_SUID, $sym10$_CSETF_PRF_SUID);
     Structures.def_csetf($sym11$PRF_BINDINGS, $sym12$_CSETF_PRF_BINDINGS);
     Structures.def_csetf($sym13$PRF_LINK, $sym14$_CSETF_PRF_LINK);

@@ -375,8 +375,7 @@ public  final class transform_list_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_transform_list_utilities_file() {
-    // CVS_ID("Id: transform-list-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_external_symbol($sym2$TRANSFORM);
+        access_macros.register_external_symbol($sym2$TRANSFORM);
     access_macros.register_external_symbol($sym3$NTRANSFORM);
     access_macros.register_external_symbol($sym15$QUIESCENT_TRANSFORM);
     access_macros.register_external_symbol($sym16$QUIESCENT_NTRANSFORM);

@@ -1575,8 +1575,7 @@ unless two of the supports are in negationMts of each other or something. */
   }
 
   public static final SubLObject setup_forward_file() {
-    // CVS_ID("Id: forward.lisp 127400 2009-03-19 17:20:13Z goolsbey ");
-    initialize_forward_inference_environment();
+        initialize_forward_inference_environment();
     memoization_state.note_memoized_function($sym69$FORWARD_POSSIBLY_SOME_COMMON_SPEC_MT_);
     return NIL;
   }

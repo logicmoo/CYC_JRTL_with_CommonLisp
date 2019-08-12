@@ -1,7 +1,16 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.alexandria_allegro_macros;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -12,29 +21,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.alexandria_allegro_macros.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class alexandria_allegro_macros extends SubLTranslatedFile {
+public final class alexandria_allegro_macros extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new alexandria_allegro_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.alexandria_allegro_macros";
+    public static final String myName = "com.cyc.cycjava_2.cycl.alexandria_allegro_macros";
 
-    public static final String myFingerPrint = "e087c84b5a2aad91d4f0b9c8004bd74a8a1bdc96c8f942b750300bf6b22d81e3";
 
     // defparameter
     private static final SubLSymbol $alexandria_allegro_mode_enabledP$ = makeSymbol("*ALEXANDRIA-ALLEGRO-MODE-ENABLED?*");
@@ -192,14 +184,14 @@ public final class alexandria_allegro_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_alexandria_allegro_macros_file() {
-        declareFunction(me, "alexandria_allegro_mode_enabledP", "ALEXANDRIA-ALLEGRO-MODE-ENABLED?", 0, 0, false);
-        declareFunction(me, "alexandria_allegro_cache_kb_store_contentP", "ALEXANDRIA-ALLEGRO-CACHE-KB-STORE-CONTENT?", 0, 0, false);
-        declareMacro(me, "suspend_jrtl_object_caching", "SUSPEND-JRTL-OBJECT-CACHING");
-        declareMacro(me, "jrtl_new", "JRTL-NEW");
-        declareMacro(me, "jrtl_method", "JRTL-METHOD");
-        declareMacro(me, "jrtl_static", "JRTL-STATIC");
-        declareMacro(me, "jrtl_call", "JRTL-CALL");
-        declareFunction(me, "symbol_value_to_el_string", "SYMBOL-VALUE-TO-EL-STRING", 1, 0, false);
+        declareFunction("alexandria_allegro_mode_enabledP", "ALEXANDRIA-ALLEGRO-MODE-ENABLED?", 0, 0, false);
+        declareFunction("alexandria_allegro_cache_kb_store_contentP", "ALEXANDRIA-ALLEGRO-CACHE-KB-STORE-CONTENT?", 0, 0, false);
+        declareMacro("suspend_jrtl_object_caching", "SUSPEND-JRTL-OBJECT-CACHING");
+        declareMacro("jrtl_new", "JRTL-NEW");
+        declareMacro("jrtl_method", "JRTL-METHOD");
+        declareMacro("jrtl_static", "JRTL-STATIC");
+        declareMacro("jrtl_call", "JRTL-CALL");
+        declareFunction("symbol_value_to_el_string", "SYMBOL-VALUE-TO-EL-STRING", 1, 0, false);
         return NIL;
     }
 

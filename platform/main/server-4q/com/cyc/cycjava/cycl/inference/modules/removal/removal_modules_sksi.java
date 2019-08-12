@@ -1,31 +1,25 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sksi;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sksi.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_sksi extends SubLTranslatedFile {
+public final class removal_modules_sksi extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_sksi();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_sksi";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_sksi";
 
-    public static final String myFingerPrint = "627e0be01d9f35acc392823e0f8595b634e484e1e9a180e8b062d9f6bfab6358";
 
     private static final SubLObject $$sksiEqualsAny = reader_make_constant_shell(makeString("sksiEqualsAny"));
 

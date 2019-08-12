@@ -60,8 +60,7 @@ public  final class meta_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_meta_macros_file() {
-    // CVS_ID("Id: meta-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

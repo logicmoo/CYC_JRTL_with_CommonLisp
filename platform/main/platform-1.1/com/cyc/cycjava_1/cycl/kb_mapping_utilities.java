@@ -1096,8 +1096,7 @@ public  final class kb_mapping_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_mapping_utilities_file() {
-    // CVS_ID("Id: kb-mapping-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym6$SOME_PRED_VALUE, $list7, $str8$Find_the_first_gaf_assertion_such, $list9, $list10);
+        utilities_macros.register_cyc_api_function($sym6$SOME_PRED_VALUE, $list7, $str8$Find_the_first_gaf_assertion_such, $list9, $list10);
     utilities_macros.register_cyc_api_function($sym13$SOME_PRED_VALUE_IN_MT, $list14, $str15$Find_the_first_gaf_assertion_such, $list16, $list10);
     utilities_macros.register_cyc_api_function($sym19$SOME_PRED_VALUE_IN_MTS, $list20, $str21$Find_the_first_gaf_assertion_such, $list22, $list10);
     utilities_macros.register_cyc_api_function($sym25$SOME_PRED_VALUE_IN_ANY_MT, $list7, $str26$Find_the_first_gaf_assertion_such, $list9, $list10);

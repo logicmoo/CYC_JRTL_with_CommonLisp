@@ -1,20 +1,34 @@
 package com.cyc.cycjava.cycl.sksi.report_generation;
 
 
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.cycl_utilities;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.kb_query;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_utilities;
-import com.cyc.cycjava.cycl.sksi.report_generation.sksi_report_generation;
+import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
+/*import com.cyc.cycjava.cycl.project.ccf.ccf_report_generation.$reportgen_exclusivity_state_native;*/
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -28,57 +42,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.sksi.report_generation.sksi_report_generation.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class sksi_report_generation extends SubLTranslatedFile {
+public final class sksi_report_generation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sksi_report_generation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.report_generation.sksi_report_generation";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.report_generation.sksi_report_generation";
 
-    public static final String myFingerPrint = "634ffb2cb154c0149b78e1897e30f5ca8bc88af482cd736eb23d690c4180eb12";
 
     // deflexical
     public static final SubLSymbol $reportgen_minimal_property$ = makeSymbol("*REPORTGEN-MINIMAL-PROPERTY*");
@@ -651,46 +625,46 @@ public final class sksi_report_generation extends SubLTranslatedFile {
     }
 
     public static SubLObject reportgen_exclusivity_state_p(final SubLObject v_object) {
-        return v_object.getClass() == sksi_report_generation.$reportgen_exclusivity_state_native.class ? T : NIL;
+        return v_object.getClass() == $reportgen_exclusivity_state_native.class ? T : NIL;
     }
 
     public static SubLObject exc_state_phys_fields(final SubLObject v_object) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject exc_state_exc_value(final SubLObject v_object) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject exc_state_default_value(final SubLObject v_object) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject exc_state_satisfied_yetP(final SubLObject v_object) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject _csetf_exc_state_phys_fields(final SubLObject v_object, final SubLObject value) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_exc_state_exc_value(final SubLObject v_object, final SubLObject value) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_exc_state_default_value(final SubLObject v_object, final SubLObject value) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_exc_state_satisfied_yetP(final SubLObject v_object, final SubLObject value) {
-        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + "CommonSymbols.NIL != sksi_report_generation.reportgen_exclusivity_state_p(v_object) " + v_object;
+        assert NIL != reportgen_exclusivity_state_p(v_object) : "sksi_report_generation.reportgen_exclusivity_state_p error :" + v_object;
         return v_object.setField5(value);
     }
 
@@ -698,7 +672,7 @@ public final class sksi_report_generation extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new sksi_report_generation.$reportgen_exclusivity_state_native();
+        final SubLObject v_new = new $reportgen_exclusivity_state_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1451,80 +1425,80 @@ public final class sksi_report_generation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_sksi_report_generation_file() {
-        declareFunction(me, "reportgen_output_rows_from_input_row", "REPORTGEN-OUTPUT-ROWS-FROM-INPUT-ROW", 2, 1, false);
-        declareFunction(me, "reportgen_source_mapping_mt", "REPORTGEN-SOURCE-MAPPING-MT", 1, 1, false);
-        declareFunction(me, "reportgen_report_from_variant", "REPORTGEN-REPORT-FROM-VARIANT", 1, 0, false);
-        declareFunction(me, "output_rows_from_entity", "OUTPUT-ROWS-FROM-ENTITY", 3, 1, false);
-        declareFunction(me, "focal_entities_from_input_row", "FOCAL-ENTITIES-FROM-INPUT-ROW", 2, 0, false);
-        declareFunction(me, "get_bound_base_query_sentence", "GET-BOUND-BASE-QUERY-SENTENCE", 2, 0, false);
-        declareFunction(me, "get_free_vars_with_values", "GET-FREE-VARS-WITH-VALUES", 3, 0, false);
-        declareFunction(me, "evaluate_lfi_from_input_row", "EVALUATE-LFI-FROM-INPUT-ROW", 3, 0, false);
-        declareFunction(me, "get_argposes_and_lfis_for_base_query_internal", "GET-ARGPOSES-AND-LFIS-FOR-BASE-QUERY-INTERNAL", 2, 0, false);
-        declareFunction(me, "get_argposes_and_lfis_for_base_query", "GET-ARGPOSES-AND-LFIS-FOR-BASE-QUERY", 2, 0, false);
-        declareFunction(me, "query_variable_using_query_function", "QUERY-VARIABLE-USING-QUERY-FUNCTION", 3, 2, false);
-        declareFunction(me, "clear_run_column_query", "CLEAR-RUN-COLUMN-QUERY", 0, 0, false);
-        declareFunction(me, "remove_run_column_query", "REMOVE-RUN-COLUMN-QUERY", 1, 2, false);
-        declareFunction(me, "run_column_query_internal", "RUN-COLUMN-QUERY-INTERNAL", 3, 0, false);
-        declareFunction(me, "run_column_query", "RUN-COLUMN-QUERY", 1, 2, false);
-        declareFunction(me, "reportgen_schema_field_name_list", "REPORTGEN-SCHEMA-FIELD-NAME-LIST", 1, 0, false);
-        declareFunction(me, "reportgen_schema_field_name_list_int", "REPORTGEN-SCHEMA-FIELD-NAME-LIST-INT", 1, 0, false);
-        declareFunction(me, "reportgen_physical_schema_field_name_list", "REPORTGEN-PHYSICAL-SCHEMA-FIELD-NAME-LIST", 2, 0, false);
-        declareFunction(me, "reportgen_input_doc_field_name_list", "REPORTGEN-INPUT-DOC-FIELD-NAME-LIST", 1, 0, false);
-        declareFunction(me, "reportgen_exclusivity_state_print_function_trampoline", "REPORTGEN-EXCLUSIVITY-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "reportgen_exclusivity_state_p", "REPORTGEN-EXCLUSIVITY-STATE-P", 1, 0, false);
+        declareFunction("reportgen_output_rows_from_input_row", "REPORTGEN-OUTPUT-ROWS-FROM-INPUT-ROW", 2, 1, false);
+        declareFunction("reportgen_source_mapping_mt", "REPORTGEN-SOURCE-MAPPING-MT", 1, 1, false);
+        declareFunction("reportgen_report_from_variant", "REPORTGEN-REPORT-FROM-VARIANT", 1, 0, false);
+        declareFunction("output_rows_from_entity", "OUTPUT-ROWS-FROM-ENTITY", 3, 1, false);
+        declareFunction("focal_entities_from_input_row", "FOCAL-ENTITIES-FROM-INPUT-ROW", 2, 0, false);
+        declareFunction("get_bound_base_query_sentence", "GET-BOUND-BASE-QUERY-SENTENCE", 2, 0, false);
+        declareFunction("get_free_vars_with_values", "GET-FREE-VARS-WITH-VALUES", 3, 0, false);
+        declareFunction("evaluate_lfi_from_input_row", "EVALUATE-LFI-FROM-INPUT-ROW", 3, 0, false);
+        declareFunction("get_argposes_and_lfis_for_base_query_internal", "GET-ARGPOSES-AND-LFIS-FOR-BASE-QUERY-INTERNAL", 2, 0, false);
+        declareFunction("get_argposes_and_lfis_for_base_query", "GET-ARGPOSES-AND-LFIS-FOR-BASE-QUERY", 2, 0, false);
+        declareFunction("query_variable_using_query_function", "QUERY-VARIABLE-USING-QUERY-FUNCTION", 3, 2, false);
+        declareFunction("clear_run_column_query", "CLEAR-RUN-COLUMN-QUERY", 0, 0, false);
+        declareFunction("remove_run_column_query", "REMOVE-RUN-COLUMN-QUERY", 1, 2, false);
+        declareFunction("run_column_query_internal", "RUN-COLUMN-QUERY-INTERNAL", 3, 0, false);
+        declareFunction("run_column_query", "RUN-COLUMN-QUERY", 1, 2, false);
+        declareFunction("reportgen_schema_field_name_list", "REPORTGEN-SCHEMA-FIELD-NAME-LIST", 1, 0, false);
+        declareFunction("reportgen_schema_field_name_list_int", "REPORTGEN-SCHEMA-FIELD-NAME-LIST-INT", 1, 0, false);
+        declareFunction("reportgen_physical_schema_field_name_list", "REPORTGEN-PHYSICAL-SCHEMA-FIELD-NAME-LIST", 2, 0, false);
+        declareFunction("reportgen_input_doc_field_name_list", "REPORTGEN-INPUT-DOC-FIELD-NAME-LIST", 1, 0, false);
+        declareFunction("reportgen_exclusivity_state_print_function_trampoline", "REPORTGEN-EXCLUSIVITY-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("reportgen_exclusivity_state_p", "REPORTGEN-EXCLUSIVITY-STATE-P", 1, 0, false);
         new sksi_report_generation.$reportgen_exclusivity_state_p$UnaryFunction();
-        declareFunction(me, "exc_state_phys_fields", "EXC-STATE-PHYS-FIELDS", 1, 0, false);
-        declareFunction(me, "exc_state_exc_value", "EXC-STATE-EXC-VALUE", 1, 0, false);
-        declareFunction(me, "exc_state_default_value", "EXC-STATE-DEFAULT-VALUE", 1, 0, false);
-        declareFunction(me, "exc_state_satisfied_yetP", "EXC-STATE-SATISFIED-YET?", 1, 0, false);
-        declareFunction(me, "_csetf_exc_state_phys_fields", "_CSETF-EXC-STATE-PHYS-FIELDS", 2, 0, false);
-        declareFunction(me, "_csetf_exc_state_exc_value", "_CSETF-EXC-STATE-EXC-VALUE", 2, 0, false);
-        declareFunction(me, "_csetf_exc_state_default_value", "_CSETF-EXC-STATE-DEFAULT-VALUE", 2, 0, false);
-        declareFunction(me, "_csetf_exc_state_satisfied_yetP", "_CSETF-EXC-STATE-SATISFIED-YET?", 2, 0, false);
-        declareFunction(me, "make_reportgen_exclusivity_state", "MAKE-REPORTGEN-EXCLUSIVITY-STATE", 0, 1, false);
-        declareFunction(me, "visit_defstruct_reportgen_exclusivity_state", "VISIT-DEFSTRUCT-REPORTGEN-EXCLUSIVITY-STATE", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_reportgen_exclusivity_state_method", "VISIT-DEFSTRUCT-OBJECT-REPORTGEN-EXCLUSIVITY-STATE-METHOD", 2, 0, false);
-        declareFunction(me, "print_exc_state", "PRINT-EXC-STATE", 3, 0, false);
-        declareFunction(me, "get_fresh_exclusivity_states", "GET-FRESH-EXCLUSIVITY-STATES", 1, 0, false);
-        declareFunction(me, "values_for_pf", "VALUES-FOR-PF", 5, 0, false);
-        declareFunction(me, "nupdate_exclusivity_states", "NUPDATE-EXCLUSIVITY-STATES", 3, 0, false);
-        declareFunction(me, "values_for_pf_from_exclusivity_states", "VALUES-FOR-PF-FROM-EXCLUSIVITY-STATES", 2, 0, false);
-        declareFunction(me, "get_mutually_exclusive_field_gafs_internal", "GET-MUTUALLY-EXCLUSIVE-FIELD-GAFS-INTERNAL", 1, 0, false);
-        declareFunction(me, "get_mutually_exclusive_field_gafs", "GET-MUTUALLY-EXCLUSIVE-FIELD-GAFS", 1, 0, false);
-        declareFunction(me, "get_default_boolean_string_for_ks_internal", "GET-DEFAULT-BOOLEAN-STRING-FOR-KS-INTERNAL", 2, 0, false);
-        declareFunction(me, "get_default_boolean_string_for_ks", "GET-DEFAULT-BOOLEAN-STRING-FOR-KS", 2, 0, false);
-        declareFunction(me, "opposite_boolean_constant", "OPPOSITE-BOOLEAN-CONSTANT", 1, 0, false);
-        declareFunction(me, "input_ks_from_report_ks_internal", "INPUT-KS-FROM-REPORT-KS-INTERNAL", 1, 0, false);
-        declareFunction(me, "input_ks_from_report_ks", "INPUT-KS-FROM-REPORT-KS", 1, 0, false);
-        declareFunction(me, "base_query_from_ks_internal", "BASE-QUERY-FROM-KS-INTERNAL", 1, 0, false);
-        declareFunction(me, "base_query_from_ks", "BASE-QUERY-FROM-KS", 1, 0, false);
-        declareFunction(me, "result_argpos_in_base_query_internal", "RESULT-ARGPOS-IN-BASE-QUERY-INTERNAL", 1, 0, false);
-        declareFunction(me, "result_argpos_in_base_query", "RESULT-ARGPOS-IN-BASE-QUERY", 1, 0, false);
-        declareFunction(me, "reportgen_physical_schema_from_knowledge_source", "REPORTGEN-PHYSICAL-SCHEMA-FROM-KNOWLEDGE-SOURCE", 1, 0, false);
-        declareFunction(me, "reportgen_logical_schema_from_knowledge_source", "REPORTGEN-LOGICAL-SCHEMA-FROM-KNOWLEDGE-SOURCE", 1, 0, false);
-        declareFunction(me, "reportgen_schema_field_list", "REPORTGEN-SCHEMA-FIELD-LIST", 1, 0, false);
-        declareFunction(me, "reportgen_physical_schema_ordered_field_list", "REPORTGEN-PHYSICAL-SCHEMA-ORDERED-FIELD-LIST", 1, 0, false);
-        declareFunction(me, "encoding_logical_field_indexical_internal", "ENCODING-LOGICAL-FIELD-INDEXICAL-INTERNAL", 1, 0, false);
-        declareFunction(me, "encoding_logical_field_indexical", "ENCODING-LOGICAL-FIELD-INDEXICAL", 1, 0, false);
-        declareFunction(me, "reportgen_encoding_expression_from_physical_field_internal", "REPORTGEN-ENCODING-EXPRESSION-FROM-PHYSICAL-FIELD-INTERNAL", 2, 0, false);
-        declareFunction(me, "reportgen_encoding_expression_from_physical_field", "REPORTGEN-ENCODING-EXPRESSION-FROM-PHYSICAL-FIELD", 2, 0, false);
-        declareFunction(me, "reportgen_encoding_expressions_from_physical_field_internal", "REPORTGEN-ENCODING-EXPRESSIONS-FROM-PHYSICAL-FIELD-INTERNAL", 2, 0, false);
-        declareFunction(me, "reportgen_encoding_expressions_from_physical_field", "REPORTGEN-ENCODING-EXPRESSIONS-FROM-PHYSICAL-FIELD", 2, 0, false);
-        declareFunction(me, "decoding_for_input_lfi_internal", "DECODING-FOR-INPUT-LFI-INTERNAL", 2, 0, false);
-        declareFunction(me, "decoding_for_input_lfi", "DECODING-FOR-INPUT-LFI", 2, 0, false);
-        declareFunction(me, "query_lfi_gaf_from_logical_indexical", "QUERY-LFI-GAF-FROM-LOGICAL-INDEXICAL", 2, 0, false);
-        declareFunction(me, "gaf_formulas_eq", "GAF-FORMULAS-EQ", 2, 0, false);
-        declareFunction(me, "query_lfi_gafs_from_logical_indexical", "QUERY-LFI-GAFS-FROM-LOGICAL-INDEXICAL", 2, 0, false);
-        declareFunction(me, "input_columns_from_logical_indexical", "INPUT-COLUMNS-FROM-LOGICAL-INDEXICAL", 2, 0, false);
-        declareFunction(me, "nbind_into_sentence", "NBIND-INTO-SENTENCE", 3, 0, false);
-        declareFunction(me, "bind_into_query_sentence", "BIND-INTO-QUERY-SENTENCE", 3, 0, false);
-        declareFunction(me, "convert_to_boolean_kb_constant", "CONVERT-TO-BOOLEAN-KB-CONSTANT", 1, 0, false);
-        declareFunction(me, "query_lfi_gaf_for_closed_queryP", "QUERY-LFI-GAF-FOR-CLOSED-QUERY?", 1, 0, false);
-        declareFunction(me, "answers_from_ks_has_query_for_lfi_gaf", "ANSWERS-FROM-KS-HAS-QUERY-FOR-LFI-GAF", 2, 0, false);
-        declareFunction(me, "answers_from_lfi", "ANSWERS-FROM-LFI", 4, 0, false);
-        declareFunction(me, "translate_input_column_no", "TRANSLATE-INPUT-COLUMN-NO", 3, 0, false);
-        declareFunction(me, "values_from_encoding_expressions", "VALUES-FROM-ENCODING-EXPRESSIONS", 4, 0, false);
-        declareFunction(me, "reportgen_cartesian_product", "REPORTGEN-CARTESIAN-PRODUCT", 1, 0, false);
+        declareFunction("exc_state_phys_fields", "EXC-STATE-PHYS-FIELDS", 1, 0, false);
+        declareFunction("exc_state_exc_value", "EXC-STATE-EXC-VALUE", 1, 0, false);
+        declareFunction("exc_state_default_value", "EXC-STATE-DEFAULT-VALUE", 1, 0, false);
+        declareFunction("exc_state_satisfied_yetP", "EXC-STATE-SATISFIED-YET?", 1, 0, false);
+        declareFunction("_csetf_exc_state_phys_fields", "_CSETF-EXC-STATE-PHYS-FIELDS", 2, 0, false);
+        declareFunction("_csetf_exc_state_exc_value", "_CSETF-EXC-STATE-EXC-VALUE", 2, 0, false);
+        declareFunction("_csetf_exc_state_default_value", "_CSETF-EXC-STATE-DEFAULT-VALUE", 2, 0, false);
+        declareFunction("_csetf_exc_state_satisfied_yetP", "_CSETF-EXC-STATE-SATISFIED-YET?", 2, 0, false);
+        declareFunction("make_reportgen_exclusivity_state", "MAKE-REPORTGEN-EXCLUSIVITY-STATE", 0, 1, false);
+        declareFunction("visit_defstruct_reportgen_exclusivity_state", "VISIT-DEFSTRUCT-REPORTGEN-EXCLUSIVITY-STATE", 2, 0, false);
+        declareFunction("visit_defstruct_object_reportgen_exclusivity_state_method", "VISIT-DEFSTRUCT-OBJECT-REPORTGEN-EXCLUSIVITY-STATE-METHOD", 2, 0, false);
+        declareFunction("print_exc_state", "PRINT-EXC-STATE", 3, 0, false);
+        declareFunction("get_fresh_exclusivity_states", "GET-FRESH-EXCLUSIVITY-STATES", 1, 0, false);
+        declareFunction("values_for_pf", "VALUES-FOR-PF", 5, 0, false);
+        declareFunction("nupdate_exclusivity_states", "NUPDATE-EXCLUSIVITY-STATES", 3, 0, false);
+        declareFunction("values_for_pf_from_exclusivity_states", "VALUES-FOR-PF-FROM-EXCLUSIVITY-STATES", 2, 0, false);
+        declareFunction("get_mutually_exclusive_field_gafs_internal", "GET-MUTUALLY-EXCLUSIVE-FIELD-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("get_mutually_exclusive_field_gafs", "GET-MUTUALLY-EXCLUSIVE-FIELD-GAFS", 1, 0, false);
+        declareFunction("get_default_boolean_string_for_ks_internal", "GET-DEFAULT-BOOLEAN-STRING-FOR-KS-INTERNAL", 2, 0, false);
+        declareFunction("get_default_boolean_string_for_ks", "GET-DEFAULT-BOOLEAN-STRING-FOR-KS", 2, 0, false);
+        declareFunction("opposite_boolean_constant", "OPPOSITE-BOOLEAN-CONSTANT", 1, 0, false);
+        declareFunction("input_ks_from_report_ks_internal", "INPUT-KS-FROM-REPORT-KS-INTERNAL", 1, 0, false);
+        declareFunction("input_ks_from_report_ks", "INPUT-KS-FROM-REPORT-KS", 1, 0, false);
+        declareFunction("base_query_from_ks_internal", "BASE-QUERY-FROM-KS-INTERNAL", 1, 0, false);
+        declareFunction("base_query_from_ks", "BASE-QUERY-FROM-KS", 1, 0, false);
+        declareFunction("result_argpos_in_base_query_internal", "RESULT-ARGPOS-IN-BASE-QUERY-INTERNAL", 1, 0, false);
+        declareFunction("result_argpos_in_base_query", "RESULT-ARGPOS-IN-BASE-QUERY", 1, 0, false);
+        declareFunction("reportgen_physical_schema_from_knowledge_source", "REPORTGEN-PHYSICAL-SCHEMA-FROM-KNOWLEDGE-SOURCE", 1, 0, false);
+        declareFunction("reportgen_logical_schema_from_knowledge_source", "REPORTGEN-LOGICAL-SCHEMA-FROM-KNOWLEDGE-SOURCE", 1, 0, false);
+        declareFunction("reportgen_schema_field_list", "REPORTGEN-SCHEMA-FIELD-LIST", 1, 0, false);
+        declareFunction("reportgen_physical_schema_ordered_field_list", "REPORTGEN-PHYSICAL-SCHEMA-ORDERED-FIELD-LIST", 1, 0, false);
+        declareFunction("encoding_logical_field_indexical_internal", "ENCODING-LOGICAL-FIELD-INDEXICAL-INTERNAL", 1, 0, false);
+        declareFunction("encoding_logical_field_indexical", "ENCODING-LOGICAL-FIELD-INDEXICAL", 1, 0, false);
+        declareFunction("reportgen_encoding_expression_from_physical_field_internal", "REPORTGEN-ENCODING-EXPRESSION-FROM-PHYSICAL-FIELD-INTERNAL", 2, 0, false);
+        declareFunction("reportgen_encoding_expression_from_physical_field", "REPORTGEN-ENCODING-EXPRESSION-FROM-PHYSICAL-FIELD", 2, 0, false);
+        declareFunction("reportgen_encoding_expressions_from_physical_field_internal", "REPORTGEN-ENCODING-EXPRESSIONS-FROM-PHYSICAL-FIELD-INTERNAL", 2, 0, false);
+        declareFunction("reportgen_encoding_expressions_from_physical_field", "REPORTGEN-ENCODING-EXPRESSIONS-FROM-PHYSICAL-FIELD", 2, 0, false);
+        declareFunction("decoding_for_input_lfi_internal", "DECODING-FOR-INPUT-LFI-INTERNAL", 2, 0, false);
+        declareFunction("decoding_for_input_lfi", "DECODING-FOR-INPUT-LFI", 2, 0, false);
+        declareFunction("query_lfi_gaf_from_logical_indexical", "QUERY-LFI-GAF-FROM-LOGICAL-INDEXICAL", 2, 0, false);
+        declareFunction("gaf_formulas_eq", "GAF-FORMULAS-EQ", 2, 0, false);
+        declareFunction("query_lfi_gafs_from_logical_indexical", "QUERY-LFI-GAFS-FROM-LOGICAL-INDEXICAL", 2, 0, false);
+        declareFunction("input_columns_from_logical_indexical", "INPUT-COLUMNS-FROM-LOGICAL-INDEXICAL", 2, 0, false);
+        declareFunction("nbind_into_sentence", "NBIND-INTO-SENTENCE", 3, 0, false);
+        declareFunction("bind_into_query_sentence", "BIND-INTO-QUERY-SENTENCE", 3, 0, false);
+        declareFunction("convert_to_boolean_kb_constant", "CONVERT-TO-BOOLEAN-KB-CONSTANT", 1, 0, false);
+        declareFunction("query_lfi_gaf_for_closed_queryP", "QUERY-LFI-GAF-FOR-CLOSED-QUERY?", 1, 0, false);
+        declareFunction("answers_from_ks_has_query_for_lfi_gaf", "ANSWERS-FROM-KS-HAS-QUERY-FOR-LFI-GAF", 2, 0, false);
+        declareFunction("answers_from_lfi", "ANSWERS-FROM-LFI", 4, 0, false);
+        declareFunction("translate_input_column_no", "TRANSLATE-INPUT-COLUMN-NO", 3, 0, false);
+        declareFunction("values_from_encoding_expressions", "VALUES-FROM-ENCODING-EXPRESSIONS", 4, 0, false);
+        declareFunction("reportgen_cartesian_product", "REPORTGEN-CARTESIAN-PRODUCT", 1, 0, false);
         return NIL;
     }
 
@@ -1683,7 +1657,7 @@ public final class sksi_report_generation extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $reportgen_exclusivity_state_native() {
+	private $reportgen_exclusivity_state_native() {
             this.$phys_fields = Lisp.NIL;
             this.$exc_value = Lisp.NIL;
             this.$default_value = Lisp.NIL;
@@ -1736,7 +1710,7 @@ public final class sksi_report_generation extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(sksi_report_generation.$reportgen_exclusivity_state_native.class, REPORTGEN_EXCLUSIVITY_STATE, REPORTGEN_EXCLUSIVITY_STATE_P, $list25, $list26, new String[]{ "$phys_fields", "$exc_value", "$default_value", "$satisfied_yetP" }, $list27, $list28, PRINT_EXC_STATE);
+            structDecl = makeStructDeclNative($reportgen_exclusivity_state_native.class, REPORTGEN_EXCLUSIVITY_STATE, REPORTGEN_EXCLUSIVITY_STATE_P, $list25, $list26, new String[]{ "$phys_fields", "$exc_value", "$default_value", "$satisfied_yetP" }, $list27, $list28, PRINT_EXC_STATE);
         }
     }
 

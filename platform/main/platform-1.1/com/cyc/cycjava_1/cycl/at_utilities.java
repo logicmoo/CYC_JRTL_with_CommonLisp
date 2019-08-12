@@ -1562,8 +1562,7 @@ public  final class at_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_utilities_file() {
-    // CVS_ID("Id: at-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym5$_GENERIC_ARG_STORE_);
+        subl_macro_promotions.declare_defglobal($sym5$_GENERIC_ARG_STORE_);
     subl_macro_promotions.declare_defglobal($sym58$_SOME_INTER_ARG_ISA_ASSERTION_SOMEWHERE_CACHE_);
     subl_macro_promotions.declare_defglobal($sym77$_SOME_INTER_ARG_FORMAT_ASSERTION_SOMEWHERE_CACHE_);
     memoization_state.note_globally_cached_function($sym123$CACHED_MAX_FLOOR_MTS_OF_NAT);

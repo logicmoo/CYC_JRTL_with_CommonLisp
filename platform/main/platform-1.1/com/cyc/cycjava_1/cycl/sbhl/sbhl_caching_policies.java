@@ -418,8 +418,7 @@ public  final class sbhl_caching_policies extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_caching_policies_file() {
-    // CVS_ID("Id: sbhl-caching-policies.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_ACTIVE_SBHL_CACHING_POLICIES_);
+        subl_macro_promotions.declare_defglobal($sym0$_ACTIVE_SBHL_CACHING_POLICIES_);
     return NIL;
   }
 

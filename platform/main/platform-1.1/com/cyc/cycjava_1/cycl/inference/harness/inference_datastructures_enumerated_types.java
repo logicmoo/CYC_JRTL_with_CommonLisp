@@ -1535,8 +1535,7 @@ do equality reasoning on all problems, or just a certain subclass of problems? *
   }
 
   public static final SubLObject setup_inference_datastructures_enumerated_types_file() {
-    // CVS_ID("Id: inference-datastructures-enumerated-types.lisp 128687 2009-09-02 17:35:51Z pace ");
-    access_macros.register_external_symbol($sym0$QUERY_PROPERTY_P);
+        access_macros.register_external_symbol($sym0$QUERY_PROPERTY_P);
     utilities_macros.register_cyc_api_function($sym1$ALL_QUERY_PROPERTIES, NIL, $str2$Return_a_list_of_all_the_query_pr, NIL, $list3);
     access_macros.register_external_symbol($sym50$PROBLEM_STORE_PROPERTY_P);
     return NIL;

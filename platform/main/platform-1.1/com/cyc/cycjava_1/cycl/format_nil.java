@@ -157,8 +157,7 @@ public  final class format_nil extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_format_nil_file() {
-    // CVS_ID("Id: format-nil.lisp 127322 2009-03-06 16:14:59Z goolsbey ");
-    access_macros.register_macro_helper($sym4$FORMAT_NIL_A, $sym5$FORMAT_NIL);
+        access_macros.register_macro_helper($sym4$FORMAT_NIL_A, $sym5$FORMAT_NIL);
     access_macros.register_macro_helper($sym6$FORMAT_NIL_A_NO_COPY, $sym5$FORMAT_NIL);
     access_macros.register_macro_helper($sym7$FORMAT_NIL_S, $sym5$FORMAT_NIL);
     access_macros.register_macro_helper($sym8$FORMAT_NIL_S_NO_COPY, $sym5$FORMAT_NIL);

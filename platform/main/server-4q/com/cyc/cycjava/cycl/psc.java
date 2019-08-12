@@ -1,46 +1,67 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.psc;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.psc.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class psc extends SubLTranslatedFile {
+public final class psc extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new psc();
 
-    public static final String myName = "com.cyc.cycjava.cycl.psc";
+ public static final String myName = "com.cyc.cycjava.cycl.psc";
 
-    public static final String myFingerPrint = "ef5ad1fc4c5aedc9bb00e7911555eb532a0ab27fde14c4516434571388593a77";
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
-    public static final SubLSymbol ALL_MTS_INFERENCE = makeSymbol("ALL-MTS-INFERENCE");
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
+    private static final SubLSymbol ALL_MTS_INFERENCE = makeSymbol("ALL-MTS-INFERENCE");
 
-    public static final SubLSymbol PSC_INFERENCE = makeSymbol("PSC-INFERENCE");
 
-    public static final SubLSymbol NORMAL_INFERENCE = makeSymbol("NORMAL-INFERENCE");
 
-    public static final SubLSymbol MT_UNION_INFERENCE = makeSymbol("MT-UNION-INFERENCE");
+    private static final SubLSymbol PSC_INFERENCE = makeSymbol("PSC-INFERENCE");
 
-    public static final SubLSymbol ANYTIME_PSC_INFERENCE = makeSymbol("ANYTIME-PSC-INFERENCE");
+    private static final SubLSymbol NORMAL_INFERENCE = makeSymbol("NORMAL-INFERENCE");
 
-    private static final SubLObject $$ProblemSolvingCntxt = reader_make_constant_shell(makeString("ProblemSolvingCntxt"));
+    private static final SubLSymbol MT_UNION_INFERENCE = makeSymbol("MT-UNION-INFERENCE");
 
+    private static final SubLSymbol ANYTIME_PSC_INFERENCE = makeSymbol("ANYTIME-PSC-INFERENCE");
+
+
+
+    // Definitions
+    public static final SubLObject mt_inference_function_alt(SubLObject mt) {
+        if (mt == $$EverythingPSC) {
+            return ALL_MTS_INFERENCE;
+        } else {
+            if (mt == $$InferencePSC) {
+                return PSC_INFERENCE;
+            } else {
+                if (NIL == possibly_naut_p(mt)) {
+                    return NORMAL_INFERENCE;
+                } else {
+                    if (NIL != hlmt.mt_union_naut_p(mt)) {
+                        return MT_UNION_INFERENCE;
+                    } else {
+                        if (NIL != hlmt.hlmt_with_anytime_psc_p(mt)) {
+                            return ANYTIME_PSC_INFERENCE;
+                        } else {
+                            return NORMAL_INFERENCE;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    // Definitions
     public static SubLObject mt_inference_function(final SubLObject mt) {
         if (NIL != kb_utilities.kbeq(mt, $$EverythingPSC)) {
             return ALL_MTS_INFERENCE;
@@ -60,13 +81,17 @@ public final class psc extends SubLTranslatedFile {
         return NORMAL_INFERENCE;
     }
 
+    public static final SubLObject pscP_alt(SubLObject constant) {
+        return isa.isaP(constant, $$ProblemSolvingCntxt, mt_vars.$psc_mt$.getGlobalValue(), UNPROVIDED);
+    }
+
     public static SubLObject pscP(final SubLObject constant) {
         return isa.isaP(constant, $$ProblemSolvingCntxt, mt_vars.$psc_mt$.getGlobalValue(), UNPROVIDED);
     }
 
     public static SubLObject declare_psc_file() {
-        declareFunction(me, "mt_inference_function", "MT-INFERENCE-FUNCTION", 1, 0, false);
-        declareFunction(me, "pscP", "PSC?", 1, 0, false);
+        declareFunction("mt_inference_function", "MT-INFERENCE-FUNCTION", 1, 0, false);
+        declareFunction("pscP", "PSC?", 1, 0, false);
         return NIL;
     }
 
@@ -94,15 +119,6 @@ public final class psc extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
     }
 }
 

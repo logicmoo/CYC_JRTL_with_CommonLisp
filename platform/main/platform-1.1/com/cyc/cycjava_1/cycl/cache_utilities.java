@@ -891,8 +891,7 @@ public static final SubLObject cache_strategy_object_p(SubLObject object) {
   }
 
   public static final SubLObject setup_cache_utilities_file() {
-    // CVS_ID("Id: cache-utilities.lisp 128042 2009-06-18 16:07:01Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cache_metrics$.getGlobalValue(), Symbols.symbol_function($sym13$CACHE_METRICS_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cache_metrics$.getGlobalValue(), Symbols.symbol_function($sym13$CACHE_METRICS_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym14$CACHEMTR_HIT_COUNT, $sym15$_CSETF_CACHEMTR_HIT_COUNT);
     Structures.def_csetf($sym16$CACHEMTR_MISS_COUNT, $sym17$_CSETF_CACHEMTR_MISS_COUNT);
     Equality.identity($sym6$CACHE_METRICS);

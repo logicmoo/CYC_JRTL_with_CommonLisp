@@ -92,8 +92,7 @@ public  final class gt_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_gt_utilities_file() {
-    // CVS_ID("Id: gt-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

@@ -1,40 +1,48 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules;
 
 
-import com.cyc.cycjava.cycl.inference.modules.preference_module_declarations;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+
+import com.cyc.cycjava.cycl.V12;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.inference.modules.preference_module_declarations.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class preference_module_declarations extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      PREFERENCE-MODULE-DECLARATIONS
+ * source file: /cyc/top/cycl/inference/modules/preference-module-declarations.lisp
+ * created:     2019/07/03 17:37:38
+ */
+public final class preference_module_declarations extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new preference_module_declarations();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.preference_module_declarations";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.preference_module_declarations";
 
-    public static final String myFingerPrint = "1230d3a84dde5f6b3fcfc688beaf0bccbc1563481458e2b3afdc6f1c259a6999";
-
+    // Internal Constants
     private static final SubLSymbol $ABNORMAL_DELAY_POS = makeKeyword("ABNORMAL-DELAY-POS");
 
-    public static final SubLList $list1 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("abnormal")), makeKeyword("REQUIRED-PATTERN"), cons(reader_make_constant_shell(makeString("abnormal")), makeKeyword("NOT-FULLY-BOUND")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
+    static private final SubLList $list1 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("abnormal"), makeKeyword("REQUIRED-PATTERN"), cons(reader_make_constant_shell("abnormal"), makeKeyword("NOT-FULLY-BOUND")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
 
     private static final SubLSymbol $INCREASE_OR_DECREASE_IN_VALUE_RETURNED_BY_NOT_FULLY_BOUND = makeKeyword("INCREASE-OR-DECREASE-IN-VALUE-RETURNED-BY-NOT-FULLY-BOUND");
 
-    public static final SubLList $list3 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ANY-PREDICATES"), list(reader_make_constant_shell(makeString("decreaseInValueReturnedBy")), reader_make_constant_shell(makeString("increaseInValueReturnedBy"))), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("OR"), list(makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND")), list(makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("NOT-FULLY-BOUND"))), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("GROSSLY-DISPREFERRED"));
+    static private final SubLList $list3 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ANY-PREDICATES"), list(reader_make_constant_shell("decreaseInValueReturnedBy"), reader_make_constant_shell("increaseInValueReturnedBy")), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("OR"), list(makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND")), list(makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("NOT-FULLY-BOUND"))), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("GROSSLY-DISPREFERRED"));
+
+    static private final SubLList $list_alt1 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("abnormal"), makeKeyword("REQUIRED-PATTERN"), cons(reader_make_constant_shell("abnormal"), makeKeyword("NOT-FULLY-BOUND")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
 
     private static final SubLSymbol $REQUIRE_ARG1_FULLY_BOUND_GENERAL = makeKeyword("REQUIRE-ARG1-FULLY-BOUND-GENERAL");
 
-    public static final SubLList $list5 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ANY-PREDICATES"), list(reader_make_constant_shell(makeString("candidateTriggerSituationTypes"))), makeKeyword("REQUIRED-PATTERN"), listS(makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
+    static private final SubLList $list5 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ANY-PREDICATES"), list(reader_make_constant_shell("candidateTriggerSituationTypes")), makeKeyword("REQUIRED-PATTERN"), listS(makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
+
+    static private final SubLList $list_alt3 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ANY-PREDICATES"), list(reader_make_constant_shell("decreaseInValueReturnedBy"), reader_make_constant_shell("increaseInValueReturnedBy")), makeKeyword("REQUIRED-PATTERN"), list(makeKeyword("OR"), list(makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND")), list(makeKeyword("ANYTHING"), makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("NOT-FULLY-BOUND"))), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("GROSSLY-DISPREFERRED"));
 
     public static SubLObject declare_preference_module_declarations_file() {
         return NIL;
@@ -56,6 +64,8 @@ public final class preference_module_declarations extends SubLTranslatedFile {
         declare_preference_module_declarations_file();
     }
 
+    static private final SubLList $list_alt5 = list(makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("ANY-PREDICATES"), list(reader_make_constant_shell("candidateTriggerSituationTypes")), makeKeyword("REQUIRED-PATTERN"), listS(makeKeyword("ANYTHING"), makeKeyword("NOT-FULLY-BOUND"), makeKeyword("ANYTHING")), makeKeyword("PREFERENCE-LEVEL"), makeKeyword("DISALLOWED"));
+
     @Override
     public void initializeVariables() {
         init_preference_module_declarations_file();
@@ -67,13 +77,6 @@ public final class preference_module_declarations extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
     }
 }
 

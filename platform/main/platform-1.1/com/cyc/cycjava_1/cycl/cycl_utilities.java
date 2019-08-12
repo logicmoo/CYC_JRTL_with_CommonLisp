@@ -1769,8 +1769,7 @@ to minimize both consing and cdr'ing through the formula args. -ksm */
   }
 
   public static final SubLObject setup_cycl_utilities_file() {
-    // CVS_ID("Id: cycl-utilities.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    access_macros.register_external_symbol($sym23$EXPRESSION_FIND_IF);
+        access_macros.register_external_symbol($sym23$EXPRESSION_FIND_IF);
     memoization_state.note_globally_cached_function($sym31$PERMUTE_LIST_CACHED);
     memoization_state.note_memoized_function($sym54$FUNCTIONAL_IN_ARG_POSITIONS);
     utilities_macros.register_cyc_api_function($sym64$NEGATED_, $list65, $str66$Assuming_FORM_is_a_valid_CycL_for, $list67, $list68);

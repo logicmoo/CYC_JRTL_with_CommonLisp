@@ -1,8 +1,37 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cfasl;
-import com.cyc.cycjava.cycl.unicode_strings;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.string_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -20,82 +49,55 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.unicode_strings.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_0;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_U;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_ampersand;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_semicolon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tilde;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_u;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class unicode_strings extends SubLTranslatedFile {
+public final class unicode_strings extends SubLTranslatedFile implements V12 {
+    // Internal Constant Initializer Methods
+    @LispMethod(comment = "Internal Constant Initializer Methods")
+    private static final SubLObject _constant_75_initializer() {
+        return list(new SubLObject[]{ cons(makeString("AElig"), makeInteger(198)), cons(makeString("Aacute"), makeInteger(193)), cons(makeString("Acirc"), makeInteger(194)), cons(makeString("Agrave"), makeInteger(192)), cons(makeString("Alpha"), makeInteger(913)), cons(makeString("Aring"), makeInteger(197)), cons(makeString("Atilde"), makeInteger(195)), cons(makeString("Auml"), makeInteger(196)), cons(makeString("Beta"), makeInteger(914)), cons(makeString("Ccedil"), makeInteger(199)), cons(makeString("Chi"), makeInteger(935)), cons(makeString("Dagger"), makeInteger(8225)), cons(makeString("Delta"), makeInteger(916)), cons(makeString("ETH"), makeInteger(208)), cons(makeString("Eacute"), makeInteger(201)), cons(makeString("Ecirc"), makeInteger(202)), cons(makeString("Egrave"), makeInteger(200)), cons(makeString("Epsilon"), makeInteger(917)), cons(makeString("Eta"), makeInteger(919)), cons(makeString("Euml"), makeInteger(203)), cons(makeString("Gamma"), makeInteger(915)), cons(makeString("Iacute"), makeInteger(205)), cons(makeString("Icirc"), makeInteger(206)), cons(makeString("Igrave"), makeInteger(204)), cons(makeString("Iota"), makeInteger(921)), cons(makeString("Iuml"), makeInteger(207)), cons(makeString("Kappa"), makeInteger(922)), cons(makeString("Lambda"), makeInteger(923)), cons(makeString("Mu"), makeInteger(924)), cons(makeString("Ntilde"), makeInteger(209)), cons(makeString("Nu"), makeInteger(925)), cons(makeString("OElig"), makeInteger(338)), cons(makeString("Oacute"), makeInteger(211)), cons(makeString("Ocirc"), makeInteger(212)), cons(makeString("Ograve"), makeInteger(210)), cons(makeString("Omega"), makeInteger(937)), cons(makeString("Omicron"), makeInteger(927)), cons(makeString("Oslash"), makeInteger(216)), cons(makeString("Otilde"), makeInteger(213)), cons(makeString("Ouml"), makeInteger(214)), cons(makeString("Phi"), makeInteger(934)), cons(makeString("Pi"), makeInteger(928)), cons(makeString("Prime"), makeInteger(8243)), cons(makeString("Psi"), makeInteger(936)), cons(makeString("Rho"), makeInteger(929)), cons(makeString("Scaron"), makeInteger(352)), cons(makeString("Sigma"), makeInteger(931)), cons(makeString("THORN"), makeInteger(222)), cons(makeString("Tau"), makeInteger(932)), cons(makeString("Theta"), makeInteger(920)), cons(makeString("Uacute"), makeInteger(218)), cons(makeString("Ucirc"), makeInteger(219)), cons(makeString("Ugrave"), makeInteger(217)), cons(makeString("Upsilon"), makeInteger(933)), cons(makeString("Uuml"), makeInteger(220)), cons(makeString("Xi"), makeInteger(926)), cons(makeString("Yacute"), makeInteger(221)), cons(makeString("Yuml"), makeInteger(376)), cons(makeString("Zeta"), makeInteger(918)), cons(makeString("aacute"), makeInteger(225)), cons(makeString("acirc"), makeInteger(226)), cons(makeString("acute"), makeInteger(180)), cons(makeString("aelig"), makeInteger(230)), cons(makeString("agrave"), makeInteger(224)), cons(makeString("alefsym"), makeInteger(8501)), cons(makeString("alpha"), makeInteger(945)), cons(makeString("amp"), makeInteger(38)), cons(makeString("and"), makeInteger(8743)), cons(makeString("ang"), makeInteger(8736)), cons(makeString("aring"), makeInteger(229)), cons(makeString("asymp"), makeInteger(8776)), cons(makeString("atilde"), makeInteger(227)), cons(makeString("auml"), makeInteger(228)), cons(makeString("bdquo"), makeInteger(8222)), cons(makeString("beta"), makeInteger(946)), cons(makeString("brvbar"), makeInteger(166)), cons(makeString("bull"), makeInteger(8226)), cons(makeString("cap"), makeInteger(8745)), cons(makeString("ccedil"), makeInteger(231)), cons(makeString("cedil"), makeInteger(184)), cons(makeString("cent"), makeInteger(162)), cons(makeString("chi"), makeInteger(967)), cons(makeString("circ"), makeInteger(710)), cons(makeString("clubs"), makeInteger(9827)), cons(makeString("cong"), makeInteger(8773)), cons(makeString("copy"), makeInteger(169)), cons(makeString("crarr"), makeInteger(8629)), cons(makeString("cup"), makeInteger(8746)), cons(makeString("curren"), makeInteger(164)), cons(makeString("dArr"), makeInteger(8659)), cons(makeString("dagger"), makeInteger(8224)), cons(makeString("darr"), makeInteger(8595)), cons(makeString("deg"), makeInteger(176)), cons(makeString("delta"), makeInteger(948)), cons(makeString("diams"), makeInteger(9830)), cons(makeString("divide"), makeInteger(247)), cons(makeString("eacute"), makeInteger(233)), cons(makeString("ecirc"), makeInteger(234)), cons(makeString("egrave"), makeInteger(232)), cons(makeString("empty"), makeInteger(8709)), cons(makeString("emsp"), makeInteger(8195)), cons(makeString("ensp"), makeInteger(8194)), cons(makeString("epsilon"), makeInteger(949)), cons(makeString("equiv"), makeInteger(8801)), cons(makeString("eta"), makeInteger(951)), cons(makeString("eth"), makeInteger(240)), cons(makeString("euml"), makeInteger(235)), cons(makeString("euro"), makeInteger(8364)), cons(makeString("exist"), makeInteger(8707)), cons(makeString("fnof"), makeInteger(402)), cons(makeString("forall"), makeInteger(8704)), cons(makeString("frac12"), makeInteger(189)), cons(makeString("frac14"), makeInteger(188)), cons(makeString("frac34"), makeInteger(190)), cons(makeString("frasl"), makeInteger(8260)), cons(makeString("gamma"), makeInteger(947)), cons(makeString("ge"), makeInteger(8805)), cons(makeString("gt"), makeInteger(62)), cons(makeString("hArr"), makeInteger(8660)), cons(makeString("harr"), makeInteger(8596)), cons(makeString("hearts"), makeInteger(9829)), cons(makeString("hellip"), makeInteger(8230)), cons(makeString("iacute"), makeInteger(237)), cons(makeString("icirc"), makeInteger(238)), cons(makeString("iexcl"), makeInteger(161)), cons(makeString("igrave"), makeInteger(236)), cons(makeString("image"), makeInteger(8465)), cons(makeString("infin"), makeInteger(8734)), cons(makeString("int"), makeInteger(8747)), cons(makeString("iota"), makeInteger(953)), cons(makeString("iquest"), makeInteger(191)), cons(makeString("isin"), makeInteger(8712)), cons(makeString("iuml"), makeInteger(239)), cons(makeString("kappa"), makeInteger(954)), cons(makeString("lArr"), makeInteger(8656)), cons(makeString("lambda"), makeInteger(955)), cons(makeString("lang"), makeInteger(9001)), cons(makeString("laquo"), makeInteger(171)), cons(makeString("larr"), makeInteger(8592)), cons(makeString("lceil"), makeInteger(8968)), cons(makeString("ldquo"), makeInteger(8220)), cons(makeString("le"), makeInteger(8804)), cons(makeString("lfloor"), makeInteger(8970)), cons(makeString("lowast"), makeInteger(8727)), cons(makeString("loz"), makeInteger(9674)), cons(makeString("lrm"), makeInteger(8206)), cons(makeString("lsaquo"), makeInteger(8249)), cons(makeString("lsquo"), makeInteger(8216)), cons(makeString("lt"), makeInteger(60)), cons(makeString("macr"), makeInteger(175)), cons(makeString("mdash"), makeInteger(8212)), cons(makeString("micro"), makeInteger(181)), cons(makeString("middot"), makeInteger(183)), cons(makeString("minus"), makeInteger(8722)), cons(makeString("mu"), makeInteger(956)), cons(makeString("nabla"), makeInteger(8711)), cons(makeString("nbsp"), makeInteger(160)), cons(makeString("ndash"), makeInteger(8211)), cons(makeString("ne"), makeInteger(8800)), cons(makeString("ni"), makeInteger(8715)), cons(makeString("not"), makeInteger(172)), cons(makeString("notin"), makeInteger(8713)), cons(makeString("nsub"), makeInteger(8836)), cons(makeString("ntilde"), makeInteger(241)), cons(makeString("nu"), makeInteger(957)), cons(makeString("oacute"), makeInteger(243)), cons(makeString("ocirc"), makeInteger(244)), cons(makeString("oelig"), makeInteger(339)), cons(makeString("ograve"), makeInteger(242)), cons(makeString("oline"), makeInteger(8254)), cons(makeString("omega"), makeInteger(969)), cons(makeString("omicron"), makeInteger(959)), cons(makeString("oplus"), makeInteger(8853)), cons(makeString("or"), makeInteger(8744)), cons(makeString("ordf"), makeInteger(170)), cons(makeString("ordm"), makeInteger(186)), cons(makeString("oslash"), makeInteger(248)), cons(makeString("otilde"), makeInteger(245)), cons(makeString("otimes"), makeInteger(8855)), cons(makeString("ouml"), makeInteger(246)), cons(makeString("para"), makeInteger(182)), cons(makeString("part"), makeInteger(8706)), cons(makeString("permil"), makeInteger(8240)), cons(makeString("perp"), makeInteger(8869)), cons(makeString("phi"), makeInteger(966)), cons(makeString("pi"), makeInteger(960)), cons(makeString("piv"), makeInteger(982)), cons(makeString("plusmn"), makeInteger(177)), cons(makeString("pound"), makeInteger(163)), cons(makeString("prime"), makeInteger(8242)), cons(makeString("prod"), makeInteger(8719)), cons(makeString("prop"), makeInteger(8733)), cons(makeString("psi"), makeInteger(968)), cons(makeString("quot"), makeInteger(34)), cons(makeString("rArr"), makeInteger(8658)), cons(makeString("radic"), makeInteger(8730)), cons(makeString("rang"), makeInteger(9002)), cons(makeString("raquo"), makeInteger(187)), cons(makeString("rarr"), makeInteger(8594)), cons(makeString("rceil"), makeInteger(8969)), cons(makeString("rdquo"), makeInteger(8221)), cons(makeString("real"), makeInteger(8476)), cons(makeString("reg"), makeInteger(174)), cons(makeString("rfloor"), makeInteger(8971)), cons(makeString("rho"), makeInteger(961)), cons(makeString("rlm"), makeInteger(8207)), cons(makeString("rsaquo"), makeInteger(8250)), cons(makeString("rsquo"), makeInteger(8217)), cons(makeString("sbquo"), makeInteger(8218)), cons(makeString("scaron"), makeInteger(353)), cons(makeString("sdot"), makeInteger(8901)), cons(makeString("sect"), makeInteger(167)), cons(makeString("shy"), makeInteger(173)), cons(makeString("sigma"), makeInteger(963)), cons(makeString("sigmaf"), makeInteger(962)), cons(makeString("sim"), makeInteger(8764)), cons(makeString("spades"), makeInteger(9824)), cons(makeString("sub"), makeInteger(8834)), cons(makeString("sube"), makeInteger(8838)), cons(makeString("sum"), makeInteger(8721)), cons(makeString("sup"), makeInteger(8835)), cons(makeString("sup1"), makeInteger(185)), cons(makeString("sup2"), makeInteger(178)), cons(makeString("sup3"), makeInteger(179)), cons(makeString("supe"), makeInteger(8839)), cons(makeString("szlig"), makeInteger(223)), cons(makeString("tau"), makeInteger(964)), cons(makeString("there4"), makeInteger(8756)), cons(makeString("theta"), makeInteger(952)), cons(makeString("thetasym"), makeInteger(977)), cons(makeString("thinsp"), makeInteger(8201)), cons(makeString("thorn"), makeInteger(254)), cons(makeString("tilde"), makeInteger(732)), cons(makeString("times"), makeInteger(215)), cons(makeString("trade"), makeInteger(8482)), cons(makeString("uArr"), makeInteger(8657)), cons(makeString("uacute"), makeInteger(250)), cons(makeString("uarr"), makeInteger(8593)), cons(makeString("ucirc"), makeInteger(251)), cons(makeString("ugrave"), makeInteger(249)), cons(makeString("uml"), makeInteger(168)), cons(makeString("upsih"), makeInteger(978)), cons(makeString("upsilon"), makeInteger(965)), cons(makeString("uuml"), makeInteger(252)), cons(makeString("weierp"), makeInteger(8472)), cons(makeString("xi"), makeInteger(958)), cons(makeString("yacute"), makeInteger(253)), cons(makeString("yen"), makeInteger(165)), cons(makeString("yuml"), makeInteger(255)), cons(makeString("zeta"), makeInteger(950)), cons(makeString("zwj"), makeInteger(8205)), cons(makeString("zwnj"), makeInteger(8204)) });
+    }
+
+    public static final class $unicode_string_native extends SubLStructNative {
+        public SubLStructDecl getStructDecl() {
+            return structDecl;
+        }
+
+        public SubLObject getField2() {
+            return com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native.this.$vect;
+        }
+
+        public SubLObject setField2(SubLObject value) {
+            return com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native.this.$vect = value;
+        }
+
+        public SubLObject $vect = Lisp.NIL;
+
+        private static final SubLStructDeclNative structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native.class, UNICODE_STRING, UNICODE_STRING_P, $list_alt18, $list_alt19, new String[]{ "$vect" }, $list_alt20, $list_alt21, PRINT_UNICODE_STRING);
+    }
+
     public static final SubLFile me = new unicode_strings();
 
-    public static final String myName = "com.cyc.cycjava.cycl.unicode_strings";
+ public static final String myName = "com.cyc.cycjava.cycl.unicode_strings";
 
-    public static final String myFingerPrint = "a38923d9dc47c1b16cb82ad6b6a348dced2f87dcd7dd1ad0f0917dbbf2db8d2e";
 
     // defconstant
+    @LispMethod(comment = "defconstant")
+    // Definitions
     private static final SubLSymbol $max_unicode_value$ = makeSymbol("MAX-UNICODE-VALUE");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_unicode_char$ = makeSymbol("*DTP-UNICODE-CHAR*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_unicode_string$ = makeSymbol("*DTP-UNICODE-STRING*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $default_non_ascii_placeholder_char$ = makeSymbol("*DEFAULT-NON-ASCII-PLACEHOLDER-CHAR*");
 
     // defparameter
@@ -104,34 +106,40 @@ public final class unicode_strings extends SubLTranslatedFile {
      * characters that are not part of 7-bit ascii. Currently, this only contains
      * code for 8-bit characters (e.g. the Latin-1 supplement).
      */
+    @LispMethod(comment = "An a-list mapping unicode-codes to ascii codes of common substitutes for\r\ncharacters that are not part of 7-bit ascii. Currently, this only contains\r\ncode for 8-bit characters (e.g. the Latin-1 supplement).\ndefparameter\nAn a-list mapping unicode-codes to ascii codes of common substitutes for\ncharacters that are not part of 7-bit ascii. Currently, this only contains\ncode for 8-bit characters (e.g. the Latin-1 supplement).")
     private static final SubLSymbol $default_unicode_to_ascii_code_map$ = makeSymbol("*DEFAULT-UNICODE-TO-ASCII-CODE-MAP*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_40_character_entity_table$ = makeSymbol("*HTML-40-CHARACTER-ENTITY-TABLE*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     private static final SubLSymbol $cfasl_opcode_unicode_char$ = makeSymbol("*CFASL-OPCODE-UNICODE-CHAR*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     private static final SubLSymbol $cfasl_opcode_unicode_string$ = makeSymbol("*CFASL-OPCODE-UNICODE-STRING*");
 
+    @LispMethod(comment = "Internal Constants")
+    // Internal Constants
     private static final SubLInteger $int$1114111 = makeInteger(1114111);
 
-    public static final SubLSymbol UNICODE_CHAR = makeSymbol("UNICODE-CHAR");
+    private static final SubLSymbol UNICODE_CHAR = makeSymbol("UNICODE-CHAR");
 
-    public static final SubLSymbol UNICODE_CHAR_P = makeSymbol("UNICODE-CHAR-P");
+    private static final SubLSymbol UNICODE_CHAR_P = makeSymbol("UNICODE-CHAR-P");
 
-    public static final SubLList $list3 = list(makeSymbol("UCHAR"));
+    static private final SubLList $list3 = list(makeSymbol("UCHAR"));
 
-    public static final SubLList $list4 = list(makeKeyword("UCHAR"));
+    static private final SubLList $list4 = list(makeKeyword("UCHAR"));
 
-    public static final SubLList $list5 = list(makeSymbol("UNICODE-CHAR-UCHAR"));
+    static private final SubLList $list5 = list(makeSymbol("UNICODE-CHAR-UCHAR"));
 
-    public static final SubLList $list6 = list(makeSymbol("_CSETF-UNICODE-CHAR-UCHAR"));
+    static private final SubLList $list6 = list(makeSymbol("_CSETF-UNICODE-CHAR-UCHAR"));
 
-    public static final SubLSymbol PRINT_UNICODE_CHAR = makeSymbol("PRINT-UNICODE-CHAR");
+    private static final SubLSymbol PRINT_UNICODE_CHAR = makeSymbol("PRINT-UNICODE-CHAR");
 
-    public static final SubLSymbol UNICODE_CHAR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("UNICODE-CHAR-PRINT-FUNCTION-TRAMPOLINE");
+    private static final SubLSymbol UNICODE_CHAR_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("UNICODE-CHAR-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list9 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("UNICODE-CHAR-P"));
 
@@ -139,17 +147,9 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_UNICODE_CHAR_UCHAR = makeSymbol("_CSETF-UNICODE-CHAR-UCHAR");
 
-
-
     private static final SubLString $str13$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_UNICODE_CHAR = makeSymbol("MAKE-UNICODE-CHAR");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_UNICODE_CHAR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-UNICODE-CHAR-METHOD");
 
@@ -165,7 +165,7 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     private static final SubLList $list24 = list(makeSymbol("VECT"));
 
-    private static final SubLList $list25 = list(makeKeyword("VECT"));
+    private static final SubLList $list25 = list($VECT);
 
     private static final SubLList $list26 = list(makeSymbol("UNICODE-STRING-VECT"));
 
@@ -181,8 +181,6 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     private static final SubLSymbol _CSETF_UNICODE_STRING_VECT = makeSymbol("_CSETF-UNICODE-STRING-VECT");
 
-
-
     private static final SubLSymbol MAKE_UNICODE_STRING = makeSymbol("MAKE-UNICODE-STRING");
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_UNICODE_STRING_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-UNICODE-STRING-METHOD");
@@ -197,21 +195,7 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     private static final SubLSymbol $ESCAPED_PROBABLY_UTF8 = makeKeyword("ESCAPED-PROBABLY-UTF8");
 
-
-
-
-
-
-
     private static final SubLInteger $int$128 = makeInteger(128);
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol DISPLAY_VECTOR_STRING_P = makeSymbol("DISPLAY-VECTOR-STRING-P");
 
@@ -224,8 +208,6 @@ public final class unicode_strings extends SubLTranslatedFile {
     private static final SubLString $str53$__ = makeString("\\\\");
 
     private static final SubLString $str54$_u26_ = makeString("&u26;");
-
-
 
     private static final SubLString $$$0 = makeString("0");
 
@@ -273,33 +255,27 @@ public final class unicode_strings extends SubLTranslatedFile {
 
 
 
-    private static final SubLInteger $int$31 = makeInteger(31);
 
-    private static final SubLInteger $int$24 = makeInteger(24);
 
     private static final SubLString $str81$__x = makeString("&#x");
 
-    private static final SubLInteger $int$38 = makeInteger(38);
+
 
     private static final SubLSymbol $START_HTML_ESCAPE = makeKeyword("START-HTML-ESCAPE");
 
     private static final SubLInteger $int$60 = makeInteger(60);
 
-
-
     private static final SubLInteger $int$62 = makeInteger(62);
 
-    private static final SubLInteger $int$35 = makeInteger(35);
+
 
     private static final SubLSymbol $HTML_NUMERIC_ESCAPE_START = makeKeyword("HTML-NUMERIC-ESCAPE-START");
-
-
 
     private static final SubLInteger $int$120 = makeInteger(120);
 
     private static final SubLSymbol $HTML_HEXADECIMAL_ESCAPE = makeKeyword("HTML-HEXADECIMAL-ESCAPE");
 
-    private static final SubLInteger $int$48 = makeInteger(48);
+
 
     private static final SubLInteger $int$57 = makeInteger(57);
 
@@ -309,15 +285,11 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     private static final SubLSymbol CODE_CHAR = makeSymbol("CODE-CHAR");
 
-
-
     private static final SubLSymbol $sym98$__ = makeSymbol("<=");
 
     private static final SubLSymbol CHAR_CODE = makeSymbol("CHAR-CODE");
 
     private static final SubLString $str100$_S__code___S__is_not_a_valid_utf8 = makeString("~S (code: ~S) is not a valid utf8 character");
-
-
 
     private static final SubLObject $list102 = _constant_102_initializer();
 
@@ -337,44 +309,74 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     private static final SubLSymbol HTML_ESCAPED_UTF8_STRING_TO_UTF8_STRING = makeSymbol("HTML-ESCAPED-UTF8-STRING-TO-UTF8-STRING");
 
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLList $list117 = list(list(list(makeString("Japan&#39;s")), makeString("Japan's")));
+
+    public static final SubLObject unicode_char_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_unicode_char(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
 
     public static SubLObject unicode_char_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         print_unicode_char(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject unicode_char_p(final SubLObject v_object) {
-        return v_object.getClass() == unicode_strings.$unicode_char_native.class ? T : NIL;
+    public static final SubLObject unicode_char_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.unicode_strings.$unicode_char_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject unicode_char_uchar(final SubLObject v_object) {
-        assert NIL != unicode_char_p(v_object) : "unicode_strings.unicode_char_p(v_object) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(v_object) " + v_object;
+    public static SubLObject unicode_char_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.unicode_strings.$unicode_char_native.class ? T : NIL;
+    }
+
+    public static final SubLObject unicode_char_uchar_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, UNICODE_CHAR_P);
         return v_object.getField2();
     }
 
-    public static SubLObject _csetf_unicode_char_uchar(final SubLObject v_object, final SubLObject value) {
-        assert NIL != unicode_char_p(v_object) : "unicode_strings.unicode_char_p(v_object) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(v_object) " + v_object;
+    public static SubLObject unicode_char_uchar(final SubLObject v_object) {
+        assert NIL != unicode_char_p(v_object) : "! unicode_strings.unicode_char_p(v_object) " + "unicode_strings.unicode_char_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject _csetf_unicode_char_uchar_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, UNICODE_CHAR_P);
         return v_object.setField2(value);
+    }
+
+    public static SubLObject _csetf_unicode_char_uchar(final SubLObject v_object, final SubLObject value) {
+        assert NIL != unicode_char_p(v_object) : "! unicode_strings.unicode_char_p(v_object) " + "unicode_strings.unicode_char_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject make_unicode_char_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.unicode_strings.$unicode_char_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($UCHAR)) {
+                        _csetf_unicode_char_uchar(v_new, current_value);
+                    } else {
+                        Errors.error($str_alt12$Invalid_slot__S_for_construction_, current_arg);
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_unicode_char(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new unicode_strings.$unicode_char_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.unicode_strings.$unicode_char_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -403,6 +405,26 @@ public final class unicode_strings extends SubLTranslatedFile {
         return visit_defstruct_unicode_char(obj, visitor_fn);
     }
 
+    public static final SubLObject unicode_char_create_alt(SubLObject uchar) {
+        {
+            SubLObject ch = ZERO_INTEGER;
+            if (NIL != unicode_character_p(uchar)) {
+                ch = uchar;
+            } else {
+                if (uchar.isChar()) {
+                    ch = char_code(uchar);
+                } else {
+                    return NIL;
+                }
+            }
+            {
+                SubLObject unicode_char_obj = make_unicode_char(UNPROVIDED);
+                _csetf_unicode_char_uchar(unicode_char_obj, ch);
+                return unicode_char_obj;
+            }
+        }
+    }
+
     public static SubLObject unicode_char_create(final SubLObject uchar) {
         SubLObject ch = ZERO_INTEGER;
         if (NIL != unicode_character_p(uchar)) {
@@ -418,6 +440,18 @@ public final class unicode_strings extends SubLTranslatedFile {
         return unicode_char_obj;
     }
 
+    public static final SubLObject print_unicode_char_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
+        {
+            SubLObject uchar = unicode_char_uchar(v_object);
+            if (uchar.numG(FIFTEEN_INTEGER)) {
+                format(stream, $str_alt13$_u_x, unicode_char_uchar(v_object));
+            } else {
+                format(stream, $str_alt14$_u0_x, unicode_char_uchar(v_object));
+            }
+            return v_object;
+        }
+    }
+
     public static SubLObject print_unicode_char(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         final SubLObject uchar = unicode_char_uchar(v_object);
         if (uchar.numG(FIFTEEN_INTEGER)) {
@@ -428,16 +462,33 @@ public final class unicode_strings extends SubLTranslatedFile {
         return v_object;
     }
 
-    public static SubLObject unicode_char_get_char(final SubLObject uchar) {
-        assert NIL != unicode_char_p(uchar) : "unicode_strings.unicode_char_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(uchar) " + uchar;
+    public static final SubLObject unicode_char_get_char_alt(SubLObject uchar) {
+        SubLTrampolineFile.checkType(uchar, UNICODE_CHAR_P);
         return unicode_char_uchar(uchar);
     }
 
-    public static SubLObject unicode_char_set_char(final SubLObject uchar, final SubLObject v_char) {
-        assert NIL != unicode_char_p(uchar) : "unicode_strings.unicode_char_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(uchar) " + uchar;
-        assert NIL != unicode_character_p(v_char) : "unicode_strings.unicode_character_p(v_char) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(v_char) " + v_char;
+    public static SubLObject unicode_char_get_char(final SubLObject uchar) {
+        assert NIL != unicode_char_p(uchar) : "! unicode_strings.unicode_char_p(uchar) " + ("unicode_strings.unicode_char_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(uchar) ") + uchar;
+        return unicode_char_uchar(uchar);
+    }
+
+    public static final SubLObject unicode_char_set_char_alt(SubLObject uchar, SubLObject v_char) {
+        SubLTrampolineFile.checkType(uchar, UNICODE_CHAR_P);
+        SubLTrampolineFile.checkType(v_char, UNICODE_CHARACTER_P);
         _csetf_unicode_char_uchar(uchar, v_char);
         return uchar;
+    }
+
+    public static SubLObject unicode_char_set_char(final SubLObject uchar, final SubLObject v_char) {
+        assert NIL != unicode_char_p(uchar) : "! unicode_strings.unicode_char_p(uchar) " + ("unicode_strings.unicode_char_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(uchar) ") + uchar;
+        assert NIL != unicode_character_p(v_char) : "! unicode_strings.unicode_character_p(v_char) " + ("unicode_strings.unicode_character_p(v_char) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(v_char) ") + v_char;
+        _csetf_unicode_char_uchar(uchar, v_char);
+        return uchar;
+    }
+
+    public static final SubLObject unicode_string_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        print_unicode_string(v_object, stream, ZERO_INTEGER);
+        return NIL;
     }
 
     public static SubLObject unicode_string_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
@@ -445,25 +496,62 @@ public final class unicode_strings extends SubLTranslatedFile {
         return NIL;
     }
 
-    public static SubLObject unicode_string_p(final SubLObject v_object) {
-        return v_object.getClass() == unicode_strings.$unicode_string_native.class ? T : NIL;
+    public static final SubLObject unicode_string_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject unicode_string_vect(final SubLObject v_object) {
-        assert NIL != unicode_string_p(v_object) : "unicode_strings.unicode_string_p(v_object) " + "CommonSymbols.NIL != unicode_strings.unicode_string_p(v_object) " + v_object;
+    public static SubLObject unicode_string_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native.class ? T : NIL;
+    }
+
+    public static final SubLObject unicode_string_vect_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, UNICODE_STRING_P);
         return v_object.getField2();
     }
 
-    public static SubLObject _csetf_unicode_string_vect(final SubLObject v_object, final SubLObject value) {
-        assert NIL != unicode_string_p(v_object) : "unicode_strings.unicode_string_p(v_object) " + "CommonSymbols.NIL != unicode_strings.unicode_string_p(v_object) " + v_object;
+    public static SubLObject unicode_string_vect(final SubLObject v_object) {
+        assert NIL != unicode_string_p(v_object) : "! unicode_strings.unicode_string_p(v_object) " + "unicode_strings.unicode_string_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject _csetf_unicode_string_vect_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, UNICODE_STRING_P);
         return v_object.setField2(value);
+    }
+
+    public static SubLObject _csetf_unicode_string_vect(final SubLObject v_object, final SubLObject value) {
+        assert NIL != unicode_string_p(v_object) : "! unicode_strings.unicode_string_p(v_object) " + "unicode_strings.unicode_string_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject make_unicode_string_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($VECT)) {
+                        _csetf_unicode_string_vect(v_new, current_value);
+                    } else {
+                        Errors.error($str_alt12$Invalid_slot__S_for_construction_, current_arg);
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_unicode_string(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new unicode_strings.$unicode_string_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.unicode_strings.$unicode_string_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -490,6 +578,42 @@ public final class unicode_strings extends SubLTranslatedFile {
 
     public static SubLObject visit_defstruct_object_unicode_string_method(final SubLObject obj, final SubLObject visitor_fn) {
         return visit_defstruct_unicode_string(obj, visitor_fn);
+    }
+
+    public static final SubLObject unicode_string_create_alt(SubLObject vect) {
+        {
+            SubLObject v = NIL;
+            if (NIL != unicode_character_p(vect)) {
+                v = make_vector(ONE_INTEGER, UNPROVIDED);
+                set_aref(vect, ZERO_INTEGER, vect);
+            } else {
+                if (vect.isChar()) {
+                    v = make_vector(ONE_INTEGER, UNPROVIDED);
+                    set_aref(v, ZERO_INTEGER, char_code(vect));
+                } else {
+                    if (NIL != unicode_vector_string_p(vect)) {
+                        v = vect;
+                    } else {
+                        if (vect.isString()) {
+                            {
+                                SubLObject univ = display_to_unicode_vector(vect);
+                                if (NIL == univ) {
+                                    return NIL;
+                                }
+                                v = univ;
+                            }
+                        } else {
+                            return NIL;
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject unicode_string_obj = make_unicode_string(UNPROVIDED);
+                _csetf_unicode_string_vect(unicode_string_obj, v);
+                return unicode_string_obj;
+            }
+        }
     }
 
     public static SubLObject unicode_string_create(final SubLObject vect) {
@@ -521,21 +645,54 @@ public final class unicode_strings extends SubLTranslatedFile {
         return unicode_string_obj;
     }
 
+    public static final SubLObject print_unicode_string_alt(SubLObject v_object, SubLObject stream, SubLObject depth) {
+        format(stream, $str_alt27$_u__a_, unicode_vector_to_display(unicode_string_vect(v_object)));
+        return v_object;
+    }
+
     public static SubLObject print_unicode_string(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
         format(stream, $str36$_u__a_, unicode_vector_to_display(unicode_string_vect(v_object)));
         return v_object;
     }
 
-    public static SubLObject unicode_string_get_vector(final SubLObject ustring) {
-        assert NIL != unicode_string_p(ustring) : "unicode_strings.unicode_string_p(ustring) " + "CommonSymbols.NIL != unicode_strings.unicode_string_p(ustring) " + ustring;
+    public static final SubLObject unicode_string_get_vector_alt(SubLObject ustring) {
+        SubLTrampolineFile.checkType(ustring, UNICODE_STRING_P);
         return unicode_string_vect(ustring);
     }
 
-    public static SubLObject unicode_string_set_vector(final SubLObject ustring, final SubLObject vect) {
-        assert NIL != unicode_string_p(ustring) : "unicode_strings.unicode_string_p(ustring) " + "CommonSymbols.NIL != unicode_strings.unicode_string_p(ustring) " + ustring;
-        assert NIL != unicode_vector_string_p(vect) : "unicode_strings.unicode_vector_string_p(vect) " + "CommonSymbols.NIL != unicode_strings.unicode_vector_string_p(vect) " + vect;
+    public static SubLObject unicode_string_get_vector(final SubLObject ustring) {
+        assert NIL != unicode_string_p(ustring) : "! unicode_strings.unicode_string_p(ustring) " + ("unicode_strings.unicode_string_p(ustring) " + "CommonSymbols.NIL != unicode_strings.unicode_string_p(ustring) ") + ustring;
+        return unicode_string_vect(ustring);
+    }
+
+    public static final SubLObject unicode_string_set_vector_alt(SubLObject ustring, SubLObject vect) {
+        SubLTrampolineFile.checkType(ustring, UNICODE_STRING_P);
+        SubLTrampolineFile.checkType(vect, UNICODE_VECTOR_STRING_P);
         _csetf_unicode_string_vect(ustring, vect);
         return ustring;
+    }
+
+    public static SubLObject unicode_string_set_vector(final SubLObject ustring, final SubLObject vect) {
+        assert NIL != unicode_string_p(ustring) : "! unicode_strings.unicode_string_p(ustring) " + ("unicode_strings.unicode_string_p(ustring) " + "CommonSymbols.NIL != unicode_strings.unicode_string_p(ustring) ") + ustring;
+        assert NIL != unicode_vector_string_p(vect) : "! unicode_strings.unicode_vector_string_p(vect) " + ("unicode_strings.unicode_vector_string_p(vect) " + "CommonSymbols.NIL != unicode_strings.unicode_vector_string_p(vect) ") + vect;
+        _csetf_unicode_string_vect(ustring, vect);
+        return ustring;
+    }
+
+    public static final SubLObject unicode_vector_string_p_alt(SubLObject v_object) {
+        if (!v_object.isVector()) {
+            return NIL;
+        }
+        {
+            SubLObject cdotimes_end_var = length(v_object);
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                if (NIL == unicode_character_p(aref(v_object, i))) {
+                    return NIL;
+                }
+            }
+        }
+        return T;
     }
 
     public static SubLObject unicode_vector_string_p(final SubLObject v_object) {
@@ -550,6 +707,29 @@ public final class unicode_strings extends SubLTranslatedFile {
             }
         }
         return T;
+    }
+
+    public static final SubLObject utf8_vector_string_p_alt(SubLObject v_object) {
+        if (!v_object.isVector()) {
+            return NIL;
+        }
+        {
+            SubLObject len = length(v_object);
+            SubLObject index = ZERO_INTEGER;
+            while (index.numL(len)) {
+                {
+                    SubLObject ulen = length_utf8_vector_codepoint(v_object, index);
+                    if (ulen.isNegative()) {
+                        return NIL;
+                    }
+                    index = add(index, ulen);
+                }
+            } 
+            if (index.numG(len)) {
+                return NIL;
+            }
+            return T;
+        }
     }
 
     public static SubLObject utf8_vector_string_p(final SubLObject v_object) {
@@ -571,6 +751,37 @@ public final class unicode_strings extends SubLTranslatedFile {
         return T;
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is a string of ASCII characters.
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is a string of ASCII characters.")
+    public static final SubLObject ascii_string_p_alt(SubLObject v_object) {
+        if (!v_object.isString()) {
+            return NIL;
+        }
+        {
+            SubLObject cdotimes_end_var = length(v_object);
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                {
+                    SubLObject v_char = Strings.sublisp_char(v_object, i);
+                    if (NIL == ascii_char_p_int(v_char)) {
+                        return NIL;
+                    }
+                }
+            }
+        }
+        return T;
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is a string of ASCII characters.
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is a string of ASCII characters.")
     public static SubLObject ascii_string_p(final SubLObject v_object) {
         if (!v_object.isString()) {
             return NIL;
@@ -587,20 +798,76 @@ public final class unicode_strings extends SubLTranslatedFile {
         return T;
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is a string that contains some non-ASCII characters.
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is a string that contains some non-ASCII characters.")
+    public static final SubLObject non_ascii_string_p_alt(SubLObject v_object) {
+        return makeBoolean(v_object.isString() && (NIL == ascii_string_p(v_object)));
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is a string that contains some non-ASCII characters.
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is a string that contains some non-ASCII characters.")
     public static SubLObject non_ascii_string_p(final SubLObject v_object) {
         return makeBoolean(v_object.isString() && (NIL == ascii_string_p(v_object)));
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is an ASCII character
+    (one whose char-code is in the range 0-127).
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is an ASCII character\r\n(one whose char-code is in the range 0-127).")
+    public static final SubLObject ascii_char_p_alt(SubLObject v_object) {
+        return makeBoolean(v_object.isChar() && (NIL != ascii_char_p_int(v_object)));
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is an ASCII character
+    (one whose char-code is in the range 0-127).
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is an ASCII character\r\n(one whose char-code is in the range 0-127).")
     public static SubLObject ascii_char_p(final SubLObject v_object) {
         return makeBoolean(v_object.isChar() && (NIL != ascii_char_p_int(v_object)));
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is a non-ASCII character
+    (one whose char-code is in the range 0-127).
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is a non-ASCII character\r\n(one whose char-code is in the range 0-127).")
+    public static final SubLObject non_ascii_char_p_alt(SubLObject v_object) {
+        return makeBoolean(v_object.isChar() && (NIL == ascii_char_p_int(v_object)));
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff OBJECT is a non-ASCII character
+    (one whose char-code is in the range 0-127).
+     */
+    @LispMethod(comment = "@return booleanp; t iff OBJECT is a non-ASCII character\r\n(one whose char-code is in the range 0-127).")
     public static SubLObject non_ascii_char_p(final SubLObject v_object) {
         return makeBoolean(v_object.isChar() && (NIL == ascii_char_p_int(v_object)));
     }
 
     public static SubLObject ascii_char_code_p(final SubLObject v_object) {
         return makeBoolean(v_object.isInteger() && v_object.numLE($int$127));
+    }
+
+    public static final SubLObject ascii_char_p_int_alt(SubLObject v_char) {
+        return numLE(char_code(v_char), $int$127);
     }
 
     public static SubLObject ascii_char_p_int(final SubLObject v_char) {
@@ -623,6 +890,29 @@ public final class unicode_strings extends SubLTranslatedFile {
         return $UNK;
     }
 
+    public static final SubLObject display_vector_is_ascii_p_alt(SubLObject v_object) {
+        if (NIL == display_vector_string_p(v_object)) {
+            return NIL;
+        }
+        {
+            SubLObject unicode_vector = display_to_unicode_vector(v_object);
+            SubLObject vector_var = unicode_vector;
+            SubLObject backwardP_var = NIL;
+            SubLObject length = length(vector_var);
+            SubLObject v_iteration = NIL;
+            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                {
+                    SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                    SubLObject elt = aref(vector_var, element_num);
+                    if (elt.numGE($int$128)) {
+                        return NIL;
+                    }
+                }
+            }
+        }
+        return T;
+    }
+
     public static SubLObject display_vector_is_ascii_p(final SubLObject v_object) {
         if (NIL == display_vector_string_p(v_object)) {
             return NIL;
@@ -639,6 +929,68 @@ public final class unicode_strings extends SubLTranslatedFile {
             elt = aref(vector_var, element_num);
             if (elt.numGE($int$128)) {
                 return NIL;
+            }
+        }
+        return T;
+    }
+
+    public static final SubLObject display_vector_string_p_alt(SubLObject v_object) {
+        if (!v_object.isString()) {
+            return NIL;
+        }
+        {
+            SubLObject state = $OPEN;
+            SubLObject ch = NIL;
+            SubLObject count = ZERO_INTEGER;
+            SubLObject uvalue = ZERO_INTEGER;
+            SubLObject cdotimes_end_var = length(v_object);
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                ch = aref(v_object, i);
+                {
+                    SubLObject pcase_var = state;
+                    if (pcase_var.eql($OPEN)) {
+                        {
+                            SubLObject pcase_var_1 = ch;
+                            if (pcase_var_1.eql(CHAR_ampersand)) {
+                                state = $START_UNICODE;
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($START_UNICODE)) {
+                            {
+                                SubLObject pcase_var_2 = ch;
+                                if (pcase_var_2.eql(CHAR_u) || pcase_var_2.eql(CHAR_U)) {
+                                    state = $UNICODE_CHAR;
+                                    count = ZERO_INTEGER;
+                                    uvalue = ZERO_INTEGER;
+                                } else {
+                                    state = $OPEN;
+                                }
+                            }
+                        } else {
+                            if (pcase_var.eql($UNICODE_CHAR)) {
+                                if (ch == CHAR_semicolon) {
+                                    state = $OPEN;
+                                    if (!(((NIL != unicode_character_p(uvalue)) && count.numG(ONE_INTEGER)) && count.numL(SEVEN_INTEGER))) {
+                                        return NIL;
+                                    }
+                                } else {
+                                    if (NIL == hex_char_p(ch)) {
+                                        return NIL;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                count = add(count, ONE_INTEGER);
+            }
+            {
+                SubLObject pcase_var = state;
+                if (pcase_var.eql($UNICODE_CHAR) || pcase_var.eql($START_UNICODE)) {
+                    return NIL;
+                }
             }
         }
         return T;
@@ -697,6 +1049,85 @@ public final class unicode_strings extends SubLTranslatedFile {
             return NIL;
         }
         return T;
+    }
+
+    public static final SubLObject display_to_unicode_vector_alt(SubLObject v_object) {
+        if (!v_object.isString()) {
+            return NIL;
+        }
+        {
+            SubLObject state = $OPEN;
+            SubLObject count = ZERO_INTEGER;
+            SubLObject uvalue = ZERO_INTEGER;
+            SubLObject retval = NIL;
+            SubLObject elts = ZERO_INTEGER;
+            SubLObject string_var = v_object;
+            SubLObject end_var = length(string_var);
+            SubLObject end_var_3 = end_var;
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; !i.numGE(end_var_3); i = number_utilities.f_1X(i)) {
+                {
+                    SubLObject ch = Strings.sublisp_char(string_var, i);
+                    SubLObject pcase_var = state;
+                    if (pcase_var.eql($OPEN)) {
+                        {
+                            SubLObject pcase_var_4 = ch;
+                            if (pcase_var_4.eql(CHAR_ampersand)) {
+                                state = $START_UNICODE;
+                            } else {
+                                if (pcase_var_4.eql(CHAR_backslash)) {
+                                } else {
+                                    retval = cons(char_code(ch), retval);
+                                    elts = add(elts, ONE_INTEGER);
+                                }
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($START_UNICODE)) {
+                            {
+                                SubLObject pcase_var_5 = ch;
+                                if (pcase_var_5.eql(CHAR_u) || pcase_var_5.eql(CHAR_U)) {
+                                    state = $UNICODE_CHAR;
+                                    count = ZERO_INTEGER;
+                                    uvalue = ZERO_INTEGER;
+                                } else {
+                                    state = $OPEN;
+                                    retval = cons(char_code(CHAR_ampersand), retval);
+                                    retval = cons(char_code(ch), retval);
+                                    elts = add(elts, TWO_INTEGER);
+                                }
+                            }
+                        } else {
+                            if (pcase_var.eql($UNICODE_CHAR)) {
+                                if (ch == CHAR_semicolon) {
+                                    state = $OPEN;
+                                    if (((NIL != unicode_character_p(uvalue)) && count.numG(ONE_INTEGER)) && count.numL(SEVEN_INTEGER)) {
+                                        retval = cons(uvalue, retval);
+                                        elts = add(elts, ONE_INTEGER);
+                                    } else {
+                                        return NIL;
+                                    }
+                                } else {
+                                    if (NIL == hex_char_p(ch)) {
+                                        return NIL;
+                                    } else {
+                                        uvalue = add(ash(uvalue, FOUR_INTEGER), hex_char_value(ch));
+                                    }
+                                }
+                                count = add(count, ONE_INTEGER);
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject pcase_var = state;
+                if (pcase_var.eql($UNICDE_CHAR) || pcase_var.eql($START_UNICODE)) {
+                    return NIL;
+                }
+            }
+            return element_vector(nreverse(retval), elts);
+        }
     }
 
     public static SubLObject display_to_unicode_vector(final SubLObject v_object) {
@@ -768,6 +1199,50 @@ public final class unicode_strings extends SubLTranslatedFile {
         return element_vector(nreverse(retval), elts);
     }
 
+    /**
+     * Convert DISPLAY to a valid SubL string, replacing non-ASCII characters with PLACEHOLDER-CHAR if
+     * not mentioned in SUBST-ALIST.
+     */
+    @LispMethod(comment = "Convert DISPLAY to a valid SubL string, replacing non-ASCII characters with PLACEHOLDER-CHAR if\r\nnot mentioned in SUBST-ALIST.\nConvert DISPLAY to a valid SubL string, replacing non-ASCII characters with PLACEHOLDER-CHAR if\nnot mentioned in SUBST-ALIST.")
+    public static final SubLObject display_to_subl_string_alt(SubLObject display, SubLObject placeholder_char, SubLObject subst_alist) {
+        if (placeholder_char == UNPROVIDED) {
+            placeholder_char = $default_non_ascii_placeholder_char$.getGlobalValue();
+        }
+        if (subst_alist == UNPROVIDED) {
+            subst_alist = $default_unicode_to_ascii_code_map$.getDynamicValue();
+        }
+        SubLTrampolineFile.checkType(display, DISPLAY_VECTOR_STRING_P);
+        SubLTrampolineFile.checkType(placeholder_char, ASCII_CHAR_P);
+        {
+            SubLObject unicode_vector = display_to_unicode_vector(display);
+            SubLObject length = length(unicode_vector);
+            SubLObject string = Strings.make_string(length, placeholder_char);
+            SubLObject vector_var = unicode_vector;
+            SubLObject backwardP_var = NIL;
+            SubLObject length_6 = length(vector_var);
+            SubLObject v_iteration = NIL;
+            for (v_iteration = ZERO_INTEGER; v_iteration.numL(length_6); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                {
+                    SubLObject index = (NIL != backwardP_var) ? ((SubLObject) (subtract(length_6, v_iteration, ONE_INTEGER))) : v_iteration;
+                    SubLObject code = aref(vector_var, index);
+                    if (code.numGE($int$128) && (NIL != list_utilities.alist_lookup(subst_alist, code, EQ, NIL))) {
+                        Strings.set_char(string, index, code_char(list_utilities.alist_lookup(subst_alist, code, EQ, NIL)));
+                    } else {
+                        if (code.numL($int$128)) {
+                            Strings.set_char(string, index, code_char(code));
+                        }
+                    }
+                }
+            }
+            return string;
+        }
+    }
+
+    /**
+     * Convert DISPLAY to a valid SubL string, replacing non-ASCII characters with PLACEHOLDER-CHAR if
+     * not mentioned in SUBST-ALIST.
+     */
+    @LispMethod(comment = "Convert DISPLAY to a valid SubL string, replacing non-ASCII characters with PLACEHOLDER-CHAR if\r\nnot mentioned in SUBST-ALIST.\nConvert DISPLAY to a valid SubL string, replacing non-ASCII characters with PLACEHOLDER-CHAR if\nnot mentioned in SUBST-ALIST.")
     public static SubLObject display_to_subl_string(final SubLObject display, SubLObject placeholder_char, SubLObject subst_alist) {
         if (placeholder_char == UNPROVIDED) {
             placeholder_char = $default_non_ascii_placeholder_char$.getGlobalValue();
@@ -775,8 +1250,8 @@ public final class unicode_strings extends SubLTranslatedFile {
         if (subst_alist == UNPROVIDED) {
             subst_alist = $default_unicode_to_ascii_code_map$.getDynamicValue();
         }
-        assert NIL != display_vector_string_p(display) : "unicode_strings.display_vector_string_p(display) " + "CommonSymbols.NIL != unicode_strings.display_vector_string_p(display) " + display;
-        assert NIL != ascii_char_p(placeholder_char) : "unicode_strings.ascii_char_p(placeholder_char) " + "CommonSymbols.NIL != unicode_strings.ascii_char_p(placeholder_char) " + placeholder_char;
+        assert NIL != display_vector_string_p(display) : "! unicode_strings.display_vector_string_p(display) " + ("unicode_strings.display_vector_string_p(display) " + "CommonSymbols.NIL != unicode_strings.display_vector_string_p(display) ") + display;
+        assert NIL != ascii_char_p(placeholder_char) : "! unicode_strings.ascii_char_p(placeholder_char) " + ("unicode_strings.ascii_char_p(placeholder_char) " + "CommonSymbols.NIL != unicode_strings.ascii_char_p(placeholder_char) ") + placeholder_char;
         final SubLObject unicode_vector = display_to_unicode_vector(display);
         final SubLObject length = length(unicode_vector);
         final SubLObject string = Strings.make_string(length, placeholder_char);
@@ -798,6 +1273,63 @@ public final class unicode_strings extends SubLTranslatedFile {
 
         }
         return string;
+    }
+
+    public static final SubLObject unicode_vector_to_display_alt(SubLObject ucode) {
+        {
+            SubLObject retval = NIL;
+            SubLObject stream = NIL;
+            try {
+                stream = make_private_string_output_stream();
+                {
+                    SubLObject vector_var = ucode;
+                    SubLObject backwardP_var = NIL;
+                    SubLObject length = length(vector_var);
+                    SubLObject v_iteration = NIL;
+                    for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                        {
+                            SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                            SubLObject code_point = aref(vector_var, element_num);
+                            if (code_point == char_code(CHAR_quotation)) {
+                                princ($str_alt38$__, stream);
+                            } else {
+                                if (code_point == char_code(CHAR_backslash)) {
+                                    princ($str_alt39$__, stream);
+                                } else {
+                                    if (code_point == char_code(CHAR_ampersand)) {
+                                        princ($str_alt40$_u26_, stream);
+                                    } else {
+                                        if (code_point.numGE($int$32) && code_point.numLE($int$127)) {
+                                            princ(Strings.make_string(ONE_INTEGER, code_char(code_point)), stream);
+                                        } else {
+                                            {
+                                                SubLObject hex = number_utilities.convert_to_hexadecimal(code_point);
+                                                if (length(hex) == ONE_INTEGER) {
+                                                    hex = cconcatenate($$$0, hex);
+                                                }
+                                                format(stream, $str_alt43$_u_A_, hex);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                retval = get_output_stream_string(stream);
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        close(stream, UNPROVIDED);
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+            return retval;
+        }
     }
 
     public static SubLObject unicode_vector_to_display(final SubLObject ucode) {
@@ -851,6 +1383,20 @@ public final class unicode_strings extends SubLTranslatedFile {
         return retval;
     }
 
+    public static final SubLObject element_vector_alt(SubLObject list, SubLObject elts) {
+        {
+            SubLObject vect = make_vector(elts, UNPROVIDED);
+            SubLObject i = ZERO_INTEGER;
+            SubLObject cdolist_list_var = list;
+            SubLObject elt = NIL;
+            for (elt = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elt = cdolist_list_var.first()) {
+                set_aref(vect, i, elt);
+                i = add(i, ONE_INTEGER);
+            }
+            return vect;
+        }
+    }
+
     public static SubLObject element_vector(final SubLObject list, final SubLObject elts) {
         final SubLObject vect = make_vector(elts, UNPROVIDED);
         SubLObject i = ZERO_INTEGER;
@@ -866,6 +1412,42 @@ public final class unicode_strings extends SubLTranslatedFile {
         return vect;
     }
 
+    public static final SubLObject unicode_vector_to_utf8_vector_alt(SubLObject ucode, SubLObject start, SubLObject end) {
+        if (start == UNPROVIDED) {
+            start = ZERO_INTEGER;
+        }
+        if (end == UNPROVIDED) {
+            end = NIL;
+        }
+        SubLTrampolineFile.checkType(ucode, UNICODE_VECTOR_STRING_P);
+        if (NIL == end) {
+            end = subtract(length(ucode), ONE_INTEGER);
+        }
+        {
+            SubLObject utf8_len = ZERO_INTEGER;
+            SubLObject utf8_str = NIL;
+            SubLObject offset = ZERO_INTEGER;
+            SubLObject ucode_offset = start;
+            while (ucode_offset.numLE(end)) {
+                {
+                    SubLObject elt = aref(ucode, ucode_offset);
+                    ucode_offset = add(ucode_offset, ONE_INTEGER);
+                    utf8_len = add(utf8_len, number_utf8_bytes(elt));
+                }
+            } 
+            utf8_str = make_vector(utf8_len, UNPROVIDED);
+            ucode_offset = start;
+            while (ucode_offset.numLE(end)) {
+                {
+                    SubLObject elt = aref(ucode, ucode_offset);
+                    ucode_offset = add(ucode_offset, ONE_INTEGER);
+                    offset = to_utc8_vector_internal(utf8_str, offset, elt);
+                }
+            } 
+            return utf8_str;
+        }
+    }
+
     public static SubLObject unicode_vector_to_utf8_vector(final SubLObject ucode, SubLObject start, SubLObject end) {
         if (start == UNPROVIDED) {
             start = ZERO_INTEGER;
@@ -873,7 +1455,7 @@ public final class unicode_strings extends SubLTranslatedFile {
         if (end == UNPROVIDED) {
             end = NIL;
         }
-        assert NIL != unicode_vector_string_p(ucode) : "unicode_strings.unicode_vector_string_p(ucode) " + "CommonSymbols.NIL != unicode_strings.unicode_vector_string_p(ucode) " + ucode;
+        assert NIL != unicode_vector_string_p(ucode) : "! unicode_strings.unicode_vector_string_p(ucode) " + ("unicode_strings.unicode_vector_string_p(ucode) " + "CommonSymbols.NIL != unicode_strings.unicode_vector_string_p(ucode) ") + ucode;
         if (NIL == end) {
             end = subtract(length(ucode), ONE_INTEGER);
         }
@@ -891,9 +1473,45 @@ public final class unicode_strings extends SubLTranslatedFile {
         return utf8_str;
     }
 
+    public static final SubLObject utf8_vector_to_unicode_vector_alt(SubLObject utf) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(utf, UTF8_VECTOR_STRING_P);
+            {
+                SubLObject len = length(utf);
+                SubLObject index = ZERO_INTEGER;
+                SubLObject number_ucode_elts = ZERO_INTEGER;
+                SubLObject elt = ZERO_INTEGER;
+                SubLObject unicode_vector = NIL;
+                while (index.numL(len)) {
+                    {
+                        SubLObject ulen = length_utf8_vector_codepoint(utf, index);
+                        number_ucode_elts = add(number_ucode_elts, ONE_INTEGER);
+                        index = add(index, ulen);
+                    }
+                } 
+                unicode_vector = make_vector(number_ucode_elts, UNPROVIDED);
+                index = ZERO_INTEGER;
+                while (index.numL(len)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject value = get_unicode_char_at_offset(utf, index);
+                        SubLObject next_offset = thread.secondMultipleValue();
+                        SubLObject len_elt = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        index = next_offset;
+                        set_aref(unicode_vector, elt, value);
+                        elt = add(elt, ONE_INTEGER);
+                    }
+                } 
+                return unicode_vector;
+            }
+        }
+    }
+
     public static SubLObject utf8_vector_to_unicode_vector(final SubLObject utf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != utf8_vector_string_p(utf) : "unicode_strings.utf8_vector_string_p(utf) " + "CommonSymbols.NIL != unicode_strings.utf8_vector_string_p(utf) " + utf;
+        assert NIL != utf8_vector_string_p(utf) : "! unicode_strings.utf8_vector_string_p(utf) " + ("unicode_strings.utf8_vector_string_p(utf) " + "CommonSymbols.NIL != unicode_strings.utf8_vector_string_p(utf) ") + utf;
         final SubLObject len = length(utf);
         SubLObject index = ZERO_INTEGER;
         SubLObject number_ucode_elts = ZERO_INTEGER;
@@ -922,14 +1540,34 @@ public final class unicode_strings extends SubLTranslatedFile {
         return unicode_vector;
     }
 
-    public static SubLObject unicode_char_code(final SubLObject uchar) {
-        assert NIL != unicode_char_p(uchar) : "unicode_strings.unicode_char_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(uchar) " + uchar;
+    public static final SubLObject unicode_char_code_alt(SubLObject uchar) {
+        SubLTrampolineFile.checkType(uchar, UNICODE_CHAR_P);
         return unicode_char_uchar(uchar);
     }
 
-    public static SubLObject unicode_code_char(final SubLObject uchar) {
-        assert NIL != unicode_character_p(uchar) : "unicode_strings.unicode_character_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(uchar) " + uchar;
+    public static SubLObject unicode_char_code(final SubLObject uchar) {
+        assert NIL != unicode_char_p(uchar) : "! unicode_strings.unicode_char_p(uchar) " + ("unicode_strings.unicode_char_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_char_p(uchar) ") + uchar;
+        return unicode_char_uchar(uchar);
+    }
+
+    public static final SubLObject unicode_code_char_alt(SubLObject uchar) {
+        SubLTrampolineFile.checkType(uchar, UNICODE_CHARACTER_P);
         return unicode_char_create(uchar);
+    }
+
+    public static SubLObject unicode_code_char(final SubLObject uchar) {
+        assert NIL != unicode_character_p(uchar) : "! unicode_strings.unicode_character_p(uchar) " + ("unicode_strings.unicode_character_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(uchar) ") + uchar;
+        return unicode_char_create(uchar);
+    }
+
+    public static final SubLObject unicode_character_p_alt(SubLObject uchar) {
+        if (!uchar.isInteger()) {
+            return NIL;
+        }
+        if (uchar.isNegative()) {
+            return NIL;
+        }
+        return unicode_subsets.unicode_isdefined(uchar);
     }
 
     public static SubLObject unicode_character_p(final SubLObject uchar) {
@@ -942,8 +1580,8 @@ public final class unicode_strings extends SubLTranslatedFile {
         return unicode_subsets.unicode_isdefined(uchar);
     }
 
-    public static SubLObject number_utf8_bytes(final SubLObject uchar) {
-        assert NIL != unicode_character_p(uchar) : "unicode_strings.unicode_character_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(uchar) " + uchar;
+    public static final SubLObject number_utf8_bytes_alt(SubLObject uchar) {
+        SubLTrampolineFile.checkType(uchar, UNICODE_CHARACTER_P);
         if (uchar.numLE($int$127)) {
             return ONE_INTEGER;
         }
@@ -962,11 +1600,53 @@ public final class unicode_strings extends SubLTranslatedFile {
         return SIX_INTEGER;
     }
 
+    public static SubLObject number_utf8_bytes(final SubLObject uchar) {
+        assert NIL != unicode_character_p(uchar) : "! unicode_strings.unicode_character_p(uchar) " + ("unicode_strings.unicode_character_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(uchar) ") + uchar;
+        if (uchar.numLE($int$127)) {
+            return ONE_INTEGER;
+        }
+        if (uchar.numLE($int$2047)) {
+            return TWO_INTEGER;
+        }
+        if (uchar.numLE($int$65535)) {
+            return THREE_INTEGER;
+        }
+        if (uchar.numLE($int$2097151)) {
+            return FOUR_INTEGER;
+        }
+        if (uchar.numLE($int$67108863)) {
+            return FIVE_INTEGER;
+        }
+        return SIX_INTEGER;
+    }
+
+    public static final SubLObject to_utf8_vector_alt(SubLObject uchar) {
+        SubLTrampolineFile.checkType(uchar, UNICODE_CHARACTER_P);
+        {
+            SubLObject vect = make_vector(number_utf8_bytes(uchar), UNPROVIDED);
+            to_utc8_vector_internal(vect, ZERO_INTEGER, uchar);
+            return vect;
+        }
+    }
+
     public static SubLObject to_utf8_vector(final SubLObject uchar) {
-        assert NIL != unicode_character_p(uchar) : "unicode_strings.unicode_character_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(uchar) " + uchar;
+        assert NIL != unicode_character_p(uchar) : "! unicode_strings.unicode_character_p(uchar) " + ("unicode_strings.unicode_character_p(uchar) " + "CommonSymbols.NIL != unicode_strings.unicode_character_p(uchar) ") + uchar;
         final SubLObject vect = make_vector(number_utf8_bytes(uchar), UNPROVIDED);
         to_utc8_vector_internal(vect, ZERO_INTEGER, uchar);
         return vect;
+    }
+
+    public static final SubLObject print_utf_hex_list_alt(SubLObject uvect) {
+        format(T, $str_alt49$__);
+        {
+            SubLObject cdotimes_end_var = length(uvect);
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                format(T, $str_alt50$_x_x_, aref(uvect, i));
+            }
+        }
+        format(T, $str_alt51$___);
+        return NIL;
     }
 
     public static SubLObject print_utf_hex_list(final SubLObject uvect) {
@@ -978,6 +1658,40 @@ public final class unicode_strings extends SubLTranslatedFile {
         }
         format(T, $str66$___);
         return NIL;
+    }
+
+    public static final SubLObject to_utc8_vector_internal_alt(SubLObject char_vector, SubLObject offset, SubLObject uchar) {
+        if (uchar.numLE($int$127)) {
+            set_aref(char_vector, offset, uchar);
+            return add(offset, ONE_INTEGER);
+        }
+        if (uchar.numLE($int$2047)) {
+            set_aref(char_vector, offset, logior($int$192, ash(uchar, $int$_6)));
+            set_aref(char_vector, add(offset, ONE_INTEGER), logior($int$128, logand(uchar, $int$63)));
+            return add(offset, TWO_INTEGER);
+        }
+        if (uchar.numLE($int$65535)) {
+            set_aref(char_vector, offset, logior($int$224, ash(uchar, $int$_12)));
+            set_aref(char_vector, add(offset, ONE_INTEGER), logior($int$128, logand(ash(uchar, $int$_6), $int$63)));
+            set_aref(char_vector, add(offset, TWO_INTEGER), logior($int$128, logand(uchar, $int$63)));
+            return add(offset, THREE_INTEGER);
+        }
+        if (uchar.numLE($int$2097151)) {
+            set_aref(char_vector, offset, logior($int$240, ash(uchar, $int$_18)));
+            set_aref(char_vector, add(offset, ONE_INTEGER), logior($int$128, logand(ash(uchar, $int$_12), $int$63)));
+            set_aref(char_vector, add(offset, TWO_INTEGER), logior($int$128, logand(ash(uchar, $int$_6), $int$63)));
+            set_aref(char_vector, add(offset, THREE_INTEGER), logior($int$128, logand(uchar, $int$63)));
+            return add(offset, FOUR_INTEGER);
+        }
+        if (uchar.numLE($int$67108863)) {
+            set_aref(char_vector, offset, logior($int$248, ash(uchar, $int$_24)));
+            set_aref(char_vector, add(offset, ONE_INTEGER), logior($int$128, logand(ash(uchar, $int$_18), $int$63)));
+            set_aref(char_vector, add(offset, TWO_INTEGER), logior($int$128, logand(ash(uchar, $int$_12), $int$63)));
+            set_aref(char_vector, add(offset, THREE_INTEGER), logior($int$128, logand(ash(uchar, $int$_6), $int$63)));
+            set_aref(char_vector, add(offset, FOUR_INTEGER), logior($int$128, logand(uchar, $int$63)));
+            return add(offset, FIVE_INTEGER);
+        }
+        return add(offset, ONE_INTEGER);
     }
 
     public static SubLObject to_utc8_vector_internal(final SubLObject char_vector, final SubLObject offset, final SubLObject uchar) {
@@ -1014,6 +1728,39 @@ public final class unicode_strings extends SubLTranslatedFile {
         return add(offset, ONE_INTEGER);
     }
 
+    public static final SubLObject length_utf8_vector_codepoint_alt(SubLObject char_vector, SubLObject offset) {
+        if (!char_vector.isVector()) {
+            return MINUS_ONE_INTEGER;
+        }
+        {
+            SubLObject len = length(char_vector);
+            SubLObject ulen = ZERO_INTEGER;
+            if (offset.numGE(len) || offset.isNegative()) {
+                return MINUS_ONE_INTEGER;
+            }
+            {
+                SubLObject first_byte = aref(char_vector, offset);
+                ulen = length_utf8_from_first_byte(first_byte);
+                if (ulen.isNegative()) {
+                    return ulen;
+                }
+            }
+            if (add(offset, ulen).numG(len)) {
+                return MINUS_ONE_INTEGER;
+            }
+            {
+                SubLObject cdotimes_end_var = add(ulen, MINUS_ONE_INTEGER);
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                    if (!logand($int$192, aref(char_vector, add(offset, ONE_INTEGER, i))).numE($int$128)) {
+                        return MINUS_ONE_INTEGER;
+                    }
+                }
+            }
+            return ulen;
+        }
+    }
+
     public static SubLObject length_utf8_vector_codepoint(final SubLObject char_vector, final SubLObject offset) {
         if (!char_vector.isVector()) {
             return MINUS_ONE_INTEGER;
@@ -1045,6 +1792,33 @@ public final class unicode_strings extends SubLTranslatedFile {
         return ulen;
     }
 
+    public static final SubLObject length_utf8_from_first_byte_alt(SubLObject first_byte) {
+        if (NIL == number_utilities.bytep(first_byte)) {
+            return MINUS_ONE_INTEGER;
+        }
+        if (logand($int$128, first_byte).numE(ZERO_INTEGER)) {
+            return ONE_INTEGER;
+        } else {
+            if (logand($int$224, first_byte).numE($int$192)) {
+                return TWO_INTEGER;
+            } else {
+                if (logand($int$240, first_byte).numE($int$224)) {
+                    return THREE_INTEGER;
+                } else {
+                    if (logand($int$248, first_byte).numE($int$240)) {
+                        return FOUR_INTEGER;
+                    } else {
+                        if (logand($int$252, first_byte).numE($int$248)) {
+                            return FIVE_INTEGER;
+                        } else {
+                            return MINUS_ONE_INTEGER;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject length_utf8_from_first_byte(final SubLObject first_byte) {
         if (NIL == number_utilities.bytep(first_byte)) {
             return MINUS_ONE_INTEGER;
@@ -1064,6 +1838,25 @@ public final class unicode_strings extends SubLTranslatedFile {
         return MINUS_ONE_INTEGER;
     }
 
+    public static final SubLObject utf8_vector_is_ascii_string_p_alt(SubLObject char_vector, SubLObject offset, SubLObject end) {
+        if (offset == UNPROVIDED) {
+            offset = ZERO_INTEGER;
+        }
+        if (end == UNPROVIDED) {
+            end = subtract(length(char_vector), ONE_INTEGER);
+        }
+        {
+            SubLObject cdotimes_end_var = add(subtract(end, offset), ONE_INTEGER);
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                if (NIL == utf8_char_is_ascii_p(char_vector, add(offset, i))) {
+                    return NIL;
+                }
+            }
+        }
+        return T;
+    }
+
     public static SubLObject utf8_vector_is_ascii_string_p(final SubLObject char_vector, SubLObject offset, SubLObject end) {
         if (offset == UNPROVIDED) {
             offset = ZERO_INTEGER;
@@ -1081,8 +1874,31 @@ public final class unicode_strings extends SubLTranslatedFile {
         return T;
     }
 
+    public static final SubLObject utf8_char_is_ascii_p_alt(SubLObject char_vector, SubLObject offset) {
+        return numE(ONE_INTEGER, length_utf8_vector_codepoint(char_vector, offset));
+    }
+
     public static SubLObject utf8_char_is_ascii_p(final SubLObject char_vector, final SubLObject offset) {
         return numE(ONE_INTEGER, length_utf8_vector_codepoint(char_vector, offset));
+    }
+
+    public static final SubLObject unicode_vector_is_ascii_string_p_alt(SubLObject unicode_vector, SubLObject offset, SubLObject end) {
+        if (offset == UNPROVIDED) {
+            offset = ZERO_INTEGER;
+        }
+        if (end == UNPROVIDED) {
+            end = subtract(length(unicode_vector), ONE_INTEGER);
+        }
+        {
+            SubLObject cdotimes_end_var = add(subtract(end, offset), ONE_INTEGER);
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                if (NIL == unicode_char_is_ascii_char_p(aref(unicode_vector, add(offset, i)))) {
+                    return NIL;
+                }
+            }
+        }
+        return T;
     }
 
     public static SubLObject unicode_vector_is_ascii_string_p(final SubLObject unicode_vector, SubLObject offset, SubLObject end) {
@@ -1102,6 +1918,13 @@ public final class unicode_strings extends SubLTranslatedFile {
         return T;
     }
 
+    public static final SubLObject unicode_char_is_ascii_char_p_alt(SubLObject unicode_char) {
+        if (NIL != unicode_character_p(unicode_char)) {
+            return numLE(unicode_char, $int$127);
+        }
+        return NIL;
+    }
+
     public static SubLObject unicode_char_is_ascii_char_p(final SubLObject unicode_char) {
         if (NIL != unicode_character_p(unicode_char)) {
             return numLE(unicode_char, $int$127);
@@ -1109,12 +1932,31 @@ public final class unicode_strings extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject utf8_char_p_alt(SubLObject char_vector, SubLObject offset) {
+        return plusp(length_utf8_vector_codepoint(char_vector, offset));
+    }
+
     public static SubLObject utf8_char_p(final SubLObject char_vector, final SubLObject offset) {
         return plusp(length_utf8_vector_codepoint(char_vector, offset));
     }
 
+    public static final SubLObject get_unicode_char_at_or_after_offset_alt(SubLObject char_vector, SubLObject offset) {
+        SubLTrampolineFile.checkType(char_vector, VECTORP);
+        {
+            SubLObject len = length(char_vector);
+            SubLObject index = offset;
+            while (index.numL(len) && logand($int$192, aref(char_vector, index)).numE($int$128)) {
+                index = add(index, ONE_INTEGER);
+            } 
+            if (index.numGE(len)) {
+                return values(MINUS_ONE_INTEGER, len);
+            }
+            return get_unicode_char_at_offset(char_vector, index);
+        }
+    }
+
     public static SubLObject get_unicode_char_at_or_after_offset(final SubLObject char_vector, final SubLObject offset) {
-        assert NIL != vectorp(char_vector) : "Types.vectorp(char_vector) " + "CommonSymbols.NIL != Types.vectorp(char_vector) " + char_vector;
+        assert NIL != vectorp(char_vector) : "! vectorp(char_vector) " + ("Types.vectorp(char_vector) " + "CommonSymbols.NIL != Types.vectorp(char_vector) ") + char_vector;
         SubLObject len;
         SubLObject index;
         for (len = length(char_vector), index = offset; index.numL(len) && logand($int$192, aref(char_vector, index)).numE($int$128); index = add(index, ONE_INTEGER)) {
@@ -1125,9 +1967,37 @@ public final class unicode_strings extends SubLTranslatedFile {
         return get_unicode_char_at_offset(char_vector, index);
     }
 
+    public static final SubLObject get_unicode_char_at_or_before_offset_alt(SubLObject char_vector, SubLObject offset) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(char_vector, VECTORP);
+            {
+                SubLObject len = length(char_vector);
+                SubLObject index = offset;
+                if (index.numGE(len)) {
+                    return values(MINUS_ONE_INTEGER, MINUS_ONE_INTEGER);
+                }
+                while (index.numGE(ZERO_INTEGER) && logand($int$192, aref(char_vector, index)).numE($int$128)) {
+                    index = subtract(index, ONE_INTEGER);
+                } 
+                if (index.numL(ZERO_INTEGER)) {
+                    return values(MINUS_ONE_INTEGER, MINUS_ONE_INTEGER);
+                }
+                thread.resetMultipleValues();
+                {
+                    SubLObject value = get_unicode_char_at_offset(char_vector, index);
+                    SubLObject next_offset = thread.secondMultipleValue();
+                    SubLObject len_7 = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    return values(value, subtract(subtract(next_offset, len_7), ONE_INTEGER));
+                }
+            }
+        }
+    }
+
     public static SubLObject get_unicode_char_at_or_before_offset(final SubLObject char_vector, final SubLObject offset) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != vectorp(char_vector) : "Types.vectorp(char_vector) " + "CommonSymbols.NIL != Types.vectorp(char_vector) " + char_vector;
+        assert NIL != vectorp(char_vector) : "! vectorp(char_vector) " + ("Types.vectorp(char_vector) " + "CommonSymbols.NIL != Types.vectorp(char_vector) ") + char_vector;
         final SubLObject len = length(char_vector);
         SubLObject index = offset;
         if (index.numGE(len)) {
@@ -1145,6 +2015,34 @@ public final class unicode_strings extends SubLTranslatedFile {
         final SubLObject len_$7 = thread.thirdMultipleValue();
         thread.resetMultipleValues();
         return values(value, subtract(subtract(next_offset, len_$7), ONE_INTEGER));
+    }
+
+    public static final SubLObject get_unicode_char_at_offset_alt(SubLObject char_vector, SubLObject offset) {
+        {
+            SubLObject ulen = length_utf8_vector_codepoint(char_vector, offset);
+            SubLObject pcase_var = ulen;
+            if (pcase_var.eql(ONE_INTEGER)) {
+                return values(aref(char_vector, offset), add(offset, ONE_INTEGER), ulen);
+            } else {
+                if (pcase_var.eql(TWO_INTEGER)) {
+                    return values(add(ash(logand(aref(char_vector, offset), $int$31), SIX_INTEGER), logand(aref(char_vector, add(offset, ONE_INTEGER)), $int$63)), add(offset, TWO_INTEGER), ulen);
+                } else {
+                    if (pcase_var.eql(THREE_INTEGER)) {
+                        return values(add(ash(logand(aref(char_vector, offset), FIFTEEN_INTEGER), TWELVE_INTEGER), ash(logand(aref(char_vector, add(offset, ONE_INTEGER)), $int$63), SIX_INTEGER), logand(aref(char_vector, add(offset, TWO_INTEGER)), $int$63)), add(offset, THREE_INTEGER), ulen);
+                    } else {
+                        if (pcase_var.eql(FOUR_INTEGER)) {
+                            return values(add(new SubLObject[]{ ash(logand(aref(char_vector, offset), SEVEN_INTEGER), EIGHTEEN_INTEGER), ash(logand(aref(char_vector, add(offset, ONE_INTEGER)), $int$63), TWELVE_INTEGER), ash(logand(aref(char_vector, add(offset, TWO_INTEGER)), $int$63), SIX_INTEGER), logand(aref(char_vector, add(offset, THREE_INTEGER)), $int$63) }), add(offset, FOUR_INTEGER), ulen);
+                        } else {
+                            if (pcase_var.eql(FIVE_INTEGER)) {
+                                return values(add(new SubLObject[]{ ash(logand(aref(char_vector, offset), THREE_INTEGER), $int$24), ash(logand(aref(char_vector, add(offset, ONE_INTEGER)), $int$63), EIGHTEEN_INTEGER), ash(logand(aref(char_vector, add(offset, TWO_INTEGER)), $int$63), TWELVE_INTEGER), ash(logand(aref(char_vector, add(offset, THREE_INTEGER)), $int$63), SIX_INTEGER), logand(aref(char_vector, add(offset, FOUR_INTEGER)), $int$63) }), add(offset, FOUR_INTEGER), ulen);
+                            } else {
+                                return values(MINUS_ONE_INTEGER, add(offset, ONE_INTEGER), ulen);
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject get_unicode_char_at_offset(final SubLObject char_vector, final SubLObject offset) {
@@ -1168,6 +2066,22 @@ public final class unicode_strings extends SubLTranslatedFile {
         return values(MINUS_ONE_INTEGER, add(offset, ONE_INTEGER), ulen);
     }
 
+    public static final SubLObject string_from_char_list_alt(SubLObject list, SubLObject len) {
+        if (len == UNPROVIDED) {
+            len = length(list);
+        }
+        {
+            SubLObject str = Strings.make_string(len, UNPROVIDED);
+            SubLObject buffer = list;
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; i.numL(len); i = add(i, ONE_INTEGER)) {
+                set_aref(str, i, buffer.first());
+                buffer = buffer.rest();
+            }
+            return str;
+        }
+    }
+
     public static SubLObject string_from_char_list(final SubLObject list, SubLObject len) {
         if (len == UNPROVIDED) {
             len = length(list);
@@ -1180,6 +2094,53 @@ public final class unicode_strings extends SubLTranslatedFile {
             buffer = buffer.rest();
         }
         return str;
+    }
+
+    public static final SubLObject unicode_to_html_escaped(SubLObject unicode_vector) {
+        {
+            SubLObject html_string = NIL;
+            SubLObject stream = NIL;
+            try {
+                stream = make_private_string_output_stream();
+                {
+                    SubLObject vector_var = unicode_vector;
+                    SubLObject backwardP_var = NIL;
+                    SubLObject length = length(vector_var);
+                    SubLObject v_iteration = NIL;
+                    for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                        {
+                            SubLObject element_num = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                            SubLObject elt = aref(vector_var, element_num);
+                            if (elt.numGE($int$32) && elt.numL($int$128)) {
+                                princ(code_char(elt), stream);
+                            } else {
+                                princ($str_alt65$__x, stream);
+                                {
+                                    SubLObject hex = number_utilities.convert_to_hexadecimal(elt);
+                                    if (length(hex).numLE(ONE_INTEGER)) {
+                                        princ(CHAR_0, stream);
+                                    }
+                                    princ(hex, stream);
+                                }
+                                princ(CHAR_semicolon, stream);
+                            }
+                        }
+                    }
+                }
+                html_string = get_output_stream_string(stream);
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        close(stream, UNPROVIDED);
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+            return html_string;
+        }
     }
 
     public static SubLObject unicode_to_html_escaped(final SubLObject unicode_vector, SubLObject escape_reserved_charsP) {
@@ -1226,16 +2187,35 @@ public final class unicode_strings extends SubLTranslatedFile {
         return html_string;
     }
 
+    public static final SubLObject unicode_string_to_utf8_alt(SubLObject unicode_string) {
+        return unicode_display_to_utf8(unicode_vector_to_display(unicode_string_get_vector(unicode_string)));
+    }
+
     public static SubLObject unicode_string_to_utf8(final SubLObject unicode_string) {
         return unicode_display_to_utf8(unicode_vector_to_display(unicode_string_get_vector(unicode_string)));
+    }
+
+    public static final SubLObject unicode_string_to_subl_string_alt(SubLObject unicode_string) {
+        return display_to_subl_string(unicode_vector_to_display(unicode_string_get_vector(unicode_string)), UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject unicode_string_to_subl_string(final SubLObject unicode_string) {
         return display_to_subl_string(unicode_vector_to_display(unicode_string_get_vector(unicode_string)), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject unicode_display_to_utf8_alt(SubLObject string) {
+        return html_escaped_to_utf8_string(unicode_display_to_html(string));
+    }
+
     public static SubLObject unicode_display_to_utf8(final SubLObject string) {
         return html_escaped_to_utf8_string(unicode_display_to_html(string));
+    }
+
+    public static final SubLObject unicode_display_to_html_alt(SubLObject string) {
+        {
+            SubLObject vector = display_to_unicode_vector(string);
+            return unicode_to_html_escaped(vector);
+        }
     }
 
     public static SubLObject unicode_display_to_html(final SubLObject string) {
@@ -1243,13 +2223,130 @@ public final class unicode_strings extends SubLTranslatedFile {
         return unicode_to_html_escaped(vector, UNPROVIDED);
     }
 
+    public static final SubLObject html_escaped_to_utf8_vector_alt(SubLObject html_string) {
+        {
+            SubLObject uvect = html_escaped_to_unicode_vector(html_string);
+            return NIL != uvect ? ((SubLObject) (unicode_vector_to_utf8_vector(uvect, UNPROVIDED, UNPROVIDED))) : NIL;
+        }
+    }
+
     public static SubLObject html_escaped_to_utf8_vector(final SubLObject html_string) {
         final SubLObject uvect = html_escaped_to_unicode_vector(html_string);
         return NIL != uvect ? unicode_vector_to_utf8_vector(uvect, UNPROVIDED, UNPROVIDED) : NIL;
     }
 
+    public static final SubLObject utf8_string_to_unicode_vector_alt(SubLObject utf8_string) {
+        return utf8_vector_to_unicode_vector(utf8_string_to_utf8_vector(utf8_string));
+    }
+
     public static SubLObject utf8_string_to_unicode_vector(final SubLObject utf8_string) {
         return utf8_vector_to_unicode_vector(utf8_string_to_utf8_vector(utf8_string));
+    }
+
+    public static final SubLObject html_escaped_to_unicode_vector_alt(SubLObject html_string) {
+        {
+            SubLObject unicode_char_stack = NIL;
+            SubLObject state = $OPEN;
+            SubLObject code = NIL;
+            SubLObject string_var = html_string;
+            SubLObject end_var = length(string_var);
+            SubLObject end_var_8 = end_var;
+            SubLObject i = NIL;
+            for (i = ZERO_INTEGER; !i.numGE(end_var_8); i = number_utilities.f_1X(i)) {
+                {
+                    SubLObject ch = Strings.sublisp_char(string_var, i);
+                    SubLObject chcode = char_code(ch);
+                    SubLObject pcase_var = state;
+                    if (pcase_var.eql($OPEN)) {
+                        {
+                            SubLObject pcase_var_9 = ch;
+                            if (pcase_var_9.eql(CHAR_ampersand)) {
+                                state = $START_HTML_ESCAPE;
+                            } else {
+                                if (pcase_var_9.eql(CHAR_less)) {
+                                    unicode_char_stack = cons(chcode, unicode_char_stack);
+                                    state = $INSIDE_TAG;
+                                } else {
+                                    unicode_char_stack = cons(chcode, unicode_char_stack);
+                                }
+                            }
+                        }
+                    } else {
+                        if (pcase_var.eql($INSIDE_TAG)) {
+                            unicode_char_stack = cons(chcode, unicode_char_stack);
+                            if (ch == CHAR_greater) {
+                                state = $OPEN;
+                            }
+                        } else {
+                            if (pcase_var.eql($START_HTML_ESCAPE)) {
+                                code = NIL;
+                                {
+                                    SubLObject pcase_var_10 = ch;
+                                    if (pcase_var_10.eql(CHAR_hash)) {
+                                        state = $HTML_NUMERIC_ESCAPE_START;
+                                    } else {
+                                        code = cons(ch, code);
+                                        state = $ENTITY_ESCAPE;
+                                    }
+                                }
+                            } else {
+                                if (pcase_var.eql($HTML_NUMERIC_ESCAPE_START)) {
+                                    if (ch.equalp(CHAR_x)) {
+                                        state = $HTML_HEXADECIMAL_ESCAPE;
+                                    } else {
+                                        if (NIL != digit_char_p(ch, UNPROVIDED)) {
+                                            state = $HTML_DECIMAL_ESCAPE;
+                                            code = cons(ch, code);
+                                        } else {
+                                            return NIL;
+                                        }
+                                    }
+                                } else {
+                                    if (pcase_var.eql($HTML_HEXADECIMAL_ESCAPE) || pcase_var.eql($HTML_DECIMAL_ESCAPE)) {
+                                        {
+                                            SubLObject pcase_var_11 = ch;
+                                            if (pcase_var_11.eql(CHAR_semicolon)) {
+                                                {
+                                                    SubLObject raw_code_string = string_from_char_list(nreverse(code), UNPROVIDED);
+                                                    SubLObject code_string = (state == $HTML_HEXADECIMAL_ESCAPE) ? ((SubLObject) (number_utilities.convert_hexadecimal_to_decimal(raw_code_string))) : read_from_string(raw_code_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    unicode_char_stack = cons(code_string, unicode_char_stack);
+                                                }
+                                                state = $OPEN;
+                                            } else {
+                                                code = cons(ch, code);
+                                            }
+                                        }
+                                    } else {
+                                        if (pcase_var.eql($ENTITY_ESCAPE)) {
+                                            {
+                                                SubLObject pcase_var_12 = ch;
+                                                if (pcase_var_12.eql(CHAR_semicolon)) {
+                                                    state = $OPEN;
+                                                    {
+                                                        SubLObject entname = string_from_char_list(nreverse(code), UNPROVIDED);
+                                                        SubLObject entval = map_character_entity_to_decimal_value(entname);
+                                                        if (NIL == entval) {
+                                                            return NIL;
+                                                        }
+                                                        unicode_char_stack = cons(entval, unicode_char_stack);
+                                                    }
+                                                } else {
+                                                    code = cons(ch, code);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (state != $OPEN) {
+                return NIL;
+            }
+            return list_utilities.list2vector(nreverse(unicode_char_stack));
+        }
     }
 
     public static SubLObject html_escaped_to_unicode_vector(final SubLObject html_string) {
@@ -1359,8 +2456,39 @@ public final class unicode_strings extends SubLTranslatedFile {
         return list_utilities.list2vector(nreverse(unicode_char_stack));
     }
 
+    public static final SubLObject utf8_vector_to_utf8_string_alt(SubLObject utf8_vector) {
+        return vector_utilities.byte_vector_to_string(utf8_vector);
+    }
+
     public static SubLObject utf8_vector_to_utf8_string(final SubLObject utf8_vector) {
         return vector_utilities.byte_vector_to_string(utf8_vector);
+    }
+
+    public static final SubLObject utf8_string_to_utf8_vector_alt(SubLObject utf8_string) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(utf8_string, STRINGP);
+            {
+                SubLObject vector = make_vector(length(utf8_string), UNPROVIDED);
+                SubLObject string_var = utf8_string;
+                SubLObject end_var = length(string_var);
+                SubLObject end_var_13 = end_var;
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; !i.numGE(end_var_13); i = number_utilities.f_1X(i)) {
+                    {
+                        SubLObject v_char = Strings.sublisp_char(string_var, i);
+                        SubLObject code = char_code(v_char);
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!code.numL($int$256)) {
+                                Errors.error($str_alt74$_S__code___S__is_not_a_valid_utf8, v_char, code);
+                            }
+                        }
+                        set_aref(vector, i, code);
+                    }
+                }
+                return vector;
+            }
+        }
     }
 
     public static SubLObject utf8_string_to_utf8_vector(final SubLObject utf8_string) {
@@ -1373,7 +2501,7 @@ public final class unicode_strings extends SubLTranslatedFile {
     }
 
     public static SubLObject subl_string_to_char_code_vector(final SubLObject string) {
-        assert NIL != stringp(string) : "Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) " + string;
+        assert NIL != stringp(string) : "! stringp(string) " + ("Types.stringp(string) " + "CommonSymbols.NIL != Types.stringp(string) ") + string;
         final SubLObject vector = make_vector(length(string), UNPROVIDED);
         SubLObject end_var_$12;
         SubLObject end_var;
@@ -1388,12 +2516,33 @@ public final class unicode_strings extends SubLTranslatedFile {
         return vector;
     }
 
+    public static final SubLObject utf8_string_to_subl_string_alt(SubLObject utf8_string) {
+        return display_to_subl_string(utf8_string_to_display(utf8_string), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject utf8_string_to_subl_string(final SubLObject utf8_string) {
         return display_to_subl_string(utf8_string_to_display(utf8_string), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject utf8_string_to_display_alt(SubLObject utf8_string) {
+        return unicode_vector_to_display(utf8_vector_to_unicode_vector(utf8_string_to_utf8_vector(utf8_string)));
+    }
+
     public static SubLObject utf8_string_to_display(final SubLObject utf8_string) {
         return unicode_vector_to_display(utf8_vector_to_unicode_vector(utf8_string_to_utf8_vector(utf8_string)));
+    }
+
+    public static final SubLObject html_escaped_to_utf8_string_alt(SubLObject html_string) {
+        if (NIL == find(CHAR_ampersand, html_string, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+            return html_string;
+        }
+        {
+            SubLObject escvect = html_escaped_to_utf8_vector(html_string);
+            if (NIL == escvect) {
+                return NIL;
+            }
+            return utf8_vector_to_utf8_string(escvect);
+        }
     }
 
     public static SubLObject html_escaped_to_utf8_string(final SubLObject html_string) {
@@ -1407,22 +2556,80 @@ public final class unicode_strings extends SubLTranslatedFile {
         return utf8_vector_to_utf8_string(escvect);
     }
 
+    public static final SubLObject display_to_utf8_string_alt(SubLObject display) {
+        {
+            SubLObject unicode_vector = display_to_unicode_vector(display);
+            SubLObject escvect = (NIL != unicode_vector) ? ((SubLObject) (unicode_vector_to_utf8_vector(unicode_vector, UNPROVIDED, UNPROVIDED))) : NIL;
+            return NIL != escvect ? ((SubLObject) (utf8_vector_to_utf8_string(escvect))) : NIL;
+        }
+    }
+
     public static SubLObject display_to_utf8_string(final SubLObject display) {
         final SubLObject unicode_vector = display_to_unicode_vector(display);
         final SubLObject escvect = (NIL != unicode_vector) ? unicode_vector_to_utf8_vector(unicode_vector, UNPROVIDED, UNPROVIDED) : NIL;
         return NIL != escvect ? utf8_vector_to_utf8_string(escvect) : NIL;
     }
 
+    public static final SubLObject html_escaped_to_display_alt(SubLObject html_string) {
+        return utf8_string_to_display(html_escaped_to_utf8_string(html_string));
+    }
+
     public static SubLObject html_escaped_to_display(final SubLObject html_string) {
         return utf8_string_to_display(html_escaped_to_utf8_string(html_string));
+    }
+
+    public static final SubLObject map_character_entity_to_decimal_value_alt(SubLObject entity_name) {
+        return list_utilities.alist_lookup_without_values($html_40_character_entity_table$.getGlobalValue(), entity_name, symbol_function(EQUAL), NIL);
     }
 
     public static SubLObject map_character_entity_to_decimal_value(final SubLObject entity_name) {
         return list_utilities.alist_lookup_without_values($html_40_character_entity_table$.getGlobalValue(), entity_name, symbol_function(EQUAL), NIL);
     }
 
+    public static final SubLObject map_decimal_value_to_character_entity_alt(SubLObject char_code) {
+        return list_utilities.alist_reverse_lookup_without_values($html_40_character_entity_table$.getGlobalValue(), char_code, symbol_function(EQL), NIL);
+    }
+
     public static SubLObject map_decimal_value_to_character_entity(final SubLObject char_code) {
         return list_utilities.alist_reverse_lookup_without_values($html_40_character_entity_table$.getGlobalValue(), char_code, symbol_function(EQL), NIL);
+    }
+
+    public static final SubLObject unicode_string_concatenate_alt(SubLObject unicode_string_1, SubLObject unicode_string_2) {
+        {
+            SubLObject vect1 = unicode_string_get_vector(unicode_string_1);
+            SubLObject length1 = length(vect1);
+            SubLObject vect2 = unicode_string_get_vector(unicode_string_2);
+            SubLObject length2 = length(vect2);
+            SubLObject new_vect = make_vector(add(length1, length2), UNPROVIDED);
+            {
+                SubLObject vector_var = vect1;
+                SubLObject backwardP_var = NIL;
+                SubLObject length = length(vector_var);
+                SubLObject v_iteration = NIL;
+                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                    {
+                        SubLObject i = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                        SubLObject code = aref(vector_var, i);
+                        set_aref(new_vect, i, code);
+                    }
+                }
+            }
+            {
+                SubLObject vector_var = vect2;
+                SubLObject backwardP_var = NIL;
+                SubLObject length = length(vector_var);
+                SubLObject v_iteration = NIL;
+                for (v_iteration = ZERO_INTEGER; v_iteration.numL(length); v_iteration = add(v_iteration, ONE_INTEGER)) {
+                    {
+                        SubLObject i = (NIL != backwardP_var) ? ((SubLObject) (subtract(length, v_iteration, ONE_INTEGER))) : v_iteration;
+                        SubLObject code = aref(vector_var, i);
+                        SubLObject j = add(i, length1);
+                        set_aref(new_vect, j, code);
+                    }
+                }
+            }
+            return unicode_string_create(new_vect);
+        }
     }
 
     public static SubLObject unicode_string_concatenate(final SubLObject unicode_string_1, final SubLObject unicode_string_2) {
@@ -1454,8 +2661,28 @@ public final class unicode_strings extends SubLTranslatedFile {
         return unicode_string_create(new_vect);
     }
 
+    public static final SubLObject cfasl_output_object_unicode_char_method_alt(SubLObject v_object, SubLObject stream) {
+        return cfasl_output_unicode_char(v_object, stream);
+    }
+
     public static SubLObject cfasl_output_object_unicode_char_method(final SubLObject v_object, final SubLObject stream) {
         return cfasl_output_unicode_char(v_object, stream);
+    }
+
+    public static final SubLObject cfasl_output_unicode_char_alt(SubLObject unicode_char, SubLObject stream) {
+        cfasl_raw_write_byte($cfasl_opcode_unicode_char$.getGlobalValue(), stream);
+        {
+            SubLObject utf8_vect = to_utf8_vector(unicode_char_uchar(unicode_char));
+            SubLObject length = length(utf8_vect);
+            cfasl_output(length, stream);
+            {
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(length); i = add(i, ONE_INTEGER)) {
+                    cfasl_raw_write_byte(aref(utf8_vect, i), stream);
+                }
+            }
+        }
+        return unicode_char;
     }
 
     public static SubLObject cfasl_output_unicode_char(final SubLObject unicode_char, final SubLObject stream) {
@@ -1468,6 +2695,33 @@ public final class unicode_strings extends SubLTranslatedFile {
             cfasl_raw_write_byte(aref(utf8_vect, i), stream);
         }
         return unicode_char;
+    }
+
+    public static final SubLObject cfasl_input_unicode_char_alt(SubLObject stream) {
+        {
+            SubLObject length = cfasl_input_object(stream);
+            SubLObject unicode_vector = NIL;
+            SubLObject output_vector = NIL;
+            unicode_vector = make_vector(length, UNPROVIDED);
+            {
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(length); i = add(i, ONE_INTEGER)) {
+                    {
+                        SubLObject v_byte = cfasl_raw_read_byte(stream);
+                        if (NIL != number_utilities.bytep(v_byte)) {
+                            set_aref(unicode_vector, i, v_byte);
+                        } else {
+                            Errors.error($str_alt79$Invalid_unicode_character__expect, length, add(i, ONE_INTEGER));
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject uchar = get_unicode_char_at_offset(unicode_vector, ZERO_INTEGER);
+                output_vector = unicode_char_create(uchar);
+            }
+            return output_vector;
+        }
     }
 
     public static SubLObject cfasl_input_unicode_char(final SubLObject stream) {
@@ -1490,8 +2744,28 @@ public final class unicode_strings extends SubLTranslatedFile {
         return output_vector;
     }
 
+    public static final SubLObject cfasl_output_object_unicode_string_method_alt(SubLObject v_object, SubLObject stream) {
+        return cfasl_output_unicode_string(v_object, stream);
+    }
+
     public static SubLObject cfasl_output_object_unicode_string_method(final SubLObject v_object, final SubLObject stream) {
         return cfasl_output_unicode_string(v_object, stream);
+    }
+
+    public static final SubLObject cfasl_output_unicode_string_alt(SubLObject unicode_string, SubLObject stream) {
+        cfasl_raw_write_byte($cfasl_opcode_unicode_string$.getGlobalValue(), stream);
+        {
+            SubLObject utf8_vect = unicode_vector_to_utf8_vector(unicode_string_vect(unicode_string), UNPROVIDED, UNPROVIDED);
+            SubLObject length = length(utf8_vect);
+            cfasl_output(length, stream);
+            {
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(length); i = add(i, ONE_INTEGER)) {
+                    cfasl_raw_write_byte(aref(utf8_vect, i), stream);
+                }
+            }
+        }
+        return unicode_string;
     }
 
     public static SubLObject cfasl_output_unicode_string(final SubLObject unicode_string, final SubLObject stream) {
@@ -1504,6 +2778,33 @@ public final class unicode_strings extends SubLTranslatedFile {
             cfasl_raw_write_byte(aref(utf8_vect, i), stream);
         }
         return unicode_string;
+    }
+
+    public static final SubLObject cfasl_input_unicode_string_alt(SubLObject stream) {
+        {
+            SubLObject length = cfasl_input_object(stream);
+            SubLObject unicode_vector = NIL;
+            SubLObject output_vector = NIL;
+            unicode_vector = make_vector(length, UNPROVIDED);
+            {
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(length); i = add(i, ONE_INTEGER)) {
+                    {
+                        SubLObject v_byte = cfasl_raw_read_byte(stream);
+                        if (NIL != number_utilities.bytep(v_byte)) {
+                            set_aref(unicode_vector, i, v_byte);
+                        } else {
+                            Errors.error($str_alt79$Invalid_unicode_character__expect, length, add(i, ONE_INTEGER));
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject vect = utf8_vector_to_unicode_vector(unicode_vector);
+                output_vector = unicode_string_create(vect);
+            }
+            return output_vector;
+        }
     }
 
     public static SubLObject cfasl_input_unicode_string(final SubLObject stream) {
@@ -1526,97 +2827,329 @@ public final class unicode_strings extends SubLTranslatedFile {
         return output_vector;
     }
 
+    public static final SubLObject declare_unicode_strings_file_alt() {
+        declareFunction("unicode_char_print_function_trampoline", "UNICODE-CHAR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("unicode_char_p", "UNICODE-CHAR-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.unicode_strings.$unicode_char_p$UnaryFunction();
+        declareFunction("unicode_char_uchar", "UNICODE-CHAR-UCHAR", 1, 0, false);
+        declareFunction("_csetf_unicode_char_uchar", "_CSETF-UNICODE-CHAR-UCHAR", 2, 0, false);
+        declareFunction("make_unicode_char", "MAKE-UNICODE-CHAR", 0, 1, false);
+        declareFunction("unicode_char_create", "UNICODE-CHAR-CREATE", 1, 0, false);
+        declareFunction("print_unicode_char", "PRINT-UNICODE-CHAR", 3, 0, false);
+        declareFunction("unicode_char_get_char", "UNICODE-CHAR-GET-CHAR", 1, 0, false);
+        declareFunction("unicode_char_set_char", "UNICODE-CHAR-SET-CHAR", 2, 0, false);
+        declareFunction("unicode_string_print_function_trampoline", "UNICODE-STRING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("unicode_string_p", "UNICODE-STRING-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.unicode_strings.$unicode_string_p$UnaryFunction();
+        declareFunction("unicode_string_vect", "UNICODE-STRING-VECT", 1, 0, false);
+        declareFunction("_csetf_unicode_string_vect", "_CSETF-UNICODE-STRING-VECT", 2, 0, false);
+        declareFunction("make_unicode_string", "MAKE-UNICODE-STRING", 0, 1, false);
+        declareFunction("unicode_string_create", "UNICODE-STRING-CREATE", 1, 0, false);
+        declareFunction("print_unicode_string", "PRINT-UNICODE-STRING", 3, 0, false);
+        declareFunction("unicode_string_get_vector", "UNICODE-STRING-GET-VECTOR", 1, 0, false);
+        declareFunction("unicode_string_set_vector", "UNICODE-STRING-SET-VECTOR", 2, 0, false);
+        declareFunction("unicode_vector_string_p", "UNICODE-VECTOR-STRING-P", 1, 0, false);
+        declareFunction("utf8_vector_string_p", "UTF8-VECTOR-STRING-P", 1, 0, false);
+        declareFunction("ascii_string_p", "ASCII-STRING-P", 1, 0, false);
+        declareFunction("non_ascii_string_p", "NON-ASCII-STRING-P", 1, 0, false);
+        declareFunction("ascii_char_p", "ASCII-CHAR-P", 1, 0, false);
+        declareFunction("non_ascii_char_p", "NON-ASCII-CHAR-P", 1, 0, false);
+        declareFunction("ascii_char_p_int", "ASCII-CHAR-P-INT", 1, 0, false);
+        declareFunction("display_vector_is_ascii_p", "DISPLAY-VECTOR-IS-ASCII-P", 1, 0, false);
+        declareFunction("display_vector_string_p", "DISPLAY-VECTOR-STRING-P", 1, 0, false);
+        declareFunction("display_to_unicode_vector", "DISPLAY-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("display_to_subl_string", "DISPLAY-TO-SUBL-STRING", 1, 2, false);
+        declareFunction("unicode_vector_to_display", "UNICODE-VECTOR-TO-DISPLAY", 1, 0, false);
+        declareFunction("element_vector", "ELEMENT-VECTOR", 2, 0, false);
+        declareFunction("unicode_vector_to_utf8_vector", "UNICODE-VECTOR-TO-UTF8-VECTOR", 1, 2, false);
+        declareFunction("utf8_vector_to_unicode_vector", "UTF8-VECTOR-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("unicode_char_code", "UNICODE-CHAR-CODE", 1, 0, false);
+        declareFunction("unicode_code_char", "UNICODE-CODE-CHAR", 1, 0, false);
+        declareFunction("unicode_character_p", "UNICODE-CHARACTER-P", 1, 0, false);
+        declareFunction("number_utf8_bytes", "NUMBER-UTF8-BYTES", 1, 0, false);
+        declareFunction("to_utf8_vector", "TO-UTF8-VECTOR", 1, 0, false);
+        declareFunction("print_utf_hex_list", "PRINT-UTF-HEX-LIST", 1, 0, false);
+        declareFunction("to_utc8_vector_internal", "TO-UTC8-VECTOR-INTERNAL", 3, 0, false);
+        declareFunction("length_utf8_vector_codepoint", "LENGTH-UTF8-VECTOR-CODEPOINT", 2, 0, false);
+        declareFunction("length_utf8_from_first_byte", "LENGTH-UTF8-FROM-FIRST-BYTE", 1, 0, false);
+        declareFunction("utf8_vector_is_ascii_string_p", "UTF8-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
+        declareFunction("utf8_char_is_ascii_p", "UTF8-CHAR-IS-ASCII-P", 2, 0, false);
+        declareFunction("unicode_vector_is_ascii_string_p", "UNICODE-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
+        declareFunction("unicode_char_is_ascii_char_p", "UNICODE-CHAR-IS-ASCII-CHAR-P", 1, 0, false);
+        declareFunction("utf8_char_p", "UTF8-CHAR-P", 2, 0, false);
+        declareFunction("get_unicode_char_at_or_after_offset", "GET-UNICODE-CHAR-AT-OR-AFTER-OFFSET", 2, 0, false);
+        declareFunction("get_unicode_char_at_or_before_offset", "GET-UNICODE-CHAR-AT-OR-BEFORE-OFFSET", 2, 0, false);
+        declareFunction("get_unicode_char_at_offset", "GET-UNICODE-CHAR-AT-OFFSET", 2, 0, false);
+        declareFunction("string_from_char_list", "STRING-FROM-CHAR-LIST", 1, 1, false);
+        declareFunction("unicode_to_html_escaped", "UNICODE-TO-HTML-ESCAPED", 1, 0, false);
+        declareFunction("unicode_string_to_utf8", "UNICODE-STRING-TO-UTF8", 1, 0, false);
+        declareFunction("unicode_string_to_subl_string", "UNICODE-STRING-TO-SUBL-STRING", 1, 0, false);
+        declareFunction("unicode_display_to_utf8", "UNICODE-DISPLAY-TO-UTF8", 1, 0, false);
+        declareFunction("unicode_display_to_html", "UNICODE-DISPLAY-TO-HTML", 1, 0, false);
+        declareFunction("html_escaped_to_utf8_vector", "HTML-ESCAPED-TO-UTF8-VECTOR", 1, 0, false);
+        declareFunction("utf8_string_to_unicode_vector", "UTF8-STRING-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("html_escaped_to_unicode_vector", "HTML-ESCAPED-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("utf8_vector_to_utf8_string", "UTF8-VECTOR-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("utf8_string_to_utf8_vector", "UTF8-STRING-TO-UTF8-VECTOR", 1, 0, false);
+        declareFunction("utf8_string_to_subl_string", "UTF8-STRING-TO-SUBL-STRING", 1, 0, false);
+        declareFunction("utf8_string_to_display", "UTF8-STRING-TO-DISPLAY", 1, 0, false);
+        declareFunction("html_escaped_to_utf8_string", "HTML-ESCAPED-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("display_to_utf8_string", "DISPLAY-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("html_escaped_to_display", "HTML-ESCAPED-TO-DISPLAY", 1, 0, false);
+        declareFunction("map_character_entity_to_decimal_value", "MAP-CHARACTER-ENTITY-TO-DECIMAL-VALUE", 1, 0, false);
+        declareFunction("map_decimal_value_to_character_entity", "MAP-DECIMAL-VALUE-TO-CHARACTER-ENTITY", 1, 0, false);
+        declareFunction("unicode_string_concatenate", "UNICODE-STRING-CONCATENATE", 2, 0, false);
+        declareFunction("cfasl_output_object_unicode_char_method", "CFASL-OUTPUT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_unicode_char", "CFASL-OUTPUT-UNICODE-CHAR", 2, 0, false);
+        declareFunction("cfasl_input_unicode_char", "CFASL-INPUT-UNICODE-CHAR", 1, 0, false);
+        declareFunction("cfasl_output_object_unicode_string_method", "CFASL-OUTPUT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_unicode_string", "CFASL-OUTPUT-UNICODE-STRING", 2, 0, false);
+        declareFunction("cfasl_input_unicode_string", "CFASL-INPUT-UNICODE-STRING", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_unicode_strings_file() {
-        declareFunction(me, "unicode_char_print_function_trampoline", "UNICODE-CHAR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "unicode_char_p", "UNICODE-CHAR-P", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("unicode_char_print_function_trampoline", "UNICODE-CHAR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("unicode_char_p", "UNICODE-CHAR-P", 1, 0, false);
+            new unicode_strings.$unicode_char_p$UnaryFunction();
+            declareFunction("unicode_char_uchar", "UNICODE-CHAR-UCHAR", 1, 0, false);
+            declareFunction("_csetf_unicode_char_uchar", "_CSETF-UNICODE-CHAR-UCHAR", 2, 0, false);
+            declareFunction("make_unicode_char", "MAKE-UNICODE-CHAR", 0, 1, false);
+            declareFunction("visit_defstruct_unicode_char", "VISIT-DEFSTRUCT-UNICODE-CHAR", 2, 0, false);
+            declareFunction("visit_defstruct_object_unicode_char_method", "VISIT-DEFSTRUCT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
+            declareFunction("unicode_char_create", "UNICODE-CHAR-CREATE", 1, 0, false);
+            declareFunction("print_unicode_char", "PRINT-UNICODE-CHAR", 3, 0, false);
+            declareFunction("unicode_char_get_char", "UNICODE-CHAR-GET-CHAR", 1, 0, false);
+            declareFunction("unicode_char_set_char", "UNICODE-CHAR-SET-CHAR", 2, 0, false);
+            declareFunction("unicode_string_print_function_trampoline", "UNICODE-STRING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("unicode_string_p", "UNICODE-STRING-P", 1, 0, false);
+            new unicode_strings.$unicode_string_p$UnaryFunction();
+            declareFunction("unicode_string_vect", "UNICODE-STRING-VECT", 1, 0, false);
+            declareFunction("_csetf_unicode_string_vect", "_CSETF-UNICODE-STRING-VECT", 2, 0, false);
+            declareFunction("make_unicode_string", "MAKE-UNICODE-STRING", 0, 1, false);
+            declareFunction("visit_defstruct_unicode_string", "VISIT-DEFSTRUCT-UNICODE-STRING", 2, 0, false);
+            declareFunction("visit_defstruct_object_unicode_string_method", "VISIT-DEFSTRUCT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
+            declareFunction("unicode_string_create", "UNICODE-STRING-CREATE", 1, 0, false);
+            declareFunction("print_unicode_string", "PRINT-UNICODE-STRING", 3, 0, false);
+            declareFunction("unicode_string_get_vector", "UNICODE-STRING-GET-VECTOR", 1, 0, false);
+            declareFunction("unicode_string_set_vector", "UNICODE-STRING-SET-VECTOR", 2, 0, false);
+            declareFunction("unicode_vector_string_p", "UNICODE-VECTOR-STRING-P", 1, 0, false);
+            declareFunction("utf8_vector_string_p", "UTF8-VECTOR-STRING-P", 1, 0, false);
+            declareFunction("ascii_string_p", "ASCII-STRING-P", 1, 0, false);
+            declareFunction("non_ascii_string_p", "NON-ASCII-STRING-P", 1, 0, false);
+            declareFunction("ascii_char_p", "ASCII-CHAR-P", 1, 0, false);
+            declareFunction("non_ascii_char_p", "NON-ASCII-CHAR-P", 1, 0, false);
+            declareFunction("ascii_char_code_p", "ASCII-CHAR-CODE-P", 1, 0, false);
+            declareFunction("ascii_char_p_int", "ASCII-CHAR-P-INT", 1, 0, false);
+            declareFunction("identify_string_type", "IDENTIFY-STRING-TYPE", 1, 0, false);
+            declareFunction("display_vector_is_ascii_p", "DISPLAY-VECTOR-IS-ASCII-P", 1, 0, false);
+            declareFunction("display_vector_string_p", "DISPLAY-VECTOR-STRING-P", 1, 0, false);
+            declareFunction("display_to_unicode_vector", "DISPLAY-TO-UNICODE-VECTOR", 1, 0, false);
+            declareFunction("display_to_subl_string", "DISPLAY-TO-SUBL-STRING", 1, 2, false);
+            declareFunction("unicode_vector_to_display", "UNICODE-VECTOR-TO-DISPLAY", 1, 0, false);
+            declareFunction("element_vector", "ELEMENT-VECTOR", 2, 0, false);
+            declareFunction("unicode_vector_to_utf8_vector", "UNICODE-VECTOR-TO-UTF8-VECTOR", 1, 2, false);
+            declareFunction("utf8_vector_to_unicode_vector", "UTF8-VECTOR-TO-UNICODE-VECTOR", 1, 0, false);
+            declareFunction("unicode_char_code", "UNICODE-CHAR-CODE", 1, 0, false);
+            declareFunction("unicode_code_char", "UNICODE-CODE-CHAR", 1, 0, false);
+            declareFunction("unicode_character_p", "UNICODE-CHARACTER-P", 1, 0, false);
+            declareFunction("number_utf8_bytes", "NUMBER-UTF8-BYTES", 1, 0, false);
+            declareFunction("to_utf8_vector", "TO-UTF8-VECTOR", 1, 0, false);
+            declareFunction("print_utf_hex_list", "PRINT-UTF-HEX-LIST", 1, 0, false);
+            declareFunction("to_utc8_vector_internal", "TO-UTC8-VECTOR-INTERNAL", 3, 0, false);
+            declareFunction("length_utf8_vector_codepoint", "LENGTH-UTF8-VECTOR-CODEPOINT", 2, 0, false);
+            declareFunction("length_utf8_from_first_byte", "LENGTH-UTF8-FROM-FIRST-BYTE", 1, 0, false);
+            declareFunction("utf8_vector_is_ascii_string_p", "UTF8-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
+            declareFunction("utf8_char_is_ascii_p", "UTF8-CHAR-IS-ASCII-P", 2, 0, false);
+            declareFunction("unicode_vector_is_ascii_string_p", "UNICODE-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
+            declareFunction("unicode_char_is_ascii_char_p", "UNICODE-CHAR-IS-ASCII-CHAR-P", 1, 0, false);
+            declareFunction("utf8_char_p", "UTF8-CHAR-P", 2, 0, false);
+            declareFunction("get_unicode_char_at_or_after_offset", "GET-UNICODE-CHAR-AT-OR-AFTER-OFFSET", 2, 0, false);
+            declareFunction("get_unicode_char_at_or_before_offset", "GET-UNICODE-CHAR-AT-OR-BEFORE-OFFSET", 2, 0, false);
+            declareFunction("get_unicode_char_at_offset", "GET-UNICODE-CHAR-AT-OFFSET", 2, 0, false);
+            declareFunction("string_from_char_list", "STRING-FROM-CHAR-LIST", 1, 1, false);
+            declareFunction("unicode_to_html_escaped", "UNICODE-TO-HTML-ESCAPED", 1, 1, false);
+            declareFunction("unicode_string_to_utf8", "UNICODE-STRING-TO-UTF8", 1, 0, false);
+            declareFunction("unicode_string_to_subl_string", "UNICODE-STRING-TO-SUBL-STRING", 1, 0, false);
+            declareFunction("unicode_display_to_utf8", "UNICODE-DISPLAY-TO-UTF8", 1, 0, false);
+            declareFunction("unicode_display_to_html", "UNICODE-DISPLAY-TO-HTML", 1, 0, false);
+            declareFunction("html_escaped_to_utf8_vector", "HTML-ESCAPED-TO-UTF8-VECTOR", 1, 0, false);
+            declareFunction("utf8_string_to_unicode_vector", "UTF8-STRING-TO-UNICODE-VECTOR", 1, 0, false);
+            declareFunction("html_escaped_to_unicode_vector", "HTML-ESCAPED-TO-UNICODE-VECTOR", 1, 0, false);
+            declareFunction("html_escaped_utf8_string_to_utf8_string", "HTML-ESCAPED-UTF8-STRING-TO-UTF8-STRING", 1, 0, false);
+            declareFunction("html_unescape_unicode_vector", "HTML-UNESCAPE-UNICODE-VECTOR", 1, 0, false);
+            declareFunction("utf8_vector_to_utf8_string", "UTF8-VECTOR-TO-UTF8-STRING", 1, 0, false);
+            declareFunction("utf8_string_to_utf8_vector", "UTF8-STRING-TO-UTF8-VECTOR", 1, 0, false);
+            declareFunction("subl_string_to_char_code_vector", "SUBL-STRING-TO-CHAR-CODE-VECTOR", 1, 0, false);
+            declareFunction("utf8_string_to_subl_string", "UTF8-STRING-TO-SUBL-STRING", 1, 0, false);
+            declareFunction("utf8_string_to_display", "UTF8-STRING-TO-DISPLAY", 1, 0, false);
+            declareFunction("html_escaped_to_utf8_string", "HTML-ESCAPED-TO-UTF8-STRING", 1, 0, false);
+            declareFunction("display_to_utf8_string", "DISPLAY-TO-UTF8-STRING", 1, 0, false);
+            declareFunction("html_escaped_to_display", "HTML-ESCAPED-TO-DISPLAY", 1, 0, false);
+            declareFunction("map_character_entity_to_decimal_value", "MAP-CHARACTER-ENTITY-TO-DECIMAL-VALUE", 1, 0, false);
+            declareFunction("map_decimal_value_to_character_entity", "MAP-DECIMAL-VALUE-TO-CHARACTER-ENTITY", 1, 0, false);
+            declareFunction("unicode_string_concatenate", "UNICODE-STRING-CONCATENATE", 2, 0, false);
+            declareFunction("cfasl_output_object_unicode_char_method", "CFASL-OUTPUT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
+            declareFunction("cfasl_output_unicode_char", "CFASL-OUTPUT-UNICODE-CHAR", 2, 0, false);
+            declareFunction("cfasl_input_unicode_char", "CFASL-INPUT-UNICODE-CHAR", 1, 0, false);
+            declareFunction("cfasl_output_object_unicode_string_method", "CFASL-OUTPUT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
+            declareFunction("cfasl_output_unicode_string", "CFASL-OUTPUT-UNICODE-STRING", 2, 0, false);
+            declareFunction("cfasl_input_unicode_string", "CFASL-INPUT-UNICODE-STRING", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("unicode_to_html_escaped", "UNICODE-TO-HTML-ESCAPED", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_unicode_strings_file_Previous() {
+        declareFunction("unicode_char_print_function_trampoline", "UNICODE-CHAR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("unicode_char_p", "UNICODE-CHAR-P", 1, 0, false);
         new unicode_strings.$unicode_char_p$UnaryFunction();
-        declareFunction(me, "unicode_char_uchar", "UNICODE-CHAR-UCHAR", 1, 0, false);
-        declareFunction(me, "_csetf_unicode_char_uchar", "_CSETF-UNICODE-CHAR-UCHAR", 2, 0, false);
-        declareFunction(me, "make_unicode_char", "MAKE-UNICODE-CHAR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_unicode_char", "VISIT-DEFSTRUCT-UNICODE-CHAR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_unicode_char_method", "VISIT-DEFSTRUCT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
-        declareFunction(me, "unicode_char_create", "UNICODE-CHAR-CREATE", 1, 0, false);
-        declareFunction(me, "print_unicode_char", "PRINT-UNICODE-CHAR", 3, 0, false);
-        declareFunction(me, "unicode_char_get_char", "UNICODE-CHAR-GET-CHAR", 1, 0, false);
-        declareFunction(me, "unicode_char_set_char", "UNICODE-CHAR-SET-CHAR", 2, 0, false);
-        declareFunction(me, "unicode_string_print_function_trampoline", "UNICODE-STRING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "unicode_string_p", "UNICODE-STRING-P", 1, 0, false);
+        declareFunction("unicode_char_uchar", "UNICODE-CHAR-UCHAR", 1, 0, false);
+        declareFunction("_csetf_unicode_char_uchar", "_CSETF-UNICODE-CHAR-UCHAR", 2, 0, false);
+        declareFunction("make_unicode_char", "MAKE-UNICODE-CHAR", 0, 1, false);
+        declareFunction("visit_defstruct_unicode_char", "VISIT-DEFSTRUCT-UNICODE-CHAR", 2, 0, false);
+        declareFunction("visit_defstruct_object_unicode_char_method", "VISIT-DEFSTRUCT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
+        declareFunction("unicode_char_create", "UNICODE-CHAR-CREATE", 1, 0, false);
+        declareFunction("print_unicode_char", "PRINT-UNICODE-CHAR", 3, 0, false);
+        declareFunction("unicode_char_get_char", "UNICODE-CHAR-GET-CHAR", 1, 0, false);
+        declareFunction("unicode_char_set_char", "UNICODE-CHAR-SET-CHAR", 2, 0, false);
+        declareFunction("unicode_string_print_function_trampoline", "UNICODE-STRING-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("unicode_string_p", "UNICODE-STRING-P", 1, 0, false);
         new unicode_strings.$unicode_string_p$UnaryFunction();
-        declareFunction(me, "unicode_string_vect", "UNICODE-STRING-VECT", 1, 0, false);
-        declareFunction(me, "_csetf_unicode_string_vect", "_CSETF-UNICODE-STRING-VECT", 2, 0, false);
-        declareFunction(me, "make_unicode_string", "MAKE-UNICODE-STRING", 0, 1, false);
-        declareFunction(me, "visit_defstruct_unicode_string", "VISIT-DEFSTRUCT-UNICODE-STRING", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_unicode_string_method", "VISIT-DEFSTRUCT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
-        declareFunction(me, "unicode_string_create", "UNICODE-STRING-CREATE", 1, 0, false);
-        declareFunction(me, "print_unicode_string", "PRINT-UNICODE-STRING", 3, 0, false);
-        declareFunction(me, "unicode_string_get_vector", "UNICODE-STRING-GET-VECTOR", 1, 0, false);
-        declareFunction(me, "unicode_string_set_vector", "UNICODE-STRING-SET-VECTOR", 2, 0, false);
-        declareFunction(me, "unicode_vector_string_p", "UNICODE-VECTOR-STRING-P", 1, 0, false);
-        declareFunction(me, "utf8_vector_string_p", "UTF8-VECTOR-STRING-P", 1, 0, false);
-        declareFunction(me, "ascii_string_p", "ASCII-STRING-P", 1, 0, false);
-        declareFunction(me, "non_ascii_string_p", "NON-ASCII-STRING-P", 1, 0, false);
-        declareFunction(me, "ascii_char_p", "ASCII-CHAR-P", 1, 0, false);
-        declareFunction(me, "non_ascii_char_p", "NON-ASCII-CHAR-P", 1, 0, false);
-        declareFunction(me, "ascii_char_code_p", "ASCII-CHAR-CODE-P", 1, 0, false);
-        declareFunction(me, "ascii_char_p_int", "ASCII-CHAR-P-INT", 1, 0, false);
-        declareFunction(me, "identify_string_type", "IDENTIFY-STRING-TYPE", 1, 0, false);
-        declareFunction(me, "display_vector_is_ascii_p", "DISPLAY-VECTOR-IS-ASCII-P", 1, 0, false);
-        declareFunction(me, "display_vector_string_p", "DISPLAY-VECTOR-STRING-P", 1, 0, false);
-        declareFunction(me, "display_to_unicode_vector", "DISPLAY-TO-UNICODE-VECTOR", 1, 0, false);
-        declareFunction(me, "display_to_subl_string", "DISPLAY-TO-SUBL-STRING", 1, 2, false);
-        declareFunction(me, "unicode_vector_to_display", "UNICODE-VECTOR-TO-DISPLAY", 1, 0, false);
-        declareFunction(me, "element_vector", "ELEMENT-VECTOR", 2, 0, false);
-        declareFunction(me, "unicode_vector_to_utf8_vector", "UNICODE-VECTOR-TO-UTF8-VECTOR", 1, 2, false);
-        declareFunction(me, "utf8_vector_to_unicode_vector", "UTF8-VECTOR-TO-UNICODE-VECTOR", 1, 0, false);
-        declareFunction(me, "unicode_char_code", "UNICODE-CHAR-CODE", 1, 0, false);
-        declareFunction(me, "unicode_code_char", "UNICODE-CODE-CHAR", 1, 0, false);
-        declareFunction(me, "unicode_character_p", "UNICODE-CHARACTER-P", 1, 0, false);
-        declareFunction(me, "number_utf8_bytes", "NUMBER-UTF8-BYTES", 1, 0, false);
-        declareFunction(me, "to_utf8_vector", "TO-UTF8-VECTOR", 1, 0, false);
-        declareFunction(me, "print_utf_hex_list", "PRINT-UTF-HEX-LIST", 1, 0, false);
-        declareFunction(me, "to_utc8_vector_internal", "TO-UTC8-VECTOR-INTERNAL", 3, 0, false);
-        declareFunction(me, "length_utf8_vector_codepoint", "LENGTH-UTF8-VECTOR-CODEPOINT", 2, 0, false);
-        declareFunction(me, "length_utf8_from_first_byte", "LENGTH-UTF8-FROM-FIRST-BYTE", 1, 0, false);
-        declareFunction(me, "utf8_vector_is_ascii_string_p", "UTF8-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
-        declareFunction(me, "utf8_char_is_ascii_p", "UTF8-CHAR-IS-ASCII-P", 2, 0, false);
-        declareFunction(me, "unicode_vector_is_ascii_string_p", "UNICODE-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
-        declareFunction(me, "unicode_char_is_ascii_char_p", "UNICODE-CHAR-IS-ASCII-CHAR-P", 1, 0, false);
-        declareFunction(me, "utf8_char_p", "UTF8-CHAR-P", 2, 0, false);
-        declareFunction(me, "get_unicode_char_at_or_after_offset", "GET-UNICODE-CHAR-AT-OR-AFTER-OFFSET", 2, 0, false);
-        declareFunction(me, "get_unicode_char_at_or_before_offset", "GET-UNICODE-CHAR-AT-OR-BEFORE-OFFSET", 2, 0, false);
-        declareFunction(me, "get_unicode_char_at_offset", "GET-UNICODE-CHAR-AT-OFFSET", 2, 0, false);
-        declareFunction(me, "string_from_char_list", "STRING-FROM-CHAR-LIST", 1, 1, false);
-        declareFunction(me, "unicode_to_html_escaped", "UNICODE-TO-HTML-ESCAPED", 1, 1, false);
-        declareFunction(me, "unicode_string_to_utf8", "UNICODE-STRING-TO-UTF8", 1, 0, false);
-        declareFunction(me, "unicode_string_to_subl_string", "UNICODE-STRING-TO-SUBL-STRING", 1, 0, false);
-        declareFunction(me, "unicode_display_to_utf8", "UNICODE-DISPLAY-TO-UTF8", 1, 0, false);
-        declareFunction(me, "unicode_display_to_html", "UNICODE-DISPLAY-TO-HTML", 1, 0, false);
-        declareFunction(me, "html_escaped_to_utf8_vector", "HTML-ESCAPED-TO-UTF8-VECTOR", 1, 0, false);
-        declareFunction(me, "utf8_string_to_unicode_vector", "UTF8-STRING-TO-UNICODE-VECTOR", 1, 0, false);
-        declareFunction(me, "html_escaped_to_unicode_vector", "HTML-ESCAPED-TO-UNICODE-VECTOR", 1, 0, false);
-        declareFunction(me, "html_escaped_utf8_string_to_utf8_string", "HTML-ESCAPED-UTF8-STRING-TO-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "html_unescape_unicode_vector", "HTML-UNESCAPE-UNICODE-VECTOR", 1, 0, false);
-        declareFunction(me, "utf8_vector_to_utf8_string", "UTF8-VECTOR-TO-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "utf8_string_to_utf8_vector", "UTF8-STRING-TO-UTF8-VECTOR", 1, 0, false);
-        declareFunction(me, "subl_string_to_char_code_vector", "SUBL-STRING-TO-CHAR-CODE-VECTOR", 1, 0, false);
-        declareFunction(me, "utf8_string_to_subl_string", "UTF8-STRING-TO-SUBL-STRING", 1, 0, false);
-        declareFunction(me, "utf8_string_to_display", "UTF8-STRING-TO-DISPLAY", 1, 0, false);
-        declareFunction(me, "html_escaped_to_utf8_string", "HTML-ESCAPED-TO-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "display_to_utf8_string", "DISPLAY-TO-UTF8-STRING", 1, 0, false);
-        declareFunction(me, "html_escaped_to_display", "HTML-ESCAPED-TO-DISPLAY", 1, 0, false);
-        declareFunction(me, "map_character_entity_to_decimal_value", "MAP-CHARACTER-ENTITY-TO-DECIMAL-VALUE", 1, 0, false);
-        declareFunction(me, "map_decimal_value_to_character_entity", "MAP-DECIMAL-VALUE-TO-CHARACTER-ENTITY", 1, 0, false);
-        declareFunction(me, "unicode_string_concatenate", "UNICODE-STRING-CONCATENATE", 2, 0, false);
-        declareFunction(me, "cfasl_output_object_unicode_char_method", "CFASL-OUTPUT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
-        declareFunction(me, "cfasl_output_unicode_char", "CFASL-OUTPUT-UNICODE-CHAR", 2, 0, false);
-        declareFunction(me, "cfasl_input_unicode_char", "CFASL-INPUT-UNICODE-CHAR", 1, 0, false);
-        declareFunction(me, "cfasl_output_object_unicode_string_method", "CFASL-OUTPUT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
-        declareFunction(me, "cfasl_output_unicode_string", "CFASL-OUTPUT-UNICODE-STRING", 2, 0, false);
-        declareFunction(me, "cfasl_input_unicode_string", "CFASL-INPUT-UNICODE-STRING", 1, 0, false);
+        declareFunction("unicode_string_vect", "UNICODE-STRING-VECT", 1, 0, false);
+        declareFunction("_csetf_unicode_string_vect", "_CSETF-UNICODE-STRING-VECT", 2, 0, false);
+        declareFunction("make_unicode_string", "MAKE-UNICODE-STRING", 0, 1, false);
+        declareFunction("visit_defstruct_unicode_string", "VISIT-DEFSTRUCT-UNICODE-STRING", 2, 0, false);
+        declareFunction("visit_defstruct_object_unicode_string_method", "VISIT-DEFSTRUCT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
+        declareFunction("unicode_string_create", "UNICODE-STRING-CREATE", 1, 0, false);
+        declareFunction("print_unicode_string", "PRINT-UNICODE-STRING", 3, 0, false);
+        declareFunction("unicode_string_get_vector", "UNICODE-STRING-GET-VECTOR", 1, 0, false);
+        declareFunction("unicode_string_set_vector", "UNICODE-STRING-SET-VECTOR", 2, 0, false);
+        declareFunction("unicode_vector_string_p", "UNICODE-VECTOR-STRING-P", 1, 0, false);
+        declareFunction("utf8_vector_string_p", "UTF8-VECTOR-STRING-P", 1, 0, false);
+        declareFunction("ascii_string_p", "ASCII-STRING-P", 1, 0, false);
+        declareFunction("non_ascii_string_p", "NON-ASCII-STRING-P", 1, 0, false);
+        declareFunction("ascii_char_p", "ASCII-CHAR-P", 1, 0, false);
+        declareFunction("non_ascii_char_p", "NON-ASCII-CHAR-P", 1, 0, false);
+        declareFunction("ascii_char_code_p", "ASCII-CHAR-CODE-P", 1, 0, false);
+        declareFunction("ascii_char_p_int", "ASCII-CHAR-P-INT", 1, 0, false);
+        declareFunction("identify_string_type", "IDENTIFY-STRING-TYPE", 1, 0, false);
+        declareFunction("display_vector_is_ascii_p", "DISPLAY-VECTOR-IS-ASCII-P", 1, 0, false);
+        declareFunction("display_vector_string_p", "DISPLAY-VECTOR-STRING-P", 1, 0, false);
+        declareFunction("display_to_unicode_vector", "DISPLAY-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("display_to_subl_string", "DISPLAY-TO-SUBL-STRING", 1, 2, false);
+        declareFunction("unicode_vector_to_display", "UNICODE-VECTOR-TO-DISPLAY", 1, 0, false);
+        declareFunction("element_vector", "ELEMENT-VECTOR", 2, 0, false);
+        declareFunction("unicode_vector_to_utf8_vector", "UNICODE-VECTOR-TO-UTF8-VECTOR", 1, 2, false);
+        declareFunction("utf8_vector_to_unicode_vector", "UTF8-VECTOR-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("unicode_char_code", "UNICODE-CHAR-CODE", 1, 0, false);
+        declareFunction("unicode_code_char", "UNICODE-CODE-CHAR", 1, 0, false);
+        declareFunction("unicode_character_p", "UNICODE-CHARACTER-P", 1, 0, false);
+        declareFunction("number_utf8_bytes", "NUMBER-UTF8-BYTES", 1, 0, false);
+        declareFunction("to_utf8_vector", "TO-UTF8-VECTOR", 1, 0, false);
+        declareFunction("print_utf_hex_list", "PRINT-UTF-HEX-LIST", 1, 0, false);
+        declareFunction("to_utc8_vector_internal", "TO-UTC8-VECTOR-INTERNAL", 3, 0, false);
+        declareFunction("length_utf8_vector_codepoint", "LENGTH-UTF8-VECTOR-CODEPOINT", 2, 0, false);
+        declareFunction("length_utf8_from_first_byte", "LENGTH-UTF8-FROM-FIRST-BYTE", 1, 0, false);
+        declareFunction("utf8_vector_is_ascii_string_p", "UTF8-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
+        declareFunction("utf8_char_is_ascii_p", "UTF8-CHAR-IS-ASCII-P", 2, 0, false);
+        declareFunction("unicode_vector_is_ascii_string_p", "UNICODE-VECTOR-IS-ASCII-STRING-P", 1, 2, false);
+        declareFunction("unicode_char_is_ascii_char_p", "UNICODE-CHAR-IS-ASCII-CHAR-P", 1, 0, false);
+        declareFunction("utf8_char_p", "UTF8-CHAR-P", 2, 0, false);
+        declareFunction("get_unicode_char_at_or_after_offset", "GET-UNICODE-CHAR-AT-OR-AFTER-OFFSET", 2, 0, false);
+        declareFunction("get_unicode_char_at_or_before_offset", "GET-UNICODE-CHAR-AT-OR-BEFORE-OFFSET", 2, 0, false);
+        declareFunction("get_unicode_char_at_offset", "GET-UNICODE-CHAR-AT-OFFSET", 2, 0, false);
+        declareFunction("string_from_char_list", "STRING-FROM-CHAR-LIST", 1, 1, false);
+        declareFunction("unicode_to_html_escaped", "UNICODE-TO-HTML-ESCAPED", 1, 1, false);
+        declareFunction("unicode_string_to_utf8", "UNICODE-STRING-TO-UTF8", 1, 0, false);
+        declareFunction("unicode_string_to_subl_string", "UNICODE-STRING-TO-SUBL-STRING", 1, 0, false);
+        declareFunction("unicode_display_to_utf8", "UNICODE-DISPLAY-TO-UTF8", 1, 0, false);
+        declareFunction("unicode_display_to_html", "UNICODE-DISPLAY-TO-HTML", 1, 0, false);
+        declareFunction("html_escaped_to_utf8_vector", "HTML-ESCAPED-TO-UTF8-VECTOR", 1, 0, false);
+        declareFunction("utf8_string_to_unicode_vector", "UTF8-STRING-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("html_escaped_to_unicode_vector", "HTML-ESCAPED-TO-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("html_escaped_utf8_string_to_utf8_string", "HTML-ESCAPED-UTF8-STRING-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("html_unescape_unicode_vector", "HTML-UNESCAPE-UNICODE-VECTOR", 1, 0, false);
+        declareFunction("utf8_vector_to_utf8_string", "UTF8-VECTOR-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("utf8_string_to_utf8_vector", "UTF8-STRING-TO-UTF8-VECTOR", 1, 0, false);
+        declareFunction("subl_string_to_char_code_vector", "SUBL-STRING-TO-CHAR-CODE-VECTOR", 1, 0, false);
+        declareFunction("utf8_string_to_subl_string", "UTF8-STRING-TO-SUBL-STRING", 1, 0, false);
+        declareFunction("utf8_string_to_display", "UTF8-STRING-TO-DISPLAY", 1, 0, false);
+        declareFunction("html_escaped_to_utf8_string", "HTML-ESCAPED-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("display_to_utf8_string", "DISPLAY-TO-UTF8-STRING", 1, 0, false);
+        declareFunction("html_escaped_to_display", "HTML-ESCAPED-TO-DISPLAY", 1, 0, false);
+        declareFunction("map_character_entity_to_decimal_value", "MAP-CHARACTER-ENTITY-TO-DECIMAL-VALUE", 1, 0, false);
+        declareFunction("map_decimal_value_to_character_entity", "MAP-DECIMAL-VALUE-TO-CHARACTER-ENTITY", 1, 0, false);
+        declareFunction("unicode_string_concatenate", "UNICODE-STRING-CONCATENATE", 2, 0, false);
+        declareFunction("cfasl_output_object_unicode_char_method", "CFASL-OUTPUT-OBJECT-UNICODE-CHAR-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_unicode_char", "CFASL-OUTPUT-UNICODE-CHAR", 2, 0, false);
+        declareFunction("cfasl_input_unicode_char", "CFASL-INPUT-UNICODE-CHAR", 1, 0, false);
+        declareFunction("cfasl_output_object_unicode_string_method", "CFASL-OUTPUT-OBJECT-UNICODE-STRING-METHOD", 2, 0, false);
+        declareFunction("cfasl_output_unicode_string", "CFASL-OUTPUT-UNICODE-STRING", 2, 0, false);
+        declareFunction("cfasl_input_unicode_string", "CFASL-INPUT-UNICODE-STRING", 1, 0, false);
+        return NIL;
+    }
+
+    static private final SubLList $list_alt3 = list(makeSymbol("UCHAR"));
+
+    static private final SubLList $list_alt4 = list(makeKeyword("UCHAR"));
+
+    static private final SubLList $list_alt5 = list(makeSymbol("UNICODE-CHAR-UCHAR"));
+
+    static private final SubLList $list_alt6 = list(makeSymbol("_CSETF-UNICODE-CHAR-UCHAR"));
+
+    static private final SubLString $str_alt12$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLString $str_alt13$_u_x = makeString("#u~x");
+
+    static private final SubLString $str_alt14$_u0_x = makeString("#u0~x");
+
+    static private final SubLList $list_alt18 = list(makeSymbol("VECT"));
+
+    static private final SubLList $list_alt19 = list($VECT);
+
+    static private final SubLList $list_alt20 = list(makeSymbol("UNICODE-STRING-VECT"));
+
+    static private final SubLList $list_alt21 = list(makeSymbol("_CSETF-UNICODE-STRING-VECT"));
+
+    static private final SubLString $str_alt27$_u__a_ = makeString("#u\"~a\"");
+
+    static private final SubLList $list_alt37 = list(new SubLObject[]{ cons(makeInteger(192), makeInteger(65)), cons(makeInteger(193), makeInteger(65)), cons(makeInteger(194), makeInteger(65)), cons(makeInteger(195), makeInteger(65)), cons(makeInteger(196), makeInteger(65)), cons(makeInteger(197), makeInteger(65)), cons(makeInteger(200), makeInteger(69)), cons(makeInteger(201), makeInteger(69)), cons(makeInteger(202), makeInteger(69)), cons(makeInteger(203), makeInteger(69)), cons(makeInteger(204), makeInteger(73)), cons(makeInteger(205), makeInteger(73)), cons(makeInteger(206), makeInteger(73)), cons(makeInteger(207), makeInteger(73)), cons(makeInteger(209), makeInteger(78)), cons(makeInteger(210), makeInteger(79)), cons(makeInteger(211), makeInteger(79)), cons(makeInteger(212), makeInteger(79)), cons(makeInteger(213), makeInteger(79)), cons(makeInteger(214), makeInteger(79)), cons(makeInteger(216), makeInteger(79)), cons(makeInteger(217), makeInteger(85)), cons(makeInteger(218), makeInteger(85)), cons(makeInteger(219), makeInteger(85)), cons(makeInteger(220), makeInteger(85)), cons(makeInteger(221), makeInteger(89)), cons(makeInteger(224), makeInteger(97)), cons(makeInteger(225), makeInteger(97)), cons(makeInteger(226), makeInteger(97)), cons(makeInteger(227), makeInteger(97)), cons(makeInteger(228), makeInteger(97)), cons(makeInteger(229), makeInteger(97)), cons(makeInteger(231), makeInteger(99)), cons(makeInteger(232), makeInteger(101)), cons(makeInteger(233), makeInteger(101)), cons(makeInteger(234), makeInteger(101)), cons(makeInteger(235), makeInteger(101)), cons(makeInteger(236), makeInteger(105)), cons(makeInteger(237), makeInteger(105)), cons(makeInteger(238), makeInteger(105)), cons(makeInteger(239), makeInteger(105)), cons(makeInteger(240), makeInteger(100)), cons(makeInteger(241), makeInteger(110)), cons(makeInteger(242), makeInteger(111)), cons(makeInteger(243), makeInteger(111)), cons(makeInteger(244), makeInteger(111)), cons(makeInteger(245), makeInteger(111)), cons(makeInteger(246), makeInteger(111)), cons(makeInteger(248), makeInteger(111)), cons(makeInteger(249), makeInteger(117)), cons(makeInteger(250), makeInteger(117)), cons(makeInteger(251), makeInteger(117)), cons(makeInteger(252), makeInteger(117)), cons(makeInteger(253), makeInteger(121)), cons(makeInteger(255), makeInteger(121)), cons(makeInteger(323), makeInteger(110)), cons(makeInteger(324), makeInteger(110)) });
+
+    public static final SubLObject init_unicode_strings_file_alt() {
+        defconstant("MAX-UNICODE-VALUE", $int$1114111);
+        defconstant("*DTP-UNICODE-CHAR*", UNICODE_CHAR);
+        defconstant("*DTP-UNICODE-STRING*", UNICODE_STRING);
+        deflexical("*DEFAULT-NON-ASCII-PLACEHOLDER-CHAR*", CHAR_tilde);
+        defparameter("*DEFAULT-UNICODE-TO-ASCII-CODE-MAP*", $list_alt37);
+        deflexical("*HTML-40-CHARACTER-ENTITY-TABLE*", $list_alt75);
+        defconstant("*CFASL-OPCODE-UNICODE-CHAR*", $int$52);
+        defconstant("*CFASL-OPCODE-UNICODE-STRING*", $int$53);
         return NIL;
     }
 
     public static SubLObject init_unicode_strings_file() {
+        if (SubLFiles.USE_V1) {
+            defconstant("MAX-UNICODE-VALUE", $int$1114111);
+            defconstant("*DTP-UNICODE-CHAR*", UNICODE_CHAR);
+            defconstant("*DTP-UNICODE-STRING*", UNICODE_STRING);
+            deflexical("*DEFAULT-NON-ASCII-PLACEHOLDER-CHAR*", CHAR_tilde);
+            defparameter("*DEFAULT-UNICODE-TO-ASCII-CODE-MAP*", $list51);
+            deflexical("*HTML-40-CHARACTER-ENTITY-TABLE*", $list102);
+            defconstant("*CFASL-OPCODE-UNICODE-CHAR*", $int$52);
+            defconstant("*CFASL-OPCODE-UNICODE-STRING*", $int$53);
+        }
+        if (SubLFiles.USE_V2) {
+            defparameter("*DEFAULT-UNICODE-TO-ASCII-CODE-MAP*", $list_alt37);
+            deflexical("*HTML-40-CHARACTER-ENTITY-TABLE*", $list_alt75);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_unicode_strings_file_Previous() {
         defconstant("MAX-UNICODE-VALUE", $int$1114111);
         defconstant("*DTP-UNICODE-CHAR*", UNICODE_CHAR);
         defconstant("*DTP-UNICODE-STRING*", UNICODE_STRING);
@@ -1627,6 +3160,12 @@ public final class unicode_strings extends SubLTranslatedFile {
         defconstant("*CFASL-OPCODE-UNICODE-STRING*", $int$53);
         return NIL;
     }
+
+    static private final SubLString $str_alt38$__ = makeString("\\\"");
+
+    static private final SubLString $str_alt39$__ = makeString("\\\\");
+
+    static private final SubLString $str_alt40$_u26_ = makeString("&u26;");
 
     public static SubLObject setup_unicode_strings_file() {
         register_method($print_object_method_table$.getGlobalValue(), $dtp_unicode_char$.getGlobalValue(), symbol_function(UNICODE_CHAR_PRINT_FUNCTION_TRAMPOLINE));
@@ -1647,9 +3186,27 @@ public final class unicode_strings extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt43$_u_A_ = makeString("&u~A;");
+
+    static private final SubLString $str_alt49$__ = makeString("#(");
+
+    static private final SubLString $str_alt50$_x_x_ = makeString("#x~x ");
+
+    static private final SubLString $str_alt51$___ = makeString(")~%");
+
+    public static final SubLInteger $int$252 = makeInteger(252);
+
+    static private final SubLString $str_alt65$__x = makeString("&#x");
+
     private static SubLObject _constant_102_initializer() {
         return list(new SubLObject[]{ cons(makeString("AElig"), makeInteger(198)), cons(makeString("Aacute"), makeInteger(193)), cons(makeString("Acirc"), makeInteger(194)), cons(makeString("Agrave"), makeInteger(192)), cons(makeString("Alpha"), makeInteger(913)), cons(makeString("Aring"), makeInteger(197)), cons(makeString("Atilde"), makeInteger(195)), cons(makeString("Auml"), makeInteger(196)), cons(makeString("Beta"), makeInteger(914)), cons(makeString("Ccedil"), makeInteger(199)), cons(makeString("Chi"), makeInteger(935)), cons(makeString("Dagger"), makeInteger(8225)), cons(makeString("Delta"), makeInteger(916)), cons(makeString("ETH"), makeInteger(208)), cons(makeString("Eacute"), makeInteger(201)), cons(makeString("Ecirc"), makeInteger(202)), cons(makeString("Egrave"), makeInteger(200)), cons(makeString("Epsilon"), makeInteger(917)), cons(makeString("Eta"), makeInteger(919)), cons(makeString("Euml"), makeInteger(203)), cons(makeString("Gamma"), makeInteger(915)), cons(makeString("Iacute"), makeInteger(205)), cons(makeString("Icirc"), makeInteger(206)), cons(makeString("Igrave"), makeInteger(204)), cons(makeString("Iota"), makeInteger(921)), cons(makeString("Iuml"), makeInteger(207)), cons(makeString("Kappa"), makeInteger(922)), cons(makeString("Lambda"), makeInteger(923)), cons(makeString("Mu"), makeInteger(924)), cons(makeString("Ntilde"), makeInteger(209)), cons(makeString("Nu"), makeInteger(925)), cons(makeString("OElig"), makeInteger(338)), cons(makeString("Oacute"), makeInteger(211)), cons(makeString("Ocirc"), makeInteger(212)), cons(makeString("Ograve"), makeInteger(210)), cons(makeString("Omega"), makeInteger(937)), cons(makeString("Omicron"), makeInteger(927)), cons(makeString("Oslash"), makeInteger(216)), cons(makeString("Otilde"), makeInteger(213)), cons(makeString("Ouml"), makeInteger(214)), cons(makeString("Phi"), makeInteger(934)), cons(makeString("Pi"), makeInteger(928)), cons(makeString("Prime"), makeInteger(8243)), cons(makeString("Psi"), makeInteger(936)), cons(makeString("Rho"), makeInteger(929)), cons(makeString("Scaron"), makeInteger(352)), cons(makeString("Sigma"), makeInteger(931)), cons(makeString("THORN"), makeInteger(222)), cons(makeString("Tau"), makeInteger(932)), cons(makeString("Theta"), makeInteger(920)), cons(makeString("Uacute"), makeInteger(218)), cons(makeString("Ucirc"), makeInteger(219)), cons(makeString("Ugrave"), makeInteger(217)), cons(makeString("Upsilon"), makeInteger(933)), cons(makeString("Uuml"), makeInteger(220)), cons(makeString("Xi"), makeInteger(926)), cons(makeString("Yacute"), makeInteger(221)), cons(makeString("Yuml"), makeInteger(376)), cons(makeString("Zeta"), makeInteger(918)), cons(makeString("aacute"), makeInteger(225)), cons(makeString("acirc"), makeInteger(226)), cons(makeString("acute"), makeInteger(180)), cons(makeString("aelig"), makeInteger(230)), cons(makeString("agrave"), makeInteger(224)), cons(makeString("alefsym"), makeInteger(8501)), cons(makeString("alpha"), makeInteger(945)), cons(makeString("amp"), makeInteger(38)), cons(makeString("and"), makeInteger(8743)), cons(makeString("ang"), makeInteger(8736)), cons(makeString("aring"), makeInteger(229)), cons(makeString("asymp"), makeInteger(8776)), cons(makeString("atilde"), makeInteger(227)), cons(makeString("auml"), makeInteger(228)), cons(makeString("bdquo"), makeInteger(8222)), cons(makeString("beta"), makeInteger(946)), cons(makeString("brvbar"), makeInteger(166)), cons(makeString("bull"), makeInteger(8226)), cons(makeString("cap"), makeInteger(8745)), cons(makeString("ccedil"), makeInteger(231)), cons(makeString("cedil"), makeInteger(184)), cons(makeString("cent"), makeInteger(162)), cons(makeString("chi"), makeInteger(967)), cons(makeString("circ"), makeInteger(710)), cons(makeString("clubs"), makeInteger(9827)), cons(makeString("cong"), makeInteger(8773)), cons(makeString("copy"), makeInteger(169)), cons(makeString("crarr"), makeInteger(8629)), cons(makeString("cup"), makeInteger(8746)), cons(makeString("curren"), makeInteger(164)), cons(makeString("dArr"), makeInteger(8659)), cons(makeString("dagger"), makeInteger(8224)), cons(makeString("darr"), makeInteger(8595)), cons(makeString("deg"), makeInteger(176)), cons(makeString("delta"), makeInteger(948)), cons(makeString("diams"), makeInteger(9830)), cons(makeString("divide"), makeInteger(247)), cons(makeString("eacute"), makeInteger(233)), cons(makeString("ecirc"), makeInteger(234)), cons(makeString("egrave"), makeInteger(232)), cons(makeString("empty"), makeInteger(8709)), cons(makeString("emsp"), makeInteger(8195)), cons(makeString("ensp"), makeInteger(8194)), cons(makeString("epsilon"), makeInteger(949)), cons(makeString("equiv"), makeInteger(8801)), cons(makeString("eta"), makeInteger(951)), cons(makeString("eth"), makeInteger(240)), cons(makeString("euml"), makeInteger(235)), cons(makeString("euro"), makeInteger(8364)), cons(makeString("exist"), makeInteger(8707)), cons(makeString("fnof"), makeInteger(402)), cons(makeString("forall"), makeInteger(8704)), cons(makeString("frac12"), makeInteger(189)), cons(makeString("frac14"), makeInteger(188)), cons(makeString("frac34"), makeInteger(190)), cons(makeString("frasl"), makeInteger(8260)), cons(makeString("gamma"), makeInteger(947)), cons(makeString("ge"), makeInteger(8805)), cons(makeString("gt"), makeInteger(62)), cons(makeString("hArr"), makeInteger(8660)), cons(makeString("harr"), makeInteger(8596)), cons(makeString("hearts"), makeInteger(9829)), cons(makeString("hellip"), makeInteger(8230)), cons(makeString("iacute"), makeInteger(237)), cons(makeString("icirc"), makeInteger(238)), cons(makeString("iexcl"), makeInteger(161)), cons(makeString("igrave"), makeInteger(236)), cons(makeString("image"), makeInteger(8465)), cons(makeString("infin"), makeInteger(8734)), cons(makeString("int"), makeInteger(8747)), cons(makeString("iota"), makeInteger(953)), cons(makeString("iquest"), makeInteger(191)), cons(makeString("isin"), makeInteger(8712)), cons(makeString("iuml"), makeInteger(239)), cons(makeString("kappa"), makeInteger(954)), cons(makeString("lArr"), makeInteger(8656)), cons(makeString("lambda"), makeInteger(955)), cons(makeString("lang"), makeInteger(9001)), cons(makeString("laquo"), makeInteger(171)), cons(makeString("larr"), makeInteger(8592)), cons(makeString("lceil"), makeInteger(8968)), cons(makeString("ldquo"), makeInteger(8220)), cons(makeString("le"), makeInteger(8804)), cons(makeString("lfloor"), makeInteger(8970)), cons(makeString("lowast"), makeInteger(8727)), cons(makeString("loz"), makeInteger(9674)), cons(makeString("lrm"), makeInteger(8206)), cons(makeString("lsaquo"), makeInteger(8249)), cons(makeString("lsquo"), makeInteger(8216)), cons(makeString("lt"), makeInteger(60)), cons(makeString("macr"), makeInteger(175)), cons(makeString("mdash"), makeInteger(8212)), cons(makeString("micro"), makeInteger(181)), cons(makeString("middot"), makeInteger(183)), cons(makeString("minus"), makeInteger(8722)), cons(makeString("mu"), makeInteger(956)), cons(makeString("nabla"), makeInteger(8711)), cons(makeString("nbsp"), makeInteger(160)), cons(makeString("ndash"), makeInteger(8211)), cons(makeString("ne"), makeInteger(8800)), cons(makeString("ni"), makeInteger(8715)), cons(makeString("not"), makeInteger(172)), cons(makeString("notin"), makeInteger(8713)), cons(makeString("nsub"), makeInteger(8836)), cons(makeString("ntilde"), makeInteger(241)), cons(makeString("nu"), makeInteger(957)), cons(makeString("oacute"), makeInteger(243)), cons(makeString("ocirc"), makeInteger(244)), cons(makeString("oelig"), makeInteger(339)), cons(makeString("ograve"), makeInteger(242)), cons(makeString("oline"), makeInteger(8254)), cons(makeString("omega"), makeInteger(969)), cons(makeString("omicron"), makeInteger(959)), cons(makeString("oplus"), makeInteger(8853)), cons(makeString("or"), makeInteger(8744)), cons(makeString("ordf"), makeInteger(170)), cons(makeString("ordm"), makeInteger(186)), cons(makeString("oslash"), makeInteger(248)), cons(makeString("otilde"), makeInteger(245)), cons(makeString("otimes"), makeInteger(8855)), cons(makeString("ouml"), makeInteger(246)), cons(makeString("para"), makeInteger(182)), cons(makeString("part"), makeInteger(8706)), cons(makeString("permil"), makeInteger(8240)), cons(makeString("perp"), makeInteger(8869)), cons(makeString("phi"), makeInteger(966)), cons(makeString("pi"), makeInteger(960)), cons(makeString("piv"), makeInteger(982)), cons(makeString("plusmn"), makeInteger(177)), cons(makeString("pound"), makeInteger(163)), cons(makeString("prime"), makeInteger(8242)), cons(makeString("prod"), makeInteger(8719)), cons(makeString("prop"), makeInteger(8733)), cons(makeString("psi"), makeInteger(968)), cons(makeString("quot"), makeInteger(34)), cons(makeString("rArr"), makeInteger(8658)), cons(makeString("radic"), makeInteger(8730)), cons(makeString("rang"), makeInteger(9002)), cons(makeString("raquo"), makeInteger(187)), cons(makeString("rarr"), makeInteger(8594)), cons(makeString("rceil"), makeInteger(8969)), cons(makeString("rdquo"), makeInteger(8221)), cons(makeString("real"), makeInteger(8476)), cons(makeString("reg"), makeInteger(174)), cons(makeString("rfloor"), makeInteger(8971)), cons(makeString("rho"), makeInteger(961)), cons(makeString("rlm"), makeInteger(8207)), cons(makeString("rsaquo"), makeInteger(8250)), cons(makeString("rsquo"), makeInteger(8217)), cons(makeString("sbquo"), makeInteger(8218)), cons(makeString("scaron"), makeInteger(353)), cons(makeString("sdot"), makeInteger(8901)), cons(makeString("sect"), makeInteger(167)), cons(makeString("shy"), makeInteger(173)), cons(makeString("sigma"), makeInteger(963)), cons(makeString("sigmaf"), makeInteger(962)), cons(makeString("sim"), makeInteger(8764)), cons(makeString("spades"), makeInteger(9824)), cons(makeString("sub"), makeInteger(8834)), cons(makeString("sube"), makeInteger(8838)), cons(makeString("sum"), makeInteger(8721)), cons(makeString("sup"), makeInteger(8835)), cons(makeString("sup1"), makeInteger(185)), cons(makeString("sup2"), makeInteger(178)), cons(makeString("sup3"), makeInteger(179)), cons(makeString("supe"), makeInteger(8839)), cons(makeString("szlig"), makeInteger(223)), cons(makeString("tau"), makeInteger(964)), cons(makeString("there4"), makeInteger(8756)), cons(makeString("theta"), makeInteger(952)), cons(makeString("thetasym"), makeInteger(977)), cons(makeString("thinsp"), makeInteger(8201)), cons(makeString("thorn"), makeInteger(254)), cons(makeString("tilde"), makeInteger(732)), cons(makeString("times"), makeInteger(215)), cons(makeString("trade"), makeInteger(8482)), cons(makeString("uArr"), makeInteger(8657)), cons(makeString("uacute"), makeInteger(250)), cons(makeString("uarr"), makeInteger(8593)), cons(makeString("ucirc"), makeInteger(251)), cons(makeString("ugrave"), makeInteger(249)), cons(makeString("uml"), makeInteger(168)), cons(makeString("upsih"), makeInteger(978)), cons(makeString("upsilon"), makeInteger(965)), cons(makeString("uuml"), makeInteger(252)), cons(makeString("weierp"), makeInteger(8472)), cons(makeString("xi"), makeInteger(958)), cons(makeString("yacute"), makeInteger(253)), cons(makeString("yen"), makeInteger(165)), cons(makeString("yuml"), makeInteger(255)), cons(makeString("zeta"), makeInteger(950)), cons(makeString("zwj"), makeInteger(8205)), cons(makeString("zwnj"), makeInteger(8204)) });
     }
+
+    static private final SubLString $str_alt74$_S__code___S__is_not_a_valid_utf8 = makeString("~S (code: ~S) is not a valid utf8 character");
+
+    public static final SubLObject $list_alt75 = _constant_75_initializer();
+
+    static private final SubLString $str_alt79$Invalid_unicode_character__expect = makeString("Invalid unicode character, expected ~A bytes, got ~A only.");
 
     @Override
     public void declareFunctions() {
@@ -1667,133 +3224,6 @@ public final class unicode_strings extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $unicode_char_native extends SubLStructNative {
@@ -1802,7 +3232,7 @@ public final class unicode_strings extends SubLTranslatedFile {
         private static final SubLStructDeclNative structDecl;
 
         public $unicode_char_native() {
-            this.$uchar = Lisp.NIL;
+            unicode_strings.$unicode_char_native.this.$uchar = Lisp.NIL;
         }
 
         @Override
@@ -1812,16 +3242,16 @@ public final class unicode_strings extends SubLTranslatedFile {
 
         @Override
         public SubLObject getField2() {
-            return this.$uchar;
+            return unicode_strings.$unicode_char_native.this.$uchar;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return this.$uchar = value;
+            return unicode_strings.$unicode_char_native.this.$uchar = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(unicode_strings.$unicode_char_native.class, UNICODE_CHAR, UNICODE_CHAR_P, $list3, $list4, new String[]{ "$uchar" }, $list5, $list6, PRINT_UNICODE_CHAR);
+            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.unicode_strings.$unicode_char_native.class, UNICODE_CHAR, UNICODE_CHAR_P, $list3, $list4, new String[]{ "$uchar" }, $list5, $list6, PRINT_UNICODE_CHAR);
         }
     }
 
@@ -1833,35 +3263,6 @@ public final class unicode_strings extends SubLTranslatedFile {
         @Override
         public SubLObject processItem(final SubLObject arg1) {
             return unicode_char_p(arg1);
-        }
-    }
-
-    public static final class $unicode_string_native extends SubLStructNative {
-        public SubLObject $vect;
-
-        private static final SubLStructDeclNative structDecl;
-
-        public $unicode_string_native() {
-            this.$vect = Lisp.NIL;
-        }
-
-        @Override
-        public SubLStructDecl getStructDecl() {
-            return structDecl;
-        }
-
-        @Override
-        public SubLObject getField2() {
-            return this.$vect;
-        }
-
-        @Override
-        public SubLObject setField2(final SubLObject value) {
-            return this.$vect = value;
-        }
-
-        static {
-            structDecl = makeStructDeclNative(unicode_strings.$unicode_string_native.class, UNICODE_STRING, UNICODE_STRING_P, $list24, $list25, new String[]{ "$vect" }, $list26, $list27, PRINT_UNICODE_STRING);
         }
     }
 

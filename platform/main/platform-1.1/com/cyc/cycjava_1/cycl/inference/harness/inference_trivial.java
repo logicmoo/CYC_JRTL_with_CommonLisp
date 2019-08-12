@@ -829,8 +829,7 @@ values but not others.  The handled and unhandled values are specified in
   }
 
   public static final SubLObject setup_inference_trivial_file() {
-    // CVS_ID("Id: inference-trivial.lisp 128472 2009-08-03 20:27:37Z pace ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

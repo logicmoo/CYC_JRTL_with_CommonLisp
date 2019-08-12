@@ -1,11 +1,32 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_parameters;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava.cycl.string_relevant_assertions;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -24,58 +45,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.string_relevant_assertions.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class string_relevant_assertions extends SubLTranslatedFile {
+public final class string_relevant_assertions extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new string_relevant_assertions();
 
-    public static final String myName = "com.cyc.cycjava.cycl.string_relevant_assertions";
+    public static final String myName = "com.cyc.cycjava_2.cycl.string_relevant_assertions";
 
-    public static final String myFingerPrint = "40c8677af896a29d6a3a8c98c4fabfc367bd91ec81e997383965df12a5fbd5e6";
 
     // deflexical
     private static final SubLSymbol $current_stack$ = makeSymbol("*CURRENT-STACK*");
@@ -1839,38 +1814,38 @@ public final class string_relevant_assertions extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_string_relevant_assertions_file() {
-        declareFunction(me, "sra_note", "SRA-NOTE", 1, 6, false);
-        declareFunction(me, "sra_warn", "SRA-WARN", 1, 6, false);
-        declareFunction(me, "suggested_query_term_sets_for_string", "SUGGESTED-QUERY-TERM-SETS-FOR-STRING", 1, 0, false);
-        declareFunction(me, "remove_short_lists", "REMOVE-SHORT-LISTS", 1, 1, false);
-        declareFunction(me, "spec_in_any_mtP_internal", "SPEC-IN-ANY-MT?-INTERNAL", 2, 0, false);
-        declareFunction(me, "spec_in_any_mtP", "SPEC-IN-ANY-MT?", 2, 0, false);
-        declareFunction(me, "assertions_for_prompt_string", "ASSERTIONS-FOR-PROMPT-STRING", 1, 2, false);
-        declareFunction(me, "score_prompt_term_combos", "SCORE-PROMPT-TERM-COMBOS", 1, 0, false);
-        declareFunction(me, "prompt_term_combo_score", "PROMPT-TERM-COMBO-SCORE", 1, 0, false);
-        declareFunction(me, "specificity_estimate", "SPECIFICITY-ESTIMATE", 1, 0, false);
-        declareFunction(me, "term_meaninginess_internal", "TERM-MEANINGINESS-INTERNAL", 1, 0, false);
-        declareFunction(me, "term_meaninginess", "TERM-MEANINGINESS", 1, 0, false);
-        declareFunction(me, "assertions_from_prompt_term_combo", "ASSERTIONS-FROM-PROMPT-TERM-COMBO", 2, 2, false);
-        declareFunction(me, "almost_out_of_inference_timeP", "ALMOST-OUT-OF-INFERENCE-TIME?", 0, 1, false);
-        declareFunction(me, "score_assertions_for_prompt_string", "SCORE-ASSERTIONS-FOR-PROMPT-STRING", 2, 0, false);
-        declareFunction(me, "truncate_tail", "TRUNCATE-TAIL", 1, 0, false);
-        declareFunction(me, "assertion_nl_okayP", "ASSERTION-NL-OKAY?", 1, 0, false);
-        declareFunction(me, "assertion_cycl_okayP", "ASSERTION-CYCL-OKAY?", 1, 0, false);
-        declareFunction(me, "prune_assertions", "PRUNE-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "significant_words", "SIGNIFICANT-WORDS", 1, 0, false);
-        declareFunction(me, "prune_specs_lists", "PRUNE-SPECS-LISTS", 2, 0, false);
-        declareFunction(me, "specs_for_term_internal", "SPECS-FOR-TERM-INTERNAL", 1, 2, false);
-        declareFunction(me, "specs_for_term", "SPECS-FOR-TERM", 1, 2, false);
-        declareFunction(me, "bio_filter_coll", "BIO-FILTER-COLL", 0, 0, false);
-        declareFunction(me, "denot_okay_for_suggested_query_searchP", "DENOT-OKAY-FOR-SUGGESTED-QUERY-SEARCH?", 1, 0, false);
-        declareFunction(me, "get_test_strings", "GET-TEST-STRINGS", 0, 0, false);
-        declareFunction(me, "test_test_strings", "TEST-TEST-STRINGS", 0, 2, false);
-        declareFunction(me, "test_test_string", "TEST-TEST-STRING", 1, 2, false);
-        declareFunction(me, "cb_string_relevant_assertions", "CB-STRING-RELEVANT-ASSERTIONS", 0, 1, false);
-        declareFunction(me, "cb_handle_string_relevant_assertions", "CB-HANDLE-STRING-RELEVANT-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "html_print_relevant_assertion_list", "HTML-PRINT-RELEVANT-ASSERTION-LIST", 1, 0, false);
-        declareFunction(me, "cb_link_string_relevant_assertions", "CB-LINK-STRING-RELEVANT-ASSERTIONS", 0, 1, false);
+        declareFunction("sra_note", "SRA-NOTE", 1, 6, false);
+        declareFunction("sra_warn", "SRA-WARN", 1, 6, false);
+        declareFunction("suggested_query_term_sets_for_string", "SUGGESTED-QUERY-TERM-SETS-FOR-STRING", 1, 0, false);
+        declareFunction("remove_short_lists", "REMOVE-SHORT-LISTS", 1, 1, false);
+        declareFunction("spec_in_any_mtP_internal", "SPEC-IN-ANY-MT?-INTERNAL", 2, 0, false);
+        declareFunction("spec_in_any_mtP", "SPEC-IN-ANY-MT?", 2, 0, false);
+        declareFunction("assertions_for_prompt_string", "ASSERTIONS-FOR-PROMPT-STRING", 1, 2, false);
+        declareFunction("score_prompt_term_combos", "SCORE-PROMPT-TERM-COMBOS", 1, 0, false);
+        declareFunction("prompt_term_combo_score", "PROMPT-TERM-COMBO-SCORE", 1, 0, false);
+        declareFunction("specificity_estimate", "SPECIFICITY-ESTIMATE", 1, 0, false);
+        declareFunction("term_meaninginess_internal", "TERM-MEANINGINESS-INTERNAL", 1, 0, false);
+        declareFunction("term_meaninginess", "TERM-MEANINGINESS", 1, 0, false);
+        declareFunction("assertions_from_prompt_term_combo", "ASSERTIONS-FROM-PROMPT-TERM-COMBO", 2, 2, false);
+        declareFunction("almost_out_of_inference_timeP", "ALMOST-OUT-OF-INFERENCE-TIME?", 0, 1, false);
+        declareFunction("score_assertions_for_prompt_string", "SCORE-ASSERTIONS-FOR-PROMPT-STRING", 2, 0, false);
+        declareFunction("truncate_tail", "TRUNCATE-TAIL", 1, 0, false);
+        declareFunction("assertion_nl_okayP", "ASSERTION-NL-OKAY?", 1, 0, false);
+        declareFunction("assertion_cycl_okayP", "ASSERTION-CYCL-OKAY?", 1, 0, false);
+        declareFunction("prune_assertions", "PRUNE-ASSERTIONS", 1, 0, false);
+        declareFunction("significant_words", "SIGNIFICANT-WORDS", 1, 0, false);
+        declareFunction("prune_specs_lists", "PRUNE-SPECS-LISTS", 2, 0, false);
+        declareFunction("specs_for_term_internal", "SPECS-FOR-TERM-INTERNAL", 1, 2, false);
+        declareFunction("specs_for_term", "SPECS-FOR-TERM", 1, 2, false);
+        declareFunction("bio_filter_coll", "BIO-FILTER-COLL", 0, 0, false);
+        declareFunction("denot_okay_for_suggested_query_searchP", "DENOT-OKAY-FOR-SUGGESTED-QUERY-SEARCH?", 1, 0, false);
+        declareFunction("get_test_strings", "GET-TEST-STRINGS", 0, 0, false);
+        declareFunction("test_test_strings", "TEST-TEST-STRINGS", 0, 2, false);
+        declareFunction("test_test_string", "TEST-TEST-STRING", 1, 2, false);
+        declareFunction("cb_string_relevant_assertions", "CB-STRING-RELEVANT-ASSERTIONS", 0, 1, false);
+        declareFunction("cb_handle_string_relevant_assertions", "CB-HANDLE-STRING-RELEVANT-ASSERTIONS", 1, 0, false);
+        declareFunction("html_print_relevant_assertion_list", "HTML-PRINT-RELEVANT-ASSERTION-LIST", 1, 0, false);
+        declareFunction("cb_link_string_relevant_assertions", "CB-LINK-STRING-RELEVANT-ASSERTIONS", 0, 1, false);
         return NIL;
     }
 

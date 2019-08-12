@@ -863,8 +863,7 @@ circularly supported assertions.  NIL means no limit */
   }
 
   public static final SubLObject setup_tms_file() {
-    // CVS_ID("Id: tms.lisp 127912 2009-06-02 17:55:55Z pace ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

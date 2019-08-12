@@ -505,8 +505,7 @@ A third returned value is T iff the evaluation included evaluation of a contextu
   }
 
   public static final SubLObject setup_relation_evaluation_file() {
-    // CVS_ID("Id: relation-evaluation.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_external_symbol($sym8$THROW_UNEVALUATABLE);
+        access_macros.register_external_symbol($sym8$THROW_UNEVALUATABLE);
     memoization_state.note_globally_cached_function($sym13$CACHED_EVALUATION_FUNCTION);
     return NIL;
   }

@@ -138,8 +138,7 @@ public  final class wff_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_wff_macros_file() {
-    // CVS_ID("Id: wff-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym19$POSSIBLY_NEW_WFF_MEMOIZATION_STATE, $sym20$WITH_WFF_MEMOIZATION_STATE);
+        access_macros.register_macro_helper($sym19$POSSIBLY_NEW_WFF_MEMOIZATION_STATE, $sym20$WITH_WFF_MEMOIZATION_STATE);
     access_macros.register_macro_helper($sym39$NEW_WFF_SPECIAL_VARIABLE_STATE, $sym41$WITH_WFF_PROPERTIES);
     return NIL;
   }

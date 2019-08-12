@@ -267,8 +267,7 @@ public  final class gt_methods extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_gt_methods_file() {
-    // CVS_ID("Id: gt-methods.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym3$GT_SUPERIORS, $list4, $str5$Returns_direct_superiors_of_FORT_, $list6, $list7);
+        utilities_macros.register_cyc_api_function($sym3$GT_SUPERIORS, $list4, $str5$Returns_direct_superiors_of_FORT_, $list6, $list7);
     utilities_macros.register_cyc_api_function($sym15$GT_MIN_SUPERIORS, $list4, $str16$Returns_minimal_superiors_of_FORT, $list6, $list7);
     utilities_macros.register_cyc_api_function($sym18$GT_INFERIORS, $list4, $str19$Returns_direct_inferiors_of_FORT_, $list6, $list7);
     utilities_macros.register_cyc_api_function($sym23$GT_MAX_INFERIORS, $list4, $str24$Returns_maximal_inferiors_of_FORT, $list6, $list7);

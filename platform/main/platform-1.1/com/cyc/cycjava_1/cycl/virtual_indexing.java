@@ -168,8 +168,7 @@ public  final class virtual_indexing extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_virtual_indexing_file() {
-    // CVS_ID("Id: virtual-indexing.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym5$ASSERTIONS_MENTIONING_TERMS, $list6, $str7$Return_a_list_of_assertions_that_, NIL, $list8);
+        utilities_macros.register_cyc_api_function($sym5$ASSERTIONS_MENTIONING_TERMS, $list6, $str7$Return_a_list_of_assertions_that_, NIL, $list8);
     return NIL;
   }
 

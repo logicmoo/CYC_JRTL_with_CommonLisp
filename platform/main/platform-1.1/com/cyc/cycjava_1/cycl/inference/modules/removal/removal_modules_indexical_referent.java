@@ -113,8 +113,7 @@ public  final class removal_modules_indexical_referent extends SubLTranslatedFil
   }
 
   public static final SubLObject setup_removal_modules_indexical_referent_file() {
-    // CVS_ID("Id: removal-modules-indexical-referent.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_kb_function($sym0$CYC_INDEXICAL_REFERENT);
+        utilities_macros.register_kb_function($sym0$CYC_INDEXICAL_REFERENT);
     inference_modules.register_solely_specific_removal_module_predicate($const1$indexicalReferent);
     inference_modules.inference_removal_module($kw2$REMOVAL_INDEXICAL_REFERENT_POS, $list3);
     register_indexical_referent_expansion($const6$QueryMt, $sym7$INDEXICAL_QUERY_MT);

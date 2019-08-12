@@ -109,8 +109,7 @@ public  final class unicode_streams extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_unicode_streams_file() {
-    // CVS_ID("Id: unicode-streams.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_utf8_stream$.getGlobalValue(), Symbols.symbol_function($sym7$UTF8_STREAM_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_utf8_stream$.getGlobalValue(), Symbols.symbol_function($sym7$UTF8_STREAM_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$UTF8_STREAM_STREAM, $sym9$_CSETF_UTF8_STREAM_STREAM);
     Structures.def_csetf($sym10$UTF8_STREAM_CACHE, $sym11$_CSETF_UTF8_STREAM_CACHE);
     Equality.identity($sym0$UTF8_STREAM);

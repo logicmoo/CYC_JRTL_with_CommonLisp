@@ -178,8 +178,7 @@ public  final class xml_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_xml_utilities_file() {
-    // CVS_ID("Id: xml-utilities.lisp 127218 2009-02-21 18:32:48Z baxter ");
-    access_macros.define_obsolete_register($sym60$GENERATE_VALID_XML_HEADER, $list61);
+        access_macros.define_obsolete_register($sym60$GENERATE_VALID_XML_HEADER, $list61);
     access_macros.register_external_symbol($sym93$QUERY_RESULTS_TO_XML_STREAM);
     access_macros.register_external_symbol($sym95$QUERY_RESULTS_TO_XML_FILE);
     access_macros.register_external_symbol($sym98$QUERY_RESULTS_TO_XML_STRING);

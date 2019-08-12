@@ -901,8 +901,7 @@ public final class agenda
 
   public static final SubLObject setup_agenda_file()
   {
-    // CVS_ID("Id: agenda.lisp 127020 2009-02-04 00:44:47Z tbrussea ");
-    subl_macro_promotions.declare_defglobal( $sym0$_AGENDA_SHOULD_QUIT_ );
+        subl_macro_promotions.declare_defglobal( $sym0$_AGENDA_SHOULD_QUIT_ );
     subl_macro_promotions.declare_defglobal( $sym1$_RESTART_AGENDA_FLAG_ );
     subl_macro_promotions.declare_defglobal( $sym7$_AGENDA_PROCESS_ );
     access_macros.register_external_symbol( $sym8$AGENDA_RUNNING );

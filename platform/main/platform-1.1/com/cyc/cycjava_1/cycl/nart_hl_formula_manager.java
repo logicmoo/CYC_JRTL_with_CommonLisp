@@ -127,8 +127,7 @@ public  final class nart_hl_formula_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_nart_hl_formula_manager_file() {
-    // CVS_ID("Id: nart-hl-formula-manager.lisp 128689 2009-09-02 19:44:42Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_NART_HL_FORMULA_MANAGER_);
+        subl_macro_promotions.declare_defglobal($sym0$_NART_HL_FORMULA_MANAGER_);
     subl_macro_promotions.declare_defglobal($sym5$_NART_HL_FORMULA_TABLE_);
     access_macros.define_obsolete_register($sym6$POSSIBLY_INITIALIZE_NART_HL_FORMULA_MANAGER_FROM_LEGACY_WORLD, NIL);
     return NIL;

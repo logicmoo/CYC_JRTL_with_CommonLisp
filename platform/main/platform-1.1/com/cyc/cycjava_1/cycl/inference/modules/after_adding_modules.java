@@ -416,8 +416,7 @@ public  final class after_adding_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_after_adding_modules_file() {
-    // CVS_ID("Id: after-adding-modules.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    {
+        {
       SubLObject cdolist_list_var = $cycl_functions_used_as_after_addings$.getGlobalValue();
       SubLObject symbol = NIL;
       for (symbol = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), symbol = cdolist_list_var.first()) {

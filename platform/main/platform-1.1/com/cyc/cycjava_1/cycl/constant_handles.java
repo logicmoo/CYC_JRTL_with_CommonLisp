@@ -753,8 +753,7 @@ public  final class constant_handles extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_constant_handles_file() {
-    // CVS_ID("Id: constant-handles.lisp 128690 2009-09-02 19:44:47Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_CONSTANT_FROM_SUID_);
+        subl_macro_promotions.declare_defglobal($sym0$_CONSTANT_FROM_SUID_);
     utilities_macros.register_cyc_api_macro($sym10$DO_CONSTANTS, $list2, $str11$Iterate_over_all_HL_constant_data);
     access_macros.register_macro_helper($sym16$DO_CONSTANTS_TABLE, $sym10$DO_CONSTANTS);
     access_macros.register_macro_helper($sym19$CREATE_CONSTANT_DUMP_ID_TABLE, $sym20$WITH_CONSTANT_DUMP_ID_TABLE);

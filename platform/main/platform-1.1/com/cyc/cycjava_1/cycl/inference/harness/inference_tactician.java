@@ -775,8 +775,7 @@ This is usually true whenn STRATEGY has some set-aside problems to continue work
   }
 
   public static final SubLObject setup_inference_tactician_file() {
-    // CVS_ID("Id: inference-tactician.lisp 128924 2009-10-07 17:48:12Z pace ");
-    utilities_macros.note_funcall_helper_function($sym5$STRATEGY_SORT_PREDICATE_);
+        utilities_macros.note_funcall_helper_function($sym5$STRATEGY_SORT_PREDICATE_);
     utilities_macros.note_funcall_helper_function($sym6$TACTIC_STRATEGIC_PRODUCTIVITY__);
     utilities_macros.note_funcall_helper_function($sym7$LOGICAL_TACTIC_BETTER_WRT_REMOVAL_);
     access_macros.register_macro_helper($sym25$PROBLEM_MAXIMAL_SUBSUMING_MULTI_FOCAL_LITERAL_JOIN_ORDERED_TACTIC, $sym28$DO_PROBLEM_UNSUBSUMED_CONNECTED_CONJUNCTION_TACTICS);

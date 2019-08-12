@@ -638,8 +638,7 @@ in the inverted variable space? */
   }
 
   public static final SubLObject setup_unification_file() {
-    // CVS_ID("Id: unification.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

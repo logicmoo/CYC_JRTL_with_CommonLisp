@@ -603,8 +603,7 @@ public  final class after_adding extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_after_adding_file() {
-    // CVS_ID("Id: after-adding.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym1$_GAF_AFTER_ADDINGS_HASH_);
+        subl_macro_promotions.declare_defglobal($sym1$_GAF_AFTER_ADDINGS_HASH_);
     subl_macro_promotions.declare_defglobal($sym2$_GAF_AFTER_REMOVINGS_HASH_);
     return NIL;
   }

@@ -1,11 +1,30 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.commander;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.cycjava.cycl.inference.harness.inference_parameters;
 import com.cyc.cycjava.cycl.inference.harness.inference_strategist;
-import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Semaphores;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -17,45 +36,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.function.Supplier;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.commander.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hyphen;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class commander extends SubLTranslatedFile {
+public final class commander extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new commander();
 
-    public static final String myName = "com.cyc.cycjava.cycl.commander";
+    public static final String myName = "com.cyc.cycjava_2.cycl.commander";
 
-    public static final String myFingerPrint = "fa71981f6520e974075d1d50f6c9b0cc464454eaae42b3de3a94da91c32b4b76";
 
     // defparameter
     public static final SubLSymbol $commander_debug_level$ = makeSymbol("*COMMANDER-DEBUG-LEVEL*");
@@ -547,46 +534,46 @@ public final class commander extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_commander_file() {
-        declareFunction(me, "commander_debug_level", "COMMANDER-DEBUG-LEVEL", 0, 0, false);
-        declareMacro(me, "commander_warn", "COMMANDER-WARN");
-        declareFunction(me, "set_commander_debug_level", "SET-COMMANDER-DEBUG-LEVEL", 1, 0, false);
-        declareFunction(me, "commander_get_processor_func", "COMMANDER-GET-PROCESSOR-FUNC", 1, 0, false);
-        declareFunction(me, "commander_get_pre_processor_func", "COMMANDER-GET-PRE-PROCESSOR-FUNC", 1, 0, false);
-        declareFunction(me, "commander_get_output_processor_func", "COMMANDER-GET-OUTPUT-PROCESSOR-FUNC", 1, 0, false);
-        declareFunction(me, "commander_get_end_session_func", "COMMANDER-GET-END-SESSION-FUNC", 1, 0, false);
-        declareFunction(me, "commander_get_cleanup_func", "COMMANDER-GET-CLEANUP-FUNC", 1, 0, false);
-        declareFunction(me, "session_id_from_message", "SESSION-ID-FROM-MESSAGE", 1, 0, false);
-        declareFunction(me, "get_query_results_with_substitutions", "GET-QUERY-RESULTS-WITH-SUBSTITUTIONS", 2, 0, false);
-        declareFunction(me, "convert_keywords_to_json_keys", "CONVERT-KEYWORDS-TO-JSON-KEYS", 1, 0, false);
-        declareFunction(me, "encode_json_key_as_keyword", "ENCODE-JSON-KEY-AS-KEYWORD", 1, 0, false);
-        declareFunction(me, "encode_keyword_as_json_key", "ENCODE-KEYWORD-AS-JSON-KEY", 1, 0, false);
-        declareFunction(me, "encode_for_plist_value", "ENCODE-FOR-PLIST-VALUE", 1, 0, false);
-        declareFunction(me, "commander_note_thread_dead", "COMMANDER-NOTE-THREAD-DEAD", 1, 0, false);
-        declareFunction(me, "commander_process_input_loop", "COMMANDER-PROCESS-INPUT-LOOP", 1, 0, false);
-        declareFunction(me, "commander_testing_message_p", "COMMANDER-TESTING-MESSAGE-P", 1, 0, false);
-        declareFunction(me, "commander_note_current_task", "COMMANDER-NOTE-CURRENT-TASK", 2, 0, false);
-        declareFunction(me, "commander_note_task_complete", "COMMANDER-NOTE-TASK-COMPLETE", 2, 0, false);
-        declareFunction(me, "display_current_commander_tasks", "DISPLAY-CURRENT-COMMANDER-TASKS", 0, 0, false);
-        declareFunction(me, "commander_receive_ui_input", "COMMANDER-RECEIVE-UI-INPUT", 1, 0, false);
-        declareFunction(me, "commander_preprocess_input", "COMMANDER-PREPROCESS-INPUT", 1, 0, false);
-        declareFunction(me, "commander_end_session_message_p", "COMMANDER-END-SESSION-MESSAGE-P", 1, 0, false);
-        declareFunction(me, "commander_enqueue_ui_input", "COMMANDER-ENQUEUE-UI-INPUT", 2, 0, false);
-        declareFunction(me, "get_next_ui_input", "GET-NEXT-UI-INPUT", 1, 0, false);
-        declareFunction(me, "is_ui_data_waitingP", "IS-UI-DATA-WAITING?", 1, 0, false);
-        declareFunction(me, "is_ui_input_being_processedP", "IS-UI-INPUT-BEING-PROCESSED?", 1, 0, false);
-        declareFunction(me, "note_ui_input_in_process", "NOTE-UI-INPUT-IN-PROCESS", 1, 0, false);
-        declareFunction(me, "note_ui_input_processed", "NOTE-UI-INPUT-PROCESSED", 1, 0, false);
-        declareFunction(me, "ensure_session_processing_ready", "ENSURE-SESSION-PROCESSING-READY", 1, 0, false);
-        declareFunction(me, "remove_input_queue_for_session", "REMOVE-INPUT-QUEUE-FOR-SESSION", 1, 0, false);
-        declareFunction(me, "clear_commander_queues", "CLEAR-COMMANDER-QUEUES", 0, 0, false);
-        declareFunction(me, "queue_output", "QUEUE-OUTPUT", 2, 0, false);
-        declareFunction(me, "queue_messages", "QUEUE-MESSAGES", 2, 0, false);
-        declareFunction(me, "pick_up_ui_output", "PICK-UP-UI-OUTPUT", 1, 1, false);
-        declareFunction(me, "commander_end_session", "COMMANDER-END-SESSION", 2, 0, false);
-        declareFunction(me, "commander_clean_up_after_session_ends", "COMMANDER-CLEAN-UP-AFTER-SESSION-ENDS", 1, 0, false);
-        declareFunction(me, "ensure_output_queue_for_session", "ENSURE-OUTPUT-QUEUE-FOR-SESSION", 1, 0, false);
-        declareFunction(me, "remove_output_queue_for_session", "REMOVE-OUTPUT-QUEUE-FOR-SESSION", 1, 0, false);
-        declareFunction(me, "commander_pickup_output_default", "COMMANDER-PICKUP-OUTPUT-DEFAULT", 2, 0, false);
+        declareFunction("commander_debug_level", "COMMANDER-DEBUG-LEVEL", 0, 0, false);
+        declareMacro("commander_warn", "COMMANDER-WARN");
+        declareFunction("set_commander_debug_level", "SET-COMMANDER-DEBUG-LEVEL", 1, 0, false);
+        declareFunction("commander_get_processor_func", "COMMANDER-GET-PROCESSOR-FUNC", 1, 0, false);
+        declareFunction("commander_get_pre_processor_func", "COMMANDER-GET-PRE-PROCESSOR-FUNC", 1, 0, false);
+        declareFunction("commander_get_output_processor_func", "COMMANDER-GET-OUTPUT-PROCESSOR-FUNC", 1, 0, false);
+        declareFunction("commander_get_end_session_func", "COMMANDER-GET-END-SESSION-FUNC", 1, 0, false);
+        declareFunction("commander_get_cleanup_func", "COMMANDER-GET-CLEANUP-FUNC", 1, 0, false);
+        declareFunction("session_id_from_message", "SESSION-ID-FROM-MESSAGE", 1, 0, false);
+        declareFunction("get_query_results_with_substitutions", "GET-QUERY-RESULTS-WITH-SUBSTITUTIONS", 2, 0, false);
+        declareFunction("convert_keywords_to_json_keys", "CONVERT-KEYWORDS-TO-JSON-KEYS", 1, 0, false);
+        declareFunction("encode_json_key_as_keyword", "ENCODE-JSON-KEY-AS-KEYWORD", 1, 0, false);
+        declareFunction("encode_keyword_as_json_key", "ENCODE-KEYWORD-AS-JSON-KEY", 1, 0, false);
+        declareFunction("encode_for_plist_value", "ENCODE-FOR-PLIST-VALUE", 1, 0, false);
+        declareFunction("commander_note_thread_dead", "COMMANDER-NOTE-THREAD-DEAD", 1, 0, false);
+        declareFunction("commander_process_input_loop", "COMMANDER-PROCESS-INPUT-LOOP", 1, 0, false);
+        declareFunction("commander_testing_message_p", "COMMANDER-TESTING-MESSAGE-P", 1, 0, false);
+        declareFunction("commander_note_current_task", "COMMANDER-NOTE-CURRENT-TASK", 2, 0, false);
+        declareFunction("commander_note_task_complete", "COMMANDER-NOTE-TASK-COMPLETE", 2, 0, false);
+        declareFunction("display_current_commander_tasks", "DISPLAY-CURRENT-COMMANDER-TASKS", 0, 0, false);
+        declareFunction("commander_receive_ui_input", "COMMANDER-RECEIVE-UI-INPUT", 1, 0, false);
+        declareFunction("commander_preprocess_input", "COMMANDER-PREPROCESS-INPUT", 1, 0, false);
+        declareFunction("commander_end_session_message_p", "COMMANDER-END-SESSION-MESSAGE-P", 1, 0, false);
+        declareFunction("commander_enqueue_ui_input", "COMMANDER-ENQUEUE-UI-INPUT", 2, 0, false);
+        declareFunction("get_next_ui_input", "GET-NEXT-UI-INPUT", 1, 0, false);
+        declareFunction("is_ui_data_waitingP", "IS-UI-DATA-WAITING?", 1, 0, false);
+        declareFunction("is_ui_input_being_processedP", "IS-UI-INPUT-BEING-PROCESSED?", 1, 0, false);
+        declareFunction("note_ui_input_in_process", "NOTE-UI-INPUT-IN-PROCESS", 1, 0, false);
+        declareFunction("note_ui_input_processed", "NOTE-UI-INPUT-PROCESSED", 1, 0, false);
+        declareFunction("ensure_session_processing_ready", "ENSURE-SESSION-PROCESSING-READY", 1, 0, false);
+        declareFunction("remove_input_queue_for_session", "REMOVE-INPUT-QUEUE-FOR-SESSION", 1, 0, false);
+        declareFunction("clear_commander_queues", "CLEAR-COMMANDER-QUEUES", 0, 0, false);
+        declareFunction("queue_output", "QUEUE-OUTPUT", 2, 0, false);
+        declareFunction("queue_messages", "QUEUE-MESSAGES", 2, 0, false);
+        declareFunction("pick_up_ui_output", "PICK-UP-UI-OUTPUT", 1, 1, false);
+        declareFunction("commander_end_session", "COMMANDER-END-SESSION", 2, 0, false);
+        declareFunction("commander_clean_up_after_session_ends", "COMMANDER-CLEAN-UP-AFTER-SESSION-ENDS", 1, 0, false);
+        declareFunction("ensure_output_queue_for_session", "ENSURE-OUTPUT-QUEUE-FOR-SESSION", 1, 0, false);
+        declareFunction("remove_output_queue_for_session", "REMOVE-OUTPUT-QUEUE-FOR-SESSION", 1, 0, false);
+        declareFunction("commander_pickup_output_default", "COMMANDER-PICKUP-OUTPUT-DEFAULT", 2, 0, false);
         return NIL;
     }
 

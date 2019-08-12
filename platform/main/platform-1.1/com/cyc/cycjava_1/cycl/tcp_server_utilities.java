@@ -390,8 +390,7 @@ Otherwise, disable all servers with DESIGNATOR as their type. */
   }
 
   public static final SubLObject setup_tcp_server_utilities_file() {
-    // CVS_ID("Id: tcp-server-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tcp_server$.getGlobalValue(), Symbols.symbol_function($sym23$TCP_SERVER_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tcp_server$.getGlobalValue(), Symbols.symbol_function($sym23$TCP_SERVER_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym24$TCPS_TYPE, $sym25$_CSETF_TCPS_TYPE);
     Structures.def_csetf($sym26$TCPS_PORT, $sym27$_CSETF_TCPS_PORT);
     Structures.def_csetf($sym28$TCPS_PROCESS, $sym29$_CSETF_TCPS_PROCESS);

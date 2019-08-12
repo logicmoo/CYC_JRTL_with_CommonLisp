@@ -146,8 +146,7 @@ public  final class inference_worker_answer extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_inference_worker_answer_file() {
-    // CVS_ID("Id: inference-worker-answer.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

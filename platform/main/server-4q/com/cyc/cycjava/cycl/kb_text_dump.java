@@ -1,9 +1,30 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.kb_indexing_datastructures;
-import com.cyc.cycjava.cycl.kb_text_dump;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Guids;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -22,48 +43,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.kb_text_dump.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class kb_text_dump extends SubLTranslatedFile {
+public final class kb_text_dump extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_text_dump();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_text_dump";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_text_dump";
 
-    public static final String myFingerPrint = "462e52903d1041a717bb1fc91ae493bf1e66466307e35224ab95c1fab2edb3ce";
 
     // defparameter
     private static final SubLSymbol $kb_text_hl_prototypical_terms$ = makeSymbol("*KB-TEXT-HL-PROTOTYPICAL-TERMS*");
@@ -2051,44 +2036,44 @@ public final class kb_text_dump extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_text_dump_file() {
-        declareFunction(me, "get_hl_prototypical_terms", "GET-HL-PROTOTYPICAL-TERMS", 0, 0, false);
-        declareFunction(me, "kb_text_hl_prototypical_termP", "KB-TEXT-HL-PROTOTYPICAL-TERM?", 1, 0, false);
-        declareFunction(me, "kb_text_convert_potential_prototypical_terms", "KB-TEXT-CONVERT-POTENTIAL-PROTOTYPICAL-TERMS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_essential_kb", "KB-TEXT-DUMP-ESSENTIAL-KB", 1, 0, false);
-        declareFunction(me, "kb_text_dump_kb", "KB-TEXT-DUMP-KB", 1, 0, false);
-        declareFunction(me, "kb_text_dump_indexing", "KB-TEXT-DUMP-INDEXING", 1, 0, false);
-        declareFunction(me, "kb_text_dump_constants", "KB-TEXT-DUMP-CONSTANTS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_narts", "KB-TEXT-DUMP-NARTS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_assertions", "KB-TEXT-DUMP-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_meta_assertions", "KB-TEXT-DUMP-META-ASSERTIONS", 1, 2, false);
-        declareFunction(me, "kb_text_dump_meta_assertions_to_stream", "KB-TEXT-DUMP-META-ASSERTIONS-TO-STREAM", 1, 2, false);
-        declareFunction(me, "kb_text_dump_assertion_to_stream", "KB-TEXT-DUMP-ASSERTION-TO-STREAM", 2, 0, false);
-        declareFunction(me, "kb_text_dump_deductions", "KB-TEXT-DUMP-DEDUCTIONS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_kb_hl_supports", "KB-TEXT-DUMP-KB-HL-SUPPORTS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_unrepresented_terms", "KB-TEXT-DUMP-UNREPRESENTED-TERMS", 1, 0, false);
-        declareFunction(me, "kb_text_dump_index_assertion", "KB-TEXT-DUMP-INDEX-ASSERTION", 2, 0, false);
-        declareFunction(me, "kb_text_dump_constant_indexing", "KB-TEXT-DUMP-CONSTANT-INDEXING", 1, 0, false);
-        declareFunction(me, "kb_text_dump_nart_indexing", "KB-TEXT-DUMP-NART-INDEXING", 1, 0, false);
-        declareFunction(me, "kb_text_dump_unrepresented_term_indexing", "KB-TEXT-DUMP-UNREPRESENTED-TERM-INDEXING", 1, 0, false);
-        declareFunction(me, "kb_text_sorted_term_assertion_list", "KB-TEXT-SORTED-TERM-ASSERTION-LIST", 1, 0, false);
-        declareFunction(me, "new_kb_text_dump_complex_visitor", "NEW-KB-TEXT-DUMP-COMPLEX-VISITOR", 1, 0, false);
-        declareFunction(me, "kb_text_term_tag", "KB-TEXT-TERM-TAG", 1, 0, false);
-        declareFunction(me, "kb_text_dump_compinx_visit_begin_visit", "KB-TEXT-DUMP-COMPINX-VISIT-BEGIN-VISIT", 2, 0, false);
-        declareFunction(me, "kb_text_dump_compinx_visit_end_visit", "KB-TEXT-DUMP-COMPINX-VISIT-END-VISIT", 2, 0, false);
-        declareFunction(me, "kb_text_dump_compinx_visit_begin_subindex", "KB-TEXT-DUMP-COMPINX-VISIT-BEGIN-SUBINDEX", 3, 0, false);
-        declareFunction(me, "kb_text_dump_compinx_visit_final_index", "KB-TEXT-DUMP-COMPINX-VISIT-FINAL-INDEX", 3, 0, false);
-        declareFunction(me, "kb_text_dump_compinx_visit_end_subindex", "KB-TEXT-DUMP-COMPINX-VISIT-END-SUBINDEX", 3, 0, false);
-        declareFunction(me, "kb_text_dump_dumpinx_visit_write_path", "KB-TEXT-DUMP-DUMPINX-VISIT-WRITE-PATH", 2, 0, false);
-        declareFunction(me, "kb_text_dump_dumpinx_visit_write_path_item", "KB-TEXT-DUMP-DUMPINX-VISIT-WRITE-PATH-ITEM", 2, 0, false);
-        declareFunction(me, "kb_text_convert_deduction_support_to_recipe", "KB-TEXT-CONVERT-DEDUCTION-SUPPORT-TO-RECIPE", 1, 0, false);
-        declareFunction(me, "kb_text_convert_deduction_supports_to_support_recipe", "KB-TEXT-CONVERT-DEDUCTION-SUPPORTS-TO-SUPPORT-RECIPE", 1, 0, false);
-        declareFunction(me, "kb_text_cons_id_string", "KB-TEXT-CONS-ID-STRING", 1, 0, false);
-        declareFunction(me, "kb_text_compact_hl_external_id_string", "KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING", 1, 0, false);
-        declareFunction(me, "clear_kb_text_compact_hl_external_id_string_cached", "CLEAR-KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED", 0, 0, false);
-        declareFunction(me, "remove_kb_text_compact_hl_external_id_string_cached", "REMOVE-KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED", 1, 0, false);
-        declareFunction(me, "kb_text_compact_hl_external_id_string_cached_internal", "KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED-INTERNAL", 1, 0, false);
-        declareFunction(me, "kb_text_compact_hl_external_id_string_cached", "KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED", 1, 0, false);
-        declareFunction(me, "kb_text_dump_file", "KB-TEXT-DUMP-FILE", 2, 0, false);
+        declareFunction("get_hl_prototypical_terms", "GET-HL-PROTOTYPICAL-TERMS", 0, 0, false);
+        declareFunction("kb_text_hl_prototypical_termP", "KB-TEXT-HL-PROTOTYPICAL-TERM?", 1, 0, false);
+        declareFunction("kb_text_convert_potential_prototypical_terms", "KB-TEXT-CONVERT-POTENTIAL-PROTOTYPICAL-TERMS", 1, 0, false);
+        declareFunction("kb_text_dump_essential_kb", "KB-TEXT-DUMP-ESSENTIAL-KB", 1, 0, false);
+        declareFunction("kb_text_dump_kb", "KB-TEXT-DUMP-KB", 1, 0, false);
+        declareFunction("kb_text_dump_indexing", "KB-TEXT-DUMP-INDEXING", 1, 0, false);
+        declareFunction("kb_text_dump_constants", "KB-TEXT-DUMP-CONSTANTS", 1, 0, false);
+        declareFunction("kb_text_dump_narts", "KB-TEXT-DUMP-NARTS", 1, 0, false);
+        declareFunction("kb_text_dump_assertions", "KB-TEXT-DUMP-ASSERTIONS", 1, 0, false);
+        declareFunction("kb_text_dump_meta_assertions", "KB-TEXT-DUMP-META-ASSERTIONS", 1, 2, false);
+        declareFunction("kb_text_dump_meta_assertions_to_stream", "KB-TEXT-DUMP-META-ASSERTIONS-TO-STREAM", 1, 2, false);
+        declareFunction("kb_text_dump_assertion_to_stream", "KB-TEXT-DUMP-ASSERTION-TO-STREAM", 2, 0, false);
+        declareFunction("kb_text_dump_deductions", "KB-TEXT-DUMP-DEDUCTIONS", 1, 0, false);
+        declareFunction("kb_text_dump_kb_hl_supports", "KB-TEXT-DUMP-KB-HL-SUPPORTS", 1, 0, false);
+        declareFunction("kb_text_dump_unrepresented_terms", "KB-TEXT-DUMP-UNREPRESENTED-TERMS", 1, 0, false);
+        declareFunction("kb_text_dump_index_assertion", "KB-TEXT-DUMP-INDEX-ASSERTION", 2, 0, false);
+        declareFunction("kb_text_dump_constant_indexing", "KB-TEXT-DUMP-CONSTANT-INDEXING", 1, 0, false);
+        declareFunction("kb_text_dump_nart_indexing", "KB-TEXT-DUMP-NART-INDEXING", 1, 0, false);
+        declareFunction("kb_text_dump_unrepresented_term_indexing", "KB-TEXT-DUMP-UNREPRESENTED-TERM-INDEXING", 1, 0, false);
+        declareFunction("kb_text_sorted_term_assertion_list", "KB-TEXT-SORTED-TERM-ASSERTION-LIST", 1, 0, false);
+        declareFunction("new_kb_text_dump_complex_visitor", "NEW-KB-TEXT-DUMP-COMPLEX-VISITOR", 1, 0, false);
+        declareFunction("kb_text_term_tag", "KB-TEXT-TERM-TAG", 1, 0, false);
+        declareFunction("kb_text_dump_compinx_visit_begin_visit", "KB-TEXT-DUMP-COMPINX-VISIT-BEGIN-VISIT", 2, 0, false);
+        declareFunction("kb_text_dump_compinx_visit_end_visit", "KB-TEXT-DUMP-COMPINX-VISIT-END-VISIT", 2, 0, false);
+        declareFunction("kb_text_dump_compinx_visit_begin_subindex", "KB-TEXT-DUMP-COMPINX-VISIT-BEGIN-SUBINDEX", 3, 0, false);
+        declareFunction("kb_text_dump_compinx_visit_final_index", "KB-TEXT-DUMP-COMPINX-VISIT-FINAL-INDEX", 3, 0, false);
+        declareFunction("kb_text_dump_compinx_visit_end_subindex", "KB-TEXT-DUMP-COMPINX-VISIT-END-SUBINDEX", 3, 0, false);
+        declareFunction("kb_text_dump_dumpinx_visit_write_path", "KB-TEXT-DUMP-DUMPINX-VISIT-WRITE-PATH", 2, 0, false);
+        declareFunction("kb_text_dump_dumpinx_visit_write_path_item", "KB-TEXT-DUMP-DUMPINX-VISIT-WRITE-PATH-ITEM", 2, 0, false);
+        declareFunction("kb_text_convert_deduction_support_to_recipe", "KB-TEXT-CONVERT-DEDUCTION-SUPPORT-TO-RECIPE", 1, 0, false);
+        declareFunction("kb_text_convert_deduction_supports_to_support_recipe", "KB-TEXT-CONVERT-DEDUCTION-SUPPORTS-TO-SUPPORT-RECIPE", 1, 0, false);
+        declareFunction("kb_text_cons_id_string", "KB-TEXT-CONS-ID-STRING", 1, 0, false);
+        declareFunction("kb_text_compact_hl_external_id_string", "KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING", 1, 0, false);
+        declareFunction("clear_kb_text_compact_hl_external_id_string_cached", "CLEAR-KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED", 0, 0, false);
+        declareFunction("remove_kb_text_compact_hl_external_id_string_cached", "REMOVE-KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED", 1, 0, false);
+        declareFunction("kb_text_compact_hl_external_id_string_cached_internal", "KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED-INTERNAL", 1, 0, false);
+        declareFunction("kb_text_compact_hl_external_id_string_cached", "KB-TEXT-COMPACT-HL-EXTERNAL-ID-STRING-CACHED", 1, 0, false);
+        declareFunction("kb_text_dump_file", "KB-TEXT-DUMP-FILE", 2, 0, false);
         return NIL;
     }
 

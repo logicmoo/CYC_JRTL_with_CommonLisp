@@ -185,8 +185,7 @@ public  final class misc_kb_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_misc_kb_utilities_file() {
-    // CVS_ID("Id: misc-kb-utilities.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    Structures.register_method($kb_handle_internal_method_table$.getGlobalValue(), constant_handles.$dtp_constant$.getGlobalValue(), Symbols.symbol_function($sym16$KB_HANDLE_INTERNAL_CONSTANT_METHOD));
+        Structures.register_method($kb_handle_internal_method_table$.getGlobalValue(), constant_handles.$dtp_constant$.getGlobalValue(), Symbols.symbol_function($sym16$KB_HANDLE_INTERNAL_CONSTANT_METHOD));
     Structures.register_method($kb_handle_internal_method_table$.getGlobalValue(), nart_handles.$dtp_nart$.getGlobalValue(), Symbols.symbol_function($sym17$KB_HANDLE_INTERNAL_NART_METHOD));
     Structures.register_method($kb_handle_internal_method_table$.getGlobalValue(), variables.$dtp_variable$.getGlobalValue(), Symbols.symbol_function($sym20$KB_HANDLE_INTERNAL_VARIABLE_METHOD));
     Structures.register_method($kb_handle_internal_method_table$.getGlobalValue(), assertion_handles.$dtp_assertion$.getGlobalValue(), Symbols.symbol_function($sym22$KB_HANDLE_INTERNAL_ASSERTION_METHOD));

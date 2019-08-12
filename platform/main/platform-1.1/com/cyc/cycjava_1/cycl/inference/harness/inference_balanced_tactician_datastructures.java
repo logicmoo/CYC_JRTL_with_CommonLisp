@@ -1397,8 +1397,7 @@ public  final class inference_balanced_tactician_datastructures extends SubLTran
   }
 
   public static final SubLObject setup_inference_balanced_tactician_datastructures_file() {
-    // CVS_ID("Id: inference-balanced-tactician-datastructures.lisp 128006 2009-06-16 15:51:35Z pace ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_balanced_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym8$BALANCED_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_balanced_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym8$BALANCED_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$BAL_STRAT_DATA_PROBLEMS_MOTIVATED_WRT_NEW_ROOT_TABLE, $sym10$_CSETF_BAL_STRAT_DATA_PROBLEMS_MOTIVATED_WRT_NEW_ROOT_TABLE);
     Structures.def_csetf($sym11$BAL_STRAT_DATA_PROBLEMS_MOTIVATED_WRT_REMOVAL, $sym12$_CSETF_BAL_STRAT_DATA_PROBLEMS_MOTIVATED_WRT_REMOVAL);
     Structures.def_csetf($sym13$BAL_STRAT_DATA_PROBLEMS_MOTIVATED_WRT_TRANSFORMATION, $sym14$_CSETF_BAL_STRAT_DATA_PROBLEMS_MOTIVATED_WRT_TRANSFORMATION);

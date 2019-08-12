@@ -72,8 +72,7 @@ public  final class graphl_graph_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_graphl_graph_utilities_file() {
-    // CVS_ID("Id: graphl-graph-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

@@ -1427,8 +1427,7 @@ tactics.  TACTIC must be a transformation tactic generator tactic, like TRANS-PR
   }
 
   public static final SubLObject setup_inference_balanced_tactician_strategic_uninterestingness_file() {
-    // CVS_ID("Id: inference-balanced-tactician-strategic-uninterestingness.lisp 128499 2009-08-06 15:49:24Z pace ");
-    access_macros.register_macro_helper($sym3$BALANCED_STRATEGY_NOTE_UNINTERESTINGNESS_EXPLANATION, $sym4$BALANCED_STRATEGY_POSSIBLY_NOTE_UNINTERESTINGNESS_EXPLANATION);
+        access_macros.register_macro_helper($sym3$BALANCED_STRATEGY_NOTE_UNINTERESTINGNESS_EXPLANATION, $sym4$BALANCED_STRATEGY_POSSIBLY_NOTE_UNINTERESTINGNESS_EXPLANATION);
     memoization_state.note_memoized_function($sym66$BALANCED_STRATEGY_PREFERRED_BACKCHAIN_REQUIRED_JOIN_ORDERED_TACTI);
     return NIL;
   }

@@ -510,8 +510,7 @@ public  final class nart_handles extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_nart_handles_file() {
-    // CVS_ID("Id: nart-handles.lisp 128690 2009-09-02 19:44:47Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_NART_FROM_ID_);
+        subl_macro_promotions.declare_defglobal($sym0$_NART_FROM_ID_);
     utilities_macros.register_cyc_api_macro($sym10$DO_NARTS, $list2, $str11$Iterate_over_all_HL_NART_datastru);
     access_macros.register_macro_helper($sym16$DO_NARTS_TABLE, $sym10$DO_NARTS);
     access_macros.register_macro_helper($sym17$CREATE_NART_DUMP_ID_TABLE, $sym18$WITH_NART_DUMP_ID_TABLE);

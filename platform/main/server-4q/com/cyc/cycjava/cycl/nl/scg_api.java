@@ -1,23 +1,22 @@
 package com.cyc.cycjava.cycl.nl;
 
 
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.http_kernel;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.misc_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.nl.scg_api;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.system_parameters;
-import com.cyc.cycjava.cycl.web_utilities;
-import com.cyc.cycjava.cycl.xml_parsing_utilities;
-import com.cyc.cycjava.cycl.xml_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -30,39 +29,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.nl.scg_api.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class scg_api extends SubLTranslatedFile {
+public final class scg_api extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new scg_api();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl.scg_api";
+    public static final String myName = "com.cyc.cycjava_2.cycl.nl.scg_api";
 
-    public static final String myFingerPrint = "162e5219676c4e27e5956e0eefb7f4078bb2722944e49b3b03f07e1da4f6010f";
 
     // defparameter
     public static final SubLSymbol $scg_parser_host$ = makeSymbol("*SCG-PARSER-HOST*");
@@ -196,7 +168,7 @@ public final class scg_api extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list53 = list(list(list(makeString("Barack Obama flick flork flack"), NIL, EQUAL, NIL), T), list(list(makeString("Barack Obama was born in 1961"), NIL, makeSymbol("HAS-MEMBER-EQUAL?"), list(reader_make_constant_shell(makeString("birthDate")), reader_make_constant_shell(makeString("BarackObama")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1961)))), T), list(list(makeString("Barack Obama was born blarg in 1961"), list(makeKeyword("COMPLETE-MATCHES-ONLY?"), NIL), makeSymbol("HAS-MEMBER-EQUAL?"), list(reader_make_constant_shell(makeString("equalSymbols")), makeSymbol("?X"), reader_make_constant_shell(makeString("BarackObama")))), T), list(list(makeString("Barack Obama was born in 1961"), NIL, makeSymbol("NOT-HAS-MEMBER-EQUAL?"), list(makeSymbol("QUOTE"), list(reader_make_constant_shell(makeString("equalSymbols")), makeSymbol("?X"), reader_make_constant_shell(makeString("BarackObama"))))), T));
+    private static final SubLList $list53 = list(list(list(makeString("Barack Obama flick flork flack"), NIL, EQUAL, NIL), T), list(list(makeString("Barack Obama was born in 1961"), NIL, makeSymbol("HAS-MEMBER-EQUAL?"), list(reader_make_constant_shell(makeString("birthDate")), reader_make_constant_shell(makeString("BarackObama")), list(reader_make_constant_shell(makeString("YearFn")), makeInteger(1961)))), T), list(list(makeString("Barack Obama was born blarg in 1961"), list(makeKeyword("COMPLETE-MATCHES-ONLY?"), NIL), makeSymbol("HAS-MEMBER-EQUAL?"), list(reader_make_constant_shell(makeString("equalSymbols")), makeSymbol("?X"), reader_make_constant_shell(makeString("BarackObama")))), T), list(list(makeString("Barack Obama was born in 1961"), NIL, makeSymbol("NOT-HAS-MEMBER-EQUAL?"), list(QUOTE, list(reader_make_constant_shell(makeString("equalSymbols")), makeSymbol("?X"), reader_make_constant_shell(makeString("BarackObama"))))), T));
 
     public static SubLObject get_scg_parser_port() {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -412,19 +384,19 @@ public final class scg_api extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_scg_api_file() {
-        declareFunction(me, "get_scg_parser_port", "GET-SCG-PARSER-PORT", 0, 0, false);
-        declareFunction(me, "get_scg_parser_callback_host", "GET-SCG-PARSER-CALLBACK-HOST", 0, 0, false);
-        declareFunction(me, "get_scg_parser_callback_port", "GET-SCG-PARSER-CALLBACK-PORT", 0, 0, false);
-        declareFunction(me, "set_scg_parse_host", "SET-SCG-PARSE-HOST", 2, 2, false);
-        declareFunction(me, "get_scg_parse_results_in_xml", "GET-SCG-PARSE-RESULTS-IN-XML", 1, 4, false);
-        declareFunction(me, "scg_parse", "SCG-PARSE", 1, 1, false);
-        declareFunction(me, "clear_scg_lexical_mt", "CLEAR-SCG-LEXICAL-MT", 0, 0, false);
-        declareFunction(me, "remove_scg_lexical_mt", "REMOVE-SCG-LEXICAL-MT", 0, 1, false);
-        declareFunction(me, "scg_lexical_mt_internal", "SCG-LEXICAL-MT-INTERNAL", 1, 0, false);
-        declareFunction(me, "scg_lexical_mt", "SCG-LEXICAL-MT", 0, 1, false);
-        declareFunction(me, "scg_construction_tag_string", "SCG-CONSTRUCTION-TAG-STRING", 0, 1, false);
-        declareFunction(me, "scg_parse_term", "SCG-PARSE-TERM", 1, 2, false);
-        declareFunction(me, "scg_parse_test", "SCG-PARSE-TEST", 4, 0, false);
+        declareFunction("get_scg_parser_port", "GET-SCG-PARSER-PORT", 0, 0, false);
+        declareFunction("get_scg_parser_callback_host", "GET-SCG-PARSER-CALLBACK-HOST", 0, 0, false);
+        declareFunction("get_scg_parser_callback_port", "GET-SCG-PARSER-CALLBACK-PORT", 0, 0, false);
+        declareFunction("set_scg_parse_host", "SET-SCG-PARSE-HOST", 2, 2, false);
+        declareFunction("get_scg_parse_results_in_xml", "GET-SCG-PARSE-RESULTS-IN-XML", 1, 4, false);
+        declareFunction("scg_parse", "SCG-PARSE", 1, 1, false);
+        declareFunction("clear_scg_lexical_mt", "CLEAR-SCG-LEXICAL-MT", 0, 0, false);
+        declareFunction("remove_scg_lexical_mt", "REMOVE-SCG-LEXICAL-MT", 0, 1, false);
+        declareFunction("scg_lexical_mt_internal", "SCG-LEXICAL-MT-INTERNAL", 1, 0, false);
+        declareFunction("scg_lexical_mt", "SCG-LEXICAL-MT", 0, 1, false);
+        declareFunction("scg_construction_tag_string", "SCG-CONSTRUCTION-TAG-STRING", 0, 1, false);
+        declareFunction("scg_parse_term", "SCG-PARSE-TERM", 1, 2, false);
+        declareFunction("scg_parse_test", "SCG-PARSE-TEST", 4, 0, false);
         return NIL;
     }
 

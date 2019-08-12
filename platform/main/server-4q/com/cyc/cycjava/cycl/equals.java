@@ -1,30 +1,15 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.equals;
-import com.cyc.cycjava.cycl.inference.inference_trampolines;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cycl_utilities.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.equals.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.cycjava.cycl.kb_mapping_utilities.*;
+import static com.cyc.cycjava.cycl.list_utilities.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -34,32 +19,45 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.inference.inference_trampolines;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class equals extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      EQUALS
+ * source file: /cyc/top/cycl/equals.lisp
+ * created:     2019/07/03 17:37:36
+ */
+public final class equals extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new equals();
 
-    public static final String myName = "com.cyc.cycjava.cycl.equals";
-
-    public static final String myFingerPrint = "3a53b0d8f2e543b36e4e0b27c43615087ccf9c52a11807459c4484ab581fb799";
-
+ public static final String myName = "com.cyc.cycjava.cycl.equals";
 
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $preferred_rewrite_term_max_recursion_depth$ = makeSymbol("*PREFERRED-REWRITE-TERM-MAX-RECURSION-DEPTH*");
 
-    private static final SubLObject $$equals = reader_make_constant_shell(makeString("equals"));
 
 
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
     private static final SubLSymbol $sym3$SOME_SOURCE_REWRITE_OF_ASSERTIONS_SOMEWHERE_ = makeSymbol("SOME-SOURCE-REWRITE-OF-ASSERTIONS-SOMEWHERE?");
 
     private static final SubLSymbol $sym4$OPAQUE_ARG_WRT_QUOTING_ = makeSymbol("OPAQUE-ARG-WRT-QUOTING?");
 
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
+
 
     private static final SubLSymbol $sym6$HAS_PREFERRED_REWRITE_TERM_ = makeSymbol("HAS-PREFERRED-REWRITE-TERM?");
 
@@ -73,7 +71,7 @@ public final class equals extends SubLTranslatedFile {
 
     private static final SubLSymbol $MAX_RECURSION_DEPTH_REACHED = makeKeyword("MAX-RECURSION-DEPTH-REACHED");
 
-    private static final SubLObject $$rewriteOf = reader_make_constant_shell(makeString("rewriteOf"));
+
 
     private static final SubLSymbol $PREFERRED_TERM_NOT_FOUND = makeKeyword("PREFERRED-TERM-NOT-FOUND");
 
@@ -85,26 +83,22 @@ public final class equals extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$different = reader_make_constant_shell(makeString("different"));
 
 
+    private static final SubLObject $const26$TermExemptFromUniqueNamesAssumpti = reader_make_constant_shell("TermExemptFromUniqueNamesAssumption");
 
+    // Definitions
+    public static final SubLObject all_equals_alt(SubLObject obj, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        return ghl_search_methods.ghl_closure($$equals, obj, ghl_search_vars.ghl_forward_direction(), mt, tv);
+    }
 
-
-
-
-
-
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
-
-
-
-    private static final SubLObject $$disjointWith = reader_make_constant_shell(makeString("disjointWith"));
-
-    private static final SubLObject $const26$TermExemptFromUniqueNamesAssumpti = reader_make_constant_shell(makeString("TermExemptFromUniqueNamesAssumption"));
-
-
-
+    // Definitions
     public static SubLObject all_equals(final SubLObject obj, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -113,6 +107,32 @@ public final class equals extends SubLTranslatedFile {
             tv = NIL;
         }
         return ghl_search_methods.ghl_closure($$equals, obj, ghl_search_vars.ghl_forward_direction(), mt, tv);
+    }
+
+    public static final SubLObject equalsP_alt(SubLObject obj1, SubLObject obj2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        if (obj1.equal(obj2)) {
+            return T;
+        } else {
+            if (NIL != forts.fort_p(obj1)) {
+                if (NIL != forts.fort_p(obj2)) {
+                    return com.cyc.cycjava.cycl.equals.equal_fortsP(obj1, obj2, mt, tv);
+                } else {
+                    return com.cyc.cycjava.cycl.equals.equal_fortP(obj1, obj2, mt, tv);
+                }
+            } else {
+                if (NIL != forts.fort_p(obj2)) {
+                    return com.cyc.cycjava.cycl.equals.equal_fortP(obj2, obj1, mt, tv);
+                } else {
+                    return NIL;
+                }
+            }
+        }
     }
 
     public static SubLObject equalsP(final SubLObject obj1, final SubLObject obj2, SubLObject mt, SubLObject tv) {
@@ -135,6 +155,28 @@ public final class equals extends SubLTranslatedFile {
                 return equal_fortP(obj2, obj1, mt, tv);
             }
             return equal_nautP(obj1, obj2, mt, tv);
+        }
+    }
+
+    public static final SubLObject why_equals_alt(SubLObject obj1, SubLObject obj2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        if (obj1.equal(obj2)) {
+            return list(arguments.make_hl_support($REFLEXIVE, make_binary_formula($$equals, obj1, obj2), mt_vars.$equals_defining_mt$.getGlobalValue(), UNPROVIDED));
+        } else {
+            if (NIL != forts.fort_p(obj1)) {
+                return ghl_search_methods.why_gt_predicate_relation_p($$equals, obj1, obj2, mt, tv);
+            } else {
+                if (NIL != forts.fort_p(obj2)) {
+                    return ghl_search_methods.why_gt_predicate_relation_p($$equals, obj2, obj1, mt, tv);
+                } else {
+                    return ghl_search_methods.why_gt_predicate_relation_p($$equals, obj1, obj2, mt, tv);
+                }
+            }
         }
     }
 
@@ -167,6 +209,33 @@ public final class equals extends SubLTranslatedFile {
         return makeBoolean(NIL == equalsP(obj1, obj2, mt, tv));
     }
 
+    /**
+     * Check if FORT is equal to NON-FORT.
+     */
+    @LispMethod(comment = "Check if FORT is equal to NON-FORT.")
+    public static final SubLObject equal_fortP_alt(SubLObject fort, SubLObject non_fort, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (((NIL != $perform_equals_unification$.getDynamicValue(thread)) && (NIL == cycl_grammar.meta_variable_p(non_fort))) && (NIL != equality_store.some_equality_assertionsP(fort, UNPROVIDED))) {
+                    ans = ghl_search_methods.gt_predicate_relation_p($$equals, fort, non_fort, mt, tv, UNPROVIDED);
+                }
+                return ans;
+            }
+        }
+    }
+
+    /**
+     * Check if FORT is equal to NON-FORT.
+     */
+    @LispMethod(comment = "Check if FORT is equal to NON-FORT.")
     public static SubLObject equal_fortP(final SubLObject fort, final SubLObject non_fort, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -182,6 +251,33 @@ public final class equals extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * Check if FORT1 is equal to FORT2.
+     */
+    @LispMethod(comment = "Check if FORT1 is equal to FORT2.")
+    public static final SubLObject equal_fortsP_alt(SubLObject fort1, SubLObject fort2, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject ans = NIL;
+                if (((((NIL != $perform_equals_unification$.getDynamicValue(thread)) && (NIL != equality_store.some_equality_assertions_somewhereP(fort1))) && (NIL != equality_store.some_equality_assertions_somewhereP(fort2))) && (NIL != equality_store.some_equality_assertionsP(fort1, UNPROVIDED))) && (NIL != equality_store.some_equality_assertionsP(fort2, UNPROVIDED))) {
+                    ans = ghl_search_methods.gt_predicate_relation_p($$equals, fort1, fort2, mt, tv, UNPROVIDED);
+                }
+                return ans;
+            }
+        }
+    }
+
+    /**
+     * Check if FORT1 is equal to FORT2.
+     */
+    @LispMethod(comment = "Check if FORT1 is equal to FORT2.")
     public static SubLObject equal_fortsP(final SubLObject fort1, final SubLObject fort2, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -249,6 +345,22 @@ public final class equals extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject max_floor_mts_where_equals_alt(SubLObject source, SubLObject target) {
+        if (NIL != com.cyc.cycjava.cycl.equals.equal_everywhereP(source, target)) {
+            return list(mt_vars.$equals_defining_mt$.getGlobalValue());
+        } else {
+            if (NIL != forts.fort_p(source)) {
+                return com.cyc.cycjava.cycl.equals.max_floor_mts_where_equals_fort(source, target);
+            } else {
+                if (NIL != forts.fort_p(target)) {
+                    return com.cyc.cycjava.cycl.equals.max_floor_mts_where_equals_fort(target, source);
+                } else {
+                    return com.cyc.cycjava.cycl.equals.max_floor_mts_where_equals_non_forts(source, target);
+                }
+            }
+        }
+    }
+
     public static SubLObject max_floor_mts_where_equals(SubLObject source, final SubLObject target) {
         if (NIL != equal_everywhereP(source, target)) {
             return list(mt_vars.$equals_defining_mt$.getGlobalValue());
@@ -262,16 +374,48 @@ public final class equals extends SubLTranslatedFile {
         return max_floor_mts_where_equals_non_forts(source, target);
     }
 
+    public static final SubLObject max_floor_mts_where_equals_fort_alt(SubLObject source_fort, SubLObject target) {
+        return ghl_search_methods.gt_max_floor_mts_of_predicate_paths($$equals, source_fort, target, UNPROVIDED);
+    }
+
     public static SubLObject max_floor_mts_where_equals_fort(final SubLObject source_fort, final SubLObject target) {
         return ghl_search_methods.gt_max_floor_mts_of_predicate_paths($$equals, source_fort, target, UNPROVIDED);
     }
 
+    /**
+     * We don't have a general solution for this, but at the very least we
+     * can try unifying them in *equals-defining-mt* and see if that works,
+     * and then also try unifying them in #$InferencePSC.
+     * This will catch a common problem, when :removal-unify generates an #$InferencePSC
+     * support for two terms that are universally unifiable but not #'equal.
+     */
+    @LispMethod(comment = "We don\'t have a general solution for this, but at the very least we\r\ncan try unifying them in *equals-defining-mt* and see if that works,\r\nand then also try unifying them in #$InferencePSC.\r\nThis will catch a common problem, when :removal-unify generates an #$InferencePSC\r\nsupport for two terms that are universally unifiable but not #\'equal.\nWe don\'t have a general solution for this, but at the very least we\ncan try unifying them in *equals-defining-mt* and see if that works,\nand then also try unifying them in #$InferencePSC.\nThis will catch a common problem, when :removal-unify generates an #$InferencePSC\nsupport for two terms that are universally unifiable but not #\'equal.")
+    public static final SubLObject max_floor_mts_where_equals_non_forts_alt(SubLObject source, SubLObject target) {
+        return NIL != com.cyc.cycjava.cycl.equals.equal_somewhereP(source, target) ? ((SubLObject) ($$InferencePSC)) : NIL;
+    }
+
+    /**
+     * We don't have a general solution for this, but at the very least we
+     * can try unifying them in *equals-defining-mt* and see if that works,
+     * and then also try unifying them in #$InferencePSC.
+     * This will catch a common problem, when :removal-unify generates an #$InferencePSC
+     * support for two terms that are universally unifiable but not #'equal.
+     */
+    @LispMethod(comment = "We don\'t have a general solution for this, but at the very least we\r\ncan try unifying them in *equals-defining-mt* and see if that works,\r\nand then also try unifying them in #$InferencePSC.\r\nThis will catch a common problem, when :removal-unify generates an #$InferencePSC\r\nsupport for two terms that are universally unifiable but not #\'equal.\nWe don\'t have a general solution for this, but at the very least we\ncan try unifying them in *equals-defining-mt* and see if that works,\nand then also try unifying them in #$InferencePSC.\nThis will catch a common problem, when :removal-unify generates an #$InferencePSC\nsupport for two terms that are universally unifiable but not #\'equal.")
     public static SubLObject max_floor_mts_where_equals_non_forts(SubLObject source, final SubLObject target) {
         return NIL != equal_somewhereP(source, target) ? $$InferencePSC : NIL;
     }
 
+    public static final SubLObject equal_everywhereP_alt(SubLObject term1, SubLObject term2) {
+        return com.cyc.cycjava.cycl.equals.equalsP(term1, term2, mt_vars.$equals_defining_mt$.getGlobalValue(), UNPROVIDED);
+    }
+
     public static SubLObject equal_everywhereP(final SubLObject term1, final SubLObject term2) {
         return equalsP(term1, term2, mt_vars.$equals_defining_mt$.getGlobalValue(), UNPROVIDED);
+    }
+
+    public static final SubLObject equal_somewhereP_alt(SubLObject term1, SubLObject term2) {
+        return com.cyc.cycjava.cycl.equals.equalsP(term1, term2, $$InferencePSC, UNPROVIDED);
     }
 
     public static SubLObject equal_somewhereP(final SubLObject term1, final SubLObject term2) {
@@ -447,6 +591,31 @@ public final class equals extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff SIMPLE-FORT is a direct rewriteOf COMPLEX-FORT,
+    i.e. if there is an assertion of the form (#$rewriteOf SIMPLE-FORT COMPLEX-FORT).
+     */
+    @LispMethod(comment = "@return booleanp; t iff SIMPLE-FORT is a direct rewriteOf COMPLEX-FORT,\r\ni.e. if there is an assertion of the form (#$rewriteOf SIMPLE-FORT COMPLEX-FORT).")
+    public static final SubLObject direct_rewrite_ofP_alt(SubLObject simple_fort, SubLObject complex_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (NIL != narts_high.naut_p(complex_term)) {
+            return member_equalP(complex_term, pred_values(simple_fort, $$rewriteOf, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+        } else {
+            return makeBoolean((NIL != equality_store.some_source_rewrite_of_assertions_somewhereP(complex_term)) && (NIL != pred_u_v_holds_in_relevant_mts($$rewriteOf, simple_fort, complex_term, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
+        }
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff SIMPLE-FORT is a direct rewriteOf COMPLEX-FORT,
+    i.e. if there is an assertion of the form (#$rewriteOf SIMPLE-FORT COMPLEX-FORT).
+     */
+    @LispMethod(comment = "@return booleanp; t iff SIMPLE-FORT is a direct rewriteOf COMPLEX-FORT,\r\ni.e. if there is an assertion of the form (#$rewriteOf SIMPLE-FORT COMPLEX-FORT).")
     public static SubLObject direct_rewrite_ofP(final SubLObject simple_fort, final SubLObject complex_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -457,6 +626,39 @@ public final class equals extends SubLTranslatedFile {
         return makeBoolean((NIL != equality_store.some_source_rewrite_of_assertions_somewhereP(complex_term)) && (NIL != kb_mapping_utilities.pred_u_v_holds_in_relevant_mts($$rewriteOf, simple_fort, complex_term, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED)));
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff any fort in SIMPLE-FORTS is a direct rewriteOf COMPLEX-FORT.
+     */
+    @LispMethod(comment = "@return booleanp; t iff any fort in SIMPLE-FORTS is a direct rewriteOf COMPLEX-FORT.")
+    public static final SubLObject any_direct_rewrite_ofP_alt(SubLObject simple_forts, SubLObject complex_term, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            SubLObject v_answer = NIL;
+            if (NIL == v_answer) {
+                {
+                    SubLObject csome_list_var = simple_forts;
+                    SubLObject simple_fort = NIL;
+                    for (simple_fort = csome_list_var.first(); !((NIL != v_answer) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , simple_fort = csome_list_var.first()) {
+                        if (NIL != com.cyc.cycjava.cycl.equals.direct_rewrite_ofP(simple_fort, complex_term, mt)) {
+                            v_answer = T;
+                        }
+                    }
+                }
+            }
+            return v_answer;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff any fort in SIMPLE-FORTS is a direct rewriteOf COMPLEX-FORT.
+     */
+    @LispMethod(comment = "@return booleanp; t iff any fort in SIMPLE-FORTS is a direct rewriteOf COMPLEX-FORT.")
     public static SubLObject any_direct_rewrite_ofP(final SubLObject simple_forts, final SubLObject complex_term, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -477,16 +679,58 @@ public final class equals extends SubLTranslatedFile {
         return v_answer;
     }
 
+    /**
+     * Return a subset of FORTS which are those with minimal rewriteOf complexity.
+     *
+     * @unknown does not yet handle transitive rewrites unless all direct rewrites are
+    members of FORTS.
+     */
+    @LispMethod(comment = "Return a subset of FORTS which are those with minimal rewriteOf complexity.\r\n\r\n@unknown does not yet handle transitive rewrites unless all direct rewrites are\r\nmembers of FORTS.")
+    public static final SubLObject simplest_forts_wrt_rewrite_alt(SubLObject v_forts, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            SubLObject list_var = v_forts;
+            SubLTrampolineFile.checkType(list_var, NON_DOTTED_LIST_P);
+            {
+                SubLObject cdolist_list_var = list_var;
+                SubLObject elem = NIL;
+                for (elem = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , elem = cdolist_list_var.first()) {
+                    SubLTrampolineFile.checkType(elem, FORT_P);
+                }
+            }
+        }
+        {
+            SubLObject simplest_forts = v_forts;
+            SubLObject cdolist_list_var = v_forts;
+            SubLObject fort = NIL;
+            for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                if (NIL != com.cyc.cycjava.cycl.equals.any_direct_rewrite_ofP(v_forts, fort, mt)) {
+                    simplest_forts = remove(fort, simplest_forts, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                }
+            }
+            return simplest_forts;
+        }
+    }
+
+    /**
+     * Return a subset of FORTS which are those with minimal rewriteOf complexity.
+     *
+     * @unknown does not yet handle transitive rewrites unless all direct rewrites are
+    members of FORTS.
+     */
+    @LispMethod(comment = "Return a subset of FORTS which are those with minimal rewriteOf complexity.\r\n\r\n@unknown does not yet handle transitive rewrites unless all direct rewrites are\r\nmembers of FORTS.")
     public static SubLObject simplest_forts_wrt_rewrite(final SubLObject v_forts, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
         }
-        assert NIL != list_utilities.non_dotted_list_p(v_forts) : "list_utilities.non_dotted_list_p(v_forts) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(v_forts) " + v_forts;
+        assert NIL != list_utilities.non_dotted_list_p(v_forts) : "! list_utilities.non_dotted_list_p(v_forts) " + ("list_utilities.non_dotted_list_p(v_forts) " + "CommonSymbols.NIL != list_utilities.non_dotted_list_p(v_forts) ") + v_forts;
         SubLObject cdolist_list_var = v_forts;
         SubLObject elem = NIL;
         elem = cdolist_list_var.first();
         while (NIL != cdolist_list_var) {
-            assert NIL != forts.fort_p(elem) : "forts.fort_p(elem) " + "CommonSymbols.NIL != forts.fort_p(elem) " + elem;
+            assert NIL != forts.fort_p(elem) : "! forts.fort_p(elem) " + ("forts.fort_p(elem) " + "CommonSymbols.NIL != forts.fort_p(elem) ") + elem;
             cdolist_list_var = cdolist_list_var.rest();
             elem = cdolist_list_var.first();
         } 
@@ -502,6 +746,41 @@ public final class equals extends SubLTranslatedFile {
             fort = cdolist_list_var.first();
         } 
         return simplest_forts;
+    }
+
+    public static final SubLObject differentP_alt(SubLObject objects, SubLObject unknown_value) {
+        if (unknown_value == UNPROVIDED) {
+            unknown_value = NIL;
+        }
+        {
+            SubLObject result = T;
+            SubLObject failureP = NIL;
+            SubLObject v_object = NIL;
+            SubLObject other_objects = NIL;
+            for (v_object = objects.first(), other_objects = objects.rest(); !((NIL != failureP) || (NIL == other_objects)); v_object = other_objects.first() , other_objects = other_objects.rest()) {
+                if (NIL == failureP) {
+                    {
+                        SubLObject csome_list_var = other_objects;
+                        SubLObject other_object = NIL;
+                        for (other_object = csome_list_var.first(); !((NIL != failureP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , other_object = csome_list_var.first()) {
+                            {
+                                SubLObject different = com.cyc.cycjava.cycl.equals.differentP_binary(v_object, other_object, unknown_value);
+                                if (different == unknown_value) {
+                                    failureP = T;
+                                    result = unknown_value;
+                                } else {
+                                    if (NIL == different) {
+                                        failureP = T;
+                                        result = NIL;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
     }
 
     public static SubLObject differentP(final SubLObject objects, SubLObject unknown_value) {
@@ -538,6 +817,33 @@ public final class equals extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject differentP_binary_alt(SubLObject obj1, SubLObject obj2, SubLObject unknown_value) {
+        if (unknown_value == UNPROVIDED) {
+            unknown_value = NIL;
+        }
+        if (NIL != unification_utilities.term_unify(obj1, obj2, UNPROVIDED, UNPROVIDED)) {
+            return NIL;
+        } else {
+            if ((NIL != cycl_grammar.subl_strict_atomic_term_p(obj1)) && (NIL != cycl_grammar.subl_strict_atomic_term_p(obj2))) {
+                return T;
+            } else {
+                if ((NIL != com.cyc.cycjava.cycl.equals.unique_names_assumption_applicable_to_termP(obj1)) && (NIL != com.cyc.cycjava.cycl.equals.unique_names_assumption_applicable_to_termP(obj2))) {
+                    return T;
+                } else {
+                    if (NIL != com.cyc.cycjava.cycl.equals.asserted_differentP(obj1, obj2)) {
+                        return T;
+                    } else {
+                        if (NIL != com.cyc.cycjava.cycl.equals.different_by_disjointnessP(obj1, obj2)) {
+                            return T;
+                        } else {
+                            return unknown_value;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject differentP_binary(final SubLObject obj1, final SubLObject obj2, SubLObject unknown_value) {
         if (unknown_value == UNPROVIDED) {
             unknown_value = NIL;
@@ -560,8 +866,57 @@ public final class equals extends SubLTranslatedFile {
         return unknown_value;
     }
 
+    public static final SubLObject asserted_differentP_alt(SubLObject obj1, SubLObject obj2) {
+        return sublisp_boolean(com.cyc.cycjava.cycl.equals.find_different_assertion(obj1, obj2));
+    }
+
     public static SubLObject asserted_differentP(final SubLObject obj1, final SubLObject obj2) {
         return list_utilities.sublisp_boolean(find_different_assertion(obj1, obj2));
+    }
+
+    public static final SubLObject find_different_assertion_alt(SubLObject obj1, SubLObject obj2) {
+        {
+            SubLObject different_assertion = NIL;
+            {
+                SubLObject rest = NIL;
+                for (rest = virtual_indexing.gather_overlap_index(list($$different, obj1, obj2), UNPROVIDED); !((NIL != different_assertion) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject assertion = rest.first();
+                        if (NIL != assertions_high.assertion_has_truth(assertion, $TRUE)) {
+                            if (NIL != assertions_high.gaf_assertionP(assertion)) {
+                                {
+                                    SubLObject predicate = assertions_high.gaf_predicate(assertion);
+                                    SubLObject args = assertions_high.gaf_args(assertion);
+                                    if ((($$different == predicate) && (NIL != member_equalP(obj1, args))) && (NIL != member_equalP(obj2, remove(obj1, args, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)))) {
+                                        different_assertion = assertion;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject rest = NIL;
+                for (rest = virtual_indexing.gather_overlap_index(list($$equals, obj1, obj2), UNPROVIDED); !((NIL != different_assertion) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject assertion = rest.first();
+                        if (NIL != assertions_high.assertion_has_truth(assertion, $FALSE)) {
+                            if (NIL != assertions_high.gaf_assertionP(assertion)) {
+                                {
+                                    SubLObject predicate = assertions_high.gaf_predicate(assertion);
+                                    SubLObject args = assertions_high.gaf_args(assertion);
+                                    if ((($$equals == predicate) && (NIL != member_equalP(obj1, args))) && (NIL != member_equalP(obj2, remove(obj1, args, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED)))) {
+                                        different_assertion = assertion;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return different_assertion;
+        }
     }
 
     public static SubLObject find_different_assertion(final SubLObject obj1, final SubLObject obj2) {
@@ -593,6 +948,22 @@ public final class equals extends SubLTranslatedFile {
         return different_assertion;
     }
 
+    public static final SubLObject different_by_disjointnessP_alt(SubLObject obj1, SubLObject obj2) {
+        if ((NIL != cycl_grammar.cycl_represented_term_p(obj1)) && (NIL != cycl_grammar.cycl_represented_term_p(obj2))) {
+            return disjoint_with.instances_of_disjoint_collectionsP(obj1, obj2, UNPROVIDED, UNPROVIDED);
+        } else {
+            if (NIL != cycl_grammar.cycl_represented_term_p(obj1)) {
+                return com.cyc.cycjava.cycl.equals.different_by_disjointnessP_rep_unrep(obj1, obj2);
+            } else {
+                if (NIL != cycl_grammar.cycl_represented_term_p(obj2)) {
+                    return com.cyc.cycjava.cycl.equals.different_by_disjointnessP_rep_unrep(obj2, obj1);
+                } else {
+                    return NIL;
+                }
+            }
+        }
+    }
+
     public static SubLObject different_by_disjointnessP(final SubLObject obj1, final SubLObject obj2) {
         if ((NIL != cycl_grammar.cycl_represented_term_p(obj1)) && (NIL != cycl_grammar.cycl_represented_term_p(obj2))) {
             return disjoint_with.instances_of_disjoint_collectionsP(obj1, obj2, UNPROVIDED, UNPROVIDED);
@@ -604,6 +975,35 @@ public final class equals extends SubLTranslatedFile {
             return different_by_disjointnessP_rep_unrep(obj2, obj1);
         }
         return NIL;
+    }
+
+    public static final SubLObject different_by_disjointnessP_rep_unrep_alt(SubLObject rep_term, SubLObject unrep_term) {
+        {
+            SubLObject differentP = NIL;
+            if (NIL == differentP) {
+                {
+                    SubLObject csome_list_var = isa.min_isa(rep_term, UNPROVIDED, UNPROVIDED);
+                    SubLObject col = NIL;
+                    for (col = csome_list_var.first(); !((NIL != differentP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , col = csome_list_var.first()) {
+                        if (NIL != at_defns.quiet_not_has_typeP(unrep_term, col, UNPROVIDED)) {
+                            differentP = T;
+                        }
+                        if (NIL == differentP) {
+                            {
+                                SubLObject csome_list_var_1 = disjoint_with.max_all_disjoint_with(col, UNPROVIDED, UNPROVIDED);
+                                SubLObject disj_col = NIL;
+                                for (disj_col = csome_list_var_1.first(); !((NIL != differentP) || (NIL == csome_list_var_1)); csome_list_var_1 = csome_list_var_1.rest() , disj_col = csome_list_var_1.first()) {
+                                    if (NIL != at_defns.quiet_has_typeP(unrep_term, disj_col, UNPROVIDED)) {
+                                        differentP = T;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return differentP;
+        }
     }
 
     public static SubLObject different_by_disjointnessP_rep_unrep(final SubLObject rep_term, final SubLObject unrep_term) {
@@ -635,6 +1035,37 @@ public final class equals extends SubLTranslatedFile {
         return differentP;
     }
 
+    public static final SubLObject $const14$TermExemptFromUniqueNamesAssumpti = reader_make_constant_shell("TermExemptFromUniqueNamesAssumption");
+
+    public static final SubLObject why_different_alt(SubLObject objects) {
+        {
+            SubLObject justification = NIL;
+            SubLObject failureP = NIL;
+            SubLObject v_object = NIL;
+            SubLObject other_objects = NIL;
+            for (v_object = objects.first(), other_objects = objects.rest(); !((NIL != failureP) || (NIL == other_objects)); v_object = other_objects.first() , other_objects = other_objects.rest()) {
+                if (NIL == failureP) {
+                    {
+                        SubLObject csome_list_var = other_objects;
+                        SubLObject other_object = NIL;
+                        for (other_object = csome_list_var.first(); !((NIL != failureP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , other_object = csome_list_var.first()) {
+                            {
+                                SubLObject binary_justification = com.cyc.cycjava.cycl.equals.why_different_binary(v_object, other_object);
+                                if (NIL != binary_justification) {
+                                    justification = nconc(justification, binary_justification);
+                                } else {
+                                    justification = NIL;
+                                    failureP = T;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return fast_delete_duplicates(justification, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject why_different(final SubLObject objects) {
         SubLObject justification = NIL;
         SubLObject failureP = NIL;
@@ -663,6 +1094,36 @@ public final class equals extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(justification, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject why_different_binary_alt(SubLObject obj1, SubLObject obj2) {
+        if (NIL != unification_utilities.term_unify(obj1, obj2, UNPROVIDED, UNPROVIDED)) {
+            return NIL;
+        } else {
+            if ((NIL != cycl_grammar.subl_strict_atomic_term_p(obj1)) && (NIL != cycl_grammar.subl_strict_atomic_term_p(obj2))) {
+                {
+                    SubLObject support = arguments.make_hl_support($OPAQUE, make_binary_formula($$different, obj1, obj2), UNPROVIDED, UNPROVIDED);
+                    return list(support);
+                }
+            } else {
+                if ((NIL != com.cyc.cycjava.cycl.equals.unique_names_assumption_applicable_to_termP(obj1)) && (NIL != com.cyc.cycjava.cycl.equals.unique_names_assumption_applicable_to_termP(obj2))) {
+                    {
+                        SubLObject support = arguments.make_hl_support($OPAQUE, make_binary_formula($$different, obj1, obj2), UNPROVIDED, UNPROVIDED);
+                        return list(support);
+                    }
+                } else {
+                    if (NIL != com.cyc.cycjava.cycl.equals.asserted_differentP(obj1, obj2)) {
+                        return com.cyc.cycjava.cycl.equals.why_asserted_different(obj1, obj2);
+                    } else {
+                        if (NIL != com.cyc.cycjava.cycl.equals.different_by_disjointnessP(obj1, obj2)) {
+                            return com.cyc.cycjava.cycl.equals.why_different_by_disjointness(obj1, obj2);
+                        } else {
+                            return NIL;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject why_different_binary(final SubLObject obj1, final SubLObject obj2) {
         if (NIL != unification_utilities.term_unify(obj1, obj2, UNPROVIDED, UNPROVIDED)) {
             return NIL;
@@ -684,8 +1145,28 @@ public final class equals extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject why_asserted_different_alt(SubLObject obj1, SubLObject obj2) {
+        return list(com.cyc.cycjava.cycl.equals.find_different_assertion(obj1, obj2));
+    }
+
     public static SubLObject why_asserted_different(final SubLObject obj1, final SubLObject obj2) {
         return list(find_different_assertion(obj1, obj2));
+    }
+
+    public static final SubLObject why_different_by_disjointness_alt(SubLObject obj1, SubLObject obj2) {
+        if ((NIL != cycl_grammar.cycl_represented_term_p(obj1)) && (NIL != cycl_grammar.cycl_represented_term_p(obj2))) {
+            return disjoint_with.why_instances_of_disjoint_collections(obj1, obj2, UNPROVIDED, UNPROVIDED);
+        } else {
+            if (NIL != cycl_grammar.cycl_represented_term_p(obj1)) {
+                return com.cyc.cycjava.cycl.equals.why_different_by_disjointness_rep_unrep(obj1, obj2);
+            } else {
+                if (NIL != cycl_grammar.cycl_represented_term_p(obj2)) {
+                    return com.cyc.cycjava.cycl.equals.why_different_by_disjointness_rep_unrep(obj2, obj1);
+                } else {
+                    return NIL;
+                }
+            }
+        }
     }
 
     public static SubLObject why_different_by_disjointness(final SubLObject obj1, final SubLObject obj2) {
@@ -699,6 +1180,44 @@ public final class equals extends SubLTranslatedFile {
             return why_different_by_disjointness_rep_unrep(obj2, obj1);
         }
         return NIL;
+    }
+
+    public static final SubLObject why_different_by_disjointness_rep_unrep_alt(SubLObject rep_term, SubLObject unrep_term) {
+        {
+            SubLObject justification = NIL;
+            if (NIL == justification) {
+                {
+                    SubLObject csome_list_var = isa.min_isa(rep_term, UNPROVIDED, UNPROVIDED);
+                    SubLObject col = NIL;
+                    for (col = csome_list_var.first(); !((NIL != justification) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , col = csome_list_var.first()) {
+                        if (NIL != at_defns.quiet_not_has_typeP(unrep_term, col, UNPROVIDED)) {
+                            {
+                                SubLObject support1 = arguments.make_hl_support($ISA, make_binary_formula($$isa, rep_term, col), UNPROVIDED, UNPROVIDED);
+                                SubLObject support2 = arguments.make_hl_support($ISA, make_negation(make_binary_formula($$isa, unrep_term, col)), UNPROVIDED, UNPROVIDED);
+                                justification = list(support1, support2);
+                            }
+                        }
+                        if (NIL == justification) {
+                            {
+                                SubLObject csome_list_var_2 = disjoint_with.max_all_disjoint_with(col, UNPROVIDED, UNPROVIDED);
+                                SubLObject disj_col = NIL;
+                                for (disj_col = csome_list_var_2.first(); !((NIL != justification) || (NIL == csome_list_var_2)); csome_list_var_2 = csome_list_var_2.rest() , disj_col = csome_list_var_2.first()) {
+                                    if (NIL != at_defns.quiet_has_typeP(unrep_term, disj_col, UNPROVIDED)) {
+                                        {
+                                            SubLObject support1 = arguments.make_hl_support($ISA, make_binary_formula($$isa, rep_term, col), UNPROVIDED, UNPROVIDED);
+                                            SubLObject support2 = arguments.make_hl_support($ISA, make_binary_formula($$isa, unrep_term, disj_col), UNPROVIDED, UNPROVIDED);
+                                            SubLObject support3 = arguments.make_hl_support($DISJOINTWITH, make_binary_formula($$disjointWith, col, disj_col), UNPROVIDED, UNPROVIDED);
+                                            justification = list(support1, support2, support3);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return justification;
+        }
     }
 
     public static SubLObject why_different_by_disjointness_rep_unrep(final SubLObject rep_term, final SubLObject unrep_term) {
@@ -735,6 +1254,26 @@ public final class equals extends SubLTranslatedFile {
         return justification;
     }
 
+    /**
+     *
+     *
+     * @return booleanp; whether the Unique Names Assumption applies to TERM
+     */
+    @LispMethod(comment = "@return booleanp; whether the Unique Names Assumption applies to TERM")
+    public static final SubLObject unique_names_assumption_applicable_to_termP_alt(SubLObject v_term) {
+        if (NIL != valid_constantP($const14$TermExemptFromUniqueNamesAssumpti, UNPROVIDED)) {
+            return makeBoolean(NIL == kb_accessors.term_exempt_from_unique_names_assumptionP(v_term));
+        } else {
+            return makeBoolean(NIL == inference_trampolines.inference_indeterminate_termP(v_term));
+        }
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; whether the Unique Names Assumption applies to TERM
+     */
+    @LispMethod(comment = "@return booleanp; whether the Unique Names Assumption applies to TERM")
     public static SubLObject unique_names_assumption_applicable_to_termP(final SubLObject v_term) {
         if (NIL != valid_constantP($const26$TermExemptFromUniqueNamesAssumpti, UNPROVIDED)) {
             return makeBoolean(NIL == kb_accessors.term_exempt_from_unique_names_assumptionP(v_term));
@@ -742,6 +1281,35 @@ public final class equals extends SubLTranslatedFile {
         return makeBoolean(NIL == inference_trampolines.inference_indeterminate_termP(v_term));
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff the UNA is applicable to all arguments of FORMULA.
+     */
+    @LispMethod(comment = "@return booleanp; t iff the UNA is applicable to all arguments of FORMULA.")
+    public static final SubLObject unique_names_assumption_applicable_to_all_argsP_alt(SubLObject formula) {
+        {
+            SubLObject failureP = NIL;
+            SubLObject args = formula_args(formula, $IGNORE);
+            SubLObject rest = NIL;
+            for (rest = args; !((NIL != failureP) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject arg = rest.first();
+                    if (NIL == com.cyc.cycjava.cycl.equals.unique_names_assumption_applicable_to_termP(arg)) {
+                        failureP = T;
+                    }
+                }
+            }
+            return makeBoolean(NIL == failureP);
+        }
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff the UNA is applicable to all arguments of FORMULA.
+     */
+    @LispMethod(comment = "@return booleanp; t iff the UNA is applicable to all arguments of FORMULA.")
     public static SubLObject unique_names_assumption_applicable_to_all_argsP(final SubLObject formula) {
         SubLObject failureP = NIL;
         final SubLObject args = cycl_utilities.formula_args(formula, $IGNORE);
@@ -756,6 +1324,39 @@ public final class equals extends SubLTranslatedFile {
         return makeBoolean(NIL == failureP);
     }
 
+    /**
+     *
+     *
+     * @return booleanp; t iff the UNA is applicable to all arguments of FORMULA except the ARGNUMth argument.
+    The UNA may or may not be applicable to the ARGNUMth argument; this function is agnostic.
+     */
+    @LispMethod(comment = "@return booleanp; t iff the UNA is applicable to all arguments of FORMULA except the ARGNUMth argument.\r\nThe UNA may or may not be applicable to the ARGNUMth argument; this function is agnostic.")
+    public static final SubLObject unique_names_assumption_applicable_to_all_args_exceptP_alt(SubLObject formula, SubLObject argnum) {
+        {
+            SubLObject failureP = NIL;
+            SubLObject n = ZERO_INTEGER;
+            SubLObject args = formula_args(formula, $IGNORE);
+            SubLObject rest = NIL;
+            for (rest = args; !((NIL != failureP) || (NIL == rest)); rest = rest.rest()) {
+                {
+                    SubLObject arg = rest.first();
+                    n = add(n, ONE_INTEGER);
+                    if (!(n.eql(argnum) || (NIL != com.cyc.cycjava.cycl.equals.unique_names_assumption_applicable_to_termP(arg)))) {
+                        failureP = T;
+                    }
+                }
+            }
+            return makeBoolean(NIL == failureP);
+        }
+    }
+
+    /**
+     *
+     *
+     * @return booleanp; t iff the UNA is applicable to all arguments of FORMULA except the ARGNUMth argument.
+    The UNA may or may not be applicable to the ARGNUMth argument; this function is agnostic.
+     */
+    @LispMethod(comment = "@return booleanp; t iff the UNA is applicable to all arguments of FORMULA except the ARGNUMth argument.\r\nThe UNA may or may not be applicable to the ARGNUMth argument; this function is agnostic.")
     public static SubLObject unique_names_assumption_applicable_to_all_args_exceptP(final SubLObject formula, final SubLObject argnum) {
         SubLObject failureP = NIL;
         SubLObject n = ZERO_INTEGER;
@@ -773,44 +1374,44 @@ public final class equals extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_equals_file() {
-        declareFunction(me, "all_equals", "ALL-EQUALS", 1, 2, false);
-        declareFunction(me, "equalsP", "EQUALS?", 2, 2, false);
-        declareFunction(me, "why_equals", "WHY-EQUALS", 2, 2, false);
-        declareFunction(me, "not_equalsP", "NOT-EQUALS?", 2, 2, false);
-        declareFunction(me, "equal_fortP", "EQUAL-FORT?", 2, 2, false);
-        declareFunction(me, "equal_fortsP", "EQUAL-FORTS?", 2, 2, false);
-        declareFunction(me, "equal_nautP", "EQUAL-NAUT?", 2, 2, false);
-        declareFunction(me, "max_floor_mts_where_equals", "MAX-FLOOR-MTS-WHERE-EQUALS", 2, 0, false);
-        declareFunction(me, "max_floor_mts_where_equals_fort", "MAX-FLOOR-MTS-WHERE-EQUALS-FORT", 2, 0, false);
-        declareFunction(me, "max_floor_mts_where_equals_non_forts", "MAX-FLOOR-MTS-WHERE-EQUALS-NON-FORTS", 2, 0, false);
-        declareFunction(me, "equal_everywhereP", "EQUAL-EVERYWHERE?", 2, 0, false);
-        declareFunction(me, "equal_somewhereP", "EQUAL-SOMEWHERE?", 2, 0, false);
-        declareFunction(me, "possibly_subst_preferred_rewrite_terms", "POSSIBLY-SUBST-PREFERRED-REWRITE-TERMS", 1, 1, false);
-        declareFunction(me, "preferred_rewrite_terms_subst_applicableP", "PREFERRED-REWRITE-TERMS-SUBST-APPLICABLE?", 2, 0, false);
-        declareFunction(me, "preferred_rewrite_terms_subst_apply", "PREFERRED-REWRITE-TERMS-SUBST-APPLY", 2, 0, false);
-        declareFunction(me, "has_preferred_rewrite_termP", "HAS-PREFERRED-REWRITE-TERM?", 1, 1, false);
-        declareFunction(me, "clear_preferred_rewrite_term", "CLEAR-PREFERRED-REWRITE-TERM", 0, 0, false);
-        declareFunction(me, "remove_preferred_rewrite_term", "REMOVE-PREFERRED-REWRITE-TERM", 1, 1, false);
-        declareFunction(me, "preferred_rewrite_term_internal", "PREFERRED-REWRITE-TERM-INTERNAL", 2, 0, false);
-        declareFunction(me, "preferred_rewrite_term", "PREFERRED-REWRITE-TERM", 1, 1, false);
-        declareFunction(me, "preferred_rewrite_term_int", "PREFERRED-REWRITE-TERM-INT", 2, 2, false);
-        declareFunction(me, "direct_rewrite_ofP", "DIRECT-REWRITE-OF?", 2, 1, false);
-        declareFunction(me, "any_direct_rewrite_ofP", "ANY-DIRECT-REWRITE-OF?", 2, 1, false);
-        declareFunction(me, "simplest_forts_wrt_rewrite", "SIMPLEST-FORTS-WRT-REWRITE", 1, 1, false);
-        declareFunction(me, "differentP", "DIFFERENT?", 1, 1, false);
-        declareFunction(me, "differentP_binary", "DIFFERENT?-BINARY", 2, 1, false);
-        declareFunction(me, "asserted_differentP", "ASSERTED-DIFFERENT?", 2, 0, false);
-        declareFunction(me, "find_different_assertion", "FIND-DIFFERENT-ASSERTION", 2, 0, false);
-        declareFunction(me, "different_by_disjointnessP", "DIFFERENT-BY-DISJOINTNESS?", 2, 0, false);
-        declareFunction(me, "different_by_disjointnessP_rep_unrep", "DIFFERENT-BY-DISJOINTNESS?-REP-UNREP", 2, 0, false);
-        declareFunction(me, "why_different", "WHY-DIFFERENT", 1, 0, false);
-        declareFunction(me, "why_different_binary", "WHY-DIFFERENT-BINARY", 2, 0, false);
-        declareFunction(me, "why_asserted_different", "WHY-ASSERTED-DIFFERENT", 2, 0, false);
-        declareFunction(me, "why_different_by_disjointness", "WHY-DIFFERENT-BY-DISJOINTNESS", 2, 0, false);
-        declareFunction(me, "why_different_by_disjointness_rep_unrep", "WHY-DIFFERENT-BY-DISJOINTNESS-REP-UNREP", 2, 0, false);
-        declareFunction(me, "unique_names_assumption_applicable_to_termP", "UNIQUE-NAMES-ASSUMPTION-APPLICABLE-TO-TERM?", 1, 0, false);
-        declareFunction(me, "unique_names_assumption_applicable_to_all_argsP", "UNIQUE-NAMES-ASSUMPTION-APPLICABLE-TO-ALL-ARGS?", 1, 0, false);
-        declareFunction(me, "unique_names_assumption_applicable_to_all_args_exceptP", "UNIQUE-NAMES-ASSUMPTION-APPLICABLE-TO-ALL-ARGS-EXCEPT?", 2, 0, false);
+        declareFunction("all_equals", "ALL-EQUALS", 1, 2, false);
+        declareFunction("equalsP", "EQUALS?", 2, 2, false);
+        declareFunction("why_equals", "WHY-EQUALS", 2, 2, false);
+        declareFunction("not_equalsP", "NOT-EQUALS?", 2, 2, false);
+        declareFunction("equal_fortP", "EQUAL-FORT?", 2, 2, false);
+        declareFunction("equal_fortsP", "EQUAL-FORTS?", 2, 2, false);
+        declareFunction("equal_nautP", "EQUAL-NAUT?", 2, 2, false);
+        declareFunction("max_floor_mts_where_equals", "MAX-FLOOR-MTS-WHERE-EQUALS", 2, 0, false);
+        declareFunction("max_floor_mts_where_equals_fort", "MAX-FLOOR-MTS-WHERE-EQUALS-FORT", 2, 0, false);
+        declareFunction("max_floor_mts_where_equals_non_forts", "MAX-FLOOR-MTS-WHERE-EQUALS-NON-FORTS", 2, 0, false);
+        declareFunction("equal_everywhereP", "EQUAL-EVERYWHERE?", 2, 0, false);
+        declareFunction("equal_somewhereP", "EQUAL-SOMEWHERE?", 2, 0, false);
+        declareFunction("possibly_subst_preferred_rewrite_terms", "POSSIBLY-SUBST-PREFERRED-REWRITE-TERMS", 1, 1, false);
+        declareFunction("preferred_rewrite_terms_subst_applicableP", "PREFERRED-REWRITE-TERMS-SUBST-APPLICABLE?", 2, 0, false);
+        declareFunction("preferred_rewrite_terms_subst_apply", "PREFERRED-REWRITE-TERMS-SUBST-APPLY", 2, 0, false);
+        declareFunction("has_preferred_rewrite_termP", "HAS-PREFERRED-REWRITE-TERM?", 1, 1, false);
+        declareFunction("clear_preferred_rewrite_term", "CLEAR-PREFERRED-REWRITE-TERM", 0, 0, false);
+        declareFunction("remove_preferred_rewrite_term", "REMOVE-PREFERRED-REWRITE-TERM", 1, 1, false);
+        declareFunction("preferred_rewrite_term_internal", "PREFERRED-REWRITE-TERM-INTERNAL", 2, 0, false);
+        declareFunction("preferred_rewrite_term", "PREFERRED-REWRITE-TERM", 1, 1, false);
+        declareFunction("preferred_rewrite_term_int", "PREFERRED-REWRITE-TERM-INT", 2, 2, false);
+        declareFunction("direct_rewrite_ofP", "DIRECT-REWRITE-OF?", 2, 1, false);
+        declareFunction("any_direct_rewrite_ofP", "ANY-DIRECT-REWRITE-OF?", 2, 1, false);
+        declareFunction("simplest_forts_wrt_rewrite", "SIMPLEST-FORTS-WRT-REWRITE", 1, 1, false);
+        declareFunction("differentP", "DIFFERENT?", 1, 1, false);
+        declareFunction("differentP_binary", "DIFFERENT?-BINARY", 2, 1, false);
+        declareFunction("asserted_differentP", "ASSERTED-DIFFERENT?", 2, 0, false);
+        declareFunction("find_different_assertion", "FIND-DIFFERENT-ASSERTION", 2, 0, false);
+        declareFunction("different_by_disjointnessP", "DIFFERENT-BY-DISJOINTNESS?", 2, 0, false);
+        declareFunction("different_by_disjointnessP_rep_unrep", "DIFFERENT-BY-DISJOINTNESS?-REP-UNREP", 2, 0, false);
+        declareFunction("why_different", "WHY-DIFFERENT", 1, 0, false);
+        declareFunction("why_different_binary", "WHY-DIFFERENT-BINARY", 2, 0, false);
+        declareFunction("why_asserted_different", "WHY-ASSERTED-DIFFERENT", 2, 0, false);
+        declareFunction("why_different_by_disjointness", "WHY-DIFFERENT-BY-DISJOINTNESS", 2, 0, false);
+        declareFunction("why_different_by_disjointness_rep_unrep", "WHY-DIFFERENT-BY-DISJOINTNESS-REP-UNREP", 2, 0, false);
+        declareFunction("unique_names_assumption_applicable_to_termP", "UNIQUE-NAMES-ASSUMPTION-APPLICABLE-TO-TERM?", 1, 0, false);
+        declareFunction("unique_names_assumption_applicable_to_all_argsP", "UNIQUE-NAMES-ASSUMPTION-APPLICABLE-TO-ALL-ARGS?", 1, 0, false);
+        declareFunction("unique_names_assumption_applicable_to_all_args_exceptP", "UNIQUE-NAMES-ASSUMPTION-APPLICABLE-TO-ALL-ARGS-EXCEPT?", 2, 0, false);
         return NIL;
     }
 
@@ -841,37 +1442,6 @@ public final class equals extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

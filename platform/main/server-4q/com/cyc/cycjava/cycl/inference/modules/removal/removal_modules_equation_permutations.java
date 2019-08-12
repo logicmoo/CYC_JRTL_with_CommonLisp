@@ -1,39 +1,11 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_equation_permutations;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_vars;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_equation_permutations.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -43,15 +15,30 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.V10;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.kb_utilities;
+import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.mt_vars;
+import com.cyc.cycjava.cycl.queues;
+import com.cyc.cycjava.cycl.set;
+import com.cyc.cycjava.cycl.subl_promotions;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_equation_permutations extends SubLTranslatedFile {
+public final class removal_modules_equation_permutations extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_equation_permutations();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_equation_permutations";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_equation_permutations";
 
-    public static final String myFingerPrint = "a16b132c140ef503b6bd67cdd3030fdb1a7c57ac9b4c89cb1b32cb1760335bf5";
 
     // deflexical
     private static final SubLSymbol $equation_permutable_operators$ = makeSymbol("*EQUATION-PERMUTABLE-OPERATORS*");
@@ -100,15 +87,15 @@ public final class removal_modules_equation_permutations extends SubLTranslatedF
 
     private static final SubLSymbol $REMOVAL_EQUATION_PERMUTATIONS_CHECK = makeKeyword("REMOVAL-EQUATION-PERMUTATIONS-CHECK");
 
-    private static final SubLList $list21 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("equationPermutations")), list(makeKeyword("BIND"), makeSymbol("EQUATION")), list(makeKeyword("BIND"), makeSymbol("PERMUTATION"))), list(list(makeKeyword("VALUE"), makeSymbol("EQUATION")), list(makeKeyword("VALUE"), makeSymbol("PERMUTATION")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("EQUATION"), makeSymbol("PERMUTATION")), list(makeKeyword("CALL"), makeSymbol("EQUATION-HAS-CANONICAL-PERMUTATION-P"), list(makeKeyword("VALUE"), makeSymbol("EQUATION")), list(makeKeyword("VALUE"), makeSymbol("PERMUTATION")))), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("SUPPORT-MT"), makeSymbol("*EQUATION-PERMUTATIONS-DEFINING-MT*"), makeKeyword("DOCUMENTATION"), makeString("(#$equationPermutations \n  (#$numericallyEquals <bound> <bound>)\n  (#$numericallyEquals <bound> <bound>))"), makeKeyword("EXAMPLE"), makeString("(#$equationPermutations\n  (#$numericallyEquals (#$TimesFn :PRESSURE :VOLUME) (#$TimesFn :MOLARITY :R :TEMPERATURE))\n  (#$numericallyEquals :PRESSURE (#$QuotientFn (#$TimesFn :MOLARITY :R :TEMPERATURE) :VOLUME)))") });
+    private static final SubLList $list21 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), makeSymbol("*CHEAP-HL-MODULE-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("equationPermutations")), list($BIND, makeSymbol("EQUATION")), list($BIND, makeSymbol("PERMUTATION"))), list(list(makeKeyword("VALUE"), makeSymbol("EQUATION")), list(makeKeyword("VALUE"), makeSymbol("PERMUTATION")))), makeKeyword("OUTPUT-CHECK-PATTERN"), list(makeKeyword("TUPLE"), list(makeSymbol("EQUATION"), makeSymbol("PERMUTATION")), list($CALL, makeSymbol("EQUATION-HAS-CANONICAL-PERMUTATION-P"), list(makeKeyword("VALUE"), makeSymbol("EQUATION")), list(makeKeyword("VALUE"), makeSymbol("PERMUTATION")))), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("SUPPORT-MT"), makeSymbol("*EQUATION-PERMUTATIONS-DEFINING-MT*"), makeKeyword("DOCUMENTATION"), makeString("(#$equationPermutations \n  (#$numericallyEquals <bound> <bound>)\n  (#$numericallyEquals <bound> <bound>))"), makeKeyword("EXAMPLE"), makeString("(#$equationPermutations\n  (#$numericallyEquals (#$TimesFn :PRESSURE :VOLUME) (#$TimesFn :MOLARITY :R :TEMPERATURE))\n  (#$numericallyEquals :PRESSURE (#$QuotientFn (#$TimesFn :MOLARITY :R :TEMPERATURE) :VOLUME)))") });
 
     private static final SubLSymbol $REMOVAL_EQUATION_PERMUTATIONS_ARG1_UNIFY = makeKeyword("REMOVAL-EQUATION-PERMUTATIONS-ARG1-UNIFY");
 
-    private static final SubLList $list23 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("NOT-FULLY-BOUND"), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), TWENTY_INTEGER, makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("ANYTHING"), list(makeKeyword("BIND"), makeSymbol("EQUATION"))), list(makeKeyword("VALUE"), makeSymbol("EQUATION"))), makeKeyword("INPUT-VERIFY-PATTERN"), list(makeKeyword("TEST"), makeSymbol("EQUATION-CANONICAL-PERMUTATION?")), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("EQUATION-PERMUTATIONS"), makeKeyword("INPUT")), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("INPUT"), list(makeKeyword("VALUE"), makeSymbol("EQUATION"))), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("SUPPORT-MT"), makeSymbol("*EQUATION-PERMUTATIONS-DEFINING-MT*"), makeKeyword("DOCUMENTATION"), makeString("(#$equationPermutations  <whatever> (#$numericallyEquals <bound> <bound>))"), makeKeyword("EXAMPLE"), makeString("(#$equationPermutations \n  ?EQUATION \n  (#$numericallyEquals :PRESSURE (#$QuotientFn (#$TimesFn :MOLARITY :R :TEMPERATURE) :VOLUME)))") });
+    private static final SubLList $list23 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("NOT-FULLY-BOUND"), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND"))), makeKeyword("COST-EXPRESSION"), TWENTY_INTEGER, makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("ANYTHING"), list($BIND, makeSymbol("EQUATION"))), list(makeKeyword("VALUE"), makeSymbol("EQUATION"))), makeKeyword("INPUT-VERIFY-PATTERN"), list($TEST, makeSymbol("EQUATION-CANONICAL-PERMUTATION?")), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("EQUATION-PERMUTATIONS"), makeKeyword("INPUT")), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("INPUT"), list(makeKeyword("VALUE"), makeSymbol("EQUATION"))), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("SUPPORT-MT"), makeSymbol("*EQUATION-PERMUTATIONS-DEFINING-MT*"), makeKeyword("DOCUMENTATION"), makeString("(#$equationPermutations  <whatever> (#$numericallyEquals <bound> <bound>))"), makeKeyword("EXAMPLE"), makeString("(#$equationPermutations \n  ?EQUATION \n  (#$numericallyEquals :PRESSURE (#$QuotientFn (#$TimesFn :MOLARITY :R :TEMPERATURE) :VOLUME)))") });
 
     private static final SubLSymbol $REMOVAL_EQUATION_PERMUTATIONS_ARG2_UNIFY = makeKeyword("REMOVAL-EQUATION-PERMUTATIONS-ARG2-UNIFY");
 
-    private static final SubLList $list25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("ANYTHING")), makeKeyword("COST-EXPRESSION"), THREE_INTEGER, makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("equationPermutations")), list(makeKeyword("BIND"), makeSymbol("EQUATION")), makeKeyword("ANYTHING")), list(makeKeyword("VALUE"), makeSymbol("EQUATION"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list(makeKeyword("CALL"), makeSymbol("EQUATION-CANONICAL-PERMUTATIONS"), makeKeyword("INPUT")), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), list(makeKeyword("VALUE"), makeSymbol("EQUATION")), makeKeyword("INPUT")), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("SUPPORT-MT"), makeSymbol("*EQUATION-PERMUTATIONS-DEFINING-MT*"), makeKeyword("DOCUMENTATION"), makeString("(#$equationPermutations (#$numericallyEquals <bound> <bound>) <whatever>)"), makeKeyword("EXAMPLE"), makeString("(#$equationPermutations\n  (#$numericallyEquals (#$TimesFn :PRESSURE :VOLUME) (#$TimesFn :MOLARITY :R :TEMPERATURE))\n  ?PERMUTED)") });
+    private static final SubLList $list25 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("equationPermutations")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), list(reader_make_constant_shell(makeString("numericallyEquals")), makeKeyword("FULLY-BOUND"), makeKeyword("FULLY-BOUND")), makeKeyword("ANYTHING")), makeKeyword("COST-EXPRESSION"), THREE_INTEGER, makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("INPUT-EXTRACT-PATTERN"), list(makeKeyword("TEMPLATE"), list(reader_make_constant_shell(makeString("equationPermutations")), list($BIND, makeSymbol("EQUATION")), makeKeyword("ANYTHING")), list(makeKeyword("VALUE"), makeSymbol("EQUATION"))), makeKeyword("OUTPUT-GENERATE-PATTERN"), list($CALL, makeSymbol("EQUATION-CANONICAL-PERMUTATIONS"), makeKeyword("INPUT")), makeKeyword("OUTPUT-CONSTRUCT-PATTERN"), list(reader_make_constant_shell(makeString("equationPermutations")), list(makeKeyword("VALUE"), makeSymbol("EQUATION")), makeKeyword("INPUT")), makeKeyword("SUPPORT-STRENGTH"), makeKeyword("MONOTONIC"), makeKeyword("SUPPORT-MT"), makeSymbol("*EQUATION-PERMUTATIONS-DEFINING-MT*"), makeKeyword("DOCUMENTATION"), makeString("(#$equationPermutations (#$numericallyEquals <bound> <bound>) <whatever>)"), makeKeyword("EXAMPLE"), makeString("(#$equationPermutations\n  (#$numericallyEquals (#$TimesFn :PRESSURE :VOLUME) (#$TimesFn :MOLARITY :R :TEMPERATURE))\n  ?PERMUTED)") });
 
     private static final SubLSymbol EQUATION_PERMUTATIONS_FROM_ADDITION = makeSymbol("EQUATION-PERMUTATIONS-FROM-ADDITION");
 
@@ -442,28 +429,28 @@ public final class removal_modules_equation_permutations extends SubLTranslatedF
     }
 
     public static SubLObject declare_removal_modules_equation_permutations_file() {
-        declareFunction(me, "cycl_equation_p", "CYCL-EQUATION-P", 1, 0, false);
-        declareFunction(me, "equation_permutations", "EQUATION-PERMUTATIONS", 1, 0, false);
-        declareFunction(me, "equation_canonical_permutations", "EQUATION-CANONICAL-PERMUTATIONS", 1, 0, false);
-        declareFunction(me, "equation_has_canonical_permutationP", "EQUATION-HAS-CANONICAL-PERMUTATION?", 2, 0, false);
-        declareFunction(me, "equation_canonical_permutationP", "EQUATION-CANONICAL-PERMUTATION?", 1, 0, false);
-        declareFunction(me, "equation_immediate_permutations", "EQUATION-IMMEDIATE-PERMUTATIONS", 1, 0, false);
-        declareFunction(me, "equation_permutable_operator_p", "EQUATION-PERMUTABLE-OPERATOR-P", 1, 0, false);
-        declareFunction(me, "equation_permutations_from_addition", "EQUATION-PERMUTATIONS-FROM-ADDITION", 2, 0, false);
-        declareFunction(me, "equation_permutations_from_subtraction", "EQUATION-PERMUTATIONS-FROM-SUBTRACTION", 2, 0, false);
-        declareFunction(me, "equation_permutations_from_multiplication", "EQUATION-PERMUTATIONS-FROM-MULTIPLICATION", 2, 0, false);
-        declareFunction(me, "equation_permutations_from_division", "EQUATION-PERMUTATIONS-FROM-DIVISION", 2, 0, false);
-        declareFunction(me, "equation_permutations_from_natural_log", "EQUATION-PERMUTATIONS-FROM-NATURAL-LOG", 2, 0, false);
-        declareFunction(me, "equation_permutations_from_natural_exp", "EQUATION-PERMUTATIONS-FROM-NATURAL-EXP", 2, 0, false);
-        declareFunction(me, "make_equation", "MAKE-EQUATION", 2, 0, false);
-        declareFunction(me, "make_commutative_formula", "MAKE-COMMUTATIVE-FORMULA", 2, 0, false);
-        declareFunction(me, "make_symmetric_formula", "MAKE-SYMMETRIC-FORMULA", 3, 0, false);
-        declareFunction(me, "make_associative_commutative_formula", "MAKE-ASSOCIATIVE-COMMUTATIVE-FORMULA", 2, 0, false);
-        declareFunction(me, "make_separator_formula", "MAKE-SEPARATOR-FORMULA", 4, 0, false);
-        declareFunction(me, "make_addition", "MAKE-ADDITION", 1, 0, false);
-        declareFunction(me, "make_multiplication", "MAKE-MULTIPLICATION", 1, 0, false);
-        declareFunction(me, "make_difference", "MAKE-DIFFERENCE", 2, 0, false);
-        declareFunction(me, "make_quotient", "MAKE-QUOTIENT", 2, 0, false);
+        declareFunction("cycl_equation_p", "CYCL-EQUATION-P", 1, 0, false);
+        declareFunction("equation_permutations", "EQUATION-PERMUTATIONS", 1, 0, false);
+        declareFunction("equation_canonical_permutations", "EQUATION-CANONICAL-PERMUTATIONS", 1, 0, false);
+        declareFunction("equation_has_canonical_permutationP", "EQUATION-HAS-CANONICAL-PERMUTATION?", 2, 0, false);
+        declareFunction("equation_canonical_permutationP", "EQUATION-CANONICAL-PERMUTATION?", 1, 0, false);
+        declareFunction("equation_immediate_permutations", "EQUATION-IMMEDIATE-PERMUTATIONS", 1, 0, false);
+        declareFunction("equation_permutable_operator_p", "EQUATION-PERMUTABLE-OPERATOR-P", 1, 0, false);
+        declareFunction("equation_permutations_from_addition", "EQUATION-PERMUTATIONS-FROM-ADDITION", 2, 0, false);
+        declareFunction("equation_permutations_from_subtraction", "EQUATION-PERMUTATIONS-FROM-SUBTRACTION", 2, 0, false);
+        declareFunction("equation_permutations_from_multiplication", "EQUATION-PERMUTATIONS-FROM-MULTIPLICATION", 2, 0, false);
+        declareFunction("equation_permutations_from_division", "EQUATION-PERMUTATIONS-FROM-DIVISION", 2, 0, false);
+        declareFunction("equation_permutations_from_natural_log", "EQUATION-PERMUTATIONS-FROM-NATURAL-LOG", 2, 0, false);
+        declareFunction("equation_permutations_from_natural_exp", "EQUATION-PERMUTATIONS-FROM-NATURAL-EXP", 2, 0, false);
+        declareFunction("make_equation", "MAKE-EQUATION", 2, 0, false);
+        declareFunction("make_commutative_formula", "MAKE-COMMUTATIVE-FORMULA", 2, 0, false);
+        declareFunction("make_symmetric_formula", "MAKE-SYMMETRIC-FORMULA", 3, 0, false);
+        declareFunction("make_associative_commutative_formula", "MAKE-ASSOCIATIVE-COMMUTATIVE-FORMULA", 2, 0, false);
+        declareFunction("make_separator_formula", "MAKE-SEPARATOR-FORMULA", 4, 0, false);
+        declareFunction("make_addition", "MAKE-ADDITION", 1, 0, false);
+        declareFunction("make_multiplication", "MAKE-MULTIPLICATION", 1, 0, false);
+        declareFunction("make_difference", "MAKE-DIFFERENCE", 2, 0, false);
+        declareFunction("make_quotient", "MAKE-QUOTIENT", 2, 0, false);
         return NIL;
     }
 

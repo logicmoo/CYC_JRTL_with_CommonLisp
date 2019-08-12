@@ -119,8 +119,7 @@ public  final class constant_completion extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_constant_completion_file() {
-    // CVS_ID("Id: constant-completion.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_CONSTANT_NAMES_IN_CODE_);
+        subl_macro_promotions.declare_defglobal($sym0$_CONSTANT_NAMES_IN_CODE_);
     subl_macro_promotions.declare_defglobal($sym1$_BOGUS_CONSTANT_NAMES_IN_CODE_);
     return NIL;
   }

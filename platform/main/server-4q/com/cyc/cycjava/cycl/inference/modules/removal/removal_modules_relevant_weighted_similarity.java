@@ -1,51 +1,39 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.genls;
-import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_relevant_weighted_similarity;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_relevant_weighted_similarity.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.V10;
+import com.cyc.cycjava.cycl.arguments;
+import com.cyc.cycjava.cycl.backward;
+import com.cyc.cycjava.cycl.bindings;
+import com.cyc.cycjava.cycl.cycl_utilities;
+import com.cyc.cycjava.cycl.genls;
+import com.cyc.cycjava.cycl.isa;
+import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.unification_utilities;
+import com.cyc.cycjava.cycl.inference.ask_utilities;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.modules.preference_modules;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_relevant_weighted_similarity extends SubLTranslatedFile {
+public final class removal_modules_relevant_weighted_similarity extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_relevant_weighted_similarity();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_relevant_weighted_similarity";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_relevant_weighted_similarity";
 
-    public static final String myFingerPrint = "34264a9ac5fd0c6265e8f6dddf0c0ec945134cdffb2075330404f002053ea723";
 
     private static final SubLObject $const0$weightedSimilarityQuaInstanceOf_S = reader_make_constant_shell(makeString("weightedSimilarityQuaInstanceOf-SetExplicit"));
 
@@ -146,7 +134,7 @@ public final class removal_modules_relevant_weighted_similarity extends SubLTran
     }
 
     public static SubLObject declare_removal_modules_relevant_weighted_similarity_file() {
-        declareFunction(me, "removal_weightedsimilarityquainstanceof_setexplicit_expand", "REMOVAL-WEIGHTEDSIMILARITYQUAINSTANCEOF-SETEXPLICIT-EXPAND", 1, 1, false);
+        declareFunction("removal_weightedsimilarityquainstanceof_setexplicit_expand", "REMOVAL-WEIGHTEDSIMILARITYQUAINSTANCEOF-SETEXPLICIT-EXPAND", 1, 1, false);
         return NIL;
     }
 

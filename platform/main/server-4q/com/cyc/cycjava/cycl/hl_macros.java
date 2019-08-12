@@ -1,7 +1,19 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.hl_macros;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -10,65 +22,40 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.hl_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class hl_macros extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      HL-MACROS
+ * source file: /cyc/top/cycl/hl-macros.lisp
+ * created:     2019/07/03 17:37:19
+ */
+public final class hl_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new hl_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.hl_macros";
-
-    public static final String myFingerPrint = "7f5f2375d6d460bf63953eb5b87408d57d40df0fa28089a352422f3555c3be5b";
-
-
-
-
-
-
-
-
-
+ public static final String myName = "com.cyc.cycjava.cycl.hl_macros";
 
 
     // Internal Constants
-    public static final SubLList $list0 = list(makeSymbol("FORM"));
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(makeSymbol("FORM"));
 
+    public static final SubLSymbol $recording_hl_transcript_operationsP$ = makeSymbol("*RECORDING-HL-TRANSCRIPT-OPERATIONS?*");
 
-
-    public static final SubLSymbol $sym2$_RECORDING_HL_TRANSCRIPT_OPERATIONS__ = makeSymbol("*RECORDING-HL-TRANSCRIPT-OPERATIONS?*");
-
-    public static final SubLSymbol RECORD_HL_TRANSCRIPT_OPERATION = makeSymbol("RECORD-HL-TRANSCRIPT-OPERATION");
+    private static final SubLSymbol RECORD_HL_TRANSCRIPT_OPERATION = makeSymbol("RECORD-HL-TRANSCRIPT-OPERATION");
 
     private static final SubLList $list4 = list(list(makeSymbol("FORT")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(makeSymbol("FORM"));
 
     public static final SubLSymbol $forts_being_removed$ = makeSymbol("*FORTS-BEING-REMOVED*");
-
-
 
     private static final SubLList $list8 = list(makeSymbol("*FORTS-BEING-REMOVED*"));
 
     private static final SubLSymbol KBEQ = makeSymbol("KBEQ");
 
-    private static final SubLObject $$termDependsOn = reader_make_constant_shell(makeString("termDependsOn"));
+
 
     private static final SubLList $list11 = list(list(makeSymbol("METRIC-TYPE"), makeSymbol("METRIC")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -76,21 +63,13 @@ public final class hl_macros extends SubLTranslatedFile {
 
     private static final SubLList $list13 = list(list(makeSymbol("NULL"), makeSymbol("*FORWARD-INFERENCE-LAST-METRIC-TIME*")));
 
-
-
     private static final SubLSymbol $forward_inference_last_metric_time$ = makeSymbol("*FORWARD-INFERENCE-LAST-METRIC-TIME*");
-
-
 
     private static final SubLList $list17 = list(list(makeSymbol("INITIAL-FORWARD-INFERENCE-METRIC-TIME")), makeSymbol("*FORWARD-INFERENCE-LAST-METRIC-TIME*"));
 
     private static final SubLSymbol POSSIBLY_WITH_FORWARD_INFERENCE_METRIC_PROFILING = makeSymbol("POSSIBLY-WITH-FORWARD-INFERENCE-METRIC-PROFILING");
 
     private static final SubLList $list19 = list(makeKeyword("NO-GAF"), makeKeyword("NO-RULE"));
-
-
-
-
 
     private static final SubLList $list22 = list(list(makeSymbol("CSETQ"), makeSymbol("*FORWARD-INFERENCE-LAST-METRIC-TIME*"), list(makeSymbol("INITIAL-FORWARD-INFERENCE-METRIC-TIME"))));
 
@@ -112,8 +91,6 @@ public final class hl_macros extends SubLTranslatedFile {
 
     private static final SubLList $list31 = list(makeSymbol("*FORWARD-INFERENCE-METRIC-LAST-FORWARD-INFERENCE-RULE*"));
 
-
-
     private static final SubLSymbol INCREMENT_FORWARD_INFERENCE_METRICS = makeSymbol("INCREMENT-FORWARD-INFERENCE-METRICS");
 
     private static final SubLList $list34 = list(ZERO_INTEGER);
@@ -126,6 +103,25 @@ public final class hl_macros extends SubLTranslatedFile {
 
     public static final SubLSymbol $forward_inference_metric_last_forward_inference_rule$ = makeSymbol("*FORWARD-INFERENCE-METRIC-LAST-FORWARD-INFERENCE-RULE*");
 
+    // Definitions
+    public static final SubLObject possibly_record_hl_transcript_operation_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject form = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt0);
+            form = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                return list(PWHEN, $recording_hl_transcript_operationsP$, list(RECORD_HL_TRANSCRIPT_OPERATION, form));
+            } else {
+                cdestructuring_bind_error(datum, $list_alt0);
+            }
+        }
+        return NIL;
+    }
+
+    // Definitions
     public static SubLObject possibly_record_hl_transcript_operation(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -134,7 +130,7 @@ public final class hl_macros extends SubLTranslatedFile {
         form = current.first();
         current = current.rest();
         if (NIL == current) {
-            return list(PWHEN, $sym2$_RECORDING_HL_TRANSCRIPT_OPERATIONS__, list(RECORD_HL_TRANSCRIPT_OPERATION, form));
+            return list(PWHEN, $recording_hl_transcript_operationsP$, list(RECORD_HL_TRANSCRIPT_OPERATION, form));
         }
         cdestructuring_bind_error(datum, $list0);
         return NIL;
@@ -266,15 +262,15 @@ public final class hl_macros extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_hl_macros_file() {
-        declareMacro(me, "possibly_record_hl_transcript_operation", "POSSIBLY-RECORD-HL-TRANSCRIPT-OPERATION");
-        declareMacro(me, "note_fort_being_removed", "NOTE-FORT-BEING-REMOVED");
-        declareFunction(me, "some_fort_being_removedP", "SOME-FORT-BEING-REMOVED?", 0, 0, false);
-        declareFunction(me, "fort_being_removedP", "FORT-BEING-REMOVED?", 1, 0, false);
-        declareFunction(me, "forts_being_removed", "FORTS-BEING-REMOVED", 0, 0, false);
-        declareFunction(me, "forts_that_will_be_removed", "FORTS-THAT-WILL-BE-REMOVED", 0, 0, false);
-        declareFunction(me, "fort_being_removed_or_will_be_removedP", "FORT-BEING-REMOVED-OR-WILL-BE-REMOVED?", 1, 0, false);
-        declareMacro(me, "with_forward_inference_metric_profiling_initialized", "WITH-FORWARD-INFERENCE-METRIC-PROFILING-INITIALIZED");
-        declareMacro(me, "possibly_with_forward_inference_metric_profiling", "POSSIBLY-WITH-FORWARD-INFERENCE-METRIC-PROFILING");
+        declareMacro("possibly_record_hl_transcript_operation", "POSSIBLY-RECORD-HL-TRANSCRIPT-OPERATION");
+        declareMacro("note_fort_being_removed", "NOTE-FORT-BEING-REMOVED");
+        declareFunction("some_fort_being_removedP", "SOME-FORT-BEING-REMOVED?", 0, 0, false);
+        declareFunction("fort_being_removedP", "FORT-BEING-REMOVED?", 1, 0, false);
+        declareFunction("forts_being_removed", "FORTS-BEING-REMOVED", 0, 0, false);
+        declareFunction("forts_that_will_be_removed", "FORTS-THAT-WILL-BE-REMOVED", 0, 0, false);
+        declareFunction("fort_being_removed_or_will_be_removedP", "FORT-BEING-REMOVED-OR-WILL-BE-REMOVED?", 1, 0, false);
+        declareMacro("with_forward_inference_metric_profiling_initialized", "WITH-FORWARD-INFERENCE-METRIC-PROFILING-INITIALIZED");
+        declareMacro("possibly_with_forward_inference_metric_profiling", "POSSIBLY-WITH-FORWARD-INFERENCE-METRIC-PROFILING");
         return NIL;
     }
 
@@ -307,51 +303,6 @@ public final class hl_macros extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

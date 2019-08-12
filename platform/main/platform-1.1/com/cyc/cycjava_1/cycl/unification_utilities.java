@@ -205,8 +205,7 @@ public  final class unification_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_unification_utilities_file() {
-    // CVS_ID("Id: unification-utilities.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_globally_cached_function($sym16$QUERY_DNF_FROM_FORMULA);
+        memoization_state.note_globally_cached_function($sym16$QUERY_DNF_FROM_FORMULA);
     return NIL;
   }
 

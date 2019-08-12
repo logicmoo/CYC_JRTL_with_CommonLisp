@@ -2983,8 +2983,7 @@ pragmatic requirements (#$pragmaticRequirement). */
   }
 
   public static final SubLObject setup_el_utilities_file() {
-    // CVS_ID("Id: el-utilities.lisp 128423 2009-07-28 19:02:50Z goolsbey ");
-    utilities_macros.register_cyc_api_function($sym40$GROUND_, $list41, $str42$Returns_whether_EXPRESSION_is_fre, NIL, $list43);
+        utilities_macros.register_cyc_api_function($sym40$GROUND_, $list41, $str42$Returns_whether_EXPRESSION_is_fre, NIL, $list43);
     access_macros.register_external_symbol($sym45$OPTIMIZE_EL_FORMULA_VARIABLE_NAME);
     access_macros.register_external_symbol($sym68$MAKE_EL_FORMULA);
     utilities_macros.register_kb_function($sym109$EXPAND_JOIN_LEFT);

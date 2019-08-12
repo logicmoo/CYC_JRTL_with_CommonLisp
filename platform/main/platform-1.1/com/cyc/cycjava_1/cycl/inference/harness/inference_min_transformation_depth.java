@@ -857,8 +857,7 @@ public  final class inference_min_transformation_depth extends SubLTranslatedFil
   }
 
   public static final SubLObject setup_inference_min_transformation_depth_file() {
-    // CVS_ID("Id: inference-min-transformation-depth.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_globally_cached_function($sym13$INTERN_PROBLEM_QUERY_DEPTH_SIGNATURE);
+        memoization_state.note_globally_cached_function($sym13$INTERN_PROBLEM_QUERY_DEPTH_SIGNATURE);
     memoization_state.note_globally_cached_function($sym19$PQDS_DEPTH);
     return NIL;
   }

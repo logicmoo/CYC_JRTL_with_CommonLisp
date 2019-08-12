@@ -1,7 +1,19 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.pph_error_message_truncator;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -12,37 +24,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.pph_error_message_truncator.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_newline;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class pph_error_message_truncator extends SubLTranslatedFile {
+public final class pph_error_message_truncator extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new pph_error_message_truncator();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_error_message_truncator";
+    public static final String myName = "com.cyc.cycjava_2.cycl.pph_error_message_truncator";
 
-    public static final String myFingerPrint = "fb5333e695978600ee095978478b69e6eb131400c8e0017ed3545ed86d42c2c8";
 
     // deflexical
     private static final SubLSymbol $pph_error_msg_truncator_id_index$ = makeSymbol("*PPH-ERROR-MSG-TRUNCATOR-ID-INDEX*");
@@ -186,14 +173,14 @@ public final class pph_error_message_truncator extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_pph_error_message_truncator_file() {
-        declareFunction(me, "truncate_pph_error_message", "TRUNCATE-PPH-ERROR-MESSAGE", 1, 0, false);
-        declareFunction(me, "tokenize_pph_error_msg", "TOKENIZE-PPH-ERROR-MSG", 1, 0, false);
-        declareFunction(me, "index_pph_error_msg", "INDEX-PPH-ERROR-MSG", 2, 0, false);
-        declareFunction(me, "index_pph_error_msg_lines", "INDEX-PPH-ERROR-MSG-LINES", 2, 0, false);
-        declareFunction(me, "get_new_pph_error_msg_id", "GET-NEW-PPH-ERROR-MSG-ID", 0, 0, false);
-        declareFunction(me, "unindex_pph_error_msg", "UNINDEX-PPH-ERROR-MSG", 1, 0, false);
-        declareFunction(me, "note_pph_error_message_referenced", "NOTE-PPH-ERROR-MESSAGE-REFERENCED", 1, 0, false);
-        declareFunction(me, "match_pph_error_msg", "MATCH-PPH-ERROR-MSG", 1, 0, false);
+        declareFunction("truncate_pph_error_message", "TRUNCATE-PPH-ERROR-MESSAGE", 1, 0, false);
+        declareFunction("tokenize_pph_error_msg", "TOKENIZE-PPH-ERROR-MSG", 1, 0, false);
+        declareFunction("index_pph_error_msg", "INDEX-PPH-ERROR-MSG", 2, 0, false);
+        declareFunction("index_pph_error_msg_lines", "INDEX-PPH-ERROR-MSG-LINES", 2, 0, false);
+        declareFunction("get_new_pph_error_msg_id", "GET-NEW-PPH-ERROR-MSG-ID", 0, 0, false);
+        declareFunction("unindex_pph_error_msg", "UNINDEX-PPH-ERROR-MSG", 1, 0, false);
+        declareFunction("note_pph_error_message_referenced", "NOTE-PPH-ERROR-MESSAGE-REFERENCED", 1, 0, false);
+        declareFunction("match_pph_error_msg", "MATCH-PPH-ERROR-MSG", 1, 0, false);
         return NIL;
     }
 

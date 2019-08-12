@@ -308,8 +308,7 @@ public  final class morphology extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_morphology_file() {
-    // CVS_ID("Id: morphology.lisp 127214 2009-02-20 21:52:10Z aldag ");
-    memoization_state.note_globally_cached_function($sym82$FIND_STEM_MEMOIZED);
+        memoization_state.note_globally_cached_function($sym82$FIND_STEM_MEMOIZED);
     access_macros.register_external_symbol($sym96$PLURAL_NOUN_TO_SG);
     return NIL;
   }

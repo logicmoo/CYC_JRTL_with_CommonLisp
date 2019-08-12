@@ -346,8 +346,7 @@ public  final class sbhl_link_vars extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_link_vars_file() {
-    // CVS_ID("Id: sbhl-link-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

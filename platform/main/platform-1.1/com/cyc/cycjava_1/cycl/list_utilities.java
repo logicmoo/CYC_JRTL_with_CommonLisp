@@ -2864,8 +2864,7 @@ By convention, if TEST is NIL, the check for duplicates is skipped. */
   }
 
   public static final SubLObject setup_list_utilities_file() {
-    // CVS_ID("Id: list-utilities.lisp 128760 2009-09-15 04:40:33Z pace ");
-    memoization_state.note_globally_cached_function($sym93$NUM_LIST_CACHED);
+        memoization_state.note_globally_cached_function($sym93$NUM_LIST_CACHED);
     //generic_testing.define_test_case_table_int($sym110$SAFE_SPLICE_INTO_SORTED_LIST, list(new SubLObject[] {$kw111$TEST, Symbols.symbol_function(EQUAL), $kw112$OWNER, NIL, $kw113$CLASSES, NIL, $kw114$KB, $kw115$TINY, $kw116$WORKING_, T}), $list117);
     access_macros.define_obsolete_register($sym183$GET_ARGLIST, $list184);
     return NIL;

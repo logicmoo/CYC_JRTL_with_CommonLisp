@@ -481,8 +481,7 @@ public  final class removal_modules_lookup extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_lookup_file() {
-    // CVS_ID("Id: removal-modules-lookup.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_removal_module($kw5$REMOVAL_LOOKUP_POS, $list6);
+        inference_modules.inference_removal_module($kw5$REMOVAL_LOOKUP_POS, $list6);
     inference_modules.inference_removal_module($kw10$REMOVAL_LOOKUP_NEG, $list11);
     inference_modules.inference_removal_module($kw14$REMOVAL_PRED_UNBOUND, $list15);
     preference_modules.inference_preference_module($kw16$PRED_UNBOUND_POS, $list17);

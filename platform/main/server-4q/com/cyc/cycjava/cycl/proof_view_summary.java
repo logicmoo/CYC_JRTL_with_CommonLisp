@@ -1,7 +1,20 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.proof_view_summary;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -12,39 +25,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.proof_view_summary.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class proof_view_summary extends SubLTranslatedFile {
+public final class proof_view_summary extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new proof_view_summary();
 
-    public static final String myName = "com.cyc.cycjava.cycl.proof_view_summary";
+    public static final String myName = "com.cyc.cycjava_2.cycl.proof_view_summary";
 
-    public static final String myFingerPrint = "8ff1b629f7944abc06cceac955f19627fa6622755d0640170ba2b25a99b98096";
 
     // defparameter
     public static final SubLSymbol $proof_view_show_abductions_in_proof_summaryP$ = makeSymbol("*PROOF-VIEW-SHOW-ABDUCTIONS-IN-PROOF-SUMMARY?*");
@@ -785,46 +771,46 @@ public final class proof_view_summary extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_proof_view_summary_file() {
-        declareFunction(me, "get_proof_view_include_summary", "GET-PROOF-VIEW-INCLUDE-SUMMARY", 1, 0, false);
-        declareFunction(me, "set_proof_view_include_summary", "SET-PROOF-VIEW-INCLUDE-SUMMARY", 2, 0, false);
-        declareFunction(me, "get_proof_view_summary_algorithm", "GET-PROOF-VIEW-SUMMARY-ALGORITHM", 1, 0, false);
-        declareFunction(me, "set_proof_view_summary_algorithm", "SET-PROOF-VIEW-SUMMARY-ALGORITHM", 2, 0, false);
-        declareFunction(me, "proof_view_get_include_summary_sectionP", "PROOF-VIEW-GET-INCLUDE-SUMMARY-SECTION?", 1, 0, false);
-        declareFunction(me, "proof_view_set_include_summary_sectionP", "PROOF-VIEW-SET-INCLUDE-SUMMARY-SECTION?", 2, 0, false);
-        declareFunction(me, "proof_view_get_include_summary_sourcesP", "PROOF-VIEW-GET-INCLUDE-SUMMARY-SOURCES?", 1, 0, false);
-        declareFunction(me, "output_proof_view_summary_in_xml", "OUTPUT-PROOF-VIEW-SUMMARY-IN-XML", 1, 0, false);
-        declareFunction(me, "proof_view_get_summary_root", "PROOF-VIEW-GET-SUMMARY-ROOT", 1, 0, false);
-        declareFunction(me, "proof_view_get_summary_algorithm", "PROOF-VIEW-GET-SUMMARY-ALGORITHM", 1, 0, false);
-        declareFunction(me, "proof_view_set_summary_algorithm", "PROOF-VIEW-SET-SUMMARY-ALGORITHM", 2, 0, false);
-        declareFunction(me, "proof_view_get_summary_entries", "PROOF-VIEW-GET-SUMMARY-ENTRIES", 1, 0, false);
-        declareFunction(me, "proof_view_summary_item_sentence", "PROOF-VIEW-SUMMARY-ITEM-SENTENCE", 1, 0, false);
-        declareFunction(me, "proof_view_has_summary_sectionP", "PROOF-VIEW-HAS-SUMMARY-SECTION?", 1, 0, false);
-        declareFunction(me, "proof_view_maybe_remove_inference_proof_summary_root", "PROOF-VIEW-MAYBE-REMOVE-INFERENCE-PROOF-SUMMARY-ROOT", 1, 0, false);
-        declareFunction(me, "proof_view_flesh_out_inference_proof_summary", "PROOF-VIEW-FLESH-OUT-INFERENCE-PROOF-SUMMARY", 2, 0, false);
-        declareFunction(me, "proof_view_add_inference_proof_summary_root", "PROOF-VIEW-ADD-INFERENCE-PROOF-SUMMARY-ROOT", 1, 0, false);
-        declareFunction(me, "proof_view_summary_item_candidates", "PROOF-VIEW-SUMMARY-ITEM-CANDIDATES", 1, 0, false);
-        declareFunction(me, "proof_view_summary_item_subsumesP", "PROOF-VIEW-SUMMARY-ITEM-SUBSUMES?", 2, 0, false);
-        declareFunction(me, "maybe_add_proof_view_entry_summary_item", "MAYBE-ADD-PROOF-VIEW-ENTRY-SUMMARY-ITEM", 3, 0, false);
-        declareFunction(me, "add_proof_view_entry_summary_item", "ADD-PROOF-VIEW-ENTRY-SUMMARY-ITEM", 3, 0, false);
-        declareFunction(me, "proof_view_entry_summary_items", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS", 1, 0, false);
-        declareFunction(me, "proof_view_entry_summary_items_int", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS-INT", 1, 0, false);
-        declareFunction(me, "proof_view_entry_summary_items_post_filter_check", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS-POST-FILTER-CHECK", 2, 1, false);
-        declareFunction(me, "causation_sentence_p", "CAUSATION-SENTENCE-P", 1, 0, false);
-        declareFunction(me, "causation_sentence_effect", "CAUSATION-SENTENCE-EFFECT", 1, 0, false);
-        declareFunction(me, "allow_because_strengthening_for_proof_view_summary_itemP", "ALLOW-BECAUSE-STRENGTHENING-FOR-PROOF-VIEW-SUMMARY-ITEM?", 2, 0, false);
-        declareFunction(me, "proof_view_entry_get_allow_because_strengtheningP", "PROOF-VIEW-ENTRY-GET-ALLOW-BECAUSE-STRENGTHENING?", 1, 0, false);
-        declareFunction(me, "proof_view_get_allow_because_strengtheningP", "PROOF-VIEW-GET-ALLOW-BECAUSE-STRENGTHENING?", 1, 0, false);
-        declareFunction(me, "proof_view_set_allow_because_strengtheningP", "PROOF-VIEW-SET-ALLOW-BECAUSE-STRENGTHENING?", 2, 0, false);
-        declareFunction(me, "proof_view_entry_summary_items_from_children", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS-FROM-CHILDREN", 3, 0, false);
-        declareFunction(me, "proof_view_get_proof_summary_items", "PROOF-VIEW-GET-PROOF-SUMMARY-ITEMS", 1, 0, false);
-        declareFunction(me, "proof_view_fact_references_hypotheticalP", "PROOF-VIEW-FACT-REFERENCES-HYPOTHETICAL?", 1, 0, false);
-        declareFunction(me, "valid_proof_view_entry_summary_item_p", "VALID-PROOF-VIEW-ENTRY-SUMMARY-ITEM-P", 1, 0, false);
-        declareFunction(me, "filter_proof_view_entry_summary_itemP_internal", "FILTER-PROOF-VIEW-ENTRY-SUMMARY-ITEM?-INTERNAL", 2, 0, false);
-        declareFunction(me, "filter_proof_view_entry_summary_itemP", "FILTER-PROOF-VIEW-ENTRY-SUMMARY-ITEM?", 2, 0, false);
-        declareFunction(me, "proof_view_item_fails_summary_whitelist_testP", "PROOF-VIEW-ITEM-FAILS-SUMMARY-WHITELIST-TEST?", 2, 0, false);
-        declareFunction(me, "proof_view_item_passes_summary_whitelist_testP", "PROOF-VIEW-ITEM-PASSES-SUMMARY-WHITELIST-TEST?", 2, 0, false);
-        declareFunction(me, "proof_view_rule_support_entry_unsuitable_for_summaryP", "PROOF-VIEW-RULE-SUPPORT-ENTRY-UNSUITABLE-FOR-SUMMARY?", 1, 0, false);
-        declareFunction(me, "proof_view_non_trivial_rule_support_entry_unsuitable_for_summaryP", "PROOF-VIEW-NON-TRIVIAL-RULE-SUPPORT-ENTRY-UNSUITABLE-FOR-SUMMARY?", 1, 0, false);
+        declareFunction("get_proof_view_include_summary", "GET-PROOF-VIEW-INCLUDE-SUMMARY", 1, 0, false);
+        declareFunction("set_proof_view_include_summary", "SET-PROOF-VIEW-INCLUDE-SUMMARY", 2, 0, false);
+        declareFunction("get_proof_view_summary_algorithm", "GET-PROOF-VIEW-SUMMARY-ALGORITHM", 1, 0, false);
+        declareFunction("set_proof_view_summary_algorithm", "SET-PROOF-VIEW-SUMMARY-ALGORITHM", 2, 0, false);
+        declareFunction("proof_view_get_include_summary_sectionP", "PROOF-VIEW-GET-INCLUDE-SUMMARY-SECTION?", 1, 0, false);
+        declareFunction("proof_view_set_include_summary_sectionP", "PROOF-VIEW-SET-INCLUDE-SUMMARY-SECTION?", 2, 0, false);
+        declareFunction("proof_view_get_include_summary_sourcesP", "PROOF-VIEW-GET-INCLUDE-SUMMARY-SOURCES?", 1, 0, false);
+        declareFunction("output_proof_view_summary_in_xml", "OUTPUT-PROOF-VIEW-SUMMARY-IN-XML", 1, 0, false);
+        declareFunction("proof_view_get_summary_root", "PROOF-VIEW-GET-SUMMARY-ROOT", 1, 0, false);
+        declareFunction("proof_view_get_summary_algorithm", "PROOF-VIEW-GET-SUMMARY-ALGORITHM", 1, 0, false);
+        declareFunction("proof_view_set_summary_algorithm", "PROOF-VIEW-SET-SUMMARY-ALGORITHM", 2, 0, false);
+        declareFunction("proof_view_get_summary_entries", "PROOF-VIEW-GET-SUMMARY-ENTRIES", 1, 0, false);
+        declareFunction("proof_view_summary_item_sentence", "PROOF-VIEW-SUMMARY-ITEM-SENTENCE", 1, 0, false);
+        declareFunction("proof_view_has_summary_sectionP", "PROOF-VIEW-HAS-SUMMARY-SECTION?", 1, 0, false);
+        declareFunction("proof_view_maybe_remove_inference_proof_summary_root", "PROOF-VIEW-MAYBE-REMOVE-INFERENCE-PROOF-SUMMARY-ROOT", 1, 0, false);
+        declareFunction("proof_view_flesh_out_inference_proof_summary", "PROOF-VIEW-FLESH-OUT-INFERENCE-PROOF-SUMMARY", 2, 0, false);
+        declareFunction("proof_view_add_inference_proof_summary_root", "PROOF-VIEW-ADD-INFERENCE-PROOF-SUMMARY-ROOT", 1, 0, false);
+        declareFunction("proof_view_summary_item_candidates", "PROOF-VIEW-SUMMARY-ITEM-CANDIDATES", 1, 0, false);
+        declareFunction("proof_view_summary_item_subsumesP", "PROOF-VIEW-SUMMARY-ITEM-SUBSUMES?", 2, 0, false);
+        declareFunction("maybe_add_proof_view_entry_summary_item", "MAYBE-ADD-PROOF-VIEW-ENTRY-SUMMARY-ITEM", 3, 0, false);
+        declareFunction("add_proof_view_entry_summary_item", "ADD-PROOF-VIEW-ENTRY-SUMMARY-ITEM", 3, 0, false);
+        declareFunction("proof_view_entry_summary_items", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS", 1, 0, false);
+        declareFunction("proof_view_entry_summary_items_int", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS-INT", 1, 0, false);
+        declareFunction("proof_view_entry_summary_items_post_filter_check", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS-POST-FILTER-CHECK", 2, 1, false);
+        declareFunction("causation_sentence_p", "CAUSATION-SENTENCE-P", 1, 0, false);
+        declareFunction("causation_sentence_effect", "CAUSATION-SENTENCE-EFFECT", 1, 0, false);
+        declareFunction("allow_because_strengthening_for_proof_view_summary_itemP", "ALLOW-BECAUSE-STRENGTHENING-FOR-PROOF-VIEW-SUMMARY-ITEM?", 2, 0, false);
+        declareFunction("proof_view_entry_get_allow_because_strengtheningP", "PROOF-VIEW-ENTRY-GET-ALLOW-BECAUSE-STRENGTHENING?", 1, 0, false);
+        declareFunction("proof_view_get_allow_because_strengtheningP", "PROOF-VIEW-GET-ALLOW-BECAUSE-STRENGTHENING?", 1, 0, false);
+        declareFunction("proof_view_set_allow_because_strengtheningP", "PROOF-VIEW-SET-ALLOW-BECAUSE-STRENGTHENING?", 2, 0, false);
+        declareFunction("proof_view_entry_summary_items_from_children", "PROOF-VIEW-ENTRY-SUMMARY-ITEMS-FROM-CHILDREN", 3, 0, false);
+        declareFunction("proof_view_get_proof_summary_items", "PROOF-VIEW-GET-PROOF-SUMMARY-ITEMS", 1, 0, false);
+        declareFunction("proof_view_fact_references_hypotheticalP", "PROOF-VIEW-FACT-REFERENCES-HYPOTHETICAL?", 1, 0, false);
+        declareFunction("valid_proof_view_entry_summary_item_p", "VALID-PROOF-VIEW-ENTRY-SUMMARY-ITEM-P", 1, 0, false);
+        declareFunction("filter_proof_view_entry_summary_itemP_internal", "FILTER-PROOF-VIEW-ENTRY-SUMMARY-ITEM?-INTERNAL", 2, 0, false);
+        declareFunction("filter_proof_view_entry_summary_itemP", "FILTER-PROOF-VIEW-ENTRY-SUMMARY-ITEM?", 2, 0, false);
+        declareFunction("proof_view_item_fails_summary_whitelist_testP", "PROOF-VIEW-ITEM-FAILS-SUMMARY-WHITELIST-TEST?", 2, 0, false);
+        declareFunction("proof_view_item_passes_summary_whitelist_testP", "PROOF-VIEW-ITEM-PASSES-SUMMARY-WHITELIST-TEST?", 2, 0, false);
+        declareFunction("proof_view_rule_support_entry_unsuitable_for_summaryP", "PROOF-VIEW-RULE-SUPPORT-ENTRY-UNSUITABLE-FOR-SUMMARY?", 1, 0, false);
+        declareFunction("proof_view_non_trivial_rule_support_entry_unsuitable_for_summaryP", "PROOF-VIEW-NON-TRIVIAL-RULE-SUPPORT-ENTRY-UNSUITABLE-FOR-SUMMARY?", 1, 0, false);
         return NIL;
     }
 

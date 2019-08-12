@@ -51,6 +51,8 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
             
             "*RETAIN-CLIENT-SOCKET?*", "*SILENT-PROGRESS?*",
 
+	    "ARGLIST",
+
             "*SUSPEND-TYPE-CHECKING?*", "*TCP-LOCALHOST-ONLY?*", //
 
             "BODY", //
@@ -234,7 +236,7 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
     //
     @Override
     public Package toLispObject() {
-        return (Package) (Object) this;
+        return (Package) this;
     }
     //
     // private static class RetrievalStr {
@@ -306,7 +308,7 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
 
     public static SubLPackage findPackageNamed(String packageName) {
         synchronized (SubLPackage.PACKAGE_LOCK) {
-            return (SubLPackage) (Object) org.armedbear.lisp.Packages.findPackage(packageName);
+            return org.armedbear.lisp.Packages.findPackage(packageName);
         }
     }
 
@@ -346,9 +348,9 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
         // SubLPackage.SUBLISP_PACKAGE.symbolNameToSymbolMap.put(SubLT.T.getSubLName(),
         // SubLT.T);
         SubLMain.preInitLisp();
-        SUBLISP_PACKAGE = (SubLPackage) (Object) Lisp.PACKAGE_SUBLISP;
-        CYC_PACKAGE = (SubLPackage) (Object) Lisp.PACKAGE_CYC;
-        KEYWORD_PACKAGE = (SubLPackage) (Object) Lisp.PACKAGE_KEYWORD;
+        SUBLISP_PACKAGE = Lisp.PACKAGE_SUBLISP;
+        CYC_PACKAGE = Lisp.PACKAGE_CYC;
+        KEYWORD_PACKAGE = Lisp.PACKAGE_KEYWORD;
         SUBLISP_PACKAGE.toPackage().importSymbol(SubLT.T);
         SUBLISP_PACKAGE.toPackage().importSymbol(Lisp.NIL);
         assert CYC_PACKAGE.findSymbol("T") == SubLT.T;
@@ -361,17 +363,18 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
         return setCurrentPackage(SubLObjectFactory.makeString(packageName));
     }
 
-    public static void setCurrentPackage(SubLPackage thePackage) {
+    public static SubLPackage setCurrentPackage(SubLPackage thePackage) {
+	final SubLPackage was = getCurrentPackage();
         if (thePackage == null)
-            return;
-        SubLPackage was = getCurrentPackage();
+	    return was;
         if (thePackage == was)
-            return;
+	    return was;
         if (Symbol._PACKAGE_ != null) {
             Symbol._PACKAGE_.setValue( thePackage);
         }
         if (Packages.$package$ != null && Packages.$package$!=Symbol._PACKAGE_)
             Packages.$package$.setValue(thePackage.toPackage());
+	return thePackage;
     }
 
     public static SubLPackage setCurrentPackage(SubLString packageName) {
@@ -868,7 +871,8 @@ abstract public class SubLPackage extends SLispObject implements SubLObject {
     @Override
     abstract public LispObject getDescription();
 
-    abstract public String toDebugString();
+    @Override
+    abstract public String toDebugString(boolean innerInfo);
 
     abstract public Symbol findInternalSymbol(AbstractString name);
 

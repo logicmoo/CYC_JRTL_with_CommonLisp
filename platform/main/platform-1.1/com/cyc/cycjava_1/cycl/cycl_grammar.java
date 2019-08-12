@@ -962,8 +962,7 @@ public  final class cycl_grammar extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cycl_grammar_file() {
-    // CVS_ID("Id: cycl-grammar.lisp 126866 2009-01-20 19:11:18Z pace ");
-    utilities_macros.register_kb_function($sym63$SUBL_NON_VARIABLE_NON_KEYWORD_SYMBOL_P);
+        utilities_macros.register_kb_function($sym63$SUBL_NON_VARIABLE_NON_KEYWORD_SYMBOL_P);
     return NIL;
   }
 

@@ -130,8 +130,7 @@ public  final class rewrite_of_propagation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_rewrite_of_propagation_file() {
-    // CVS_ID("Id: rewrite-of-propagation.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_kb_function($sym2$REWRITE_OF_AFTER_ADDING);
+        utilities_macros.register_kb_function($sym2$REWRITE_OF_AFTER_ADDING);
     return NIL;
   }
 

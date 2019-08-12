@@ -211,8 +211,7 @@ public  final class bag extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_bag_file() {
-    // CVS_ID("Id: bag.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_bag$.getGlobalValue(), Symbols.symbol_function($sym8$BAG_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_bag$.getGlobalValue(), Symbols.symbol_function($sym8$BAG_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$BAG_STRUCT_UNIQUE_CONTENTS, $sym10$_CSETF_BAG_STRUCT_UNIQUE_CONTENTS);
     Structures.def_csetf($sym11$BAG_STRUCT_REPEAT_CONTENTS, $sym12$_CSETF_BAG_STRUCT_REPEAT_CONTENTS);
     Structures.def_csetf($sym13$BAG_STRUCT_REPEAT_SIZE, $sym14$_CSETF_BAG_STRUCT_REPEAT_SIZE);

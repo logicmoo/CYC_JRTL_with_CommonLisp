@@ -125,8 +125,7 @@ public  final class sparse_matrix extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sparse_matrix_file() {
-    // CVS_ID("Id: sparse-matrix.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sparse_matrix$.getGlobalValue(), Symbols.symbol_function($sym7$SPARSE_MATRIX_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sparse_matrix$.getGlobalValue(), Symbols.symbol_function($sym7$SPARSE_MATRIX_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$SMATRIX_ROWS, $sym9$_CSETF_SMATRIX_ROWS);
     Structures.def_csetf($sym10$SMATRIX_COLUMNS, $sym11$_CSETF_SMATRIX_COLUMNS);
     Equality.identity($sym0$SPARSE_MATRIX);

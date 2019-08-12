@@ -432,8 +432,7 @@ public  final class graph_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_graph_utilities_file() {
-    // CVS_ID("Id: graph-utilities.lisp 127951 2009-06-04 15:34:54Z rck ");
-    generic_testing.define_test_case_table_int($sym28$TEST_COMPUTE_GRAPH_RANK_ESTIMATE, list(new SubLObject[] {$kw29$TEST, Symbols.symbol_function(EQUAL), $kw30$OWNER, NIL, $kw31$CLASSES, NIL, $kw32$KB, $kw33$TINY, $kw34$WORKING_, T}), $list35);
+        generic_testing.define_test_case_table_int($sym28$TEST_COMPUTE_GRAPH_RANK_ESTIMATE, list(new SubLObject[] {$kw29$TEST, Symbols.symbol_function(EQUAL), $kw30$OWNER, NIL, $kw31$CLASSES, NIL, $kw32$KB, $kw33$TINY, $kw34$WORKING_, T}), $list35);
     generic_testing.define_test_case_table_int($sym42$TEST_DAG_IDENTIFY_LEAFS, list(new SubLObject[] {$kw29$TEST, NIL, $kw30$OWNER, NIL, $kw31$CLASSES, NIL, $kw32$KB, $kw33$TINY, $kw34$WORKING_, T}), $list43);
     generic_testing.define_test_case_table_int($sym46$TEST_DAG_IDENTIFY_ROOTS, list(new SubLObject[] {$kw29$TEST, NIL, $kw30$OWNER, NIL, $kw31$CLASSES, NIL, $kw32$KB, $kw33$TINY, $kw34$WORKING_, T}), $list47);
     generic_testing.define_test_case_table_int($sym52$TEST_DAG_ELIDE_FROM_GRAPH, list(new SubLObject[] {$kw29$TEST, NIL, $kw30$OWNER, NIL, $kw31$CLASSES, NIL, $kw32$KB, $kw33$TINY, $kw34$WORKING_, T}), $list53);

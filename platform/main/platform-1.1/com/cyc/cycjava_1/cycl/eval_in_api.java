@@ -500,8 +500,7 @@ public  final class eval_in_api extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_eval_in_api_file() {
-    // CVS_ID("Id: eval-in-api.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym1$_EVAL_IN_API_MUTABLE_GLOBALS_);
+        subl_macro_promotions.declare_defglobal($sym1$_EVAL_IN_API_MUTABLE_GLOBALS_);
     subl_macro_promotions.declare_defglobal($sym2$_EVAL_IN_API_IMMUTABLE_GLOBALS_);
     subl_macro_promotions.declare_defglobal($sym3$_API_SPECIAL_VERIFY_TABLE_);
     subl_macro_promotions.declare_defglobal($sym4$_API_FUNCTION_TABLE_);

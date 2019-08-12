@@ -1,10 +1,21 @@
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.temporal_projection_utilities;
-import com.cyc.cycjava.cycl.utilities_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -17,48 +28,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.temporal_projection_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ELEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWELVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class temporal_projection_utilities extends SubLTranslatedFile {
+public final class temporal_projection_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new temporal_projection_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.temporal_projection_utilities";
+    public static final String myName = "com.cyc.cycjava_2.cycl.temporal_projection_utilities";
 
-    public static final String myFingerPrint = "bb196d36bb9d98bd413a0c0eb435faf54bd16f17455e0d91028746cea18259bd";
 
     // defparameter
     private static final SubLSymbol $ignored_temporal_projection_functions$ = makeSymbol("*IGNORED-TEMPORAL-PROJECTION-FUNCTIONS*");
@@ -1796,64 +1771,64 @@ public final class temporal_projection_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_temporal_projection_utilities_file() {
-        declareFunction(me, "store_temporal_projection_results", "STORE-TEMPORAL-PROJECTION-RESULTS", 3, 1, false);
-        declareFunction(me, "temporal_projection_quick_failP", "TEMPORAL-PROJECTION-QUICK-FAIL?", 1, 0, false);
-        declareFunction(me, "deduction_not_produced_by_temporal_projectionP", "DEDUCTION-NOT-PRODUCED-BY-TEMPORAL-PROJECTION?", 1, 0, false);
-        declareFunction(me, "verify_temporal_projection_code_supportP", "VERIFY-TEMPORAL-PROJECTION-CODE-SUPPORT?", 1, 0, false);
-        declareFunction(me, "get_code_rule_for_documentation", "GET-CODE-RULE-FOR-DOCUMENTATION", 0, 0, false);
-        declareFunction(me, "find_likelihood_of_survival_of_spec", "FIND-LIKELIHOOD-OF-SURVIVAL-OF-SPEC", 3, 0, false);
-        declareFunction(me, "find_prob_of_termination_of_membership_at_age", "FIND-PROB-OF-TERMINATION-OF-MEMBERSHIP-AT-AGE", 2, 0, false);
-        declareFunction(me, "get_all_relevant_distributions_for_survival_of_entity", "GET-ALL-RELEVANT-DISTRIBUTIONS-FOR-SURVIVAL-OF-ENTITY", 1, 0, false);
-        declareFunction(me, "find_expected_survival_duration_at_age", "FIND-EXPECTED-SURVIVAL-DURATION-AT-AGE", 2, 0, false);
-        declareFunction(me, "one_year_death_probability_at_age", "ONE-YEAR-DEATH-PROBABILITY-AT-AGE", 1, 0, false);
-        declareFunction(me, "possibly_get_nauts_from_narts", "POSSIBLY-GET-NAUTS-FROM-NARTS", 1, 0, false);
-        declareFunction(me, "get_monad_mt", "GET-MONAD-MT", 1, 0, false);
-        declareFunction(me, "mt_with_anytime_psc_time_parameter", "MT-WITH-ANYTIME-PSC-TIME-PARAMETER", 1, 0, false);
-        declareFunction(me, "assertion_produced_by_temporal_projectionP", "ASSERTION-PRODUCED-BY-TEMPORAL-PROJECTION?", 1, 0, false);
-        declareFunction(me, "format_justification_entry", "FORMAT-JUSTIFICATION-ENTRY", 1, 0, false);
-        declareFunction(me, "find_the_latest_known_time_point_of_existence", "FIND-THE-LATEST-KNOWN-TIME-POINT-OF-EXISTENCE", 1, 0, false);
-        declareFunction(me, "find_first_point_of_time", "FIND-FIRST-POINT-OF-TIME", 1, 0, false);
-        declareFunction(me, "find_last_point_of_time", "FIND-LAST-POINT-OF-TIME", 1, 0, false);
-        declareFunction(me, "sunrise_time_for_location", "SUNRISE-TIME-FOR-LOCATION", 2, 1, false);
-        declareFunction(me, "sunset_time_for_location", "SUNSET-TIME-FOR-LOCATION", 2, 1, false);
-        declareFunction(me, "dawn_time_for_location", "DAWN-TIME-FOR-LOCATION", 2, 1, false);
-        declareFunction(me, "dusk_time_for_location", "DUSK-TIME-FOR-LOCATION", 2, 1, false);
-        declareFunction(me, "get_latitude_of_place", "GET-LATITUDE-OF-PLACE", 1, 0, false);
-        declareFunction(me, "use_territory_fn_to_get_information", "USE-TERRITORY-FN-TO-GET-INFORMATION", 2, 0, false);
-        declareFunction(me, "get_longitude_of_place", "GET-LONGITUDE-OF-PLACE", 1, 0, false);
-        declareFunction(me, "calculate_sunset_time", "CALCULATE-SUNSET-TIME", 4, 0, false);
-        declareFunction(me, "calculate_dusk_time", "CALCULATE-DUSK-TIME", 4, 0, false);
-        declareFunction(me, "calculate_sunrise_time", "CALCULATE-SUNRISE-TIME", 4, 0, false);
-        declareFunction(me, "calculate_dawn_time", "CALCULATE-DAWN-TIME", 4, 0, false);
-        declareFunction(me, "convert_offset", "CONVERT-OFFSET", 3, 0, false);
-        declareFunction(me, "find_offset_for_location_on_date", "FIND-OFFSET-FOR-LOCATION-ON-DATE", 2, 1, false);
-        declareFunction(me, "find_timezone_for_place_at_date", "FIND-TIMEZONE-FOR-PLACE-AT-DATE", 2, 0, false);
-        declareFunction(me, "get_time_zones_for_place", "GET-TIME-ZONES-FOR-PLACE", 1, 0, false);
-        declareFunction(me, "find_starting_point_of_daylight_saving_time", "FIND-STARTING-POINT-OF-DAYLIGHT-SAVING-TIME", 2, 0, false);
-        declareFunction(me, "find_ending_point_of_daylight_saving_time", "FIND-ENDING-POINT-OF-DAYLIGHT-SAVING-TIME", 2, 0, false);
-        declareFunction(me, "find_ending_point_of_european_summer_time", "FIND-ENDING-POINT-OF-EUROPEAN-SUMMER-TIME", 2, 0, false);
-        declareFunction(me, "find_starting_point_of_european_summer_time", "FIND-STARTING-POINT-OF-EUROPEAN-SUMMER-TIME", 2, 0, false);
-        declareFunction(me, "cyc_time_zone_conversion", "CYC-TIME-ZONE-CONVERSION", 2, 0, false);
-        declareFunction(me, "time_zone_conversion", "TIME-ZONE-CONVERSION", 2, 0, false);
-        declareFunction(me, "find_utc_offset_for_time_zone", "FIND-UTC-OFFSET-FOR-TIME-ZONE", 1, 0, false);
-        declareFunction(me, "location_has_qualitative_time_of_day_at_time", "LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME", 3, 0, false);
-        declareFunction(me, "location_has_sunrise_time", "LOCATION-HAS-SUNRISE-TIME", 2, 0, false);
-        declareFunction(me, "location_has_sunset_time", "LOCATION-HAS-SUNSET-TIME", 2, 0, false);
-        declareFunction(me, "local_sunrise_time_for_coordinates", "LOCAL-SUNRISE-TIME-FOR-COORDINATES", 3, 1, false);
-        declareFunction(me, "local_sunset_time_for_coordinates", "LOCAL-SUNSET-TIME-FOR-COORDINATES", 3, 1, false);
-        declareFunction(me, "estimate_timezone_offset", "ESTIMATE-TIMEZONE-OFFSET", 2, 0, false);
-        declareFunction(me, "find_closest_match_for_latitude_and_longitude", "FIND-CLOSEST-MATCH-FOR-LATITUDE-AND-LONGITUDE", 3, 0, false);
-        declareFunction(me, "check_dawn_time", "CHECK-DAWN-TIME", 3, 0, false);
-        declareFunction(me, "check_dusk_time", "CHECK-DUSK-TIME", 3, 0, false);
-        declareFunction(me, "check_morning_time", "CHECK-MORNING-TIME", 1, 0, false);
-        declareFunction(me, "check_afternoon_time", "CHECK-AFTERNOON-TIME", 1, 0, false);
-        declareFunction(me, "check_evening_time", "CHECK-EVENING-TIME", 1, 0, false);
-        declareFunction(me, "check_midday_time", "CHECK-MIDDAY-TIME", 1, 0, false);
-        declareFunction(me, "check_midnight_time", "CHECK-MIDNIGHT-TIME", 1, 0, false);
-        declareFunction(me, "get_minutes_of_date", "GET-MINUTES-OF-DATE", 1, 0, false);
-        declareFunction(me, "check_night_time", "CHECK-NIGHT-TIME", 3, 0, false);
-        declareFunction(me, "check_daytime_hours", "CHECK-DAYTIME-HOURS", 3, 0, false);
-        declareFunction(me, "find_local_time_at_location", "FIND-LOCAL-TIME-AT-LOCATION", 3, 0, false);
+        declareFunction("store_temporal_projection_results", "STORE-TEMPORAL-PROJECTION-RESULTS", 3, 1, false);
+        declareFunction("temporal_projection_quick_failP", "TEMPORAL-PROJECTION-QUICK-FAIL?", 1, 0, false);
+        declareFunction("deduction_not_produced_by_temporal_projectionP", "DEDUCTION-NOT-PRODUCED-BY-TEMPORAL-PROJECTION?", 1, 0, false);
+        declareFunction("verify_temporal_projection_code_supportP", "VERIFY-TEMPORAL-PROJECTION-CODE-SUPPORT?", 1, 0, false);
+        declareFunction("get_code_rule_for_documentation", "GET-CODE-RULE-FOR-DOCUMENTATION", 0, 0, false);
+        declareFunction("find_likelihood_of_survival_of_spec", "FIND-LIKELIHOOD-OF-SURVIVAL-OF-SPEC", 3, 0, false);
+        declareFunction("find_prob_of_termination_of_membership_at_age", "FIND-PROB-OF-TERMINATION-OF-MEMBERSHIP-AT-AGE", 2, 0, false);
+        declareFunction("get_all_relevant_distributions_for_survival_of_entity", "GET-ALL-RELEVANT-DISTRIBUTIONS-FOR-SURVIVAL-OF-ENTITY", 1, 0, false);
+        declareFunction("find_expected_survival_duration_at_age", "FIND-EXPECTED-SURVIVAL-DURATION-AT-AGE", 2, 0, false);
+        declareFunction("one_year_death_probability_at_age", "ONE-YEAR-DEATH-PROBABILITY-AT-AGE", 1, 0, false);
+        declareFunction("possibly_get_nauts_from_narts", "POSSIBLY-GET-NAUTS-FROM-NARTS", 1, 0, false);
+        declareFunction("get_monad_mt", "GET-MONAD-MT", 1, 0, false);
+        declareFunction("mt_with_anytime_psc_time_parameter", "MT-WITH-ANYTIME-PSC-TIME-PARAMETER", 1, 0, false);
+        declareFunction("assertion_produced_by_temporal_projectionP", "ASSERTION-PRODUCED-BY-TEMPORAL-PROJECTION?", 1, 0, false);
+        declareFunction("format_justification_entry", "FORMAT-JUSTIFICATION-ENTRY", 1, 0, false);
+        declareFunction("find_the_latest_known_time_point_of_existence", "FIND-THE-LATEST-KNOWN-TIME-POINT-OF-EXISTENCE", 1, 0, false);
+        declareFunction("find_first_point_of_time", "FIND-FIRST-POINT-OF-TIME", 1, 0, false);
+        declareFunction("find_last_point_of_time", "FIND-LAST-POINT-OF-TIME", 1, 0, false);
+        declareFunction("sunrise_time_for_location", "SUNRISE-TIME-FOR-LOCATION", 2, 1, false);
+        declareFunction("sunset_time_for_location", "SUNSET-TIME-FOR-LOCATION", 2, 1, false);
+        declareFunction("dawn_time_for_location", "DAWN-TIME-FOR-LOCATION", 2, 1, false);
+        declareFunction("dusk_time_for_location", "DUSK-TIME-FOR-LOCATION", 2, 1, false);
+        declareFunction("get_latitude_of_place", "GET-LATITUDE-OF-PLACE", 1, 0, false);
+        declareFunction("use_territory_fn_to_get_information", "USE-TERRITORY-FN-TO-GET-INFORMATION", 2, 0, false);
+        declareFunction("get_longitude_of_place", "GET-LONGITUDE-OF-PLACE", 1, 0, false);
+        declareFunction("calculate_sunset_time", "CALCULATE-SUNSET-TIME", 4, 0, false);
+        declareFunction("calculate_dusk_time", "CALCULATE-DUSK-TIME", 4, 0, false);
+        declareFunction("calculate_sunrise_time", "CALCULATE-SUNRISE-TIME", 4, 0, false);
+        declareFunction("calculate_dawn_time", "CALCULATE-DAWN-TIME", 4, 0, false);
+        declareFunction("convert_offset", "CONVERT-OFFSET", 3, 0, false);
+        declareFunction("find_offset_for_location_on_date", "FIND-OFFSET-FOR-LOCATION-ON-DATE", 2, 1, false);
+        declareFunction("find_timezone_for_place_at_date", "FIND-TIMEZONE-FOR-PLACE-AT-DATE", 2, 0, false);
+        declareFunction("get_time_zones_for_place", "GET-TIME-ZONES-FOR-PLACE", 1, 0, false);
+        declareFunction("find_starting_point_of_daylight_saving_time", "FIND-STARTING-POINT-OF-DAYLIGHT-SAVING-TIME", 2, 0, false);
+        declareFunction("find_ending_point_of_daylight_saving_time", "FIND-ENDING-POINT-OF-DAYLIGHT-SAVING-TIME", 2, 0, false);
+        declareFunction("find_ending_point_of_european_summer_time", "FIND-ENDING-POINT-OF-EUROPEAN-SUMMER-TIME", 2, 0, false);
+        declareFunction("find_starting_point_of_european_summer_time", "FIND-STARTING-POINT-OF-EUROPEAN-SUMMER-TIME", 2, 0, false);
+        declareFunction("cyc_time_zone_conversion", "CYC-TIME-ZONE-CONVERSION", 2, 0, false);
+        declareFunction("time_zone_conversion", "TIME-ZONE-CONVERSION", 2, 0, false);
+        declareFunction("find_utc_offset_for_time_zone", "FIND-UTC-OFFSET-FOR-TIME-ZONE", 1, 0, false);
+        declareFunction("location_has_qualitative_time_of_day_at_time", "LOCATION-HAS-QUALITATIVE-TIME-OF-DAY-AT-TIME", 3, 0, false);
+        declareFunction("location_has_sunrise_time", "LOCATION-HAS-SUNRISE-TIME", 2, 0, false);
+        declareFunction("location_has_sunset_time", "LOCATION-HAS-SUNSET-TIME", 2, 0, false);
+        declareFunction("local_sunrise_time_for_coordinates", "LOCAL-SUNRISE-TIME-FOR-COORDINATES", 3, 1, false);
+        declareFunction("local_sunset_time_for_coordinates", "LOCAL-SUNSET-TIME-FOR-COORDINATES", 3, 1, false);
+        declareFunction("estimate_timezone_offset", "ESTIMATE-TIMEZONE-OFFSET", 2, 0, false);
+        declareFunction("find_closest_match_for_latitude_and_longitude", "FIND-CLOSEST-MATCH-FOR-LATITUDE-AND-LONGITUDE", 3, 0, false);
+        declareFunction("check_dawn_time", "CHECK-DAWN-TIME", 3, 0, false);
+        declareFunction("check_dusk_time", "CHECK-DUSK-TIME", 3, 0, false);
+        declareFunction("check_morning_time", "CHECK-MORNING-TIME", 1, 0, false);
+        declareFunction("check_afternoon_time", "CHECK-AFTERNOON-TIME", 1, 0, false);
+        declareFunction("check_evening_time", "CHECK-EVENING-TIME", 1, 0, false);
+        declareFunction("check_midday_time", "CHECK-MIDDAY-TIME", 1, 0, false);
+        declareFunction("check_midnight_time", "CHECK-MIDNIGHT-TIME", 1, 0, false);
+        declareFunction("get_minutes_of_date", "GET-MINUTES-OF-DATE", 1, 0, false);
+        declareFunction("check_night_time", "CHECK-NIGHT-TIME", 3, 0, false);
+        declareFunction("check_daytime_hours", "CHECK-DAYTIME-HOURS", 3, 0, false);
+        declareFunction("find_local_time_at_location", "FIND-LOCAL-TIME-AT-LOCATION", 3, 0, false);
         return NIL;
     }
 

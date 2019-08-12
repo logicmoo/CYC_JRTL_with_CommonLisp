@@ -223,8 +223,7 @@ and hook up all the indexing between them. */
   }
 
   public static final SubLObject setup_hl_modifiers_file() {
-    // CVS_ID("Id: hl-modifiers.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym4$KB_CREATE_ASSERTED_ARGUMENT, $list7, $str8$Create_an_asserted_argument_for_A, $list9, $list10);
+        utilities_macros.register_cyc_api_function($sym4$KB_CREATE_ASSERTED_ARGUMENT, $list7, $str8$Create_an_asserted_argument_for_A, $list9, $list10);
     utilities_macros.register_cyc_api_function($sym11$KB_REMOVE_ASSERTED_ARGUMENT, $list12, $str13$Remove_ASSERTED_ARGUMENT_for_ASSE, $list14, $list15);
     utilities_macros.register_cyc_api_function($sym18$HL_ASSERT_BOOKKEEPING_BINARY_GAF, $list19, $str20$Assert__PRED_ARG1_ARG2__in_MT_to_, $list21, $list22);
     utilities_macros.register_cyc_api_function($sym23$HL_UNASSERT_BOOKKEEPING_BINARY_GAF, $list19, $str24$Unassert__PRED_ARG1_ARG2__in_MT_f, $list21, $list22);

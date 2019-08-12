@@ -3,18 +3,14 @@ package com.cyc.tool.subl.jrtl.nativeCode.subLisp;
 
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 
-import org.armedbear.lisp.*;
-
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLT;
 
 public interface CommonSymbols_KW extends CommonSymbols_SYM {
 
+    SubLSymbol $IDLE = makeKeyword("IDLE");
+    SubLSymbol $SORT = makeKeyword("SORT");
+
+    SubLSymbol $HASH = makeKeyword("HASH");
     SubLSymbol $1 = makeKeyword("1");
     SubLSymbol $2ND_WEIGHT = makeKeyword("2ND-WEIGHT");
     SubLSymbol $64 = makeKeyword("64");
@@ -25,6 +21,8 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $ABBREV_TYPES = makeKeyword("ABBREV-TYPES");
     SubLSymbol $ABDUCED_SUPPORT = makeKeyword("ABDUCED-SUPPORT");
     SubLSymbol $ABDUCTION = makeKeyword("ABDUCTION");
+    SubLSymbol $WEEK = makeKeyword("WEEK");
+    SubLSymbol $POLY = makeKeyword("POLY");
     SubLSymbol $ABNORMAL = makeKeyword("ABNORMAL");
     SubLSymbol $ABORTED = makeKeyword("ABORTED");
     SubLSymbol $ABORT_INFERENCE = makeKeyword("ABORT-INFERENCE");
@@ -73,6 +71,10 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $ADDITIONAL_ARGS = makeKeyword("ADDITIONAL-ARGS");
     SubLSymbol $ADDITIONAL_HEADERS = makeKeyword("ADDITIONAL-HEADERS");
     SubLSymbol $ADD = makeKeyword("ADD");
+    SubLSymbol $ADJP = makeKeyword("ADJP");
+    SubLSymbol $ADVP = makeKeyword("ADVP");
+    SubLSymbol $AUXD = makeKeyword("AUXD");
+    SubLSymbol $AUXZ = makeKeyword("AUXZ");
     SubLSymbol $ADD_PRED = makeKeyword("ADD-PRED");
     SubLSymbol $ADDRESSEE = makeKeyword("ADDRESSEE");
     SubLSymbol $ADDRESS = makeKeyword("ADDRESS");
@@ -442,8 +444,15 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $BLUE_EVENT = makeKeyword("BLUE-EVENT");
     SubLSymbol $BLUE_INDEX = makeKeyword("BLUE-INDEX");
     SubLSymbol $BLUE = makeKeyword("BLUE");
+    SubLSymbol $CYAN = makeKeyword("CYAN");
+    SubLSymbol $SINV = makeKeyword("SINV");
+    SubLSymbol $WHPP = makeKeyword("WHPP");
+    SubLSymbol $CITY = makeKeyword("FRAG");
+    SubLSymbol $FRAG = makeKeyword("WHPP");
+    SubLSymbol $SEND = makeKeyword("SEND");
     SubLSymbol $BNODE = makeKeyword("BNODE");
     SubLSymbol $BODY = makeKeyword("BODY");
+    SubLSymbol $CONF = makeKeyword("CONF");
     SubLSymbol $BOGOMIPS = makeKeyword("BOGOMIPS");
     SubLSymbol $BOGUS = makeKeyword("BOGUS");
     SubLSymbol $BOLD = makeKeyword("BOLD");
@@ -1540,6 +1549,8 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $FORMULA_TEMPLATE = makeKeyword("FORMULA-TEMPLATE");
     SubLSymbol $FORT_FILTER = makeKeyword("FORT-FILTER");
     SubLSymbol $FORT = makeKeyword("FORT");
+    SubLSymbol $HLMT = makeKeyword("HLMT");
+    SubLSymbol $CHAR = makeKeyword("CHAR");
     SubLSymbol $FORT_MODIFIED = makeKeyword("FORT-MODIFIED");
     SubLSymbol $FORT_REMOVED = makeKeyword("FORT-REMOVED");
     SubLSymbol $FORTS = makeKeyword("FORTS");
@@ -2258,6 +2269,14 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $LIGHTER_RED = makeKeyword("LIGHTER-RED");
     SubLSymbol $LIGHTER_YELLOW = makeKeyword("LIGHTER-YELLOW");
     SubLSymbol $LIGHTEST_GREY = makeKeyword("LIGHTEST-GREY");
+    SubLSymbol $FINE = makeKeyword("FINE");
+    SubLSymbol $FINER = makeKeyword("FINER");
+    SubLSymbol $FINEST = makeKeyword("FINEST");
+
+    SubLSymbol $ZOOM = makeKeyword("ZOOM");
+    SubLSymbol $SWAP = makeKeyword("SWAP");
+    SubLSymbol $GREY = makeKeyword("GREY");
+    SubLSymbol $NUKE = makeKeyword("NUKE");
     SubLSymbol $LIGHT_GRAY = makeKeyword("LIGHT-GRAY");
     SubLSymbol $LIGHT_GREY = makeKeyword("LIGHT-GREY");
     SubLSymbol $LIGHT_PURPLE = makeKeyword("LIGHT-PURPLE");
@@ -3245,6 +3264,12 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $PROMOTE = makeKeyword("PROMOTE");
     SubLSymbol $PROMPTER = makeKeyword("PROMPTER");
     SubLSymbol $PROMPT = makeKeyword("PROMPT");
+    SubLSymbol $LOGO = makeKeyword("LOGO");
+    SubLSymbol $DREF = makeKeyword("DREF");
+    SubLSymbol $REDO = makeKeyword("REDO");
+    SubLSymbol $BUSY = makeKeyword("BUSY");
+    SubLSymbol $DCYC = makeKeyword("DCYC");
+
     SubLSymbol $PRONOMIAL = makeKeyword("PRONOMIAL");
     SubLSymbol $PRONOUN = makeKeyword("PRONOUN");
     SubLSymbol $PROOF_COUNT = makeKeyword("PROOF-COUNT");
@@ -4256,6 +4281,10 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $TEST_SUITES = makeKeyword("TEST-SUITES");
     SubLSymbol $TEXT_ANSWERS = makeKeyword("TEXT-ANSWERS");
     SubLSymbol $TEXT_COLOR = makeKeyword("TEXT-COLOR");
+    SubLSymbol $YMAX = makeKeyword("YMAX");
+    SubLSymbol $XMAX = makeKeyword("XMAX");
+    SubLSymbol $HOME = makeKeyword("HOME");
+    SubLSymbol $ECHO = makeKeyword("ECHO");
     SubLSymbol $TEXT = makeKeyword("TEXT");
     SubLSymbol $TEXT_MATCHES = makeKeyword("TEXT-MATCHES");
     SubLSymbol $TEXT_PROCESSING = makeKeyword("TEXT-PROCESSING");
@@ -4671,6 +4700,7 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $WAITING = makeKeyword("WAITING");
     SubLSymbol $WANTED = makeKeyword("WANTED");
     SubLSymbol $WARN = makeKeyword("WARN");
+    SubLSymbol $NOTE = makeKeyword("NOTE");
     SubLSymbol $WARN_ONLY = makeKeyword("WARN-ONLY");
     SubLSymbol $WDT = makeKeyword("WDT");
     SubLSymbol $WEAKEN_CONSTRAINT = makeKeyword("WEAKEN-CONSTRAINT");
@@ -4726,6 +4756,11 @@ public interface CommonSymbols_KW extends CommonSymbols_SYM {
     SubLSymbol $WORSE = makeKeyword("WORSE");
     SubLSymbol $WP = makeKeyword("WP");
     SubLSymbol $WRAP = makeKeyword("WRAP");
+    SubLSymbol $LOAD = makeKeyword("LOAD");
+    SubLSymbol $CZER = makeKeyword("CZER");
+    SubLSymbol $DIRS = makeKeyword("DIRS");
+    SubLSymbol $FIRE = makeKeyword("FIRE");
+    SubLSymbol $WAIT = makeKeyword("WAIT");
     SubLSymbol $WRITER = makeKeyword("WRITER");
     SubLSymbol $WRITE_TRANS = makeKeyword("WRITE-TRANS");
     SubLSymbol $WS = makeKeyword("WS");

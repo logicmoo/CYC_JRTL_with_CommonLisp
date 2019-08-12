@@ -285,8 +285,7 @@ public  final class kb_compare extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_compare_file() {
-    // CVS_ID("Id: kb-compare.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym9$SET_KB_COMPARE_CONNECTION_COMMON_SYMBOLS, $sym10$WITH_NEW_KB_COMPARE_CONNECTION);
+        access_macros.register_macro_helper($sym9$SET_KB_COMPARE_CONNECTION_COMMON_SYMBOLS, $sym10$WITH_NEW_KB_COMPARE_CONNECTION);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_kb_intersection$.getGlobalValue(), Symbols.symbol_function($sym25$KB_INTERSECTION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym26$KB_INTRSCT_REMOTE_IMAGE, $sym27$_CSETF_KB_INTRSCT_REMOTE_IMAGE);
     Structures.def_csetf($sym28$KB_INTRSCT_CONSTANT_INDEX, $sym29$_CSETF_KB_INTRSCT_CONSTANT_INDEX);

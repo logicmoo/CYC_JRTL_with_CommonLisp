@@ -284,8 +284,7 @@ public  final class janus extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_janus_file() {
-    // CVS_ID("Id: janus.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.note_funcall_helper_function($sym58$JANUS_CATEGORIZE_FAILING_ASSERT_INT);
+        utilities_macros.note_funcall_helper_function($sym58$JANUS_CATEGORIZE_FAILING_ASSERT_INT);
     return NIL;
   }
 

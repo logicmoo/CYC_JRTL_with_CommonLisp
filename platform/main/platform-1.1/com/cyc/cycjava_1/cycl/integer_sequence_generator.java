@@ -256,8 +256,7 @@ If LIMIT is NIL, it means there is no limit enforced. */
   }
 
   public static final SubLObject setup_integer_sequence_generator_file() {
-    // CVS_ID("Id: integer-sequence-generator.lisp 127184 2009-02-19 22:01:26Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_integer_sequence_generator$.getGlobalValue(), Symbols.symbol_function($sym7$INTEGER_SEQUENCE_GENERATOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_integer_sequence_generator$.getGlobalValue(), Symbols.symbol_function($sym7$INTEGER_SEQUENCE_GENERATOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$ISG_LOCK, $sym9$_CSETF_ISG_LOCK);
     Structures.def_csetf($sym10$ISG_CURRENT, $sym11$_CSETF_ISG_CURRENT);
     Structures.def_csetf($sym12$ISG_START, $sym13$_CSETF_ISG_START);

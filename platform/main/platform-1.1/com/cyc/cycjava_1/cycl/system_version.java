@@ -111,8 +111,7 @@ public  final class system_version extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_system_version_file() {
-    // CVS_ID("Id: system-version.lisp 128948 2009-10-14 04:00:30Z rck ");
-    modules.create_system($str1$cycl);
+        modules.create_system($str1$cycl);
     {
       SubLObject cdolist_list_var = $list2;
       SubLObject name = NIL;

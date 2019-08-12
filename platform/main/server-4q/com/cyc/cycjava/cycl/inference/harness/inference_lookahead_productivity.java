@@ -1,7 +1,19 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.memoization_state;
 import com.cyc.cycjava.cycl.subl_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -13,42 +25,76 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      INFERENCE-LOOKAHEAD-PRODUCTIVITY
+ * source file: /cyc/top/cycl/inference/harness/inference-lookahead-productivity.lisp
+ * created:     2019/07/03 17:37:40
+ */
+public final class inference_lookahead_productivity extends SubLTranslatedFile implements V12 {
+    // Definitions
+    public static final SubLObject memoized_problem_max_removal_productivity_internal(SubLObject problem, SubLObject strategic_context) {
+        return com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.problem_max_removal_productivity(problem, strategic_context);
+    }
 
-public final class inference_lookahead_productivity extends SubLTranslatedFile {
     public static final SubLFile me = new inference_lookahead_productivity();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity";
 
-    public static final String myFingerPrint = "7e635c9bf1987771e89d2b8f91eee9136a2570db77be69ded2ab6b45aec791a9";
 
     private static final SubLSymbol MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY_INT = makeSymbol("MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT");
 
     private static final SubLSymbol $sym1$_EXIT = makeSymbol("%EXIT");
 
-
-
     private static final SubLString $str3$Unexpected_removal_relevant_tacti = makeString("Unexpected removal-relevant tactic ~S");
 
     private static final SubLSymbol $RELEVANT_TACTICS_WRT_REMOVAL = makeKeyword("RELEVANT-TACTICS-WRT-REMOVAL");
 
-
+    public static final SubLObject memoized_problem_max_removal_productivity_alt(SubLObject problem, SubLObject strategic_context) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.memoized_problem_max_removal_productivity_internal(problem, strategic_context);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(problem, strategic_context);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw1$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (problem == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (strategic_context == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.memoized_problem_max_removal_productivity_internal(problem, strategic_context)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(problem, strategic_context));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
+    }
 
     public static SubLObject memoized_problem_max_removal_productivity(final SubLObject problem, final SubLObject strategic_context) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -144,6 +190,37 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject problem_max_removal_productivity_alt(SubLObject problem, SubLObject strategic_context) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != balancing_tactician.balancing_tactician_p(strategic_context)) {
+                strategic_context = balancing_tactician.balancing_tactician_sole_removal_substrategy(strategic_context);
+            }
+            {
+                SubLObject existing_proof_count = inference_datastructures_problem.problem_proof_count(problem, UNPROVIDED);
+                SubLObject productivity_from_existing_proofs = inference_datastructures_enumerated_types.productivity_for_number_of_children(existing_proof_count);
+                SubLObject max_productivity = productivity_from_existing_proofs;
+                SubLObject max_justification = problem;
+                SubLObject tactics = com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.problem_relevant_tactics_wrt_removal(problem, strategic_context);
+                SubLObject cdolist_list_var = tactics;
+                SubLObject tactic = NIL;
+                for (tactic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tactic = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject max_lookahead_productivity = com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.tactic_max_removal_productivity(tactic, strategic_context);
+                        SubLObject max_lookahead_justification = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != inference_datastructures_enumerated_types.productivity_G(max_lookahead_productivity, max_productivity)) {
+                            max_productivity = max_lookahead_productivity;
+                            max_justification = max_lookahead_justification;
+                        }
+                    }
+                }
+                return values(max_productivity, max_justification);
+            }
+        }
+    }
+
     public static SubLObject problem_max_removal_productivity(final SubLObject problem, SubLObject strategic_context) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != striping_tactician.striping_tactician_p(strategic_context)) {
@@ -180,6 +257,54 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
         return subl_promotions.values2(max_productivity, max_justification);
     }
 
+    public static final SubLObject tactic_max_removal_productivity_alt(SubLObject tactic, SubLObject strategic_context) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ((NIL != inference_worker_removal.generalized_removal_tactic_p(tactic)) || (NIL != inference_worker_rewrite.rewrite_tactic_p(tactic))) {
+                return values(inference_datastructures_tactic.tactic_original_productivity(tactic), tactic);
+            } else {
+                if (NIL != inference_worker.logical_tactic_with_unique_lookahead_problem_p(tactic)) {
+                    {
+                        SubLObject lookahead_problem = inference_worker.logical_tactic_lookahead_problem(tactic);
+                        return com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.problem_max_removal_productivity(lookahead_problem, strategic_context);
+                    }
+                } else {
+                    if (NIL != inference_worker_join.join_tactic_p(tactic)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject first_problem = inference_worker_join.join_tactic_lookahead_problems(tactic);
+                            SubLObject second_problem = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject first_productivity = com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.problem_max_removal_productivity(first_problem, strategic_context);
+                                SubLObject first_justification = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject second_productivity = com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.problem_max_removal_productivity(second_problem, strategic_context);
+                                    SubLObject second_justification = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    if (NIL != inference_datastructures_enumerated_types.productivity_G(second_productivity, first_productivity)) {
+                                        return values(second_productivity, second_justification);
+                                    } else {
+                                        return values(first_productivity, first_justification);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if (NIL != inference_worker_split.meta_split_tactic_p(tactic)) {
+                            return values(ZERO_INTEGER, tactic);
+                        } else {
+                            return Errors.error($str_alt2$Unexpected_removal_relevant_tacti, tactic);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject tactic_max_removal_productivity(final SubLObject tactic, final SubLObject strategic_context) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != inference_worker_removal.generalized_removal_tactic_p(tactic)) || (NIL != inference_worker_rewrite.rewrite_tactic_p(tactic))) {
@@ -214,6 +339,23 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
         }
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY = makeSymbol("MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY");
+
+    public static final SubLSymbol $kw1$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLString $str_alt2$Unexpected_removal_relevant_tacti = makeString("Unexpected removal-relevant tactic ~S");
+
+    public static final SubLObject problem_relevant_tactics_wrt_removal_alt(SubLObject problem, SubLObject strategic_context) {
+        inference_worker.determine_strategic_status_wrt(problem, strategic_context);
+        if ($TACTICAL == strategic_context) {
+            return com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.problem_tactically_relevant_tactics_wrt_removal(problem);
+        } else {
+            return com.cyc.cycjava.cycl.inference.harness.inference_lookahead_productivity.strategy_relevant_tactics_wrt_removal(strategic_context, problem);
+        }
+    }
+
     public static SubLObject problem_relevant_tactics_wrt_removal(final SubLObject problem, final SubLObject strategic_context) {
         inference_worker.determine_strategic_status_wrt(problem, strategic_context);
         if ($TACTICAL == strategic_context) {
@@ -222,8 +364,26 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
         return strategy_relevant_tactics_wrt_removal(strategic_context, problem);
     }
 
+    public static final SubLObject strategy_relevant_tactics_wrt_removal_alt(SubLObject strategy, SubLObject problem) {
+        return inference_datastructures_strategy.strategy_dispatch(strategy, $RELEVANT_TACTICS_WRT_REMOVAL, problem, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject strategy_relevant_tactics_wrt_removal(final SubLObject strategy, final SubLObject problem) {
         return inference_datastructures_strategy.strategy_dispatch(strategy, $RELEVANT_TACTICS_WRT_REMOVAL, problem, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject problem_tactically_relevant_tactics_wrt_removal_alt(SubLObject problem) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = inference_datastructures_problem.problem_tactics(problem);
+            SubLObject tactic = NIL;
+            for (tactic = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tactic = cdolist_list_var.first()) {
+                if (NIL != inference_datastructures_problem.do_problem_tactics_type_match(tactic, $REMOVAL)) {
+                    result = cons(tactic, result);
+                }
+            }
+            return result;
+        }
     }
 
     public static SubLObject problem_tactically_relevant_tactics_wrt_removal(final SubLObject problem) {
@@ -241,15 +401,43 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject declare_inference_lookahead_productivity_file_alt() {
+        declareFunction("memoized_problem_max_removal_productivity_internal", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INTERNAL", 2, 0, false);
+        declareFunction("memoized_problem_max_removal_productivity", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+        declareFunction("problem_max_removal_productivity", "PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+        declareFunction("tactic_max_removal_productivity", "TACTIC-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+        declareFunction("problem_relevant_tactics_wrt_removal", "PROBLEM-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
+        declareFunction("strategy_relevant_tactics_wrt_removal", "STRATEGY-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
+        declareFunction("problem_tactically_relevant_tactics_wrt_removal", "PROBLEM-TACTICALLY-RELEVANT-TACTICS-WRT-REMOVAL", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_inference_lookahead_productivity_file() {
-        declareFunction(me, "memoized_problem_max_removal_productivity", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
-        declareFunction(me, "memoized_problem_max_removal_productivity_int_internal", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT-INTERNAL", 2, 0, false);
-        declareFunction(me, "memoized_problem_max_removal_productivity_int", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT", 2, 0, false);
-        declareFunction(me, "problem_max_removal_productivity", "PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
-        declareFunction(me, "tactic_max_removal_productivity", "TACTIC-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
-        declareFunction(me, "problem_relevant_tactics_wrt_removal", "PROBLEM-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
-        declareFunction(me, "strategy_relevant_tactics_wrt_removal", "STRATEGY-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
-        declareFunction(me, "problem_tactically_relevant_tactics_wrt_removal", "PROBLEM-TACTICALLY-RELEVANT-TACTICS-WRT-REMOVAL", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("memoized_problem_max_removal_productivity", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+            declareFunction("memoized_problem_max_removal_productivity_int_internal", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT-INTERNAL", 2, 0, false);
+            declareFunction("memoized_problem_max_removal_productivity_int", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT", 2, 0, false);
+            declareFunction("problem_max_removal_productivity", "PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+            declareFunction("tactic_max_removal_productivity", "TACTIC-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+            declareFunction("problem_relevant_tactics_wrt_removal", "PROBLEM-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
+            declareFunction("strategy_relevant_tactics_wrt_removal", "STRATEGY-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
+            declareFunction("problem_tactically_relevant_tactics_wrt_removal", "PROBLEM-TACTICALLY-RELEVANT-TACTICS-WRT-REMOVAL", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("memoized_problem_max_removal_productivity_internal", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INTERNAL", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_inference_lookahead_productivity_file_Previous() {
+        declareFunction("memoized_problem_max_removal_productivity", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+        declareFunction("memoized_problem_max_removal_productivity_int_internal", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT-INTERNAL", 2, 0, false);
+        declareFunction("memoized_problem_max_removal_productivity_int", "MEMOIZED-PROBLEM-MAX-REMOVAL-PRODUCTIVITY-INT", 2, 0, false);
+        declareFunction("problem_max_removal_productivity", "PROBLEM-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+        declareFunction("tactic_max_removal_productivity", "TACTIC-MAX-REMOVAL-PRODUCTIVITY", 2, 0, false);
+        declareFunction("problem_relevant_tactics_wrt_removal", "PROBLEM-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
+        declareFunction("strategy_relevant_tactics_wrt_removal", "STRATEGY-RELEVANT-TACTICS-WRT-REMOVAL", 2, 0, false);
+        declareFunction("problem_tactically_relevant_tactics_wrt_removal", "PROBLEM-TACTICALLY-RELEVANT-TACTICS-WRT-REMOVAL", 1, 0, false);
         return NIL;
     }
 
@@ -257,7 +445,22 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_inference_lookahead_productivity_file_alt() {
+        memoization_state.note_memoized_function(MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY);
+        return NIL;
+    }
+
     public static SubLObject setup_inference_lookahead_productivity_file() {
+        if (SubLFiles.USE_V1) {
+            memoization_state.note_memoized_function(MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY_INT);
+        }
+        if (SubLFiles.USE_V2) {
+            memoization_state.note_memoized_function(MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_inference_lookahead_productivity_file_Previous() {
         memoization_state.note_memoized_function(MEMOIZED_PROBLEM_MAX_REMOVAL_PRODUCTIVITY_INT);
         return NIL;
     }
@@ -278,13 +481,6 @@ public final class inference_lookahead_productivity extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
     }
 }
 

@@ -245,8 +245,7 @@ public  final class formula_pattern_match extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_formula_pattern_match_file() {
-    // CVS_ID("Id: formula-pattern-match.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    memoization_state.note_memoized_function($sym3$MEMOIZED_CALL_PATTERN_MATCHES_FORMULA_ISA_METHOD);
+        memoization_state.note_memoized_function($sym3$MEMOIZED_CALL_PATTERN_MATCHES_FORMULA_ISA_METHOD);
     memoization_state.note_memoized_function($sym5$MEMOIZED_CALL_PATTERN_MATCHES_FORMULA_NOT_ISA_DISJOINT_METHOD);
     return NIL;
   }

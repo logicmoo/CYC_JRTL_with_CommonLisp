@@ -124,6 +124,7 @@ public class SubLT extends Symbol implements SubLObject, SubLBoolean, SubLSymbol
 	public SubLObject eval(SubLEnvironment env) throws InvalidSubLExpressionException {
 		return this;
 	}
+    @Override
     protected SubLObject getValueSL(boolean canThrow) {
     	return this;
     }
@@ -456,10 +457,10 @@ public class SubLT extends Symbol implements SubLObject, SubLBoolean, SubLSymbol
 		return getStream(false).toOutputTextStream();
 	}
 
-	@Override
-	public SubLSymbol toSymbol() {
-		return this;
-	}
+    //	@Override
+    //	public SubLSymbol toSymbol() {
+    //		return this;
+    //	}
 
 	@Override
 	public String toTypeName() {

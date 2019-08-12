@@ -350,8 +350,7 @@ public  final class hl_storage_module_declarations extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_hl_storage_module_declarations_file() {
-    // CVS_ID("Id: hl-storage-module-declarations.lisp 126640 2008-12-04 13:39:36Z builder ");
-    hl_storage_modules.hl_storage_module($kw0$REGULAR_KB_ASSERTION, $list1);
+        hl_storage_modules.hl_storage_module($kw0$REGULAR_KB_ASSERTION, $list1);
     hl_storage_modules.hl_storage_module($kw20$IST, $list21);
     hl_storage_modules.hl_storage_module($kw25$CONSTANT_NAME, $list26);
     hl_storage_modules.hl_storage_module($kw29$ASSERTION_DIRECTION, $list30);

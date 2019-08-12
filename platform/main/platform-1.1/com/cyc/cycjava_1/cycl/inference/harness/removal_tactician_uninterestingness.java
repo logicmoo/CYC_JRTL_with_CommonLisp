@@ -1134,8 +1134,7 @@ public  final class removal_tactician_uninterestingness extends SubLTranslatedFi
   }
 
   public static final SubLObject setup_removal_tactician_uninterestingness_file() {
-    // CVS_ID("Id: inference-removal-tactician-strategic-uninterestingness.lisp 127093 2009-02-12 17:12:43Z pace ");
-    memoization_state.note_memoized_function($sym27$REMOVAL_STRATEGY_PREFERRED_BACKCHAIN_REQUIRED_JOIN_ORDERED_TACTIC);
+        memoization_state.note_memoized_function($sym27$REMOVAL_STRATEGY_PREFERRED_BACKCHAIN_REQUIRED_JOIN_ORDERED_TACTIC);
     return NIL;
   }
 

@@ -1,21 +1,31 @@
 package com.cyc.cycjava.cycl.inference;
 
 
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.cb_assertion_browser;
-import com.cyc.cycjava.cycl.cyc_file_dependencies;
-import com.cyc.cycjava.cycl.dhtml_macros;
-import com.cyc.cycjava.cycl.hlmt;
-import com.cyc.cycjava.cycl.html_macros;
-import com.cyc.cycjava.cycl.inference.cb_show_consequences;
-import com.cyc.cycjava.cycl.integer_sequence_generator;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.set;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -26,66 +36,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_followP$;
-import static com.cyc.cycjava.cycl.cb_parameters.$cb_permit_robots_to_indexP$;
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.inference.cb_show_consequences.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cb_show_consequences extends SubLTranslatedFile {
+public final class cb_show_consequences extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_show_consequences();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.cb_show_consequences";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.cb_show_consequences";
 
-    public static final String myFingerPrint = "554e1a12a942f08d937484f458a68142c1d93bd4271899122baa9eaae89ad45f";
 
     // defparameter
     public static final SubLSymbol $cb_show_consequences_link_enabledP$ = makeSymbol("*CB-SHOW-CONSEQUENCES-LINK-ENABLED?*");
@@ -674,17 +630,17 @@ public final class cb_show_consequences extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_show_consequences_file() {
-        declareFunction(me, "cb_link_show_consequences", "CB-LINK-SHOW-CONSEQUENCES", 1, 2, false);
-        declareFunction(me, "cb_show_consequences", "CB-SHOW-CONSEQUENCES", 1, 0, false);
-        declareFunction(me, "cb_display_consequence", "CB-DISPLAY-CONSEQUENCE", 1, 0, false);
-        declareFunction(me, "clear_show_consequences_rules_from_mt", "CLEAR-SHOW-CONSEQUENCES-RULES-FROM-MT", 0, 0, false);
-        declareFunction(me, "remove_show_consequences_rules_from_mt", "REMOVE-SHOW-CONSEQUENCES-RULES-FROM-MT", 1, 0, false);
-        declareFunction(me, "show_consequences_rules_from_mt_internal", "SHOW-CONSEQUENCES-RULES-FROM-MT-INTERNAL", 1, 0, false);
-        declareFunction(me, "show_consequences_rules_from_mt", "SHOW-CONSEQUENCES-RULES-FROM-MT", 1, 0, false);
-        declareFunction(me, "clear_biology_practice_rules", "CLEAR-BIOLOGY-PRACTICE-RULES", 0, 0, false);
-        declareFunction(me, "remove_biology_practice_rules", "REMOVE-BIOLOGY-PRACTICE-RULES", 0, 0, false);
-        declareFunction(me, "biology_practice_rules_internal", "BIOLOGY-PRACTICE-RULES-INTERNAL", 0, 0, false);
-        declareFunction(me, "biology_practice_rules", "BIOLOGY-PRACTICE-RULES", 0, 0, false);
+        declareFunction("cb_link_show_consequences", "CB-LINK-SHOW-CONSEQUENCES", 1, 2, false);
+        declareFunction("cb_show_consequences", "CB-SHOW-CONSEQUENCES", 1, 0, false);
+        declareFunction("cb_display_consequence", "CB-DISPLAY-CONSEQUENCE", 1, 0, false);
+        declareFunction("clear_show_consequences_rules_from_mt", "CLEAR-SHOW-CONSEQUENCES-RULES-FROM-MT", 0, 0, false);
+        declareFunction("remove_show_consequences_rules_from_mt", "REMOVE-SHOW-CONSEQUENCES-RULES-FROM-MT", 1, 0, false);
+        declareFunction("show_consequences_rules_from_mt_internal", "SHOW-CONSEQUENCES-RULES-FROM-MT-INTERNAL", 1, 0, false);
+        declareFunction("show_consequences_rules_from_mt", "SHOW-CONSEQUENCES-RULES-FROM-MT", 1, 0, false);
+        declareFunction("clear_biology_practice_rules", "CLEAR-BIOLOGY-PRACTICE-RULES", 0, 0, false);
+        declareFunction("remove_biology_practice_rules", "REMOVE-BIOLOGY-PRACTICE-RULES", 0, 0, false);
+        declareFunction("biology_practice_rules_internal", "BIOLOGY-PRACTICE-RULES-INTERNAL", 0, 0, false);
+        declareFunction("biology_practice_rules", "BIOLOGY-PRACTICE-RULES", 0, 0, false);
         return NIL;
     }
 

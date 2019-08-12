@@ -132,8 +132,7 @@ public  final class hierarchical_visitor extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_hierarchical_visitor_file() {
-    // CVS_ID("Id: hierarchical-visitor.lisp 127954 2009-06-04 20:08:55Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_hierarchical_visitor$.getGlobalValue(), Symbols.symbol_function($sym8$HIERARCHICAL_VISITOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_hierarchical_visitor$.getGlobalValue(), Symbols.symbol_function($sym8$HIERARCHICAL_VISITOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$HIER_VISIT_BEGIN_PATH_FN, $sym10$_CSETF_HIER_VISIT_BEGIN_PATH_FN);
     Structures.def_csetf($sym11$HIER_VISIT_END_PATH_FN, $sym12$_CSETF_HIER_VISIT_END_PATH_FN);
     Structures.def_csetf($sym13$HIER_VISIT_ACCEPT_NODE_FN, $sym14$_CSETF_HIER_VISIT_ACCEPT_NODE_FN);

@@ -763,8 +763,7 @@ import com.cyc.tool.subl.util.*;
 
   public static final SubLObject setup_cyc_testing_file()
   {
-    // CVS_ID("Id: cyc-testing.lisp 128822 2009-09-22 17:25:29Z pace ");
-    subl_macro_promotions.declare_defglobal( $sym11$_CYC_TESTS_ );
+        subl_macro_promotions.declare_defglobal( $sym11$_CYC_TESTS_ );
     subl_macro_promotions.declare_defglobal( $sym21$_CYC_TEST_BY_NAME_ );
     subl_macro_promotions.declare_defglobal( $sym23$_CYC_TEST_BY_DWIMMED_NAME_ );
     Structures.register_method( print_high.$print_object_method_table$.getGlobalValue(), $dtp_cyc_test$.getGlobalValue(), Symbols.symbol_function( $sym36$CYC_TEST_PRINT_FUNCTION_TRAMPOLINE ) );

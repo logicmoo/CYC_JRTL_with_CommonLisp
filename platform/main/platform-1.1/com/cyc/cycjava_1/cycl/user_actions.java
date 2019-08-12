@@ -187,8 +187,7 @@ public  final class user_actions extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_user_actions_file() {
-    // CVS_ID("Id: user-actions.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_action_type$.getGlobalValue(), Symbols.symbol_function($sym7$ACTION_TYPE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_action_type$.getGlobalValue(), Symbols.symbol_function($sym7$ACTION_TYPE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$ACTION_TYPE_KEY, $sym9$_CSETF_ACTION_TYPE_KEY);
     Structures.def_csetf($sym10$ACTION_TYPE_SUMMARY_FN, $sym11$_CSETF_ACTION_TYPE_SUMMARY_FN);
     Structures.def_csetf($sym12$ACTION_TYPE_DISPLAY_FN, $sym13$_CSETF_ACTION_TYPE_DISPLAY_FN);

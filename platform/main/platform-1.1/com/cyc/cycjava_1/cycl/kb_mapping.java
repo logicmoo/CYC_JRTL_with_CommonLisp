@@ -2469,8 +2469,7 @@ c) if DIRECTION is non-nil, then DIRECTION must be its direction. */
   }
 
   public static final SubLObject setup_kb_mapping_file() {
-    // CVS_ID("Id: kb-mapping.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym21$MAP_TERM, $list22, $str23$Apply_FUNCTION_to_each_assertion_, $list24, $list25);
+        utilities_macros.register_cyc_api_function($sym21$MAP_TERM, $list22, $str23$Apply_FUNCTION_to_each_assertion_, $list24, $list25);
     utilities_macros.register_cyc_api_function($sym27$MAP_TERM_SELECTIVE, $list28, $str29$Apply_FUNCTION_to_each_assertion_, $list30, $list25);
     utilities_macros.register_cyc_api_function($sym31$MAP_TERM_GAFS, $list32, $str33$Apply_FUNCTION_to_every_gaf_index, $list24, $list25);
     utilities_macros.register_cyc_api_function($sym37$MAP_MT_CONTENTS, $list38, $str39$Apply_FUNCTION_to_each_assertion_, $list24, $list25);

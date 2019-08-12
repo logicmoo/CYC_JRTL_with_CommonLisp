@@ -1,28 +1,11 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.arithmetic;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
-import static com.cyc.cycjava.cycl.arithmetic.*;
 import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -30,59 +13,83 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class arithmetic extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      ARITHMETIC
+ * source file: /cyc/top/cycl/arithmetic.lisp
+ * created:     2019/07/03 17:37:52
+ */
+public final class arithmetic extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new arithmetic();
 
-    public static final String myName = "com.cyc.cycjava.cycl.arithmetic";
+ public static final String myName = "com.cyc.cycjava.cycl.arithmetic";
 
-    public static final String myFingerPrint = "a8f61f371d3256ca0aace2e26cec40ede5d4ef37dcfd9358832cb83553198a61";
 
     // Internal Constants
-    public static final SubLSymbol CYC_PLUS_INTERNAL = makeSymbol("CYC-PLUS-INTERNAL");
+    @LispMethod(comment = "Internal Constants")
+    private static final SubLSymbol CYC_PLUS_INTERNAL = makeSymbol("CYC-PLUS-INTERNAL");
 
-    public static final SubLSymbol CYC_PLUS = makeSymbol("CYC-PLUS");
+    private static final SubLSymbol CYC_PLUS = makeSymbol("CYC-PLUS");
 
-    public static final SubLSymbol CYC_DIFFERENCE = makeSymbol("CYC-DIFFERENCE");
+    private static final SubLSymbol CYC_DIFFERENCE = makeSymbol("CYC-DIFFERENCE");
 
-    public static final SubLSymbol CYC_MINUS = makeSymbol("CYC-MINUS");
+    private static final SubLSymbol CYC_MINUS = makeSymbol("CYC-MINUS");
 
-    public static final SubLSymbol CYC_TIMES_INTERNAL = makeSymbol("CYC-TIMES-INTERNAL");
+    private static final SubLSymbol CYC_TIMES_INTERNAL = makeSymbol("CYC-TIMES-INTERNAL");
 
-    public static final SubLSymbol CYC_TIMES = makeSymbol("CYC-TIMES");
+    private static final SubLSymbol CYC_TIMES = makeSymbol("CYC-TIMES");
 
-    public static final SubLSymbol CYC_GREATER_THAN = makeSymbol("CYC-GREATER-THAN");
+    private static final SubLSymbol CYC_GREATER_THAN = makeSymbol("CYC-GREATER-THAN");
 
-    public static final SubLSymbol CYC_LESS_THAN = makeSymbol("CYC-LESS-THAN");
+    private static final SubLSymbol CYC_LESS_THAN = makeSymbol("CYC-LESS-THAN");
 
-    public static final SubLSymbol CYC_GREATER_THAN_OR_EQUAL_TO = makeSymbol("CYC-GREATER-THAN-OR-EQUAL-TO");
+    private static final SubLSymbol CYC_GREATER_THAN_OR_EQUAL_TO = makeSymbol("CYC-GREATER-THAN-OR-EQUAL-TO");
 
-    public static final SubLSymbol CYC_LESS_THAN_OR_EQUAL_TO = makeSymbol("CYC-LESS-THAN-OR-EQUAL-TO");
+    private static final SubLSymbol CYC_LESS_THAN_OR_EQUAL_TO = makeSymbol("CYC-LESS-THAN-OR-EQUAL-TO");
 
-    public static final SubLSymbol CYC_NUMERICALLY_EQUAL = makeSymbol("CYC-NUMERICALLY-EQUAL");
+    private static final SubLSymbol CYC_NUMERICALLY_EQUAL = makeSymbol("CYC-NUMERICALLY-EQUAL");
 
     private static final SubLSymbol POSSIBLY_SANITIZE_FLOAT_MEMOIZED = makeSymbol("POSSIBLY-SANITIZE-FLOAT-MEMOIZED");
 
-
-
     private static final SubLSymbol POSSIBLY_SANITIZE_FLOAT = makeSymbol("POSSIBLY-SANITIZE-FLOAT");
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLList $list20 = list(list(list(makeDouble(0.7999999999999999)), makeDouble(0.8)), list(list(makeDouble(0.8000000000000002)), makeDouble(0.8)), list(list(makeDouble(0.799999999999999)), makeDouble(0.799999999999999)), list(list(makeDouble(3.141592653589793)), makeDouble(3.141592653589793)));
 
+    // Definitions
+    /**
+     * evaluationDefn for #$PlusFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$PlusFn")
+    public static final SubLObject cyc_plus_alt(SubLObject args) {
+        if (NIL == args) {
+            relation_evaluation.throw_unevaluatable();
+        } else {
+            if (NIL != list_utilities.singletonP(args)) {
+                return args.first();
+            } else {
+                return com.cyc.cycjava.cycl.arithmetic.quantity_reduce(CYC_PLUS_INTERNAL, NIL, args);
+            }
+        }
+        return NIL;
+    }
+
+    // Definitions
+    /**
+     * evaluationDefn for #$PlusFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$PlusFn")
     public static SubLObject cyc_plus(final SubLObject args) {
         if (NIL == args) {
             relation_evaluation.throw_unevaluatable();
@@ -94,6 +101,13 @@ public final class arithmetic extends SubLTranslatedFile {
         return quantity_reduce(CYC_PLUS_INTERNAL, NIL, args);
     }
 
+    public static final SubLObject cyc_plus_internal_alt(SubLObject interval1, SubLObject interval2) {
+        if (interval1.isNumber() && interval2.isNumber()) {
+            return com.cyc.cycjava.cycl.arithmetic.arithmetic_answer(add(interval1, interval2));
+        }
+        return quantities.cyc_plus_quantities(interval1, interval2);
+    }
+
     public static SubLObject cyc_plus_internal(final SubLObject interval1, final SubLObject interval2) {
         if (interval1.isNumber() && interval2.isNumber()) {
             return arithmetic_answer(add(interval1, interval2));
@@ -101,10 +115,37 @@ public final class arithmetic extends SubLTranslatedFile {
         return quantities.cyc_plus_quantities(interval1, interval2);
     }
 
+    /**
+     * evaluationDefn for #$DifferenceFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$DifferenceFn")
+    public static final SubLObject cyc_difference_alt(SubLObject interval1, SubLObject interval2) {
+        return com.cyc.cycjava.cycl.arithmetic.cyc_plus_internal(interval1, com.cyc.cycjava.cycl.arithmetic.cyc_minus(interval2));
+    }
+
+    /**
+     * evaluationDefn for #$DifferenceFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$DifferenceFn")
     public static SubLObject cyc_difference(final SubLObject interval1, final SubLObject interval2) {
         return cyc_plus_internal(interval1, cyc_minus(interval2));
     }
 
+    /**
+     * evaluationDefn for #$MinusFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MinusFn")
+    public static final SubLObject cyc_minus_alt(SubLObject interval) {
+        if (interval.isNumber()) {
+            return com.cyc.cycjava.cycl.arithmetic.arithmetic_answer(minus(interval));
+        }
+        return quantities.cyc_minus_quantities(interval);
+    }
+
+    /**
+     * evaluationDefn for #$MinusFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$MinusFn")
     public static SubLObject cyc_minus(final SubLObject interval) {
         if (interval.isNumber()) {
             return arithmetic_answer(minus(interval));
@@ -115,8 +156,43 @@ public final class arithmetic extends SubLTranslatedFile {
         return quantities.cyc_minus_quantities(interval);
     }
 
+    /**
+     * evaluationDefn for #$TimesFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$TimesFn")
+    public static final SubLObject cyc_times_alt(SubLObject args) {
+        return com.cyc.cycjava.cycl.arithmetic.quantity_reduce(CYC_TIMES_INTERNAL, ONE_INTEGER, args);
+    }
+
+    /**
+     * evaluationDefn for #$TimesFn
+     */
+    @LispMethod(comment = "evaluationDefn for #$TimesFn")
     public static SubLObject cyc_times(final SubLObject args) {
         return quantity_reduce(CYC_TIMES_INTERNAL, ONE_INTEGER, args);
+    }
+
+    public static final SubLObject cyc_times_internal_alt(SubLObject interval1, SubLObject interval2) {
+        if (ZERO_INTEGER.eql(interval1)) {
+            return ZERO_INTEGER;
+        } else {
+            if (ZERO_INTEGER.eql(interval2)) {
+                return ZERO_INTEGER;
+            } else {
+                if (ONE_INTEGER.eql(interval1)) {
+                    return interval2;
+                } else {
+                    if (ONE_INTEGER.eql(interval2)) {
+                        return interval1;
+                    } else {
+                        if (interval1.isNumber() && interval2.isNumber()) {
+                            return com.cyc.cycjava.cycl.arithmetic.arithmetic_answer(multiply(interval1, interval2));
+                        }
+                    }
+                }
+            }
+        }
+        return quantities.cyc_times_quantities(interval1, interval2);
     }
 
     public static SubLObject cyc_times_internal(final SubLObject interval1, final SubLObject interval2) {
@@ -146,10 +222,37 @@ public final class arithmetic extends SubLTranslatedFile {
 
     }
 
+    /**
+     * evaluationDefn for #$greaterThan
+     */
+    @LispMethod(comment = "evaluationDefn for #$greaterThan")
+    public static final SubLObject cyc_greater_than_alt(SubLObject interval1, SubLObject interval2) {
+        return com.cyc.cycjava.cycl.arithmetic.cyc_less_than(interval2, interval1);
+    }
+
+    /**
+     * evaluationDefn for #$greaterThan
+     */
+    @LispMethod(comment = "evaluationDefn for #$greaterThan")
     public static SubLObject cyc_greater_than(final SubLObject interval1, final SubLObject interval2) {
         return cyc_less_than(interval2, interval1);
     }
 
+    /**
+     * evaluationDefn for #$lessThan
+     */
+    @LispMethod(comment = "evaluationDefn for #$lessThan")
+    public static final SubLObject cyc_less_than_alt(SubLObject interval1, SubLObject interval2) {
+        if (interval1.isNumber() && interval2.isNumber()) {
+            return numL(interval1, interval2);
+        }
+        return quantities.cyc_less_than_quantities(interval1, interval2);
+    }
+
+    /**
+     * evaluationDefn for #$lessThan
+     */
+    @LispMethod(comment = "evaluationDefn for #$lessThan")
     public static SubLObject cyc_less_than(SubLObject interval1, SubLObject interval2) {
         interval1 = possibly_sanitize_float(interval1);
         interval2 = possibly_sanitize_float(interval2);
@@ -159,10 +262,37 @@ public final class arithmetic extends SubLTranslatedFile {
         return quantities.cyc_less_than_quantities(interval1, interval2);
     }
 
+    /**
+     * evaluationDefn for #$greaterThanOrEqualTo
+     */
+    @LispMethod(comment = "evaluationDefn for #$greaterThanOrEqualTo")
+    public static final SubLObject cyc_greater_than_or_equal_to_alt(SubLObject interval1, SubLObject interval2) {
+        return com.cyc.cycjava.cycl.arithmetic.cyc_less_than_or_equal_to(interval2, interval1);
+    }
+
+    /**
+     * evaluationDefn for #$greaterThanOrEqualTo
+     */
+    @LispMethod(comment = "evaluationDefn for #$greaterThanOrEqualTo")
     public static SubLObject cyc_greater_than_or_equal_to(final SubLObject interval1, final SubLObject interval2) {
         return cyc_less_than_or_equal_to(interval2, interval1);
     }
 
+    /**
+     * evaluationDefn for #$lessThanOrEqualTo
+     */
+    @LispMethod(comment = "evaluationDefn for #$lessThanOrEqualTo")
+    public static final SubLObject cyc_less_than_or_equal_to_alt(SubLObject interval1, SubLObject interval2) {
+        if (interval1.isNumber() && interval2.isNumber()) {
+            return numLE(interval1, interval2);
+        }
+        return quantities.cyc_less_than_or_equal_to_quantities(interval1, interval2);
+    }
+
+    /**
+     * evaluationDefn for #$lessThanOrEqualTo
+     */
+    @LispMethod(comment = "evaluationDefn for #$lessThanOrEqualTo")
     public static SubLObject cyc_less_than_or_equal_to(SubLObject interval1, SubLObject interval2) {
         interval1 = possibly_sanitize_float(interval1);
         interval2 = possibly_sanitize_float(interval2);
@@ -172,6 +302,18 @@ public final class arithmetic extends SubLTranslatedFile {
         return quantities.cyc_less_than_or_equal_to_quantities(interval1, interval2);
     }
 
+    /**
+     * evaluationDefn for #$numericallyEqual
+     */
+    @LispMethod(comment = "evaluationDefn for #$numericallyEqual")
+    public static final SubLObject cyc_numerically_equal_alt(SubLObject interval1, SubLObject interval2) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.arithmetic.cyc_less_than_or_equal_to(interval1, interval2)) && (NIL != com.cyc.cycjava.cycl.arithmetic.cyc_greater_than_or_equal_to(interval1, interval2)));
+    }
+
+    /**
+     * evaluationDefn for #$numericallyEqual
+     */
+    @LispMethod(comment = "evaluationDefn for #$numericallyEqual")
     public static SubLObject cyc_numerically_equal(SubLObject interval1, SubLObject interval2) {
         interval1 = possibly_sanitize_float(interval1);
         interval2 = possibly_sanitize_float(interval2);
@@ -179,6 +321,39 @@ public final class arithmetic extends SubLTranslatedFile {
             return makeBoolean(interval1.numLE(interval2) && interval2.numLE(interval1));
         }
         return makeBoolean((NIL == quantities.cyc_less_than_quantities(interval1, interval2)) && (NIL == quantities.cyc_less_than_quantities(interval2, interval1)));
+    }
+
+    public static final SubLObject quantity_reduce_alt(SubLObject lisp_defun, SubLObject identity_constant, SubLObject args) {
+        {
+            SubLObject num_items = length(args);
+            if (num_items.numE(ZERO_INTEGER)) {
+                if (NIL != identity_constant) {
+                    return identity_constant;
+                } else {
+                    relation_evaluation.throw_unevaluatable();
+                }
+            } else {
+                if (num_items.numE(ONE_INTEGER)) {
+                    if (NIL != identity_constant) {
+                        return funcall(lisp_defun, identity_constant, args.first());
+                    } else {
+                        return args.first();
+                    }
+                } else {
+                    {
+                        SubLObject result = args.first();
+                        SubLObject items = NIL;
+                        SubLObject sofar = NIL;
+                        SubLObject item = NIL;
+                        for (items = args.rest(), sofar = result, item = items.first(); NIL != items; items = items.rest() , sofar = result , item = items.first()) {
+                            result = funcall(lisp_defun, sofar, item);
+                        }
+                        return result;
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject quantity_reduce(final SubLObject lisp_defun, final SubLObject identity_constant, final SubLObject args) {
@@ -211,6 +386,10 @@ public final class arithmetic extends SubLTranslatedFile {
             }
             return args.first();
         }
+    }
+
+    public static final SubLObject arithmetic_answer_alt(SubLObject ans) {
+        return ans;
     }
 
     public static SubLObject arithmetic_answer(final SubLObject ans) {
@@ -258,22 +437,22 @@ public final class arithmetic extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_arithmetic_file() {
-        declareFunction(me, "cyc_plus", "CYC-PLUS", 1, 0, false);
-        declareFunction(me, "cyc_plus_internal", "CYC-PLUS-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_difference", "CYC-DIFFERENCE", 2, 0, false);
-        declareFunction(me, "cyc_minus", "CYC-MINUS", 1, 0, false);
-        declareFunction(me, "cyc_times", "CYC-TIMES", 1, 0, false);
-        declareFunction(me, "cyc_times_internal", "CYC-TIMES-INTERNAL", 2, 0, false);
-        declareFunction(me, "cyc_greater_than", "CYC-GREATER-THAN", 2, 0, false);
-        declareFunction(me, "cyc_less_than", "CYC-LESS-THAN", 2, 0, false);
-        declareFunction(me, "cyc_greater_than_or_equal_to", "CYC-GREATER-THAN-OR-EQUAL-TO", 2, 0, false);
-        declareFunction(me, "cyc_less_than_or_equal_to", "CYC-LESS-THAN-OR-EQUAL-TO", 2, 0, false);
-        declareFunction(me, "cyc_numerically_equal", "CYC-NUMERICALLY-EQUAL", 2, 0, false);
-        declareFunction(me, "quantity_reduce", "QUANTITY-REDUCE", 3, 0, false);
-        declareFunction(me, "arithmetic_answer", "ARITHMETIC-ANSWER", 1, 0, false);
-        declareFunction(me, "possibly_sanitize_float", "POSSIBLY-SANITIZE-FLOAT", 1, 0, false);
-        declareFunction(me, "possibly_sanitize_float_memoized_internal", "POSSIBLY-SANITIZE-FLOAT-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "possibly_sanitize_float_memoized", "POSSIBLY-SANITIZE-FLOAT-MEMOIZED", 1, 0, false);
+        declareFunction("cyc_plus", "CYC-PLUS", 1, 0, false);
+        declareFunction("cyc_plus_internal", "CYC-PLUS-INTERNAL", 2, 0, false);
+        declareFunction("cyc_difference", "CYC-DIFFERENCE", 2, 0, false);
+        declareFunction("cyc_minus", "CYC-MINUS", 1, 0, false);
+        declareFunction("cyc_times", "CYC-TIMES", 1, 0, false);
+        declareFunction("cyc_times_internal", "CYC-TIMES-INTERNAL", 2, 0, false);
+        declareFunction("cyc_greater_than", "CYC-GREATER-THAN", 2, 0, false);
+        declareFunction("cyc_less_than", "CYC-LESS-THAN", 2, 0, false);
+        declareFunction("cyc_greater_than_or_equal_to", "CYC-GREATER-THAN-OR-EQUAL-TO", 2, 0, false);
+        declareFunction("cyc_less_than_or_equal_to", "CYC-LESS-THAN-OR-EQUAL-TO", 2, 0, false);
+        declareFunction("cyc_numerically_equal", "CYC-NUMERICALLY-EQUAL", 2, 0, false);
+        declareFunction("quantity_reduce", "QUANTITY-REDUCE", 3, 0, false);
+        declareFunction("arithmetic_answer", "ARITHMETIC-ANSWER", 1, 0, false);
+        declareFunction("possibly_sanitize_float", "POSSIBLY-SANITIZE-FLOAT", 1, 0, false);
+        declareFunction("possibly_sanitize_float_memoized_internal", "POSSIBLY-SANITIZE-FLOAT-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("possibly_sanitize_float_memoized", "POSSIBLY-SANITIZE-FLOAT-MEMOIZED", 1, 0, false);
         return NIL;
     }
 
@@ -312,28 +491,6 @@ public final class arithmetic extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

@@ -1,8 +1,16 @@
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.temporal_projection_preds;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -14,31 +22,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.temporal_projection_preds.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class temporal_projection_preds extends SubLTranslatedFile {
+public final class temporal_projection_preds extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new temporal_projection_preds();
 
-    public static final String myName = "com.cyc.cycjava.cycl.temporal_projection_preds";
+    public static final String myName = "com.cyc.cycjava_2.cycl.temporal_projection_preds";
 
-    public static final String myFingerPrint = "4647529fcbeac15ec04e63d758965acb1143dfcd5f7bc0b294c1031b29751e36";
 
     private static final SubLObject $$Now = reader_make_constant_shell(makeString("Now"));
 
@@ -447,16 +436,16 @@ public final class temporal_projection_preds extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_temporal_projection_preds_file() {
-        declareFunction(me, "find_likelihood_of_language_spoken", "FIND-LIKELIHOOD-OF-LANGUAGE-SPOKEN", 2, 0, false);
-        declareFunction(me, "get_nearest_time_for_fact_truth", "GET-NEAREST-TIME-FOR-FACT-TRUTH", 2, 0, false);
-        declareFunction(me, "find_likelihood_of_acquaintances", "FIND-LIKELIHOOD-OF-ACQUAINTANCES", 3, 0, false);
-        declareFunction(me, "find_scaling_factor_from_org", "FIND-SCALING-FACTOR-FROM-ORG", 3, 0, false);
-        declareFunction(me, "find_likelihood_given_value_of_parameters", "FIND-LIKELIHOOD-GIVEN-VALUE-OF-PARAMETERS", 4, 0, false);
-        declareFunction(me, "find_level_of_opaque_expertise_on_topic_with_rating", "FIND-LEVEL-OF-OPAQUE-EXPERTISE-ON-TOPIC-WITH-RATING", 3, 0, false);
-        declareFunction(me, "scale_prob_from_covariates_for_familiarity_queries", "SCALE-PROB-FROM-COVARIATES-FOR-FAMILIARITY-QUERIES", 4, 0, false);
-        declareFunction(me, "scale_prob_from_covariates_for_familiarity_queries_2", "SCALE-PROB-FROM-COVARIATES-FOR-FAMILIARITY-QUERIES-2", 4, 0, false);
-        declareFunction(me, "return_best_explanation", "RETURN-BEST-EXPLANATION", 1, 0, false);
-        declareFunction(me, "get_answers_from_new_cyc_query", "GET-ANSWERS-FROM-NEW-CYC-QUERY", 1, 3, false);
+        declareFunction("find_likelihood_of_language_spoken", "FIND-LIKELIHOOD-OF-LANGUAGE-SPOKEN", 2, 0, false);
+        declareFunction("get_nearest_time_for_fact_truth", "GET-NEAREST-TIME-FOR-FACT-TRUTH", 2, 0, false);
+        declareFunction("find_likelihood_of_acquaintances", "FIND-LIKELIHOOD-OF-ACQUAINTANCES", 3, 0, false);
+        declareFunction("find_scaling_factor_from_org", "FIND-SCALING-FACTOR-FROM-ORG", 3, 0, false);
+        declareFunction("find_likelihood_given_value_of_parameters", "FIND-LIKELIHOOD-GIVEN-VALUE-OF-PARAMETERS", 4, 0, false);
+        declareFunction("find_level_of_opaque_expertise_on_topic_with_rating", "FIND-LEVEL-OF-OPAQUE-EXPERTISE-ON-TOPIC-WITH-RATING", 3, 0, false);
+        declareFunction("scale_prob_from_covariates_for_familiarity_queries", "SCALE-PROB-FROM-COVARIATES-FOR-FAMILIARITY-QUERIES", 4, 0, false);
+        declareFunction("scale_prob_from_covariates_for_familiarity_queries_2", "SCALE-PROB-FROM-COVARIATES-FOR-FAMILIARITY-QUERIES-2", 4, 0, false);
+        declareFunction("return_best_explanation", "RETURN-BEST-EXPLANATION", 1, 0, false);
+        declareFunction("get_answers_from_new_cyc_query", "GET-ANSWERS-FROM-NEW-CYC-QUERY", 1, 3, false);
         return NIL;
     }
 

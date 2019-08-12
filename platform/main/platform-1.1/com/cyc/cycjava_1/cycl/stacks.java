@@ -263,8 +263,7 @@ public  final class stacks extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_stacks_file() {
-    // CVS_ID("Id: stacks.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_stack$.getGlobalValue(), Symbols.symbol_function($sym7$STACK_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_stack$.getGlobalValue(), Symbols.symbol_function($sym7$STACK_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$STACK_STRUC_NUM, $sym9$_CSETF_STACK_STRUC_NUM);
     Structures.def_csetf($sym10$STACK_STRUC_ELEMENTS, $sym11$_CSETF_STACK_STRUC_ELEMENTS);
     Equality.identity($sym0$STACK);

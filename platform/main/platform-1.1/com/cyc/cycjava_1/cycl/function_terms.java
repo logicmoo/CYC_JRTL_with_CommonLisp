@@ -252,8 +252,7 @@ public  final class function_terms extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_function_terms_file() {
-    // CVS_ID("Id: function-terms.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.define_obsolete_register($sym0$TERM_OF_UNIT, NIL);
+        access_macros.define_obsolete_register($sym0$TERM_OF_UNIT, NIL);
     Structures.register_method($term_functional_complexity_internal_method_table$.getGlobalValue(), constant_handles.$dtp_constant$.getGlobalValue(), Symbols.symbol_function($sym8$TERM_FUNCTIONAL_COMPLEXITY_INTERNAL_CONSTANT_METHOD));
     Structures.register_method($term_functional_complexity_internal_method_table$.getGlobalValue(), nart_handles.$dtp_nart$.getGlobalValue(), Symbols.symbol_function($sym9$TERM_FUNCTIONAL_COMPLEXITY_INTERNAL_NART_METHOD));
     Structures.register_method($term_functional_complexity_internal_method_table$.getGlobalValue(), Types.$dtp_cons$.getGlobalValue(), Symbols.symbol_function($sym11$TERM_FUNCTIONAL_COMPLEXITY_INTERNAL_CONS_METHOD));

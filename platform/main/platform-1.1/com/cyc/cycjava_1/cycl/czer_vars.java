@@ -720,8 +720,7 @@ of all instances of #$CanonicalizerDirectivePredicate, which is much broader. */
   }
 
   public static final SubLObject setup_czer_vars_file() {
-    // CVS_ID("Id: czer-vars.lisp 127691 2009-04-21 15:59:50Z pace ");
-    subl_macro_promotions.declare_defglobal($sym24$_SKOLEM_AXIOM_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym24$_SKOLEM_AXIOM_TABLE_);
     return NIL;
   }
 

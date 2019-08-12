@@ -922,8 +922,7 @@ of iterators. */
   }
 
   public static final SubLObject setup_iteration_file() {
-    // CVS_ID("Id: iteration.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_iterator$.getGlobalValue(), Symbols.symbol_function($sym7$ITERATOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_iterator$.getGlobalValue(), Symbols.symbol_function($sym7$ITERATOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$IT_STATE, $sym9$_CSETF_IT_STATE);
     Structures.def_csetf($sym10$IT_DONE, $sym11$_CSETF_IT_DONE);
     Structures.def_csetf($sym12$IT_NEXT, $sym13$_CSETF_IT_NEXT);

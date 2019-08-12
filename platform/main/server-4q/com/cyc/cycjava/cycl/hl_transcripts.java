@@ -1,11 +1,30 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cfasl;
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.hl_transcripts;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
@@ -24,54 +43,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.hl_transcripts.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class hl_transcripts extends SubLTranslatedFile {
+public final class hl_transcripts extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new hl_transcripts();
 
-    public static final String myName = "com.cyc.cycjava.cycl.hl_transcripts";
+    public static final String myName = "com.cyc.cycjava_2.cycl.hl_transcripts";
 
-    public static final String myFingerPrint = "554ab1dd03340b10385d2dfb8698f490e43c9340ef05a5ec4eb1f3f2b7453713";
 
     // defparameter
     public static final SubLSymbol $hl_transcript_compression_enabledP$ = makeSymbol("*HL-TRANSCRIPT-COMPRESSION-ENABLED?*");
@@ -90,7 +67,7 @@ public final class hl_transcripts extends SubLTranslatedFile {
 
     private static final SubLList $list0 = list(list(makeSymbol("CONSTANT-VAR"), makeSymbol("&KEY"), makeSymbol("START"), makeSymbol("END"), makeSymbol("PROGRESS-MESSAGE"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list1 = list(makeKeyword("START"), makeKeyword("END"), makeKeyword("PROGRESS-MESSAGE"), makeKeyword("DONE"));
+    private static final SubLList $list1 = list(makeKeyword("START"), makeKeyword("END"), makeKeyword("PROGRESS-MESSAGE"), $DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
@@ -266,7 +243,7 @@ public final class hl_transcripts extends SubLTranslatedFile {
 
     private static final SubLSymbol SAVE_ONE_HL_TRANSCRIPT_OPERATION = makeSymbol("SAVE-ONE-HL-TRANSCRIPT-OPERATION");
 
-    private static final SubLList $list89 = list(makeSymbol("QUOTE"), list(makeSymbol("IGNORE")));
+    private static final SubLList $list89 = list(QUOTE, list(makeSymbol("IGNORE")));
 
     private static final SubLList $list90 = list(makeSymbol("IGNORE"));
 
@@ -378,7 +355,7 @@ public final class hl_transcripts extends SubLTranslatedFile {
 
     private static final SubLSymbol HLT_FIND_OR_CREATE_DEDUCTION = makeSymbol("HLT-FIND-OR-CREATE-DEDUCTION");
 
-    private static final SubLList $list145 = list(new SubLObject[]{ makeKeyword("FORWARD"), makeKeyword("BACKWARD"), makeKeyword("TRUE"), makeKeyword("FALSE"), makeKeyword("DEFAULT"), makeKeyword("MONOTONIC"), makeKeyword("ASSERTED-TRUE-DEF"), makeKeyword("ASSERTED-TRUE-MON"), makeKeyword("HP"), makeSymbol("HLT-FIND-OR-CREATE"), makeSymbol("HLT-FIND-OR-CREATE-NART"), makeSymbol("HLT-FIND-OR-CREATE-ASSERTION"), makeSymbol("HLT-ASSERT"), makeSymbol("HLT-FIND-OR-CREATE-KB-HL-SUPPORT"), makeSymbol("HLT-FIND-OR-CREATE-DEDUCTION"), makeSymbol("HLT-REMOVE-CONSTANT"), makeSymbol("HLT-REMOVE-NART"), makeSymbol("HLT-UNASSERT"), makeSymbol("HLT-REMOVE-ASSERTION"), makeSymbol("HLT-REMOVE-DEDUCTION") });
+    private static final SubLList $list145 = list(new SubLObject[]{ makeKeyword("FORWARD"), makeKeyword("BACKWARD"), $TRUE, makeKeyword("FALSE"), makeKeyword("DEFAULT"), makeKeyword("MONOTONIC"), makeKeyword("ASSERTED-TRUE-DEF"), makeKeyword("ASSERTED-TRUE-MON"), makeKeyword("HP"), makeSymbol("HLT-FIND-OR-CREATE"), makeSymbol("HLT-FIND-OR-CREATE-NART"), makeSymbol("HLT-FIND-OR-CREATE-ASSERTION"), makeSymbol("HLT-ASSERT"), makeSymbol("HLT-FIND-OR-CREATE-KB-HL-SUPPORT"), makeSymbol("HLT-FIND-OR-CREATE-DEDUCTION"), makeSymbol("HLT-REMOVE-CONSTANT"), makeSymbol("HLT-REMOVE-NART"), makeSymbol("HLT-UNASSERT"), makeSymbol("HLT-REMOVE-ASSERTION"), makeSymbol("HLT-REMOVE-DEDUCTION") });
 
     private static final SubLList $list146 = list(reader_make_constant_shell(makeString("not")), reader_make_constant_shell(makeString("implies")), reader_make_constant_shell(makeString("thereExists")), reader_make_constant_shell(makeString("forAll")));
 
@@ -3117,99 +3094,99 @@ public final class hl_transcripts extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_hl_transcripts_file() {
-        declareMacro(me, "do_constants_by_internal_id", "DO-CONSTANTS-BY-INTERNAL-ID");
-        declareFunction(me, "note_constants_by_internal_id_progress", "NOTE-CONSTANTS-BY-INTERNAL-ID-PROGRESS", 3, 0, false);
-        declareMacro(me, "do_narts_by_id", "DO-NARTS-BY-ID");
-        declareFunction(me, "note_narts_by_id_progress", "NOTE-NARTS-BY-ID-PROGRESS", 3, 0, false);
-        declareMacro(me, "do_assertions_by_id", "DO-ASSERTIONS-BY-ID");
-        declareFunction(me, "note_assertions_by_id_progress", "NOTE-ASSERTIONS-BY-ID-PROGRESS", 3, 0, false);
-        declareMacro(me, "do_deductions_by_id", "DO-DEDUCTIONS-BY-ID");
-        declareFunction(me, "note_deductions_by_id_progress", "NOTE-DEDUCTIONS-BY-ID-PROGRESS", 3, 0, false);
-        declareMacro(me, "do_kb_hl_supports_by_id", "DO-KB-HL-SUPPORTS-BY-ID");
-        declareFunction(me, "note_kb_hl_supports_by_id_progress", "NOTE-KB-HL-SUPPORTS-BY-ID-PROGRESS", 3, 0, false);
-        declareFunction(me, "most_recent_constants", "MOST-RECENT-CONSTANTS", 0, 1, false);
-        declareFunction(me, "most_recent_narts", "MOST-RECENT-NARTS", 0, 1, false);
-        declareFunction(me, "most_recent_assertions", "MOST-RECENT-ASSERTIONS", 0, 1, false);
-        declareFunction(me, "most_recent_deductions", "MOST-RECENT-DEDUCTIONS", 0, 1, false);
-        declareFunction(me, "most_recent_kb_hl_supports", "MOST-RECENT-KB-HL-SUPPORTS", 0, 1, false);
-        declareFunction(me, "most_recent_kb_objects", "MOST-RECENT-KB-OBJECTS", 4, 0, false);
-        declareFunction(me, "previous_dump_kb_state_checkpoint", "PREVIOUS-DUMP-KB-STATE-CHECKPOINT", 0, 0, false);
-        declareFunction(me, "current_kb_state_checkpoint", "CURRENT-KB-STATE-CHECKPOINT", 0, 0, false);
-        declareFunction(me, "make_kb_state_checkpoint", "MAKE-KB-STATE-CHECKPOINT", 5, 0, false);
-        declareFunction(me, "destructure_kb_state_checkpoint", "DESTRUCTURE-KB-STATE-CHECKPOINT", 1, 0, false);
-        declareFunction(me, "kb_checkpoint_difference", "KB-CHECKPOINT-DIFFERENCE", 0, 2, false);
-        declareFunction(me, "save_hl_transcript", "SAVE-HL-TRANSCRIPT", 1, 2, false);
-        declareFunction(me, "save_hl_transcript_from_modification_spec", "SAVE-HL-TRANSCRIPT-FROM-MODIFICATION-SPEC", 2, 0, false);
-        declareFunction(me, "load_hl_transcript_new", "LOAD-HL-TRANSCRIPT-NEW", 1, 1, false);
-        declareFunction(me, "show_hl_transcript", "SHOW-HL-TRANSCRIPT", 1, 1, false);
-        declareMacro(me, "with_hl_transcript_compression", "WITH-HL-TRANSCRIPT-COMPRESSION");
-        declareFunction(me, "save_hl_transcript_from_modification_spec_to_stream", "SAVE-HL-TRANSCRIPT-FROM-MODIFICATION-SPEC-TO-STREAM", 2, 0, false);
-        declareFunction(me, "save_hl_transcript_from_modification_spec_to_stream_int", "SAVE-HL-TRANSCRIPT-FROM-MODIFICATION-SPEC-TO-STREAM-INT", 2, 0, false);
-        declareFunction(me, "save_hl_transcript_additions_from_modification_spec_to_stream", "SAVE-HL-TRANSCRIPT-ADDITIONS-FROM-MODIFICATION-SPEC-TO-STREAM", 2, 0, false);
-        declareFunction(me, "save_hl_transcript_removals_from_modification_spec_to_stream", "SAVE-HL-TRANSCRIPT-REMOVALS-FROM-MODIFICATION-SPEC-TO-STREAM", 2, 0, false);
-        declareFunction(me, "plist_remove_value", "PLIST-REMOVE-VALUE", 2, 1, false);
-        declareFunction(me, "save_one_hl_transcript_operation", "SAVE-ONE-HL-TRANSCRIPT-OPERATION", 2, 0, false);
-        declareFunction(me, "load_one_hl_transcript_operation", "LOAD-ONE-HL-TRANSCRIPT-OPERATION", 1, 0, false);
-        declareFunction(me, "process_hl_transcript_operation", "PROCESS-HL-TRANSCRIPT-OPERATION", 3, 0, false);
-        declareFunction(me, "process_hl_transcript_operation_int", "PROCESS-HL-TRANSCRIPT-OPERATION-INT", 1, 0, false);
-        declareFunction(me, "show_hl_transcript_operation", "SHOW-HL-TRANSCRIPT-OPERATION", 2, 0, false);
-        declareFunction(me, "possibly_transform_hl_op_wrt_compatibility", "POSSIBLY-TRANSFORM-HL-OP-WRT-COMPATIBILITY", 1, 0, false);
-        declareFunction(me, "hl_transcript_objects_to_compress", "HL-TRANSCRIPT-OBJECTS-TO-COMPRESS", 1, 0, false);
-        declareFunction(me, "new_objects_between_kb_checkpoints", "NEW-OBJECTS-BETWEEN-KB-CHECKPOINTS", 0, 2, false);
-        declareMacro(me, "gathering_new_kb_objects", "GATHERING-NEW-KB-OBJECTS");
-        declareMacro(me, "gathering_rules_used_in_new_deductions", "GATHERING-RULES-USED-IN-NEW-DEDUCTIONS");
-        declareFunction(me, "gathering_rules_used_in_new_deductions_postprocess", "GATHERING-RULES-USED-IN-NEW-DEDUCTIONS-POSTPROCESS", 2, 0, false);
-        declareFunction(me, "compressible_references_in_modification_spec", "COMPRESSIBLE-REFERENCES-IN-MODIFICATION-SPEC", 1, 1, false);
-        declareFunction(me, "increment_compressible_object_mention_count", "INCREMENT-COMPRESSIBLE-OBJECT-MENTION-COUNT", 1, 0, false);
-        declareFunction(me, "deduction_map", "DEDUCTION-MAP", 2, 2, false);
-        declareFunction(me, "kb_hl_support_map", "KB-HL-SUPPORT-MAP", 2, 2, false);
-        declareFunction(me, "expression_map_support", "EXPRESSION-MAP-SUPPORT", 2, 2, false);
-        declareMacro(me, "with_hl_transcript_created_constant_equivalence_by_name", "WITH-HL-TRANSCRIPT-CREATED-CONSTANT-EQUIVALENCE-BY-NAME");
-        declareFunction(me, "new_hlt_external_id_equivalence_map", "NEW-HLT-EXTERNAL-ID-EQUIVALENCE-MAP", 0, 0, false);
-        declareFunction(me, "hlt_possibly_find_via_external_id_equivalence", "HLT-POSSIBLY-FIND-VIA-EXTERNAL-ID-EQUIVALENCE", 2, 0, false);
-        declareFunction(me, "write_constant_to_hl_transcript_stream", "WRITE-CONSTANT-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create", "HLT-FIND-OR-CREATE", 1, 1, false);
-        declareFunction(me, "hlt_find_or_create_missing_constant", "HLT-FIND-OR-CREATE-MISSING-CONSTANT", 1, 1, false);
-        declareFunction(me, "write_nart_to_hl_transcript_stream", "WRITE-NART-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create_nart", "HLT-FIND-OR-CREATE-NART", 1, 0, false);
-        declareFunction(me, "hlt_find_or_create_missing_nart", "HLT-FIND-OR-CREATE-MISSING-NART", 1, 0, false);
-        declareFunction(me, "write_assertion_to_hl_transcript_stream", "WRITE-ASSERTION-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create_assertion", "HLT-FIND-OR-CREATE-ASSERTION", 7, 0, false);
-        declareFunction(me, "hlt_find_or_create_missing_gaf", "HLT-FIND-OR-CREATE-MISSING-GAF", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create_missing_rule", "HLT-FIND-OR-CREATE-MISSING-RULE", 2, 0, false);
-        declareFunction(me, "hlt_assert", "HLT-ASSERT", 5, 0, false);
-        declareFunction(me, "hlt_timestamp_assertion", "HLT-TIMESTAMP-ASSERTION", 5, 0, false);
-        declareFunction(me, "write_kb_hl_support_to_hl_transcript_stream", "WRITE-KB-HL-SUPPORT-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create_kb_hl_support", "HLT-FIND-OR-CREATE-KB-HL-SUPPORT", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create_missing_kb_hl_support", "HLT-FIND-OR-CREATE-MISSING-KB-HL-SUPPORT", 1, 0, false);
-        declareFunction(me, "write_deduction_to_hl_transcript_stream", "WRITE-DEDUCTION-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "hlt_find_or_create_deduction", "HLT-FIND-OR-CREATE-DEDUCTION", 3, 2, false);
-        declareFunction(me, "hlt_find_or_create_missing_deduction", "HLT-FIND-OR-CREATE-MISSING-DEDUCTION", 2, 3, false);
-        declareFunction(me, "write_existing_constant_removal_to_hl_transcript_stream", "WRITE-EXISTING-CONSTANT-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "write_constant_removal_to_hl_transcript_stream", "WRITE-CONSTANT-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareMacro(me, "hlt_catch_unencapsulation_errors", "HLT-CATCH-UNENCAPSULATION-ERRORS");
-        declareFunction(me, "hlt_remove_constant", "HLT-REMOVE-CONSTANT", 1, 0, false);
-        declareFunction(me, "write_existing_assertion_unassert_to_hl_transcript_stream", "WRITE-EXISTING-ASSERTION-UNASSERT-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "write_assertion_unassert_to_hl_transcript_stream", "WRITE-ASSERTION-UNASSERT-TO-HL-TRANSCRIPT-STREAM", 3, 0, false);
-        declareFunction(me, "hlt_unassert", "HLT-UNASSERT", 2, 0, false);
-        declareFunction(me, "write_existing_assertion_removal_to_hl_transcript_stream", "WRITE-EXISTING-ASSERTION-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
-        declareFunction(me, "write_assertion_removal_to_hl_transcript_stream", "WRITE-ASSERTION-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 3, 0, false);
-        declareFunction(me, "hlt_remove_assertion", "HLT-REMOVE-ASSERTION", 2, 0, false);
-        declareFunction(me, "new_transcript_file_operations_iterator", "NEW-TRANSCRIPT-FILE-OPERATIONS-ITERATOR", 1, 2, false);
-        declareFunction(me, "new_transcript_file_kb_removal_operations_iterator", "NEW-TRANSCRIPT-FILE-KB-REMOVAL-OPERATIONS-ITERATOR", 1, 2, false);
-        declareFunction(me, "transcript_file_kb_removal_operations", "TRANSCRIPT-FILE-KB-REMOVAL-OPERATIONS", 1, 2, false);
-        declareFunction(me, "kb_removal_operationP", "KB-REMOVAL-OPERATION?", 1, 0, false);
-        declareFunction(me, "constants_to_remove_wrt_sibling_image", "CONSTANTS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
-        declareFunction(me, "narts_to_remove_wrt_sibling_image", "NARTS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
-        declareFunction(me, "assertions_to_remove_wrt_sibling_image", "ASSERTIONS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
-        declareFunction(me, "deductions_to_remove_wrt_sibling_image", "DEDUCTIONS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
-        declareFunction(me, "kb_hl_supports_to_remove_wrt_sibling_image", "KB-HL-SUPPORTS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
-        declareFunction(me, "kb_objects_to_remove_wrt_sibling_image_int", "KB-OBJECTS-TO-REMOVE-WRT-SIBLING-IMAGE-INT", 5, 0, false);
-        declareFunction(me, "save_catchup_hl_transcript", "SAVE-CATCHUP-HL-TRANSCRIPT", 0, 3, false);
-        declareFunction(me, "make_next_cyc_hlt_filename", "MAKE-NEXT-CYC-HLT-FILENAME", 0, 3, false);
-        declareFunction(me, "make_cyc_hlt_filename", "MAKE-CYC-HLT-FILENAME", 0, 3, false);
-        declareFunction(me, "extract_removals_hl_transcript", "EXTRACT-REMOVALS-HL-TRANSCRIPT", 2, 0, false);
-        declareFunction(me, "hlt_removal_methodP", "HLT-REMOVAL-METHOD?", 1, 0, false);
+        declareMacro("do_constants_by_internal_id", "DO-CONSTANTS-BY-INTERNAL-ID");
+        declareFunction("note_constants_by_internal_id_progress", "NOTE-CONSTANTS-BY-INTERNAL-ID-PROGRESS", 3, 0, false);
+        declareMacro("do_narts_by_id", "DO-NARTS-BY-ID");
+        declareFunction("note_narts_by_id_progress", "NOTE-NARTS-BY-ID-PROGRESS", 3, 0, false);
+        declareMacro("do_assertions_by_id", "DO-ASSERTIONS-BY-ID");
+        declareFunction("note_assertions_by_id_progress", "NOTE-ASSERTIONS-BY-ID-PROGRESS", 3, 0, false);
+        declareMacro("do_deductions_by_id", "DO-DEDUCTIONS-BY-ID");
+        declareFunction("note_deductions_by_id_progress", "NOTE-DEDUCTIONS-BY-ID-PROGRESS", 3, 0, false);
+        declareMacro("do_kb_hl_supports_by_id", "DO-KB-HL-SUPPORTS-BY-ID");
+        declareFunction("note_kb_hl_supports_by_id_progress", "NOTE-KB-HL-SUPPORTS-BY-ID-PROGRESS", 3, 0, false);
+        declareFunction("most_recent_constants", "MOST-RECENT-CONSTANTS", 0, 1, false);
+        declareFunction("most_recent_narts", "MOST-RECENT-NARTS", 0, 1, false);
+        declareFunction("most_recent_assertions", "MOST-RECENT-ASSERTIONS", 0, 1, false);
+        declareFunction("most_recent_deductions", "MOST-RECENT-DEDUCTIONS", 0, 1, false);
+        declareFunction("most_recent_kb_hl_supports", "MOST-RECENT-KB-HL-SUPPORTS", 0, 1, false);
+        declareFunction("most_recent_kb_objects", "MOST-RECENT-KB-OBJECTS", 4, 0, false);
+        declareFunction("previous_dump_kb_state_checkpoint", "PREVIOUS-DUMP-KB-STATE-CHECKPOINT", 0, 0, false);
+        declareFunction("current_kb_state_checkpoint", "CURRENT-KB-STATE-CHECKPOINT", 0, 0, false);
+        declareFunction("make_kb_state_checkpoint", "MAKE-KB-STATE-CHECKPOINT", 5, 0, false);
+        declareFunction("destructure_kb_state_checkpoint", "DESTRUCTURE-KB-STATE-CHECKPOINT", 1, 0, false);
+        declareFunction("kb_checkpoint_difference", "KB-CHECKPOINT-DIFFERENCE", 0, 2, false);
+        declareFunction("save_hl_transcript", "SAVE-HL-TRANSCRIPT", 1, 2, false);
+        declareFunction("save_hl_transcript_from_modification_spec", "SAVE-HL-TRANSCRIPT-FROM-MODIFICATION-SPEC", 2, 0, false);
+        declareFunction("load_hl_transcript_new", "LOAD-HL-TRANSCRIPT-NEW", 1, 1, false);
+        declareFunction("show_hl_transcript", "SHOW-HL-TRANSCRIPT", 1, 1, false);
+        declareMacro("with_hl_transcript_compression", "WITH-HL-TRANSCRIPT-COMPRESSION");
+        declareFunction("save_hl_transcript_from_modification_spec_to_stream", "SAVE-HL-TRANSCRIPT-FROM-MODIFICATION-SPEC-TO-STREAM", 2, 0, false);
+        declareFunction("save_hl_transcript_from_modification_spec_to_stream_int", "SAVE-HL-TRANSCRIPT-FROM-MODIFICATION-SPEC-TO-STREAM-INT", 2, 0, false);
+        declareFunction("save_hl_transcript_additions_from_modification_spec_to_stream", "SAVE-HL-TRANSCRIPT-ADDITIONS-FROM-MODIFICATION-SPEC-TO-STREAM", 2, 0, false);
+        declareFunction("save_hl_transcript_removals_from_modification_spec_to_stream", "SAVE-HL-TRANSCRIPT-REMOVALS-FROM-MODIFICATION-SPEC-TO-STREAM", 2, 0, false);
+        declareFunction("plist_remove_value", "PLIST-REMOVE-VALUE", 2, 1, false);
+        declareFunction("save_one_hl_transcript_operation", "SAVE-ONE-HL-TRANSCRIPT-OPERATION", 2, 0, false);
+        declareFunction("load_one_hl_transcript_operation", "LOAD-ONE-HL-TRANSCRIPT-OPERATION", 1, 0, false);
+        declareFunction("process_hl_transcript_operation", "PROCESS-HL-TRANSCRIPT-OPERATION", 3, 0, false);
+        declareFunction("process_hl_transcript_operation_int", "PROCESS-HL-TRANSCRIPT-OPERATION-INT", 1, 0, false);
+        declareFunction("show_hl_transcript_operation", "SHOW-HL-TRANSCRIPT-OPERATION", 2, 0, false);
+        declareFunction("possibly_transform_hl_op_wrt_compatibility", "POSSIBLY-TRANSFORM-HL-OP-WRT-COMPATIBILITY", 1, 0, false);
+        declareFunction("hl_transcript_objects_to_compress", "HL-TRANSCRIPT-OBJECTS-TO-COMPRESS", 1, 0, false);
+        declareFunction("new_objects_between_kb_checkpoints", "NEW-OBJECTS-BETWEEN-KB-CHECKPOINTS", 0, 2, false);
+        declareMacro("gathering_new_kb_objects", "GATHERING-NEW-KB-OBJECTS");
+        declareMacro("gathering_rules_used_in_new_deductions", "GATHERING-RULES-USED-IN-NEW-DEDUCTIONS");
+        declareFunction("gathering_rules_used_in_new_deductions_postprocess", "GATHERING-RULES-USED-IN-NEW-DEDUCTIONS-POSTPROCESS", 2, 0, false);
+        declareFunction("compressible_references_in_modification_spec", "COMPRESSIBLE-REFERENCES-IN-MODIFICATION-SPEC", 1, 1, false);
+        declareFunction("increment_compressible_object_mention_count", "INCREMENT-COMPRESSIBLE-OBJECT-MENTION-COUNT", 1, 0, false);
+        declareFunction("deduction_map", "DEDUCTION-MAP", 2, 2, false);
+        declareFunction("kb_hl_support_map", "KB-HL-SUPPORT-MAP", 2, 2, false);
+        declareFunction("expression_map_support", "EXPRESSION-MAP-SUPPORT", 2, 2, false);
+        declareMacro("with_hl_transcript_created_constant_equivalence_by_name", "WITH-HL-TRANSCRIPT-CREATED-CONSTANT-EQUIVALENCE-BY-NAME");
+        declareFunction("new_hlt_external_id_equivalence_map", "NEW-HLT-EXTERNAL-ID-EQUIVALENCE-MAP", 0, 0, false);
+        declareFunction("hlt_possibly_find_via_external_id_equivalence", "HLT-POSSIBLY-FIND-VIA-EXTERNAL-ID-EQUIVALENCE", 2, 0, false);
+        declareFunction("write_constant_to_hl_transcript_stream", "WRITE-CONSTANT-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("hlt_find_or_create", "HLT-FIND-OR-CREATE", 1, 1, false);
+        declareFunction("hlt_find_or_create_missing_constant", "HLT-FIND-OR-CREATE-MISSING-CONSTANT", 1, 1, false);
+        declareFunction("write_nart_to_hl_transcript_stream", "WRITE-NART-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("hlt_find_or_create_nart", "HLT-FIND-OR-CREATE-NART", 1, 0, false);
+        declareFunction("hlt_find_or_create_missing_nart", "HLT-FIND-OR-CREATE-MISSING-NART", 1, 0, false);
+        declareFunction("write_assertion_to_hl_transcript_stream", "WRITE-ASSERTION-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("hlt_find_or_create_assertion", "HLT-FIND-OR-CREATE-ASSERTION", 7, 0, false);
+        declareFunction("hlt_find_or_create_missing_gaf", "HLT-FIND-OR-CREATE-MISSING-GAF", 2, 0, false);
+        declareFunction("hlt_find_or_create_missing_rule", "HLT-FIND-OR-CREATE-MISSING-RULE", 2, 0, false);
+        declareFunction("hlt_assert", "HLT-ASSERT", 5, 0, false);
+        declareFunction("hlt_timestamp_assertion", "HLT-TIMESTAMP-ASSERTION", 5, 0, false);
+        declareFunction("write_kb_hl_support_to_hl_transcript_stream", "WRITE-KB-HL-SUPPORT-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("hlt_find_or_create_kb_hl_support", "HLT-FIND-OR-CREATE-KB-HL-SUPPORT", 2, 0, false);
+        declareFunction("hlt_find_or_create_missing_kb_hl_support", "HLT-FIND-OR-CREATE-MISSING-KB-HL-SUPPORT", 1, 0, false);
+        declareFunction("write_deduction_to_hl_transcript_stream", "WRITE-DEDUCTION-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("hlt_find_or_create_deduction", "HLT-FIND-OR-CREATE-DEDUCTION", 3, 2, false);
+        declareFunction("hlt_find_or_create_missing_deduction", "HLT-FIND-OR-CREATE-MISSING-DEDUCTION", 2, 3, false);
+        declareFunction("write_existing_constant_removal_to_hl_transcript_stream", "WRITE-EXISTING-CONSTANT-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("write_constant_removal_to_hl_transcript_stream", "WRITE-CONSTANT-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareMacro("hlt_catch_unencapsulation_errors", "HLT-CATCH-UNENCAPSULATION-ERRORS");
+        declareFunction("hlt_remove_constant", "HLT-REMOVE-CONSTANT", 1, 0, false);
+        declareFunction("write_existing_assertion_unassert_to_hl_transcript_stream", "WRITE-EXISTING-ASSERTION-UNASSERT-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("write_assertion_unassert_to_hl_transcript_stream", "WRITE-ASSERTION-UNASSERT-TO-HL-TRANSCRIPT-STREAM", 3, 0, false);
+        declareFunction("hlt_unassert", "HLT-UNASSERT", 2, 0, false);
+        declareFunction("write_existing_assertion_removal_to_hl_transcript_stream", "WRITE-EXISTING-ASSERTION-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 2, 0, false);
+        declareFunction("write_assertion_removal_to_hl_transcript_stream", "WRITE-ASSERTION-REMOVAL-TO-HL-TRANSCRIPT-STREAM", 3, 0, false);
+        declareFunction("hlt_remove_assertion", "HLT-REMOVE-ASSERTION", 2, 0, false);
+        declareFunction("new_transcript_file_operations_iterator", "NEW-TRANSCRIPT-FILE-OPERATIONS-ITERATOR", 1, 2, false);
+        declareFunction("new_transcript_file_kb_removal_operations_iterator", "NEW-TRANSCRIPT-FILE-KB-REMOVAL-OPERATIONS-ITERATOR", 1, 2, false);
+        declareFunction("transcript_file_kb_removal_operations", "TRANSCRIPT-FILE-KB-REMOVAL-OPERATIONS", 1, 2, false);
+        declareFunction("kb_removal_operationP", "KB-REMOVAL-OPERATION?", 1, 0, false);
+        declareFunction("constants_to_remove_wrt_sibling_image", "CONSTANTS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
+        declareFunction("narts_to_remove_wrt_sibling_image", "NARTS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
+        declareFunction("assertions_to_remove_wrt_sibling_image", "ASSERTIONS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
+        declareFunction("deductions_to_remove_wrt_sibling_image", "DEDUCTIONS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
+        declareFunction("kb_hl_supports_to_remove_wrt_sibling_image", "KB-HL-SUPPORTS-TO-REMOVE-WRT-SIBLING-IMAGE", 2, 1, false);
+        declareFunction("kb_objects_to_remove_wrt_sibling_image_int", "KB-OBJECTS-TO-REMOVE-WRT-SIBLING-IMAGE-INT", 5, 0, false);
+        declareFunction("save_catchup_hl_transcript", "SAVE-CATCHUP-HL-TRANSCRIPT", 0, 3, false);
+        declareFunction("make_next_cyc_hlt_filename", "MAKE-NEXT-CYC-HLT-FILENAME", 0, 3, false);
+        declareFunction("make_cyc_hlt_filename", "MAKE-CYC-HLT-FILENAME", 0, 3, false);
+        declareFunction("extract_removals_hl_transcript", "EXTRACT-REMOVALS-HL-TRANSCRIPT", 2, 0, false);
+        declareFunction("hlt_removal_methodP", "HLT-REMOVAL-METHOD?", 1, 0, false);
         return NIL;
     }
 

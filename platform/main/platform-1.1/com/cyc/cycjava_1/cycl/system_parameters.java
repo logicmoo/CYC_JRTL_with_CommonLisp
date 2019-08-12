@@ -434,8 +434,7 @@ default Cyclist initially logged into the system. */
   }
 
   public static final SubLObject setup_system_parameters_file() {
-    // CVS_ID("Id: system-parameters.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym1$_SYSTEM_PARAMETERS_);
+        subl_macro_promotions.declare_defglobal($sym1$_SYSTEM_PARAMETERS_);
     register_system_parameter($sym53$_AUTO_CONTINUE_TRANSCRIPT_PROBLEMS_, T, $sym16$T_OR_NIL, $str54$Possible_values__NIL__T___If_NIL_);
     register_system_parameter($sym55$_CONTINUE_AGENDA_ON_ERROR_, T, $sym16$T_OR_NIL, $str56$Possible_values__NIL__T___If_NIL_);
     register_system_parameter($sym57$_SUSPEND_SBHL_TYPE_CHECKING__, NIL, $sym16$T_OR_NIL, $str58$Possible_values__T__NIL___Type_ch);

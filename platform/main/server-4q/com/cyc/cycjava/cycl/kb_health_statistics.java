@@ -1,7 +1,15 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.kb_health_statistics;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -9,31 +17,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.function.Supplier;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.kb_health_statistics.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class kb_health_statistics extends SubLTranslatedFile {
+public final class kb_health_statistics extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new kb_health_statistics();
 
-    public static final String myName = "com.cyc.cycjava.cycl.kb_health_statistics";
+    public static final String myName = "com.cyc.cycjava_2.cycl.kb_health_statistics";
 
-    public static final String myFingerPrint = "5f5a37b7e9d9c5730a030f7ee93ef1123bef662ec7171d8d1a04736aadd7618b";
 
     // deflexical
     public static final SubLSymbol $kb_health_issue_comparison_fn$ = makeSymbol("*KB-HEALTH-ISSUE-COMPARISON-FN*");
@@ -319,20 +309,20 @@ public final class kb_health_statistics extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_kb_health_statistics_file() {
-        declareMacro(me, "with_kb_health_issues_store_lock", "WITH-KB-HEALTH-ISSUES-STORE-LOCK");
-        declareFunction(me, "find_or_create_kb_health_details_unlocked", "FIND-OR-CREATE-KB-HEALTH-DETAILS-UNLOCKED", 2, 0, false);
-        declareMacro(me, "with_kb_health_component", "WITH-KB-HEALTH-COMPONENT");
-        declareMacro(me, "with_kb_health_context", "WITH-KB-HEALTH-CONTEXT");
-        declareMacro(me, "with_kb_health_sub_context", "WITH-KB-HEALTH-SUB-CONTEXT");
-        declareFunction(me, "kb_health_note_problem", "KB-HEALTH-NOTE-PROBLEM", 1, 3, false);
-        declareFunction(me, "kb_health_note_problem_with", "KB-HEALTH-NOTE-PROBLEM-WITH", 2, 3, false);
-        declareFunction(me, "get_kb_health_statistic_components", "GET-KB-HEALTH-STATISTIC-COMPONENTS", 0, 0, false);
-        declareFunction(me, "get_kb_health_statistic_contexts_for_component", "GET-KB-HEALTH-STATISTIC-CONTEXTS-FOR-COMPONENT", 1, 0, false);
-        declareFunction(me, "get_kb_health_statistic_sub_contexts_for_context", "GET-KB-HEALTH-STATISTIC-SUB-CONTEXTS-FOR-CONTEXT", 2, 0, false);
-        declareFunction(me, "get_kb_health_statistic_handles_for_sub_context", "GET-KB-HEALTH-STATISTIC-HANDLES-FOR-SUB-CONTEXT", 3, 0, false);
-        declareFunction(me, "get_kb_health_statistic_details_for_sub_context_handle", "GET-KB-HEALTH-STATISTIC-DETAILS-FOR-SUB-CONTEXT-HANDLE", 4, 0, false);
-        declareFunction(me, "get_kb_health_statistic_count_for_handle", "GET-KB-HEALTH-STATISTIC-COUNT-FOR-HANDLE", 4, 0, false);
-        declareFunction(me, "compile_kb_health_statistics", "COMPILE-KB-HEALTH-STATISTICS", 0, 0, false);
+        declareMacro("with_kb_health_issues_store_lock", "WITH-KB-HEALTH-ISSUES-STORE-LOCK");
+        declareFunction("find_or_create_kb_health_details_unlocked", "FIND-OR-CREATE-KB-HEALTH-DETAILS-UNLOCKED", 2, 0, false);
+        declareMacro("with_kb_health_component", "WITH-KB-HEALTH-COMPONENT");
+        declareMacro("with_kb_health_context", "WITH-KB-HEALTH-CONTEXT");
+        declareMacro("with_kb_health_sub_context", "WITH-KB-HEALTH-SUB-CONTEXT");
+        declareFunction("kb_health_note_problem", "KB-HEALTH-NOTE-PROBLEM", 1, 3, false);
+        declareFunction("kb_health_note_problem_with", "KB-HEALTH-NOTE-PROBLEM-WITH", 2, 3, false);
+        declareFunction("get_kb_health_statistic_components", "GET-KB-HEALTH-STATISTIC-COMPONENTS", 0, 0, false);
+        declareFunction("get_kb_health_statistic_contexts_for_component", "GET-KB-HEALTH-STATISTIC-CONTEXTS-FOR-COMPONENT", 1, 0, false);
+        declareFunction("get_kb_health_statistic_sub_contexts_for_context", "GET-KB-HEALTH-STATISTIC-SUB-CONTEXTS-FOR-CONTEXT", 2, 0, false);
+        declareFunction("get_kb_health_statistic_handles_for_sub_context", "GET-KB-HEALTH-STATISTIC-HANDLES-FOR-SUB-CONTEXT", 3, 0, false);
+        declareFunction("get_kb_health_statistic_details_for_sub_context_handle", "GET-KB-HEALTH-STATISTIC-DETAILS-FOR-SUB-CONTEXT-HANDLE", 4, 0, false);
+        declareFunction("get_kb_health_statistic_count_for_handle", "GET-KB-HEALTH-STATISTIC-COUNT-FOR-HANDLE", 4, 0, false);
+        declareFunction("compile_kb_health_statistics", "COMPILE-KB-HEALTH-STATISTICS", 0, 0, false);
         return NIL;
     }
 

@@ -432,8 +432,7 @@ public  final class map_utilities extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_map_utilities_file() {
-    // CVS_ID("Id: map-utilities.lisp 128869 2009-10-01 02:11:06Z rck ");
-    Structures.register_method($is_map_object_p_method_table$.getGlobalValue(), dictionary.$dtp_dictionary$.getGlobalValue(), Symbols.symbol_function($sym33$IS_MAP_OBJECT_P_DICTIONARY_METHOD));
+        Structures.register_method($is_map_object_p_method_table$.getGlobalValue(), dictionary.$dtp_dictionary$.getGlobalValue(), Symbols.symbol_function($sym33$IS_MAP_OBJECT_P_DICTIONARY_METHOD));
     Structures.register_method($is_map_object_p_method_table$.getGlobalValue(), Types.$dtp_hash_table$.getGlobalValue(), Symbols.symbol_function($sym34$IS_MAP_OBJECT_P_HASH_TABLE_METHOD));
     Structures.register_method($map_object_size_method_table$.getGlobalValue(), dictionary.$dtp_dictionary$.getGlobalValue(), Symbols.symbol_function($sym36$MAP_OBJECT_SIZE_DICTIONARY_METHOD));
     Structures.register_method($map_object_size_method_table$.getGlobalValue(), Types.$dtp_hash_table$.getGlobalValue(), Symbols.symbol_function($sym37$MAP_OBJECT_SIZE_HASH_TABLE_METHOD));

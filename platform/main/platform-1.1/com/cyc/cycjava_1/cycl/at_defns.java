@@ -2037,8 +2037,7 @@ public  final class at_defns extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_defns_file() {
-    // CVS_ID("Id: at-defns.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    {
+        {
       SubLObject item_var = $sym3$_OLD_DEFNS_ADMIT__METERS_;
       if ((NIL == conses_high.member(item_var, utilities_macros.$defn_state_variables$.getGlobalValue(), Symbols.symbol_function(EQL), Symbols.symbol_function(IDENTITY)))) {
         utilities_macros.$defn_state_variables$.setGlobalValue(cons(item_var, utilities_macros.$defn_state_variables$.getGlobalValue()));

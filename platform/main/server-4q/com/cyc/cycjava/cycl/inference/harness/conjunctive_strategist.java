@@ -1,20 +1,25 @@
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.bindings;
-import com.cyc.cycjava.cycl.cycl_grammar;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.inference.harness.conjunctive_strategist;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.queues;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.variables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -25,45 +30,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$inference_debugP$;
-import static com.cyc.cycjava.cycl.control_vars.$removal_cost_cutoff$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.harness.conjunctive_strategist.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$with_timeout_nesting_depth$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$within_with_timeout$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class conjunctive_strategist extends SubLTranslatedFile {
+public final class conjunctive_strategist extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new conjunctive_strategist();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.conjunctive_strategist";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.harness.conjunctive_strategist";
 
-    public static final String myFingerPrint = "1f386c6099b47ec0899305cfd95305cd1a777eee1ac23bbba30bd2f24856fb03";
 
     // deflexical
     private static final SubLSymbol $conjunctive_strategist_properties$ = makeSymbol("*CONJUNCTIVE-STRATEGIST-PROPERTIES*");
@@ -741,23 +713,23 @@ public final class conjunctive_strategist extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_conjunctive_strategist_file() {
-        declareFunction(me, "new_cyc_conjunctive_query", "NEW-CYC-CONJUNCTIVE-QUERY", 1, 2, false);
-        declareFunction(me, "new_cyc_ordered_conjunctive_query", "NEW-CYC-ORDERED-CONJUNCTIVE-QUERY", 1, 2, false);
-        declareFunction(me, "contextualize_conjunctive_query", "CONTEXTUALIZE-CONJUNCTIVE-QUERY", 1, 1, false);
-        declareFunction(me, "el_unwrap_existentials", "EL-UNWRAP-EXISTENTIALS", 1, 0, false);
-        declareFunction(me, "el_wrap_existentials", "EL-WRAP-EXISTENTIALS", 2, 0, false);
-        declareFunction(me, "new_cyc_conjunctive_contextualized_query", "NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 1, false);
-        declareFunction(me, "new_cyc_ordered_conjunctive_contextualized_query", "NEW-CYC-ORDERED-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 1, false);
-        declareFunction(me, "canonicalize_conjunctive_contextualized_query", "CANONICALIZE-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 0, false);
-        declareFunction(me, "new_cyc_conjunctive_contextualized_hl_query", "NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY", 1, 1, false);
-        declareFunction(me, "order_conjunctive_contextualized_hl_query_wrt_removal", "ORDER-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY-WRT-REMOVAL", 1, 0, false);
-        declareFunction(me, "new_cyc_ordered_conjunctive_contextualized_hl_query", "NEW-CYC-ORDERED-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY", 1, 1, false);
-        declareFunction(me, "process_conjunctive_removal_hl_query_recursive", "PROCESS-CONJUNCTIVE-REMOVAL-HL-QUERY-RECURSIVE", 6, 2, false);
-        declareFunction(me, "categorize_query_properties_wrt_conjunctive_strategist", "CATEGORIZE-QUERY-PROPERTIES-WRT-CONJUNCTIVE-STRATEGIST", 1, 0, false);
-        declareFunction(me, "conjunctive_removal_literal_result", "CONJUNCTIVE-REMOVAL-LITERAL-RESULT", 1, 1, false);
-        declareFunction(me, "extend_bindings", "EXTEND-BINDINGS", 2, 0, false);
-        declareFunction(me, "nextend_bindings", "NEXTEND-BINDINGS", 2, 0, false);
-        declareFunction(me, "test_canonicalize_conjunctive_contextualized_query", "TEST-CANONICALIZE-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 0, false);
+        declareFunction("new_cyc_conjunctive_query", "NEW-CYC-CONJUNCTIVE-QUERY", 1, 2, false);
+        declareFunction("new_cyc_ordered_conjunctive_query", "NEW-CYC-ORDERED-CONJUNCTIVE-QUERY", 1, 2, false);
+        declareFunction("contextualize_conjunctive_query", "CONTEXTUALIZE-CONJUNCTIVE-QUERY", 1, 1, false);
+        declareFunction("el_unwrap_existentials", "EL-UNWRAP-EXISTENTIALS", 1, 0, false);
+        declareFunction("el_wrap_existentials", "EL-WRAP-EXISTENTIALS", 2, 0, false);
+        declareFunction("new_cyc_conjunctive_contextualized_query", "NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 1, false);
+        declareFunction("new_cyc_ordered_conjunctive_contextualized_query", "NEW-CYC-ORDERED-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 1, false);
+        declareFunction("canonicalize_conjunctive_contextualized_query", "CANONICALIZE-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 0, false);
+        declareFunction("new_cyc_conjunctive_contextualized_hl_query", "NEW-CYC-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY", 1, 1, false);
+        declareFunction("order_conjunctive_contextualized_hl_query_wrt_removal", "ORDER-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY-WRT-REMOVAL", 1, 0, false);
+        declareFunction("new_cyc_ordered_conjunctive_contextualized_hl_query", "NEW-CYC-ORDERED-CONJUNCTIVE-CONTEXTUALIZED-HL-QUERY", 1, 1, false);
+        declareFunction("process_conjunctive_removal_hl_query_recursive", "PROCESS-CONJUNCTIVE-REMOVAL-HL-QUERY-RECURSIVE", 6, 2, false);
+        declareFunction("categorize_query_properties_wrt_conjunctive_strategist", "CATEGORIZE-QUERY-PROPERTIES-WRT-CONJUNCTIVE-STRATEGIST", 1, 0, false);
+        declareFunction("conjunctive_removal_literal_result", "CONJUNCTIVE-REMOVAL-LITERAL-RESULT", 1, 1, false);
+        declareFunction("extend_bindings", "EXTEND-BINDINGS", 2, 0, false);
+        declareFunction("nextend_bindings", "NEXTEND-BINDINGS", 2, 0, false);
+        declareFunction("test_canonicalize_conjunctive_contextualized_query", "TEST-CANONICALIZE-CONJUNCTIVE-CONTEXTUALIZED-QUERY", 1, 0, false);
         return NIL;
     }
 

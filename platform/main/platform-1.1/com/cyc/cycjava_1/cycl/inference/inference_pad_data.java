@@ -62,8 +62,7 @@ public  final class inference_pad_data extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_inference_pad_data_file() {
-    // CVS_ID("Id: inference-pad-data.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_NON_TKB_FINAL_BOGOMIPS_);
+        subl_macro_promotions.declare_defglobal($sym0$_NON_TKB_FINAL_BOGOMIPS_);
     subl_macro_promotions.declare_defglobal($sym2$_NON_TKB_FINAL_TIMES_TO_FIRST_ANSWER_);
     return NIL;
   }

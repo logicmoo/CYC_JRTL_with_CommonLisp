@@ -181,8 +181,7 @@ public  final class transformation_module_tests extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_transformation_module_tests_file() {
-    // CVS_ID("Id: transformation-module-tests.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_transformation_module_test$.getGlobalValue(), Symbols.symbol_function($sym7$TRANSFORMATION_MODULE_TEST_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_transformation_module_test$.getGlobalValue(), Symbols.symbol_function($sym7$TRANSFORMATION_MODULE_TEST_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$TMT_HL_MODULE, $sym9$_CSETF_TMT_HL_MODULE);
     Structures.def_csetf($sym10$TMT_ID, $sym11$_CSETF_TMT_ID);
     Structures.def_csetf($sym12$TMT_SENTENCE, $sym13$_CSETF_TMT_SENTENCE);

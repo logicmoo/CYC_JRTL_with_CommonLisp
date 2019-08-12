@@ -413,8 +413,7 @@ public  final class unrepresented_terms extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_unrepresented_terms_file() {
-    // CVS_ID("Id: unrepresented-terms.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_UNREPRESENTED_TERM_TO_SUID_);
+        subl_macro_promotions.declare_defglobal($sym0$_UNREPRESENTED_TERM_TO_SUID_);
     subl_macro_promotions.declare_defglobal($sym1$_UNREPRESENTED_TERM_FROM_SUID_);
     access_macros.register_macro_helper($sym13$DO_UNREPRESENTED_TERMS_TABLE, $sym14$DO_KB_UNREPRESENTED_TERMS);
     access_macros.register_macro_helper($sym27$CREATE_UNREPRESENTED_TERM_DUMP_ID_TABLE, $sym28$WITH_UNREPRESENTED_TERM_DUMP_ID_TABLE);

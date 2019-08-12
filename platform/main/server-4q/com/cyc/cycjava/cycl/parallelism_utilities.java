@@ -1,8 +1,32 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.parallelism_utilities;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.ArrayList;
+
+import org.armedbear.lisp.Lisp;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Semaphores;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -16,58 +40,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.ArrayList;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.parallelism_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVENTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class parallelism_utilities extends SubLTranslatedFile {
+import com.cyc.tool.subl.util.SubLTranslatedFile; 
+ public final class parallelism_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new parallelism_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.parallelism_utilities";
+    public static final String myName = "com.cyc.cycjava_2.cycl.parallelism_utilities";
 
-    public static final String myFingerPrint = "9431b4a03c37a120b0ce510e7175000886ed3f44372077c49b3af59d0234cfdd";
 
     // defconstant
     public static final SubLSymbol $dtp_parallel_iterator$ = makeSymbol("*DTP-PARALLEL-ITERATOR*");
@@ -88,7 +71,7 @@ public final class parallelism_utilities extends SubLTranslatedFile {
 
     private static final SubLList $list2 = list(new SubLObject[]{ makeSymbol("SOURCE-ITERATOR"), makeSymbol("FUNCTION"), makeSymbol("SHARED-ARGS"), makeSymbol("SVS"), makeSymbol("WIDTH"), makeSymbol("BATCH"), makeSymbol("TOTAL"), makeSymbol("SOFAR"), makeSymbol("MESSAGE"), makeSymbol("INITIALIZER"), makeSymbol("REDUCER"), makeSymbol("FINAL-RESULT"), makeSymbol("LOCK"), makeSymbol("BEGIN-SEMAPHORE"), makeSymbol("FINISH-SEMAPHORE"), makeSymbol("PROCESS-POOL"), makeSymbol("PROGRESS-INDICATOR") });
 
-    private static final SubLList $list3 = list(new SubLObject[]{ makeKeyword("SOURCE-ITERATOR"), makeKeyword("FUNCTION"), makeKeyword("SHARED-ARGS"), makeKeyword("SVS"), makeKeyword("WIDTH"), makeKeyword("BATCH"), makeKeyword("TOTAL"), makeKeyword("SOFAR"), makeKeyword("MESSAGE"), makeKeyword("INITIALIZER"), makeKeyword("REDUCER"), makeKeyword("FINAL-RESULT"), makeKeyword("LOCK"), makeKeyword("BEGIN-SEMAPHORE"), makeKeyword("FINISH-SEMAPHORE"), makeKeyword("PROCESS-POOL"), makeKeyword("PROGRESS-INDICATOR") });
+    private static final SubLList $list3 = list(new SubLObject[]{ makeKeyword("SOURCE-ITERATOR"), makeKeyword("FUNCTION"), makeKeyword("SHARED-ARGS"), makeKeyword("SVS"), makeKeyword("WIDTH"), makeKeyword("BATCH"), makeKeyword("TOTAL"), makeKeyword("SOFAR"), makeKeyword("MESSAGE"), makeKeyword("INITIALIZER"), makeKeyword("REDUCER"), makeKeyword("FINAL-RESULT"), $LOCK, makeKeyword("BEGIN-SEMAPHORE"), makeKeyword("FINISH-SEMAPHORE"), makeKeyword("PROCESS-POOL"), makeKeyword("PROGRESS-INDICATOR") });
 
     private static final SubLList $list4 = list(new SubLObject[]{ makeSymbol("PARITER-SOURCE-ITERATOR"), makeSymbol("PARITER-FUNCTION"), makeSymbol("PARITER-SHARED-ARGS"), makeSymbol("PARITER-SVS"), makeSymbol("PARITER-WIDTH"), makeSymbol("PARITER-BATCH"), makeSymbol("PARITER-TOTAL"), makeSymbol("PARITER-SOFAR"), makeSymbol("PARITER-MESSAGE"), makeSymbol("PARITER-INITIALIZER"), makeSymbol("PARITER-REDUCER"), makeSymbol("PARITER-FINAL-RESULT"), makeSymbol("PARITER-LOCK"), makeSymbol("PARITER-BEGIN-SEMAPHORE"), makeSymbol("PARITER-FINISH-SEMAPHORE"), makeSymbol("PARITER-PROCESS-POOL"), makeSymbol("PARITER-PROGRESS-INDICATOR") });
 
@@ -284,176 +267,176 @@ public final class parallelism_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject parallel_iterator_p(final SubLObject v_object) {
-        return v_object.getClass() == parallelism_utilities.$parallel_iterator_native.class ? T : NIL;
+        return v_object.getClass() == $parallel_iterator_native.class ? T : NIL;
     }
 
     public static SubLObject pariter_source_iterator(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject pariter_function(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject pariter_shared_args(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject pariter_svs(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject pariter_width(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject pariter_batch(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField7();
     }
 
     public static SubLObject pariter_total(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField8();
     }
 
     public static SubLObject pariter_sofar(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField9();
     }
 
     public static SubLObject pariter_message(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField10();
     }
 
     public static SubLObject pariter_initializer(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField11();
     }
 
     public static SubLObject pariter_reducer(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField12();
     }
 
     public static SubLObject pariter_final_result(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField13();
     }
 
     public static SubLObject pariter_lock(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField14();
     }
 
     public static SubLObject pariter_begin_semaphore(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField15();
     }
 
     public static SubLObject pariter_finish_semaphore(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField16();
     }
 
     public static SubLObject pariter_process_pool(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField17();
     }
 
     public static SubLObject pariter_progress_indicator(final SubLObject v_object) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.getField18();
     }
 
     public static SubLObject _csetf_pariter_source_iterator(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_pariter_function(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_pariter_shared_args(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_pariter_svs(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_pariter_width(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_pariter_batch(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField7(value);
     }
 
     public static SubLObject _csetf_pariter_total(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField8(value);
     }
 
     public static SubLObject _csetf_pariter_sofar(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField9(value);
     }
 
     public static SubLObject _csetf_pariter_message(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField10(value);
     }
 
     public static SubLObject _csetf_pariter_initializer(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField11(value);
     }
 
     public static SubLObject _csetf_pariter_reducer(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField12(value);
     }
 
     public static SubLObject _csetf_pariter_final_result(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField13(value);
     }
 
     public static SubLObject _csetf_pariter_lock(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField14(value);
     }
 
     public static SubLObject _csetf_pariter_begin_semaphore(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField15(value);
     }
 
     public static SubLObject _csetf_pariter_finish_semaphore(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField16(value);
     }
 
     public static SubLObject _csetf_pariter_process_pool(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField17(value);
     }
 
     public static SubLObject _csetf_pariter_progress_indicator(final SubLObject v_object, final SubLObject value) {
-        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p(v_object) " + "CommonSymbols.NIL != parallelism_utilities.parallel_iterator_p(v_object) " + v_object;
+        assert NIL != parallel_iterator_p(v_object) : "parallelism_utilities.parallel_iterator_p error :" + v_object;
         return v_object.setField18(value);
     }
 
@@ -461,7 +444,7 @@ public final class parallelism_utilities extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new parallelism_utilities.$parallel_iterator_native();
+        final SubLObject v_new = new $parallel_iterator_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1090,81 +1073,81 @@ public final class parallelism_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_parallelism_utilities_file() {
-        declareFunction(me, "parallel_extract_options", "PARALLEL-EXTRACT-OPTIONS", 1, 0, false);
-        declareFunction(me, "parallel_iterator_print_function_trampoline", "PARALLEL-ITERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "parallel_iterator_p", "PARALLEL-ITERATOR-P", 1, 0, false);
+        declareFunction("parallel_extract_options", "PARALLEL-EXTRACT-OPTIONS", 1, 0, false);
+        declareFunction("parallel_iterator_print_function_trampoline", "PARALLEL-ITERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("parallel_iterator_p", "PARALLEL-ITERATOR-P", 1, 0, false);
         new parallelism_utilities.$parallel_iterator_p$UnaryFunction();
-        declareFunction(me, "pariter_source_iterator", "PARITER-SOURCE-ITERATOR", 1, 0, false);
-        declareFunction(me, "pariter_function", "PARITER-FUNCTION", 1, 0, false);
-        declareFunction(me, "pariter_shared_args", "PARITER-SHARED-ARGS", 1, 0, false);
-        declareFunction(me, "pariter_svs", "PARITER-SVS", 1, 0, false);
-        declareFunction(me, "pariter_width", "PARITER-WIDTH", 1, 0, false);
-        declareFunction(me, "pariter_batch", "PARITER-BATCH", 1, 0, false);
-        declareFunction(me, "pariter_total", "PARITER-TOTAL", 1, 0, false);
-        declareFunction(me, "pariter_sofar", "PARITER-SOFAR", 1, 0, false);
-        declareFunction(me, "pariter_message", "PARITER-MESSAGE", 1, 0, false);
-        declareFunction(me, "pariter_initializer", "PARITER-INITIALIZER", 1, 0, false);
-        declareFunction(me, "pariter_reducer", "PARITER-REDUCER", 1, 0, false);
-        declareFunction(me, "pariter_final_result", "PARITER-FINAL-RESULT", 1, 0, false);
-        declareFunction(me, "pariter_lock", "PARITER-LOCK", 1, 0, false);
-        declareFunction(me, "pariter_begin_semaphore", "PARITER-BEGIN-SEMAPHORE", 1, 0, false);
-        declareFunction(me, "pariter_finish_semaphore", "PARITER-FINISH-SEMAPHORE", 1, 0, false);
-        declareFunction(me, "pariter_process_pool", "PARITER-PROCESS-POOL", 1, 0, false);
-        declareFunction(me, "pariter_progress_indicator", "PARITER-PROGRESS-INDICATOR", 1, 0, false);
-        declareFunction(me, "_csetf_pariter_source_iterator", "_CSETF-PARITER-SOURCE-ITERATOR", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_function", "_CSETF-PARITER-FUNCTION", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_shared_args", "_CSETF-PARITER-SHARED-ARGS", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_svs", "_CSETF-PARITER-SVS", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_width", "_CSETF-PARITER-WIDTH", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_batch", "_CSETF-PARITER-BATCH", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_total", "_CSETF-PARITER-TOTAL", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_sofar", "_CSETF-PARITER-SOFAR", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_message", "_CSETF-PARITER-MESSAGE", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_initializer", "_CSETF-PARITER-INITIALIZER", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_reducer", "_CSETF-PARITER-REDUCER", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_final_result", "_CSETF-PARITER-FINAL-RESULT", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_lock", "_CSETF-PARITER-LOCK", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_begin_semaphore", "_CSETF-PARITER-BEGIN-SEMAPHORE", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_finish_semaphore", "_CSETF-PARITER-FINISH-SEMAPHORE", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_process_pool", "_CSETF-PARITER-PROCESS-POOL", 2, 0, false);
-        declareFunction(me, "_csetf_pariter_progress_indicator", "_CSETF-PARITER-PROGRESS-INDICATOR", 2, 0, false);
-        declareFunction(me, "make_parallel_iterator", "MAKE-PARALLEL-ITERATOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_parallel_iterator", "VISIT-DEFSTRUCT-PARALLEL-ITERATOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_parallel_iterator_method", "VISIT-DEFSTRUCT-OBJECT-PARALLEL-ITERATOR-METHOD", 2, 0, false);
-        declareFunction(me, "new_parallel_iterator", "NEW-PARALLEL-ITERATOR", 3, 0, false);
-        declareFunction(me, "make_pariter_process_pool", "MAKE-PARITER-PROCESS-POOL", 1, 0, false);
-        declareFunction(me, "pariter_possibly_start_progress_indicator", "PARITER-POSSIBLY-START-PROGRESS-INDICATOR", 1, 0, false);
-        declareFunction(me, "parallel_map_iterator", "PARALLEL-MAP-ITERATOR", 2, 1, false);
-        declareFunction(me, "parallel_iterator_process", "PARALLEL-ITERATOR-PROCESS", 1, 0, false);
-        declareFunction(me, "parallel_iterator_finalize", "PARALLEL-ITERATOR-FINALIZE", 1, 0, false);
-        declareFunction(me, "pariter_initialize_final_result", "PARITER-INITIALIZE-FINAL-RESULT", 1, 0, false);
-        declareFunction(me, "pariter_signal_pool_to_begin", "PARITER-SIGNAL-POOL-TO-BEGIN", 1, 0, false);
-        declareFunction(me, "pariter_wait_for_pool_to_finish", "PARITER-WAIT-FOR-POOL-TO-FINISH", 1, 0, false);
-        declareFunction(me, "pariter_possibly_halt_process_pool", "PARITER-POSSIBLY-HALT-PROCESS-POOL", 1, 0, false);
-        declareFunction(me, "pariter_possibly_halt_process", "PARITER-POSSIBLY-HALT-PROCESS", 1, 0, false);
-        declareFunction(me, "pariter_possibly_halt_progress_indicator", "PARITER-POSSIBLY-HALT-PROGRESS-INDICATOR", 1, 0, false);
-        declareFunction(me, "current_pariter", "CURRENT-PARITER", 0, 0, false);
-        declareFunction(me, "current_pariter_index", "CURRENT-PARITER-INDEX", 0, 0, false);
-        declareFunction(me, "current_pariter_width", "CURRENT-PARITER-WIDTH", 0, 0, false);
-        declareFunction(me, "pariter_process_method", "PARITER-PROCESS-METHOD", 2, 0, false);
-        declareFunction(me, "pariter_wait_to_begin", "PARITER-WAIT-TO-BEGIN", 1, 0, false);
-        declareFunction(me, "pariter_doneP", "PARITER-DONE?", 1, 0, false);
-        declareFunction(me, "pariter_obtain_batch_items", "PARITER-OBTAIN-BATCH-ITEMS", 1, 0, false);
-        declareFunction(me, "pariter_process_batch_items", "PARITER-PROCESS-BATCH-ITEMS", 2, 0, false);
-        declareFunction(me, "pariter_reduce_final_result", "PARITER-REDUCE-FINAL-RESULT", 2, 0, false);
-        declareFunction(me, "pariter_signal_finish", "PARITER-SIGNAL-FINISH", 2, 0, false);
-        declareFunction(me, "pariter_initialize_batch_result", "PARITER-INITIALIZE-BATCH-RESULT", 1, 0, false);
-        declareFunction(me, "pariter_process_apply", "PARITER-PROCESS-APPLY", 2, 1, false);
-        declareFunction(me, "pariter_reduce_within_batch", "PARITER-REDUCE-WITHIN-BATCH", 3, 0, false);
-        declareFunction(me, "pariter_increment_sofar", "PARITER-INCREMENT-SOFAR", 2, 0, false);
-        declareFunction(me, "pariter_progress_method", "PARITER-PROGRESS-METHOD", 2, 0, false);
-        declareFunction(me, "parallel_map_assertions", "PARALLEL-MAP-ASSERTIONS", 1, 1, false);
-        declareFunction(me, "parallel_map_deductions", "PARALLEL-MAP-DEDUCTIONS", 1, 1, false);
-        declareFunction(me, "parallel_mapc", "PARALLEL-MAPC", 2, 1, false);
-        declareFunction(me, "parallel_count_if", "PARALLEL-COUNT-IF", 2, 1, false);
-        declareFunction(me, "parallel_filter_match_count", "PARALLEL-FILTER-MATCH-COUNT", 1, 0, false);
-        declareFunction(me, "parallel_filter_matchP", "PARALLEL-FILTER-MATCH?", 1, 0, false);
-        declareFunction(me, "test_parallel_count_assertions", "TEST-PARALLEL-COUNT-ASSERTIONS", 0, 2, false);
+        declareFunction("pariter_source_iterator", "PARITER-SOURCE-ITERATOR", 1, 0, false);
+        declareFunction("pariter_function", "PARITER-FUNCTION", 1, 0, false);
+        declareFunction("pariter_shared_args", "PARITER-SHARED-ARGS", 1, 0, false);
+        declareFunction("pariter_svs", "PARITER-SVS", 1, 0, false);
+        declareFunction("pariter_width", "PARITER-WIDTH", 1, 0, false);
+        declareFunction("pariter_batch", "PARITER-BATCH", 1, 0, false);
+        declareFunction("pariter_total", "PARITER-TOTAL", 1, 0, false);
+        declareFunction("pariter_sofar", "PARITER-SOFAR", 1, 0, false);
+        declareFunction("pariter_message", "PARITER-MESSAGE", 1, 0, false);
+        declareFunction("pariter_initializer", "PARITER-INITIALIZER", 1, 0, false);
+        declareFunction("pariter_reducer", "PARITER-REDUCER", 1, 0, false);
+        declareFunction("pariter_final_result", "PARITER-FINAL-RESULT", 1, 0, false);
+        declareFunction("pariter_lock", "PARITER-LOCK", 1, 0, false);
+        declareFunction("pariter_begin_semaphore", "PARITER-BEGIN-SEMAPHORE", 1, 0, false);
+        declareFunction("pariter_finish_semaphore", "PARITER-FINISH-SEMAPHORE", 1, 0, false);
+        declareFunction("pariter_process_pool", "PARITER-PROCESS-POOL", 1, 0, false);
+        declareFunction("pariter_progress_indicator", "PARITER-PROGRESS-INDICATOR", 1, 0, false);
+        declareFunction("_csetf_pariter_source_iterator", "_CSETF-PARITER-SOURCE-ITERATOR", 2, 0, false);
+        declareFunction("_csetf_pariter_function", "_CSETF-PARITER-FUNCTION", 2, 0, false);
+        declareFunction("_csetf_pariter_shared_args", "_CSETF-PARITER-SHARED-ARGS", 2, 0, false);
+        declareFunction("_csetf_pariter_svs", "_CSETF-PARITER-SVS", 2, 0, false);
+        declareFunction("_csetf_pariter_width", "_CSETF-PARITER-WIDTH", 2, 0, false);
+        declareFunction("_csetf_pariter_batch", "_CSETF-PARITER-BATCH", 2, 0, false);
+        declareFunction("_csetf_pariter_total", "_CSETF-PARITER-TOTAL", 2, 0, false);
+        declareFunction("_csetf_pariter_sofar", "_CSETF-PARITER-SOFAR", 2, 0, false);
+        declareFunction("_csetf_pariter_message", "_CSETF-PARITER-MESSAGE", 2, 0, false);
+        declareFunction("_csetf_pariter_initializer", "_CSETF-PARITER-INITIALIZER", 2, 0, false);
+        declareFunction("_csetf_pariter_reducer", "_CSETF-PARITER-REDUCER", 2, 0, false);
+        declareFunction("_csetf_pariter_final_result", "_CSETF-PARITER-FINAL-RESULT", 2, 0, false);
+        declareFunction("_csetf_pariter_lock", "_CSETF-PARITER-LOCK", 2, 0, false);
+        declareFunction("_csetf_pariter_begin_semaphore", "_CSETF-PARITER-BEGIN-SEMAPHORE", 2, 0, false);
+        declareFunction("_csetf_pariter_finish_semaphore", "_CSETF-PARITER-FINISH-SEMAPHORE", 2, 0, false);
+        declareFunction("_csetf_pariter_process_pool", "_CSETF-PARITER-PROCESS-POOL", 2, 0, false);
+        declareFunction("_csetf_pariter_progress_indicator", "_CSETF-PARITER-PROGRESS-INDICATOR", 2, 0, false);
+        declareFunction("make_parallel_iterator", "MAKE-PARALLEL-ITERATOR", 0, 1, false);
+        declareFunction("visit_defstruct_parallel_iterator", "VISIT-DEFSTRUCT-PARALLEL-ITERATOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_parallel_iterator_method", "VISIT-DEFSTRUCT-OBJECT-PARALLEL-ITERATOR-METHOD", 2, 0, false);
+        declareFunction("new_parallel_iterator", "NEW-PARALLEL-ITERATOR", 3, 0, false);
+        declareFunction("make_pariter_process_pool", "MAKE-PARITER-PROCESS-POOL", 1, 0, false);
+        declareFunction("pariter_possibly_start_progress_indicator", "PARITER-POSSIBLY-START-PROGRESS-INDICATOR", 1, 0, false);
+        declareFunction("parallel_map_iterator", "PARALLEL-MAP-ITERATOR", 2, 1, false);
+        declareFunction("parallel_iterator_process", "PARALLEL-ITERATOR-PROCESS", 1, 0, false);
+        declareFunction("parallel_iterator_finalize", "PARALLEL-ITERATOR-FINALIZE", 1, 0, false);
+        declareFunction("pariter_initialize_final_result", "PARITER-INITIALIZE-FINAL-RESULT", 1, 0, false);
+        declareFunction("pariter_signal_pool_to_begin", "PARITER-SIGNAL-POOL-TO-BEGIN", 1, 0, false);
+        declareFunction("pariter_wait_for_pool_to_finish", "PARITER-WAIT-FOR-POOL-TO-FINISH", 1, 0, false);
+        declareFunction("pariter_possibly_halt_process_pool", "PARITER-POSSIBLY-HALT-PROCESS-POOL", 1, 0, false);
+        declareFunction("pariter_possibly_halt_process", "PARITER-POSSIBLY-HALT-PROCESS", 1, 0, false);
+        declareFunction("pariter_possibly_halt_progress_indicator", "PARITER-POSSIBLY-HALT-PROGRESS-INDICATOR", 1, 0, false);
+        declareFunction("current_pariter", "CURRENT-PARITER", 0, 0, false);
+        declareFunction("current_pariter_index", "CURRENT-PARITER-INDEX", 0, 0, false);
+        declareFunction("current_pariter_width", "CURRENT-PARITER-WIDTH", 0, 0, false);
+        declareFunction("pariter_process_method", "PARITER-PROCESS-METHOD", 2, 0, false);
+        declareFunction("pariter_wait_to_begin", "PARITER-WAIT-TO-BEGIN", 1, 0, false);
+        declareFunction("pariter_doneP", "PARITER-DONE?", 1, 0, false);
+        declareFunction("pariter_obtain_batch_items", "PARITER-OBTAIN-BATCH-ITEMS", 1, 0, false);
+        declareFunction("pariter_process_batch_items", "PARITER-PROCESS-BATCH-ITEMS", 2, 0, false);
+        declareFunction("pariter_reduce_final_result", "PARITER-REDUCE-FINAL-RESULT", 2, 0, false);
+        declareFunction("pariter_signal_finish", "PARITER-SIGNAL-FINISH", 2, 0, false);
+        declareFunction("pariter_initialize_batch_result", "PARITER-INITIALIZE-BATCH-RESULT", 1, 0, false);
+        declareFunction("pariter_process_apply", "PARITER-PROCESS-APPLY", 2, 1, false);
+        declareFunction("pariter_reduce_within_batch", "PARITER-REDUCE-WITHIN-BATCH", 3, 0, false);
+        declareFunction("pariter_increment_sofar", "PARITER-INCREMENT-SOFAR", 2, 0, false);
+        declareFunction("pariter_progress_method", "PARITER-PROGRESS-METHOD", 2, 0, false);
+        declareFunction("parallel_map_assertions", "PARALLEL-MAP-ASSERTIONS", 1, 1, false);
+        declareFunction("parallel_map_deductions", "PARALLEL-MAP-DEDUCTIONS", 1, 1, false);
+        declareFunction("parallel_mapc", "PARALLEL-MAPC", 2, 1, false);
+        declareFunction("parallel_count_if", "PARALLEL-COUNT-IF", 2, 1, false);
+        declareFunction("parallel_filter_match_count", "PARALLEL-FILTER-MATCH-COUNT", 1, 0, false);
+        declareFunction("parallel_filter_matchP", "PARALLEL-FILTER-MATCH?", 1, 0, false);
+        declareFunction("test_parallel_count_assertions", "TEST-PARALLEL-COUNT-ASSERTIONS", 0, 2, false);
         return NIL;
     }
 
@@ -1360,7 +1343,7 @@ public final class parallelism_utilities extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $parallel_iterator_native() {
+        private $parallel_iterator_native() {
             this.$source_iterator = Lisp.NIL;
             this.$function = Lisp.NIL;
             this.$shared_args = Lisp.NIL;
@@ -1556,7 +1539,7 @@ public final class parallelism_utilities extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(parallelism_utilities.$parallel_iterator_native.class, PARALLEL_ITERATOR, PARALLEL_ITERATOR_P, $list2, $list3, new String[]{ "$source_iterator", "$function", "$shared_args", "$svs", "$width", "$batch", "$total", "$sofar", "$message", "$initializer", "$reducer", "$final_result", "$lock", "$begin_semaphore", "$finish_semaphore", "$process_pool", "$progress_indicator" }, $list4, $list5, DEFAULT_STRUCT_PRINT_FUNCTION);
+            structDecl = makeStructDeclNative($parallel_iterator_native.class, PARALLEL_ITERATOR, PARALLEL_ITERATOR_P, $list2, $list3, new String[]{ "$source_iterator", "$function", "$shared_args", "$svs", "$width", "$batch", "$total", "$sofar", "$message", "$initializer", "$reducer", "$final_result", "$lock", "$begin_semaphore", "$finish_semaphore", "$process_pool", "$progress_indicator" }, $list4, $list5, DEFAULT_STRUCT_PRINT_FUNCTION);
         }
     }
 

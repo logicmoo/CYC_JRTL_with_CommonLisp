@@ -1,22 +1,24 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.at_admitted;
-import com.cyc.cycjava.cycl.at_defns;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.genls;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.harness.inference_modules;
 import com.cyc.cycjava.cycl.inference.modules.preference_modules;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_accessors;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
@@ -26,78 +28,65 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class removal_modules_admitted_formula extends SubLTranslatedFile {
+public final class removal_modules_admitted_formula extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new removal_modules_admitted_formula();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula";
 
-    public static final String myFingerPrint = "6d343951bb19ad9dd8668f78dcdd51fa16961dfb548ad2d336a19e8907af439a";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_removal_admitted_formula_cost$ = makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $default_removal_admitted_argument_check_cost$ = makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*");
 
-    private static final SubLObject $$admittedSentence = reader_make_constant_shell(makeString("admittedSentence"));
+
 
     private static final SubLSymbol $REMOVAL_NON_WFF_CHECK_NEG = makeKeyword("REMOVAL-NON-WFF-CHECK-NEG");
 
-
-
-
-
     private static final SubLSymbol $REMOVAL_ADMITTED_SENTENCE_POS = makeKeyword("REMOVAL-ADMITTED-SENTENCE-POS");
 
-    private static final SubLList $list5 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("admittedSentence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("admittedSentence")), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-SENTENCE-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$admittedSentence <fully-bound>)\nby checking that the formula is syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$admittedSentence (#$bordersOn #$Canada #$France))") });
+    private static final SubLList $list5 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedSentence"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedSentence"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-SENTENCE-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$admittedSentence <fully-bound>)\nby checking that the formula is syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$admittedSentence (#$bordersOn #$Canada #$France))") });
 
 
-
-    private static final SubLObject $$True = reader_make_constant_shell(makeString("True"));
 
     private static final SubLSymbol $REMOVAL_ADMITTED_SENTENCE_NEG = makeKeyword("REMOVAL-ADMITTED-SENTENCE-NEG");
 
-    private static final SubLList $list9 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("admittedSentence")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("admittedSentence")), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$admittedSentence <fully-bound>))\nby checking that the formula is not both syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$not (#$admittedSentence (#$genls #$Canada #$Country)))") });
+    private static final SubLList $list9 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedSentence"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedSentence"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$admittedSentence <fully-bound>))\nby checking that the formula is not both syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$not (#$admittedSentence (#$genls #$Canada #$Country)))") });
 
-    private static final SubLObject $$admittedArgument = reader_make_constant_shell(makeString("admittedArgument"));
+
 
     private static final SubLSymbol $REMOVAL_ADMITTED_ARGUMENT_CHECK_POS = makeKeyword("REMOVAL-ADMITTED-ARGUMENT-CHECK-POS");
 
-    private static final SubLList $list12 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("admittedArgument")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("admittedArgument")), makeKeyword("FULLY-BOUND"), makeKeyword("INTEGER"), makeKeyword("FORT")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$admittedArgument <fully-bound> <integer> <fort>)\nby checking that the argument is syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$admittedArgument #$Canada 1 #$bordersOn)\n (#$admittedArgument #$Dog 1 #$JuvenileFn)") });
+    private static final SubLList $list12 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedArgument"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedArgument"), makeKeyword("FULLY-BOUND"), makeKeyword("INTEGER"), $FORT), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$admittedArgument <fully-bound> <integer> <fort>)\nby checking that the argument is syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$admittedArgument #$Canada 1 #$bordersOn)\n (#$admittedArgument #$Dog 1 #$JuvenileFn)") });
 
     private static final SubLFloat $float$0_9 = makeDouble(0.9);
 
 
 
-
-
-    private static final SubLObject $$Thing = reader_make_constant_shell(makeString("Thing"));
-
     private static final SubLSymbol $REMOVAL_ADMITTED_ARGUMENT_CHECK_NEG = makeKeyword("REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG");
 
-    private static final SubLList $list18 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell(makeString("admittedArgument")), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell(makeString("admittedArgument")), makeKeyword("FULLY-BOUND"), makeKeyword("INTEGER"), makeKeyword("FORT")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$admittedArgument <fully-bound> <integer> <fort>))\nby checking that the argument is not both syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$not (#$admittedArgument #$Canada 1 #$genls))\n (#$not (#$admittedArgument #$Dog 1 #$LeftFn))") });
+    private static final SubLList $list18 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedArgument"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedArgument"), makeKeyword("FULLY-BOUND"), makeKeyword("INTEGER"), $FORT), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$admittedArgument <fully-bound> <integer> <fort>))\nby checking that the argument is not both syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$not (#$admittedArgument #$Canada 1 #$genls))\n (#$not (#$admittedArgument #$Dog 1 #$LeftFn))") });
 
+    // Definitions
+    public static final SubLObject removal_admitted_sentence_pos_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            SubLObject formula = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject admitted = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.inference_admitted_sentence(formula, UNPROVIDED);
+            if (NIL != admitted) {
+                backward.removal_add_node(arguments.make_hl_support($ADMIT, asent, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
+    // Definitions
     public static SubLObject removal_admitted_sentence_pos_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -108,6 +97,31 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
             backward.removal_add_node(arguments.make_hl_support($ADMIT, asent, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject inference_admitted_formula_alt(SubLObject formula, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (NIL != el_formula_p(formula)) {
+            if (NIL == contains_subformula_p(formula)) {
+                {
+                    SubLObject relation = cycl_utilities.formula_operator(formula);
+                    SubLObject argnum = ZERO_INTEGER;
+                    SubLObject args = cycl_utilities.formula_args(formula, $IGNORE);
+                    SubLObject cdolist_list_var = args;
+                    SubLObject arg = NIL;
+                    for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                        argnum = add(argnum, ONE_INTEGER);
+                        if (NIL == com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.inference_admitted_argument(arg, argnum, relation, mt)) {
+                            return NIL;
+                        }
+                    }
+                }
+            }
+            return at_admitted.admitted_formulaP(formula, mt);
+        }
+        return eq($$True, formula);
     }
 
     public static SubLObject inference_admitted_formula(final SubLObject formula, SubLObject mt) {
@@ -136,6 +150,32 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
         return eql($$True, formula);
     }
 
+    public static final SubLObject inference_admitted_sentence_alt(SubLObject sentence, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (NIL != el_formula_p(sentence)) {
+            if (NIL == contains_subformula_p(sentence)) {
+                {
+                    SubLObject relation = cycl_utilities.formula_operator(sentence);
+                    SubLObject argnum = ZERO_INTEGER;
+                    SubLObject args = cycl_utilities.formula_args(sentence, $IGNORE);
+                    SubLObject cdolist_list_var = args;
+                    SubLObject arg = NIL;
+                    for (arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg = cdolist_list_var.first()) {
+                        argnum = add(argnum, ONE_INTEGER);
+                        if (NIL == com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.inference_admitted_argument(arg, argnum, relation, mt)) {
+                            return NIL;
+                        }
+                    }
+                }
+            }
+            return at_admitted.admitted_sentenceP(sentence, mt);
+        } else {
+            return eq($$True, sentence);
+        }
+    }
+
     public static SubLObject inference_admitted_sentence(final SubLObject sentence, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -162,6 +202,20 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
         return eql($$True, sentence);
     }
 
+    public static final SubLObject removal_admitted_sentence_neg_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            SubLObject formula = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject admitted = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.inference_admitted_sentence(formula, UNPROVIDED);
+            if (NIL == admitted) {
+                backward.removal_add_node(arguments.make_hl_support($ADMIT, cycl_utilities.negate(asent), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject removal_admitted_sentence_neg_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -170,6 +224,22 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
         final SubLObject admitted = inference_admitted_sentence(formula, UNPROVIDED);
         if (NIL == admitted) {
             backward.removal_add_node(arguments.make_hl_support($ADMIT, cycl_utilities.negate(asent), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+        }
+        return NIL;
+    }
+
+    public static final SubLObject removal_admitted_argument_check_pos_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            SubLObject v_term = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject relation = cycl_utilities.atomic_sentence_arg3(asent, UNPROVIDED);
+            SubLObject admitted = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.inference_admitted_argument(v_term, arg, relation, UNPROVIDED);
+            if (NIL != admitted) {
+                backward.removal_add_node(arguments.make_hl_support($ADMIT, asent, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            }
         }
         return NIL;
     }
@@ -186,6 +256,177 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
             backward.removal_add_node(arguments.make_hl_support($ADMIT, asent, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject inference_admitted_argument_alt(SubLObject v_term, SubLObject argnum, SubLObject relation, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == el_formula_p(v_term)) {
+                {
+                    SubLObject rejected = NIL;
+                    {
+                        SubLObject arg_isa_pred = kb_accessors.arg_isa_pred(argnum, relation, mt);
+                        SubLObject mt_var = mt;
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                {
+                                    SubLObject arg_isa = NIL;
+                                    SubLObject pred_var = arg_isa_pred;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(relation, ONE_INTEGER, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(relation, ONE_INTEGER, pred_var);
+                                            SubLObject done_var = rejected;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_1 = rejected;
+                                                                    SubLObject token_var_2 = NIL;
+                                                                    while (NIL == done_var_1) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_2);
+                                                                            SubLObject valid_3 = makeBoolean(token_var_2 != assertion);
+                                                                            if (NIL != valid_3) {
+                                                                                arg_isa = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                                if (NIL != forts.fort_p(arg_isa)) {
+                                                                                    if (!((arg_isa.eql($$Thing) || (NIL != isa.isaP(v_term, arg_isa, mt, UNPROVIDED))) || (NIL != at_defns.defns_admitP(arg_isa, v_term, mt)))) {
+                                                                                        rejected = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_1 = makeBoolean((NIL == valid_3) || (NIL != rejected));
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_4 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_4, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean((NIL == valid) || (NIL != rejected));
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                    if (NIL != rejected) {
+                        return NIL;
+                    }
+                    {
+                        SubLObject arg_genl_pred = kb_accessors.arg_genl_pred(argnum, UNPROVIDED, UNPROVIDED);
+                        SubLObject mt_var = mt;
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                {
+                                    SubLObject arg_genl = NIL;
+                                    SubLObject pred_var = arg_genl_pred;
+                                    if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(relation, ONE_INTEGER, pred_var)) {
+                                        {
+                                            SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(relation, ONE_INTEGER, pred_var);
+                                            SubLObject done_var = rejected;
+                                            SubLObject token_var = NIL;
+                                            while (NIL == done_var) {
+                                                {
+                                                    SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                                    SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                                    if (NIL != valid) {
+                                                        {
+                                                            SubLObject final_index_iterator = NIL;
+                                                            try {
+                                                                final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                                                {
+                                                                    SubLObject done_var_5 = rejected;
+                                                                    SubLObject token_var_6 = NIL;
+                                                                    while (NIL == done_var_5) {
+                                                                        {
+                                                                            SubLObject assertion = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_6);
+                                                                            SubLObject valid_7 = makeBoolean(token_var_6 != assertion);
+                                                                            if (NIL != valid_7) {
+                                                                                arg_genl = assertions_high.gaf_arg(assertion, TWO_INTEGER);
+                                                                                if (NIL != forts.fort_p(arg_genl)) {
+                                                                                    if (!(arg_genl.eql($$Thing) || (NIL != genls.genlsP(v_term, arg_genl, mt, UNPROVIDED)))) {
+                                                                                        rejected = T;
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                            done_var_5 = makeBoolean((NIL == valid_7) || (NIL != rejected));
+                                                                        }
+                                                                    } 
+                                                                }
+                                                            } finally {
+                                                                {
+                                                                    SubLObject _prev_bind_0_8 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                    try {
+                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                        if (NIL != final_index_iterator) {
+                                                                            kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                        }
+                                                                    } finally {
+                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_8, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                    done_var = makeBoolean((NIL == valid) || (NIL != rejected));
+                                                }
+                                            } 
+                                        }
+                                    }
+                                }
+                            } finally {
+                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                    if (NIL != rejected) {
+                        return NIL;
+                    }
+                }
+            }
+            return at_admitted.admitted_argumentP(v_term, argnum, relation, mt);
+        }
     }
 
     public static SubLObject inference_admitted_argument(final SubLObject v_term, final SubLObject argnum, final SubLObject relation, SubLObject mt) {
@@ -319,6 +560,22 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
         return at_admitted.admitted_argumentP(v_term, argnum, relation, mt);
     }
 
+    public static final SubLObject removal_admitted_argument_check_neg_expand_alt(SubLObject asent, SubLObject sense) {
+        if (sense == UNPROVIDED) {
+            sense = NIL;
+        }
+        {
+            SubLObject v_term = cycl_utilities.atomic_sentence_arg1(asent, UNPROVIDED);
+            SubLObject arg = cycl_utilities.atomic_sentence_arg2(asent, UNPROVIDED);
+            SubLObject relation = cycl_utilities.atomic_sentence_arg3(asent, UNPROVIDED);
+            SubLObject admitted = com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_admitted_formula.inference_admitted_argument(v_term, arg, relation, UNPROVIDED);
+            if (NIL == admitted) {
+                backward.removal_add_node(arguments.make_hl_support($ADMIT, cycl_utilities.negate(asent), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject removal_admitted_argument_check_neg_expand(final SubLObject asent, SubLObject sense) {
         if (sense == UNPROVIDED) {
             sense = NIL;
@@ -334,13 +591,13 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_admitted_formula_file() {
-        declareFunction(me, "removal_admitted_sentence_pos_expand", "REMOVAL-ADMITTED-SENTENCE-POS-EXPAND", 1, 1, false);
-        declareFunction(me, "inference_admitted_formula", "INFERENCE-ADMITTED-FORMULA", 1, 1, false);
-        declareFunction(me, "inference_admitted_sentence", "INFERENCE-ADMITTED-SENTENCE", 1, 1, false);
-        declareFunction(me, "removal_admitted_sentence_neg_expand", "REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND", 1, 1, false);
-        declareFunction(me, "removal_admitted_argument_check_pos_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND", 1, 1, false);
-        declareFunction(me, "inference_admitted_argument", "INFERENCE-ADMITTED-ARGUMENT", 3, 1, false);
-        declareFunction(me, "removal_admitted_argument_check_neg_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_admitted_sentence_pos_expand", "REMOVAL-ADMITTED-SENTENCE-POS-EXPAND", 1, 1, false);
+        declareFunction("inference_admitted_formula", "INFERENCE-ADMITTED-FORMULA", 1, 1, false);
+        declareFunction("inference_admitted_sentence", "INFERENCE-ADMITTED-SENTENCE", 1, 1, false);
+        declareFunction("removal_admitted_sentence_neg_expand", "REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND", 1, 1, false);
+        declareFunction("removal_admitted_argument_check_pos_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND", 1, 1, false);
+        declareFunction("inference_admitted_argument", "INFERENCE-ADMITTED-ARGUMENT", 3, 1, false);
+        declareFunction("removal_admitted_argument_check_neg_expand", "REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND", 1, 1, false);
         return NIL;
     }
 
@@ -350,7 +607,41 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_removal_modules_admitted_formula_file_alt() {
+        inference_modules.register_solely_specific_removal_module_predicate($$admittedSentence);
+        inference_modules.inference_removal_module_dont_use_universal($$admittedSentence, $REMOVAL_NON_WFF_CHECK_NEG);
+        inference_modules.inference_removal_module($REMOVAL_ADMITTED_SENTENCE_POS, $list_alt4);
+        inference_modules.inference_removal_module($REMOVAL_ADMITTED_SENTENCE_NEG, $list_alt8);
+        inference_modules.register_solely_specific_removal_module_predicate($$admittedArgument);
+        inference_modules.inference_removal_module_dont_use_universal($$admittedArgument, $REMOVAL_NON_WFF_CHECK_NEG);
+        inference_modules.inference_removal_module($REMOVAL_ADMITTED_ARGUMENT_CHECK_POS, $list_alt11);
+        inference_modules.inference_removal_module($REMOVAL_ADMITTED_ARGUMENT_CHECK_NEG, $list_alt17);
+        return NIL;
+    }
+
     public static SubLObject setup_removal_modules_admitted_formula_file() {
+        if (SubLFiles.USE_V1) {
+            inference_modules.register_solely_specific_removal_module_predicate($$admittedSentence);
+            inference_modules.inference_removal_module_dont_use_universal($$admittedSentence, $REMOVAL_NON_WFF_CHECK_NEG);
+            preference_modules.doomed_unless_all_args_bindable($BOTH, $$admittedSentence);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_SENTENCE_POS, $list5);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_SENTENCE_NEG, $list9);
+            inference_modules.register_solely_specific_removal_module_predicate($$admittedArgument);
+            inference_modules.inference_removal_module_dont_use_universal($$admittedArgument, $REMOVAL_NON_WFF_CHECK_NEG);
+            preference_modules.doomed_unless_all_args_bindable($BOTH, $$admittedArgument);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_ARGUMENT_CHECK_POS, $list12);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_ARGUMENT_CHECK_NEG, $list18);
+        }
+        if (SubLFiles.USE_V2) {
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_SENTENCE_POS, $list_alt4);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_SENTENCE_NEG, $list_alt8);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_ARGUMENT_CHECK_POS, $list_alt11);
+            inference_modules.inference_removal_module($REMOVAL_ADMITTED_ARGUMENT_CHECK_NEG, $list_alt17);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_removal_modules_admitted_formula_file_Previous() {
         inference_modules.register_solely_specific_removal_module_predicate($$admittedSentence);
         inference_modules.inference_removal_module_dont_use_universal($$admittedSentence, $REMOVAL_NON_WFF_CHECK_NEG);
         preference_modules.doomed_unless_all_args_bindable($BOTH, $$admittedSentence);
@@ -380,29 +671,15 @@ public final class removal_modules_admitted_formula extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt4 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedSentence"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedSentence"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-SENTENCE-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$admittedSentence <fully-bound>)\nby checking that the formula is syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$admittedSentence (#$bordersOn #$Canada #$France))") });
+
+    static private final SubLList $list_alt8 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedSentence"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedSentence"), makeKeyword("FULLY-BOUND")), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-FORMULA-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-SENTENCE-NEG-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$admittedSentence <fully-bound>))\nby checking that the formula is not both syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$not (#$admittedSentence (#$genls #$Canada #$Country)))") });
+
+    static private final SubLList $list_alt11 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("POS"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedArgument"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedArgument"), makeKeyword("FULLY-BOUND"), makeKeyword("INTEGER"), $FORT), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-ARGUMENT-CHECK-POS-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$admittedArgument <fully-bound> <integer> <fort>)\nby checking that the argument is syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$admittedArgument #$Canada 1 #$bordersOn)\n (#$admittedArgument #$Dog 1 #$JuvenileFn)") });
+
+    static private final SubLList $list_alt17 = list(new SubLObject[]{ makeKeyword("SENSE"), makeKeyword("NEG"), makeKeyword("PREDICATE"), reader_make_constant_shell("admittedArgument"), makeKeyword("REQUIRED-PATTERN"), list(reader_make_constant_shell("admittedArgument"), makeKeyword("FULLY-BOUND"), makeKeyword("INTEGER"), $FORT), makeKeyword("COST-EXPRESSION"), makeSymbol("*DEFAULT-REMOVAL-ADMITTED-ARGUMENT-CHECK-COST*"), makeKeyword("COMPLETENESS"), makeKeyword("COMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-ADMITTED-ARGUMENT-CHECK-NEG-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$not (#$admittedArgument <fully-bound> <integer> <fort>))\nby checking that the argument is not both syntactically and semantically well-formed"), makeKeyword("EXAMPLE"), makeString("(#$not (#$admittedArgument #$Canada 1 #$genls))\n (#$not (#$admittedArgument #$Dog 1 #$LeftFn))") });
 }
 
 /**

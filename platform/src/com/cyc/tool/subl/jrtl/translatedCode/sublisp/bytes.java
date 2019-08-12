@@ -29,9 +29,9 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class bytes extends SubLTranslatedFile {
     public static SubLObject declare_bytes_file() {
-        declareFunction(myName, "sublisp_byte", "BYTE", 2, 0, false);
-        declareFunction(myName, "ldb", "LDB", 2, 0, false);
-        declareFunction(myName, "dpb", "DPB", 3, 0, false);
+        declareFunction("sublisp_byte", "BYTE", 2, 0, false);
+        declareFunction("ldb", "LDB", 2, 0, false);
+        declareFunction("dpb", "DPB", 3, 0, false);
         return NIL;
     }
 

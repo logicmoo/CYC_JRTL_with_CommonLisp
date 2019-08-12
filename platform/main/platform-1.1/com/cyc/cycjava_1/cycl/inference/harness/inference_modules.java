@@ -1830,8 +1830,7 @@ but their execution is handled specially by the harness. */
   }
 
   public static final SubLObject setup_inference_modules_file() {
-    // CVS_ID("Id: inference-modules.lisp 127150 2009-02-18 03:19:24Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_META_REMOVAL_MODULES_);
+        subl_macro_promotions.declare_defglobal($sym0$_META_REMOVAL_MODULES_);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_hl_module$.getGlobalValue(), Symbols.symbol_function($sym28$HL_MODULE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym29$HL_MOD_NAME, $sym30$_CSETF_HL_MOD_NAME);
     Structures.def_csetf($sym31$HL_MOD_PLIST, $sym32$_CSETF_HL_MOD_PLIST);

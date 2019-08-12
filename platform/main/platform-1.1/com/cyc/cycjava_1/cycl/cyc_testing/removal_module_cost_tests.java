@@ -177,8 +177,7 @@ public  final class removal_module_cost_tests extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_module_cost_tests_file() {
-    // CVS_ID("Id: removal-module-cost-tests.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_module_cost_test$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_MODULE_COST_TEST_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_removal_module_cost_test$.getGlobalValue(), Symbols.symbol_function($sym7$REMOVAL_MODULE_COST_TEST_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$RMCT_HL_MODULE, $sym9$_CSETF_RMCT_HL_MODULE);
     Structures.def_csetf($sym10$RMCT_ID, $sym11$_CSETF_RMCT_ID);
     Structures.def_csetf($sym12$RMCT_SENTENCE, $sym13$_CSETF_RMCT_SENTENCE);

@@ -1,7 +1,43 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.blue_grapher_utilities;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.genl_predicates.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.id_index.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.inference.browser.cb_query_browser;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_inference;
 import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_problem_query;
@@ -24,86 +60,44 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.function.Supplier;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.blue_grapher_utilities.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.id_index.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class blue_grapher_utilities extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      BLUE-GRAPHER-UTILITIES
+ * source file: /cyc/top/cycl/blue-grapher-utilities.lisp
+ * created:     2019/07/03 17:38:09
+ */
+public final class blue_grapher_utilities extends SubLTranslatedFile implements V12 {
+    public static final SubLObject bff_rtv_irrelevant_terms(SubLObject terms, SubLObject mt) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = terms;
+            SubLObject v_term = NIL;
+            for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                if (NIL != isa.quoted_isa_in_any_mtP(v_term, $$LDSCSharedOntologyConstant)) {
+                    result = cons(v_term, result);
+                }
+            }
+            return result;
+        }
+    }
+
+    public static final SubLObject bff_rkf_irrelevant_terms(SubLObject terms, SubLObject mt) {
+        return rkf_relevance_utilities.rkf_filter_irrelevant_terms(terms, mt);
+    }
+
+    static private final SubLString $str_alt159$ = makeString("");
+
     public static final SubLFile me = new blue_grapher_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.blue_grapher_utilities";
-
-    public static final String myFingerPrint = "f902a76ede6edeee341747b76d704ec76e3246f94b92d01750a21120e7dbd76c";
-
-
-
-
-
-
-
-
-
-
-
+ public static final String myName = "com.cyc.cycjava.cycl.blue_grapher_utilities";
 
 
     // deflexical
@@ -111,108 +105,84 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
      * The default relation to show as an edge label when a more specific relation
      * can't be found.
      */
+    @LispMethod(comment = "The default relation to show as an edge label when a more specific relation\r\ncan\'t be found.\ndeflexical\nThe default relation to show as an edge label when a more specific relation\ncan\'t be found.")
     private static final SubLSymbol $inference_answers_default_undetermined_relation$ = makeSymbol("*INFERENCE-ANSWERS-DEFAULT-UNDETERMINED-RELATION*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $blue_event_dispatcher_lock$ = makeSymbol("*BLUE-EVENT-DISPATCHER-LOCK*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $blue_message_mailbox_suite$ = makeSymbol("*BLUE-MESSAGE-MAILBOX-SUITE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $blue_event_to_blue_event_listener$ = makeSymbol("*BLUE-EVENT-TO-BLUE-EVENT-LISTENER*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_blue_graph$ = makeSymbol("*DTP-BLUE-GRAPH*");
 
     // Internal Constants
+    @LispMethod(comment = "Internal Constants")
     public static final SubLSymbol $blue_filter_fns$ = makeSymbol("*BLUE-FILTER-FNS*");
 
-    public static final SubLList $list1 = list(makeSymbol("NAME"), makeSymbol("ARGLIST"), makeSymbol("DEFLIST"), makeSymbol("&BODY"), makeSymbol("BODY"));
+    static private final SubLList $list1 = list(makeSymbol("NAME"), makeSymbol("ARGLIST"), makeSymbol("DEFLIST"), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-
-
-
-
-
-
-
-
-    public static final SubLSymbol REGISTER_API_PREDEFINED_FUNCTION = makeSymbol("REGISTER-API-PREDEFINED-FUNCTION");
+    private static final SubLSymbol REGISTER_API_PREDEFINED_FUNCTION = makeSymbol("REGISTER-API-PREDEFINED-FUNCTION");
 
     public static final SubLSymbol $default_blue_filter_fn_cost$ = makeSymbol("*DEFAULT-BLUE-FILTER-FN-COST*");
 
-
-
     public static final SubLSymbol $default_blue_filter_fn_strength$ = makeSymbol("*DEFAULT-BLUE-FILTER-FN-STRENGTH*");
-
-
 
     public static final SubLSymbol $default_blue_filter_fn_type$ = makeSymbol("*DEFAULT-BLUE-FILTER-FN-TYPE*");
 
+    static private final SubLString $str13$APPLY_BLUE_FILTER_FN___A_is_not_a = makeString("APPLY-BLUE-FILTER-FN: ~A is not a blue-filter-fn-p");
+
+    static private final SubLSymbol $sym14$_ = makeSymbol("<");
+
+    private static final SubLSymbol GET_BLUE_FILTER_FN_STRENGTH = makeSymbol("GET-BLUE-FILTER-FN-STRENGTH");
+
+    private static final SubLSymbol MAKE_KEYWORD = makeSymbol("MAKE-KEYWORD");
+
+    private static final SubLSymbol BFF_ARBITRARY_UNIONS = makeSymbol("BFF-ARBITRARY-UNIONS");
+
+    static private final SubLList $list18 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), TEN_INTEGER);
 
 
-    public static final SubLString $str13$APPLY_BLUE_FILTER_FN___A_is_not_a = makeString("APPLY-BLUE-FILTER-FN: ~A is not a blue-filter-fn-p");
-
-    public static final SubLSymbol $sym14$_ = makeSymbol("<");
-
-    public static final SubLSymbol GET_BLUE_FILTER_FN_STRENGTH = makeSymbol("GET-BLUE-FILTER-FN-STRENGTH");
-
-    public static final SubLSymbol MAKE_KEYWORD = makeSymbol("MAKE-KEYWORD");
-
-    public static final SubLSymbol BFF_ARBITRARY_UNIONS = makeSymbol("BFF-ARBITRARY-UNIONS");
-
-    public static final SubLList $list18 = list(makeKeyword("COST"), ONE_INTEGER, makeKeyword("STRENGTH"), TEN_INTEGER);
-
-    private static final SubLObject $$ArbitraryUnion = reader_make_constant_shell(makeString("ArbitraryUnion"));
 
     private static final SubLSymbol BFF_CYC_KB_SUBSET_COLLECTIONS = makeSymbol("BFF-CYC-KB-SUBSET-COLLECTIONS");
 
-    private static final SubLObject $$CycKBSubsetCollection = reader_make_constant_shell(makeString("CycKBSubsetCollection"));
+
 
     private static final SubLSymbol BFF_MOST_GENERAL_5 = makeSymbol("BFF-MOST-GENERAL-5");
 
-    private static final SubLList $list23 = list(makeKeyword("COST"), ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(500), makeKeyword("TYPE"), makeKeyword("POST-MINIMIZATION"));
+    private static final SubLList $list23 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(500), $TYPE, makeKeyword("POST-MINIMIZATION"));
 
     private static final SubLSymbol $sym24$GENERALITY_ESTIMATE_ = makeSymbol("GENERALITY-ESTIMATE>");
 
     private static final SubLSymbol BFF_MOST_GENERAL_10 = makeSymbol("BFF-MOST-GENERAL-10");
 
-    public static final SubLList $list26 = list(makeKeyword("COST"), ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(1000), makeKeyword("TYPE"), makeKeyword("POST-MINIMIZATION"));
+    static private final SubLList $list26 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(1000), $TYPE, makeKeyword("POST-MINIMIZATION"));
 
     private static final SubLSymbol BFF_MOST_GENERAL_20 = makeSymbol("BFF-MOST-GENERAL-20");
 
-    private static final SubLList $list28 = list(makeKeyword("COST"), ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(2000), makeKeyword("TYPE"), makeKeyword("POST-MINIMIZATION"));
+    private static final SubLList $list28 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(2000), $TYPE, makeKeyword("POST-MINIMIZATION"));
 
     public static final SubLSymbol $blue_builder_fns$ = makeSymbol("*BLUE-BUILDER-FNS*");
 
     public static final SubLSymbol $blue_builder_fn_to_deflist_hash$ = makeSymbol("*BLUE-BUILDER-FN-TO-DEFLIST-HASH*");
 
-    public static final SubLList $list31 = list(makeSymbol("*BLUE-BUILDER-FNS*"), T);
+    static private final SubLList $list31 = list(makeSymbol("*BLUE-BUILDER-FNS*"), T);
 
     private static final SubLString $str32$BLUE_BUILDER___A_is_not_a_blue_bu = makeString("BLUE-BUILDER: ~A is not a blue-builder-fn-p");
 
     private static final SubLSymbol $sym33$STRING_ = makeSymbol("STRING<");
 
-
-
     private static final SubLSymbol BBF_FORWARD_TRUE = makeSymbol("BBF-FORWARD-TRUE");
 
     private static final SubLList $list36 = list(makeKeyword("HELP-STRING"), makeString("Show forward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)"));
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol BBF_BACKWARD_TRUE = makeSymbol("BBF-BACKWARD-TRUE");
 
@@ -230,67 +200,47 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
 
     private static final SubLList $list50 = list(makeKeyword("HELP-STRING"), makeString("Show the minimal ceilings of all forward edges from FORTS (nodes) through PREDS (edges) in MT and iterate DEPTH times.  (Forts failing FILTER-FNS are not shown.) (EXPERIMENTAL)"));
 
-    private static final SubLObject $$True_JustificationTruth = reader_make_constant_shell(makeString("True-JustificationTruth"));
+    private static final SubLObject $$True_JustificationTruth = reader_make_constant_shell("True-JustificationTruth");
 
     private static final SubLSymbol BBF_MIN_FORWARD_AND_BACKWARD_TRUE = makeSymbol("BBF-MIN-FORWARD-AND-BACKWARD-TRUE");
 
-    public static final SubLList $list53 = list(makeKeyword("HELP-STRING"), makeString("Show minimum forward and backward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)  (Note that this is *expensive* for higher depths) (EXPERIMENTAL)"));
-
-
-
-
+    static private final SubLList $list53 = list(makeKeyword("HELP-STRING"), makeString("Show minimum forward and backward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)  (Note that this is *expensive* for higher depths) (EXPERIMENTAL)"));
 
     private static final SubLSymbol BBF_SCRIPT = makeSymbol("BBF-SCRIPT");
 
     private static final SubLList $list57 = list(makeKeyword("HELP-STRING"), makeString("Create a graph representation of a script (a spec of #$Situation) that shows the temporal ordering of scenes and the actors and roles involved in each scene.  FORTS must be a singleton containing the script term."));
 
-    private static final SubLObject $const58$CurrentWorldDataCollectorMt_NonHo = reader_make_constant_shell(makeString("CurrentWorldDataCollectorMt-NonHomocentric"));
+    private static final SubLObject $const58$CurrentWorldDataCollectorMt_NonHo = reader_make_constant_shell("CurrentWorldDataCollectorMt-NonHomocentric");
 
-    private static final SubLObject $$Situation = reader_make_constant_shell(makeString("Situation"));
 
-    public static final SubLList $list60 = list(TWO_INTEGER, THREE_INTEGER);
+
+    static private final SubLList $list60 = list(TWO_INTEGER, THREE_INTEGER);
 
     private static final SubLSymbol $sym61$TERNARY_PREDICATE_ = makeSymbol("TERNARY-PREDICATE?");
 
-    private static final SubLObject $const62$QuasiTemporalSubSituationTypesPre = reader_make_constant_shell(makeString("QuasiTemporalSubSituationTypesPredicate"));
-
-    private static final SubLObject $$SomethingExisting = reader_make_constant_shell(makeString("SomethingExisting"));
-
-
-
-
-
-
+    private static final SubLObject $const62$QuasiTemporalSubSituationTypesPre = reader_make_constant_shell("QuasiTemporalSubSituationTypesPredicate");
 
 
 
     private static final SubLList $list68 = list(TWO_INTEGER, THREE_INTEGER, FOUR_INTEGER);
 
-    private static final SubLObject $const69$SituationTypeRelation_BasicActorT = reader_make_constant_shell(makeString("SituationTypeRelation-BasicActorTypesAndRolesForSubSitTypes"));
+    private static final SubLObject $const69$SituationTypeRelation_BasicActorT = reader_make_constant_shell("SituationTypeRelation-BasicActorTypesAndRolesForSubSitTypes");
 
-    private static final SubLObject $const70$individualPlaysRoleInSubSituation = reader_make_constant_shell(makeString("individualPlaysRoleInSubSituationType"));
+    private static final SubLObject $const70$individualPlaysRoleInSubSituation = reader_make_constant_shell("individualPlaysRoleInSubSituationType");
 
-    private static final SubLObject $$Individual = reader_make_constant_shell(makeString("Individual"));
 
-    private static final SubLObject $const72$SituationTypeRelation_SitTypeToSu = reader_make_constant_shell(makeString("SituationTypeRelation-SitTypeToSubSitTypeBasic"));
+
+    private static final SubLObject $const72$SituationTypeRelation_SitTypeToSu = reader_make_constant_shell("SituationTypeRelation-SitTypeToSubSitTypeBasic");
 
     private static final SubLList $list73 = list(TWO_INTEGER, THREE_INTEGER, FOUR_INTEGER, FIVE_INTEGER, SIX_INTEGER);
 
-    private static final SubLObject $const74$GraphicallyEditableRoleMappingPre = reader_make_constant_shell(makeString("GraphicallyEditableRoleMappingPredicate"));
+    private static final SubLObject $const74$GraphicallyEditableRoleMappingPre = reader_make_constant_shell("GraphicallyEditableRoleMappingPredicate");
 
 
-
-
-
-
-
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
     private static final SubLSymbol BBF_INFERENCE_ANSWERS = makeSymbol("BBF-INFERENCE-ANSWERS");
 
     private static final SubLList $list80 = list(makeKeyword("HELP-STRING"), makeString("Graph the results of an inference by graphing the GAFs the result when filling in the bindings back into the query."));
-
-
 
     private static final SubLSymbol $INFERENCE_STORE_ID = makeKeyword("INFERENCE-STORE-ID");
 
@@ -298,25 +248,13 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
 
 
 
-
-
-    private static final SubLObject $$conceptuallyRelated = reader_make_constant_shell(makeString("conceptuallyRelated"));
-
-    private static final SubLObject $$arg1Isa = reader_make_constant_shell(makeString("arg1Isa"));
-
-    private static final SubLObject $$CycLSentence_Assertible = reader_make_constant_shell(makeString("CycLSentence-Assertible"));
-
-    private static final SubLObject $$different = reader_make_constant_shell(makeString("different"));
+    private static final SubLObject $$CycLSentence_Assertible = reader_make_constant_shell("CycLSentence-Assertible");
 
 
 
     private static final SubLString $$$Query = makeString("Query");
 
-
-
     private static final SubLString $$$Edge_Templates = makeString("Edge Templates");
-
-
 
     private static final SubLString $str95$_____ = makeString(" --- ");
 
@@ -326,49 +264,21 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
 
     private static final SubLList $list98 = list(makeKeyword("HELP-STRING"), makeString("Graph an inference query formula by taking the neg-lits and pos-lits, converting the HL vars to EL, then treating them as edges."));
 
-
-
-
-
     private static final SubLString $str101$Inference_not_found_ = makeString("Inference not found.");
-
-
 
     private static final SubLList $list103 = list(makeSymbol("MT"), makeSymbol("ASENT"));
 
-
-
     private static final SubLSymbol BBF_RULE = makeSymbol("BBF-RULE");
 
-    public static final SubLList $list106 = list(makeKeyword("HELP-STRING"), makeString("Graph a rule by taking the neg-lits and pos-lits, converting the HL vars to EL, then treating them as edges."));
-
-
+    static private final SubLList $list106 = list(makeKeyword("HELP-STRING"), makeString("Graph a rule by taking the neg-lits and pos-lits, converting the HL vars to EL, then treating them as edges."));
 
     private static final SubLList $list108 = cons(makeSymbol("EL-VAR"), makeSymbol("HL-VAR"));
 
     private static final SubLSymbol INTERN_EL_VAR = makeSymbol("INTERN-EL-VAR");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLSymbol $BLUE_GRAPHER_BASE_EVENT = makeKeyword("BLUE-GRAPHER-BASE-EVENT");
 
     private static final SubLSymbol $CYC_APPLICATION_EVENT = makeKeyword("CYC-APPLICATION-EVENT");
-
-
 
     private static final SubLString $str121$BLUE_EVENT_DISPATCHER_Lock = makeString("BLUE-EVENT-DISPATCHER Lock");
 
@@ -384,123 +294,94 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
 
     private static final SubLList $list127 = list(makeSymbol("ISG"), makeSymbol("NODE-LABEL-MAP"), makeSymbol("NODES"), makeSymbol("EDGE-LABEL-MAP"), makeSymbol("EDGES"), makeSymbol("NODE-DEFINITIONS"), makeSymbol("EDGE-DEFINITIONS"), makeSymbol("OPTIONS"));
 
-    public static final SubLList $list128 = list(makeKeyword("ISG"), makeKeyword("NODE-LABEL-MAP"), makeKeyword("NODES"), makeKeyword("EDGE-LABEL-MAP"), makeKeyword("EDGES"), makeKeyword("NODE-DEFINITIONS"), makeKeyword("EDGE-DEFINITIONS"), makeKeyword("OPTIONS"));
+    static private final SubLList $list128 = list(makeKeyword("ISG"), makeKeyword("NODE-LABEL-MAP"), makeKeyword("NODES"), makeKeyword("EDGE-LABEL-MAP"), makeKeyword("EDGES"), makeKeyword("NODE-DEFINITIONS"), makeKeyword("EDGE-DEFINITIONS"), makeKeyword("OPTIONS"));
 
-    public static final SubLList $list129 = list(makeSymbol("BLUE-GRAPH-ISG"), makeSymbol("BLUE-GRAPH-NODE-LABEL-MAP"), makeSymbol("BLUE-GRAPH-NODES"), makeSymbol("BLUE-GRAPH-EDGE-LABEL-MAP"), makeSymbol("BLUE-GRAPH-EDGES"), makeSymbol("BLUE-GRAPH-NODE-DEFINITIONS"), makeSymbol("BLUE-GRAPH-EDGE-DEFINITIONS"), makeSymbol("BLUE-GRAPH-OPTIONS"));
+    static private final SubLList $list129 = list(makeSymbol("BLUE-GRAPH-ISG"), makeSymbol("BLUE-GRAPH-NODE-LABEL-MAP"), makeSymbol("BLUE-GRAPH-NODES"), makeSymbol("BLUE-GRAPH-EDGE-LABEL-MAP"), makeSymbol("BLUE-GRAPH-EDGES"), makeSymbol("BLUE-GRAPH-NODE-DEFINITIONS"), makeSymbol("BLUE-GRAPH-EDGE-DEFINITIONS"), makeSymbol("BLUE-GRAPH-OPTIONS"));
 
-    public static final SubLList $list130 = list(makeSymbol("_CSETF-BLUE-GRAPH-ISG"), makeSymbol("_CSETF-BLUE-GRAPH-NODE-LABEL-MAP"), makeSymbol("_CSETF-BLUE-GRAPH-NODES"), makeSymbol("_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP"), makeSymbol("_CSETF-BLUE-GRAPH-EDGES"), makeSymbol("_CSETF-BLUE-GRAPH-NODE-DEFINITIONS"), makeSymbol("_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS"), makeSymbol("_CSETF-BLUE-GRAPH-OPTIONS"));
-
-
+    static private final SubLList $list130 = list(makeSymbol("_CSETF-BLUE-GRAPH-ISG"), makeSymbol("_CSETF-BLUE-GRAPH-NODE-LABEL-MAP"), makeSymbol("_CSETF-BLUE-GRAPH-NODES"), makeSymbol("_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP"), makeSymbol("_CSETF-BLUE-GRAPH-EDGES"), makeSymbol("_CSETF-BLUE-GRAPH-NODE-DEFINITIONS"), makeSymbol("_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS"), makeSymbol("_CSETF-BLUE-GRAPH-OPTIONS"));
 
     private static final SubLSymbol BLUE_GRAPH_PRINT_FUNCTION_TRAMPOLINE = makeSymbol("BLUE-GRAPH-PRINT-FUNCTION-TRAMPOLINE");
 
     private static final SubLList $list133 = list(makeSymbol("OPTIMIZE-FUNCALL"), makeSymbol("BLUE-GRAPH-P"));
 
-    public static final SubLSymbol BLUE_GRAPH_ISG = makeSymbol("BLUE-GRAPH-ISG");
+    private static final SubLSymbol BLUE_GRAPH_ISG = makeSymbol("BLUE-GRAPH-ISG");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_ISG = makeSymbol("_CSETF-BLUE-GRAPH-ISG");
 
-    public static final SubLSymbol BLUE_GRAPH_NODE_LABEL_MAP = makeSymbol("BLUE-GRAPH-NODE-LABEL-MAP");
+    private static final SubLSymbol BLUE_GRAPH_NODE_LABEL_MAP = makeSymbol("BLUE-GRAPH-NODE-LABEL-MAP");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_NODE_LABEL_MAP = makeSymbol("_CSETF-BLUE-GRAPH-NODE-LABEL-MAP");
 
-    public static final SubLSymbol BLUE_GRAPH_NODES = makeSymbol("BLUE-GRAPH-NODES");
+    private static final SubLSymbol BLUE_GRAPH_NODES = makeSymbol("BLUE-GRAPH-NODES");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_NODES = makeSymbol("_CSETF-BLUE-GRAPH-NODES");
 
-    public static final SubLSymbol BLUE_GRAPH_EDGE_LABEL_MAP = makeSymbol("BLUE-GRAPH-EDGE-LABEL-MAP");
+    private static final SubLSymbol BLUE_GRAPH_EDGE_LABEL_MAP = makeSymbol("BLUE-GRAPH-EDGE-LABEL-MAP");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_EDGE_LABEL_MAP = makeSymbol("_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP");
 
-    public static final SubLSymbol BLUE_GRAPH_EDGES = makeSymbol("BLUE-GRAPH-EDGES");
+    private static final SubLSymbol BLUE_GRAPH_EDGES = makeSymbol("BLUE-GRAPH-EDGES");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_EDGES = makeSymbol("_CSETF-BLUE-GRAPH-EDGES");
 
-    public static final SubLSymbol BLUE_GRAPH_NODE_DEFINITIONS = makeSymbol("BLUE-GRAPH-NODE-DEFINITIONS");
+    private static final SubLSymbol BLUE_GRAPH_NODE_DEFINITIONS = makeSymbol("BLUE-GRAPH-NODE-DEFINITIONS");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_NODE_DEFINITIONS = makeSymbol("_CSETF-BLUE-GRAPH-NODE-DEFINITIONS");
 
-    public static final SubLSymbol BLUE_GRAPH_EDGE_DEFINITIONS = makeSymbol("BLUE-GRAPH-EDGE-DEFINITIONS");
+    private static final SubLSymbol BLUE_GRAPH_EDGE_DEFINITIONS = makeSymbol("BLUE-GRAPH-EDGE-DEFINITIONS");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_EDGE_DEFINITIONS = makeSymbol("_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS");
 
-    public static final SubLSymbol BLUE_GRAPH_OPTIONS = makeSymbol("BLUE-GRAPH-OPTIONS");
+    private static final SubLSymbol BLUE_GRAPH_OPTIONS = makeSymbol("BLUE-GRAPH-OPTIONS");
 
     public static final SubLSymbol _CSETF_BLUE_GRAPH_OPTIONS = makeSymbol("_CSETF-BLUE-GRAPH-OPTIONS");
-
-
 
     private static final SubLSymbol $NODE_LABEL_MAP = makeKeyword("NODE-LABEL-MAP");
 
     private static final SubLSymbol $EDGE_LABEL_MAP = makeKeyword("EDGE-LABEL-MAP");
 
-
-
-
-
-
-
-    public static final SubLString $str156$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
-
-
+    static private final SubLString $str156$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
     private static final SubLSymbol MAKE_BLUE_GRAPH = makeSymbol("MAKE-BLUE-GRAPH");
 
-
-
-
-
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_BLUE_GRAPH_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-BLUE-GRAPH-METHOD");
 
-
-
-
-
     private static final SubLString $str164$ = makeString("");
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol BBF_RTV_FROM_INFERENCE = makeSymbol("BBF-RTV-FROM-INFERENCE");
 
     private static final SubLList $list175 = list(makeKeyword("HELP-STRING"), makeString(""));
 
-
-
     private static final SubLSymbol $PROBLEM_STORE_ID = makeKeyword("PROBLEM-STORE-ID");
 
     private static final SubLSymbol RTV_CLAUSE_P = makeSymbol("RTV-CLAUSE-P");
 
-
-
     private static final SubLSymbol BBF_RTV_UNBOUND = makeSymbol("BBF-RTV-UNBOUND");
-
-
-
-
-
-
 
     private static final SubLSymbol BBF_RTV_FROM_INFERENCE_NEW = makeSymbol("BBF-RTV-FROM-INFERENCE-NEW");
 
-
-
-
+    public static final SubLObject define_blue_filter_fn_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject name = NIL;
+            SubLObject arglist = NIL;
+            SubLObject deflist = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            name = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            arglist = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            deflist = current.first();
+            current = current.rest();
+            {
+                SubLObject body = current;
+                return list(PROGN, list(SETHASH, list(QUOTE, name), $blue_filter_fns$, list(QUOTE, deflist)), listS(DEFINE_PROTECTED, name, arglist, append(body, NIL)), list(REGISTER_API_PREDEFINED_FUNCTION, list(QUOTE, name)));
+            }
+        }
+    }
 
     public static SubLObject define_blue_filter_fn(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
@@ -521,10 +402,35 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return list(PROGN, list(SETHASH, list(QUOTE, name), $blue_filter_fns$, list(QUOTE, deflist)), listS(DEFINE_PROTECTED, name, arglist, append(body, NIL)), list(REGISTER_API_PREDEFINED_FUNCTION, list(QUOTE, name)));
     }
 
+    public static final SubLObject blue_filter_fns_alt() {
+        return hash_table_utilities.hash_table_keys($blue_filter_fns$.getGlobalValue());
+    }
+
     public static SubLObject blue_filter_fns() {
         return hash_table_utilities.hash_table_keys($blue_filter_fns$.getGlobalValue());
     }
 
+    /**
+     * wrapper around a gethash
+     */
+    @LispMethod(comment = "wrapper around a gethash")
+    public static final SubLObject get_blue_filter_fn_data_alt(SubLObject blue_filter_fn) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject blue_filter_fn_data = gethash(blue_filter_fn, $blue_filter_fns$.getGlobalValue(), UNPROVIDED);
+                SubLObject foundP = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                return values(blue_filter_fn_data, foundP);
+            }
+        }
+    }
+
+    /**
+     * wrapper around a gethash
+     */
+    @LispMethod(comment = "wrapper around a gethash")
     public static SubLObject get_blue_filter_fn_data(final SubLObject blue_filter_fn) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -532,6 +438,23 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         final SubLObject foundP = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return values(blue_filter_fn_data, foundP);
+    }
+
+    public static final SubLObject blue_filter_fn_p_alt(SubLObject blue_filter_fn) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject blue_filter_fn_data = get_blue_filter_fn_data(blue_filter_fn);
+                SubLObject foundP = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL != foundP) {
+                    return T;
+                } else {
+                    return NIL;
+                }
+            }
+        }
     }
 
     public static SubLObject blue_filter_fn_p(final SubLObject blue_filter_fn) {
@@ -546,10 +469,26 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject get_blue_filter_fn_cost_alt(SubLObject blue_filter_fn) {
+        {
+            SubLObject filter_fn_data = get_blue_filter_fn_data(blue_filter_fn);
+            SubLObject cost = getf(filter_fn_data, $COST, UNPROVIDED);
+            return cost.isInteger() ? ((SubLObject) (cost)) : $default_blue_filter_fn_cost$.getGlobalValue();
+        }
+    }
+
     public static SubLObject get_blue_filter_fn_cost(final SubLObject blue_filter_fn) {
         final SubLObject filter_fn_data = get_blue_filter_fn_data(blue_filter_fn);
         final SubLObject cost = getf(filter_fn_data, $COST, UNPROVIDED);
         return cost.isInteger() ? cost : $default_blue_filter_fn_cost$.getGlobalValue();
+    }
+
+    public static final SubLObject get_blue_filter_fn_strength_alt(SubLObject blue_filter_fn) {
+        {
+            SubLObject filter_fn_data = get_blue_filter_fn_data(blue_filter_fn);
+            SubLObject strength = getf(filter_fn_data, $STRENGTH, UNPROVIDED);
+            return strength.isInteger() ? ((SubLObject) (strength)) : $default_blue_filter_fn_strength$.getGlobalValue();
+        }
     }
 
     public static SubLObject get_blue_filter_fn_strength(final SubLObject blue_filter_fn) {
@@ -558,10 +497,34 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return strength.isInteger() ? strength : $default_blue_filter_fn_strength$.getGlobalValue();
     }
 
+    public static final SubLObject get_blue_filter_fn_type_alt(SubLObject blue_filter_fn) {
+        {
+            SubLObject filter_fn_data = get_blue_filter_fn_data(blue_filter_fn);
+            SubLObject type = getf(filter_fn_data, $TYPE, UNPROVIDED);
+            return type.isKeyword() ? ((SubLObject) (type)) : $default_blue_filter_fn_type$.getGlobalValue();
+        }
+    }
+
     public static SubLObject get_blue_filter_fn_type(final SubLObject blue_filter_fn) {
         final SubLObject filter_fn_data = get_blue_filter_fn_data(blue_filter_fn);
         final SubLObject type = getf(filter_fn_data, $TYPE, UNPROVIDED);
         return type.isKeyword() ? type : $default_blue_filter_fn_type$.getGlobalValue();
+    }
+
+    public static final SubLObject apply_blue_filter_fn_alt(SubLObject blue_filter_fn, SubLObject list, SubLObject mt, SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = NIL;
+        }
+        if (NIL == blue_filter_fn_p(blue_filter_fn)) {
+            Errors.warn($str_alt13$APPLY_BLUE_FILTER_FN___A_is_not_a, blue_filter_fn);
+        } else {
+            if (get_blue_filter_fn_type(blue_filter_fn) == type) {
+                return funcall(blue_filter_fn, list, mt);
+            } else {
+                return list;
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject apply_blue_filter_fn(final SubLObject blue_filter_fn, final SubLObject list, final SubLObject mt, SubLObject type) {
@@ -578,11 +541,34 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return list;
     }
 
+    public static final SubLObject blue_filter_fns_sorted_alt(SubLObject blue_filter_fns) {
+        if (blue_filter_fns == UNPROVIDED) {
+            blue_filter_fns = blue_filter_fns();
+        }
+        return Sort.sort(blue_filter_fns, symbol_function($sym14$_), symbol_function(GET_BLUE_FILTER_FN_STRENGTH));
+    }
+
     public static SubLObject blue_filter_fns_sorted(SubLObject blue_filter_fns) {
         if (blue_filter_fns == UNPROVIDED) {
             blue_filter_fns = blue_filter_fns();
         }
         return Sort.sort(blue_filter_fns, symbol_function($sym14$_), symbol_function(GET_BLUE_FILTER_FN_STRENGTH));
+    }
+
+    public static final SubLObject blue_apply_filter_fns_alt(SubLObject term_list, SubLObject blue_filter_fns, SubLObject mt, SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = NIL;
+        }
+        {
+            SubLObject sorted_blue_filter_fns = blue_filter_fns_sorted(blue_filter_fns);
+            SubLObject result_term_list = term_list;
+            SubLObject cdolist_list_var = sorted_blue_filter_fns;
+            SubLObject blue_filter_fn = NIL;
+            for (blue_filter_fn = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , blue_filter_fn = cdolist_list_var.first()) {
+                result_term_list = apply_blue_filter_fn(blue_filter_fn, result_term_list, mt, type);
+            }
+            return result_term_list;
+        }
     }
 
     public static SubLObject blue_apply_filter_fns(final SubLObject term_list, final SubLObject blue_filter_fns, final SubLObject mt, SubLObject type) {
@@ -602,11 +588,28 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return result_term_list;
     }
 
+    public static final SubLObject blue_filter_fn_keys_alt(SubLObject blue_filter_fns) {
+        if (blue_filter_fns == UNPROVIDED) {
+            blue_filter_fns = blue_filter_fns();
+        }
+        return Mapping.mapcar(symbol_function(MAKE_KEYWORD), blue_filter_fns_sorted(blue_filter_fns));
+    }
+
     public static SubLObject blue_filter_fn_keys(SubLObject blue_filter_fns) {
         if (blue_filter_fns == UNPROVIDED) {
             blue_filter_fns = blue_filter_fns();
         }
         return Mapping.mapcar(symbol_function(MAKE_KEYWORD), blue_filter_fns_sorted(blue_filter_fns));
+    }
+
+    public static final SubLObject blue_filter_fn_by_key_alt(SubLObject bbf_key) {
+        {
+            SubLObject poss_function_spec = intern(string_utilities.string_from_keyword(bbf_key), UNPROVIDED);
+            if ((NIL != gethash(poss_function_spec, $blue_filter_fns$.getGlobalValue(), UNPROVIDED)) && poss_function_spec.isFunctionSpec()) {
+                return poss_function_spec;
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject blue_filter_fn_by_key(final SubLObject bbf_key) {
@@ -615,6 +618,20 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             return poss_function_spec;
         }
         return NIL;
+    }
+
+    public static final SubLObject bff_arbitrary_unions_alt(SubLObject terms, SubLObject mt) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = terms;
+            SubLObject v_term = NIL;
+            for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                if (NIL == isa.isa_in_any_mtP(v_term, $$ArbitraryUnion)) {
+                    result = cons(v_term, result);
+                }
+            }
+            return result;
+        }
     }
 
     public static SubLObject bff_arbitrary_unions(final SubLObject terms, final SubLObject mt) {
@@ -632,6 +649,20 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject bff_cyc_kb_subset_collections_alt(SubLObject terms, SubLObject mt) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = terms;
+            SubLObject v_term = NIL;
+            for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                if (NIL == isa.isa_in_any_mtP(v_term, $$CycKBSubsetCollection)) {
+                    result = cons(v_term, result);
+                }
+            }
+            return result;
+        }
+    }
+
     public static SubLObject bff_cyc_kb_subset_collections(final SubLObject terms, final SubLObject mt) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = terms;
@@ -647,16 +678,51 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject bff_most_general_5_alt(SubLObject terms, SubLObject mt) {
+        return list_utilities.first_n(FIVE_INTEGER, Sort.sort(terms, symbol_function($sym27$GENERALITY_ESTIMATE_), UNPROVIDED));
+    }
+
     public static SubLObject bff_most_general_5(final SubLObject terms, final SubLObject mt) {
         return list_utilities.first_n(FIVE_INTEGER, Sort.sort(terms, symbol_function($sym24$GENERALITY_ESTIMATE_), UNPROVIDED));
+    }
+
+    public static final SubLObject bff_most_general_10_alt(SubLObject terms, SubLObject mt) {
+        return list_utilities.first_n(TEN_INTEGER, Sort.sort(terms, symbol_function($sym27$GENERALITY_ESTIMATE_), UNPROVIDED));
     }
 
     public static SubLObject bff_most_general_10(final SubLObject terms, final SubLObject mt) {
         return list_utilities.first_n(TEN_INTEGER, Sort.sort(terms, symbol_function($sym24$GENERALITY_ESTIMATE_), UNPROVIDED));
     }
 
+    public static final SubLObject bff_most_general_20_alt(SubLObject terms, SubLObject mt) {
+        return list_utilities.first_n(TWENTY_INTEGER, Sort.sort(terms, symbol_function($sym27$GENERALITY_ESTIMATE_), UNPROVIDED));
+    }
+
     public static SubLObject bff_most_general_20(final SubLObject terms, final SubLObject mt) {
         return list_utilities.first_n(TWENTY_INTEGER, Sort.sort(terms, symbol_function($sym24$GENERALITY_ESTIMATE_), UNPROVIDED));
+    }
+
+    public static final SubLObject define_blue_builder_fn_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject name = NIL;
+            SubLObject arglist = NIL;
+            SubLObject deflist = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            name = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            arglist = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            deflist = current.first();
+            current = current.rest();
+            {
+                SubLObject body = current;
+                return list(PROGN, listS(SETHASH, list(QUOTE, name), $list_alt34), list(SETHASH, list(QUOTE, name), $blue_builder_fn_to_deflist_hash$, list(QUOTE, deflist)), listS(DEFINE_PROTECTED, name, arglist, append(body, NIL)), list(REGISTER_API_PREDEFINED_FUNCTION, list(QUOTE, name)));
+            }
+        }
     }
 
     public static SubLObject define_blue_builder_fn(final SubLObject macroform, final SubLObject environment) {
@@ -678,6 +744,27 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return list(PROGN, listS(SETHASH, list(QUOTE, name), $list31), list(SETHASH, list(QUOTE, name), $blue_builder_fn_to_deflist_hash$, list(QUOTE, deflist)), listS(DEFINE_PROTECTED, name, arglist, append(body, NIL)), list(REGISTER_API_PREDEFINED_FUNCTION, list(QUOTE, name)));
     }
 
+    /**
+     * wrapper around a gethash
+     */
+    @LispMethod(comment = "wrapper around a gethash")
+    public static final SubLObject get_blue_builder_fn_data_alt(SubLObject blue_builder_fn) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject blue_builder_fn_data = gethash(blue_builder_fn, $blue_builder_fns$.getGlobalValue(), UNPROVIDED);
+                SubLObject foundP = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                return values(blue_builder_fn_data, foundP);
+            }
+        }
+    }
+
+    /**
+     * wrapper around a gethash
+     */
+    @LispMethod(comment = "wrapper around a gethash")
     public static SubLObject get_blue_builder_fn_data(final SubLObject blue_builder_fn) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -685,6 +772,23 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         final SubLObject foundP = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return values(blue_builder_fn_data, foundP);
+    }
+
+    public static final SubLObject blue_builder_fn_p_alt(SubLObject blue_builder_fn) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject blue_builder_fn_data = get_blue_builder_fn_data(blue_builder_fn);
+                SubLObject foundP = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL != foundP) {
+                    return T;
+                } else {
+                    return NIL;
+                }
+            }
+        }
     }
 
     public static SubLObject blue_builder_fn_p(final SubLObject blue_builder_fn) {
@@ -699,6 +803,15 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject blue_builder_alt(SubLObject blue_builder_fn, SubLObject key_list) {
+        if (NIL != blue_builder_fn_p(blue_builder_fn)) {
+            return funcall(blue_builder_fn, key_list);
+        } else {
+            Errors.warn($str_alt35$BLUE_BUILDER___A_is_not_a_blue_bu, blue_builder_fn);
+            return NIL;
+        }
+    }
+
     public static SubLObject blue_builder(final SubLObject blue_builder_fn, final SubLObject key_list) {
         if (NIL != blue_builder_fn_p(blue_builder_fn)) {
             return funcall(blue_builder_fn, key_list);
@@ -707,8 +820,22 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject blue_builder_fn_keys_alt() {
+        return Mapping.mapcar(symbol_function(MAKE_KEYWORD), Sort.sort(hash_table_utilities.hash_table_keys($blue_builder_fns$.getGlobalValue()), $sym36$STRING_, SYMBOL_NAME));
+    }
+
     public static SubLObject blue_builder_fn_keys() {
         return Mapping.mapcar(symbol_function(MAKE_KEYWORD), Sort.sort(hash_table_utilities.hash_table_keys($blue_builder_fns$.getGlobalValue()), $sym33$STRING_, SYMBOL_NAME));
+    }
+
+    public static final SubLObject blue_builder_fn_by_key_alt(SubLObject bbf_key) {
+        {
+            SubLObject poss_function_spec = intern(string_utilities.string_from_keyword(bbf_key), UNPROVIDED);
+            if ((NIL != gethash(poss_function_spec, $blue_builder_fns$.getGlobalValue(), UNPROVIDED)) && poss_function_spec.isFunctionSpec()) {
+                return poss_function_spec;
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject blue_builder_fn_by_key(final SubLObject bbf_key) {
@@ -719,12 +846,69 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject get_blue_builder_fn_def_value_alt(SubLObject bbf_key, SubLObject def_key) {
+        {
+            SubLObject bbf = blue_builder_fn_by_key(bbf_key);
+            if (NIL != blue_builder_fn_p(bbf)) {
+                return getf(gethash(bbf, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), UNPROVIDED), def_key, UNPROVIDED);
+            } else {
+                return NIL;
+            }
+        }
+    }
+
     public static SubLObject get_blue_builder_fn_def_value(final SubLObject bbf_key, final SubLObject def_key) {
         final SubLObject bbf = blue_builder_fn_by_key(bbf_key);
         if (NIL != blue_builder_fn_p(bbf)) {
             return getf(gethash(bbf, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), UNPROVIDED), def_key, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject bbf_forward_true_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject filter_fns = getf(arg_plist, $FILTER_FNS, UNPROVIDED);
+                SubLObject depth = getf(arg_plist, $DEPTH, UNPROVIDED);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                SubLObject cdolist_list_var = v_forts;
+                SubLObject fort = NIL;
+                for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_1 = preds;
+                        SubLObject pred = NIL;
+                        for (pred = cdolist_list_var_1.first(); NIL != cdolist_list_var_1; cdolist_list_var_1 = cdolist_list_var_1.rest() , pred = cdolist_list_var_1.first()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject protoedges = bbf_forward_true_internal(pred, fort, mt, filter_fns, depth, UNPROVIDED);
+                                SubLObject protonodes = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject cdolist_list_var_2 = protonodes;
+                                    SubLObject protonode = NIL;
+                                    for (protonode = cdolist_list_var_2.first(); NIL != cdolist_list_var_2; cdolist_list_var_2 = cdolist_list_var_2.rest() , protonode = cdolist_list_var_2.first()) {
+                                        result_nodes = cons(bbf_make_node(protonode, UNPROVIDED, UNPROVIDED), result_nodes);
+                                    }
+                                }
+                                {
+                                    SubLObject cdolist_list_var_3 = protoedges;
+                                    SubLObject protoedge = NIL;
+                                    for (protoedge = cdolist_list_var_3.first(); NIL != cdolist_list_var_3; cdolist_list_var_3 = cdolist_list_var_3.rest() , protoedge = cdolist_list_var_3.first()) {
+                                        result_edges = cons(bbf_make_edge(pred, protoedge.first(), second(protoedge), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), result_edges);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+            }
+        }
     }
 
     public static SubLObject bbf_forward_true(final SubLObject arg_plist) {
@@ -771,6 +955,101 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             fort = cdolist_list_var.first();
         } 
         return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+    }
+
+    public static final SubLObject bbf_forward_true_internal_alt(SubLObject pred, SubLObject tail_node, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject done_tail_nodes) {
+        if (done_tail_nodes == UNPROVIDED) {
+            done_tail_nodes = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject recurseP = NIL;
+                SubLObject protoedges = NIL;
+                SubLObject head_nodes = NIL;
+                SubLObject coextensional_head_nodes = NIL;
+                head_nodes = (NIL != kb_accessors.transitive_predicateP(pred)) ? ((SubLObject) (gt_methods.gt_superiors(pred, tail_node, mt))) : kb_mapping_utilities.pred_values_in_mt(tail_node, pred, mt, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                if (NIL != head_nodes) {
+                    head_nodes = blue_apply_filter_fns(head_nodes, filter_fns, mt, UNPROVIDED);
+                    if (NIL != head_nodes) {
+                        coextensional_head_nodes = intersection(head_nodes, NIL != kb_accessors.transitive_predicateP(pred) ? ((SubLObject) (gt_methods.gt_inferiors(pred, tail_node, mt))) : kb_mapping_utilities.pred_values_in_mt(tail_node, pred, mt, TWO_INTEGER, ONE_INTEGER, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                        head_nodes = set_difference(head_nodes, coextensional_head_nodes, UNPROVIDED, UNPROVIDED);
+                        coextensional_head_nodes = set_difference(coextensional_head_nodes, list(tail_node), UNPROVIDED, UNPROVIDED);
+                    }
+                }
+                head_nodes = blue_apply_filter_fns(head_nodes, filter_fns, mt, $POST_MINIMIZATION);
+                {
+                    SubLObject cdolist_list_var = head_nodes;
+                    SubLObject head_node = NIL;
+                    for (head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , head_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(tail_node, head_node), protoedges);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = coextensional_head_nodes;
+                    SubLObject coextensional_head_node = NIL;
+                    for (coextensional_head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , coextensional_head_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(tail_node, coextensional_head_node), protoedges);
+                        protoedges = cons(list(coextensional_head_node, tail_node), protoedges);
+                        {
+                            SubLObject cdolist_list_var_4 = coextensional_head_nodes;
+                            SubLObject another_coextensional_head_node = NIL;
+                            for (another_coextensional_head_node = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , another_coextensional_head_node = cdolist_list_var_4.first()) {
+                                if (coextensional_head_node != another_coextensional_head_node) {
+                                    protoedges = cons(list(coextensional_head_node, another_coextensional_head_node), protoedges);
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = head_nodes;
+                    SubLObject head_node = NIL;
+                    for (head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , head_node = cdolist_list_var.first()) {
+                        {
+                            SubLObject cdolist_list_var_5 = coextensional_head_nodes;
+                            SubLObject coextensional_head_node = NIL;
+                            for (coextensional_head_node = cdolist_list_var_5.first(); NIL != cdolist_list_var_5; cdolist_list_var_5 = cdolist_list_var_5.rest() , coextensional_head_node = cdolist_list_var_5.first()) {
+                                protoedges = cons(list(coextensional_head_node, head_node), protoedges);
+                            }
+                        }
+                    }
+                }
+                if (depth.numE(ONE_INTEGER)) {
+                    recurseP = NIL;
+                } else {
+                    recurseP = T;
+                    depth = subtract(depth, ONE_INTEGER);
+                }
+                if (NIL != recurseP) {
+                    {
+                        SubLObject cdolist_list_var = head_nodes;
+                        SubLObject recurse_tail_node = NIL;
+                        for (recurse_tail_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , recurse_tail_node = cdolist_list_var.first()) {
+                            if (NIL == subl_promotions.memberP(recurse_tail_node, done_tail_nodes, symbol_function(EQUAL), UNPROVIDED)) {
+                                done_tail_nodes = cons(recurse_tail_node, done_tail_nodes);
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject recurse_protoedges = bbf_forward_true_internal(pred, recurse_tail_node, mt, filter_fns, depth, done_tail_nodes);
+                                    SubLObject recurse_done_tail_nodes = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    done_tail_nodes = recurse_done_tail_nodes;
+                                    recurse_protoedges = remove_duplicates(recurse_protoedges, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    {
+                                        SubLObject cdolist_list_var_6 = recurse_protoedges;
+                                        SubLObject recurse_protoedge = NIL;
+                                        for (recurse_protoedge = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , recurse_protoedge = cdolist_list_var_6.first()) {
+                                            protoedges = cons(recurse_protoedge, protoedges);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return values(protoedges, done_tail_nodes);
+            }
+        }
     }
 
     public static SubLObject bbf_forward_true_internal(final SubLObject pred, final SubLObject tail_node, final SubLObject mt, final SubLObject filter_fns, SubLObject depth, SubLObject done_tail_nodes) {
@@ -869,6 +1148,52 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return values(protoedges, done_tail_nodes);
     }
 
+    public static final SubLObject bbf_backward_true_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject filter_fns = getf(arg_plist, $FILTER_FNS, UNPROVIDED);
+                SubLObject depth = getf(arg_plist, $DEPTH, UNPROVIDED);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                SubLObject cdolist_list_var = v_forts;
+                SubLObject fort = NIL;
+                for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_7 = preds;
+                        SubLObject pred = NIL;
+                        for (pred = cdolist_list_var_7.first(); NIL != cdolist_list_var_7; cdolist_list_var_7 = cdolist_list_var_7.rest() , pred = cdolist_list_var_7.first()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject protoedges = bbf_backward_true_internal(pred, fort, mt, filter_fns, depth, UNPROVIDED);
+                                SubLObject protonodes = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject cdolist_list_var_8 = protonodes;
+                                    SubLObject protonode = NIL;
+                                    for (protonode = cdolist_list_var_8.first(); NIL != cdolist_list_var_8; cdolist_list_var_8 = cdolist_list_var_8.rest() , protonode = cdolist_list_var_8.first()) {
+                                        result_nodes = cons(bbf_make_node(protonode, UNPROVIDED, UNPROVIDED), result_nodes);
+                                    }
+                                }
+                                {
+                                    SubLObject cdolist_list_var_9 = protoedges;
+                                    SubLObject protoedge = NIL;
+                                    for (protoedge = cdolist_list_var_9.first(); NIL != cdolist_list_var_9; cdolist_list_var_9 = cdolist_list_var_9.rest() , protoedge = cdolist_list_var_9.first()) {
+                                        result_edges = cons(bbf_make_edge(pred, protoedge.first(), second(protoedge), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), result_edges);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+            }
+        }
+    }
+
     public static SubLObject bbf_backward_true(final SubLObject arg_plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
@@ -913,6 +1238,79 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             fort = cdolist_list_var.first();
         } 
         return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+    }
+
+    public static final SubLObject bbf_backward_true_internal_alt(SubLObject pred, SubLObject head_node, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject done_head_nodes) {
+        if (done_head_nodes == UNPROVIDED) {
+            done_head_nodes = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject recurseP = NIL;
+                SubLObject protoedges = NIL;
+                SubLObject tail_nodes = NIL;
+                SubLObject coextensional_tail_nodes = NIL;
+                tail_nodes = (NIL != kb_accessors.transitive_predicateP(pred)) ? ((SubLObject) (gt_methods.gt_inferiors(pred, head_node, mt))) : kb_mapping_utilities.pred_values_in_mt(head_node, pred, mt, TWO_INTEGER, ONE_INTEGER, UNPROVIDED);
+                if (NIL != tail_nodes) {
+                    tail_nodes = blue_apply_filter_fns(tail_nodes, filter_fns, mt, UNPROVIDED);
+                    if (NIL != tail_nodes) {
+                        coextensional_tail_nodes = intersection(tail_nodes, NIL != kb_accessors.transitive_predicateP(pred) ? ((SubLObject) (gt_methods.gt_superiors(pred, head_node, mt))) : kb_mapping_utilities.pred_values_in_mt(head_node, pred, mt, ONE_INTEGER, TWO_INTEGER, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                        tail_nodes = set_difference(tail_nodes, coextensional_tail_nodes, UNPROVIDED, UNPROVIDED);
+                        coextensional_tail_nodes = set_difference(coextensional_tail_nodes, list(head_node), UNPROVIDED, UNPROVIDED);
+                    }
+                }
+                tail_nodes = blue_apply_filter_fns(tail_nodes, filter_fns, mt, $POST_MINIMIZATION);
+                {
+                    SubLObject cdolist_list_var = tail_nodes;
+                    SubLObject tail_node = NIL;
+                    for (tail_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tail_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(tail_node, head_node), protoedges);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = coextensional_tail_nodes;
+                    SubLObject coextensional_tail_node = NIL;
+                    for (coextensional_tail_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , coextensional_tail_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(head_node, coextensional_tail_node), protoedges);
+                        protoedges = cons(list(coextensional_tail_node, head_node), protoedges);
+                    }
+                }
+                if (depth.numE(ONE_INTEGER)) {
+                    recurseP = NIL;
+                } else {
+                    recurseP = T;
+                    depth = subtract(depth, ONE_INTEGER);
+                }
+                if (NIL != recurseP) {
+                    {
+                        SubLObject cdolist_list_var = tail_nodes;
+                        SubLObject recurse_head_node = NIL;
+                        for (recurse_head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , recurse_head_node = cdolist_list_var.first()) {
+                            if (NIL == subl_promotions.memberP(recurse_head_node, done_head_nodes, symbol_function(EQUAL), UNPROVIDED)) {
+                                done_head_nodes = cons(recurse_head_node, done_head_nodes);
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject recurse_protoedges = bbf_backward_true_internal(pred, recurse_head_node, mt, filter_fns, depth, done_head_nodes);
+                                    SubLObject recurse_done_head_nodes = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    done_head_nodes = recurse_done_head_nodes;
+                                    recurse_protoedges = remove_duplicates(recurse_protoedges, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    {
+                                        SubLObject cdolist_list_var_10 = recurse_protoedges;
+                                        SubLObject recurse_protoedge = NIL;
+                                        for (recurse_protoedge = cdolist_list_var_10.first(); NIL != cdolist_list_var_10; cdolist_list_var_10 = cdolist_list_var_10.rest() , recurse_protoedge = cdolist_list_var_10.first()) {
+                                            protoedges = cons(recurse_protoedge, protoedges);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return values(protoedges, done_head_nodes);
+            }
+        }
     }
 
     public static SubLObject bbf_backward_true_internal(final SubLObject pred, final SubLObject head_node, final SubLObject mt, final SubLObject filter_fns, SubLObject depth, SubLObject done_head_nodes) {
@@ -986,6 +1384,52 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return values(protoedges, done_head_nodes);
     }
 
+    public static final SubLObject bbf_min_forward_true_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject filter_fns = getf(arg_plist, $FILTER_FNS, UNPROVIDED);
+                SubLObject depth = getf(arg_plist, $DEPTH, UNPROVIDED);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                SubLObject cdolist_list_var = v_forts;
+                SubLObject fort = NIL;
+                for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_11 = preds;
+                        SubLObject pred = NIL;
+                        for (pred = cdolist_list_var_11.first(); NIL != cdolist_list_var_11; cdolist_list_var_11 = cdolist_list_var_11.rest() , pred = cdolist_list_var_11.first()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject protoedges = bbf_min_forward_true_internal(pred, fort, mt, filter_fns, depth, UNPROVIDED);
+                                SubLObject protonodes = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject cdolist_list_var_12 = protonodes;
+                                    SubLObject protonode = NIL;
+                                    for (protonode = cdolist_list_var_12.first(); NIL != cdolist_list_var_12; cdolist_list_var_12 = cdolist_list_var_12.rest() , protonode = cdolist_list_var_12.first()) {
+                                        result_nodes = cons(bbf_make_node(protonode, UNPROVIDED, UNPROVIDED), result_nodes);
+                                    }
+                                }
+                                {
+                                    SubLObject cdolist_list_var_13 = protoedges;
+                                    SubLObject protoedge = NIL;
+                                    for (protoedge = cdolist_list_var_13.first(); NIL != cdolist_list_var_13; cdolist_list_var_13 = cdolist_list_var_13.rest() , protoedge = cdolist_list_var_13.first()) {
+                                        result_edges = cons(bbf_make_edge(pred, protoedge.first(), second(protoedge), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), result_edges);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+            }
+        }
+    }
+
     public static SubLObject bbf_min_forward_true(final SubLObject arg_plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
@@ -1030,6 +1474,109 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             fort = cdolist_list_var.first();
         } 
         return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+    }
+
+    public static final SubLObject bbf_min_forward_true_internal_alt(SubLObject pred, SubLObject tail_node, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject done_tail_nodes) {
+        if (done_tail_nodes == UNPROVIDED) {
+            done_tail_nodes = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject recurseP = NIL;
+                SubLObject protoedges = NIL;
+                SubLObject head_nodes = NIL;
+                SubLObject coextensional_head_nodes = NIL;
+                if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
+                    head_nodes = sbhl_search_methods.sbhl_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module(pred), tail_node, mt, UNPROVIDED);
+                    if (NIL != head_nodes) {
+                        head_nodes = blue_apply_filter_fns(head_nodes, filter_fns, mt, UNPROVIDED);
+                        if (NIL != head_nodes) {
+                            coextensional_head_nodes = sbhl_search_methods.sbhl_all_backward_true_nodes_among(sbhl_module_vars.get_sbhl_module(pred), tail_node, head_nodes, mt, UNPROVIDED);
+                            head_nodes = set_difference(head_nodes, coextensional_head_nodes, UNPROVIDED, UNPROVIDED);
+                            coextensional_head_nodes = set_difference(coextensional_head_nodes, list(tail_node), UNPROVIDED, UNPROVIDED);
+                            if (length(head_nodes).numG(ONE_INTEGER)) {
+                                head_nodes = sbhl_search_methods.sbhl_min_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), head_nodes, mt, UNPROVIDED);
+                            }
+                            if (length(coextensional_head_nodes).numG(ONE_INTEGER)) {
+                                coextensional_head_nodes = sbhl_search_methods.sbhl_min_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), coextensional_head_nodes, mt, UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+                head_nodes = blue_apply_filter_fns(head_nodes, filter_fns, mt, $POST_MINIMIZATION);
+                {
+                    SubLObject cdolist_list_var = head_nodes;
+                    SubLObject head_node = NIL;
+                    for (head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , head_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(tail_node, head_node), protoedges);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = coextensional_head_nodes;
+                    SubLObject coextensional_head_node = NIL;
+                    for (coextensional_head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , coextensional_head_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(tail_node, coextensional_head_node), protoedges);
+                        protoedges = cons(list(coextensional_head_node, tail_node), protoedges);
+                        {
+                            SubLObject cdolist_list_var_14 = coextensional_head_nodes;
+                            SubLObject another_coextensional_head_node = NIL;
+                            for (another_coextensional_head_node = cdolist_list_var_14.first(); NIL != cdolist_list_var_14; cdolist_list_var_14 = cdolist_list_var_14.rest() , another_coextensional_head_node = cdolist_list_var_14.first()) {
+                                if (coextensional_head_node != another_coextensional_head_node) {
+                                    protoedges = cons(list(coextensional_head_node, another_coextensional_head_node), protoedges);
+                                }
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = head_nodes;
+                    SubLObject head_node = NIL;
+                    for (head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , head_node = cdolist_list_var.first()) {
+                        {
+                            SubLObject cdolist_list_var_15 = coextensional_head_nodes;
+                            SubLObject coextensional_head_node = NIL;
+                            for (coextensional_head_node = cdolist_list_var_15.first(); NIL != cdolist_list_var_15; cdolist_list_var_15 = cdolist_list_var_15.rest() , coextensional_head_node = cdolist_list_var_15.first()) {
+                                protoedges = cons(list(coextensional_head_node, head_node), protoedges);
+                            }
+                        }
+                    }
+                }
+                if (depth.numE(ONE_INTEGER)) {
+                    recurseP = NIL;
+                } else {
+                    recurseP = T;
+                    depth = subtract(depth, ONE_INTEGER);
+                }
+                if (NIL != recurseP) {
+                    {
+                        SubLObject cdolist_list_var = head_nodes;
+                        SubLObject recurse_tail_node = NIL;
+                        for (recurse_tail_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , recurse_tail_node = cdolist_list_var.first()) {
+                            if (NIL == subl_promotions.memberP(recurse_tail_node, done_tail_nodes, symbol_function(EQUAL), UNPROVIDED)) {
+                                done_tail_nodes = cons(recurse_tail_node, done_tail_nodes);
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject recurse_protoedges = bbf_min_forward_true_internal(pred, recurse_tail_node, mt, filter_fns, depth, done_tail_nodes);
+                                    SubLObject recurse_done_tail_nodes = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    done_tail_nodes = recurse_done_tail_nodes;
+                                    recurse_protoedges = remove_duplicates(recurse_protoedges, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    {
+                                        SubLObject cdolist_list_var_16 = recurse_protoedges;
+                                        SubLObject recurse_protoedge = NIL;
+                                        for (recurse_protoedge = cdolist_list_var_16.first(); NIL != cdolist_list_var_16; cdolist_list_var_16 = cdolist_list_var_16.rest() , recurse_protoedge = cdolist_list_var_16.first()) {
+                                            protoedges = cons(recurse_protoedge, protoedges);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return values(protoedges, done_tail_nodes);
+            }
+        }
     }
 
     public static SubLObject bbf_min_forward_true_internal(final SubLObject pred, final SubLObject tail_node, final SubLObject mt, final SubLObject filter_fns, SubLObject depth, SubLObject done_tail_nodes) {
@@ -1136,6 +1683,52 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return values(protoedges, done_tail_nodes);
     }
 
+    public static final SubLObject bbf_min_backward_true_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject filter_fns = getf(arg_plist, $FILTER_FNS, UNPROVIDED);
+                SubLObject depth = getf(arg_plist, $DEPTH, UNPROVIDED);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                SubLObject cdolist_list_var = v_forts;
+                SubLObject fort = NIL;
+                for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_17 = preds;
+                        SubLObject pred = NIL;
+                        for (pred = cdolist_list_var_17.first(); NIL != cdolist_list_var_17; cdolist_list_var_17 = cdolist_list_var_17.rest() , pred = cdolist_list_var_17.first()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject protoedges = bbf_min_backward_true_internal(pred, fort, mt, filter_fns, depth, UNPROVIDED);
+                                SubLObject protonodes = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject cdolist_list_var_18 = protonodes;
+                                    SubLObject protonode = NIL;
+                                    for (protonode = cdolist_list_var_18.first(); NIL != cdolist_list_var_18; cdolist_list_var_18 = cdolist_list_var_18.rest() , protonode = cdolist_list_var_18.first()) {
+                                        result_nodes = cons(bbf_make_node(protonode, UNPROVIDED, UNPROVIDED), result_nodes);
+                                    }
+                                }
+                                {
+                                    SubLObject cdolist_list_var_19 = protoedges;
+                                    SubLObject protoedge = NIL;
+                                    for (protoedge = cdolist_list_var_19.first(); NIL != cdolist_list_var_19; cdolist_list_var_19 = cdolist_list_var_19.rest() , protoedge = cdolist_list_var_19.first()) {
+                                        result_edges = cons(bbf_make_edge(pred, protoedge.first(), second(protoedge), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), result_edges);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+            }
+        }
+    }
+
     public static SubLObject bbf_min_backward_true(final SubLObject arg_plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
@@ -1180,6 +1773,87 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             fort = cdolist_list_var.first();
         } 
         return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+    }
+
+    public static final SubLObject bbf_min_backward_true_internal_alt(SubLObject pred, SubLObject head_node, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject done_head_nodes) {
+        if (done_head_nodes == UNPROVIDED) {
+            done_head_nodes = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject recurseP = NIL;
+                SubLObject protoedges = NIL;
+                SubLObject tail_nodes = NIL;
+                SubLObject coextensional_tail_nodes = NIL;
+                if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
+                    tail_nodes = sbhl_search_methods.sbhl_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module(pred), head_node, mt, UNPROVIDED);
+                    if (NIL != tail_nodes) {
+                        tail_nodes = blue_apply_filter_fns(tail_nodes, filter_fns, mt, UNPROVIDED);
+                        if (NIL != tail_nodes) {
+                            coextensional_tail_nodes = sbhl_search_methods.sbhl_all_forward_true_nodes_among(sbhl_module_vars.get_sbhl_module(pred), head_node, tail_nodes, mt, UNPROVIDED);
+                            tail_nodes = set_difference(tail_nodes, coextensional_tail_nodes, UNPROVIDED, UNPROVIDED);
+                            coextensional_tail_nodes = set_difference(coextensional_tail_nodes, list(head_node), UNPROVIDED, UNPROVIDED);
+                            if (length(tail_nodes).numG(ONE_INTEGER)) {
+                                tail_nodes = sbhl_search_methods.sbhl_max_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), tail_nodes, mt, UNPROVIDED, UNPROVIDED);
+                            }
+                            if (length(coextensional_tail_nodes).numG(ONE_INTEGER)) {
+                                coextensional_tail_nodes = sbhl_search_methods.sbhl_max_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), coextensional_tail_nodes, mt, UNPROVIDED, UNPROVIDED);
+                            }
+                        }
+                    }
+                }
+                tail_nodes = blue_apply_filter_fns(tail_nodes, filter_fns, mt, $POST_MINIMIZATION);
+                {
+                    SubLObject cdolist_list_var = tail_nodes;
+                    SubLObject tail_node = NIL;
+                    for (tail_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , tail_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(tail_node, head_node), protoedges);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = coextensional_tail_nodes;
+                    SubLObject coextensional_tail_node = NIL;
+                    for (coextensional_tail_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , coextensional_tail_node = cdolist_list_var.first()) {
+                        protoedges = cons(list(head_node, coextensional_tail_node), protoedges);
+                        protoedges = cons(list(coextensional_tail_node, head_node), protoedges);
+                    }
+                }
+                if (depth.numE(ONE_INTEGER)) {
+                    recurseP = NIL;
+                } else {
+                    recurseP = T;
+                    depth = subtract(depth, ONE_INTEGER);
+                }
+                if (NIL != recurseP) {
+                    {
+                        SubLObject cdolist_list_var = tail_nodes;
+                        SubLObject recurse_head_node = NIL;
+                        for (recurse_head_node = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , recurse_head_node = cdolist_list_var.first()) {
+                            if (NIL == subl_promotions.memberP(recurse_head_node, done_head_nodes, symbol_function(EQUAL), UNPROVIDED)) {
+                                done_head_nodes = cons(recurse_head_node, done_head_nodes);
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject recurse_protoedges = bbf_min_backward_true_internal(pred, recurse_head_node, mt, filter_fns, depth, done_head_nodes);
+                                    SubLObject recurse_done_head_nodes = thread.secondMultipleValue();
+                                    thread.resetMultipleValues();
+                                    done_head_nodes = recurse_done_head_nodes;
+                                    recurse_protoedges = remove_duplicates(recurse_protoedges, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    {
+                                        SubLObject cdolist_list_var_20 = recurse_protoedges;
+                                        SubLObject recurse_protoedge = NIL;
+                                        for (recurse_protoedge = cdolist_list_var_20.first(); NIL != cdolist_list_var_20; cdolist_list_var_20 = cdolist_list_var_20.rest() , recurse_protoedge = cdolist_list_var_20.first()) {
+                                            protoedges = cons(recurse_protoedge, protoedges);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return values(protoedges, done_head_nodes);
+            }
+        }
     }
 
     public static SubLObject bbf_min_backward_true_internal(final SubLObject pred, final SubLObject head_node, final SubLObject mt, final SubLObject filter_fns, SubLObject depth, SubLObject done_head_nodes) {
@@ -1261,6 +1935,46 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return values(protoedges, done_head_nodes);
     }
 
+    public static final SubLObject bbf_min_ceilings_forward_true_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject filter_fns = getf(arg_plist, $FILTER_FNS, UNPROVIDED);
+                SubLObject depth = getf(arg_plist, $DEPTH, UNPROVIDED);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                SubLObject cdolist_list_var = preds;
+                SubLObject pred = NIL;
+                for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject protoedges = bbf_min_ceilings_forward_true_internal(pred, v_forts, mt, filter_fns, depth, UNPROVIDED);
+                        SubLObject protonodes = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject cdolist_list_var_21 = protonodes;
+                            SubLObject protonode = NIL;
+                            for (protonode = cdolist_list_var_21.first(); NIL != cdolist_list_var_21; cdolist_list_var_21 = cdolist_list_var_21.rest() , protonode = cdolist_list_var_21.first()) {
+                                result_nodes = cons(bbf_make_node(protonode, UNPROVIDED, UNPROVIDED), result_nodes);
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var_22 = protoedges;
+                            SubLObject protoedge = NIL;
+                            for (protoedge = cdolist_list_var_22.first(); NIL != cdolist_list_var_22; cdolist_list_var_22 = cdolist_list_var_22.rest() , protoedge = cdolist_list_var_22.first()) {
+                                result_edges = cons(bbf_make_edge(pred, protoedge.first(), second(protoedge), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), result_edges);
+                            }
+                        }
+                    }
+                }
+                return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+            }
+        }
+    }
+
     public static SubLObject bbf_min_ceilings_forward_true(final SubLObject arg_plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
@@ -1298,6 +2012,84 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             pred = cdolist_list_var.first();
         } 
         return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+    }
+
+    public static final SubLObject bbf_min_ceilings_forward_true_internal_alt(SubLObject pred, SubLObject arg_ins, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject done_arg_ins) {
+        if (done_arg_ins == UNPROVIDED) {
+            done_arg_ins = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ((NIL == arg_ins) || length(arg_ins).numLE(ONE_INTEGER)) {
+                return values(NIL, done_arg_ins);
+            }
+            {
+                SubLObject recurseP = NIL;
+                SubLObject protoedges = NIL;
+                SubLObject arg_outs = NIL;
+                if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
+                    {
+                        SubLObject arg_in_1 = NIL;
+                        SubLObject arg_ins_copy = NIL;
+                        for (arg_in_1 = arg_ins.first(), arg_ins_copy = arg_ins.rest(); NIL != arg_ins_copy; arg_in_1 = arg_ins_copy.first() , arg_ins_copy = arg_ins_copy.rest()) {
+                            {
+                                SubLObject cdolist_list_var = arg_ins_copy;
+                                SubLObject arg_in_2 = NIL;
+                                for (arg_in_2 = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg_in_2 = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject local_arg_outs = NIL;
+                                        local_arg_outs = sbhl_search_methods.sbhl_ceilings(sbhl_module_vars.get_sbhl_module(pred), list(arg_in_1, arg_in_2), NIL, mt, $$True_JustificationTruth);
+                                        if (NIL != local_arg_outs) {
+                                            local_arg_outs = blue_apply_filter_fns(local_arg_outs, filter_fns, mt, UNPROVIDED);
+                                            local_arg_outs = set_difference(local_arg_outs, arg_ins, UNPROVIDED, UNPROVIDED);
+                                            if (length(local_arg_outs).numG(ONE_INTEGER)) {
+                                                local_arg_outs = sbhl_search_methods.sbhl_min_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), local_arg_outs, mt, $$True_JustificationTruth);
+                                            }
+                                        }
+                                        local_arg_outs = blue_apply_filter_fns(local_arg_outs, filter_fns, mt, $POST_MINIMIZATION);
+                                        {
+                                            SubLObject cdolist_list_var_23 = local_arg_outs;
+                                            SubLObject local_arg_out = NIL;
+                                            for (local_arg_out = cdolist_list_var_23.first(); NIL != cdolist_list_var_23; cdolist_list_var_23 = cdolist_list_var_23.rest() , local_arg_out = cdolist_list_var_23.first()) {
+                                                arg_outs = cons(local_arg_out, arg_outs);
+                                                protoedges = cons(list(arg_in_1, local_arg_out), protoedges);
+                                                protoedges = cons(list(arg_in_2, local_arg_out), protoedges);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    protoedges = remove_duplicates(protoedges, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    arg_outs = remove_duplicates(arg_outs, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                }
+                if (depth.numE(ONE_INTEGER)) {
+                    recurseP = NIL;
+                } else {
+                    recurseP = T;
+                    depth = subtract(depth, ONE_INTEGER);
+                }
+                if (NIL != recurseP) {
+                    done_arg_ins = arg_ins;
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject recurse_protoedges = bbf_min_ceilings_forward_true_internal(pred, arg_outs, mt, filter_fns, depth, done_arg_ins);
+                        SubLObject recurse_done_arg_ins = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        recurse_protoedges = remove_duplicates(recurse_protoedges, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        {
+                            SubLObject cdolist_list_var = recurse_protoedges;
+                            SubLObject recurse_protoedge = NIL;
+                            for (recurse_protoedge = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , recurse_protoedge = cdolist_list_var.first()) {
+                                protoedges = cons(recurse_protoedge, protoedges);
+                            }
+                        }
+                    }
+                }
+                return values(protoedges, done_arg_ins);
+            }
+        }
     }
 
     public static SubLObject bbf_min_ceilings_forward_true_internal(final SubLObject pred, final SubLObject arg_ins, final SubLObject mt, final SubLObject filter_fns, SubLObject depth, SubLObject done_arg_ins) {
@@ -1373,6 +2165,42 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return values(protoedges, done_arg_ins);
     }
 
+    public static final SubLObject bbf_min_forward_and_backward_true_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject filter_fns = getf(arg_plist, $FILTER_FNS, UNPROVIDED);
+                SubLObject depth = getf(arg_plist, $DEPTH, UNPROVIDED);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject protoedges = bbf_min_forward_and_backward_true_internal(preds, mt, filter_fns, depth, v_forts);
+                    SubLObject protonodes = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject cdolist_list_var = protonodes;
+                        SubLObject protonode = NIL;
+                        for (protonode = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , protonode = cdolist_list_var.first()) {
+                            result_nodes = cons(bbf_make_node(protonode, UNPROVIDED, UNPROVIDED), result_nodes);
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = protoedges;
+                        SubLObject protoedge = NIL;
+                        for (protoedge = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , protoedge = cdolist_list_var.first()) {
+                            result_edges = cons(bbf_make_edge(protoedge.first(), second(protoedge), third(protoedge), mt, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), result_edges);
+                        }
+                    }
+                    return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+                }
+            }
+        }
+    }
+
     public static SubLObject bbf_min_forward_and_backward_true(final SubLObject arg_plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject preds = getf(arg_plist, $PREDS, UNPROVIDED);
@@ -1403,6 +2231,71 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             protoedge = cdolist_list_var.first();
         } 
         return bbf_make_graph(result_nodes, result_edges, list($MT, mt));
+    }
+
+    public static final SubLObject bbf_min_forward_and_backward_true_internal_alt(SubLObject preds, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject args) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == args) {
+                return values(NIL, NIL);
+            }
+            {
+                SubLObject arg_step_map = list(args);
+                thread.resetMultipleValues();
+                {
+                    SubLObject arg_edge_map = bbf_min_forward_and_backward_true_internal_internal(preds, mt, filter_fns, depth, arg_step_map, UNPROVIDED, UNPROVIDED);
+                    SubLObject arg_depth_map = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject protoedges = NIL;
+                        SubLObject protonodes = NIL;
+                        SubLObject arg_in = NIL;
+                        SubLObject pred_arg_outs = NIL;
+                        {
+                            final Iterator cdohash_iterator = getEntrySetIterator(arg_edge_map);
+                            try {
+                                while (iteratorHasNext(cdohash_iterator)) {
+                                    final Map.Entry cdohash_entry = iteratorNextEntry(cdohash_iterator);
+                                    arg_in = getEntryKey(cdohash_entry);
+                                    pred_arg_outs = getEntryValue(cdohash_entry);
+                                    {
+                                        SubLObject cdolist_list_var = pred_arg_outs;
+                                        SubLObject pred_arg_out = NIL;
+                                        for (pred_arg_out = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred_arg_out = cdolist_list_var.first()) {
+                                            {
+                                                SubLObject pred = pred_arg_out.first();
+                                                SubLObject arg_out = second(pred_arg_out);
+                                                protoedges = cons(list(pred, arg_out, arg_in), protoedges);
+                                            }
+                                        }
+                                    }
+                                } 
+                            } finally {
+                                releaseEntrySetIterator(cdohash_iterator);
+                            }
+                        }
+                        {
+                            SubLObject arg = NIL;
+                            SubLObject arg_depth = NIL;
+                            {
+                                final Iterator cdohash_iterator_24 = getEntrySetIterator(arg_depth_map);
+                                try {
+                                    while (iteratorHasNext(cdohash_iterator_24)) {
+                                        final Map.Entry cdohash_entry_25 = iteratorNextEntry(cdohash_iterator_24);
+                                        arg = getEntryKey(cdohash_entry_25);
+                                        arg_depth = getEntryValue(cdohash_entry_25);
+                                        protonodes = cons(list(arg, arg_depth), protonodes);
+                                    } 
+                                } finally {
+                                    releaseEntrySetIterator(cdohash_iterator_24);
+                                }
+                            }
+                        }
+                        return values(protoedges, protonodes);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject bbf_min_forward_and_backward_true_internal(final SubLObject preds, final SubLObject mt, final SubLObject filter_fns, final SubLObject depth, final SubLObject args) {
@@ -1453,6 +2346,119 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             releaseEntrySetIterator(cdohash_iterator_$24);
         }
         return values(protoedges, protonodes);
+    }
+
+    public static final SubLObject bbf_min_forward_and_backward_true_internal_internal_alt(SubLObject preds, SubLObject mt, SubLObject filter_fns, SubLObject depth, SubLObject arg_step_map, SubLObject arg_edge_map, SubLObject arg_depth_map) {
+        if (arg_edge_map == UNPROVIDED) {
+            arg_edge_map = NIL;
+        }
+        if (arg_depth_map == UNPROVIDED) {
+            arg_depth_map = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (!arg_edge_map.isHashtable()) {
+                arg_edge_map = make_hash_table($int$32, UNPROVIDED, UNPROVIDED);
+            }
+            if (!arg_depth_map.isHashtable()) {
+                arg_depth_map = make_hash_table($int$32, UNPROVIDED, UNPROVIDED);
+                {
+                    SubLObject cdolist_list_var = arg_step_map.first();
+                    SubLObject arg_step = NIL;
+                    for (arg_step = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg_step = cdolist_list_var.first()) {
+                        sethash(arg_step, arg_depth_map, depth);
+                    }
+                }
+            }
+            {
+                SubLObject recurseP = NIL;
+                SubLObject arg_nexts = NIL;
+                SubLObject arg_nexts_list = NIL;
+                {
+                    SubLObject cdolist_list_var = preds;
+                    SubLObject pred = NIL;
+                    for (pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pred = cdolist_list_var.first()) {
+                        if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
+                            {
+                                SubLObject args = arg_step_map.first();
+                                SubLObject cdolist_list_var_26 = args;
+                                SubLObject arg = NIL;
+                                for (arg = cdolist_list_var_26.first(); NIL != cdolist_list_var_26; cdolist_list_var_26 = cdolist_list_var_26.rest() , arg = cdolist_list_var_26.first()) {
+                                    {
+                                        SubLObject arg_outs = NIL;
+                                        arg_outs = sbhl_search_methods.sbhl_all_forward_true_nodes(sbhl_module_vars.get_sbhl_module(pred), arg, mt, UNPROVIDED);
+                                        if (NIL != arg_outs) {
+                                            arg_outs = blue_apply_filter_fns(arg_outs, filter_fns, mt, UNPROVIDED);
+                                            if (length(arg_outs).numG(ONE_INTEGER)) {
+                                                arg_outs = sbhl_search_methods.sbhl_min_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), arg_outs, mt, UNPROVIDED);
+                                            }
+                                        }
+                                        {
+                                            SubLObject cdolist_list_var_27 = arg_outs;
+                                            SubLObject arg_out = NIL;
+                                            for (arg_out = cdolist_list_var_27.first(); NIL != cdolist_list_var_27; cdolist_list_var_27 = cdolist_list_var_27.rest() , arg_out = cdolist_list_var_27.first()) {
+                                                hash_table_utilities.pushnew_hash(arg, list(pred, arg_out), arg_edge_map, UNPROVIDED);
+                                            }
+                                        }
+                                        arg_nexts_list = cons(arg_outs, arg_nexts_list);
+                                    }
+                                    {
+                                        SubLObject arg_ins = NIL;
+                                        arg_ins = sbhl_search_methods.sbhl_all_backward_true_nodes(sbhl_module_vars.get_sbhl_module(pred), arg, mt, UNPROVIDED);
+                                        if (NIL != arg_ins) {
+                                            arg_ins = blue_apply_filter_fns(arg_ins, filter_fns, mt, UNPROVIDED);
+                                            if (length(arg_ins).numG(ONE_INTEGER)) {
+                                                arg_ins = sbhl_search_methods.sbhl_max_nodes(sbhl_module_utilities.get_sbhl_reductions_module(sbhl_module_vars.get_sbhl_module(pred)), arg_ins, mt, UNPROVIDED, UNPROVIDED);
+                                            }
+                                        }
+                                        {
+                                            SubLObject cdolist_list_var_28 = arg_ins;
+                                            SubLObject arg_in = NIL;
+                                            for (arg_in = cdolist_list_var_28.first(); NIL != cdolist_list_var_28; cdolist_list_var_28 = cdolist_list_var_28.rest() , arg_in = cdolist_list_var_28.first()) {
+                                                hash_table_utilities.push_hash(arg_in, list(pred, arg), arg_edge_map);
+                                            }
+                                        }
+                                        arg_nexts_list = cons(arg_ins, arg_nexts_list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                arg_nexts = remove_duplicates(apply(symbol_function(APPEND), arg_nexts_list), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                arg_nexts = remove_duplicates(arg_nexts, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                arg_nexts = blue_apply_filter_fns(arg_nexts, filter_fns, mt, $POST_MINIMIZATION);
+                arg_nexts = set_difference(arg_nexts, apply(symbol_function(APPEND), arg_step_map), UNPROVIDED, UNPROVIDED);
+                arg_step_map = cons(arg_nexts, arg_step_map);
+                if (depth.numG(ONE_INTEGER)) {
+                    recurseP = T;
+                }
+                depth = subtract(depth, ONE_INTEGER);
+                {
+                    SubLObject cdolist_list_var = arg_nexts;
+                    SubLObject arg_next = NIL;
+                    for (arg_next = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , arg_next = cdolist_list_var.first()) {
+                        {
+                            SubLObject arg_depth = gethash(arg_next, arg_depth_map, UNPROVIDED);
+                            if (!(arg_depth.isInteger() && arg_depth.numG(depth))) {
+                                sethash(arg_next, arg_depth_map, depth);
+                            }
+                        }
+                    }
+                }
+                if (NIL != recurseP) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject new_arg_edge_map = bbf_min_forward_and_backward_true_internal_internal(preds, mt, filter_fns, depth, arg_step_map, arg_edge_map, arg_depth_map);
+                        SubLObject new_arg_depth_map = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        arg_edge_map = new_arg_edge_map;
+                        arg_depth_map = new_arg_depth_map;
+                    }
+                }
+                return values(arg_edge_map, arg_depth_map);
+            }
+        }
     }
 
     public static SubLObject bbf_min_forward_and_backward_true_internal_internal(final SubLObject preds, final SubLObject mt, final SubLObject filter_fns, SubLObject depth, SubLObject arg_step_map, SubLObject arg_edge_map, SubLObject arg_depth_map) {
@@ -1560,6 +2566,146 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             arg_depth_map = new_arg_depth_map;
         }
         return values(arg_edge_map, arg_depth_map);
+    }
+
+    public static final SubLObject bbf_script_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_forts = getf(arg_plist, $FORTS, UNPROVIDED);
+                SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+                SubLObject script_fort = v_forts.first();
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                if (NIL == mt) {
+                    mt = kb_accessors.defining_mt(script_fort);
+                }
+                if (NIL == mt) {
+                    mt = $$EverythingPSC;
+                }
+                {
+                    SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                            {
+                                SubLObject cdolist_list_var = isa.all_fort_instances($const64$QuasiTemporalSubSituationTypesPre, UNPROVIDED, UNPROVIDED);
+                                SubLObject quasi_temporal_pred = NIL;
+                                for (quasi_temporal_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , quasi_temporal_pred = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject cdolist_list_var_29 = kb_mapping_utilities.pred_value_tuples(script_fort, quasi_temporal_pred, ONE_INTEGER, $list_alt63, UNPROVIDED);
+                                        SubLObject scene2_scene1 = NIL;
+                                        for (scene2_scene1 = cdolist_list_var_29.first(); NIL != cdolist_list_var_29; cdolist_list_var_29 = cdolist_list_var_29.rest() , scene2_scene1 = cdolist_list_var_29.first()) {
+                                            {
+                                                SubLObject scene2 = scene2_scene1.first();
+                                                SubLObject scene1 = second(scene2_scene1);
+                                                SubLObject node2 = bbf_make_node(scene2, $$Situation, UNPROVIDED);
+                                                SubLObject node1 = bbf_make_node(scene1, $$Situation, UNPROVIDED);
+                                                result_nodes = cons(node1, result_nodes);
+                                                result_nodes = cons(node2, result_nodes);
+                                                result_edges = cons(bbf_make_edge_with_nodes(quasi_temporal_pred, node1, node2, mt, NIL, UNPROVIDED), result_edges);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                SubLObject cdolist_list_var = isa.all_fort_instances($const71$SituationTypeRelation_BasicActorT, UNPROVIDED, UNPROVIDED);
+                                SubLObject actor_scene_role_pred = NIL;
+                                for (actor_scene_role_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , actor_scene_role_pred = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject cdolist_list_var_30 = kb_mapping_utilities.pred_value_tuples(script_fort, actor_scene_role_pred, ONE_INTEGER, $list_alt70, UNPROVIDED);
+                                        SubLObject actor_scene_role = NIL;
+                                        for (actor_scene_role = cdolist_list_var_30.first(); NIL != cdolist_list_var_30; cdolist_list_var_30 = cdolist_list_var_30.rest() , actor_scene_role = cdolist_list_var_30.first()) {
+                                            {
+                                                SubLObject actor = actor_scene_role.first();
+                                                SubLObject scene = second(actor_scene_role);
+                                                SubLObject role = third(actor_scene_role);
+                                                SubLObject tailnode = bbf_make_node(scene, $$Situation, UNPROVIDED);
+                                                SubLObject headnode = bbf_make_node(list(actor, role, scene), $$SomethingExisting, list($ACTOR, actor, $ROLE, role, $SCENE, scene));
+                                                result_nodes = cons(tailnode, result_nodes);
+                                                result_nodes = cons(headnode, result_nodes);
+                                                result_edges = cons(bbf_make_edge_with_nodes(role, tailnode, headnode, mt, NIL, list($ORIGINAL_PREDICATE, actor_scene_role_pred)), result_edges);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                SubLObject actor_scene_role_pred = $const72$individualPlaysRoleInSubSituation;
+                                SubLObject headnodes = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+                                SubLObject cdolist_list_var = kb_mapping_utilities.pred_value_tuples(script_fort, actor_scene_role_pred, ONE_INTEGER, $list_alt70, UNPROVIDED);
+                                SubLObject actor_scene_role = NIL;
+                                for (actor_scene_role = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , actor_scene_role = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject actor = actor_scene_role.first();
+                                        SubLObject scene = second(actor_scene_role);
+                                        SubLObject role = third(actor_scene_role);
+                                        SubLObject tailnode = bbf_make_node(scene, $$Situation, UNPROVIDED);
+                                        SubLObject headnode = dictionary.dictionary_lookup(headnodes, actor, UNPROVIDED);
+                                        if (NIL == headnode) {
+                                            headnode = bbf_make_node(list(actor, role, scene), $$Individual, list($ACTOR, actor, $ROLE, role, $SCENE, scene));
+                                            dictionary.dictionary_enter(headnodes, actor, headnode);
+                                        }
+                                        result_nodes = cons(tailnode, result_nodes);
+                                        result_nodes = cons(headnode, result_nodes);
+                                        result_edges = cons(bbf_make_edge_with_nodes(role, tailnode, headnode, mt, NIL, list($ORIGINAL_PREDICATE, actor_scene_role_pred)), result_edges);
+                                    }
+                                }
+                            }
+                            {
+                                SubLObject cdolist_list_var = isa.all_fort_instances($const74$SituationTypeRelation_SitTypeToSu, UNPROVIDED, UNPROVIDED);
+                                SubLObject script_pred = NIL;
+                                for (script_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , script_pred = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject cdolist_list_var_31 = kb_mapping_utilities.pred_values(script_fort, script_pred, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                        SubLObject scene = NIL;
+                                        for (scene = cdolist_list_var_31.first(); NIL != cdolist_list_var_31; cdolist_list_var_31 = cdolist_list_var_31.rest() , scene = cdolist_list_var_31.first()) {
+                                            result_nodes = cons(bbf_make_node(scene, $$Situation, UNPROVIDED), result_nodes);
+                                        }
+                                    }
+                                }
+                            }
+                            {
+                                SubLObject cdolist_list_var = isa.all_fort_instances_in_all_mts($const76$GraphicallyEditableRoleMappingPre);
+                                SubLObject scene_to_scene_actor_relation = NIL;
+                                for (scene_to_scene_actor_relation = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , scene_to_scene_actor_relation = cdolist_list_var.first()) {
+                                    {
+                                        SubLObject cdolist_list_var_32 = kb_mapping_utilities.pred_value_tuples(script_fort, scene_to_scene_actor_relation, ONE_INTEGER, $list_alt75, UNPROVIDED);
+                                        SubLObject scene1_role1_scene2_role2_type = NIL;
+                                        for (scene1_role1_scene2_role2_type = cdolist_list_var_32.first(); NIL != cdolist_list_var_32; cdolist_list_var_32 = cdolist_list_var_32.rest() , scene1_role1_scene2_role2_type = cdolist_list_var_32.first()) {
+                                            {
+                                                SubLObject scene1 = scene1_role1_scene2_role2_type.first();
+                                                SubLObject role1 = second(scene1_role1_scene2_role2_type);
+                                                SubLObject scene2 = third(scene1_role1_scene2_role2_type);
+                                                SubLObject role2 = fourth(scene1_role1_scene2_role2_type);
+                                                SubLObject type = fifth(scene1_role1_scene2_role2_type);
+                                                SubLObject tailnode = bbf_make_node(list(type, role1, scene1), $$SomethingExisting, list($ACTOR, type, $ROLE, role1, $SCENE, scene1));
+                                                SubLObject headnode = bbf_make_node(list(type, role2, scene2), $$SomethingExisting, list($ACTOR, type, $ROLE, role2, $SCENE, scene2));
+                                                SubLObject edge = bbf_make_edge_with_nodes(scene_to_scene_actor_relation, tailnode, headnode, mt, UNPROVIDED, UNPROVIDED);
+                                                result_nodes = cons(tailnode, result_nodes);
+                                                result_nodes = cons(headnode, result_nodes);
+                                                result_edges = cons(edge, result_edges);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } finally {
+                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), mt == $$EverythingPSC ? ((SubLObject) (NIL)) : list($MT, mt));
+            }
+        }
     }
 
     public static SubLObject bbf_script(final SubLObject arg_plist) {
@@ -1735,6 +2881,51 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), mt.eql($$EverythingPSC) ? NIL : list($MT, mt));
     }
 
+    public static final SubLObject bbf_inference_answers_alt(SubLObject arg_plist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
+                SubLObject inference_store_id = getf(params, $INFERENCE_STORE_ID, UNPROVIDED);
+                SubLObject inference_id = getf(params, $INFERENCE_ID, UNPROVIDED);
+                SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(inference_store_id, inference_id);
+                SubLObject var_var_pred_map = determine_edge_templates_for_inference(inference);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject current_answers = cb_query_browser.cb_inference_current_answers(inference);
+                    SubLObject free_el_variables = thread.secondMultipleValue();
+                    SubLObject inference_new_justification_set = thread.thirdMultipleValue();
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject cdolist_list_var = current_answers;
+                        SubLObject v_answer = NIL;
+                        for (v_answer = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_answer = cdolist_list_var.first()) {
+                            {
+                                SubLObject v_bindings = inference_datastructures_inference.inference_answer_bindings(v_answer);
+                                SubLObject cdolist_list_var_33 = var_var_pred_map;
+                                SubLObject var_var_pred = NIL;
+                                for (var_var_pred = cdolist_list_var_33.first(); NIL != cdolist_list_var_33; cdolist_list_var_33 = cdolist_list_var_33.rest() , var_var_pred = cdolist_list_var_33.first()) {
+                                    {
+                                        SubLObject pred = (NIL != cycl_variables.el_varP(third(var_var_pred))) ? ((SubLObject) (list_utilities.alist_lookup(v_bindings, third(var_var_pred), UNPROVIDED, UNPROVIDED))) : third(var_var_pred);
+                                        SubLObject node_in = bbf_make_node(list_utilities.alist_lookup(v_bindings, var_var_pred.first(), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                                        SubLObject node_out = bbf_make_node(list_utilities.alist_lookup(v_bindings, second(var_var_pred), UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                                        SubLObject mt = fourth(var_var_pred);
+                                        SubLObject type = NIL;
+                                        SubLObject v_properties = (NIL != fort_types_interface.commutative_relationP(pred)) ? ((SubLObject) (list($DIRECTION, $UNDIRECTED))) : NIL;
+                                        result_edges = cons(bbf_make_edge_with_nodes(pred, node_in, node_out, mt, type, v_properties), result_edges);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), NIL != inference_datastructures_inference.inference_mt(inference) ? ((SubLObject) (list($MT, inference_datastructures_inference.inference_mt(inference)))) : NIL);
+            }
+        }
+    }
+
     public static SubLObject bbf_inference_answers(final SubLObject arg_plist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
@@ -1772,6 +2963,118 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             v_answer = cdolist_list_var.first();
         } 
         return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), NIL != inference_datastructures_inference.inference_mt(inference) ? list($MT, inference_datastructures_inference.inference_mt(inference)) : NIL);
+    }
+
+    public static final SubLObject determine_edge_templates_for_inference_alt(SubLObject inference) {
+        {
+            SubLObject el_bindings = inference_datastructures_inference.inference_el_bindings(inference);
+            SubLObject free_el_variables = inference_datastructures_inference.inference_free_el_vars(inference);
+            SubLObject var_var_pred_map = NIL;
+            {
+                SubLObject cdolist_list_var = inference_datastructures_inference.inference_hl_query(inference);
+                SubLObject clause = NIL;
+                for (clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , clause = cdolist_list_var.first()) {
+                    {
+                        SubLObject cdolist_list_var_34 = clauses.neg_lits(clause);
+                        SubLObject lit = NIL;
+                        for (lit = cdolist_list_var_34.first(); NIL != cdolist_list_var_34; cdolist_list_var_34 = cdolist_list_var_34.rest() , lit = cdolist_list_var_34.first()) {
+                            {
+                                SubLObject lit_asent = inference_datastructures_problem_query.contextualized_asent_asent(lit);
+                                SubLObject lit_mt = inference_datastructures_problem_query.contextualized_asent_mt(lit);
+                                SubLObject pred = lit_asent.first();
+                                if ((NIL != forts.fort_p(pred)) && (kb_mapping_utilities.fpred_value_in_any_mt(pred, $$arg1Isa, UNPROVIDED, UNPROVIDED, UNPROVIDED) == $$CycLSentence_Assertible)) {
+                                    lit_asent = second(lit_asent);
+                                }
+                                {
+                                    SubLObject list_var = NIL;
+                                    SubLObject arg1 = NIL;
+                                    SubLObject arg1_pos = NIL;
+                                    for (list_var = cycl_utilities.sentence_args(lit_asent, UNPROVIDED), arg1 = list_var.first(), arg1_pos = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , arg1 = list_var.first() , arg1_pos = add(ONE_INTEGER, arg1_pos)) {
+                                        {
+                                            SubLObject list_var_35 = NIL;
+                                            SubLObject arg2 = NIL;
+                                            SubLObject arg2_pos = NIL;
+                                            for (list_var_35 = cycl_utilities.sentence_args(lit_asent, UNPROVIDED), arg2 = list_var_35.first(), arg2_pos = ZERO_INTEGER; NIL != list_var_35; list_var_35 = list_var_35.rest() , arg2 = list_var_35.first() , arg2_pos = add(ONE_INTEGER, arg2_pos)) {
+                                                if ((arg1_pos.numL(arg2_pos) && (NIL != cycl_grammar.hl_variable_p(arg1))) && (NIL != cycl_grammar.hl_variable_p(arg2))) {
+                                                    {
+                                                        SubLObject el_var1 = list_utilities.alist_reverse_lookup(el_bindings, arg1, UNPROVIDED, UNPROVIDED);
+                                                        SubLObject el_var2 = list_utilities.alist_reverse_lookup(el_bindings, arg2, UNPROVIDED, UNPROVIDED);
+                                                        if ((NIL != subl_promotions.memberP(el_var1, free_el_variables, UNPROVIDED, UNPROVIDED)) && (NIL != subl_promotions.memberP(el_var2, free_el_variables, UNPROVIDED, UNPROVIDED))) {
+                                                            {
+                                                                SubLObject pred_36 = (NIL != cycl_grammar.hl_variable_p(cycl_utilities.sentence_arg0(lit_asent))) ? ((SubLObject) (list_utilities.alist_reverse_lookup(el_bindings, cycl_utilities.sentence_arg0(lit_asent), UNPROVIDED, UNPROVIDED))) : cycl_utilities.sentence_arg0(lit_asent);
+                                                                if (pred_36 == $$different) {
+                                                                    pred_36 = $inference_answers_default_undetermined_relation$.getGlobalValue();
+                                                                }
+                                                                var_var_pred_map = cons(list(el_var1, el_var2, pred_36, lit_mt), var_var_pred_map);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var_37 = clauses.pos_lits(clause);
+                        SubLObject lit = NIL;
+                        for (lit = cdolist_list_var_37.first(); NIL != cdolist_list_var_37; cdolist_list_var_37 = cdolist_list_var_37.rest() , lit = cdolist_list_var_37.first()) {
+                            {
+                                SubLObject lit_asent = inference_datastructures_problem_query.contextualized_asent_asent(lit);
+                                SubLObject lit_mt = inference_datastructures_problem_query.contextualized_asent_mt(lit);
+                                SubLObject pred = lit_asent.first();
+                                if ((NIL != forts.fort_p(pred)) && (kb_mapping_utilities.fpred_value_in_any_mt(pred, $$arg1Isa, UNPROVIDED, UNPROVIDED, UNPROVIDED) == $$CycLSentence_Assertible)) {
+                                    lit_asent = second(lit_asent);
+                                }
+                                {
+                                    SubLObject list_var = NIL;
+                                    SubLObject arg1 = NIL;
+                                    SubLObject arg1_pos = NIL;
+                                    for (list_var = cycl_utilities.sentence_args(lit_asent, UNPROVIDED), arg1 = list_var.first(), arg1_pos = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , arg1 = list_var.first() , arg1_pos = add(ONE_INTEGER, arg1_pos)) {
+                                        {
+                                            SubLObject list_var_38 = NIL;
+                                            SubLObject arg2 = NIL;
+                                            SubLObject arg2_pos = NIL;
+                                            for (list_var_38 = cycl_utilities.sentence_args(lit_asent, UNPROVIDED), arg2 = list_var_38.first(), arg2_pos = ZERO_INTEGER; NIL != list_var_38; list_var_38 = list_var_38.rest() , arg2 = list_var_38.first() , arg2_pos = add(ONE_INTEGER, arg2_pos)) {
+                                                if ((arg1_pos.numL(arg2_pos) && (NIL != cycl_grammar.hl_variable_p(arg1))) && (NIL != cycl_grammar.hl_variable_p(arg2))) {
+                                                    {
+                                                        SubLObject el_var1 = list_utilities.alist_reverse_lookup(el_bindings, arg1, UNPROVIDED, UNPROVIDED);
+                                                        SubLObject el_var2 = list_utilities.alist_reverse_lookup(el_bindings, arg2, UNPROVIDED, UNPROVIDED);
+                                                        if ((NIL != subl_promotions.memberP(el_var1, free_el_variables, UNPROVIDED, UNPROVIDED)) && (NIL != subl_promotions.memberP(el_var2, free_el_variables, UNPROVIDED, UNPROVIDED))) {
+                                                            {
+                                                                SubLObject pred_39 = (NIL != cycl_grammar.hl_variable_p(cycl_utilities.sentence_arg0(lit_asent))) ? ((SubLObject) (list_utilities.alist_reverse_lookup(el_bindings, cycl_utilities.sentence_arg0(lit_asent), UNPROVIDED, UNPROVIDED))) : cycl_utilities.sentence_arg0(lit_asent);
+                                                                if (pred_39 == $$different) {
+                                                                    pred_39 = $inference_answers_default_undetermined_relation$.getGlobalValue();
+                                                                }
+                                                                var_var_pred_map = cons(list(el_var1, el_var2, pred_39, lit_mt), var_var_pred_map);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (NIL == var_var_pred_map) {
+                {
+                    SubLObject focus_el_var = free_el_variables.first();
+                    SubLObject other_el_vars = free_el_variables.rest();
+                    SubLObject cdolist_list_var = other_el_vars;
+                    SubLObject other_el_var = NIL;
+                    for (other_el_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other_el_var = cdolist_list_var.first()) {
+                        var_var_pred_map = cons(list(focus_el_var, other_el_var, $inference_answers_default_undetermined_relation$.getGlobalValue(), $$EverythingPSC), var_var_pred_map);
+                    }
+                }
+            }
+            return var_var_pred_map;
+        }
     }
 
     public static SubLObject determine_edge_templates_for_inference(final SubLObject inference) {
@@ -1874,6 +3177,217 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             } 
         }
         return var_var_pred_map;
+    }
+
+    public static final SubLObject html_determine_edge_templates_for_inference_alt(SubLObject inference) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject var_var_pred_map = determine_edge_templates_for_inference(inference);
+                SubLObject el_query = inference_datastructures_inference.inference_el_query(inference);
+                html_markup(html_macros.$html_table_head$.getGlobalValue());
+                if (true) {
+                    html_markup(html_macros.$html_table_cellpadding$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(ZERO_INTEGER);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                if (true) {
+                    html_markup(html_macros.$html_table_cellspacing$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(ZERO_INTEGER);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                        html_char(CHAR_greater, UNPROVIDED);
+                        {
+                            SubLObject _prev_bind_0_40 = html_macros.$html_safe_print$.currentBinding(thread);
+                            try {
+                                html_macros.$html_safe_print$.bind(T, thread);
+                                html_markup(html_macros.$html_table_header_head$.getGlobalValue());
+                                if (true) {
+                                    html_markup(html_macros.$html_table_data_align$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(html_align($LEFT));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_41 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_princ($$$Query);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_41, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_table_header_tail$.getGlobalValue());
+                                html_markup(html_macros.$html_table_header_head$.getGlobalValue());
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_42 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_glyph($NBSP, THREE_INTEGER);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_42, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_table_header_tail$.getGlobalValue());
+                                html_markup(html_macros.$html_table_header_head$.getGlobalValue());
+                                if (true) {
+                                    html_markup(html_macros.$html_table_data_align$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(html_align($LEFT));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_43 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_princ($$$Edge_Templates);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_43, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_table_header_tail$.getGlobalValue());
+                            } finally {
+                                html_macros.$html_safe_print$.rebind(_prev_bind_0_40, thread);
+                            }
+                        }
+                        html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                        html_char(CHAR_greater, UNPROVIDED);
+                        {
+                            SubLObject _prev_bind_0_44 = html_macros.$html_safe_print$.currentBinding(thread);
+                            try {
+                                html_macros.$html_safe_print$.bind(T, thread);
+                                html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                if (true) {
+                                    html_markup(html_macros.$html_table_data_valign$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(html_align($TOP));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_45 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        {
+                                            SubLObject size_val = ONE_INTEGER;
+                                            html_markup(html_macros.$html_font_head$.getGlobalValue());
+                                            if (NIL != size_val) {
+                                                html_markup(html_macros.$html_font_size$.getGlobalValue());
+                                                html_char(CHAR_quotation, UNPROVIDED);
+                                                html_markup(size_val);
+                                                html_char(CHAR_quotation, UNPROVIDED);
+                                            }
+                                            html_char(CHAR_greater, UNPROVIDED);
+                                            {
+                                                SubLObject _prev_bind_0_46 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                try {
+                                                    html_macros.$html_safe_print$.bind(T, thread);
+                                                    cb_form(el_query, ZERO_INTEGER, T);
+                                                } finally {
+                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_46, thread);
+                                                }
+                                            }
+                                            html_markup(html_macros.$html_font_tail$.getGlobalValue());
+                                        }
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_45, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_47 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_glyph($NBSP, THREE_INTEGER);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_47, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                if (true) {
+                                    html_markup(html_macros.$html_table_data_valign$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(html_align($TOP));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_48 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        {
+                                            SubLObject size_val = ONE_INTEGER;
+                                            html_markup(html_macros.$html_font_head$.getGlobalValue());
+                                            if (NIL != size_val) {
+                                                html_markup(html_macros.$html_font_size$.getGlobalValue());
+                                                html_char(CHAR_quotation, UNPROVIDED);
+                                                html_markup(size_val);
+                                                html_char(CHAR_quotation, UNPROVIDED);
+                                            }
+                                            html_char(CHAR_greater, UNPROVIDED);
+                                            {
+                                                SubLObject _prev_bind_0_49 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                try {
+                                                    html_macros.$html_safe_print$.bind(T, thread);
+                                                    {
+                                                        SubLObject cdolist_list_var = var_var_pred_map;
+                                                        SubLObject var_var_pred = NIL;
+                                                        for (var_var_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , var_var_pred = cdolist_list_var.first()) {
+                                                            html_markup(html_macros.$html_no_break_head$.getGlobalValue());
+                                                            cb_form(var_var_pred.first(), UNPROVIDED, UNPROVIDED);
+                                                            html_princ($str_alt93$_____);
+                                                            cb_form(third(var_var_pred), UNPROVIDED, UNPROVIDED);
+                                                            if (NIL != fort_types_interface.commutative_relationP(third(var_var_pred))) {
+                                                                html_princ($str_alt93$_____);
+                                                            } else {
+                                                                html_princ($str_alt94$______);
+                                                            }
+                                                            cb_form(second(var_var_pred), UNPROVIDED, UNPROVIDED);
+                                                            html_markup(html_macros.$html_no_break_tail$.getGlobalValue());
+                                                            html_br();
+                                                        }
+                                                    }
+                                                } finally {
+                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_49, thread);
+                                                }
+                                            }
+                                            html_markup(html_macros.$html_font_tail$.getGlobalValue());
+                                        }
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_48, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                            } finally {
+                                html_macros.$html_safe_print$.rebind(_prev_bind_0_44, thread);
+                            }
+                        }
+                        html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_table_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject html_determine_edge_templates_for_inference(final SubLObject inference) {
@@ -2046,6 +3560,82 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject bbf_inference_alt(SubLObject arg_plist) {
+        {
+            SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
+            SubLObject store_suid = getf(params, $STORE_SUID, UNPROVIDED);
+            SubLObject inference_suid = getf(params, $INFERENCE_SUID, UNPROVIDED);
+            SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(store_suid, inference_suid);
+            if (NIL == inference_datastructures_inference.inference_p(inference)) {
+                Errors.error($str_alt99$Inference_not_found_);
+            }
+            {
+                SubLObject inference_mt = inference_datastructures_inference.inference_mt(inference);
+                SubLObject hl_query = inference_datastructures_inference.inference_hl_query(inference);
+                SubLObject hl_to_el_var_list = make_inference_hl_to_el_var_list(inference);
+                SubLObject result_nodes = NIL;
+                SubLObject result_edges = NIL;
+                SubLObject cdolist_list_var = hl_query;
+                SubLObject contextualized_clause = NIL;
+                for (contextualized_clause = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , contextualized_clause = cdolist_list_var.first()) {
+                    {
+                        SubLObject sense = $NEG;
+                        SubLObject index_var = ZERO_INTEGER;
+                        SubLObject cdolist_list_var_50 = clauses.neg_lits(contextualized_clause);
+                        SubLObject contextualized_asent = NIL;
+                        for (contextualized_asent = cdolist_list_var_50.first(); NIL != cdolist_list_var_50; cdolist_list_var_50 = cdolist_list_var_50.rest() , contextualized_asent = cdolist_list_var_50.first()) {
+                            {
+                                SubLObject datum = contextualized_asent;
+                                SubLObject current = datum;
+                                SubLObject mt = NIL;
+                                SubLObject asent = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt101);
+                                mt = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt101);
+                                asent = current.first();
+                                current = current.rest();
+                                if (NIL == current) {
+                                    result_edges = cons(blue_literal_to_edge(asent, hl_to_el_var_list, mt), result_edges);
+                                } else {
+                                    cdestructuring_bind_error(datum, $list_alt101);
+                                }
+                            }
+                            index_var = add(index_var, ONE_INTEGER);
+                        }
+                    }
+                    {
+                        SubLObject sense = $POS;
+                        SubLObject index_var = ZERO_INTEGER;
+                        SubLObject cdolist_list_var_51 = clauses.pos_lits(contextualized_clause);
+                        SubLObject contextualized_asent = NIL;
+                        for (contextualized_asent = cdolist_list_var_51.first(); NIL != cdolist_list_var_51; cdolist_list_var_51 = cdolist_list_var_51.rest() , contextualized_asent = cdolist_list_var_51.first()) {
+                            {
+                                SubLObject datum = contextualized_asent;
+                                SubLObject current = datum;
+                                SubLObject mt = NIL;
+                                SubLObject asent = NIL;
+                                destructuring_bind_must_consp(current, datum, $list_alt101);
+                                mt = current.first();
+                                current = current.rest();
+                                destructuring_bind_must_consp(current, datum, $list_alt101);
+                                asent = current.first();
+                                current = current.rest();
+                                if (NIL == current) {
+                                    result_edges = cons(blue_literal_to_edge(asent, hl_to_el_var_list, mt), result_edges);
+                                } else {
+                                    cdestructuring_bind_error(datum, $list_alt101);
+                                }
+                            }
+                            index_var = add(index_var, ONE_INTEGER);
+                        }
+                    }
+                }
+                return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, inference_mt));
+            }
+        }
+    }
+
     public static SubLObject bbf_inference(final SubLObject arg_plist) {
         final SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
         final SubLObject store_suid = getf(params, $STORE_SUID, UNPROVIDED);
@@ -2119,6 +3709,41 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, inference_mt));
     }
 
+    public static final SubLObject bbf_rule_alt(SubLObject arg_plist) {
+        {
+            SubLObject assertions = getf(arg_plist, $ASSERTIONS, UNPROVIDED);
+            SubLObject mt = NIL;
+            SubLObject result_nodes = NIL;
+            SubLObject result_edges = NIL;
+            SubLObject cdolist_list_var = assertions;
+            SubLObject assertion = NIL;
+            for (assertion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , assertion = cdolist_list_var.first()) {
+                mt = assertions_high.assertion_mt(assertion);
+                {
+                    SubLObject clause = assertions_high.assertion_cnf(assertion);
+                    SubLObject neg_lits = clauses.neg_lits(clause);
+                    SubLObject pos_lits = clauses.pos_lits(clause);
+                    SubLObject hl_to_el_var_list = make_assertion_hl_to_el_var_list(assertion);
+                    {
+                        SubLObject cdolist_list_var_52 = neg_lits;
+                        SubLObject neg_lit = NIL;
+                        for (neg_lit = cdolist_list_var_52.first(); NIL != cdolist_list_var_52; cdolist_list_var_52 = cdolist_list_var_52.rest() , neg_lit = cdolist_list_var_52.first()) {
+                            result_edges = cons(blue_literal_to_edge(neg_lit, hl_to_el_var_list, mt), result_edges);
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var_53 = pos_lits;
+                        SubLObject pos_lit = NIL;
+                        for (pos_lit = cdolist_list_var_53.first(); NIL != cdolist_list_var_53; cdolist_list_var_53 = cdolist_list_var_53.rest() , pos_lit = cdolist_list_var_53.first()) {
+                            result_edges = cons(blue_literal_to_edge(pos_lit, hl_to_el_var_list, mt), result_edges);
+                        }
+                    }
+                }
+            }
+            return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, mt));
+        }
+    }
+
     public static SubLObject bbf_rule(final SubLObject arg_plist) {
         final SubLObject assertions = getf(arg_plist, $ASSERTIONS, UNPROVIDED);
         SubLObject mt = NIL;
@@ -2155,6 +3780,32 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return bbf_make_graph(list_utilities.hash_remove_duplicates(result_nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list_utilities.hash_remove_duplicates(result_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, mt));
     }
 
+    public static final SubLObject blue_literal_to_edge_alt(SubLObject lit, SubLObject hl_to_el_var_list, SubLObject mt) {
+        if (NIL != unary_lit_p(lit)) {
+            return NIL;
+        }
+        {
+            SubLObject predicate = cycl_utilities.formula_arg0(lit);
+            SubLObject arg1 = literal_arg1(lit, UNPROVIDED);
+            SubLObject arg2 = (NIL != binary_lit_p(lit)) ? ((SubLObject) (literal_arg2(lit, UNPROVIDED))) : literal_args(lit, UNPROVIDED).rest();
+            SubLObject list_var = NIL;
+            SubLObject el_var = NIL;
+            SubLObject hl_var_id = NIL;
+            for (list_var = hl_to_el_var_list, el_var = list_var.first(), hl_var_id = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , el_var = list_var.first() , hl_var_id = add(ONE_INTEGER, hl_var_id)) {
+                {
+                    SubLObject hl_var = variables.get_variable(hl_var_id);
+                    arg1 = list_utilities.tree_substitute(list(arg1), hl_var, el_var).first();
+                    arg2 = list_utilities.tree_substitute(list(arg2), hl_var, el_var).first();
+                }
+            }
+            {
+                SubLObject node_in = bbf_make_node(arg1, UNPROVIDED, UNPROVIDED);
+                SubLObject node_out = bbf_make_node(arg2, UNPROVIDED, UNPROVIDED);
+                return bbf_make_edge_with_nodes(predicate, node_in, node_out, mt, UNPROVIDED, UNPROVIDED);
+            }
+        }
+    }
+
     public static SubLObject blue_literal_to_edge(final SubLObject lit, final SubLObject hl_to_el_var_list, final SubLObject mt) {
         if (NIL != unary_lit_p(lit)) {
             return NIL;
@@ -2175,6 +3826,55 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         final SubLObject node_in = bbf_make_node(arg1, UNPROVIDED, UNPROVIDED);
         final SubLObject node_out = bbf_make_node(arg2, UNPROVIDED, UNPROVIDED);
         return bbf_make_edge_with_nodes(predicate, node_in, node_out, mt, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject make_inference_hl_to_el_var_list_alt(SubLObject inference) {
+        {
+            SubLObject inference_el_bindings = inference_datastructures_inference.inference_el_bindings(inference);
+            SubLObject list_length = ZERO_INTEGER;
+            SubLObject result = NIL;
+            {
+                SubLObject cdolist_list_var = inference_el_bindings;
+                SubLObject cons = NIL;
+                for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
+                    {
+                        SubLObject datum = cons;
+                        SubLObject current = datum;
+                        SubLObject el_var = NIL;
+                        SubLObject hl_var = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt106);
+                        el_var = current.first();
+                        current = current.rest();
+                        hl_var = current;
+                        {
+                            SubLObject hl_var_pos = add(ONE_INTEGER, variables.variable_id(hl_var));
+                            if (hl_var_pos.numG(list_length)) {
+                                list_length = hl_var_pos;
+                            }
+                        }
+                    }
+                }
+            }
+            result = make_list(list_length, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = inference_el_bindings;
+                SubLObject cons = NIL;
+                for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
+                    {
+                        SubLObject datum = cons;
+                        SubLObject current = datum;
+                        SubLObject el_var = NIL;
+                        SubLObject hl_var = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt106);
+                        el_var = current.first();
+                        current = current.rest();
+                        hl_var = current;
+                        set_nth(variables.variable_id(hl_var), result, el_var);
+                    }
+                }
+            }
+            return result;
+        }
     }
 
     public static SubLObject make_inference_hl_to_el_var_list(final SubLObject inference) {
@@ -2218,8 +3918,22 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject make_assertion_hl_to_el_var_list_alt(SubLObject assertion) {
+        return Mapping.mapcar(INTERN_EL_VAR, assertions_high.assertion_variable_names(assertion));
+    }
+
     public static SubLObject make_assertion_hl_to_el_var_list(final SubLObject assertion) {
         return Mapping.mapcar(INTERN_EL_VAR, assertions_high.assertion_variable_names(assertion));
+    }
+
+    public static final SubLObject bbf_make_edge_from_assertion_alt(SubLObject assertion) {
+        if (NIL == assertion_handles.assertion_p(assertion)) {
+            return NIL;
+        }
+        {
+            SubLObject formula = assertions_high.assertion_formula(assertion);
+            return bbf_make_edge(cycl_utilities.formula_arg0(formula), cycl_utilities.formula_arg1(formula, UNPROVIDED), cycl_utilities.formula_arg2(formula, UNPROVIDED), assertions_high.assertion_mt(assertion), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
     }
 
     public static SubLObject bbf_make_edge_from_assertion(final SubLObject assertion) {
@@ -2228,6 +3942,24 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         }
         final SubLObject formula = assertions_high.assertion_formula(assertion);
         return bbf_make_edge(cycl_utilities.formula_arg0(formula), cycl_utilities.formula_arg1(formula, UNPROVIDED), cycl_utilities.formula_arg2(formula, UNPROVIDED), assertions_high.assertion_mt(assertion), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject bbf_make_graph_alt(SubLObject nodes, SubLObject edges, SubLObject v_properties) {
+        if (v_properties == UNPROVIDED) {
+            v_properties = NIL;
+        }
+        if ((NIL != edges) && (NIL == nodes)) {
+            {
+                SubLObject cdolist_list_var = edges;
+                SubLObject edge = NIL;
+                for (edge = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , edge = cdolist_list_var.first()) {
+                    nodes = cons(getf(edge, $HEAD, UNPROVIDED), nodes);
+                    nodes = cons(getf(edge, $TAIL, UNPROVIDED), nodes);
+                }
+            }
+            nodes = list_utilities.hash_remove_duplicates(nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+        return list($NODES, nodes, $EDGES, edges, $PROPERTIES, v_properties);
     }
 
     public static SubLObject bbf_make_graph(SubLObject nodes, final SubLObject edges, SubLObject v_properties) {
@@ -2247,6 +3979,38 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             nodes = list_utilities.hash_remove_duplicates(nodes, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return list($NODES, nodes, $EDGES, edges, $PROPERTIES, v_properties);
+    }
+
+    public static final SubLObject bbf_make_edge_alt(SubLObject pred, SubLObject arg_in, SubLObject arg_out, SubLObject mt, SubLObject type, SubLObject arg_in_type, SubLObject arg_out_type, SubLObject v_properties) {
+        if (type == UNPROVIDED) {
+            type = NIL;
+        }
+        if (arg_in_type == UNPROVIDED) {
+            arg_in_type = NIL;
+        }
+        if (arg_out_type == UNPROVIDED) {
+            arg_out_type = NIL;
+        }
+        if (v_properties == UNPROVIDED) {
+            v_properties = NIL;
+        }
+        {
+            SubLObject possible_assertion = kb_indexing.find_gaf_genl_mts(list(pred, arg_in, arg_out), mt);
+            SubLObject trueP = T;
+            SubLObject assertedP = NIL;
+            SubLObject strength = $DEFAULT;
+            if (NIL != assertion_handles.assertion_p(possible_assertion)) {
+                trueP = (assertions_high.assertion_truth(possible_assertion) == $TRUE) ? ((SubLObject) (T)) : NIL;
+                assertedP = assertions_high.asserted_assertionP(possible_assertion);
+                strength = assertions_high.assertion_strength(possible_assertion);
+                mt = assertions_high.assertion_mt(possible_assertion);
+            } else {
+                if (NIL != sbhl_module_utilities.sbhl_predicate_p(pred)) {
+                    mt = sbhl_search_what_mts.sbhl_max_floor_mts_of_predicate_paths(sbhl_module_vars.get_sbhl_module(pred), arg_in, arg_out, $$True_JustificationTruth).first();
+                }
+            }
+            return list(new SubLObject[]{ $RELATION, pred, $TAIL, bbf_make_node(arg_in, arg_in_type, UNPROVIDED), $HEAD, bbf_make_node(arg_out, arg_out_type, UNPROVIDED), $MT, mt, $TRUE_, trueP, $ASSERTED_, assertedP, $STRENGTH, strength, $TYPE, type, $PROPERTIES, v_properties });
+        }
     }
 
     public static SubLObject bbf_make_edge(final SubLObject pred, final SubLObject arg_in, final SubLObject arg_out, SubLObject mt, SubLObject type, SubLObject arg_in_type, SubLObject arg_out_type, SubLObject v_properties) {
@@ -2279,6 +4043,16 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return list(new SubLObject[]{ $RELATION, pred, $TAIL, bbf_make_node(arg_in, arg_in_type, UNPROVIDED), $HEAD, bbf_make_node(arg_out, arg_out_type, UNPROVIDED), $MT, mt, $TRUE_, trueP, $ASSERTED_, assertedP, $STRENGTH, strength, $TYPE, type, $PROPERTIES, v_properties });
     }
 
+    public static final SubLObject bbf_make_edge_with_nodes_alt(SubLObject pred, SubLObject node_in, SubLObject node_out, SubLObject mt, SubLObject type, SubLObject v_properties) {
+        if (type == UNPROVIDED) {
+            type = NIL;
+        }
+        if (v_properties == UNPROVIDED) {
+            v_properties = NIL;
+        }
+        return list(new SubLObject[]{ $RELATION, pred, $TAIL, node_in, $HEAD, node_out, $MT, mt, $TYPE, type, $PROPERTIES, v_properties });
+    }
+
     public static SubLObject bbf_make_edge_with_nodes(final SubLObject pred, final SubLObject node_in, final SubLObject node_out, final SubLObject mt, SubLObject type, SubLObject v_properties) {
         if (type == UNPROVIDED) {
             type = NIL;
@@ -2287,6 +4061,16 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             v_properties = NIL;
         }
         return list(new SubLObject[]{ $RELATION, pred, $TAIL, node_in, $HEAD, node_out, $MT, mt, $TYPE, type, $PROPERTIES, v_properties });
+    }
+
+    public static final SubLObject bbf_make_node_alt(SubLObject v_core, SubLObject type, SubLObject v_properties) {
+        if (type == UNPROVIDED) {
+            type = NIL;
+        }
+        if (v_properties == UNPROVIDED) {
+            v_properties = NIL;
+        }
+        return list($CORE, v_core, $TYPE, type, $PROPERTIES, v_properties);
     }
 
     public static SubLObject bbf_make_node(final SubLObject v_core, SubLObject type, SubLObject v_properties) {
@@ -2299,8 +4083,19 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return list($CORE, v_core, $TYPE, type, $PROPERTIES, v_properties);
     }
 
+    public static final SubLObject blue_event_dispatcher_runningP_alt() {
+        return event_utilities.generic_event_dispatcher_process_running_for_application_p($blue_event_dispatcher_listeners$);
+    }
+
     public static SubLObject blue_event_dispatcher_runningP() {
         return event_utilities.generic_event_dispatcher_process_running_for_application_p($blue_event_dispatcher_listeners$);
+    }
+
+    public static final SubLObject ensure_blue_event_dispatcher_running_alt() {
+        if (NIL == blue_event_dispatcher_runningP()) {
+            start_blue_event_dispatcher();
+        }
+        return event_utilities.generic_event_dispatcher_process();
     }
 
     public static SubLObject ensure_blue_event_dispatcher_running() {
@@ -2308,6 +4103,27 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             start_blue_event_dispatcher();
         }
         return event_utilities.generic_event_dispatcher_process();
+    }
+
+    public static final SubLObject register_listener_with_blue_event_dispatcher_alt(SubLObject listener_var) {
+        {
+            SubLObject lock = $blue_event_dispatcher_lock$.getGlobalValue();
+            SubLObject release = NIL;
+            try {
+                release = seize_lock(lock);
+                if (NIL == find(listener_var, $blue_event_dispatcher_listeners$.getGlobalValue(), EQUALP, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                    $blue_event_dispatcher_listeners$.setGlobalValue(cons(listener_var, $blue_event_dispatcher_listeners$.getGlobalValue()));
+                    if (NIL != blue_event_dispatcher_runningP()) {
+                        event_broker.register_event_listener(listener_var, NIL);
+                    }
+                }
+            } finally {
+                if (NIL != release) {
+                    release_lock(lock);
+                }
+            }
+        }
+        return listener_var;
     }
 
     public static SubLObject register_listener_with_blue_event_dispatcher(final SubLObject listener_var) {
@@ -2323,6 +4139,25 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         } finally {
             if (NIL != release) {
                 release_lock($blue_event_dispatcher_lock$.getGlobalValue());
+            }
+        }
+        return listener_var;
+    }
+
+    public static final SubLObject deregister_listener_with_blue_event_dispatcher_alt(SubLObject listener_var) {
+        {
+            SubLObject lock = $blue_event_dispatcher_lock$.getGlobalValue();
+            SubLObject release = NIL;
+            try {
+                release = seize_lock(lock);
+                $blue_event_dispatcher_listeners$.setGlobalValue(remove(listener_var, $blue_event_dispatcher_listeners$.getGlobalValue(), EQUALP, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                if (NIL != blue_event_dispatcher_runningP()) {
+                    event_broker.deregister_event_listener(listener_var, NIL);
+                }
+            } finally {
+                if (NIL != release) {
+                    release_lock(lock);
+                }
             }
         }
         return listener_var;
@@ -2344,18 +4179,44 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return listener_var;
     }
 
+    public static final SubLObject stop_blue_event_dispatcher_alt() {
+        return event_utilities.stop_generic_event_dispatcher_process_for_application($blue_event_dispatcher_listeners$);
+    }
+
     public static SubLObject stop_blue_event_dispatcher() {
         return event_utilities.stop_generic_event_dispatcher_process_for_application($blue_event_dispatcher_listeners$);
+    }
+
+    public static final SubLObject start_blue_event_dispatcher_alt() {
+        return event_utilities.start_generic_event_dispatcher_process_for_application($blue_event_dispatcher_listeners$);
     }
 
     public static SubLObject start_blue_event_dispatcher() {
         return event_utilities.start_generic_event_dispatcher_process_for_application($blue_event_dispatcher_listeners$);
     }
 
+    public static final SubLObject blue_event_alt(SubLObject signature, SubLObject blue_event) {
+        ensure_blue_event_dispatcher_running();
+        {
+            SubLObject event = event_model.new_event($BLUE_EVENT, blue_event, signature);
+            return event_broker.post_event(event, event_broker.core_event_broker());
+        }
+    }
+
     public static SubLObject blue_event(final SubLObject signature, final SubLObject blue_event) {
         ensure_blue_event_dispatcher_running();
         final SubLObject event = event_model.new_event($BLUE_EVENT, blue_event, signature);
         return event_broker.post_event(event, event_broker.core_event_broker());
+    }
+
+    public static final SubLObject blue_fetch_event_alt(SubLObject signature) {
+        {
+            SubLObject message = message_mailboxes.retrieve_mail_from_message_mailbox(signature);
+            if (NIL != string_utilities.empty_string_p(message)) {
+                message = NIL;
+            }
+            return message;
+        }
     }
 
     public static SubLObject blue_fetch_event(final SubLObject signature) {
@@ -2366,13 +4227,32 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return message;
     }
 
+    public static final SubLObject blue_fetch_uia_blue_event_alt(SubLObject signature) {
+        return blue_fetch_event(signature);
+    }
+
     public static SubLObject blue_fetch_uia_blue_event(final SubLObject signature) {
         return blue_fetch_event(signature);
+    }
+
+    public static final SubLObject blue_current_message_mailbox_suite_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $blue_message_mailbox_suite$.getDynamicValue(thread);
+        }
     }
 
     public static SubLObject blue_current_message_mailbox_suite() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return $blue_message_mailbox_suite$.getDynamicValue(thread);
+    }
+
+    public static final SubLObject blue_ensure_blue_event_address_alt(SubLObject address) {
+        {
+            SubLObject mbox_suite = blue_current_message_mailbox_suite();
+            message_mailboxes.ensure_message_mailbox_allocation(address, mbox_suite);
+        }
+        return address;
     }
 
     public static SubLObject blue_ensure_blue_event_address(final SubLObject address) {
@@ -2381,10 +4261,27 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return address;
     }
 
+    public static final SubLObject map_blue_event_to_mailbox_alt(SubLObject event) {
+        {
+            SubLObject source = event_model.event_source(event);
+            SubLObject message = event_model.event_message(event);
+            message_mailboxes.store_mail_in_message_mailbox(source, message, UNPROVIDED);
+        }
+        return event;
+    }
+
     public static SubLObject map_blue_event_to_mailbox(final SubLObject event) {
         final SubLObject source = event_model.event_source(event);
         final SubLObject message = event_model.event_message(event);
         message_mailboxes.store_mail_in_message_mailbox(source, message, UNPROVIDED);
+        return event;
+    }
+
+    public static final SubLObject blue_map_event_to_blue_event_alt(SubLObject event, SubLObject params) {
+        if (params == UNPROVIDED) {
+            params = NIL;
+        }
+        map_blue_event_to_mailbox(event);
         return event;
     }
 
@@ -2396,100 +4293,240 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return event;
     }
 
+    public static final SubLObject blue_graph_print_function_trampoline_alt(SubLObject v_object, SubLObject stream) {
+        compatibility.default_struct_print_function(v_object, stream, ZERO_INTEGER);
+        return NIL;
+    }
+
     public static SubLObject blue_graph_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
         compatibility.default_struct_print_function(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
-    public static SubLObject blue_graph_p(final SubLObject v_object) {
-        return v_object.getClass() == blue_grapher_utilities.$blue_graph_native.class ? T : NIL;
+    public static final SubLObject blue_graph_p_alt(SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.blue_grapher_utilities.$blue_graph_native.class ? ((SubLObject) (T)) : NIL;
     }
 
-    public static SubLObject blue_graph_isg(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_p(final SubLObject v_object) {
+        return v_object.getClass() == com.cyc.cycjava.cycl.blue_grapher_utilities.$blue_graph_native.class ? T : NIL;
+    }
+
+    public static final SubLObject blue_graph_isg_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField2();
     }
 
-    public static SubLObject blue_graph_node_label_map(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_isg(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField2();
+    }
+
+    public static final SubLObject blue_graph_node_label_map_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField3();
     }
 
-    public static SubLObject blue_graph_nodes(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_node_label_map(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField3();
+    }
+
+    public static final SubLObject blue_graph_nodes_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField4();
     }
 
-    public static SubLObject blue_graph_edge_label_map(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_nodes(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField4();
+    }
+
+    public static final SubLObject blue_graph_edge_label_map_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField5();
     }
 
-    public static SubLObject blue_graph_edges(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_edge_label_map(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField5();
+    }
+
+    public static final SubLObject blue_graph_edges_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField6();
     }
 
-    public static SubLObject blue_graph_node_definitions(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_edges(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField6();
+    }
+
+    public static final SubLObject blue_graph_node_definitions_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField7();
     }
 
-    public static SubLObject blue_graph_edge_definitions(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_node_definitions(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField7();
+    }
+
+    public static final SubLObject blue_graph_edge_definitions_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField8();
     }
 
-    public static SubLObject blue_graph_options(final SubLObject v_object) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_edge_definitions(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField8();
+    }
+
+    public static final SubLObject blue_graph_options_alt(SubLObject v_object) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.getField9();
     }
 
-    public static SubLObject _csetf_blue_graph_isg(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject blue_graph_options(final SubLObject v_object) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.getField9();
+    }
+
+    public static final SubLObject _csetf_blue_graph_isg_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField2(value);
     }
 
-    public static SubLObject _csetf_blue_graph_node_label_map(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_isg(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField2(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_node_label_map_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField3(value);
     }
 
-    public static SubLObject _csetf_blue_graph_nodes(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_node_label_map(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField3(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_nodes_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField4(value);
     }
 
-    public static SubLObject _csetf_blue_graph_edge_label_map(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_nodes(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField4(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_edge_label_map_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField5(value);
     }
 
-    public static SubLObject _csetf_blue_graph_edges(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_edge_label_map(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField5(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_edges_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField6(value);
     }
 
-    public static SubLObject _csetf_blue_graph_node_definitions(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_edges(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField6(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_node_definitions_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField7(value);
     }
 
-    public static SubLObject _csetf_blue_graph_edge_definitions(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_node_definitions(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField7(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_edge_definitions_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField8(value);
     }
 
-    public static SubLObject _csetf_blue_graph_options(final SubLObject v_object, final SubLObject value) {
-        assert NIL != blue_graph_p(v_object) : "blue_grapher_utilities.blue_graph_p(v_object) " + "CommonSymbols.NIL != blue_grapher_utilities.blue_graph_p(v_object) " + v_object;
+    public static SubLObject _csetf_blue_graph_edge_definitions(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField8(value);
+    }
+
+    public static final SubLObject _csetf_blue_graph_options_alt(SubLObject v_object, SubLObject value) {
+        SubLTrampolineFile.checkType(v_object, BLUE_GRAPH_P);
         return v_object.setField9(value);
+    }
+
+    public static SubLObject _csetf_blue_graph_options(final SubLObject v_object, final SubLObject value) {
+        assert NIL != blue_graph_p(v_object) : "! blue_grapher_utilities.blue_graph_p(v_object) " + "blue_grapher_utilities.blue_graph_p error :" + v_object;
+        return v_object.setField9(value);
+    }
+
+    public static final SubLObject make_blue_graph_alt(SubLObject arglist) {
+        if (arglist == UNPROVIDED) {
+            arglist = NIL;
+        }
+        {
+            SubLObject v_new = new com.cyc.cycjava.cycl.blue_grapher_utilities.$blue_graph_native();
+            SubLObject next = NIL;
+            for (next = arglist; NIL != next; next = cddr(next)) {
+                {
+                    SubLObject current_arg = next.first();
+                    SubLObject current_value = cadr(next);
+                    SubLObject pcase_var = current_arg;
+                    if (pcase_var.eql($ISG)) {
+                        _csetf_blue_graph_isg(v_new, current_value);
+                    } else {
+                        if (pcase_var.eql($NODE_LABEL_MAP)) {
+                            _csetf_blue_graph_node_label_map(v_new, current_value);
+                        } else {
+                            if (pcase_var.eql($NODES)) {
+                                _csetf_blue_graph_nodes(v_new, current_value);
+                            } else {
+                                if (pcase_var.eql($EDGE_LABEL_MAP)) {
+                                    _csetf_blue_graph_edge_label_map(v_new, current_value);
+                                } else {
+                                    if (pcase_var.eql($EDGES)) {
+                                        _csetf_blue_graph_edges(v_new, current_value);
+                                    } else {
+                                        if (pcase_var.eql($NODE_DEFINITIONS)) {
+                                            _csetf_blue_graph_node_definitions(v_new, current_value);
+                                        } else {
+                                            if (pcase_var.eql($EDGE_DEFINITIONS)) {
+                                                _csetf_blue_graph_edge_definitions(v_new, current_value);
+                                            } else {
+                                                if (pcase_var.eql($OPTIONS)) {
+                                                    _csetf_blue_graph_options(v_new, current_value);
+                                                } else {
+                                                    Errors.error($str_alt156$Invalid_slot__S_for_construction_, current_arg);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return v_new;
+        }
     }
 
     public static SubLObject make_blue_graph(SubLObject arglist) {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new blue_grapher_utilities.$blue_graph_native();
+        final SubLObject v_new = new com.cyc.cycjava.cycl.blue_grapher_utilities.$blue_graph_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -2553,6 +4590,21 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return visit_defstruct_blue_graph(obj, visitor_fn);
     }
 
+    public static final SubLObject new_blue_graph_alt() {
+        {
+            SubLObject blue_graph = make_blue_graph(UNPROVIDED);
+            _csetf_blue_graph_isg(blue_graph, integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED));
+            _csetf_blue_graph_node_label_map(blue_graph, dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
+            _csetf_blue_graph_edge_label_map(blue_graph, dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
+            _csetf_blue_graph_edges(blue_graph, NIL);
+            _csetf_blue_graph_nodes(blue_graph, dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
+            _csetf_blue_graph_node_definitions(blue_graph, dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
+            _csetf_blue_graph_edge_definitions(blue_graph, dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
+            _csetf_blue_graph_options(blue_graph, dictionary.new_dictionary(UNPROVIDED, UNPROVIDED));
+            return blue_graph;
+        }
+    }
+
     public static SubLObject new_blue_graph() {
         final SubLObject blue_graph = make_blue_graph(UNPROVIDED);
         _csetf_blue_graph_isg(blue_graph, integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED));
@@ -2566,10 +4618,29 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return blue_graph;
     }
 
+    public static final SubLObject blue_graph_add_node_type_alt(SubLObject blue_graph, SubLObject type, SubLObject color) {
+        {
+            SubLObject node_definitions = blue_graph_node_definitions(blue_graph);
+            dictionary.dictionary_enter(node_definitions, type, list($COLOR, color));
+            return blue_graph;
+        }
+    }
+
     public static SubLObject blue_graph_add_node_type(final SubLObject blue_graph, final SubLObject type, final SubLObject color) {
         final SubLObject node_definitions = blue_graph_node_definitions(blue_graph);
         dictionary.dictionary_enter(node_definitions, type, list($COLOR, color));
         return blue_graph;
+    }
+
+    public static final SubLObject blue_graph_add_edge_type_alt(SubLObject blue_graph, SubLObject type, SubLObject color, SubLObject orientation) {
+        if (orientation == UNPROVIDED) {
+            orientation = $DEFAULT;
+        }
+        {
+            SubLObject edge_definitions = blue_graph_edge_definitions(blue_graph);
+            dictionary.dictionary_enter(edge_definitions, type, list($COLOR, color, $ORIENTATION, orientation));
+            return blue_graph;
+        }
     }
 
     public static SubLObject blue_graph_add_edge_type(final SubLObject blue_graph, final SubLObject type, final SubLObject color, SubLObject orientation) {
@@ -2581,9 +4652,37 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return blue_graph;
     }
 
+    public static final SubLObject blue_graph_add_option_alt(SubLObject blue_graph, SubLObject option, SubLObject plist) {
+        {
+            SubLObject options = blue_graph_options(blue_graph);
+            dictionary.dictionary_enter(options, option, plist);
+            return blue_graph;
+        }
+    }
+
     public static SubLObject blue_graph_add_option(final SubLObject blue_graph, final SubLObject option, final SubLObject plist) {
         final SubLObject options = blue_graph_options(blue_graph);
         dictionary.dictionary_enter(options, option, plist);
+        return blue_graph;
+    }
+
+    public static final SubLObject blue_graph_add_node_alt(SubLObject blue_graph, SubLObject type, SubLObject label) {
+        if (type == UNPROVIDED) {
+            type = $DEFAULT;
+        }
+        if (label == UNPROVIDED) {
+            label = $str_alt159$;
+        }
+        {
+            SubLObject new_id = blue_graph_next_id(blue_graph);
+            SubLObject nodes = blue_graph_nodes(blue_graph);
+            SubLObject node_label_map = blue_graph_node_label_map(blue_graph);
+            SubLObject node = list($ID, new_id, $TYPE, type, $LABEL, label);
+            dictionary.dictionary_enter(nodes, new_id, node);
+            if (NIL == string_utilities.empty_string_p(label)) {
+                dictionary.dictionary_enter(node_label_map, label, node);
+            }
+        }
         return blue_graph;
     }
 
@@ -2605,8 +4704,22 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return blue_graph;
     }
 
+    public static final SubLObject blue_graph_node_p_alt(SubLObject node) {
+        return makeBoolean(node.isList() && blue_graph_node_get_id(node).isFixnum());
+    }
+
     public static SubLObject blue_graph_node_p(final SubLObject node) {
         return makeBoolean(node.isList() && blue_graph_node_get_id(node).isFixnum());
+    }
+
+    public static final SubLObject blue_graph_maybe_add_node_alt(SubLObject blue_graph, SubLObject label, SubLObject type) {
+        if (type == UNPROVIDED) {
+            type = $DEFAULT;
+        }
+        if (NIL == blue_graph_node_p(blue_graph_get_node_by_label(blue_graph, label))) {
+            blue_graph_add_node(blue_graph, type, label);
+        }
+        return blue_graph;
     }
 
     public static SubLObject blue_graph_maybe_add_node(final SubLObject blue_graph, final SubLObject label, SubLObject type) {
@@ -2619,16 +4732,35 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return blue_graph;
     }
 
+    public static final SubLObject blue_graph_node_get_id_alt(SubLObject node) {
+        return getf(node, $ID, UNPROVIDED);
+    }
+
     public static SubLObject blue_graph_node_get_id(final SubLObject node) {
         return getf(node, $ID, UNPROVIDED);
+    }
+
+    public static final SubLObject blue_graph_node_get_type_alt(SubLObject node) {
+        return getf(node, $TYPE, $DEFAULT);
     }
 
     public static SubLObject blue_graph_node_get_type(final SubLObject node) {
         return getf(node, $TYPE, $DEFAULT);
     }
 
+    public static final SubLObject blue_graph_node_get_label_alt(SubLObject node) {
+        return getf(node, $LABEL, $str_alt159$);
+    }
+
     public static SubLObject blue_graph_node_get_label(final SubLObject node) {
         return getf(node, $LABEL, $str164$);
+    }
+
+    public static final SubLObject blue_graph_get_node_alt(SubLObject blue_graph, SubLObject id) {
+        {
+            SubLObject nodes = blue_graph_nodes(blue_graph);
+            return dictionary.dictionary_lookup(nodes, id, UNPROVIDED);
+        }
     }
 
     public static SubLObject blue_graph_get_node(final SubLObject blue_graph, final SubLObject id) {
@@ -2636,9 +4768,23 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return dictionary.dictionary_lookup(nodes, id, UNPROVIDED);
     }
 
+    public static final SubLObject blue_graph_get_node_by_label_alt(SubLObject blue_graph, SubLObject label) {
+        {
+            SubLObject node_label_map = blue_graph_node_label_map(blue_graph);
+            return dictionary.dictionary_lookup(node_label_map, label, UNPROVIDED);
+        }
+    }
+
     public static SubLObject blue_graph_get_node_by_label(final SubLObject blue_graph, final SubLObject label) {
         final SubLObject node_label_map = blue_graph_node_label_map(blue_graph);
         return dictionary.dictionary_lookup(node_label_map, label, UNPROVIDED);
+    }
+
+    public static final SubLObject blue_graph_resolve_node_label_reference_alt(SubLObject blue_graph, SubLObject label) {
+        {
+            SubLObject node = blue_graph_get_node_by_label(blue_graph, label);
+            return blue_graph_node_get_id(node);
+        }
     }
 
     public static SubLObject blue_graph_resolve_node_label_reference(final SubLObject blue_graph, final SubLObject label) {
@@ -2646,20 +4792,63 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return blue_graph_node_get_id(node);
     }
 
+    public static final SubLObject blue_graph_edge_from_alt(SubLObject edge) {
+        return getf(edge, $FROM, UNPROVIDED);
+    }
+
     public static SubLObject blue_graph_edge_from(final SubLObject edge) {
         return getf(edge, $FROM, UNPROVIDED);
+    }
+
+    public static final SubLObject blue_graph_edge_to_alt(SubLObject edge) {
+        return getf(edge, $TO, UNPROVIDED);
     }
 
     public static SubLObject blue_graph_edge_to(final SubLObject edge) {
         return getf(edge, $TO, UNPROVIDED);
     }
 
+    public static final SubLObject blue_graph_edge_get_type_alt(SubLObject edge) {
+        return getf(edge, $TYPE, $DEFAULT);
+    }
+
     public static SubLObject blue_graph_edge_get_type(final SubLObject edge) {
         return getf(edge, $TYPE, $DEFAULT);
     }
 
+    public static final SubLObject blue_graph_edge_get_label_alt(SubLObject edge) {
+        return getf(edge, $LABEL, $str_alt159$);
+    }
+
     public static SubLObject blue_graph_edge_get_label(final SubLObject edge) {
         return getf(edge, $LABEL, $str164$);
+    }
+
+    public static final SubLObject blue_graph_add_edge_alt(SubLObject blue_graph, SubLObject from, SubLObject to, SubLObject type, SubLObject label) {
+        if (type == UNPROVIDED) {
+            type = $DEFAULT;
+        }
+        if (label == UNPROVIDED) {
+            label = $str_alt159$;
+        }
+        {
+            SubLObject edges = blue_graph_edges(blue_graph);
+            SubLObject edge_label_map = blue_graph_edge_label_map(blue_graph);
+            SubLObject edge = NIL;
+            if (from.isString()) {
+                from = blue_graph_resolve_node_label_reference(blue_graph, from);
+            }
+            if (to.isString()) {
+                to = blue_graph_resolve_node_label_reference(blue_graph, to);
+            }
+            edge = list($FROM, from, $TO, to, $TYPE, type, $LABEL, label);
+            edges = cons(edge, edges);
+            _csetf_blue_graph_edges(blue_graph, edges);
+            if (NIL == string_utilities.empty_string_p(label)) {
+                dictionary_utilities.dictionary_push(edge_label_map, label, edge);
+            }
+        }
+        return blue_graph;
     }
 
     public static SubLObject blue_graph_add_edge(final SubLObject blue_graph, SubLObject from, SubLObject to, SubLObject type, SubLObject label) {
@@ -2687,13 +4876,62 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return blue_graph;
     }
 
+    public static final SubLObject blue_graph_next_id_alt(SubLObject blue_graph) {
+        {
+            SubLObject isg = blue_graph_isg(blue_graph);
+            return integer_sequence_generator.integer_sequence_generator_next(isg);
+        }
+    }
+
     public static SubLObject blue_graph_next_id(final SubLObject blue_graph) {
         final SubLObject isg = blue_graph_isg(blue_graph);
         return integer_sequence_generator.integer_sequence_generator_next(isg);
     }
 
+    public static final SubLObject blue_graph_generate_description_alt(SubLObject blue_graph) {
+        return listS(blue_graph_generate_definition_description(blue_graph), blue_graph_generate_option_description(blue_graph), append(blue_graph_generate_node_description(blue_graph), blue_graph_generate_edge_description(blue_graph), NIL));
+    }
+
     public static SubLObject blue_graph_generate_description(final SubLObject blue_graph) {
         return listS(blue_graph_generate_definition_description(blue_graph), blue_graph_generate_option_description(blue_graph), append(blue_graph_generate_node_description(blue_graph), blue_graph_generate_edge_description(blue_graph), NIL));
+    }
+
+    public static final SubLObject blue_graph_generate_definition_description_alt(SubLObject blue_graph) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject definitions = NIL;
+                {
+                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(blue_graph_node_definitions(blue_graph)));
+                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject type = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                            SubLObject definition = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            definitions = cons(listS($NODE_TYPE, type, append(definition, NIL)), definitions);
+                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                        }
+                    } 
+                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                }
+                {
+                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(blue_graph_edge_definitions(blue_graph)));
+                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject type = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                            SubLObject definition = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            definitions = cons(listS($EDGE_TYPE, type, append(definition, NIL)), definitions);
+                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                        }
+                    } 
+                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                }
+                return list($DEFINITIONS, definitions);
+            }
+        }
     }
 
     public static SubLObject blue_graph_generate_definition_description(final SubLObject blue_graph) {
@@ -2719,6 +4957,28 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return list($DEFINITIONS, definitions);
     }
 
+    public static final SubLObject blue_graph_generate_option_description_alt(SubLObject blue_graph) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject options = NIL;
+                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(blue_graph_options(blue_graph)));
+                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject option = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                        SubLObject value = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        options = cons(list(option, value), options);
+                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                    }
+                } 
+                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                return list($OPTIONS, options);
+            }
+        }
+    }
+
     public static SubLObject blue_graph_generate_option_description(final SubLObject blue_graph) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject options = NIL;
@@ -2732,6 +4992,28 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         }
         dictionary_contents.do_dictionary_contents_finalize(iteration_state);
         return list($OPTIONS, options);
+    }
+
+    public static final SubLObject blue_graph_generate_node_description_alt(SubLObject blue_graph) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject nodes = NIL;
+                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(blue_graph_nodes(blue_graph)));
+                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject id = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                        SubLObject node = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        nodes = cons(list($NODE, node), nodes);
+                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                    }
+                } 
+                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                return nodes;
+            }
+        }
     }
 
     public static SubLObject blue_graph_generate_node_description(final SubLObject blue_graph) {
@@ -2749,6 +5031,18 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return nodes;
     }
 
+    public static final SubLObject blue_graph_generate_edge_description_alt(SubLObject blue_graph) {
+        {
+            SubLObject edges = NIL;
+            SubLObject cdolist_list_var = blue_graph_edges(blue_graph);
+            SubLObject edge = NIL;
+            for (edge = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , edge = cdolist_list_var.first()) {
+                edges = cons(list($EDGE, edge), edges);
+            }
+            return edges;
+        }
+    }
+
     public static SubLObject blue_graph_generate_edge_description(final SubLObject blue_graph) {
         SubLObject edges = NIL;
         SubLObject cdolist_list_var = blue_graph_edges(blue_graph);
@@ -2760,6 +5054,65 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             edge = cdolist_list_var.first();
         } 
         return edges;
+    }
+
+    public static final SubLObject bbf_rtv_from_inference_alt(SubLObject arg_plist) {
+        {
+            SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
+            SubLObject formula = getf(params, $FORMULA, UNPROVIDED);
+            SubLObject problem_store_id = getf(params, $PROBLEM_STORE_ID, UNPROVIDED);
+            SubLObject inference_id = getf(params, $INFERENCE_ID, UNPROVIDED);
+            SubLObject rtv_clause = list_utilities.tree_find_if(RTV_CLAUSE_P, formula, UNPROVIDED);
+            SubLObject rtv_preds_list = fourth(rtv_clause);
+            SubLObject all_rtv_relevant_preds_set = NIL;
+            SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id);
+            SubLObject mt = inference_datastructures_inference.inference_mt(inference);
+            SubLObject bbf_edges = NIL;
+            all_rtv_relevant_preds_set = set_utilities.construct_set_from_list(rtv_preds_list.rest(), UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = rtv_preds_list;
+                SubLObject each_pred = NIL;
+                for (each_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , each_pred = cdolist_list_var.first()) {
+                    set_utilities.set_add_all(all_spec_preds(each_pred, mt, UNPROVIDED), all_rtv_relevant_preds_set);
+                }
+            }
+            {
+                SubLObject idx = inference_datastructures_inference.inference_answer_id_index(inference);
+                if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                    {
+                        SubLObject id = do_id_index_next_id(idx, NIL, NIL, NIL);
+                        SubLObject state_var = do_id_index_next_state(idx, NIL, id, NIL);
+                        SubLObject inference_answer = NIL;
+                        while (NIL != id) {
+                            inference_answer = do_id_index_state_object(idx, $SKIP, id, state_var);
+                            if (NIL != do_id_index_id_and_object_validP(id, inference_answer, $SKIP)) {
+                                {
+                                    SubLObject proofs = pph_proof.inference_answer_get_proofs(inference_answer);
+                                    SubLObject cdolist_list_var = proofs;
+                                    SubLObject proof = NIL;
+                                    for (proof = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , proof = cdolist_list_var.first()) {
+                                        {
+                                            SubLObject v_proof_view = proof_view.construct_inference_proof_view(proof, inference_answer, mt, UNPROVIDED);
+                                            SubLObject facts_used = proof_view.proof_view_get_facts_used(v_proof_view);
+                                            SubLObject cdolist_list_var_54 = facts_used;
+                                            SubLObject fact = NIL;
+                                            for (fact = cdolist_list_var_54.first(); NIL != cdolist_list_var_54; cdolist_list_var_54 = cdolist_list_var_54.rest() , fact = cdolist_list_var_54.first()) {
+                                                if (NIL != valid_rtv_justificationP(assertions_high.assertion_formula(fact), all_rtv_relevant_preds_set)) {
+                                                    bbf_edges = cons(bbf_make_edge_from_assertion(fact), bbf_edges);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            id = do_id_index_next_id(idx, NIL, id, state_var);
+                            state_var = do_id_index_next_state(idx, NIL, id, state_var);
+                        } 
+                    }
+                }
+            }
+            return bbf_make_graph(NIL, list_utilities.hash_remove_duplicates(bbf_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, mt));
+        }
     }
 
     public static SubLObject bbf_rtv_from_inference(final SubLObject arg_plist) {
@@ -2867,6 +5220,70 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return bbf_make_graph(NIL, list_utilities.hash_remove_duplicates(bbf_edges, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, mt));
     }
 
+    public static final SubLObject bbf_rtv_unbound_alt(SubLObject arg_plist) {
+        {
+            SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
+            SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
+            SubLObject formula = getf(params, $FORMULA, UNPROVIDED);
+            SubLObject arg1_answers = getf(params, $ARG1_ANSWERS, UNPROVIDED);
+            SubLObject arg2_answers = getf(params, $ARG2_ANSWERS, UNPROVIDED);
+            SubLObject rtv_clause = list_utilities.tree_find_if(RTV_CLAUSE_P, formula, UNPROVIDED);
+            SubLObject arg1_var = cycl_utilities.formula_arg1(rtv_clause, UNPROVIDED);
+            SubLObject arg2_var = cycl_utilities.formula_arg2(rtv_clause, UNPROVIDED);
+            SubLObject depth = cycl_utilities.formula_arg4(rtv_clause, UNPROVIDED);
+            SubLObject preds = el_extensional_set_elements(cycl_utilities.formula_arg3(rtv_clause, UNPROVIDED));
+            SubLObject new_formula = NIL;
+            SubLObject just_assertions = NIL;
+            SubLObject all_relevant_assertions = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject all_rtv_relevant_preds_set = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject result_links = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject goal_terms = NIL;
+            SubLObject start_terms = NIL;
+            SubLObject subst_var = NIL;
+            if (length(arg1_answers).numG(length(arg2_answers))) {
+                goal_terms = arg1_answers;
+                start_terms = arg2_answers;
+                subst_var = arg1_var;
+            } else {
+                goal_terms = arg2_answers;
+                start_terms = arg1_answers;
+                subst_var = arg2_var;
+            }
+            all_rtv_relevant_preds_set = set_utilities.construct_set_from_list(preds, UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = preds;
+                SubLObject each_pred = NIL;
+                for (each_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , each_pred = cdolist_list_var.first()) {
+                    set_utilities.set_add_all(all_spec_preds(each_pred, mt, UNPROVIDED), all_rtv_relevant_preds_set);
+                }
+            }
+            {
+                SubLObject cdolist_list_var = start_terms;
+                SubLObject fort = NIL;
+                for (fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , fort = cdolist_list_var.first()) {
+                    new_formula = list_utilities.tree_substitute(formula, subst_var, fort);
+                    just_assertions = remove_duplicates(removal_modules_rtv.rtv_all_edges_from_node_to_nodes_satisfying(fort, new_formula, preds, depth, mt), symbol_function(EQUAL), symbol_function(ASSERTION_FORMULA), UNPROVIDED, UNPROVIDED);
+                    set_utilities.set_add_all(just_assertions, all_relevant_assertions);
+                }
+            }
+            all_relevant_assertions = remove_rtv_irrelevant_justifications(all_relevant_assertions, all_rtv_relevant_preds_set);
+            {
+                SubLObject set_contents_var = set.do_set_internal(all_relevant_assertions);
+                SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
+                SubLObject state = NIL;
+                for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
+                    {
+                        SubLObject each_ass = set_contents.do_set_contents_next(basis_object, state);
+                        if (NIL != set_contents.do_set_contents_element_validP(state, each_ass)) {
+                            set.set_add(bbf_make_edge_from_assertion(each_ass), result_links);
+                        }
+                    }
+                }
+            }
+            return bbf_make_graph(NIL, set.set_element_list(result_links), list($MT, mt));
+        }
+    }
+
     public static SubLObject bbf_rtv_unbound(final SubLObject arg_plist) {
         final SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
         final SubLObject mt = getf(arg_plist, $MT, UNPROVIDED);
@@ -2926,6 +5343,79 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             }
         }
         return bbf_make_graph(NIL, set.set_element_list(result_links), list($MT, mt));
+    }
+
+    public static final SubLObject bbf_rtv_from_inference_new_alt(SubLObject arg_plist) {
+        {
+            SubLObject params = getf(arg_plist, $PARAMS, UNPROVIDED);
+            SubLObject formula = getf(params, $FORMULA, UNPROVIDED);
+            SubLObject answers = set_utilities.construct_set_from_list(getf(params, $ANSWERS, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+            SubLObject problem_store_id = getf(params, $PROBLEM_STORE_ID, UNPROVIDED);
+            SubLObject inference_id = getf(params, $INFERENCE_ID, UNPROVIDED);
+            SubLObject rtv_clause = list_utilities.tree_find_if(RTV_CLAUSE_P, formula, UNPROVIDED);
+            SubLObject rtv_preds_list = fourth(rtv_clause);
+            SubLObject all_rtv_relevant_preds_set = NIL;
+            SubLObject inference = inference_datastructures_problem_store.find_inference_by_ids(problem_store_id, inference_id);
+            SubLObject mt = inference_datastructures_inference.inference_mt(inference);
+            SubLObject supports = NIL;
+            SubLObject justification = NIL;
+            SubLObject bbf_edges = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject answer_terms_set = set.new_set(UNPROVIDED, UNPROVIDED);
+            all_rtv_relevant_preds_set = set_utilities.construct_set_from_list(rtv_preds_list.rest(), UNPROVIDED, UNPROVIDED);
+            {
+                SubLObject cdolist_list_var = rtv_preds_list;
+                SubLObject each_pred = NIL;
+                for (each_pred = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , each_pred = cdolist_list_var.first()) {
+                    set_utilities.set_add_all(all_spec_preds(each_pred, mt, UNPROVIDED), all_rtv_relevant_preds_set);
+                }
+            }
+            {
+                SubLObject idx = inference_datastructures_inference.inference_answer_id_index(inference);
+                if (NIL == do_id_index_empty_p(idx, $SKIP)) {
+                    {
+                        SubLObject id = do_id_index_next_id(idx, NIL, NIL, NIL);
+                        SubLObject state_var = do_id_index_next_state(idx, NIL, id, NIL);
+                        SubLObject inference_answer = NIL;
+                        while (NIL != id) {
+                            inference_answer = do_id_index_state_object(idx, $SKIP, id, state_var);
+                            if (NIL != do_id_index_id_and_object_validP(id, inference_answer, $SKIP)) {
+                                answer_terms_set = set_utilities.construct_set_from_list(Mapping.mapcar(symbol_function(CDR), inference_datastructures_inference.inference_answer_bindings(inference_answer)), UNPROVIDED, UNPROVIDED);
+                                if (NIL != set.non_empty_set_p(set_utilities.set_intersection(list(answers, answer_terms_set), UNPROVIDED))) {
+                                    {
+                                        SubLObject cdolist_list_var = inference_datastructures_inference.inference_answer_justifications(inference_answer);
+                                        SubLObject inference_justify = NIL;
+                                        for (inference_justify = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , inference_justify = cdolist_list_var.first()) {
+                                            supports = inference_datastructures_inference.inference_answer_justification_supports(inference_justify);
+                                            {
+                                                SubLObject cdolist_list_var_55 = supports;
+                                                SubLObject support = NIL;
+                                                for (support = cdolist_list_var_55.first(); NIL != cdolist_list_var_55; cdolist_list_var_55 = cdolist_list_var_55.rest() , support = cdolist_list_var_55.first()) {
+                                                    justification = arguments.support_justification(support);
+                                                    {
+                                                        SubLObject cdolist_list_var_56 = justification;
+                                                        SubLObject each_sentence = NIL;
+                                                        for (each_sentence = cdolist_list_var_56.first(); NIL != cdolist_list_var_56; cdolist_list_var_56 = cdolist_list_var_56.rest() , each_sentence = cdolist_list_var_56.first()) {
+                                                            if (NIL != assertion_handles.assertion_p(each_sentence)) {
+                                                                if (NIL != valid_rtv_justificationP(assertions_high.assertion_formula(each_sentence), all_rtv_relevant_preds_set)) {
+                                                                    set.set_add(bbf_make_edge_from_assertion(each_sentence), bbf_edges);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            id = do_id_index_next_id(idx, NIL, id, state_var);
+                            state_var = do_id_index_next_state(idx, NIL, id, state_var);
+                        } 
+                    }
+                }
+            }
+            return bbf_make_graph(NIL, list_utilities.hash_remove_duplicates(set.set_element_list(bbf_edges), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, mt));
+        }
     }
 
     public static SubLObject bbf_rtv_from_inference_new(final SubLObject arg_plist) {
@@ -3054,11 +5544,39 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return bbf_make_graph(NIL, list_utilities.hash_remove_duplicates(set.set_element_list(bbf_edges), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), list($MT, mt));
     }
 
+    public static final SubLObject valid_rtv_justificationP_alt(SubLObject formula, SubLObject rtv_preds_set) {
+        if (NIL != set.set_memberP(cycl_utilities.formula_arg0(formula), rtv_preds_set)) {
+            return T;
+        } else {
+            return NIL;
+        }
+    }
+
     public static SubLObject valid_rtv_justificationP(final SubLObject formula, final SubLObject rtv_preds_set) {
         if (NIL != set.set_memberP(cycl_utilities.formula_arg0(formula), rtv_preds_set)) {
             return T;
         }
         return NIL;
+    }
+
+    public static final SubLObject remove_rtv_irrelevant_justifications_alt(SubLObject all_relevant_assertions, SubLObject rtv_preds_set) {
+        {
+            SubLObject rtv_filtered_set = set.new_set(UNPROVIDED, UNPROVIDED);
+            SubLObject set_contents_var = set.do_set_internal(all_relevant_assertions);
+            SubLObject basis_object = set_contents.do_set_contents_basis_object(set_contents_var);
+            SubLObject state = NIL;
+            for (state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
+                {
+                    SubLObject each_ass = set_contents.do_set_contents_next(basis_object, state);
+                    if (NIL != set_contents.do_set_contents_element_validP(state, each_ass)) {
+                        if (NIL != valid_rtv_justificationP(assertions_high.assertion_formula(each_ass), rtv_preds_set)) {
+                            set.set_add(each_ass, rtv_filtered_set);
+                        }
+                    }
+                }
+            }
+            return rtv_filtered_set;
+        }
     }
 
     public static SubLObject remove_rtv_irrelevant_justifications(final SubLObject all_relevant_assertions, final SubLObject rtv_preds_set) {
@@ -3076,126 +5594,414 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return rtv_filtered_set;
     }
 
+    public static final SubLObject declare_blue_grapher_utilities_file_alt() {
+        declareMacro("define_blue_filter_fn", "DEFINE-BLUE-FILTER-FN");
+        declareFunction("blue_filter_fns", "BLUE-FILTER-FNS", 0, 0, false);
+        declareFunction("get_blue_filter_fn_data", "GET-BLUE-FILTER-FN-DATA", 1, 0, false);
+        declareFunction("blue_filter_fn_p", "BLUE-FILTER-FN-P", 1, 0, false);
+        declareFunction("get_blue_filter_fn_cost", "GET-BLUE-FILTER-FN-COST", 1, 0, false);
+        declareFunction("get_blue_filter_fn_strength", "GET-BLUE-FILTER-FN-STRENGTH", 1, 0, false);
+        declareFunction("get_blue_filter_fn_type", "GET-BLUE-FILTER-FN-TYPE", 1, 0, false);
+        declareFunction("apply_blue_filter_fn", "APPLY-BLUE-FILTER-FN", 3, 1, false);
+        declareFunction("blue_filter_fns_sorted", "BLUE-FILTER-FNS-SORTED", 0, 1, false);
+        declareFunction("blue_apply_filter_fns", "BLUE-APPLY-FILTER-FNS", 3, 1, false);
+        declareFunction("blue_filter_fn_keys", "BLUE-FILTER-FN-KEYS", 0, 1, false);
+        declareFunction("blue_filter_fn_by_key", "BLUE-FILTER-FN-BY-KEY", 1, 0, false);
+        declareFunction("bff_arbitrary_unions", "BFF-ARBITRARY-UNIONS", 2, 0, false);
+        declareFunction("bff_rkf_irrelevant_terms", "BFF-RKF-IRRELEVANT-TERMS", 2, 0, false);
+        declareFunction("bff_cyc_kb_subset_collections", "BFF-CYC-KB-SUBSET-COLLECTIONS", 2, 0, false);
+        declareFunction("bff_rtv_irrelevant_terms", "BFF-RTV-IRRELEVANT-TERMS", 2, 0, false);
+        declareFunction("bff_most_general_5", "BFF-MOST-GENERAL-5", 2, 0, false);
+        declareFunction("bff_most_general_10", "BFF-MOST-GENERAL-10", 2, 0, false);
+        declareFunction("bff_most_general_20", "BFF-MOST-GENERAL-20", 2, 0, false);
+        declareMacro("define_blue_builder_fn", "DEFINE-BLUE-BUILDER-FN");
+        declareFunction("get_blue_builder_fn_data", "GET-BLUE-BUILDER-FN-DATA", 1, 0, false);
+        declareFunction("blue_builder_fn_p", "BLUE-BUILDER-FN-P", 1, 0, false);
+        declareFunction("blue_builder", "BLUE-BUILDER", 2, 0, false);
+        declareFunction("blue_builder_fn_keys", "BLUE-BUILDER-FN-KEYS", 0, 0, false);
+        declareFunction("blue_builder_fn_by_key", "BLUE-BUILDER-FN-BY-KEY", 1, 0, false);
+        declareFunction("get_blue_builder_fn_def_value", "GET-BLUE-BUILDER-FN-DEF-VALUE", 2, 0, false);
+        declareFunction("bbf_forward_true", "BBF-FORWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_forward_true_internal", "BBF-FORWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_backward_true", "BBF-BACKWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_backward_true_internal", "BBF-BACKWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_forward_true", "BBF-MIN-FORWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_forward_true_internal", "BBF-MIN-FORWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_backward_true", "BBF-MIN-BACKWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_backward_true_internal", "BBF-MIN-BACKWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_ceilings_forward_true", "BBF-MIN-CEILINGS-FORWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_ceilings_forward_true_internal", "BBF-MIN-CEILINGS-FORWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_forward_and_backward_true", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_forward_and_backward_true_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL", 5, 0, false);
+        declareFunction("bbf_min_forward_and_backward_true_internal_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL-INTERNAL", 5, 2, false);
+        declareFunction("bbf_script", "BBF-SCRIPT", 1, 0, false);
+        declareFunction("bbf_inference_answers", "BBF-INFERENCE-ANSWERS", 1, 0, false);
+        declareFunction("determine_edge_templates_for_inference", "DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
+        declareFunction("html_determine_edge_templates_for_inference", "HTML-DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
+        declareFunction("bbf_inference", "BBF-INFERENCE", 1, 0, false);
+        declareFunction("bbf_rule", "BBF-RULE", 1, 0, false);
+        declareFunction("blue_literal_to_edge", "BLUE-LITERAL-TO-EDGE", 3, 0, false);
+        declareFunction("make_inference_hl_to_el_var_list", "MAKE-INFERENCE-HL-TO-EL-VAR-LIST", 1, 0, false);
+        declareFunction("make_assertion_hl_to_el_var_list", "MAKE-ASSERTION-HL-TO-EL-VAR-LIST", 1, 0, false);
+        declareFunction("bbf_make_edge_from_assertion", "BBF-MAKE-EDGE-FROM-ASSERTION", 1, 0, false);
+        declareFunction("bbf_make_graph", "BBF-MAKE-GRAPH", 2, 1, false);
+        declareFunction("bbf_make_edge", "BBF-MAKE-EDGE", 4, 4, false);
+        declareFunction("bbf_make_edge_with_nodes", "BBF-MAKE-EDGE-WITH-NODES", 4, 2, false);
+        declareFunction("bbf_make_node", "BBF-MAKE-NODE", 1, 2, false);
+        declareFunction("blue_event_dispatcher_runningP", "BLUE-EVENT-DISPATCHER-RUNNING?", 0, 0, false);
+        declareFunction("ensure_blue_event_dispatcher_running", "ENSURE-BLUE-EVENT-DISPATCHER-RUNNING", 0, 0, false);
+        declareFunction("register_listener_with_blue_event_dispatcher", "REGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
+        declareFunction("deregister_listener_with_blue_event_dispatcher", "DEREGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
+        declareFunction("stop_blue_event_dispatcher", "STOP-BLUE-EVENT-DISPATCHER", 0, 0, false);
+        declareFunction("start_blue_event_dispatcher", "START-BLUE-EVENT-DISPATCHER", 0, 0, false);
+        declareFunction("blue_event", "BLUE-EVENT", 2, 0, false);
+        declareFunction("blue_fetch_event", "BLUE-FETCH-EVENT", 1, 0, false);
+        declareFunction("blue_fetch_uia_blue_event", "BLUE-FETCH-UIA-BLUE-EVENT", 1, 0, false);
+        declareFunction("blue_current_message_mailbox_suite", "BLUE-CURRENT-MESSAGE-MAILBOX-SUITE", 0, 0, false);
+        declareFunction("blue_ensure_blue_event_address", "BLUE-ENSURE-BLUE-EVENT-ADDRESS", 1, 0, false);
+        declareFunction("map_blue_event_to_mailbox", "MAP-BLUE-EVENT-TO-MAILBOX", 1, 0, false);
+        declareFunction("blue_map_event_to_blue_event", "BLUE-MAP-EVENT-TO-BLUE-EVENT", 1, 1, false);
+        declareFunction("blue_graph_print_function_trampoline", "BLUE-GRAPH-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("blue_graph_p", "BLUE-GRAPH-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.blue_grapher_utilities.$blue_graph_p$UnaryFunction();
+        declareFunction("blue_graph_isg", "BLUE-GRAPH-ISG", 1, 0, false);
+        declareFunction("blue_graph_node_label_map", "BLUE-GRAPH-NODE-LABEL-MAP", 1, 0, false);
+        declareFunction("blue_graph_nodes", "BLUE-GRAPH-NODES", 1, 0, false);
+        declareFunction("blue_graph_edge_label_map", "BLUE-GRAPH-EDGE-LABEL-MAP", 1, 0, false);
+        declareFunction("blue_graph_edges", "BLUE-GRAPH-EDGES", 1, 0, false);
+        declareFunction("blue_graph_node_definitions", "BLUE-GRAPH-NODE-DEFINITIONS", 1, 0, false);
+        declareFunction("blue_graph_edge_definitions", "BLUE-GRAPH-EDGE-DEFINITIONS", 1, 0, false);
+        declareFunction("blue_graph_options", "BLUE-GRAPH-OPTIONS", 1, 0, false);
+        declareFunction("_csetf_blue_graph_isg", "_CSETF-BLUE-GRAPH-ISG", 2, 0, false);
+        declareFunction("_csetf_blue_graph_node_label_map", "_CSETF-BLUE-GRAPH-NODE-LABEL-MAP", 2, 0, false);
+        declareFunction("_csetf_blue_graph_nodes", "_CSETF-BLUE-GRAPH-NODES", 2, 0, false);
+        declareFunction("_csetf_blue_graph_edge_label_map", "_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP", 2, 0, false);
+        declareFunction("_csetf_blue_graph_edges", "_CSETF-BLUE-GRAPH-EDGES", 2, 0, false);
+        declareFunction("_csetf_blue_graph_node_definitions", "_CSETF-BLUE-GRAPH-NODE-DEFINITIONS", 2, 0, false);
+        declareFunction("_csetf_blue_graph_edge_definitions", "_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS", 2, 0, false);
+        declareFunction("_csetf_blue_graph_options", "_CSETF-BLUE-GRAPH-OPTIONS", 2, 0, false);
+        declareFunction("make_blue_graph", "MAKE-BLUE-GRAPH", 0, 1, false);
+        declareFunction("new_blue_graph", "NEW-BLUE-GRAPH", 0, 0, false);
+        declareFunction("blue_graph_add_node_type", "BLUE-GRAPH-ADD-NODE-TYPE", 3, 0, false);
+        declareFunction("blue_graph_add_edge_type", "BLUE-GRAPH-ADD-EDGE-TYPE", 3, 1, false);
+        declareFunction("blue_graph_add_option", "BLUE-GRAPH-ADD-OPTION", 3, 0, false);
+        declareFunction("blue_graph_add_node", "BLUE-GRAPH-ADD-NODE", 1, 2, false);
+        declareFunction("blue_graph_node_p", "BLUE-GRAPH-NODE-P", 1, 0, false);
+        declareFunction("blue_graph_maybe_add_node", "BLUE-GRAPH-MAYBE-ADD-NODE", 2, 1, false);
+        declareFunction("blue_graph_node_get_id", "BLUE-GRAPH-NODE-GET-ID", 1, 0, false);
+        declareFunction("blue_graph_node_get_type", "BLUE-GRAPH-NODE-GET-TYPE", 1, 0, false);
+        declareFunction("blue_graph_node_get_label", "BLUE-GRAPH-NODE-GET-LABEL", 1, 0, false);
+        declareFunction("blue_graph_get_node", "BLUE-GRAPH-GET-NODE", 2, 0, false);
+        declareFunction("blue_graph_get_node_by_label", "BLUE-GRAPH-GET-NODE-BY-LABEL", 2, 0, false);
+        declareFunction("blue_graph_resolve_node_label_reference", "BLUE-GRAPH-RESOLVE-NODE-LABEL-REFERENCE", 2, 0, false);
+        declareFunction("blue_graph_edge_from", "BLUE-GRAPH-EDGE-FROM", 1, 0, false);
+        declareFunction("blue_graph_edge_to", "BLUE-GRAPH-EDGE-TO", 1, 0, false);
+        declareFunction("blue_graph_edge_get_type", "BLUE-GRAPH-EDGE-GET-TYPE", 1, 0, false);
+        declareFunction("blue_graph_edge_get_label", "BLUE-GRAPH-EDGE-GET-LABEL", 1, 0, false);
+        declareFunction("blue_graph_add_edge", "BLUE-GRAPH-ADD-EDGE", 3, 2, false);
+        declareFunction("blue_graph_next_id", "BLUE-GRAPH-NEXT-ID", 1, 0, false);
+        declareFunction("blue_graph_generate_description", "BLUE-GRAPH-GENERATE-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_definition_description", "BLUE-GRAPH-GENERATE-DEFINITION-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_option_description", "BLUE-GRAPH-GENERATE-OPTION-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_node_description", "BLUE-GRAPH-GENERATE-NODE-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_edge_description", "BLUE-GRAPH-GENERATE-EDGE-DESCRIPTION", 1, 0, false);
+        declareFunction("bbf_rtv_from_inference", "BBF-RTV-FROM-INFERENCE", 1, 0, false);
+        declareFunction("bbf_rtv_unbound", "BBF-RTV-UNBOUND", 1, 0, false);
+        declareFunction("bbf_rtv_from_inference_new", "BBF-RTV-FROM-INFERENCE-NEW", 1, 0, false);
+        declareFunction("valid_rtv_justificationP", "VALID-RTV-JUSTIFICATION?", 2, 0, false);
+        declareFunction("remove_rtv_irrelevant_justifications", "REMOVE-RTV-IRRELEVANT-JUSTIFICATIONS", 2, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_blue_grapher_utilities_file() {
-        declareMacro(me, "define_blue_filter_fn", "DEFINE-BLUE-FILTER-FN");
-        declareFunction(me, "blue_filter_fns", "BLUE-FILTER-FNS", 0, 0, false);
-        declareFunction(me, "get_blue_filter_fn_data", "GET-BLUE-FILTER-FN-DATA", 1, 0, false);
-        declareFunction(me, "blue_filter_fn_p", "BLUE-FILTER-FN-P", 1, 0, false);
-        declareFunction(me, "get_blue_filter_fn_cost", "GET-BLUE-FILTER-FN-COST", 1, 0, false);
-        declareFunction(me, "get_blue_filter_fn_strength", "GET-BLUE-FILTER-FN-STRENGTH", 1, 0, false);
-        declareFunction(me, "get_blue_filter_fn_type", "GET-BLUE-FILTER-FN-TYPE", 1, 0, false);
-        declareFunction(me, "apply_blue_filter_fn", "APPLY-BLUE-FILTER-FN", 3, 1, false);
-        declareFunction(me, "blue_filter_fns_sorted", "BLUE-FILTER-FNS-SORTED", 0, 1, false);
-        declareFunction(me, "blue_apply_filter_fns", "BLUE-APPLY-FILTER-FNS", 3, 1, false);
-        declareFunction(me, "blue_filter_fn_keys", "BLUE-FILTER-FN-KEYS", 0, 1, false);
-        declareFunction(me, "blue_filter_fn_by_key", "BLUE-FILTER-FN-BY-KEY", 1, 0, false);
-        declareFunction(me, "bff_arbitrary_unions", "BFF-ARBITRARY-UNIONS", 2, 0, false);
-        declareFunction(me, "bff_cyc_kb_subset_collections", "BFF-CYC-KB-SUBSET-COLLECTIONS", 2, 0, false);
-        declareFunction(me, "bff_most_general_5", "BFF-MOST-GENERAL-5", 2, 0, false);
-        declareFunction(me, "bff_most_general_10", "BFF-MOST-GENERAL-10", 2, 0, false);
-        declareFunction(me, "bff_most_general_20", "BFF-MOST-GENERAL-20", 2, 0, false);
-        declareMacro(me, "define_blue_builder_fn", "DEFINE-BLUE-BUILDER-FN");
-        declareFunction(me, "get_blue_builder_fn_data", "GET-BLUE-BUILDER-FN-DATA", 1, 0, false);
-        declareFunction(me, "blue_builder_fn_p", "BLUE-BUILDER-FN-P", 1, 0, false);
-        declareFunction(me, "blue_builder", "BLUE-BUILDER", 2, 0, false);
-        declareFunction(me, "blue_builder_fn_keys", "BLUE-BUILDER-FN-KEYS", 0, 0, false);
-        declareFunction(me, "blue_builder_fn_by_key", "BLUE-BUILDER-FN-BY-KEY", 1, 0, false);
-        declareFunction(me, "get_blue_builder_fn_def_value", "GET-BLUE-BUILDER-FN-DEF-VALUE", 2, 0, false);
-        declareFunction(me, "bbf_forward_true", "BBF-FORWARD-TRUE", 1, 0, false);
-        declareFunction(me, "bbf_forward_true_internal", "BBF-FORWARD-TRUE-INTERNAL", 5, 1, false);
-        declareFunction(me, "bbf_backward_true", "BBF-BACKWARD-TRUE", 1, 0, false);
-        declareFunction(me, "bbf_backward_true_internal", "BBF-BACKWARD-TRUE-INTERNAL", 5, 1, false);
-        declareFunction(me, "bbf_min_forward_true", "BBF-MIN-FORWARD-TRUE", 1, 0, false);
-        declareFunction(me, "bbf_min_forward_true_internal", "BBF-MIN-FORWARD-TRUE-INTERNAL", 5, 1, false);
-        declareFunction(me, "bbf_min_backward_true", "BBF-MIN-BACKWARD-TRUE", 1, 0, false);
-        declareFunction(me, "bbf_min_backward_true_internal", "BBF-MIN-BACKWARD-TRUE-INTERNAL", 5, 1, false);
-        declareFunction(me, "bbf_min_ceilings_forward_true", "BBF-MIN-CEILINGS-FORWARD-TRUE", 1, 0, false);
-        declareFunction(me, "bbf_min_ceilings_forward_true_internal", "BBF-MIN-CEILINGS-FORWARD-TRUE-INTERNAL", 5, 1, false);
-        declareFunction(me, "bbf_min_forward_and_backward_true", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE", 1, 0, false);
-        declareFunction(me, "bbf_min_forward_and_backward_true_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL", 5, 0, false);
-        declareFunction(me, "bbf_min_forward_and_backward_true_internal_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL-INTERNAL", 5, 2, false);
-        declareFunction(me, "bbf_script", "BBF-SCRIPT", 1, 0, false);
-        declareFunction(me, "bbf_inference_answers", "BBF-INFERENCE-ANSWERS", 1, 0, false);
-        declareFunction(me, "determine_edge_templates_for_inference", "DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
-        declareFunction(me, "html_determine_edge_templates_for_inference", "HTML-DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
-        declareFunction(me, "bbf_inference", "BBF-INFERENCE", 1, 0, false);
-        declareFunction(me, "bbf_rule", "BBF-RULE", 1, 0, false);
-        declareFunction(me, "blue_literal_to_edge", "BLUE-LITERAL-TO-EDGE", 3, 0, false);
-        declareFunction(me, "make_inference_hl_to_el_var_list", "MAKE-INFERENCE-HL-TO-EL-VAR-LIST", 1, 0, false);
-        declareFunction(me, "make_assertion_hl_to_el_var_list", "MAKE-ASSERTION-HL-TO-EL-VAR-LIST", 1, 0, false);
-        declareFunction(me, "bbf_make_edge_from_assertion", "BBF-MAKE-EDGE-FROM-ASSERTION", 1, 0, false);
-        declareFunction(me, "bbf_make_graph", "BBF-MAKE-GRAPH", 2, 1, false);
-        declareFunction(me, "bbf_make_edge", "BBF-MAKE-EDGE", 4, 4, false);
-        declareFunction(me, "bbf_make_edge_with_nodes", "BBF-MAKE-EDGE-WITH-NODES", 4, 2, false);
-        declareFunction(me, "bbf_make_node", "BBF-MAKE-NODE", 1, 2, false);
-        declareFunction(me, "blue_event_dispatcher_runningP", "BLUE-EVENT-DISPATCHER-RUNNING?", 0, 0, false);
-        declareFunction(me, "ensure_blue_event_dispatcher_running", "ENSURE-BLUE-EVENT-DISPATCHER-RUNNING", 0, 0, false);
-        declareFunction(me, "register_listener_with_blue_event_dispatcher", "REGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
-        declareFunction(me, "deregister_listener_with_blue_event_dispatcher", "DEREGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
-        declareFunction(me, "stop_blue_event_dispatcher", "STOP-BLUE-EVENT-DISPATCHER", 0, 0, false);
-        declareFunction(me, "start_blue_event_dispatcher", "START-BLUE-EVENT-DISPATCHER", 0, 0, false);
-        declareFunction(me, "blue_event", "BLUE-EVENT", 2, 0, false);
-        declareFunction(me, "blue_fetch_event", "BLUE-FETCH-EVENT", 1, 0, false);
-        declareFunction(me, "blue_fetch_uia_blue_event", "BLUE-FETCH-UIA-BLUE-EVENT", 1, 0, false);
-        declareFunction(me, "blue_current_message_mailbox_suite", "BLUE-CURRENT-MESSAGE-MAILBOX-SUITE", 0, 0, false);
-        declareFunction(me, "blue_ensure_blue_event_address", "BLUE-ENSURE-BLUE-EVENT-ADDRESS", 1, 0, false);
-        declareFunction(me, "map_blue_event_to_mailbox", "MAP-BLUE-EVENT-TO-MAILBOX", 1, 0, false);
-        declareFunction(me, "blue_map_event_to_blue_event", "BLUE-MAP-EVENT-TO-BLUE-EVENT", 1, 1, false);
-        declareFunction(me, "blue_graph_print_function_trampoline", "BLUE-GRAPH-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "blue_graph_p", "BLUE-GRAPH-P", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareMacro("define_blue_filter_fn", "DEFINE-BLUE-FILTER-FN");
+            declareFunction("blue_filter_fns", "BLUE-FILTER-FNS", 0, 0, false);
+            declareFunction("get_blue_filter_fn_data", "GET-BLUE-FILTER-FN-DATA", 1, 0, false);
+            declareFunction("blue_filter_fn_p", "BLUE-FILTER-FN-P", 1, 0, false);
+            declareFunction("get_blue_filter_fn_cost", "GET-BLUE-FILTER-FN-COST", 1, 0, false);
+            declareFunction("get_blue_filter_fn_strength", "GET-BLUE-FILTER-FN-STRENGTH", 1, 0, false);
+            declareFunction("get_blue_filter_fn_type", "GET-BLUE-FILTER-FN-TYPE", 1, 0, false);
+            declareFunction("apply_blue_filter_fn", "APPLY-BLUE-FILTER-FN", 3, 1, false);
+            declareFunction("blue_filter_fns_sorted", "BLUE-FILTER-FNS-SORTED", 0, 1, false);
+            declareFunction("blue_apply_filter_fns", "BLUE-APPLY-FILTER-FNS", 3, 1, false);
+            declareFunction("blue_filter_fn_keys", "BLUE-FILTER-FN-KEYS", 0, 1, false);
+            declareFunction("blue_filter_fn_by_key", "BLUE-FILTER-FN-BY-KEY", 1, 0, false);
+            declareFunction("bff_arbitrary_unions", "BFF-ARBITRARY-UNIONS", 2, 0, false);
+            declareFunction("bff_cyc_kb_subset_collections", "BFF-CYC-KB-SUBSET-COLLECTIONS", 2, 0, false);
+            declareFunction("bff_most_general_5", "BFF-MOST-GENERAL-5", 2, 0, false);
+            declareFunction("bff_most_general_10", "BFF-MOST-GENERAL-10", 2, 0, false);
+            declareFunction("bff_most_general_20", "BFF-MOST-GENERAL-20", 2, 0, false);
+            declareMacro("define_blue_builder_fn", "DEFINE-BLUE-BUILDER-FN");
+            declareFunction("get_blue_builder_fn_data", "GET-BLUE-BUILDER-FN-DATA", 1, 0, false);
+            declareFunction("blue_builder_fn_p", "BLUE-BUILDER-FN-P", 1, 0, false);
+            declareFunction("blue_builder", "BLUE-BUILDER", 2, 0, false);
+            declareFunction("blue_builder_fn_keys", "BLUE-BUILDER-FN-KEYS", 0, 0, false);
+            declareFunction("blue_builder_fn_by_key", "BLUE-BUILDER-FN-BY-KEY", 1, 0, false);
+            declareFunction("get_blue_builder_fn_def_value", "GET-BLUE-BUILDER-FN-DEF-VALUE", 2, 0, false);
+            declareFunction("bbf_forward_true", "BBF-FORWARD-TRUE", 1, 0, false);
+            declareFunction("bbf_forward_true_internal", "BBF-FORWARD-TRUE-INTERNAL", 5, 1, false);
+            declareFunction("bbf_backward_true", "BBF-BACKWARD-TRUE", 1, 0, false);
+            declareFunction("bbf_backward_true_internal", "BBF-BACKWARD-TRUE-INTERNAL", 5, 1, false);
+            declareFunction("bbf_min_forward_true", "BBF-MIN-FORWARD-TRUE", 1, 0, false);
+            declareFunction("bbf_min_forward_true_internal", "BBF-MIN-FORWARD-TRUE-INTERNAL", 5, 1, false);
+            declareFunction("bbf_min_backward_true", "BBF-MIN-BACKWARD-TRUE", 1, 0, false);
+            declareFunction("bbf_min_backward_true_internal", "BBF-MIN-BACKWARD-TRUE-INTERNAL", 5, 1, false);
+            declareFunction("bbf_min_ceilings_forward_true", "BBF-MIN-CEILINGS-FORWARD-TRUE", 1, 0, false);
+            declareFunction("bbf_min_ceilings_forward_true_internal", "BBF-MIN-CEILINGS-FORWARD-TRUE-INTERNAL", 5, 1, false);
+            declareFunction("bbf_min_forward_and_backward_true", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE", 1, 0, false);
+            declareFunction("bbf_min_forward_and_backward_true_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL", 5, 0, false);
+            declareFunction("bbf_min_forward_and_backward_true_internal_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL-INTERNAL", 5, 2, false);
+            declareFunction("bbf_script", "BBF-SCRIPT", 1, 0, false);
+            declareFunction("bbf_inference_answers", "BBF-INFERENCE-ANSWERS", 1, 0, false);
+            declareFunction("determine_edge_templates_for_inference", "DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
+            declareFunction("html_determine_edge_templates_for_inference", "HTML-DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
+            declareFunction("bbf_inference", "BBF-INFERENCE", 1, 0, false);
+            declareFunction("bbf_rule", "BBF-RULE", 1, 0, false);
+            declareFunction("blue_literal_to_edge", "BLUE-LITERAL-TO-EDGE", 3, 0, false);
+            declareFunction("make_inference_hl_to_el_var_list", "MAKE-INFERENCE-HL-TO-EL-VAR-LIST", 1, 0, false);
+            declareFunction("make_assertion_hl_to_el_var_list", "MAKE-ASSERTION-HL-TO-EL-VAR-LIST", 1, 0, false);
+            declareFunction("bbf_make_edge_from_assertion", "BBF-MAKE-EDGE-FROM-ASSERTION", 1, 0, false);
+            declareFunction("bbf_make_graph", "BBF-MAKE-GRAPH", 2, 1, false);
+            declareFunction("bbf_make_edge", "BBF-MAKE-EDGE", 4, 4, false);
+            declareFunction("bbf_make_edge_with_nodes", "BBF-MAKE-EDGE-WITH-NODES", 4, 2, false);
+            declareFunction("bbf_make_node", "BBF-MAKE-NODE", 1, 2, false);
+            declareFunction("blue_event_dispatcher_runningP", "BLUE-EVENT-DISPATCHER-RUNNING?", 0, 0, false);
+            declareFunction("ensure_blue_event_dispatcher_running", "ENSURE-BLUE-EVENT-DISPATCHER-RUNNING", 0, 0, false);
+            declareFunction("register_listener_with_blue_event_dispatcher", "REGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
+            declareFunction("deregister_listener_with_blue_event_dispatcher", "DEREGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
+            declareFunction("stop_blue_event_dispatcher", "STOP-BLUE-EVENT-DISPATCHER", 0, 0, false);
+            declareFunction("start_blue_event_dispatcher", "START-BLUE-EVENT-DISPATCHER", 0, 0, false);
+            declareFunction("blue_event", "BLUE-EVENT", 2, 0, false);
+            declareFunction("blue_fetch_event", "BLUE-FETCH-EVENT", 1, 0, false);
+            declareFunction("blue_fetch_uia_blue_event", "BLUE-FETCH-UIA-BLUE-EVENT", 1, 0, false);
+            declareFunction("blue_current_message_mailbox_suite", "BLUE-CURRENT-MESSAGE-MAILBOX-SUITE", 0, 0, false);
+            declareFunction("blue_ensure_blue_event_address", "BLUE-ENSURE-BLUE-EVENT-ADDRESS", 1, 0, false);
+            declareFunction("map_blue_event_to_mailbox", "MAP-BLUE-EVENT-TO-MAILBOX", 1, 0, false);
+            declareFunction("blue_map_event_to_blue_event", "BLUE-MAP-EVENT-TO-BLUE-EVENT", 1, 1, false);
+            declareFunction("blue_graph_print_function_trampoline", "BLUE-GRAPH-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("blue_graph_p", "BLUE-GRAPH-P", 1, 0, false);
+            new blue_grapher_utilities.$blue_graph_p$UnaryFunction();
+            declareFunction("blue_graph_isg", "BLUE-GRAPH-ISG", 1, 0, false);
+            declareFunction("blue_graph_node_label_map", "BLUE-GRAPH-NODE-LABEL-MAP", 1, 0, false);
+            declareFunction("blue_graph_nodes", "BLUE-GRAPH-NODES", 1, 0, false);
+            declareFunction("blue_graph_edge_label_map", "BLUE-GRAPH-EDGE-LABEL-MAP", 1, 0, false);
+            declareFunction("blue_graph_edges", "BLUE-GRAPH-EDGES", 1, 0, false);
+            declareFunction("blue_graph_node_definitions", "BLUE-GRAPH-NODE-DEFINITIONS", 1, 0, false);
+            declareFunction("blue_graph_edge_definitions", "BLUE-GRAPH-EDGE-DEFINITIONS", 1, 0, false);
+            declareFunction("blue_graph_options", "BLUE-GRAPH-OPTIONS", 1, 0, false);
+            declareFunction("_csetf_blue_graph_isg", "_CSETF-BLUE-GRAPH-ISG", 2, 0, false);
+            declareFunction("_csetf_blue_graph_node_label_map", "_CSETF-BLUE-GRAPH-NODE-LABEL-MAP", 2, 0, false);
+            declareFunction("_csetf_blue_graph_nodes", "_CSETF-BLUE-GRAPH-NODES", 2, 0, false);
+            declareFunction("_csetf_blue_graph_edge_label_map", "_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP", 2, 0, false);
+            declareFunction("_csetf_blue_graph_edges", "_CSETF-BLUE-GRAPH-EDGES", 2, 0, false);
+            declareFunction("_csetf_blue_graph_node_definitions", "_CSETF-BLUE-GRAPH-NODE-DEFINITIONS", 2, 0, false);
+            declareFunction("_csetf_blue_graph_edge_definitions", "_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS", 2, 0, false);
+            declareFunction("_csetf_blue_graph_options", "_CSETF-BLUE-GRAPH-OPTIONS", 2, 0, false);
+            declareFunction("make_blue_graph", "MAKE-BLUE-GRAPH", 0, 1, false);
+            declareFunction("visit_defstruct_blue_graph", "VISIT-DEFSTRUCT-BLUE-GRAPH", 2, 0, false);
+            declareFunction("visit_defstruct_object_blue_graph_method", "VISIT-DEFSTRUCT-OBJECT-BLUE-GRAPH-METHOD", 2, 0, false);
+            declareFunction("new_blue_graph", "NEW-BLUE-GRAPH", 0, 0, false);
+            declareFunction("blue_graph_add_node_type", "BLUE-GRAPH-ADD-NODE-TYPE", 3, 0, false);
+            declareFunction("blue_graph_add_edge_type", "BLUE-GRAPH-ADD-EDGE-TYPE", 3, 1, false);
+            declareFunction("blue_graph_add_option", "BLUE-GRAPH-ADD-OPTION", 3, 0, false);
+            declareFunction("blue_graph_add_node", "BLUE-GRAPH-ADD-NODE", 1, 2, false);
+            declareFunction("blue_graph_node_p", "BLUE-GRAPH-NODE-P", 1, 0, false);
+            declareFunction("blue_graph_maybe_add_node", "BLUE-GRAPH-MAYBE-ADD-NODE", 2, 1, false);
+            declareFunction("blue_graph_node_get_id", "BLUE-GRAPH-NODE-GET-ID", 1, 0, false);
+            declareFunction("blue_graph_node_get_type", "BLUE-GRAPH-NODE-GET-TYPE", 1, 0, false);
+            declareFunction("blue_graph_node_get_label", "BLUE-GRAPH-NODE-GET-LABEL", 1, 0, false);
+            declareFunction("blue_graph_get_node", "BLUE-GRAPH-GET-NODE", 2, 0, false);
+            declareFunction("blue_graph_get_node_by_label", "BLUE-GRAPH-GET-NODE-BY-LABEL", 2, 0, false);
+            declareFunction("blue_graph_resolve_node_label_reference", "BLUE-GRAPH-RESOLVE-NODE-LABEL-REFERENCE", 2, 0, false);
+            declareFunction("blue_graph_edge_from", "BLUE-GRAPH-EDGE-FROM", 1, 0, false);
+            declareFunction("blue_graph_edge_to", "BLUE-GRAPH-EDGE-TO", 1, 0, false);
+            declareFunction("blue_graph_edge_get_type", "BLUE-GRAPH-EDGE-GET-TYPE", 1, 0, false);
+            declareFunction("blue_graph_edge_get_label", "BLUE-GRAPH-EDGE-GET-LABEL", 1, 0, false);
+            declareFunction("blue_graph_add_edge", "BLUE-GRAPH-ADD-EDGE", 3, 2, false);
+            declareFunction("blue_graph_next_id", "BLUE-GRAPH-NEXT-ID", 1, 0, false);
+            declareFunction("blue_graph_generate_description", "BLUE-GRAPH-GENERATE-DESCRIPTION", 1, 0, false);
+            declareFunction("blue_graph_generate_definition_description", "BLUE-GRAPH-GENERATE-DEFINITION-DESCRIPTION", 1, 0, false);
+            declareFunction("blue_graph_generate_option_description", "BLUE-GRAPH-GENERATE-OPTION-DESCRIPTION", 1, 0, false);
+            declareFunction("blue_graph_generate_node_description", "BLUE-GRAPH-GENERATE-NODE-DESCRIPTION", 1, 0, false);
+            declareFunction("blue_graph_generate_edge_description", "BLUE-GRAPH-GENERATE-EDGE-DESCRIPTION", 1, 0, false);
+            declareFunction("bbf_rtv_from_inference", "BBF-RTV-FROM-INFERENCE", 1, 0, false);
+            declareFunction("bbf_rtv_unbound", "BBF-RTV-UNBOUND", 1, 0, false);
+            declareFunction("bbf_rtv_from_inference_new", "BBF-RTV-FROM-INFERENCE-NEW", 1, 0, false);
+            declareFunction("valid_rtv_justificationP", "VALID-RTV-JUSTIFICATION?", 2, 0, false);
+            declareFunction("remove_rtv_irrelevant_justifications", "REMOVE-RTV-IRRELEVANT-JUSTIFICATIONS", 2, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("bff_rkf_irrelevant_terms", "BFF-RKF-IRRELEVANT-TERMS", 2, 0, false);
+            declareFunction("bff_rtv_irrelevant_terms", "BFF-RTV-IRRELEVANT-TERMS", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_blue_grapher_utilities_file_Previous() {
+        declareMacro("define_blue_filter_fn", "DEFINE-BLUE-FILTER-FN");
+        declareFunction("blue_filter_fns", "BLUE-FILTER-FNS", 0, 0, false);
+        declareFunction("get_blue_filter_fn_data", "GET-BLUE-FILTER-FN-DATA", 1, 0, false);
+        declareFunction("blue_filter_fn_p", "BLUE-FILTER-FN-P", 1, 0, false);
+        declareFunction("get_blue_filter_fn_cost", "GET-BLUE-FILTER-FN-COST", 1, 0, false);
+        declareFunction("get_blue_filter_fn_strength", "GET-BLUE-FILTER-FN-STRENGTH", 1, 0, false);
+        declareFunction("get_blue_filter_fn_type", "GET-BLUE-FILTER-FN-TYPE", 1, 0, false);
+        declareFunction("apply_blue_filter_fn", "APPLY-BLUE-FILTER-FN", 3, 1, false);
+        declareFunction("blue_filter_fns_sorted", "BLUE-FILTER-FNS-SORTED", 0, 1, false);
+        declareFunction("blue_apply_filter_fns", "BLUE-APPLY-FILTER-FNS", 3, 1, false);
+        declareFunction("blue_filter_fn_keys", "BLUE-FILTER-FN-KEYS", 0, 1, false);
+        declareFunction("blue_filter_fn_by_key", "BLUE-FILTER-FN-BY-KEY", 1, 0, false);
+        declareFunction("bff_arbitrary_unions", "BFF-ARBITRARY-UNIONS", 2, 0, false);
+        declareFunction("bff_cyc_kb_subset_collections", "BFF-CYC-KB-SUBSET-COLLECTIONS", 2, 0, false);
+        declareFunction("bff_most_general_5", "BFF-MOST-GENERAL-5", 2, 0, false);
+        declareFunction("bff_most_general_10", "BFF-MOST-GENERAL-10", 2, 0, false);
+        declareFunction("bff_most_general_20", "BFF-MOST-GENERAL-20", 2, 0, false);
+        declareMacro("define_blue_builder_fn", "DEFINE-BLUE-BUILDER-FN");
+        declareFunction("get_blue_builder_fn_data", "GET-BLUE-BUILDER-FN-DATA", 1, 0, false);
+        declareFunction("blue_builder_fn_p", "BLUE-BUILDER-FN-P", 1, 0, false);
+        declareFunction("blue_builder", "BLUE-BUILDER", 2, 0, false);
+        declareFunction("blue_builder_fn_keys", "BLUE-BUILDER-FN-KEYS", 0, 0, false);
+        declareFunction("blue_builder_fn_by_key", "BLUE-BUILDER-FN-BY-KEY", 1, 0, false);
+        declareFunction("get_blue_builder_fn_def_value", "GET-BLUE-BUILDER-FN-DEF-VALUE", 2, 0, false);
+        declareFunction("bbf_forward_true", "BBF-FORWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_forward_true_internal", "BBF-FORWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_backward_true", "BBF-BACKWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_backward_true_internal", "BBF-BACKWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_forward_true", "BBF-MIN-FORWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_forward_true_internal", "BBF-MIN-FORWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_backward_true", "BBF-MIN-BACKWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_backward_true_internal", "BBF-MIN-BACKWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_ceilings_forward_true", "BBF-MIN-CEILINGS-FORWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_ceilings_forward_true_internal", "BBF-MIN-CEILINGS-FORWARD-TRUE-INTERNAL", 5, 1, false);
+        declareFunction("bbf_min_forward_and_backward_true", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE", 1, 0, false);
+        declareFunction("bbf_min_forward_and_backward_true_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL", 5, 0, false);
+        declareFunction("bbf_min_forward_and_backward_true_internal_internal", "BBF-MIN-FORWARD-AND-BACKWARD-TRUE-INTERNAL-INTERNAL", 5, 2, false);
+        declareFunction("bbf_script", "BBF-SCRIPT", 1, 0, false);
+        declareFunction("bbf_inference_answers", "BBF-INFERENCE-ANSWERS", 1, 0, false);
+        declareFunction("determine_edge_templates_for_inference", "DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
+        declareFunction("html_determine_edge_templates_for_inference", "HTML-DETERMINE-EDGE-TEMPLATES-FOR-INFERENCE", 1, 0, false);
+        declareFunction("bbf_inference", "BBF-INFERENCE", 1, 0, false);
+        declareFunction("bbf_rule", "BBF-RULE", 1, 0, false);
+        declareFunction("blue_literal_to_edge", "BLUE-LITERAL-TO-EDGE", 3, 0, false);
+        declareFunction("make_inference_hl_to_el_var_list", "MAKE-INFERENCE-HL-TO-EL-VAR-LIST", 1, 0, false);
+        declareFunction("make_assertion_hl_to_el_var_list", "MAKE-ASSERTION-HL-TO-EL-VAR-LIST", 1, 0, false);
+        declareFunction("bbf_make_edge_from_assertion", "BBF-MAKE-EDGE-FROM-ASSERTION", 1, 0, false);
+        declareFunction("bbf_make_graph", "BBF-MAKE-GRAPH", 2, 1, false);
+        declareFunction("bbf_make_edge", "BBF-MAKE-EDGE", 4, 4, false);
+        declareFunction("bbf_make_edge_with_nodes", "BBF-MAKE-EDGE-WITH-NODES", 4, 2, false);
+        declareFunction("bbf_make_node", "BBF-MAKE-NODE", 1, 2, false);
+        declareFunction("blue_event_dispatcher_runningP", "BLUE-EVENT-DISPATCHER-RUNNING?", 0, 0, false);
+        declareFunction("ensure_blue_event_dispatcher_running", "ENSURE-BLUE-EVENT-DISPATCHER-RUNNING", 0, 0, false);
+        declareFunction("register_listener_with_blue_event_dispatcher", "REGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
+        declareFunction("deregister_listener_with_blue_event_dispatcher", "DEREGISTER-LISTENER-WITH-BLUE-EVENT-DISPATCHER", 1, 0, false);
+        declareFunction("stop_blue_event_dispatcher", "STOP-BLUE-EVENT-DISPATCHER", 0, 0, false);
+        declareFunction("start_blue_event_dispatcher", "START-BLUE-EVENT-DISPATCHER", 0, 0, false);
+        declareFunction("blue_event", "BLUE-EVENT", 2, 0, false);
+        declareFunction("blue_fetch_event", "BLUE-FETCH-EVENT", 1, 0, false);
+        declareFunction("blue_fetch_uia_blue_event", "BLUE-FETCH-UIA-BLUE-EVENT", 1, 0, false);
+        declareFunction("blue_current_message_mailbox_suite", "BLUE-CURRENT-MESSAGE-MAILBOX-SUITE", 0, 0, false);
+        declareFunction("blue_ensure_blue_event_address", "BLUE-ENSURE-BLUE-EVENT-ADDRESS", 1, 0, false);
+        declareFunction("map_blue_event_to_mailbox", "MAP-BLUE-EVENT-TO-MAILBOX", 1, 0, false);
+        declareFunction("blue_map_event_to_blue_event", "BLUE-MAP-EVENT-TO-BLUE-EVENT", 1, 1, false);
+        declareFunction("blue_graph_print_function_trampoline", "BLUE-GRAPH-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("blue_graph_p", "BLUE-GRAPH-P", 1, 0, false);
         new blue_grapher_utilities.$blue_graph_p$UnaryFunction();
-        declareFunction(me, "blue_graph_isg", "BLUE-GRAPH-ISG", 1, 0, false);
-        declareFunction(me, "blue_graph_node_label_map", "BLUE-GRAPH-NODE-LABEL-MAP", 1, 0, false);
-        declareFunction(me, "blue_graph_nodes", "BLUE-GRAPH-NODES", 1, 0, false);
-        declareFunction(me, "blue_graph_edge_label_map", "BLUE-GRAPH-EDGE-LABEL-MAP", 1, 0, false);
-        declareFunction(me, "blue_graph_edges", "BLUE-GRAPH-EDGES", 1, 0, false);
-        declareFunction(me, "blue_graph_node_definitions", "BLUE-GRAPH-NODE-DEFINITIONS", 1, 0, false);
-        declareFunction(me, "blue_graph_edge_definitions", "BLUE-GRAPH-EDGE-DEFINITIONS", 1, 0, false);
-        declareFunction(me, "blue_graph_options", "BLUE-GRAPH-OPTIONS", 1, 0, false);
-        declareFunction(me, "_csetf_blue_graph_isg", "_CSETF-BLUE-GRAPH-ISG", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_node_label_map", "_CSETF-BLUE-GRAPH-NODE-LABEL-MAP", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_nodes", "_CSETF-BLUE-GRAPH-NODES", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_edge_label_map", "_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_edges", "_CSETF-BLUE-GRAPH-EDGES", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_node_definitions", "_CSETF-BLUE-GRAPH-NODE-DEFINITIONS", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_edge_definitions", "_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS", 2, 0, false);
-        declareFunction(me, "_csetf_blue_graph_options", "_CSETF-BLUE-GRAPH-OPTIONS", 2, 0, false);
-        declareFunction(me, "make_blue_graph", "MAKE-BLUE-GRAPH", 0, 1, false);
-        declareFunction(me, "visit_defstruct_blue_graph", "VISIT-DEFSTRUCT-BLUE-GRAPH", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_blue_graph_method", "VISIT-DEFSTRUCT-OBJECT-BLUE-GRAPH-METHOD", 2, 0, false);
-        declareFunction(me, "new_blue_graph", "NEW-BLUE-GRAPH", 0, 0, false);
-        declareFunction(me, "blue_graph_add_node_type", "BLUE-GRAPH-ADD-NODE-TYPE", 3, 0, false);
-        declareFunction(me, "blue_graph_add_edge_type", "BLUE-GRAPH-ADD-EDGE-TYPE", 3, 1, false);
-        declareFunction(me, "blue_graph_add_option", "BLUE-GRAPH-ADD-OPTION", 3, 0, false);
-        declareFunction(me, "blue_graph_add_node", "BLUE-GRAPH-ADD-NODE", 1, 2, false);
-        declareFunction(me, "blue_graph_node_p", "BLUE-GRAPH-NODE-P", 1, 0, false);
-        declareFunction(me, "blue_graph_maybe_add_node", "BLUE-GRAPH-MAYBE-ADD-NODE", 2, 1, false);
-        declareFunction(me, "blue_graph_node_get_id", "BLUE-GRAPH-NODE-GET-ID", 1, 0, false);
-        declareFunction(me, "blue_graph_node_get_type", "BLUE-GRAPH-NODE-GET-TYPE", 1, 0, false);
-        declareFunction(me, "blue_graph_node_get_label", "BLUE-GRAPH-NODE-GET-LABEL", 1, 0, false);
-        declareFunction(me, "blue_graph_get_node", "BLUE-GRAPH-GET-NODE", 2, 0, false);
-        declareFunction(me, "blue_graph_get_node_by_label", "BLUE-GRAPH-GET-NODE-BY-LABEL", 2, 0, false);
-        declareFunction(me, "blue_graph_resolve_node_label_reference", "BLUE-GRAPH-RESOLVE-NODE-LABEL-REFERENCE", 2, 0, false);
-        declareFunction(me, "blue_graph_edge_from", "BLUE-GRAPH-EDGE-FROM", 1, 0, false);
-        declareFunction(me, "blue_graph_edge_to", "BLUE-GRAPH-EDGE-TO", 1, 0, false);
-        declareFunction(me, "blue_graph_edge_get_type", "BLUE-GRAPH-EDGE-GET-TYPE", 1, 0, false);
-        declareFunction(me, "blue_graph_edge_get_label", "BLUE-GRAPH-EDGE-GET-LABEL", 1, 0, false);
-        declareFunction(me, "blue_graph_add_edge", "BLUE-GRAPH-ADD-EDGE", 3, 2, false);
-        declareFunction(me, "blue_graph_next_id", "BLUE-GRAPH-NEXT-ID", 1, 0, false);
-        declareFunction(me, "blue_graph_generate_description", "BLUE-GRAPH-GENERATE-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "blue_graph_generate_definition_description", "BLUE-GRAPH-GENERATE-DEFINITION-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "blue_graph_generate_option_description", "BLUE-GRAPH-GENERATE-OPTION-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "blue_graph_generate_node_description", "BLUE-GRAPH-GENERATE-NODE-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "blue_graph_generate_edge_description", "BLUE-GRAPH-GENERATE-EDGE-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "bbf_rtv_from_inference", "BBF-RTV-FROM-INFERENCE", 1, 0, false);
-        declareFunction(me, "bbf_rtv_unbound", "BBF-RTV-UNBOUND", 1, 0, false);
-        declareFunction(me, "bbf_rtv_from_inference_new", "BBF-RTV-FROM-INFERENCE-NEW", 1, 0, false);
-        declareFunction(me, "valid_rtv_justificationP", "VALID-RTV-JUSTIFICATION?", 2, 0, false);
-        declareFunction(me, "remove_rtv_irrelevant_justifications", "REMOVE-RTV-IRRELEVANT-JUSTIFICATIONS", 2, 0, false);
+        declareFunction("blue_graph_isg", "BLUE-GRAPH-ISG", 1, 0, false);
+        declareFunction("blue_graph_node_label_map", "BLUE-GRAPH-NODE-LABEL-MAP", 1, 0, false);
+        declareFunction("blue_graph_nodes", "BLUE-GRAPH-NODES", 1, 0, false);
+        declareFunction("blue_graph_edge_label_map", "BLUE-GRAPH-EDGE-LABEL-MAP", 1, 0, false);
+        declareFunction("blue_graph_edges", "BLUE-GRAPH-EDGES", 1, 0, false);
+        declareFunction("blue_graph_node_definitions", "BLUE-GRAPH-NODE-DEFINITIONS", 1, 0, false);
+        declareFunction("blue_graph_edge_definitions", "BLUE-GRAPH-EDGE-DEFINITIONS", 1, 0, false);
+        declareFunction("blue_graph_options", "BLUE-GRAPH-OPTIONS", 1, 0, false);
+        declareFunction("_csetf_blue_graph_isg", "_CSETF-BLUE-GRAPH-ISG", 2, 0, false);
+        declareFunction("_csetf_blue_graph_node_label_map", "_CSETF-BLUE-GRAPH-NODE-LABEL-MAP", 2, 0, false);
+        declareFunction("_csetf_blue_graph_nodes", "_CSETF-BLUE-GRAPH-NODES", 2, 0, false);
+        declareFunction("_csetf_blue_graph_edge_label_map", "_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP", 2, 0, false);
+        declareFunction("_csetf_blue_graph_edges", "_CSETF-BLUE-GRAPH-EDGES", 2, 0, false);
+        declareFunction("_csetf_blue_graph_node_definitions", "_CSETF-BLUE-GRAPH-NODE-DEFINITIONS", 2, 0, false);
+        declareFunction("_csetf_blue_graph_edge_definitions", "_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS", 2, 0, false);
+        declareFunction("_csetf_blue_graph_options", "_CSETF-BLUE-GRAPH-OPTIONS", 2, 0, false);
+        declareFunction("make_blue_graph", "MAKE-BLUE-GRAPH", 0, 1, false);
+        declareFunction("visit_defstruct_blue_graph", "VISIT-DEFSTRUCT-BLUE-GRAPH", 2, 0, false);
+        declareFunction("visit_defstruct_object_blue_graph_method", "VISIT-DEFSTRUCT-OBJECT-BLUE-GRAPH-METHOD", 2, 0, false);
+        declareFunction("new_blue_graph", "NEW-BLUE-GRAPH", 0, 0, false);
+        declareFunction("blue_graph_add_node_type", "BLUE-GRAPH-ADD-NODE-TYPE", 3, 0, false);
+        declareFunction("blue_graph_add_edge_type", "BLUE-GRAPH-ADD-EDGE-TYPE", 3, 1, false);
+        declareFunction("blue_graph_add_option", "BLUE-GRAPH-ADD-OPTION", 3, 0, false);
+        declareFunction("blue_graph_add_node", "BLUE-GRAPH-ADD-NODE", 1, 2, false);
+        declareFunction("blue_graph_node_p", "BLUE-GRAPH-NODE-P", 1, 0, false);
+        declareFunction("blue_graph_maybe_add_node", "BLUE-GRAPH-MAYBE-ADD-NODE", 2, 1, false);
+        declareFunction("blue_graph_node_get_id", "BLUE-GRAPH-NODE-GET-ID", 1, 0, false);
+        declareFunction("blue_graph_node_get_type", "BLUE-GRAPH-NODE-GET-TYPE", 1, 0, false);
+        declareFunction("blue_graph_node_get_label", "BLUE-GRAPH-NODE-GET-LABEL", 1, 0, false);
+        declareFunction("blue_graph_get_node", "BLUE-GRAPH-GET-NODE", 2, 0, false);
+        declareFunction("blue_graph_get_node_by_label", "BLUE-GRAPH-GET-NODE-BY-LABEL", 2, 0, false);
+        declareFunction("blue_graph_resolve_node_label_reference", "BLUE-GRAPH-RESOLVE-NODE-LABEL-REFERENCE", 2, 0, false);
+        declareFunction("blue_graph_edge_from", "BLUE-GRAPH-EDGE-FROM", 1, 0, false);
+        declareFunction("blue_graph_edge_to", "BLUE-GRAPH-EDGE-TO", 1, 0, false);
+        declareFunction("blue_graph_edge_get_type", "BLUE-GRAPH-EDGE-GET-TYPE", 1, 0, false);
+        declareFunction("blue_graph_edge_get_label", "BLUE-GRAPH-EDGE-GET-LABEL", 1, 0, false);
+        declareFunction("blue_graph_add_edge", "BLUE-GRAPH-ADD-EDGE", 3, 2, false);
+        declareFunction("blue_graph_next_id", "BLUE-GRAPH-NEXT-ID", 1, 0, false);
+        declareFunction("blue_graph_generate_description", "BLUE-GRAPH-GENERATE-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_definition_description", "BLUE-GRAPH-GENERATE-DEFINITION-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_option_description", "BLUE-GRAPH-GENERATE-OPTION-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_node_description", "BLUE-GRAPH-GENERATE-NODE-DESCRIPTION", 1, 0, false);
+        declareFunction("blue_graph_generate_edge_description", "BLUE-GRAPH-GENERATE-EDGE-DESCRIPTION", 1, 0, false);
+        declareFunction("bbf_rtv_from_inference", "BBF-RTV-FROM-INFERENCE", 1, 0, false);
+        declareFunction("bbf_rtv_unbound", "BBF-RTV-UNBOUND", 1, 0, false);
+        declareFunction("bbf_rtv_from_inference_new", "BBF-RTV-FROM-INFERENCE-NEW", 1, 0, false);
+        declareFunction("valid_rtv_justificationP", "VALID-RTV-JUSTIFICATION?", 2, 0, false);
+        declareFunction("remove_rtv_irrelevant_justifications", "REMOVE-RTV-IRRELEVANT-JUSTIFICATIONS", 2, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_blue_grapher_utilities_file_alt() {
+        deflexical("*BLUE-FILTER-FNS*", NIL != boundp($blue_filter_fns$) ? ((SubLObject) ($blue_filter_fns$.getGlobalValue())) : make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED));
+        deflexical("*DEFAULT-BLUE-FILTER-FN-COST*", NIL != boundp($default_blue_filter_fn_cost$) ? ((SubLObject) ($default_blue_filter_fn_cost$.getGlobalValue())) : ZERO_INTEGER);
+        deflexical("*DEFAULT-BLUE-FILTER-FN-STRENGTH*", NIL != boundp($default_blue_filter_fn_strength$) ? ((SubLObject) ($default_blue_filter_fn_strength$.getGlobalValue())) : ZERO_INTEGER);
+        deflexical("*DEFAULT-BLUE-FILTER-FN-TYPE*", NIL != boundp($default_blue_filter_fn_type$) ? ((SubLObject) ($default_blue_filter_fn_type$.getGlobalValue())) : NIL);
+        deflexical("*BLUE-BUILDER-FNS*", NIL != boundp($blue_builder_fns$) ? ((SubLObject) ($blue_builder_fns$.getGlobalValue())) : make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED));
+        deflexical("*BLUE-BUILDER-FN-TO-DEFLIST-HASH*", NIL != boundp($blue_builder_fn_to_deflist_hash$) ? ((SubLObject) ($blue_builder_fn_to_deflist_hash$.getGlobalValue())) : make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED));
+        deflexical("*INFERENCE-ANSWERS-DEFAULT-UNDETERMINED-RELATION*", $$conceptuallyRelated);
+        deflexical("*BLUE-EVENT-DISPATCHER-LOCK*", make_lock($str_alt122$BLUE_EVENT_DISPATCHER_Lock));
+        deflexical("*BLUE-EVENT-DISPATCHER-LISTENERS*", NIL != boundp($blue_event_dispatcher_listeners$) ? ((SubLObject) ($blue_event_dispatcher_listeners$.getGlobalValue())) : NIL);
+        defparameter("*BLUE-MESSAGE-MAILBOX-SUITE*", message_mailboxes.new_message_mailbox_suite());
+        deflexical("*BLUE-EVENT-TO-BLUE-EVENT-LISTENER*", event_broker.describe_funcall_listener($BLUE_EVENT, BLUE_MAP_EVENT_TO_BLUE_EVENT, UNPROVIDED, UNPROVIDED));
+        defconstant("*DTP-BLUE-GRAPH*", BLUE_GRAPH);
         return NIL;
     }
 
     public static SubLObject init_blue_grapher_utilities_file() {
+        if (SubLFiles.USE_V1) {
+            deflexical("*BLUE-FILTER-FNS*", SubLTrampolineFile.maybeDefault($blue_filter_fns$, $blue_filter_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+            deflexical("*DEFAULT-BLUE-FILTER-FN-COST*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_cost$, $default_blue_filter_fn_cost$, ZERO_INTEGER));
+            deflexical("*DEFAULT-BLUE-FILTER-FN-STRENGTH*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_strength$, $default_blue_filter_fn_strength$, ZERO_INTEGER));
+            deflexical("*DEFAULT-BLUE-FILTER-FN-TYPE*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_type$, $default_blue_filter_fn_type$, NIL));
+            deflexical("*BLUE-BUILDER-FNS*", SubLTrampolineFile.maybeDefault($blue_builder_fns$, $blue_builder_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+            deflexical("*BLUE-BUILDER-FN-TO-DEFLIST-HASH*", SubLTrampolineFile.maybeDefault($blue_builder_fn_to_deflist_hash$, $blue_builder_fn_to_deflist_hash$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
+            deflexical("*INFERENCE-ANSWERS-DEFAULT-UNDETERMINED-RELATION*", $$conceptuallyRelated);
+            deflexical("*BLUE-EVENT-DISPATCHER-LOCK*", make_lock($str121$BLUE_EVENT_DISPATCHER_Lock));
+            deflexical("*BLUE-EVENT-DISPATCHER-LISTENERS*", SubLTrampolineFile.maybeDefault($blue_event_dispatcher_listeners$, $blue_event_dispatcher_listeners$, NIL));
+            defparameter("*BLUE-MESSAGE-MAILBOX-SUITE*", message_mailboxes.new_message_mailbox_suite());
+            deflexical("*BLUE-EVENT-TO-BLUE-EVENT-LISTENER*", event_broker.describe_funcall_listener($BLUE_EVENT, BLUE_MAP_EVENT_TO_BLUE_EVENT, UNPROVIDED, UNPROVIDED));
+            defconstant("*DTP-BLUE-GRAPH*", BLUE_GRAPH);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*BLUE-FILTER-FNS*", NIL != boundp($blue_filter_fns$) ? ((SubLObject) ($blue_filter_fns$.getGlobalValue())) : make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED));
+            deflexical("*DEFAULT-BLUE-FILTER-FN-COST*", NIL != boundp($default_blue_filter_fn_cost$) ? ((SubLObject) ($default_blue_filter_fn_cost$.getGlobalValue())) : ZERO_INTEGER);
+            deflexical("*DEFAULT-BLUE-FILTER-FN-STRENGTH*", NIL != boundp($default_blue_filter_fn_strength$) ? ((SubLObject) ($default_blue_filter_fn_strength$.getGlobalValue())) : ZERO_INTEGER);
+            deflexical("*DEFAULT-BLUE-FILTER-FN-TYPE*", NIL != boundp($default_blue_filter_fn_type$) ? ((SubLObject) ($default_blue_filter_fn_type$.getGlobalValue())) : NIL);
+            deflexical("*BLUE-BUILDER-FNS*", NIL != boundp($blue_builder_fns$) ? ((SubLObject) ($blue_builder_fns$.getGlobalValue())) : make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED));
+            deflexical("*BLUE-BUILDER-FN-TO-DEFLIST-HASH*", NIL != boundp($blue_builder_fn_to_deflist_hash$) ? ((SubLObject) ($blue_builder_fn_to_deflist_hash$.getGlobalValue())) : make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED));
+            deflexical("*BLUE-EVENT-DISPATCHER-LOCK*", make_lock($str_alt122$BLUE_EVENT_DISPATCHER_Lock));
+            deflexical("*BLUE-EVENT-DISPATCHER-LISTENERS*", NIL != boundp($blue_event_dispatcher_listeners$) ? ((SubLObject) ($blue_event_dispatcher_listeners$.getGlobalValue())) : NIL);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_blue_grapher_utilities_file_Previous() {
         deflexical("*BLUE-FILTER-FNS*", SubLTrampolineFile.maybeDefault($blue_filter_fns$, $blue_filter_fns$, () -> make_hash_table(SIXTEEN_INTEGER, UNPROVIDED, UNPROVIDED)));
         deflexical("*DEFAULT-BLUE-FILTER-FN-COST*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_cost$, $default_blue_filter_fn_cost$, ZERO_INTEGER));
         deflexical("*DEFAULT-BLUE-FILTER-FN-STRENGTH*", SubLTrampolineFile.maybeDefault($default_blue_filter_fn_strength$, $default_blue_filter_fn_strength$, ZERO_INTEGER));
@@ -3211,7 +6017,185 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_blue_grapher_utilities_file_alt() {
+        declare_defglobal($blue_filter_fns$);
+        declare_defglobal($default_blue_filter_fn_cost$);
+        declare_defglobal($default_blue_filter_fn_strength$);
+        declare_defglobal($default_blue_filter_fn_type$);
+        sethash(BFF_ARBITRARY_UNIONS, $blue_filter_fns$.getGlobalValue(), $list_alt18);
+        register_api_predefined_function(BFF_ARBITRARY_UNIONS);
+        sethash(BFF_RKF_IRRELEVANT_TERMS, $blue_filter_fns$.getGlobalValue(), $list_alt18);
+        register_api_predefined_function(BFF_RKF_IRRELEVANT_TERMS);
+        sethash(BFF_CYC_KB_SUBSET_COLLECTIONS, $blue_filter_fns$.getGlobalValue(), $list_alt18);
+        register_api_predefined_function(BFF_CYC_KB_SUBSET_COLLECTIONS);
+        sethash(BFF_RTV_IRRELEVANT_TERMS, $blue_filter_fns$.getGlobalValue(), $list_alt18);
+        register_api_predefined_function(BFF_RTV_IRRELEVANT_TERMS);
+        sethash(BFF_MOST_GENERAL_5, $blue_filter_fns$.getGlobalValue(), $list_alt26);
+        register_api_predefined_function(BFF_MOST_GENERAL_5);
+        sethash(BFF_MOST_GENERAL_10, $blue_filter_fns$.getGlobalValue(), $list_alt29);
+        register_api_predefined_function(BFF_MOST_GENERAL_10);
+        sethash(BFF_MOST_GENERAL_20, $blue_filter_fns$.getGlobalValue(), $list_alt31);
+        register_api_predefined_function(BFF_MOST_GENERAL_20);
+        declare_defglobal($blue_builder_fns$);
+        declare_defglobal($blue_builder_fn_to_deflist_hash$);
+        sethash(BBF_FORWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt39);
+        register_api_predefined_function(BBF_FORWARD_TRUE);
+        sethash(BBF_BACKWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt47);
+        register_api_predefined_function(BBF_BACKWARD_TRUE);
+        sethash(BBF_MIN_FORWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_MIN_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt49);
+        register_api_predefined_function(BBF_MIN_FORWARD_TRUE);
+        sethash(BBF_MIN_BACKWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_MIN_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt51);
+        register_api_predefined_function(BBF_MIN_BACKWARD_TRUE);
+        sethash(BBF_MIN_CEILINGS_FORWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_MIN_CEILINGS_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt53);
+        register_api_predefined_function(BBF_MIN_CEILINGS_FORWARD_TRUE);
+        sethash(BBF_MIN_FORWARD_AND_BACKWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_MIN_FORWARD_AND_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt56);
+        register_api_predefined_function(BBF_MIN_FORWARD_AND_BACKWARD_TRUE);
+        sethash(BBF_SCRIPT, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_SCRIPT, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt60);
+        register_api_predefined_function(BBF_SCRIPT);
+        sethash(BBF_INFERENCE_ANSWERS, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_INFERENCE_ANSWERS, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt78);
+        register_api_predefined_function(BBF_INFERENCE_ANSWERS);
+        sethash(BBF_INFERENCE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_INFERENCE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt96);
+        register_api_predefined_function(BBF_INFERENCE);
+        sethash(BBF_RULE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_RULE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt104);
+        register_api_predefined_function(BBF_RULE);
+        event_model.register_event_class($BLUE_GRAPHER_BASE_EVENT, $CYC_APPLICATION_EVENT, NIL);
+        event_model.register_event_class($BLUE_EVENT, $BLUE_GRAPHER_BASE_EVENT, NIL);
+        declare_defglobal($blue_event_dispatcher_listeners$);
+        register_external_symbol(BLUE_FETCH_EVENT);
+        register_listener_with_blue_event_dispatcher($blue_event_to_blue_event_listener$.getGlobalValue());
+        register_method($print_object_method_table$.getGlobalValue(), $dtp_blue_graph$.getGlobalValue(), symbol_function(BLUE_GRAPH_PRINT_FUNCTION_TRAMPOLINE));
+        def_csetf(BLUE_GRAPH_ISG, _CSETF_BLUE_GRAPH_ISG);
+        def_csetf(BLUE_GRAPH_NODE_LABEL_MAP, _CSETF_BLUE_GRAPH_NODE_LABEL_MAP);
+        def_csetf(BLUE_GRAPH_NODES, _CSETF_BLUE_GRAPH_NODES);
+        def_csetf(BLUE_GRAPH_EDGE_LABEL_MAP, _CSETF_BLUE_GRAPH_EDGE_LABEL_MAP);
+        def_csetf(BLUE_GRAPH_EDGES, _CSETF_BLUE_GRAPH_EDGES);
+        def_csetf(BLUE_GRAPH_NODE_DEFINITIONS, _CSETF_BLUE_GRAPH_NODE_DEFINITIONS);
+        def_csetf(BLUE_GRAPH_EDGE_DEFINITIONS, _CSETF_BLUE_GRAPH_EDGE_DEFINITIONS);
+        def_csetf(BLUE_GRAPH_OPTIONS, _CSETF_BLUE_GRAPH_OPTIONS);
+        identity(BLUE_GRAPH);
+        sethash(BBF_RTV_FROM_INFERENCE, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_RTV_FROM_INFERENCE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt170);
+        register_api_predefined_function(BBF_RTV_FROM_INFERENCE);
+        sethash(BBF_RTV_UNBOUND, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_RTV_UNBOUND, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt170);
+        register_api_predefined_function(BBF_RTV_UNBOUND);
+        sethash(BBF_RTV_FROM_INFERENCE_NEW, $blue_builder_fns$.getGlobalValue(), T);
+        sethash(BBF_RTV_FROM_INFERENCE_NEW, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt170);
+        register_api_predefined_function(BBF_RTV_FROM_INFERENCE_NEW);
+        return NIL;
+    }
+
     public static SubLObject setup_blue_grapher_utilities_file() {
+        if (SubLFiles.USE_V1) {
+            declare_defglobal($blue_filter_fns$);
+            declare_defglobal($default_blue_filter_fn_cost$);
+            declare_defglobal($default_blue_filter_fn_strength$);
+            declare_defglobal($default_blue_filter_fn_type$);
+            sethash(BFF_ARBITRARY_UNIONS, $blue_filter_fns$.getGlobalValue(), $list18);
+            register_api_predefined_function(BFF_ARBITRARY_UNIONS);
+            sethash(BFF_CYC_KB_SUBSET_COLLECTIONS, $blue_filter_fns$.getGlobalValue(), $list18);
+            register_api_predefined_function(BFF_CYC_KB_SUBSET_COLLECTIONS);
+            sethash(BFF_MOST_GENERAL_5, $blue_filter_fns$.getGlobalValue(), $list23);
+            register_api_predefined_function(BFF_MOST_GENERAL_5);
+            sethash(BFF_MOST_GENERAL_10, $blue_filter_fns$.getGlobalValue(), $list26);
+            register_api_predefined_function(BFF_MOST_GENERAL_10);
+            sethash(BFF_MOST_GENERAL_20, $blue_filter_fns$.getGlobalValue(), $list28);
+            register_api_predefined_function(BFF_MOST_GENERAL_20);
+            declare_defglobal($blue_builder_fns$);
+            declare_defglobal($blue_builder_fn_to_deflist_hash$);
+            sethash(BBF_FORWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list36);
+            register_api_predefined_function(BBF_FORWARD_TRUE);
+            sethash(BBF_BACKWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list44);
+            register_api_predefined_function(BBF_BACKWARD_TRUE);
+            sethash(BBF_MIN_FORWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_MIN_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list46);
+            register_api_predefined_function(BBF_MIN_FORWARD_TRUE);
+            sethash(BBF_MIN_BACKWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_MIN_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list48);
+            register_api_predefined_function(BBF_MIN_BACKWARD_TRUE);
+            sethash(BBF_MIN_CEILINGS_FORWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_MIN_CEILINGS_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list50);
+            register_api_predefined_function(BBF_MIN_CEILINGS_FORWARD_TRUE);
+            sethash(BBF_MIN_FORWARD_AND_BACKWARD_TRUE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_MIN_FORWARD_AND_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list53);
+            register_api_predefined_function(BBF_MIN_FORWARD_AND_BACKWARD_TRUE);
+            sethash(BBF_SCRIPT, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_SCRIPT, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list57);
+            register_api_predefined_function(BBF_SCRIPT);
+            sethash(BBF_INFERENCE_ANSWERS, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_INFERENCE_ANSWERS, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list80);
+            register_api_predefined_function(BBF_INFERENCE_ANSWERS);
+            sethash(BBF_INFERENCE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_INFERENCE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list98);
+            register_api_predefined_function(BBF_INFERENCE);
+            sethash(BBF_RULE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_RULE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list106);
+            register_api_predefined_function(BBF_RULE);
+            event_model.register_event_class($BLUE_GRAPHER_BASE_EVENT, $CYC_APPLICATION_EVENT, NIL);
+            event_model.register_event_class($BLUE_EVENT, $BLUE_GRAPHER_BASE_EVENT, NIL);
+            declare_defglobal($blue_event_dispatcher_listeners$);
+            register_external_symbol(BLUE_FETCH_EVENT);
+            register_listener_with_blue_event_dispatcher($blue_event_to_blue_event_listener$.getGlobalValue());
+            register_method($print_object_method_table$.getGlobalValue(), $dtp_blue_graph$.getGlobalValue(), symbol_function(BLUE_GRAPH_PRINT_FUNCTION_TRAMPOLINE));
+            SubLSpecialOperatorDeclarations.proclaim($list133);
+            def_csetf(BLUE_GRAPH_ISG, _CSETF_BLUE_GRAPH_ISG);
+            def_csetf(BLUE_GRAPH_NODE_LABEL_MAP, _CSETF_BLUE_GRAPH_NODE_LABEL_MAP);
+            def_csetf(BLUE_GRAPH_NODES, _CSETF_BLUE_GRAPH_NODES);
+            def_csetf(BLUE_GRAPH_EDGE_LABEL_MAP, _CSETF_BLUE_GRAPH_EDGE_LABEL_MAP);
+            def_csetf(BLUE_GRAPH_EDGES, _CSETF_BLUE_GRAPH_EDGES);
+            def_csetf(BLUE_GRAPH_NODE_DEFINITIONS, _CSETF_BLUE_GRAPH_NODE_DEFINITIONS);
+            def_csetf(BLUE_GRAPH_EDGE_DEFINITIONS, _CSETF_BLUE_GRAPH_EDGE_DEFINITIONS);
+            def_csetf(BLUE_GRAPH_OPTIONS, _CSETF_BLUE_GRAPH_OPTIONS);
+            identity(BLUE_GRAPH);
+            register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_blue_graph$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_BLUE_GRAPH_METHOD));
+            sethash(BBF_RTV_FROM_INFERENCE, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_RTV_FROM_INFERENCE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list175);
+            register_api_predefined_function(BBF_RTV_FROM_INFERENCE);
+            sethash(BBF_RTV_UNBOUND, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_RTV_UNBOUND, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list175);
+            register_api_predefined_function(BBF_RTV_UNBOUND);
+            sethash(BBF_RTV_FROM_INFERENCE_NEW, $blue_builder_fns$.getGlobalValue(), T);
+            sethash(BBF_RTV_FROM_INFERENCE_NEW, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list175);
+            register_api_predefined_function(BBF_RTV_FROM_INFERENCE_NEW);
+        }
+        if (SubLFiles.USE_V2) {
+            sethash(BFF_RKF_IRRELEVANT_TERMS, $blue_filter_fns$.getGlobalValue(), $list_alt18);
+            register_api_predefined_function(BFF_RKF_IRRELEVANT_TERMS);
+            sethash(BFF_RTV_IRRELEVANT_TERMS, $blue_filter_fns$.getGlobalValue(), $list_alt18);
+            register_api_predefined_function(BFF_RTV_IRRELEVANT_TERMS);
+            sethash(BFF_MOST_GENERAL_5, $blue_filter_fns$.getGlobalValue(), $list_alt26);
+            sethash(BFF_MOST_GENERAL_10, $blue_filter_fns$.getGlobalValue(), $list_alt29);
+            sethash(BFF_MOST_GENERAL_20, $blue_filter_fns$.getGlobalValue(), $list_alt31);
+            sethash(BBF_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt39);
+            sethash(BBF_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt47);
+            sethash(BBF_MIN_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt49);
+            sethash(BBF_MIN_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt51);
+            sethash(BBF_MIN_CEILINGS_FORWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt53);
+            sethash(BBF_MIN_FORWARD_AND_BACKWARD_TRUE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt56);
+            sethash(BBF_SCRIPT, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt60);
+            sethash(BBF_INFERENCE_ANSWERS, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt78);
+            sethash(BBF_INFERENCE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt96);
+            sethash(BBF_RULE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt104);
+            sethash(BBF_RTV_FROM_INFERENCE, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt170);
+            sethash(BBF_RTV_UNBOUND, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt170);
+            sethash(BBF_RTV_FROM_INFERENCE_NEW, $blue_builder_fn_to_deflist_hash$.getGlobalValue(), $list_alt170);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_blue_grapher_utilities_file_Previous() {
         declare_defglobal($blue_filter_fns$);
         declare_defglobal($default_blue_filter_fn_cost$);
         declare_defglobal($default_blue_filter_fn_strength$);
@@ -3303,206 +6287,6 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $blue_graph_native extends SubLStructNative {
@@ -3525,14 +6309,14 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
         private static final SubLStructDeclNative structDecl;
 
         public $blue_graph_native() {
-            this.$isg = Lisp.NIL;
-            this.$node_label_map = Lisp.NIL;
-            this.$nodes = Lisp.NIL;
-            this.$edge_label_map = Lisp.NIL;
-            this.$edges = Lisp.NIL;
-            this.$node_definitions = Lisp.NIL;
-            this.$edge_definitions = Lisp.NIL;
-            this.$options = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$isg = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$node_label_map = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$nodes = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$edge_label_map = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$edges = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$node_definitions = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$edge_definitions = Lisp.NIL;
+            blue_grapher_utilities.$blue_graph_native.this.$options = Lisp.NIL;
         }
 
         @Override
@@ -3542,86 +6326,86 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
 
         @Override
         public SubLObject getField2() {
-            return this.$isg;
+            return blue_grapher_utilities.$blue_graph_native.this.$isg;
         }
 
         @Override
         public SubLObject getField3() {
-            return this.$node_label_map;
+            return blue_grapher_utilities.$blue_graph_native.this.$node_label_map;
         }
 
         @Override
         public SubLObject getField4() {
-            return this.$nodes;
+            return blue_grapher_utilities.$blue_graph_native.this.$nodes;
         }
 
         @Override
         public SubLObject getField5() {
-            return this.$edge_label_map;
+            return blue_grapher_utilities.$blue_graph_native.this.$edge_label_map;
         }
 
         @Override
         public SubLObject getField6() {
-            return this.$edges;
+            return blue_grapher_utilities.$blue_graph_native.this.$edges;
         }
 
         @Override
         public SubLObject getField7() {
-            return this.$node_definitions;
+            return blue_grapher_utilities.$blue_graph_native.this.$node_definitions;
         }
 
         @Override
         public SubLObject getField8() {
-            return this.$edge_definitions;
+            return blue_grapher_utilities.$blue_graph_native.this.$edge_definitions;
         }
 
         @Override
         public SubLObject getField9() {
-            return this.$options;
+            return blue_grapher_utilities.$blue_graph_native.this.$options;
         }
 
         @Override
         public SubLObject setField2(final SubLObject value) {
-            return this.$isg = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$isg = value;
         }
 
         @Override
         public SubLObject setField3(final SubLObject value) {
-            return this.$node_label_map = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$node_label_map = value;
         }
 
         @Override
         public SubLObject setField4(final SubLObject value) {
-            return this.$nodes = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$nodes = value;
         }
 
         @Override
         public SubLObject setField5(final SubLObject value) {
-            return this.$edge_label_map = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$edge_label_map = value;
         }
 
         @Override
         public SubLObject setField6(final SubLObject value) {
-            return this.$edges = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$edges = value;
         }
 
         @Override
         public SubLObject setField7(final SubLObject value) {
-            return this.$node_definitions = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$node_definitions = value;
         }
 
         @Override
         public SubLObject setField8(final SubLObject value) {
-            return this.$edge_definitions = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$edge_definitions = value;
         }
 
         @Override
         public SubLObject setField9(final SubLObject value) {
-            return this.$options = value;
+            return blue_grapher_utilities.$blue_graph_native.this.$options = value;
         }
 
         static {
-            structDecl = makeStructDeclNative(blue_grapher_utilities.$blue_graph_native.class, BLUE_GRAPH, BLUE_GRAPH_P, $list127, $list128, new String[]{ "$isg", "$node_label_map", "$nodes", "$edge_label_map", "$edges", "$node_definitions", "$edge_definitions", "$options" }, $list129, $list130, DEFAULT_STRUCT_PRINT_FUNCTION);
+            structDecl = makeStructDeclNative(com.cyc.cycjava.cycl.blue_grapher_utilities.$blue_graph_native.class, BLUE_GRAPH, BLUE_GRAPH_P, $list127, $list128, new String[]{ "$isg", "$node_label_map", "$nodes", "$edge_label_map", "$edges", "$node_definitions", "$edge_definitions", "$options" }, $list129, $list130, DEFAULT_STRUCT_PRINT_FUNCTION);
         }
     }
 
@@ -3635,6 +6419,92 @@ public final class blue_grapher_utilities extends SubLTranslatedFile {
             return blue_graph_p(arg1);
         }
     }
+
+    static private final SubLList $list_alt1 = list(makeSymbol("NAME"), makeSymbol("ARGLIST"), makeSymbol("DEFLIST"), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLString $str_alt13$APPLY_BLUE_FILTER_FN___A_is_not_a = makeString("APPLY-BLUE-FILTER-FN: ~A is not a blue-filter-fn-p");
+
+    static private final SubLList $list_alt18 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), TEN_INTEGER);
+
+    private static final SubLSymbol BFF_RKF_IRRELEVANT_TERMS = makeSymbol("BFF-RKF-IRRELEVANT-TERMS");
+
+    private static final SubLSymbol BFF_RTV_IRRELEVANT_TERMS = makeSymbol("BFF-RTV-IRRELEVANT-TERMS");
+
+
+
+    static private final SubLList $list_alt26 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(500), $TYPE, makeKeyword("POST-MINIMIZATION"));
+
+    static private final SubLSymbol $sym27$GENERALITY_ESTIMATE_ = makeSymbol("GENERALITY-ESTIMATE>");
+
+    static private final SubLList $list_alt29 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(1000), $TYPE, makeKeyword("POST-MINIMIZATION"));
+
+    static private final SubLList $list_alt31 = list($COST, ONE_INTEGER, makeKeyword("STRENGTH"), makeInteger(2000), $TYPE, makeKeyword("POST-MINIMIZATION"));
+
+    static private final SubLList $list_alt34 = list(makeSymbol("*BLUE-BUILDER-FNS*"), T);
+
+    static private final SubLString $str_alt35$BLUE_BUILDER___A_is_not_a_blue_bu = makeString("BLUE-BUILDER: ~A is not a blue-builder-fn-p");
+
+    static private final SubLSymbol $sym36$STRING_ = makeSymbol("STRING<");
+
+    static private final SubLList $list_alt39 = list(makeKeyword("HELP-STRING"), makeString("Show forward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)"));
+
+    static private final SubLList $list_alt47 = list(makeKeyword("HELP-STRING"), makeString("Show backward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)"));
+
+    static private final SubLList $list_alt49 = list(makeKeyword("HELP-STRING"), makeString("Show minimum forward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)"));
+
+    static private final SubLList $list_alt51 = list(makeKeyword("HELP-STRING"), makeString("Show minimum backward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)"));
+
+    static private final SubLList $list_alt53 = list(makeKeyword("HELP-STRING"), makeString("Show the minimal ceilings of all forward edges from FORTS (nodes) through PREDS (edges) in MT and iterate DEPTH times.  (Forts failing FILTER-FNS are not shown.) (EXPERIMENTAL)"));
+
+    static private final SubLList $list_alt56 = list(makeKeyword("HELP-STRING"), makeString("Show minimum forward and backward edges from FORTS (nodes) through PREDS (edges) in MT to DEPTH.  (Forts failing FILTER-FNS are not shown.)  (Note that this is *expensive* for higher depths) (EXPERIMENTAL)"));
+
+    static private final SubLList $list_alt60 = list(makeKeyword("HELP-STRING"), makeString("Create a graph representation of a script (a spec of #$Situation) that shows the temporal ordering of scenes and the actors and roles involved in each scene.  FORTS must be a singleton containing the script term."));
+
+    static private final SubLList $list_alt63 = list(TWO_INTEGER, THREE_INTEGER);
+
+    public static final SubLObject $const64$QuasiTemporalSubSituationTypesPre = reader_make_constant_shell("QuasiTemporalSubSituationTypesPredicate");
+
+    static private final SubLList $list_alt70 = list(TWO_INTEGER, THREE_INTEGER, FOUR_INTEGER);
+
+    public static final SubLObject $const71$SituationTypeRelation_BasicActorT = reader_make_constant_shell("SituationTypeRelation-BasicActorTypesAndRolesForSubSitTypes");
+
+    public static final SubLObject $const72$individualPlaysRoleInSubSituation = reader_make_constant_shell("individualPlaysRoleInSubSituationType");
+
+    public static final SubLObject $const74$SituationTypeRelation_SitTypeToSu = reader_make_constant_shell("SituationTypeRelation-SitTypeToSubSitTypeBasic");
+
+    static private final SubLList $list_alt75 = list(TWO_INTEGER, THREE_INTEGER, FOUR_INTEGER, FIVE_INTEGER, SIX_INTEGER);
+
+    public static final SubLObject $const76$GraphicallyEditableRoleMappingPre = reader_make_constant_shell("GraphicallyEditableRoleMappingPredicate");
+
+    static private final SubLList $list_alt78 = list(makeKeyword("HELP-STRING"), makeString("Graph the results of an inference by graphing the GAFs the result when filling in the bindings back into the query."));
+
+    static private final SubLString $str_alt93$_____ = makeString(" --- ");
+
+    static private final SubLString $str_alt94$______ = makeString(" ---> ");
+
+    static private final SubLList $list_alt96 = list(makeKeyword("HELP-STRING"), makeString("Graph an inference query formula by taking the neg-lits and pos-lits, converting the HL vars to EL, then treating them as edges."));
+
+    static private final SubLString $str_alt99$Inference_not_found_ = makeString("Inference not found.");
+
+    static private final SubLList $list_alt101 = list(makeSymbol("MT"), makeSymbol("ASENT"));
+
+    static private final SubLList $list_alt104 = list(makeKeyword("HELP-STRING"), makeString("Graph a rule by taking the neg-lits and pos-lits, converting the HL vars to EL, then treating them as edges."));
+
+    static private final SubLList $list_alt106 = cons(makeSymbol("EL-VAR"), makeSymbol("HL-VAR"));
+
+    static private final SubLString $str_alt122$BLUE_EVENT_DISPATCHER_Lock = makeString("BLUE-EVENT-DISPATCHER Lock");
+
+    static private final SubLList $list_alt128 = list(makeSymbol("ISG"), makeSymbol("NODE-LABEL-MAP"), makeSymbol("NODES"), makeSymbol("EDGE-LABEL-MAP"), makeSymbol("EDGES"), makeSymbol("NODE-DEFINITIONS"), makeSymbol("EDGE-DEFINITIONS"), makeSymbol("OPTIONS"));
+
+    static private final SubLList $list_alt129 = list(makeKeyword("ISG"), makeKeyword("NODE-LABEL-MAP"), makeKeyword("NODES"), makeKeyword("EDGE-LABEL-MAP"), makeKeyword("EDGES"), makeKeyword("NODE-DEFINITIONS"), makeKeyword("EDGE-DEFINITIONS"), makeKeyword("OPTIONS"));
+
+    static private final SubLList $list_alt130 = list(makeSymbol("BLUE-GRAPH-ISG"), makeSymbol("BLUE-GRAPH-NODE-LABEL-MAP"), makeSymbol("BLUE-GRAPH-NODES"), makeSymbol("BLUE-GRAPH-EDGE-LABEL-MAP"), makeSymbol("BLUE-GRAPH-EDGES"), makeSymbol("BLUE-GRAPH-NODE-DEFINITIONS"), makeSymbol("BLUE-GRAPH-EDGE-DEFINITIONS"), makeSymbol("BLUE-GRAPH-OPTIONS"));
+
+    static private final SubLList $list_alt131 = list(makeSymbol("_CSETF-BLUE-GRAPH-ISG"), makeSymbol("_CSETF-BLUE-GRAPH-NODE-LABEL-MAP"), makeSymbol("_CSETF-BLUE-GRAPH-NODES"), makeSymbol("_CSETF-BLUE-GRAPH-EDGE-LABEL-MAP"), makeSymbol("_CSETF-BLUE-GRAPH-EDGES"), makeSymbol("_CSETF-BLUE-GRAPH-NODE-DEFINITIONS"), makeSymbol("_CSETF-BLUE-GRAPH-EDGE-DEFINITIONS"), makeSymbol("_CSETF-BLUE-GRAPH-OPTIONS"));
+
+    static private final SubLString $str_alt156$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
+
+    static private final SubLList $list_alt170 = list(makeKeyword("HELP-STRING"), makeString(""));
 }
 
 /**

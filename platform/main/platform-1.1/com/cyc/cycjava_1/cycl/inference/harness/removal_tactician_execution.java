@@ -288,8 +288,7 @@ remove from boxes during selection if necessary. (quiescence)
   }
 
   public static final SubLObject setup_removal_tactician_execution_file() {
-    // CVS_ID("Id: inference-removal-tactician-execution.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.note_funcall_helper_function($sym0$REMOVAL_STRATEGY_DONE_);
+        utilities_macros.note_funcall_helper_function($sym0$REMOVAL_STRATEGY_DONE_);
     utilities_macros.note_funcall_helper_function($sym4$REMOVAL_STRATEGY_DO_ONE_STEP);
     return NIL;
   }

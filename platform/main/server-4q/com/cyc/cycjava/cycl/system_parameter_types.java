@@ -1,7 +1,21 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.system_parameter_types;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -14,38 +28,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.system_parameter_types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class system_parameter_types extends SubLTranslatedFile {
+public final class system_parameter_types extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new system_parameter_types();
 
-    public static final String myName = "com.cyc.cycjava.cycl.system_parameter_types";
+    public static final String myName = "com.cyc.cycjava_2.cycl.system_parameter_types";
 
-    public static final String myFingerPrint = "6d16ff56b981d4679e71541ba19745f517a5aad1849d687da9ba953cf7c1f95e";
 
 
 
@@ -319,15 +307,15 @@ public final class system_parameter_types extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_system_parameter_types_file() {
-        declareFunction(me, "register_system_parameter_type", "REGISTER-SYSTEM-PARAMETER-TYPE", 3, 0, false);
-        declareFunction(me, "boolean_checker_p", "BOOLEAN-CHECKER-P", 1, 0, false);
-        declareFunction(me, "port_checker_p", "PORT-CHECKER-P", 1, 0, false);
-        declareFunction(me, "get_system_parameter_type_possible_values_string", "GET-SYSTEM-PARAMETER-TYPE-POSSIBLE-VALUES-STRING", 1, 0, false);
-        declareFunction(me, "get_system_parameter_type_checker", "GET-SYSTEM-PARAMETER-TYPE-CHECKER", 1, 0, false);
-        declareFunction(me, "get_system_parameter_member_type_members", "GET-SYSTEM-PARAMETER-MEMBER-TYPE-MEMBERS", 1, 0, false);
-        declareFunction(me, "determine_system_parameter_type_possible_values_string", "DETERMINE-SYSTEM-PARAMETER-TYPE-POSSIBLE-VALUES-STRING", 1, 1, false);
-        declareFunction(me, "valid_system_parameter_typeP", "VALID-SYSTEM-PARAMETER-TYPE?", 1, 0, false);
-        declareFunction(me, "check_system_parameter_value", "CHECK-SYSTEM-PARAMETER-VALUE", 2, 0, false);
+        declareFunction("register_system_parameter_type", "REGISTER-SYSTEM-PARAMETER-TYPE", 3, 0, false);
+        declareFunction("boolean_checker_p", "BOOLEAN-CHECKER-P", 1, 0, false);
+        declareFunction("port_checker_p", "PORT-CHECKER-P", 1, 0, false);
+        declareFunction("get_system_parameter_type_possible_values_string", "GET-SYSTEM-PARAMETER-TYPE-POSSIBLE-VALUES-STRING", 1, 0, false);
+        declareFunction("get_system_parameter_type_checker", "GET-SYSTEM-PARAMETER-TYPE-CHECKER", 1, 0, false);
+        declareFunction("get_system_parameter_member_type_members", "GET-SYSTEM-PARAMETER-MEMBER-TYPE-MEMBERS", 1, 0, false);
+        declareFunction("determine_system_parameter_type_possible_values_string", "DETERMINE-SYSTEM-PARAMETER-TYPE-POSSIBLE-VALUES-STRING", 1, 1, false);
+        declareFunction("valid_system_parameter_typeP", "VALID-SYSTEM-PARAMETER-TYPE?", 1, 0, false);
+        declareFunction("check_system_parameter_value", "CHECK-SYSTEM-PARAMETER-VALUE", 2, 0, false);
         return NIL;
     }
 

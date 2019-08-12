@@ -1,57 +1,50 @@
 package com.cyc.cycjava.cycl.sksi.report_generation;
 
 
-import com.cyc.cycjava.cycl.api_control_vars;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.cae_query_search;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.fi;
-import com.cyc.cycjava.cycl.file_utilities;
-import com.cyc.cycjava.cycl.hash_table_utilities;
-import com.cyc.cycjava.cycl.hlmt_czer;
-import com.cyc.cycjava.cycl.http_kernel;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import java.util.Iterator;
+import java.util.Map;
+
+import org.armedbear.lisp.Lisp;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
 import com.cyc.cycjava.cycl.inference.kb_query;
 import com.cyc.cycjava.cycl.inference.scheduled_queries;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mail_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.misc_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.number_utilities;
-import com.cyc.cycjava.cycl.operation_communication;
-import com.cyc.cycjava.cycl.simplifier;
+import com.cyc.cycjava.cycl.inference.harness.inference_datastructures_enumerated_types;
 import com.cyc.cycjava.cycl.sksi.modeling_tools.interfaces.sksi_sks_manager;
 import com.cyc.cycjava.cycl.sksi.query_sks.sksi_removal_module_generation;
-import com.cyc.cycjava.cycl.sksi.report_generation.sksi_reports_by_column;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_field_translation_utilities;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_interaction;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.system_parameters;
-import com.cyc.cycjava.cycl.vector_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.ReadWriteLocks;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDecl;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sxhash;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -63,68 +56,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.Iterator;
-import java.util.Map;
-import org.armedbear.lisp.Lisp;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.sksi.report_generation.sksi_reports_by_column.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.$catch_error_message_target$;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_comma;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_period;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
-
-
-public final class sksi_reports_by_column extends SubLTranslatedFile {
+public final class sksi_reports_by_column extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new sksi_reports_by_column();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.report_generation.sksi_reports_by_column";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.report_generation.sksi_reports_by_column";
 
-    public static final String myFingerPrint = "3007651572a4fbec845d094ffe5b12a3fa4dcb956a8f291f33071dc6bbb618be";
 
     // defconstant
     private static final SubLSymbol $rgbc_default_overriding_properties$ = makeSymbol("*RGBC-DEFAULT-OVERRIDING-PROPERTIES*");
@@ -341,7 +278,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
 
     private static final SubLList $list90 = list(makeSymbol("TYPE"), makeSymbol("DESCRIPTION"), makeSymbol("PHYSICAL-FIELD"));
 
-    private static final SubLList $list91 = list(makeKeyword("TYPE"), makeKeyword("DESCRIPTION"), makeKeyword("PHYSICAL-FIELD"));
+    private static final SubLList $list91 = list($TYPE, makeKeyword("DESCRIPTION"), makeKeyword("PHYSICAL-FIELD"));
 
     private static final SubLList $list92 = list(makeSymbol("RG-PROBLEM-TYPE"), makeSymbol("RG-PROBLEM-DESCRIPTION"), makeSymbol("RG-PROBLEM-PHYSICAL-FIELD"));
 
@@ -1391,36 +1328,36 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
     }
 
     public static SubLObject report_generator_p(final SubLObject v_object) {
-        return v_object.getClass() == sksi_reports_by_column.$report_generator_native.class ? T : NIL;
+        return v_object.getClass() == $report_generator_native.class ? T : NIL;
     }
 
     public static SubLObject rg_full_report_props(final SubLObject v_object) {
-        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_p(v_object) " + v_object;
+        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject rg_iterator(final SubLObject v_object) {
-        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_p(v_object) " + v_object;
+        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject rg_problems(final SubLObject v_object) {
-        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_p(v_object) " + v_object;
+        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject _csetf_rg_full_report_props(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_p(v_object) " + v_object;
+        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_rg_iterator(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_p(v_object) " + v_object;
+        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_rg_problems(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_p(v_object) " + v_object;
+        assert NIL != report_generator_p(v_object) : "sksi_reports_by_column.report_generator_p error :" + v_object;
         return v_object.setField4(value);
     }
 
@@ -1428,7 +1365,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new sksi_reports_by_column.$report_generator_native();
+        final SubLObject v_new = new $report_generator_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1617,36 +1554,36 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
     }
 
     public static SubLObject report_generator_problem_p(final SubLObject v_object) {
-        return v_object.getClass() == sksi_reports_by_column.$report_generator_problem_native.class ? T : NIL;
+        return v_object.getClass() == $report_generator_problem_native.class ? T : NIL;
     }
 
     public static SubLObject rg_problem_type(final SubLObject v_object) {
-        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_problem_p(v_object) " + v_object;
+        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject rg_problem_description(final SubLObject v_object) {
-        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_problem_p(v_object) " + v_object;
+        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject rg_problem_physical_field(final SubLObject v_object) {
-        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_problem_p(v_object) " + v_object;
+        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject _csetf_rg_problem_type(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_problem_p(v_object) " + v_object;
+        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_rg_problem_description(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_problem_p(v_object) " + v_object;
+        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_rg_problem_physical_field(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generator_problem_p(v_object) " + v_object;
+        assert NIL != report_generator_problem_p(v_object) : "sksi_reports_by_column.report_generator_problem_p error :" + v_object;
         return v_object.setField4(value);
     }
 
@@ -1654,7 +1591,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new sksi_reports_by_column.$report_generator_problem_native();
+        final SubLObject v_new = new $report_generator_problem_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -1735,96 +1672,96 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
     }
 
     public static SubLObject report_generation_state_p(final SubLObject v_object) {
-        return v_object.getClass() == sksi_reports_by_column.$report_generation_state_native.class ? T : NIL;
+        return v_object.getClass() == $report_generation_state_native.class ? T : NIL;
     }
 
     public static SubLObject rg_state_ks(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject rg_state_range(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject rg_state_mt(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject rg_state_pf_iterator(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject rg_state_iterations(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject rg_state_merged_props(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField7();
     }
 
     public static SubLObject rg_state_results_table(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField8();
     }
 
     public static SubLObject rg_state_executed_queries(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField9();
     }
 
     public static SubLObject rg_state_report_generator(final SubLObject v_object) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.getField10();
     }
 
     public static SubLObject _csetf_rg_state_ks(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_rg_state_range(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_rg_state_mt(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_rg_state_pf_iterator(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_rg_state_iterations(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_rg_state_merged_props(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField7(value);
     }
 
     public static SubLObject _csetf_rg_state_results_table(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField8(value);
     }
 
     public static SubLObject _csetf_rg_state_executed_queries(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField9(value);
     }
 
     public static SubLObject _csetf_rg_state_report_generator(final SubLObject v_object, final SubLObject value) {
-        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p(v_object) " + "CommonSymbols.NIL != sksi_reports_by_column.report_generation_state_p(v_object) " + v_object;
+        assert NIL != report_generation_state_p(v_object) : "sksi_reports_by_column.report_generation_state_p error :" + v_object;
         return v_object.setField10(value);
     }
 
@@ -1832,7 +1769,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new sksi_reports_by_column.$report_generation_state_native();
+        final SubLObject v_new = new $report_generation_state_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -3439,167 +3376,167 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_sksi_reports_by_column_file() {
-        declareMacro(me, "with_text_file_or_null_stream", "WITH-TEXT-FILE-OR-NULL-STREAM");
-        declareFunction(me, "schedule_report", "SCHEDULE-REPORT", 2, 9, false);
-        declareFunction(me, "schedule_recurring_report", "SCHEDULE-RECURRING-REPORT", 2, 9, false);
-        declareFunction(me, "add_report_specification_to_scheduled_query", "ADD-REPORT-SPECIFICATION-TO-SCHEDULED-QUERY", 9, 0, false);
-        declareFunction(me, "get_report_specification_mt", "GET-REPORT-SPECIFICATION-MT", 0, 2, false);
-        declareFunction(me, "get_cycl_character", "GET-CYCL-CHARACTER", 1, 0, false);
-        declareFunction(me, "reports_directory", "REPORTS-DIRECTORY", 0, 0, false);
-        declareFunction(me, "url_to_retrieve_report_file", "URL-TO-RETRIEVE-REPORT-FILE", 1, 0, false);
-        declareFunction(me, "report_by_column_to_file", "REPORT-BY-COLUMN-TO-FILE", 1, 0, false);
-        declareFunction(me, "report_generator_run_report", "REPORT-GENERATOR-RUN-REPORT", 1, 1, false);
-        declareFunction(me, "parse_filename", "PARSE-FILENAME", 1, 0, false);
-        declareFunction(me, "report_by_column_to_stream", "REPORT-BY-COLUMN-TO-STREAM", 2, 0, false);
-        declareFunction(me, "output_report_by_column", "OUTPUT-REPORT-BY-COLUMN", 3, 0, false);
-        declareFunction(me, "report_property_p", "REPORT-PROPERTY-P", 1, 0, false);
-        declareFunction(me, "get_full_filename_for_report", "GET-FULL-FILENAME-FOR-REPORT", 1, 0, false);
-        declareFunction(me, "get_full_logfilename_for_report", "GET-FULL-LOGFILENAME-FOR-REPORT", 1, 0, false);
-        declareFunction(me, "construct_full_path_from_prop_values", "CONSTRUCT-FULL-PATH-FROM-PROP-VALUES", 3, 0, false);
-        declareFunction(me, "absolute_path_from_absolute_or_relative", "ABSOLUTE-PATH-FROM-ABSOLUTE-OR-RELATIVE", 2, 0, false);
-        declareFunction(me, "split_report_properties", "SPLIT-REPORT-PROPERTIES", 1, 0, false);
-        declareFunction(me, "query_properties_from_report_properties", "QUERY-PROPERTIES-FROM-REPORT-PROPERTIES", 1, 0, false);
-        declareFunction(me, "merge_in_default_overriding_properties", "MERGE-IN-DEFAULT-OVERRIDING-PROPERTIES", 1, 0, false);
-        declareFunction(me, "get_rgbc_overriding_properties", "GET-RGBC-OVERRIDING-PROPERTIES", 0, 0, false);
-        declareFunction(me, "add_to_rgbc_overriding_properties", "ADD-TO-RGBC-OVERRIDING-PROPERTIES", 1, 0, false);
-        declareFunction(me, "update_rgbc_max_time", "UPDATE-RGBC-MAX-TIME", 1, 0, false);
-        declareFunction(me, "reset_rgbc_overriding_properties", "RESET-RGBC-OVERRIDING-PROPERTIES", 0, 0, false);
-        declareFunction(me, "print_hashtable_of_vectors_as_delimited_lines", "PRINT-HASHTABLE-OF-VECTORS-AS-DELIMITED-LINES", 1, 2, false);
-        declareFunction(me, "print_hashtable_of_plists_as_delimited_lines", "PRINT-HASHTABLE-OF-PLISTS-AS-DELIMITED-LINES", 2, 2, false);
-        declareFunction(me, "new_report_generation_iterator", "NEW-REPORT-GENERATION-ITERATOR", 2, 0, false);
-        declareFunction(me, "report_generator_print_function_trampoline", "REPORT-GENERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "report_generator_p", "REPORT-GENERATOR-P", 1, 0, false);
+        declareMacro("with_text_file_or_null_stream", "WITH-TEXT-FILE-OR-NULL-STREAM");
+        declareFunction("schedule_report", "SCHEDULE-REPORT", 2, 9, false);
+        declareFunction("schedule_recurring_report", "SCHEDULE-RECURRING-REPORT", 2, 9, false);
+        declareFunction("add_report_specification_to_scheduled_query", "ADD-REPORT-SPECIFICATION-TO-SCHEDULED-QUERY", 9, 0, false);
+        declareFunction("get_report_specification_mt", "GET-REPORT-SPECIFICATION-MT", 0, 2, false);
+        declareFunction("get_cycl_character", "GET-CYCL-CHARACTER", 1, 0, false);
+        declareFunction("reports_directory", "REPORTS-DIRECTORY", 0, 0, false);
+        declareFunction("url_to_retrieve_report_file", "URL-TO-RETRIEVE-REPORT-FILE", 1, 0, false);
+        declareFunction("report_by_column_to_file", "REPORT-BY-COLUMN-TO-FILE", 1, 0, false);
+        declareFunction("report_generator_run_report", "REPORT-GENERATOR-RUN-REPORT", 1, 1, false);
+        declareFunction("parse_filename", "PARSE-FILENAME", 1, 0, false);
+        declareFunction("report_by_column_to_stream", "REPORT-BY-COLUMN-TO-STREAM", 2, 0, false);
+        declareFunction("output_report_by_column", "OUTPUT-REPORT-BY-COLUMN", 3, 0, false);
+        declareFunction("report_property_p", "REPORT-PROPERTY-P", 1, 0, false);
+        declareFunction("get_full_filename_for_report", "GET-FULL-FILENAME-FOR-REPORT", 1, 0, false);
+        declareFunction("get_full_logfilename_for_report", "GET-FULL-LOGFILENAME-FOR-REPORT", 1, 0, false);
+        declareFunction("construct_full_path_from_prop_values", "CONSTRUCT-FULL-PATH-FROM-PROP-VALUES", 3, 0, false);
+        declareFunction("absolute_path_from_absolute_or_relative", "ABSOLUTE-PATH-FROM-ABSOLUTE-OR-RELATIVE", 2, 0, false);
+        declareFunction("split_report_properties", "SPLIT-REPORT-PROPERTIES", 1, 0, false);
+        declareFunction("query_properties_from_report_properties", "QUERY-PROPERTIES-FROM-REPORT-PROPERTIES", 1, 0, false);
+        declareFunction("merge_in_default_overriding_properties", "MERGE-IN-DEFAULT-OVERRIDING-PROPERTIES", 1, 0, false);
+        declareFunction("get_rgbc_overriding_properties", "GET-RGBC-OVERRIDING-PROPERTIES", 0, 0, false);
+        declareFunction("add_to_rgbc_overriding_properties", "ADD-TO-RGBC-OVERRIDING-PROPERTIES", 1, 0, false);
+        declareFunction("update_rgbc_max_time", "UPDATE-RGBC-MAX-TIME", 1, 0, false);
+        declareFunction("reset_rgbc_overriding_properties", "RESET-RGBC-OVERRIDING-PROPERTIES", 0, 0, false);
+        declareFunction("print_hashtable_of_vectors_as_delimited_lines", "PRINT-HASHTABLE-OF-VECTORS-AS-DELIMITED-LINES", 1, 2, false);
+        declareFunction("print_hashtable_of_plists_as_delimited_lines", "PRINT-HASHTABLE-OF-PLISTS-AS-DELIMITED-LINES", 2, 2, false);
+        declareFunction("new_report_generation_iterator", "NEW-REPORT-GENERATION-ITERATOR", 2, 0, false);
+        declareFunction("report_generator_print_function_trampoline", "REPORT-GENERATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("report_generator_p", "REPORT-GENERATOR-P", 1, 0, false);
         new sksi_reports_by_column.$report_generator_p$UnaryFunction();
-        declareFunction(me, "rg_full_report_props", "RG-FULL-REPORT-PROPS", 1, 0, false);
-        declareFunction(me, "rg_iterator", "RG-ITERATOR", 1, 0, false);
-        declareFunction(me, "rg_problems", "RG-PROBLEMS", 1, 0, false);
-        declareFunction(me, "_csetf_rg_full_report_props", "_CSETF-RG-FULL-REPORT-PROPS", 2, 0, false);
-        declareFunction(me, "_csetf_rg_iterator", "_CSETF-RG-ITERATOR", 2, 0, false);
-        declareFunction(me, "_csetf_rg_problems", "_CSETF-RG-PROBLEMS", 2, 0, false);
-        declareFunction(me, "make_report_generator", "MAKE-REPORT-GENERATOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_report_generator", "VISIT-DEFSTRUCT-REPORT-GENERATOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_report_generator_method", "VISIT-DEFSTRUCT-OBJECT-REPORT-GENERATOR-METHOD", 2, 0, false);
-        declareFunction(me, "print_report_generator", "PRINT-REPORT-GENERATOR", 3, 0, false);
-        declareFunction(me, "new_report_generator", "NEW-REPORT-GENERATOR", 1, 0, false);
-        declareFunction(me, "report_generator_full_report_props", "REPORT-GENERATOR-FULL-REPORT-PROPS", 1, 0, false);
-        declareFunction(me, "report_generator_iterator", "REPORT-GENERATOR-ITERATOR", 1, 0, false);
-        declareFunction(me, "report_generator_problems", "REPORT-GENERATOR-PROBLEMS", 1, 0, false);
-        declareFunction(me, "report_generator_problem_count", "REPORT-GENERATOR-PROBLEM-COUNT", 1, 0, false);
-        declareMacro(me, "report_generator_do_problems", "REPORT-GENERATOR-DO-PROBLEMS");
-        declareFunction(me, "report_generator_column_count", "REPORT-GENERATOR-COLUMN-COUNT", 1, 0, false);
-        declareFunction(me, "report_generator_problem_iterator", "REPORT-GENERATOR-PROBLEM-ITERATOR", 1, 0, false);
-        declareFunction(me, "report_generator_note_problem", "REPORT-GENERATOR-NOTE-PROBLEM", 4, 1, false);
-        declareFunction(me, "report_generator_guess_problem_type", "REPORT-GENERATOR-GUESS-PROBLEM-TYPE", 1, 0, false);
-        declareFunction(me, "sxhash_report_generator_method", "SXHASH-REPORT-GENERATOR-METHOD", 1, 0, false);
-        declareFunction(me, "sxhash_report_generator", "SXHASH-REPORT-GENERATOR", 1, 0, false);
-        declareFunction(me, "report_generator_problem_print_function_trampoline", "REPORT-GENERATOR-PROBLEM-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "report_generator_problem_p", "REPORT-GENERATOR-PROBLEM-P", 1, 0, false);
+        declareFunction("rg_full_report_props", "RG-FULL-REPORT-PROPS", 1, 0, false);
+        declareFunction("rg_iterator", "RG-ITERATOR", 1, 0, false);
+        declareFunction("rg_problems", "RG-PROBLEMS", 1, 0, false);
+        declareFunction("_csetf_rg_full_report_props", "_CSETF-RG-FULL-REPORT-PROPS", 2, 0, false);
+        declareFunction("_csetf_rg_iterator", "_CSETF-RG-ITERATOR", 2, 0, false);
+        declareFunction("_csetf_rg_problems", "_CSETF-RG-PROBLEMS", 2, 0, false);
+        declareFunction("make_report_generator", "MAKE-REPORT-GENERATOR", 0, 1, false);
+        declareFunction("visit_defstruct_report_generator", "VISIT-DEFSTRUCT-REPORT-GENERATOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_report_generator_method", "VISIT-DEFSTRUCT-OBJECT-REPORT-GENERATOR-METHOD", 2, 0, false);
+        declareFunction("print_report_generator", "PRINT-REPORT-GENERATOR", 3, 0, false);
+        declareFunction("new_report_generator", "NEW-REPORT-GENERATOR", 1, 0, false);
+        declareFunction("report_generator_full_report_props", "REPORT-GENERATOR-FULL-REPORT-PROPS", 1, 0, false);
+        declareFunction("report_generator_iterator", "REPORT-GENERATOR-ITERATOR", 1, 0, false);
+        declareFunction("report_generator_problems", "REPORT-GENERATOR-PROBLEMS", 1, 0, false);
+        declareFunction("report_generator_problem_count", "REPORT-GENERATOR-PROBLEM-COUNT", 1, 0, false);
+        declareMacro("report_generator_do_problems", "REPORT-GENERATOR-DO-PROBLEMS");
+        declareFunction("report_generator_column_count", "REPORT-GENERATOR-COLUMN-COUNT", 1, 0, false);
+        declareFunction("report_generator_problem_iterator", "REPORT-GENERATOR-PROBLEM-ITERATOR", 1, 0, false);
+        declareFunction("report_generator_note_problem", "REPORT-GENERATOR-NOTE-PROBLEM", 4, 1, false);
+        declareFunction("report_generator_guess_problem_type", "REPORT-GENERATOR-GUESS-PROBLEM-TYPE", 1, 0, false);
+        declareFunction("sxhash_report_generator_method", "SXHASH-REPORT-GENERATOR-METHOD", 1, 0, false);
+        declareFunction("sxhash_report_generator", "SXHASH-REPORT-GENERATOR", 1, 0, false);
+        declareFunction("report_generator_problem_print_function_trampoline", "REPORT-GENERATOR-PROBLEM-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("report_generator_problem_p", "REPORT-GENERATOR-PROBLEM-P", 1, 0, false);
         new sksi_reports_by_column.$report_generator_problem_p$UnaryFunction();
-        declareFunction(me, "rg_problem_type", "RG-PROBLEM-TYPE", 1, 0, false);
-        declareFunction(me, "rg_problem_description", "RG-PROBLEM-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "rg_problem_physical_field", "RG-PROBLEM-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "_csetf_rg_problem_type", "_CSETF-RG-PROBLEM-TYPE", 2, 0, false);
-        declareFunction(me, "_csetf_rg_problem_description", "_CSETF-RG-PROBLEM-DESCRIPTION", 2, 0, false);
-        declareFunction(me, "_csetf_rg_problem_physical_field", "_CSETF-RG-PROBLEM-PHYSICAL-FIELD", 2, 0, false);
-        declareFunction(me, "make_report_generator_problem", "MAKE-REPORT-GENERATOR-PROBLEM", 0, 1, false);
-        declareFunction(me, "visit_defstruct_report_generator_problem", "VISIT-DEFSTRUCT-REPORT-GENERATOR-PROBLEM", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_report_generator_problem_method", "VISIT-DEFSTRUCT-OBJECT-REPORT-GENERATOR-PROBLEM-METHOD", 2, 0, false);
-        declareFunction(me, "print_report_generator_problem", "PRINT-REPORT-GENERATOR-PROBLEM", 3, 0, false);
-        declareFunction(me, "new_report_generator_problem", "NEW-REPORT-GENERATOR-PROBLEM", 3, 0, false);
-        declareFunction(me, "report_generator_problem_type", "REPORT-GENERATOR-PROBLEM-TYPE", 1, 0, false);
-        declareFunction(me, "report_generator_problem_description", "REPORT-GENERATOR-PROBLEM-DESCRIPTION", 1, 0, false);
-        declareFunction(me, "report_generator_problem_physical_field", "REPORT-GENERATOR-PROBLEM-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sxhash_report_generator_problem_method", "SXHASH-REPORT-GENERATOR-PROBLEM-METHOD", 1, 0, false);
-        declareFunction(me, "sxhash_report_generator_problem", "SXHASH-REPORT-GENERATOR-PROBLEM", 1, 0, false);
-        declareFunction(me, "report_generation_state_print_function_trampoline", "REPORT-GENERATION-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "report_generation_state_p", "REPORT-GENERATION-STATE-P", 1, 0, false);
+        declareFunction("rg_problem_type", "RG-PROBLEM-TYPE", 1, 0, false);
+        declareFunction("rg_problem_description", "RG-PROBLEM-DESCRIPTION", 1, 0, false);
+        declareFunction("rg_problem_physical_field", "RG-PROBLEM-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("_csetf_rg_problem_type", "_CSETF-RG-PROBLEM-TYPE", 2, 0, false);
+        declareFunction("_csetf_rg_problem_description", "_CSETF-RG-PROBLEM-DESCRIPTION", 2, 0, false);
+        declareFunction("_csetf_rg_problem_physical_field", "_CSETF-RG-PROBLEM-PHYSICAL-FIELD", 2, 0, false);
+        declareFunction("make_report_generator_problem", "MAKE-REPORT-GENERATOR-PROBLEM", 0, 1, false);
+        declareFunction("visit_defstruct_report_generator_problem", "VISIT-DEFSTRUCT-REPORT-GENERATOR-PROBLEM", 2, 0, false);
+        declareFunction("visit_defstruct_object_report_generator_problem_method", "VISIT-DEFSTRUCT-OBJECT-REPORT-GENERATOR-PROBLEM-METHOD", 2, 0, false);
+        declareFunction("print_report_generator_problem", "PRINT-REPORT-GENERATOR-PROBLEM", 3, 0, false);
+        declareFunction("new_report_generator_problem", "NEW-REPORT-GENERATOR-PROBLEM", 3, 0, false);
+        declareFunction("report_generator_problem_type", "REPORT-GENERATOR-PROBLEM-TYPE", 1, 0, false);
+        declareFunction("report_generator_problem_description", "REPORT-GENERATOR-PROBLEM-DESCRIPTION", 1, 0, false);
+        declareFunction("report_generator_problem_physical_field", "REPORT-GENERATOR-PROBLEM-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sxhash_report_generator_problem_method", "SXHASH-REPORT-GENERATOR-PROBLEM-METHOD", 1, 0, false);
+        declareFunction("sxhash_report_generator_problem", "SXHASH-REPORT-GENERATOR-PROBLEM", 1, 0, false);
+        declareFunction("report_generation_state_print_function_trampoline", "REPORT-GENERATION-STATE-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("report_generation_state_p", "REPORT-GENERATION-STATE-P", 1, 0, false);
         new sksi_reports_by_column.$report_generation_state_p$UnaryFunction();
-        declareFunction(me, "rg_state_ks", "RG-STATE-KS", 1, 0, false);
-        declareFunction(me, "rg_state_range", "RG-STATE-RANGE", 1, 0, false);
-        declareFunction(me, "rg_state_mt", "RG-STATE-MT", 1, 0, false);
-        declareFunction(me, "rg_state_pf_iterator", "RG-STATE-PF-ITERATOR", 1, 0, false);
-        declareFunction(me, "rg_state_iterations", "RG-STATE-ITERATIONS", 1, 0, false);
-        declareFunction(me, "rg_state_merged_props", "RG-STATE-MERGED-PROPS", 1, 0, false);
-        declareFunction(me, "rg_state_results_table", "RG-STATE-RESULTS-TABLE", 1, 0, false);
-        declareFunction(me, "rg_state_executed_queries", "RG-STATE-EXECUTED-QUERIES", 1, 0, false);
-        declareFunction(me, "rg_state_report_generator", "RG-STATE-REPORT-GENERATOR", 1, 0, false);
-        declareFunction(me, "_csetf_rg_state_ks", "_CSETF-RG-STATE-KS", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_range", "_CSETF-RG-STATE-RANGE", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_mt", "_CSETF-RG-STATE-MT", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_pf_iterator", "_CSETF-RG-STATE-PF-ITERATOR", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_iterations", "_CSETF-RG-STATE-ITERATIONS", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_merged_props", "_CSETF-RG-STATE-MERGED-PROPS", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_results_table", "_CSETF-RG-STATE-RESULTS-TABLE", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_executed_queries", "_CSETF-RG-STATE-EXECUTED-QUERIES", 2, 0, false);
-        declareFunction(me, "_csetf_rg_state_report_generator", "_CSETF-RG-STATE-REPORT-GENERATOR", 2, 0, false);
-        declareFunction(me, "make_report_generation_state", "MAKE-REPORT-GENERATION-STATE", 0, 1, false);
-        declareFunction(me, "visit_defstruct_report_generation_state", "VISIT-DEFSTRUCT-REPORT-GENERATION-STATE", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_report_generation_state_method", "VISIT-DEFSTRUCT-OBJECT-REPORT-GENERATION-STATE-METHOD", 2, 0, false);
-        declareFunction(me, "print_report_generation_state", "PRINT-REPORT-GENERATION-STATE", 3, 0, false);
-        declareFunction(me, "new_report_generation_state", "NEW-REPORT-GENERATION-STATE", 9, 0, false);
-        declareFunction(me, "report_generation_state_ks", "REPORT-GENERATION-STATE-KS", 1, 0, false);
-        declareFunction(me, "report_generation_state_range", "REPORT-GENERATION-STATE-RANGE", 1, 0, false);
-        declareFunction(me, "report_generation_state_mt", "REPORT-GENERATION-STATE-MT", 1, 0, false);
-        declareFunction(me, "report_generation_state_pf_iterator", "REPORT-GENERATION-STATE-PF-ITERATOR", 1, 0, false);
-        declareFunction(me, "report_generation_state_iterations", "REPORT-GENERATION-STATE-ITERATIONS", 1, 0, false);
-        declareFunction(me, "report_generation_state_merged_props", "REPORT-GENERATION-STATE-MERGED-PROPS", 1, 0, false);
-        declareFunction(me, "report_generation_state_results_table", "REPORT-GENERATION-STATE-RESULTS-TABLE", 1, 0, false);
-        declareFunction(me, "report_generation_state_executed_queries", "REPORT-GENERATION-STATE-EXECUTED-QUERIES", 1, 0, false);
-        declareFunction(me, "sxhash_report_generation_state_method", "SXHASH-REPORT-GENERATION-STATE-METHOD", 1, 0, false);
-        declareFunction(me, "sxhash_report_generation_state", "SXHASH-REPORT-GENERATION-STATE", 1, 0, false);
-        declareFunction(me, "make_report_generation_iterator_state", "MAKE-REPORT-GENERATION-ITERATOR-STATE", 2, 0, false);
-        declareFunction(me, "report_generation_iterator_done_p", "REPORT-GENERATION-ITERATOR-DONE-P", 1, 0, false);
-        declareFunction(me, "report_generation_iterator_next", "REPORT-GENERATION-ITERATOR-NEXT", 1, 0, false);
-        declareFunction(me, "replace_with_null", "REPLACE-WITH-NULL", 1, 0, false);
-        declareFunction(me, "persist_hashtable_in_database", "PERSIST-HASHTABLE-IN-DATABASE", 2, 0, false);
-        declareFunction(me, "run_batch_reports_from_definition_file", "RUN-BATCH-REPORTS-FROM-DEFINITION-FILE", 1, 0, false);
-        declareFunction(me, "run_batch_reports_from_definition", "RUN-BATCH-REPORTS-FROM-DEFINITION", 1, 0, false);
-        declareFunction(me, "read_batch_definition_from_file", "READ-BATCH-DEFINITION-FROM-FILE", 1, 0, false);
-        declareFunction(me, "get_global_batch_report_props_from_definition", "GET-GLOBAL-BATCH-REPORT-PROPS-FROM-DEFINITION", 1, 0, false);
-        declareFunction(me, "get_batch_properties_for_all_reports_from_definition", "GET-BATCH-PROPERTIES-FOR-ALL-REPORTS-FROM-DEFINITION", 1, 0, false);
-        declareFunction(me, "apply_range_specifier_to_sequence", "APPLY-RANGE-SPECIFIER-TO-SEQUENCE", 2, 0, false);
-        declareFunction(me, "parse_number_range_specifier", "PARSE-NUMBER-RANGE-SPECIFIER", 1, 1, false);
-        declareFunction(me, "range_specifier_item_p", "RANGE-SPECIFIER-ITEM-P", 1, 0, false);
-        declareFunction(me, "expand_range_specifier_item", "EXPAND-RANGE-SPECIFIER-ITEM", 1, 0, false);
-        declareFunction(me, "gafs_from_ks_internal", "GAFS-FROM-KS-INTERNAL", 1, 0, false);
-        declareFunction(me, "gafs_from_ks", "GAFS-FROM-KS", 1, 0, false);
-        declareFunction(me, "initialized_report_hashtable", "INITIALIZED-REPORT-HASHTABLE", 1, 1, false);
-        declareFunction(me, "initialized_report_hashtable_new", "INITIALIZED-REPORT-HASHTABLE-NEW", 1, 0, false);
-        declareFunction(me, "add_final_column_answers_to_hashtable", "ADD-FINAL-COLUMN-ANSWERS-TO-HASHTABLE", 6, 0, false);
-        declareFunction(me, "store_encoded_answers_new", "STORE-ENCODED-ANSWERS-NEW", 3, 0, false);
-        declareFunction(me, "store_encoded_answers", "STORE-ENCODED-ANSWERS", 5, 0, false);
-        declareFunction(me, "encode_logical_answer", "ENCODE-LOGICAL-ANSWER", 6, 0, false);
-        declareFunction(me, "unpack_column_answer", "UNPACK-COLUMN-ANSWER", 3, 0, false);
-        declareFunction(me, "warn_about_multiple_values", "WARN-ABOUT-MULTIPLE-VALUES", 1, 0, false);
-        declareFunction(me, "apply_encoding_for_pf_internal", "APPLY-ENCODING-FOR-PF-INTERNAL", 3, 1, false);
-        declareFunction(me, "apply_encoding_for_pf", "APPLY-ENCODING-FOR-PF", 3, 1, false);
-        declareFunction(me, "my_sksi_apply_encoding_and_reformulate", "MY-SKSI-APPLY-ENCODING-AND-REFORMULATE", 3, 0, false);
-        declareFunction(me, "rgbc_compute_modified_query_properties", "RGBC-COMPUTE-MODIFIED-QUERY-PROPERTIES", 2, 0, false);
-        declareFunction(me, "run_modified_query_for_answer_list", "RUN-MODIFIED-QUERY-FOR-ANSWER-LIST", 2, 0, false);
-        declareFunction(me, "run_modified_query_for_answer_list_multiple_io", "RUN-MODIFIED-QUERY-FOR-ANSWER-LIST-MULTIPLE-IO", 2, 0, false);
-        declareFunction(me, "report_generator_query_for_physical_field", "REPORT-GENERATOR-QUERY-FOR-PHYSICAL-FIELD", 2, 0, false);
-        declareFunction(me, "my_rgbc_query_template", "MY-RGBC-QUERY-TEMPLATE", 4, 2, false);
-        declareFunction(me, "create_modified_query_sentence", "CREATE-MODIFIED-QUERY-SENTENCE", 3, 0, false);
-        declareFunction(me, "create_modified_query_sentence_multiple_io", "CREATE-MODIFIED-QUERY-SENTENCE-MULTIPLE-IO", 4, 0, false);
-        declareFunction(me, "replace_inputs_in_selection_sentence", "REPLACE-INPUTS-IN-SELECTION-SENTENCE", 4, 0, false);
-        declareFunction(me, "maybe_selection_sentence_replacements", "MAYBE-SELECTION-SENTENCE-REPLACEMENTS", 2, 0, false);
-        declareFunction(me, "tuple_to_map", "TUPLE-TO-MAP", 1, 0, false);
-        declareFunction(me, "maybe_augment_selection_sentence_with_base_query", "MAYBE-AUGMENT-SELECTION-SENTENCE-WITH-BASE-QUERY", 2, 0, false);
-        declareFunction(me, "get_selection_sentence_from_ks", "GET-SELECTION-SENTENCE-FROM-KS", 1, 0, false);
-        declareFunction(me, "fill_in_default_values_for_report_column", "FILL-IN-DEFAULT-VALUES-FOR-REPORT-COLUMN", 5, 0, false);
-        declareFunction(me, "rgbc_default_value_for_pf", "RGBC-DEFAULT-VALUE-FOR-PF", 3, 0, false);
-        declareFunction(me, "test_default_value_for_pf", "TEST-DEFAULT-VALUE-FOR-PF", 1, 0, false);
-        declareFunction(me, "sentence_with_one_free_var_p", "SENTENCE-WITH-ONE-FREE-VAR-P", 1, 0, false);
-        declareFunction(me, "all_selected_entities", "ALL-SELECTED-ENTITIES", 1, 0, false);
-        declareFunction(me, "get_report_queries_query_sentence", "GET-REPORT-QUERIES-QUERY-SENTENCE", 2, 0, false);
-        declareFunction(me, "a_possibly_open_query_from_ks", "A-POSSIBLY-OPEN-QUERY-FROM-KS", 1, 1, false);
-        declareFunction(me, "all_queries_from_ks", "ALL-QUERIES-FROM-KS", 1, 0, false);
-        declareFunction(me, "reportgen_lfi_from_pf", "REPORTGEN-LFI-FROM-PF", 2, 0, false);
-        declareFunction(me, "query_lfi_gaf_from_pf", "QUERY-LFI-GAF-FROM-PF", 2, 0, false);
-        declareFunction(me, "default_report_properties", "DEFAULT-REPORT-PROPERTIES", 0, 0, false);
-        declareFunction(me, "run_report_test_specification", "RUN-REPORT-TEST-SPECIFICATION", 1, 0, false);
-        declareFunction(me, "verify_test_report_results", "VERIFY-TEST-REPORT-RESULTS", 5, 0, false);
-        declareFunction(me, "read_test_results_file", "READ-TEST-RESULTS-FILE", 2, 0, false);
+        declareFunction("rg_state_ks", "RG-STATE-KS", 1, 0, false);
+        declareFunction("rg_state_range", "RG-STATE-RANGE", 1, 0, false);
+        declareFunction("rg_state_mt", "RG-STATE-MT", 1, 0, false);
+        declareFunction("rg_state_pf_iterator", "RG-STATE-PF-ITERATOR", 1, 0, false);
+        declareFunction("rg_state_iterations", "RG-STATE-ITERATIONS", 1, 0, false);
+        declareFunction("rg_state_merged_props", "RG-STATE-MERGED-PROPS", 1, 0, false);
+        declareFunction("rg_state_results_table", "RG-STATE-RESULTS-TABLE", 1, 0, false);
+        declareFunction("rg_state_executed_queries", "RG-STATE-EXECUTED-QUERIES", 1, 0, false);
+        declareFunction("rg_state_report_generator", "RG-STATE-REPORT-GENERATOR", 1, 0, false);
+        declareFunction("_csetf_rg_state_ks", "_CSETF-RG-STATE-KS", 2, 0, false);
+        declareFunction("_csetf_rg_state_range", "_CSETF-RG-STATE-RANGE", 2, 0, false);
+        declareFunction("_csetf_rg_state_mt", "_CSETF-RG-STATE-MT", 2, 0, false);
+        declareFunction("_csetf_rg_state_pf_iterator", "_CSETF-RG-STATE-PF-ITERATOR", 2, 0, false);
+        declareFunction("_csetf_rg_state_iterations", "_CSETF-RG-STATE-ITERATIONS", 2, 0, false);
+        declareFunction("_csetf_rg_state_merged_props", "_CSETF-RG-STATE-MERGED-PROPS", 2, 0, false);
+        declareFunction("_csetf_rg_state_results_table", "_CSETF-RG-STATE-RESULTS-TABLE", 2, 0, false);
+        declareFunction("_csetf_rg_state_executed_queries", "_CSETF-RG-STATE-EXECUTED-QUERIES", 2, 0, false);
+        declareFunction("_csetf_rg_state_report_generator", "_CSETF-RG-STATE-REPORT-GENERATOR", 2, 0, false);
+        declareFunction("make_report_generation_state", "MAKE-REPORT-GENERATION-STATE", 0, 1, false);
+        declareFunction("visit_defstruct_report_generation_state", "VISIT-DEFSTRUCT-REPORT-GENERATION-STATE", 2, 0, false);
+        declareFunction("visit_defstruct_object_report_generation_state_method", "VISIT-DEFSTRUCT-OBJECT-REPORT-GENERATION-STATE-METHOD", 2, 0, false);
+        declareFunction("print_report_generation_state", "PRINT-REPORT-GENERATION-STATE", 3, 0, false);
+        declareFunction("new_report_generation_state", "NEW-REPORT-GENERATION-STATE", 9, 0, false);
+        declareFunction("report_generation_state_ks", "REPORT-GENERATION-STATE-KS", 1, 0, false);
+        declareFunction("report_generation_state_range", "REPORT-GENERATION-STATE-RANGE", 1, 0, false);
+        declareFunction("report_generation_state_mt", "REPORT-GENERATION-STATE-MT", 1, 0, false);
+        declareFunction("report_generation_state_pf_iterator", "REPORT-GENERATION-STATE-PF-ITERATOR", 1, 0, false);
+        declareFunction("report_generation_state_iterations", "REPORT-GENERATION-STATE-ITERATIONS", 1, 0, false);
+        declareFunction("report_generation_state_merged_props", "REPORT-GENERATION-STATE-MERGED-PROPS", 1, 0, false);
+        declareFunction("report_generation_state_results_table", "REPORT-GENERATION-STATE-RESULTS-TABLE", 1, 0, false);
+        declareFunction("report_generation_state_executed_queries", "REPORT-GENERATION-STATE-EXECUTED-QUERIES", 1, 0, false);
+        declareFunction("sxhash_report_generation_state_method", "SXHASH-REPORT-GENERATION-STATE-METHOD", 1, 0, false);
+        declareFunction("sxhash_report_generation_state", "SXHASH-REPORT-GENERATION-STATE", 1, 0, false);
+        declareFunction("make_report_generation_iterator_state", "MAKE-REPORT-GENERATION-ITERATOR-STATE", 2, 0, false);
+        declareFunction("report_generation_iterator_done_p", "REPORT-GENERATION-ITERATOR-DONE-P", 1, 0, false);
+        declareFunction("report_generation_iterator_next", "REPORT-GENERATION-ITERATOR-NEXT", 1, 0, false);
+        declareFunction("replace_with_null", "REPLACE-WITH-NULL", 1, 0, false);
+        declareFunction("persist_hashtable_in_database", "PERSIST-HASHTABLE-IN-DATABASE", 2, 0, false);
+        declareFunction("run_batch_reports_from_definition_file", "RUN-BATCH-REPORTS-FROM-DEFINITION-FILE", 1, 0, false);
+        declareFunction("run_batch_reports_from_definition", "RUN-BATCH-REPORTS-FROM-DEFINITION", 1, 0, false);
+        declareFunction("read_batch_definition_from_file", "READ-BATCH-DEFINITION-FROM-FILE", 1, 0, false);
+        declareFunction("get_global_batch_report_props_from_definition", "GET-GLOBAL-BATCH-REPORT-PROPS-FROM-DEFINITION", 1, 0, false);
+        declareFunction("get_batch_properties_for_all_reports_from_definition", "GET-BATCH-PROPERTIES-FOR-ALL-REPORTS-FROM-DEFINITION", 1, 0, false);
+        declareFunction("apply_range_specifier_to_sequence", "APPLY-RANGE-SPECIFIER-TO-SEQUENCE", 2, 0, false);
+        declareFunction("parse_number_range_specifier", "PARSE-NUMBER-RANGE-SPECIFIER", 1, 1, false);
+        declareFunction("range_specifier_item_p", "RANGE-SPECIFIER-ITEM-P", 1, 0, false);
+        declareFunction("expand_range_specifier_item", "EXPAND-RANGE-SPECIFIER-ITEM", 1, 0, false);
+        declareFunction("gafs_from_ks_internal", "GAFS-FROM-KS-INTERNAL", 1, 0, false);
+        declareFunction("gafs_from_ks", "GAFS-FROM-KS", 1, 0, false);
+        declareFunction("initialized_report_hashtable", "INITIALIZED-REPORT-HASHTABLE", 1, 1, false);
+        declareFunction("initialized_report_hashtable_new", "INITIALIZED-REPORT-HASHTABLE-NEW", 1, 0, false);
+        declareFunction("add_final_column_answers_to_hashtable", "ADD-FINAL-COLUMN-ANSWERS-TO-HASHTABLE", 6, 0, false);
+        declareFunction("store_encoded_answers_new", "STORE-ENCODED-ANSWERS-NEW", 3, 0, false);
+        declareFunction("store_encoded_answers", "STORE-ENCODED-ANSWERS", 5, 0, false);
+        declareFunction("encode_logical_answer", "ENCODE-LOGICAL-ANSWER", 6, 0, false);
+        declareFunction("unpack_column_answer", "UNPACK-COLUMN-ANSWER", 3, 0, false);
+        declareFunction("warn_about_multiple_values", "WARN-ABOUT-MULTIPLE-VALUES", 1, 0, false);
+        declareFunction("apply_encoding_for_pf_internal", "APPLY-ENCODING-FOR-PF-INTERNAL", 3, 1, false);
+        declareFunction("apply_encoding_for_pf", "APPLY-ENCODING-FOR-PF", 3, 1, false);
+        declareFunction("my_sksi_apply_encoding_and_reformulate", "MY-SKSI-APPLY-ENCODING-AND-REFORMULATE", 3, 0, false);
+        declareFunction("rgbc_compute_modified_query_properties", "RGBC-COMPUTE-MODIFIED-QUERY-PROPERTIES", 2, 0, false);
+        declareFunction("run_modified_query_for_answer_list", "RUN-MODIFIED-QUERY-FOR-ANSWER-LIST", 2, 0, false);
+        declareFunction("run_modified_query_for_answer_list_multiple_io", "RUN-MODIFIED-QUERY-FOR-ANSWER-LIST-MULTIPLE-IO", 2, 0, false);
+        declareFunction("report_generator_query_for_physical_field", "REPORT-GENERATOR-QUERY-FOR-PHYSICAL-FIELD", 2, 0, false);
+        declareFunction("my_rgbc_query_template", "MY-RGBC-QUERY-TEMPLATE", 4, 2, false);
+        declareFunction("create_modified_query_sentence", "CREATE-MODIFIED-QUERY-SENTENCE", 3, 0, false);
+        declareFunction("create_modified_query_sentence_multiple_io", "CREATE-MODIFIED-QUERY-SENTENCE-MULTIPLE-IO", 4, 0, false);
+        declareFunction("replace_inputs_in_selection_sentence", "REPLACE-INPUTS-IN-SELECTION-SENTENCE", 4, 0, false);
+        declareFunction("maybe_selection_sentence_replacements", "MAYBE-SELECTION-SENTENCE-REPLACEMENTS", 2, 0, false);
+        declareFunction("tuple_to_map", "TUPLE-TO-MAP", 1, 0, false);
+        declareFunction("maybe_augment_selection_sentence_with_base_query", "MAYBE-AUGMENT-SELECTION-SENTENCE-WITH-BASE-QUERY", 2, 0, false);
+        declareFunction("get_selection_sentence_from_ks", "GET-SELECTION-SENTENCE-FROM-KS", 1, 0, false);
+        declareFunction("fill_in_default_values_for_report_column", "FILL-IN-DEFAULT-VALUES-FOR-REPORT-COLUMN", 5, 0, false);
+        declareFunction("rgbc_default_value_for_pf", "RGBC-DEFAULT-VALUE-FOR-PF", 3, 0, false);
+        declareFunction("test_default_value_for_pf", "TEST-DEFAULT-VALUE-FOR-PF", 1, 0, false);
+        declareFunction("sentence_with_one_free_var_p", "SENTENCE-WITH-ONE-FREE-VAR-P", 1, 0, false);
+        declareFunction("all_selected_entities", "ALL-SELECTED-ENTITIES", 1, 0, false);
+        declareFunction("get_report_queries_query_sentence", "GET-REPORT-QUERIES-QUERY-SENTENCE", 2, 0, false);
+        declareFunction("a_possibly_open_query_from_ks", "A-POSSIBLY-OPEN-QUERY-FROM-KS", 1, 1, false);
+        declareFunction("all_queries_from_ks", "ALL-QUERIES-FROM-KS", 1, 0, false);
+        declareFunction("reportgen_lfi_from_pf", "REPORTGEN-LFI-FROM-PF", 2, 0, false);
+        declareFunction("query_lfi_gaf_from_pf", "QUERY-LFI-GAF-FROM-PF", 2, 0, false);
+        declareFunction("default_report_properties", "DEFAULT-REPORT-PROPERTIES", 0, 0, false);
+        declareFunction("run_report_test_specification", "RUN-REPORT-TEST-SPECIFICATION", 1, 0, false);
+        declareFunction("verify_test_report_results", "VERIFY-TEST-REPORT-RESULTS", 5, 0, false);
+        declareFunction("read_test_results_file", "READ-TEST-RESULTS-FILE", 2, 0, false);
         return NIL;
     }
 
@@ -3995,7 +3932,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $report_generator_native() {
+        private $report_generator_native() {
             this.$full_report_props = Lisp.NIL;
             this.$iterator = Lisp.NIL;
             this.$problems = Lisp.NIL;
@@ -4037,7 +3974,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(sksi_reports_by_column.$report_generator_native.class, REPORT_GENERATOR, REPORT_GENERATOR_P, $list56, $list57, new String[]{ "$full_report_props", "$iterator", "$problems" }, $list58, $list59, PRINT_REPORT_GENERATOR);
+            structDecl = makeStructDeclNative($report_generator_native.class, REPORT_GENERATOR, REPORT_GENERATOR_P, $list56, $list57, new String[]{ "$full_report_props", "$iterator", "$problems" }, $list58, $list59, PRINT_REPORT_GENERATOR);
         }
     }
 
@@ -4061,7 +3998,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $report_generator_problem_native() {
+        private $report_generator_problem_native() {
             this.$type = Lisp.NIL;
             this.$description = Lisp.NIL;
             this.$physical_field = Lisp.NIL;
@@ -4103,7 +4040,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(sksi_reports_by_column.$report_generator_problem_native.class, REPORT_GENERATOR_PROBLEM, REPORT_GENERATOR_PROBLEM_P, $list90, $list91, new String[]{ "$type", "$description", "$physical_field" }, $list92, $list93, PRINT_REPORT_GENERATOR_PROBLEM);
+            structDecl = makeStructDeclNative($report_generator_problem_native.class, REPORT_GENERATOR_PROBLEM, REPORT_GENERATOR_PROBLEM_P, $list90, $list91, new String[]{ "$type", "$description", "$physical_field" }, $list92, $list93, PRINT_REPORT_GENERATOR_PROBLEM);
         }
     }
 
@@ -4139,7 +4076,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $report_generation_state_native() {
+        private $report_generation_state_native() {
             this.$ks = Lisp.NIL;
             this.$range = Lisp.NIL;
             this.$mt = Lisp.NIL;
@@ -4247,7 +4184,7 @@ public final class sksi_reports_by_column extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(sksi_reports_by_column.$report_generation_state_native.class, REPORT_GENERATION_STATE, REPORT_GENERATION_STATE_P, $list112, $list113, new String[]{ "$ks", "$range", "$mt", "$pf_iterator", "$iterations", "$merged_props", "$results_table", "$executed_queries", "$report_generator" }, $list114, $list115, PRINT_REPORT_GENERATION_STATE);
+            structDecl = makeStructDeclNative($report_generation_state_native.class, REPORT_GENERATION_STATE, REPORT_GENERATION_STATE_P, $list112, $list113, new String[]{ "$ks", "$range", "$mt", "$pf_iterator", "$iterations", "$merged_props", "$results_table", "$executed_queries", "$report_generator" }, $list114, $list115, PRINT_REPORT_GENERATION_STATE);
         }
     }
 

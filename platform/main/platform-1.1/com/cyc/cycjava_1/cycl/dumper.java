@@ -3927,8 +3927,7 @@ public final class dumper_larkc
 
   public static final SubLObject setup_dumper_file()
   {
-    // CVS_ID("Id: dumper.lisp 128918 2009-10-07 03:04:59Z rck ");
-    subl_macro_promotions.declare_defglobal( $sym0$_FORCE_MONOLITHIC_KB_ASSUMPTION_ );
+        subl_macro_promotions.declare_defglobal( $sym0$_FORCE_MONOLITHIC_KB_ASSUMPTION_ );
 //    utilities_macros.note_funcall_helper_function( $sym98$LOAD_DEDUCTION_DEF_FROM_CACHE );
 //    utilities_macros.note_funcall_helper_function( $sym104$LOAD_ASSERTION_DEF_FROM_CACHE );
 //    utilities_macros.note_funcall_helper_function( $sym110$LOAD_KB_HL_SUPPORT_DEF_FROM_CACHE );

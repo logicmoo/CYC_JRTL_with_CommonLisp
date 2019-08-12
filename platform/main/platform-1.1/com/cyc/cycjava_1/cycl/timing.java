@@ -142,8 +142,7 @@ public  final class timing extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_timing_file() {
-    // CVS_ID("Id: timing.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_timing_info$.getGlobalValue(), Symbols.symbol_function($sym17$TIMING_INFO_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_timing_info$.getGlobalValue(), Symbols.symbol_function($sym17$TIMING_INFO_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym18$TIMING_INFO_COUNT, $sym19$_CSETF_TIMING_INFO_COUNT);
     Structures.def_csetf($sym20$TIMING_INFO_TOTAL, $sym21$_CSETF_TIMING_INFO_TOTAL);
     Structures.def_csetf($sym22$TIMING_INFO_MAX, $sym23$_CSETF_TIMING_INFO_MAX);

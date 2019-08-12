@@ -321,8 +321,7 @@ public  final class graphic_library_format extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_graphic_library_format_file() {
-    // CVS_ID("Id: graphic-library-format.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_glf_graph$.getGlobalValue(), Symbols.symbol_function($sym7$GLF_GRAPH_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_glf_graph$.getGlobalValue(), Symbols.symbol_function($sym7$GLF_GRAPH_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$GLFGRPH_ID, $sym9$_CSETF_GLFGRPH_ID);
     Structures.def_csetf($sym10$GLFGRPH_TYPES, $sym11$_CSETF_GLFGRPH_TYPES);
     Structures.def_csetf($sym12$GLFGRPH_AIS, $sym13$_CSETF_GLFGRPH_AIS);

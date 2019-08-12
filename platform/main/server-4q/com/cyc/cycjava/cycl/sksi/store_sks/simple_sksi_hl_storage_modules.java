@@ -1,23 +1,18 @@
 package com.cyc.cycjava.cycl.sksi.store_sks;
 
 
-import com.cyc.cycjava.cycl.clause_utilities;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.czer_main;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.hl_storage_modules;
-import com.cyc.cycjava.cycl.hlmt;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
 import com.cyc.cycjava.cycl.inference.ask_utilities;
 import com.cyc.cycjava.cycl.inference.harness.removal_module_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
 import com.cyc.cycjava.cycl.sksi.data_warehousing.sksi_batch_store;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
-import com.cyc.cycjava.cycl.sksi.store_sks.simple_sksi_hl_storage_modules;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.variables;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -28,29 +23,13 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.function.Supplier;
-
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.sksi.store_sks.simple_sksi_hl_storage_modules.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class simple_sksi_hl_storage_modules extends SubLTranslatedFile {
+public final class simple_sksi_hl_storage_modules extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new simple_sksi_hl_storage_modules();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.store_sks.simple_sksi_hl_storage_modules";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.store_sks.simple_sksi_hl_storage_modules";
 
-    public static final String myFingerPrint = "b06071bdd7f8ae483ea3e96acc788c615416ac1b37b0dd6bc4dfcb19ce8b75c8";
 
 
 
@@ -290,26 +269,26 @@ public final class simple_sksi_hl_storage_modules extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_simple_sksi_hl_storage_modules_file() {
-        declareFunction(me, "register_simple_sksi_hl_storage_predicate", "REGISTER-SIMPLE-SKSI-HL-STORAGE-PREDICATE", 2, 0, false);
-        declareFunction(me, "deregister_simple_sksi_hl_storage_predicate", "DEREGISTER-SIMPLE-SKSI-HL-STORAGE-PREDICATE", 1, 0, false);
-        declareFunction(me, "simple_sksi_hl_storage_predicateP", "SIMPLE-SKSI-HL-STORAGE-PREDICATE?", 1, 0, false);
-        declareFunction(me, "simple_sksi_hl_storage_module_name", "SIMPLE-SKSI-HL-STORAGE-MODULE-NAME", 1, 0, false);
-        declareFunction(me, "register_simple_sksi_hl_storage_module_for_predicate", "REGISTER-SIMPLE-SKSI-HL-STORAGE-MODULE-FOR-PREDICATE", 1, 0, false);
-        declareFunction(me, "deregister_simple_sksi_hl_storage_module_for_predicate", "DEREGISTER-SIMPLE-SKSI-HL-STORAGE-MODULE-FOR-PREDICATE", 1, 0, false);
-        declareFunction(me, "compute_hl_storage_module_name", "COMPUTE-HL-STORAGE-MODULE-NAME", 1, 0, false);
-        declareFunction(me, "simple_sksi_applicability_func", "SIMPLE-SKSI-APPLICABILITY-FUNC", 5, 0, false);
-        declareFunction(me, "simple_sksi_incompleteness_func", "SIMPLE-SKSI-INCOMPLETENESS-FUNC", 5, 0, false);
-        declareFunction(me, "simple_sksi_assert_func", "SIMPLE-SKSI-ASSERT-FUNC", 5, 0, false);
-        declareFunction(me, "simple_sksi_unassert_func", "SIMPLE-SKSI-UNASSERT-FUNC", 3, 0, false);
-        declareFunction(me, "simple_sksi_unassert_all_func", "SIMPLE-SKSI-UNASSERT-ALL-FUNC", 2, 0, false);
-        declareFunction(me, "simple_sksi_store_asent_in_db_table", "SIMPLE-SKSI-STORE-ASENT-IN-DB-TABLE", 1, 0, false);
-        declareFunction(me, "simple_sksi_mapping_mt_for_predicate", "SIMPLE-SKSI-MAPPING-MT-FOR-PREDICATE", 1, 0, false);
-        declareFunction(me, "simple_sksi_mapping_mt_for_asent", "SIMPLE-SKSI-MAPPING-MT-FOR-ASENT", 1, 0, false);
-        declareFunction(me, "simple_sksi_db_table_for_predicate", "SIMPLE-SKSI-DB-TABLE-FOR-PREDICATE", 1, 0, false);
-        declareFunction(me, "simple_sksi_db_table_for_predicate_in_mt", "SIMPLE-SKSI-DB-TABLE-FOR-PREDICATE-IN-MT", 2, 0, false);
-        declareFunction(me, "simple_sksi_db_table_for_asent", "SIMPLE-SKSI-DB-TABLE-FOR-ASENT", 1, 0, false);
-        declareFunction(me, "simple_sksi_schema_translation_mt_for_predicate", "SIMPLE-SKSI-SCHEMA-TRANSLATION-MT-FOR-PREDICATE", 1, 0, false);
-        declareFunction(me, "simple_sksi_schema_translation_mt_for_asent", "SIMPLE-SKSI-SCHEMA-TRANSLATION-MT-FOR-ASENT", 1, 0, false);
+        declareFunction("register_simple_sksi_hl_storage_predicate", "REGISTER-SIMPLE-SKSI-HL-STORAGE-PREDICATE", 2, 0, false);
+        declareFunction("deregister_simple_sksi_hl_storage_predicate", "DEREGISTER-SIMPLE-SKSI-HL-STORAGE-PREDICATE", 1, 0, false);
+        declareFunction("simple_sksi_hl_storage_predicateP", "SIMPLE-SKSI-HL-STORAGE-PREDICATE?", 1, 0, false);
+        declareFunction("simple_sksi_hl_storage_module_name", "SIMPLE-SKSI-HL-STORAGE-MODULE-NAME", 1, 0, false);
+        declareFunction("register_simple_sksi_hl_storage_module_for_predicate", "REGISTER-SIMPLE-SKSI-HL-STORAGE-MODULE-FOR-PREDICATE", 1, 0, false);
+        declareFunction("deregister_simple_sksi_hl_storage_module_for_predicate", "DEREGISTER-SIMPLE-SKSI-HL-STORAGE-MODULE-FOR-PREDICATE", 1, 0, false);
+        declareFunction("compute_hl_storage_module_name", "COMPUTE-HL-STORAGE-MODULE-NAME", 1, 0, false);
+        declareFunction("simple_sksi_applicability_func", "SIMPLE-SKSI-APPLICABILITY-FUNC", 5, 0, false);
+        declareFunction("simple_sksi_incompleteness_func", "SIMPLE-SKSI-INCOMPLETENESS-FUNC", 5, 0, false);
+        declareFunction("simple_sksi_assert_func", "SIMPLE-SKSI-ASSERT-FUNC", 5, 0, false);
+        declareFunction("simple_sksi_unassert_func", "SIMPLE-SKSI-UNASSERT-FUNC", 3, 0, false);
+        declareFunction("simple_sksi_unassert_all_func", "SIMPLE-SKSI-UNASSERT-ALL-FUNC", 2, 0, false);
+        declareFunction("simple_sksi_store_asent_in_db_table", "SIMPLE-SKSI-STORE-ASENT-IN-DB-TABLE", 1, 0, false);
+        declareFunction("simple_sksi_mapping_mt_for_predicate", "SIMPLE-SKSI-MAPPING-MT-FOR-PREDICATE", 1, 0, false);
+        declareFunction("simple_sksi_mapping_mt_for_asent", "SIMPLE-SKSI-MAPPING-MT-FOR-ASENT", 1, 0, false);
+        declareFunction("simple_sksi_db_table_for_predicate", "SIMPLE-SKSI-DB-TABLE-FOR-PREDICATE", 1, 0, false);
+        declareFunction("simple_sksi_db_table_for_predicate_in_mt", "SIMPLE-SKSI-DB-TABLE-FOR-PREDICATE-IN-MT", 2, 0, false);
+        declareFunction("simple_sksi_db_table_for_asent", "SIMPLE-SKSI-DB-TABLE-FOR-ASENT", 1, 0, false);
+        declareFunction("simple_sksi_schema_translation_mt_for_predicate", "SIMPLE-SKSI-SCHEMA-TRANSLATION-MT-FOR-PREDICATE", 1, 0, false);
+        declareFunction("simple_sksi_schema_translation_mt_for_asent", "SIMPLE-SKSI-SCHEMA-TRANSLATION-MT-FOR-ASENT", 1, 0, false);
         return NIL;
     }
 

@@ -663,8 +663,7 @@ when failing, close its socket. */
   }
 
   public static final SubLObject setup_java_api_kernel_file() {
-    // CVS_ID("Id: java-api-kernel.lisp 128158 2009-06-26 21:52:24Z tbrussea ");
-    utilities_macros.register_cyc_api_function($sym3$INITIALIZE_JAVA_API_LEASE_MONITOR, NIL, $str4$Initialize_the_process_which_moni, NIL, NIL);
+        utilities_macros.register_cyc_api_function($sym3$INITIALIZE_JAVA_API_LEASE_MONITOR, NIL, $str4$Initialize_the_process_which_moni, NIL, NIL);
     utilities_macros.register_cyc_api_function($sym5$HALT_JAVA_API_LEASE_MONITOR, NIL, $str6$Halt_the_the_process_which_monito, NIL, NIL);
     utilities_macros.register_cyc_api_function($sym13$RELEASE_RESOURCES_FOR_JAVA_API_CLIENT, $list14, $str15$Closes_the_outbound_api_socket_an, $list16, $list17);
     utilities_macros.register_cyc_api_function($sym28$ACQUIRE_API_SERVICES_LEASE, $list29, $str30$Requests_an_API_services_lease___, $list31, $list32);

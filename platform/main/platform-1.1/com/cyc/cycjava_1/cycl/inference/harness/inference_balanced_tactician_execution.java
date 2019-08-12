@@ -481,8 +481,7 @@ remove from boxes during selection if necessary. (quiescence)
   }
 
   public static final SubLObject setup_inference_balanced_tactician_execution_file() {
-    // CVS_ID("Id: inference-balanced-tactician-execution.lisp 128006 2009-06-16 15:51:35Z pace ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

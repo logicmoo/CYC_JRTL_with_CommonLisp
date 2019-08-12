@@ -137,8 +137,7 @@ public  final class cyc_revision_extraction extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cyc_revision_extraction_file() {
-    // CVS_ID("Id: cyc-revision-extraction.lisp 126698 2008-12-17 17:45:32Z rck ");
-    return NIL;
+        return NIL;
   }
 
   //// Initializers

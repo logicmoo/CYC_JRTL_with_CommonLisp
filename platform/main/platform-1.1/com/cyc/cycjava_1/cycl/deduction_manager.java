@@ -138,8 +138,7 @@ public  final class deduction_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_deduction_manager_file() {
-    // CVS_ID("Id: deduction-manager.lisp 128689 2009-09-02 19:44:42Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_DEDUCTION_CONTENT_MANAGER_);
+        subl_macro_promotions.declare_defglobal($sym0$_DEDUCTION_CONTENT_MANAGER_);
     return NIL;
   }
 

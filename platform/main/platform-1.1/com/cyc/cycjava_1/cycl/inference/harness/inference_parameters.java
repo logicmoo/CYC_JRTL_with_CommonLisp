@@ -169,8 +169,7 @@ public  final class inference_parameters extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_inference_parameters_file() {
-    // CVS_ID("Id: inference-parameters.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

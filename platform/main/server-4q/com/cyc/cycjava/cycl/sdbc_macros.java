@@ -1,7 +1,17 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.sdbc_macros;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
@@ -9,88 +19,90 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.sdbc_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class sdbc_macros extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      SDBC-MACROS
+ * source file: /cyc/top/cycl/sdbc-macros.lisp
+ * created:     2019/07/03 17:37:16
+ */
+public final class sdbc_macros extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new sdbc_macros();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sdbc_macros";
+ public static final String myName = "com.cyc.cycjava.cycl.sdbc_macros";
 
-    public static final String myFingerPrint = "a799f1ffbae1489d24bcb65be8dfdf1a8866494d20364bfbfc7aa191a1c9f075";
 
     // Internal Constants
-    public static final SubLList $list0 = list(makeSymbol("WRAPPER-FN"), makeSymbol("WRAPPED-FN"), makeSymbol("ARGS"), makeSymbol("KEYS"));
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(makeSymbol("WRAPPER-FN"), makeSymbol("WRAPPED-FN"), makeSymbol("ARGS"), makeSymbol("KEYS"));
 
-    public static final SubLSymbol $sym1$RESULT_SET = makeUninternedSymbol("RESULT-SET");
+    static private final SubLSymbol $sym1$RESULT_SET = makeUninternedSymbol("RESULT-SET");
 
-    public static final SubLSymbol $sym2$COLUMN_COUNT = makeUninternedSymbol("COLUMN-COUNT");
+    static private final SubLSymbol $sym2$COLUMN_COUNT = makeUninternedSymbol("COLUMN-COUNT");
 
-    public static final SubLSymbol $sym3$I = makeUninternedSymbol("I");
+    static private final SubLSymbol $sym3$I = makeUninternedSymbol("I");
 
-    public static final SubLSymbol $sym4$KEY = makeUninternedSymbol("KEY");
+    static private final SubLSymbol $sym4$KEY = makeUninternedSymbol("KEY");
 
-    public static final SubLSymbol $sym5$RESULTS = makeUninternedSymbol("RESULTS");
+    static private final SubLSymbol $sym5$RESULTS = makeUninternedSymbol("RESULTS");
 
-    public static final SubLSymbol $sym6$BINDINGS = makeUninternedSymbol("BINDINGS");
+    static private final SubLSymbol $sym6$BINDINGS = makeUninternedSymbol("BINDINGS");
 
+    private static final SubLSymbol SQL_RESULT_SET_P = makeSymbol("SQL-RESULT-SET-P");
 
+    static private final SubLString $str15$SQLC_error___A = makeString("SQLC error: ~A");
 
+    static private final SubLList $list16 = list(list(RET, NIL));
 
+    private static final SubLSymbol SQLRS_COLUMN_COUNT = makeSymbol("SQLRS-COLUMN-COUNT");
 
+    private static final SubLSymbol SQLRS_IS_LAST = makeSymbol("SQLRS-IS-LAST");
 
+    private static final SubLSymbol SQLRS_NEXT = makeSymbol("SQLRS-NEXT");
 
+    static private final SubLList $list22 = list(ZERO_INTEGER);
 
+    static private final SubLSymbol $sym26$__ = makeSymbol("<=");
 
+    // Definitions
+    public static final SubLObject define_sqlc_wrapper_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject wrapper_fn = NIL;
+            SubLObject wrapped_fn = NIL;
+            SubLObject args = NIL;
+            SubLObject keys = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt0);
+            wrapper_fn = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt0);
+            wrapped_fn = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt0);
+            args = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt0);
+            keys = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject result_set = $sym1$RESULT_SET;
+                    SubLObject column_count = $sym2$COLUMN_COUNT;
+                    SubLObject i = $sym3$I;
+                    SubLObject key = $sym4$KEY;
+                    SubLObject results = $sym5$RESULTS;
+                    SubLObject v_bindings = $sym6$BINDINGS;
+                    return list(DEFINE_PROTECTED, wrapper_fn, args, list(CLET, list(list(result_set, list(APPLY, list(QUOTE, wrapped_fn), bq_cons(LIST, append(args, NIL))))), listS(PUNLESS, list(SQL_RESULT_SET_P, result_set), list(WARN, $str_alt15$SQLC_error___A, result_set), $list_alt16), list(CLET, list(list(column_count, list(SQLRS_COLUMN_COUNT, result_set)), results), list(WHILE, list(CNOT, list(SQLRS_IS_LAST, result_set)), list(SQLRS_NEXT, result_set), list(CLET, list(bq_cons(i, $list_alt22), v_bindings), list(CDOLIST, list(key, list(QUOTE, keys)), list(CINC, i), list(PWHEN, list($sym26$__, i, column_count), list(CPUSH, key, v_bindings), list(CPUSH, list(SQLRS_GET_OBJECT, result_set, i), v_bindings))), list(CPUSH, list(NREVERSE, v_bindings), results))), list(RET, list(NREVERSE, results)))));
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list_alt0);
+            }
+        }
+        return NIL;
+    }
 
-
-
-
-    public static final SubLSymbol SQL_RESULT_SET_P = makeSymbol("SQL-RESULT-SET-P");
-
-
-
-    public static final SubLString $str15$SQLC_error___A = makeString("SQLC error: ~A");
-
-    public static final SubLList $list16 = list(list(makeSymbol("RET"), NIL));
-
-    public static final SubLSymbol SQLRS_COLUMN_COUNT = makeSymbol("SQLRS-COLUMN-COUNT");
-
-
-
-
-
-    public static final SubLSymbol SQLRS_IS_LAST = makeSymbol("SQLRS-IS-LAST");
-
-    public static final SubLSymbol SQLRS_NEXT = makeSymbol("SQLRS-NEXT");
-
-    public static final SubLList $list22 = list(ZERO_INTEGER);
-
-
-
-
-
-
-
-    public static final SubLSymbol $sym26$__ = makeSymbol("<=");
-
-
-
-
-
-
-
-
-
+    // Definitions
     public static SubLObject define_sqlc_wrapper(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -123,8 +135,12 @@ public final class sdbc_macros extends SubLTranslatedFile {
         return NIL;
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(makeSymbol("WRAPPER-FN"), makeSymbol("WRAPPED-FN"), makeSymbol("ARGS"), makeSymbol("KEYS"));
+
     public static SubLObject declare_sdbc_macros_file() {
-        declareMacro(me, "define_sqlc_wrapper", "DEFINE-SQLC-WRAPPER");
+        declareMacro("define_sqlc_wrapper", "DEFINE-SQLC-WRAPPER");
         return NIL;
     }
 
@@ -132,9 +148,13 @@ public final class sdbc_macros extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt15$SQLC_error___A = makeString("SQLC error: ~A");
+
     public static SubLObject setup_sdbc_macros_file() {
         return NIL;
     }
+
+    static private final SubLList $list_alt16 = list(list(RET, NIL));
 
     @Override
     public void declareFunctions() {
@@ -152,39 +172,9 @@ public final class sdbc_macros extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt22 = list(ZERO_INTEGER);
 }
 
 /**

@@ -182,8 +182,7 @@ public  final class accumulation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_accumulation_file() {
-    // CVS_ID("Id: accumulation.lisp 127702 2009-04-23 16:39:29Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_accumulator$.getGlobalValue(), Symbols.symbol_function($sym7$ACCUMULATOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_accumulator$.getGlobalValue(), Symbols.symbol_function($sym7$ACCUMULATOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$ACC_STATE, $sym9$_CSETF_ACC_STATE);
     Structures.def_csetf($sym10$ACC_RESET_FN, $sym11$_CSETF_ACC_RESET_FN);
     Structures.def_csetf($sym12$ACC_ADD_FN, $sym13$_CSETF_ACC_ADD_FN);

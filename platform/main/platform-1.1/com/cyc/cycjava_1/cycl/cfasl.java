@@ -1587,8 +1587,7 @@ to output in a terser representation. */
   }
 
   public static final SubLObject setup_cfasl_file() {
-    // CVS_ID("Id: cfasl.lisp 128945 2009-10-13 22:05:33Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cfasl_encoding_stream$.getGlobalValue(), Symbols.symbol_function($sym7$CFASL_ENCODING_STREAM_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cfasl_encoding_stream$.getGlobalValue(), Symbols.symbol_function($sym7$CFASL_ENCODING_STREAM_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$CFASL_ENCODING_STREAM_INTERNAL_STREAM, $sym9$_CSETF_CFASL_ENCODING_STREAM_INTERNAL_STREAM);
     Equality.identity($sym0$CFASL_ENCODING_STREAM);
     access_macros.register_macro_helper($sym19$CFASL_ENCODING_STRING_STREAM_ENCODING, $sym21$WITH_CFASL_OUTPUT_TO_HEX_STRING);

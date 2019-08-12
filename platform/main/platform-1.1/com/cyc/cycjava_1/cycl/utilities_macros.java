@@ -1122,8 +1122,7 @@ for a structure resource declared via DEFINE-STRUCTURE-RESOURCE. */
   }
 
   public static final SubLObject setup_utilities_macros_file() {
-    // CVS_ID("Id: utilities-macros.lisp 127836 2009-05-18 23:13:06Z tbrussea ");
-    subl_macro_promotions.declare_defglobal($sym15$_API_SPECIAL_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym15$_API_SPECIAL_TABLE_);
     subl_macro_promotions.declare_defglobal($sym17$_API_PREDEFINED_FUNCTION_TABLE_);
     subl_macro_promotions.declare_defglobal($sym19$_API_PREDEFINED_HOST_FUNCTION_TABLE_);
     subl_macro_promotions.declare_defglobal($sym21$_API_PREDEFINED_MACRO_TABLE_);

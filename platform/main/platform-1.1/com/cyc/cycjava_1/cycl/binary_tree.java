@@ -769,8 +769,7 @@ public  final class binary_tree extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_binary_tree_file() {
-    // CVS_ID("Id: binary-tree.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_btree$.getGlobalValue(), Symbols.symbol_function($sym7$BTREE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_btree$.getGlobalValue(), Symbols.symbol_function($sym7$BTREE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$BT_TAG, $sym9$_CSETF_BT_TAG);
     Structures.def_csetf($sym10$BT_STATE, $sym11$_CSETF_BT_STATE);
     Structures.def_csetf($sym12$BT_LOWER, $sym13$_CSETF_BT_LOWER);

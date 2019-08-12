@@ -21,37 +21,21 @@ import org.armedbear.lisp.Symbol;
 import org.logicmoo.system.JVMImpl;
 
 import com.cyc.cycjava.cycl.constant_handles;
-import com.cyc.cycjava.cycl.constant_handles.*;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Packages;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Resourcer;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLListListIterator;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLStructDeclNative;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThreadPool;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.ExceptionFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.InvalidSubLExpressionException;
 import com.cyc.tool.subl.jrtl.nativeCode.type.exception.SubLException;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.*;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLDoubleFloat;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLFixnum;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumber;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLNumberFactory;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLCompiledFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLInterpretedFunction;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLMacro;
 import com.cyc.tool.subl.jrtl.nativeCode.type.operator.SubLOperatorFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLBroadcastStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInOutTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLInputTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputBinaryStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLOutputTextStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLSocketStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStream;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLStreamFactory;
-import com.cyc.tool.subl.jrtl.nativeCode.type.stream.SubLSynonymStream;
+import com.cyc.tool.subl.jrtl.nativeCode.type.stream.*;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLBoolean;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLNil;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLPackage;
@@ -89,13 +73,13 @@ public class SubLObjectFactory {
 
     public static SubLStruct makeConstSym(String name) {
 	synchronized (constantsCreated) {
-	    com.cyc.cycjava.cycl.constant_handles.$constant_native struct = ($constant_native) constantsCreated.get(name);
+	    SubLStruct struct = (SubLStruct) constantsCreated.get(name);
 	    if (struct == null) {
-		if (false) {
-		    struct = ($constant_native) constant_handles.reader_make_constant_shell(makeString(name));
+		if (true) {
+		    struct = (SubLStruct) constant_handles.reader_make_constant_shell(makeString(name));
 		} else {
-		    struct = new com.cyc.cycjava.cycl.constant_handles.$constant_native();
-		    struct.$name = makeString(name);
+//		    struct = new com.cyc.cycjava.cycl.constant_handles.$constant_native();
+//		    struct.$name = makeString(name);
 		}
 		constantsCreated.put(name, struct);
 	    }
@@ -706,8 +690,12 @@ public class SubLObjectFactory {
     }
 
     public static SubLSymbol makeSymbol(String symbolName) {
-	SubLPackage currentPackage = Packages.$package$.getDynamicValue().toPackage();
+	SubLPackage currentPackage = SubLPackage.getCurrentPackage();
 	return SubLSymbolFactory.makeSymbol(symbolName, currentPackage);
+    }
+
+    public static SubLObject makeCycConstant(final String constant_name) {
+	return constant_handles.reader_make_constant_shell(makeString(constant_name));
     }
 
     public static SubLSymbol makeSymbol(String symbolName, String packageName) {

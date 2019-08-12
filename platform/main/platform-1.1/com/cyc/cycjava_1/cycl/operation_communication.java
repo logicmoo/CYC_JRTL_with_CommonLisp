@@ -711,8 +711,7 @@ i.e. it is not reset when a new local transcript is started. */
   }
 
   public static final SubLObject setup_operation_communication_file() {
-    // CVS_ID("Id: operation-communication.lisp 128745 2009-09-11 20:11:10Z rck ");
-    subl_macro_promotions.declare_defglobal($sym1$_ALLOW_TRANSMITTING_);
+        subl_macro_promotions.declare_defglobal($sym1$_ALLOW_TRANSMITTING_);
     subl_macro_promotions.declare_defglobal($sym2$_KB_FULL_TRANSCRIPT_LOADED_);
     subl_macro_promotions.declare_defglobal($sym8$_RECEIVING_REMOTE_OPERATIONS__);
     subl_macro_promotions.declare_defglobal($sym9$_PROCESS_LOCAL_OPERATIONS__);

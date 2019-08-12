@@ -668,8 +668,7 @@ public  final class at_vars extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_vars_file() {
-    // CVS_ID("Id: at-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    {
+        {
       SubLObject item_var = $sym0$_SEMANTIC_DNF_HL_FILTERING_ENABLED_;
       if ((NIL == conses_high.member(item_var, utilities_macros.$at_state_variables$.getGlobalValue(), Symbols.symbol_function(EQL), Symbols.symbol_function(IDENTITY)))) {
         utilities_macros.$at_state_variables$.setGlobalValue(cons(item_var, utilities_macros.$at_state_variables$.getGlobalValue()));

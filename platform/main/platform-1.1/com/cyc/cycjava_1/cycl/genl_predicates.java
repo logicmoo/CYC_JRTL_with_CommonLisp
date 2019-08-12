@@ -623,8 +623,7 @@ public  final class genl_predicates extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_genl_predicates_file() {
-    // CVS_ID("Id: genl-predicates.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym2$GENL_PREDICATES, $list3, $str4$Returns_the_local_genlPreds_of_PR, $list5, $list6);
+        utilities_macros.register_cyc_api_function($sym2$GENL_PREDICATES, $list3, $str4$Returns_the_local_genlPreds_of_PR, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym7$MIN_GENL_PREDICATES, $list3, $str8$Returns_the_most_specific_local_g, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym10$GENL_INVERSES, $list3, $str11$Returns_the_local_genlInverses_of, $list5, $list6);
     utilities_macros.register_cyc_api_function($sym12$MIN_GENL_INVERSES, $list3, $str13$Returns_the_most_specific_local_g, $list5, $list6);

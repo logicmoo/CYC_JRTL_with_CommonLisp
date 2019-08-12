@@ -1,8 +1,17 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.ontological_similarity;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
@@ -10,36 +19,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.ontological_similarity.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class ontological_similarity extends SubLTranslatedFile {
+public final class ontological_similarity extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new ontological_similarity();
 
-    public static final String myName = "com.cyc.cycjava.cycl.ontological_similarity";
+    public static final String myName = "com.cyc.cycjava_2.cycl.ontological_similarity";
 
-    public static final String myFingerPrint = "0d1b585c90dc599b369ac63a3f47012e46ce52e0cca4f212602b48e8f5d9cf08";
 
 
 
@@ -399,20 +384,20 @@ public final class ontological_similarity extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_ontological_similarity_file() {
-        declareFunction(me, "ontological_signature", "ONTOLOGICAL-SIGNATURE", 1, 1, false);
-        declareFunction(me, "ontological_signature_ordered", "ONTOLOGICAL-SIGNATURE-ORDERED", 1, 1, false);
-        declareFunction(me, "ontological_signature_memoized", "ONTOLOGICAL-SIGNATURE-MEMOIZED", 1, 1, false);
-        declareFunction(me, "ontological_signature_memoized_internal_internal", "ONTOLOGICAL-SIGNATURE-MEMOIZED-INTERNAL-INTERNAL", 2, 0, false);
-        declareFunction(me, "ontological_signature_memoized_internal", "ONTOLOGICAL-SIGNATURE-MEMOIZED-INTERNAL", 2, 0, false);
-        declareFunction(me, "ontological_comparison", "ONTOLOGICAL-COMPARISON", 1, 1, false);
-        declareFunction(me, "ontological_similarity", "ONTOLOGICAL-SIMILARITY", 1, 1, false);
-        declareFunction(me, "ontological_distance", "ONTOLOGICAL-DISTANCE", 2, 1, false);
-        declareFunction(me, "ontological_distance_memoized", "ONTOLOGICAL-DISTANCE-MEMOIZED", 2, 1, false);
-        declareFunction(me, "ontological_comparison_int", "ONTOLOGICAL-COMPARISON-INT", 1, 1, false);
-        declareFunction(me, "ontological_distance_memoized_internal_internal", "ONTOLOGICAL-DISTANCE-MEMOIZED-INTERNAL-INTERNAL", 3, 0, false);
-        declareFunction(me, "ontological_distance_memoized_internal", "ONTOLOGICAL-DISTANCE-MEMOIZED-INTERNAL", 3, 0, false);
-        declareFunction(me, "maximally_ontologically_distant_element_wrt", "MAXIMALLY-ONTOLOGICALLY-DISTANT-ELEMENT-WRT", 2, 1, false);
-        declareFunction(me, "minimally_ontologically_distant_element_wrt", "MINIMALLY-ONTOLOGICALLY-DISTANT-ELEMENT-WRT", 2, 1, false);
+        declareFunction("ontological_signature", "ONTOLOGICAL-SIGNATURE", 1, 1, false);
+        declareFunction("ontological_signature_ordered", "ONTOLOGICAL-SIGNATURE-ORDERED", 1, 1, false);
+        declareFunction("ontological_signature_memoized", "ONTOLOGICAL-SIGNATURE-MEMOIZED", 1, 1, false);
+        declareFunction("ontological_signature_memoized_internal_internal", "ONTOLOGICAL-SIGNATURE-MEMOIZED-INTERNAL-INTERNAL", 2, 0, false);
+        declareFunction("ontological_signature_memoized_internal", "ONTOLOGICAL-SIGNATURE-MEMOIZED-INTERNAL", 2, 0, false);
+        declareFunction("ontological_comparison", "ONTOLOGICAL-COMPARISON", 1, 1, false);
+        declareFunction("ontological_similarity", "ONTOLOGICAL-SIMILARITY", 1, 1, false);
+        declareFunction("ontological_distance", "ONTOLOGICAL-DISTANCE", 2, 1, false);
+        declareFunction("ontological_distance_memoized", "ONTOLOGICAL-DISTANCE-MEMOIZED", 2, 1, false);
+        declareFunction("ontological_comparison_int", "ONTOLOGICAL-COMPARISON-INT", 1, 1, false);
+        declareFunction("ontological_distance_memoized_internal_internal", "ONTOLOGICAL-DISTANCE-MEMOIZED-INTERNAL-INTERNAL", 3, 0, false);
+        declareFunction("ontological_distance_memoized_internal", "ONTOLOGICAL-DISTANCE-MEMOIZED-INTERNAL", 3, 0, false);
+        declareFunction("maximally_ontologically_distant_element_wrt", "MAXIMALLY-ONTOLOGICALLY-DISTANT-ELEMENT-WRT", 2, 1, false);
+        declareFunction("minimally_ontologically_distant_element_wrt", "MINIMALLY-ONTOLOGICALLY-DISTANT-ELEMENT-WRT", 2, 1, false);
         return NIL;
     }
 

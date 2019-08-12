@@ -73,10 +73,10 @@ public final class SubLSymbolField extends Symbol implements SubLSymbol {
   //// Public Area
 
   /** Method created to avoid casting */
-  @Override
-public final SubLSymbol toSymbol() {
-    return this;
-  }
+    //  @Override
+    //public final SubLSymbol toSymbol() {
+    //    return this;
+    //  }
 
   @Override
 public final int getBindingId() {

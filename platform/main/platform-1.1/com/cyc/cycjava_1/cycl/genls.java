@@ -482,8 +482,7 @@ public  final class genls extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_genls_file() {
-    // CVS_ID("Id: genls.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym1$MIN_GENLS, $list2, $str3$Returns_the_most_specific_genls_o, NIL, $list4);
+        utilities_macros.register_cyc_api_function($sym1$MIN_GENLS, $list2, $str3$Returns_the_most_specific_genls_o, NIL, $list4);
     utilities_macros.register_cyc_api_function($sym6$MAX_NOT_GENLS, $list2, $str7$Returns_the_least_specific_negate, $list8, $list4);
     utilities_macros.register_cyc_api_function($sym10$MAX_SPECS, $list2, $str11$Returns_the_least_specific_specs_, $list8, $list4);
     utilities_macros.register_cyc_api_function($sym12$MIN_NOT_SPECS, $list2, $str13$Returns_the_most_specific_negated, $list8, $list4);

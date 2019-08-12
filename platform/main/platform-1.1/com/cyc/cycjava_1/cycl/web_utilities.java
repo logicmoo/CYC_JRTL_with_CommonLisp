@@ -475,8 +475,7 @@ public  class web_utilities extends SubLTranslatedFile {
   }
 
   public static SubLObject setup_web_utilities_file() {
-    // CVS_ID("Id: web-utilities.lisp 128434 2009-07-28 22:05:56Z goolsbey ");
-    generic_testing.define_test_case_table_int($sym90$RESOLVE_RELATIVE_URI, list(new SubLObject[] {$kw91$TEST, NIL, $kw92$OWNER, NIL, $kw93$CLASSES, NIL, $kw94$KB, $kw95$TINY, $kw96$WORKING_, T}), $list97);
+        generic_testing.define_test_case_table_int($sym90$RESOLVE_RELATIVE_URI, list(new SubLObject[] {$kw91$TEST, NIL, $kw92$OWNER, NIL, $kw93$CLASSES, NIL, $kw94$KB, $kw95$TINY, $kw96$WORKING_, T}), $list97);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_xml_token_iterator_state$.getGlobalValue(), Symbols.symbol_function($sym107$XML_TOKEN_ITERATOR_STATE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym108$XML_IT_STATE_IN_STREAM, $sym109$_CSETF_XML_IT_STATE_IN_STREAM);
     Structures.def_csetf($sym110$XML_IT_STATE_SCRATCH_STREAM, $sym111$_CSETF_XML_IT_STATE_SCRATCH_STREAM);

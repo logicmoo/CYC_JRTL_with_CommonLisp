@@ -134,8 +134,7 @@ public  final class sparse_vector extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sparse_vector_file() {
-    // CVS_ID("Id: sparse-vector.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sparse_vector$.getGlobalValue(), Symbols.symbol_function($sym7$SPARSE_VECTOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sparse_vector$.getGlobalValue(), Symbols.symbol_function($sym7$SPARSE_VECTOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$SVECTOR_MAGNITUDE, $sym9$_CSETF_SVECTOR_MAGNITUDE);
     Structures.def_csetf($sym10$SVECTOR_DIMENSIONS, $sym11$_CSETF_SVECTOR_DIMENSIONS);
     Equality.identity($sym0$SPARSE_VECTOR);

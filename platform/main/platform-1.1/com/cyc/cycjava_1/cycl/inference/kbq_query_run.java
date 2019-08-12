@@ -754,8 +754,7 @@ public  final class kbq_query_run extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kbq_query_run_file() {
-    // CVS_ID("Id: kbq-query-run.lisp 128945 2009-10-13 22:05:33Z rck ");
-    access_macros.register_macro_helper($sym5$KBQ_CFASL_COMMON_SYMBOLS, $sym6$DO_QUERY_SET_RUN);
+        access_macros.register_macro_helper($sym5$KBQ_CFASL_COMMON_SYMBOLS, $sym6$DO_QUERY_SET_RUN);
     subl_macro_promotions.declare_defglobal($sym189$_LAST_QUERY_SET_RUN_);
     access_macros.register_macro_helper($sym187$RUN_KBQ_EXPERIMENT_INTERNAL, $sym190$RUN_KBQ_EXPERIMENT);
     subl_macro_promotions.declare_defglobal($sym211$_LAST_TEST_SET_RUN_);

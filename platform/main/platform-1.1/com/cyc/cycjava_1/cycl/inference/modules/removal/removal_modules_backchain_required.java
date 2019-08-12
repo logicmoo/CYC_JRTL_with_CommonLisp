@@ -111,8 +111,7 @@ public  final class removal_modules_backchain_required extends SubLTranslatedFil
   }
 
   public static final SubLObject setup_removal_modules_backchain_required_file() {
-    // CVS_ID("Id: removal-modules-backchain-required.lisp 126640 2008-12-04 13:39:36Z builder ");
-    preference_modules.inference_preference_module($kw0$BACKCHAIN_REQUIRED_POS, $list1);
+        preference_modules.inference_preference_module($kw0$BACKCHAIN_REQUIRED_POS, $list1);
     preference_modules.inference_preference_module($kw2$BACKCHAIN_FORBIDDEN_UNLESS_ARG_CHOSEN_DELAY, $list3);
     inference_modules.inference_removal_module($kw4$REMOVAL_BACKCHAIN_REQUIRED_PRUNE, $list5);
     utilities_macros.note_funcall_helper_function($sym6$REMOVAL_BACKCHAIN_REQUIRED_PRUNE_REQUIRED);

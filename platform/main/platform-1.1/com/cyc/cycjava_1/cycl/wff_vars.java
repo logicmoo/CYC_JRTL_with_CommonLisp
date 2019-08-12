@@ -358,8 +358,7 @@ continue at wff checks even after failure. */
   }
 
   public static final SubLObject setup_wff_vars_file() {
-    // CVS_ID("Id: wff-vars.lisp 126660 2008-12-06 00:38:39Z goolsbey ");
-    note_wff_property($kw1$WFF_MODE, $sym2$_WFF_MODE_, $kw0$STRICT);
+        note_wff_property($kw1$WFF_MODE, $sym2$_WFF_MODE_, $kw0$STRICT);
     note_wff_property($kw3$DEBUG_, $sym4$_WFF_DEBUG__, NIL);
     note_wff_property($kw5$VALIDATE_CONSTANTS_, $sym6$_VALIDATE_CONSTANTS__, T);
     note_wff_property($kw7$RECOGNIZE_VARIABLES_, $sym8$_RECOGNIZE_VARIABLES__, T);

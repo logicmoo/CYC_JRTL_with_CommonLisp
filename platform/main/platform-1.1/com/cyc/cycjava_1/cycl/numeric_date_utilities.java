@@ -741,8 +741,7 @@ The Julian date for the start of Aug 1, 2001 is 2452122.5 */
   }
 
   public static final SubLObject setup_numeric_date_utilities_file() {
-    // CVS_ID("Id: numeric-date-utilities.lisp 128778 2009-09-16 15:15:08Z pace ");
-    access_macros.define_obsolete_register($sym17$TIME_FROM_NOW, $list18);
+        access_macros.define_obsolete_register($sym17$TIME_FROM_NOW, $list18);
     access_macros.define_obsolete_register($sym77$ELAPSED_SECONDS_STRING, $list78);
     subl_macro_promotions.declare_defglobal($sym89$_JULIAN_OFFSETS_);
     access_macros.define_obsolete_register($sym108$ABBREVIATION_FOR_MONTH_NUMBER, $list109);

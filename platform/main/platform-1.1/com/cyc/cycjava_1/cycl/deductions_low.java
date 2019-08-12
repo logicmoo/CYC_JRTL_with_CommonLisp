@@ -439,8 +439,7 @@ public  final class deductions_low extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_deductions_low_file() {
-    // CVS_ID("Id: deductions-low.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_deduction_content$.getGlobalValue(), Symbols.symbol_function($sym8$DEDUCTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_deduction_content$.getGlobalValue(), Symbols.symbol_function($sym8$DEDUCTION_CONTENT_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$D_CONTENT_TV, $sym10$_CSETF_D_CONTENT_TV);
     Structures.def_csetf($sym11$D_CONTENT_ASSERTION, $sym12$_CSETF_D_CONTENT_ASSERTION);
     Structures.def_csetf($sym13$D_CONTENT_SUPPORTS, $sym14$_CSETF_D_CONTENT_SUPPORTS);

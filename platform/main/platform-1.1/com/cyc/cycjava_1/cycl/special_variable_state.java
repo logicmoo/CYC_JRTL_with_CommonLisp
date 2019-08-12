@@ -207,8 +207,7 @@ public  final class special_variable_state extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_special_variable_state_file() {
-    // CVS_ID("Id: special-variable-state.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_special_variable_state$.getGlobalValue(), Symbols.symbol_function($sym8$SPECIAL_VARIABLE_STATE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_special_variable_state$.getGlobalValue(), Symbols.symbol_function($sym8$SPECIAL_VARIABLE_STATE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$SVS_VARIABLES, $sym10$_CSETF_SVS_VARIABLES);
     Structures.def_csetf($sym11$SVS_VALUES, $sym12$_CSETF_SVS_VALUES);
     Equality.identity($sym1$SPECIAL_VARIABLE_STATE);

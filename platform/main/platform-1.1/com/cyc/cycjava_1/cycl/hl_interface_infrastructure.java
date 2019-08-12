@@ -442,8 +442,7 @@ public  final class hl_interface_infrastructure extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_hl_interface_infrastructure_file() {
-    // CVS_ID("Id: hl-interface-infrastructure.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym8$_REMOTE_HL_STORE_IMAGE_);
+        subl_macro_promotions.declare_defglobal($sym8$_REMOTE_HL_STORE_IMAGE_);
     subl_macro_promotions.declare_defglobal($sym9$_REMOTE_HL_STORE_CONNECTION_POOL_);
     access_macros.register_macro_helper($sym34$DEFINE_HL_MODIFIER_PREAMBLE, $list35);
     access_macros.register_macro_helper($sym36$DEFINE_HL_MODIFIER_POSTAMBLE, $list35);

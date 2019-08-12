@@ -1,43 +1,13 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_parameters;
-import com.cyc.cycjava.cycl.cb_pph_phrase_browser;
-import com.cyc.cycjava.cycl.cb_utilities;
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_pph_phrase_browser.*;
 import static com.cyc.cycjava.cycl.cb_utilities.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.control_vars.*;
 import static com.cyc.cycjava.cycl.html_utilities.*;
 import static com.cyc.cycjava.cycl.id_index.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_less;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
@@ -52,15 +22,24 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class cb_pph_phrase_browser extends SubLTranslatedFile {
+public final class cb_pph_phrase_browser extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new cb_pph_phrase_browser();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_pph_phrase_browser";
+    public static final String myName = "com.cyc.cycjava_2.cycl.cb_pph_phrase_browser";
 
-    public static final String myFingerPrint = "8ff6f27f560c1e8d3e2d8888bd8d9877f023b7f8f0cf7b9825cdfdb67abebe6f";
 
 
 
@@ -2326,45 +2305,45 @@ public final class cb_pph_phrase_browser extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_cb_pph_phrase_browser_file() {
-        declareFunction(me, "cb_pph_phrase", "CB-PPH-PHRASE", 1, 0, false);
-        declareFunction(me, "cb_pph_phrases", "CB-PPH-PHRASES", 1, 0, false);
-        declareFunction(me, "cb_handle_pph_phrases", "CB-HANDLE-PPH-PHRASES", 1, 0, false);
-        declareFunction(me, "cb_pph_phrases_internal", "CB-PPH-PHRASES-INTERNAL", 1, 0, false);
-        declareFunction(me, "gather_pph_phrases_int", "GATHER-PPH-PHRASES-INT", 0, 7, false);
-        declareFunction(me, "clear_max_gen_template_phrase_id", "CLEAR-MAX-GEN-TEMPLATE-PHRASE-ID", 0, 0, false);
-        declareFunction(me, "remove_max_gen_template_phrase_id", "REMOVE-MAX-GEN-TEMPLATE-PHRASE-ID", 0, 0, false);
-        declareFunction(me, "max_gen_template_phrase_id_internal", "MAX-GEN-TEMPLATE-PHRASE-ID-INTERNAL", 0, 0, false);
-        declareFunction(me, "max_gen_template_phrase_id", "MAX-GEN-TEMPLATE-PHRASE-ID", 0, 0, false);
-        declareFunction(me, "max_id_of_pph_phrase_and_dtrs", "MAX-ID-OF-PPH-PHRASE-AND-DTRS", 1, 1, false);
-        declareFunction(me, "pph_phrase_ok_for_categoryP", "PPH-PHRASE-OK-FOR-CATEGORY?", 2, 0, false);
-        declareFunction(me, "pph_phrase_ok_for_nl_predP", "PPH-PHRASE-OK-FOR-NL-PRED?", 2, 0, false);
-        declareFunction(me, "pph_phrase_ok_for_demeritsP", "PPH-PHRASE-OK-FOR-DEMERITS?", 3, 0, false);
-        declareFunction(me, "clear_pph_phrase_id_demerits", "CLEAR-PPH-PHRASE-ID-DEMERITS", 0, 0, false);
-        declareFunction(me, "remove_pph_phrase_id_demerits", "REMOVE-PPH-PHRASE-ID-DEMERITS", 1, 0, false);
-        declareFunction(me, "pph_phrase_id_demerits_internal", "PPH-PHRASE-ID-DEMERITS-INTERNAL", 1, 0, false);
-        declareFunction(me, "pph_phrase_id_demerits", "PPH-PHRASE-ID-DEMERITS", 1, 0, false);
-        declareFunction(me, "sort_pph_phrases", "SORT-PPH-PHRASES", 3, 0, false);
-        declareFunction(me, "sort_pph_phrases_by_id", "SORT-PPH-PHRASES-BY-ID", 2, 0, false);
-        declareFunction(me, "sort_pph_phrases_by_demerits", "SORT-PPH-PHRASES-BY-DEMERITS", 2, 0, false);
-        declareFunction(me, "cb_link_pph_phrase", "CB-LINK-PPH-PHRASE", 1, 2, false);
-        declareFunction(me, "cb_form_sign_method", "CB-FORM-SIGN-METHOD", 1, 2, false);
-        declareFunction(me, "cb_guess_pph_phrase", "CB-GUESS-PPH-PHRASE", 1, 0, false);
-        declareFunction(me, "cb_pph_category_abbreviation", "CB-PPH-CATEGORY-ABBREVIATION", 1, 0, false);
-        declareFunction(me, "cb_pph_phrase_guts", "CB-PPH-PHRASE-GUTS", 1, 0, false);
-        declareFunction(me, "pph_bgcolor_for_phrase", "PPH-BGCOLOR-FOR-PHRASE", 1, 0, false);
-        declareFunction(me, "pph_class_for_phrase", "PPH-CLASS-FOR-PHRASE", 1, 0, false);
-        declareFunction(me, "pph_phrase_problem_count", "PPH-PHRASE-PROBLEM-COUNT", 1, 0, false);
-        declareMacro(me, "html_show_pph_phrase_property", "HTML-SHOW-PPH-PHRASE-PROPERTY");
-        declareFunction(me, "html_show_pph_phrase_details", "HTML-SHOW-PPH-PHRASE-DETAILS", 1, 0, false);
-        declareFunction(me, "html_output_pph_problem", "HTML-OUTPUT-PPH-PROBLEM", 1, 0, false);
-        declareFunction(me, "html_show_pph_cycl", "HTML-SHOW-PPH-CYCL", 1, 0, false);
-        declareFunction(me, "html_show_pph_arg_position", "HTML-SHOW-PPH-ARG-POSITION", 1, 0, false);
-        declareFunction(me, "html_show_pph_string", "HTML-SHOW-PPH-STRING", 1, 0, false);
-        declareFunction(me, "html_show_pph_output_item_headers", "HTML-SHOW-PPH-OUTPUT-ITEM-HEADERS", 0, 0, false);
-        declareFunction(me, "html_show_pph_output_item", "HTML-SHOW-PPH-OUTPUT-ITEM", 1, 0, false);
-        declareFunction(me, "cb_pph_phrase_category_string", "CB-PPH-PHRASE-CATEGORY-STRING", 1, 0, false);
-        declareFunction(me, "html_show_pph_agr", "HTML-SHOW-PPH-AGR", 1, 0, false);
-        declareFunction(me, "cb_pph_phrase_string", "CB-PPH-PHRASE-STRING", 1, 2, false);
+        declareFunction("cb_pph_phrase", "CB-PPH-PHRASE", 1, 0, false);
+        declareFunction("cb_pph_phrases", "CB-PPH-PHRASES", 1, 0, false);
+        declareFunction("cb_handle_pph_phrases", "CB-HANDLE-PPH-PHRASES", 1, 0, false);
+        declareFunction("cb_pph_phrases_internal", "CB-PPH-PHRASES-INTERNAL", 1, 0, false);
+        declareFunction("gather_pph_phrases_int", "GATHER-PPH-PHRASES-INT", 0, 7, false);
+        declareFunction("clear_max_gen_template_phrase_id", "CLEAR-MAX-GEN-TEMPLATE-PHRASE-ID", 0, 0, false);
+        declareFunction("remove_max_gen_template_phrase_id", "REMOVE-MAX-GEN-TEMPLATE-PHRASE-ID", 0, 0, false);
+        declareFunction("max_gen_template_phrase_id_internal", "MAX-GEN-TEMPLATE-PHRASE-ID-INTERNAL", 0, 0, false);
+        declareFunction("max_gen_template_phrase_id", "MAX-GEN-TEMPLATE-PHRASE-ID", 0, 0, false);
+        declareFunction("max_id_of_pph_phrase_and_dtrs", "MAX-ID-OF-PPH-PHRASE-AND-DTRS", 1, 1, false);
+        declareFunction("pph_phrase_ok_for_categoryP", "PPH-PHRASE-OK-FOR-CATEGORY?", 2, 0, false);
+        declareFunction("pph_phrase_ok_for_nl_predP", "PPH-PHRASE-OK-FOR-NL-PRED?", 2, 0, false);
+        declareFunction("pph_phrase_ok_for_demeritsP", "PPH-PHRASE-OK-FOR-DEMERITS?", 3, 0, false);
+        declareFunction("clear_pph_phrase_id_demerits", "CLEAR-PPH-PHRASE-ID-DEMERITS", 0, 0, false);
+        declareFunction("remove_pph_phrase_id_demerits", "REMOVE-PPH-PHRASE-ID-DEMERITS", 1, 0, false);
+        declareFunction("pph_phrase_id_demerits_internal", "PPH-PHRASE-ID-DEMERITS-INTERNAL", 1, 0, false);
+        declareFunction("pph_phrase_id_demerits", "PPH-PHRASE-ID-DEMERITS", 1, 0, false);
+        declareFunction("sort_pph_phrases", "SORT-PPH-PHRASES", 3, 0, false);
+        declareFunction("sort_pph_phrases_by_id", "SORT-PPH-PHRASES-BY-ID", 2, 0, false);
+        declareFunction("sort_pph_phrases_by_demerits", "SORT-PPH-PHRASES-BY-DEMERITS", 2, 0, false);
+        declareFunction("cb_link_pph_phrase", "CB-LINK-PPH-PHRASE", 1, 2, false);
+        declareFunction("cb_form_sign_method", "CB-FORM-SIGN-METHOD", 1, 2, false);
+        declareFunction("cb_guess_pph_phrase", "CB-GUESS-PPH-PHRASE", 1, 0, false);
+        declareFunction("cb_pph_category_abbreviation", "CB-PPH-CATEGORY-ABBREVIATION", 1, 0, false);
+        declareFunction("cb_pph_phrase_guts", "CB-PPH-PHRASE-GUTS", 1, 0, false);
+        declareFunction("pph_bgcolor_for_phrase", "PPH-BGCOLOR-FOR-PHRASE", 1, 0, false);
+        declareFunction("pph_class_for_phrase", "PPH-CLASS-FOR-PHRASE", 1, 0, false);
+        declareFunction("pph_phrase_problem_count", "PPH-PHRASE-PROBLEM-COUNT", 1, 0, false);
+        declareMacro("html_show_pph_phrase_property", "HTML-SHOW-PPH-PHRASE-PROPERTY");
+        declareFunction("html_show_pph_phrase_details", "HTML-SHOW-PPH-PHRASE-DETAILS", 1, 0, false);
+        declareFunction("html_output_pph_problem", "HTML-OUTPUT-PPH-PROBLEM", 1, 0, false);
+        declareFunction("html_show_pph_cycl", "HTML-SHOW-PPH-CYCL", 1, 0, false);
+        declareFunction("html_show_pph_arg_position", "HTML-SHOW-PPH-ARG-POSITION", 1, 0, false);
+        declareFunction("html_show_pph_string", "HTML-SHOW-PPH-STRING", 1, 0, false);
+        declareFunction("html_show_pph_output_item_headers", "HTML-SHOW-PPH-OUTPUT-ITEM-HEADERS", 0, 0, false);
+        declareFunction("html_show_pph_output_item", "HTML-SHOW-PPH-OUTPUT-ITEM", 1, 0, false);
+        declareFunction("cb_pph_phrase_category_string", "CB-PPH-PHRASE-CATEGORY-STRING", 1, 0, false);
+        declareFunction("html_show_pph_agr", "HTML-SHOW-PPH-AGR", 1, 0, false);
+        declareFunction("cb_pph_phrase_string", "CB-PPH-PHRASE-STRING", 1, 2, false);
         return NIL;
     }
 

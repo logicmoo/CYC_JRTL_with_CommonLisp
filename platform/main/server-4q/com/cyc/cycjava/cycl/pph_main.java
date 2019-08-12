@@ -1,55 +1,23 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
-
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lexicon;
-import com.cyc.cycjava.cycl.pph_main;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
-import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-import java.util.function.Supplier;
 
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.control_vars.*;
 import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.cycl_utilities.*;
+import static com.cyc.cycjava.cycl.dictionary_utilities.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.pph_main.*;
+import static com.cyc.cycjava.cycl.pph_data_structures.*;
+import static com.cyc.cycjava.cycl.pph_phrase_resolution.*;
+import static com.cyc.cycjava.cycl.pph_question.*;
+import static com.cyc.cycjava.cycl.pph_sentence.*;
+import static com.cyc.cycjava.cycl.pph_types.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_newline;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_return;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NINE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIXTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
@@ -58,7 +26,6 @@ import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
@@ -69,166 +36,199 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_lexicon;
+import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
+import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
+import com.cyc.tool.subl.jrtl.translatedCode.sublisp.time_high;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class pph_main extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      PPH-MAIN
+ * source file: /cyc/top/cycl/pph-main.lisp
+ * created:     2019/07/03 17:38:20
+ */
+public final class pph_main extends SubLTranslatedFile implements V12 {
+    public static final SubLObject test_battery_for_output_lists_p(SubLObject test_battery_for_output_lists) {
+        return classes.subloop_instanceof_class(test_battery_for_output_lists, TEST_BATTERY_FOR_OUTPUT_LISTS);
+    }
+
+    public static final SubLObject test_battery_for_java_phrases_p(SubLObject test_battery_for_java_phrases) {
+        return classes.subloop_instanceof_class(test_battery_for_java_phrases, TEST_BATTERY_FOR_JAVA_PHRASES);
+    }
+
+    public static final SubLObject subloop_reserved_initialize_test_battery_for_output_lists_instance(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, RESULT, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, TEST_METHOD, NIL);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_test_battery_for_output_lists_class(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, MODULE, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, CATEGORIES, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, SUITES, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, TEST_METHODS, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, ENABLED, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, LOCK, NIL);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_test_battery_for_java_phrases_instance(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, ISOLATED_P, NIL);
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_NUMBER, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, RESULT, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, TEST_METHOD, NIL);
+        return NIL;
+    }
+
+    public static final SubLObject subloop_reserved_initialize_test_battery_for_java_phrases_class(SubLObject new_instance) {
+        classes.subloop_initialize_slot(new_instance, OBJECT, INSTANCE_COUNT, ZERO_INTEGER);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, MODULE, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, CATEGORIES, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, SUITES, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, TEST_METHODS, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, ENABLED, NIL);
+        classes.subloop_initialize_slot(new_instance, TEST_CASE, LOCK, NIL);
+        return NIL;
+    }
+
     public static final SubLFile me = new pph_main();
 
-    public static final String myName = "com.cyc.cycjava.cycl.pph_main";
+ public static final String myName = "com.cyc.cycjava.cycl.pph_main";
 
-    public static final String myFingerPrint = "a1507b530e31309a515598d18e257246c4b4ebad9dc56b5bfe356b5ab10ed4e7";
 
     // defconstant
+    // Definitions
+    /**
+     * How many SBHL spaces might we need at one time?
+     */
+    @LispMethod(comment = "How many SBHL spaces might we need at one time?\ndefconstant")
     private static final SubLSymbol $pph_sbhl_spaces_to_resource$ = makeSymbol("*PPH-SBHL-SPACES-TO-RESOURCE*");
 
 
 
-    // deflexical
-    private static final SubLSymbol $pph_initializedP$ = makeSymbol("*PPH-INITIALIZED?*");
-
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $pph_method_stack$ = makeSymbol("*PPH-METHOD-STACK*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $pph_phrase_method_times$ = makeSymbol("*PPH-PHRASE-METHOD-TIMES*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $currently_metered_pph_phrase_methods$ = makeSymbol("*CURRENTLY-METERED-PPH-PHRASE-METHODS*");
 
+    static private final SubLSymbol $sym3$VALID_EXTERNAL_PPH_NL_PREDS_ = makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?");
 
+    private static final SubLSymbol KEYWORD_OR_NIL_P = makeSymbol("KEYWORD-OR-NIL-P");
 
+    static private final SubLSymbol $sym5$HLMT_ = makeSymbol("HLMT?");
 
+    private static final SubLSymbol NON_NEGATIVE_INTEGER_OR_NIL_P = makeSymbol("NON-NEGATIVE-INTEGER-OR-NIL-P");
 
+    static private final SubLList $list10 = list(new SubLObject[]{ makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("DETERMINER"), NIL), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("MODE"), $TEXT), list(makeSymbol("TOP"), NIL), list(makeSymbol("FOCUS-ARG"), NIL) });
 
+    static private final SubLString $str11$_param_OBJECT__the_CycL_object_fo = makeString("@param OBJECT; the CycL object for which you want to generate English.\n@param NL-PREDS; a list of instances of #$SpeechPartPredicate.\n@param DETERMINER; a determiner keyword in *DETERMINER-KEYS*.\n@param LANGUAGE-MT; the microtheory from which to look for linguistic information.\n@param DOMAIN-MT; the microtheory from which to look for domain information.\n@return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT\n into English with the given parameters.\n@return 1; pos-pred or NIL\n@return 2; LISTP of justifications\n@return 3; PPH-OUTPUT-LIST-P.");
 
-    public static final SubLSymbol $sym3$VALID_EXTERNAL_PPH_NL_PREDS_ = makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?");
+    static private final SubLList $list12 = list(list(makeSymbol("OBJECT"), makeSymbol("CYCL-EXPRESSION-P")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("DETERMINER"), makeSymbol("KEYWORD-OR-NIL-P")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("HLMT?")), list(makeSymbol("MODE"), makeSymbol("KEYWORDP")), list(makeSymbol("TOP"), makeSymbol("BOOLEANP")), list(makeSymbol("FOCUS-ARG"), makeSymbol("NON-NEGATIVE-INTEGER-OR-NIL-P")));
 
-    public static final SubLSymbol KEYWORD_OR_NIL_P = makeSymbol("KEYWORD-OR-NIL-P");
-
-    public static final SubLSymbol $sym5$HLMT_ = makeSymbol("HLMT?");
-
-
-
-
-
-    public static final SubLSymbol NON_NEGATIVE_INTEGER_OR_NIL_P = makeSymbol("NON-NEGATIVE-INTEGER-OR-NIL-P");
-
-
-
-    public static final SubLList $list10 = list(new SubLObject[]{ makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("DETERMINER"), NIL), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("MODE"), makeKeyword("TEXT")), list(makeSymbol("TOP"), NIL), list(makeSymbol("FOCUS-ARG"), NIL) });
-
-    public static final SubLString $str11$_param_OBJECT__the_CycL_object_fo = makeString("@param OBJECT; the CycL object for which you want to generate English.\n@param NL-PREDS; a list of instances of #$SpeechPartPredicate.\n@param DETERMINER; a determiner keyword in *DETERMINER-KEYS*.\n@param LANGUAGE-MT; the microtheory from which to look for linguistic information.\n@param DOMAIN-MT; the microtheory from which to look for domain information.\n@return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT\n into English with the given parameters.\n@return 1; pos-pred or NIL\n@return 2; LISTP of justifications\n@return 3; PPH-OUTPUT-LIST-P.");
-
-    public static final SubLList $list12 = list(list(makeSymbol("OBJECT"), makeSymbol("CYCL-EXPRESSION-P")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("DETERMINER"), makeSymbol("KEYWORD-OR-NIL-P")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("HLMT?")), list(makeSymbol("MODE"), makeSymbol("KEYWORDP")), list(makeSymbol("TOP"), makeSymbol("BOOLEANP")), list(makeSymbol("FOCUS-ARG"), makeSymbol("NON-NEGATIVE-INTEGER-OR-NIL-P")));
-
-    public static final SubLList $list13 = list(makeSymbol("STRING-OR-NIL-P"), makeSymbol("PREDICATE?-OR-NIL-P"), makeSymbol("LISTP"), makeSymbol("PPH-OUTPUT-LIST-P"));
+    static private final SubLList $list13 = list(makeSymbol("STRING-OR-NIL-P"), makeSymbol("PREDICATE?-OR-NIL-P"), makeSymbol("LISTP"), makeSymbol("PPH-OUTPUT-LIST-P"));
 
     private static final SubLSymbol GENERATE_PHRASE_NO_CHECKS_MEMOIZED = makeSymbol("GENERATE-PHRASE-NO-CHECKS-MEMOIZED");
 
-
-
     private static final SubLSymbol $PPH_METHOD_FAILURE = makeKeyword("PPH-METHOD-FAILURE");
 
-    public static final SubLString $str17$_PPH_error_level_ = makeString("(PPH error level ");
+    static private final SubLString $str17$_PPH_error_level_ = makeString("(PPH error level ");
 
-    public static final SubLString $str18$__ = makeString(") ");
+    static private final SubLString $str18$__ = makeString(") ");
 
-    public static final SubLString $str19$Don_t_know_what_to_do_with_determ = makeString("Don't know what to do with determiner ~S passed to GENERATE-PHRASE.");
-
-
-
-
+    static private final SubLString $str19$Don_t_know_what_to_do_with_determ = makeString("Don't know what to do with determiner ~S passed to GENERATE-PHRASE.");
 
     private static final SubLString $str22$___Top_level_CycL___S = makeString("~% Top-level CycL: ~S");
-
-
-
-
 
     private static final SubLSymbol $sym25$PPH_PHRASE_NAUT_ = makeSymbol("PPH-PHRASE-NAUT?");
 
     private static final SubLSymbol $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_ = makeSymbol("VALID-PPH-LANGUAGE-MT-SPECIFIER?");
 
+    private static final SubLSymbol GENERATE_PHRASE_FOR_JAVA = makeSymbol("GENERATE-PHRASE-FOR-JAVA");
 
+    static private final SubLList $list29 = list(makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("MODE"), $HTML));
 
-    public static final SubLSymbol GENERATE_PHRASE_FOR_JAVA = makeSymbol("GENERATE-PHRASE-FOR-JAVA");
+    static private final SubLString $str30$Return_paraphrase_info_in_a_java_ = makeString("Return paraphrase info in a java-friendly format, one big list with no structures.\n@param OBJECT; the CycL object for which you want to generate English.\n@param NL-PREDS; VALID-EXTERNAL-PPH-NL-PREDS?.\n@param FORCE; PPH-FORCE-P.\n@param LANGUAGE-MT; the microtheory from which to look for linguistic information.\n@param DOMAIN-MT; the microtheory from which to look for domain information.\n@return 0 NIL or PPH-JAVALIST-P;\n@return 1 BOOLEANP; Use arg-positions strictly?\n@return 2 LISTP; of PPH supports.");
 
-    public static final SubLList $list29 = list(makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("MODE"), makeKeyword("HTML")));
+    static private final SubLList $list31 = list(list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("VALID-PPH-LANGUAGE-MT-SPECIFIER?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("POSSIBLY-MT-P")));
 
-    public static final SubLString $str30$Return_paraphrase_info_in_a_java_ = makeString("Return paraphrase info in a java-friendly format, one big list with no structures.\n@param OBJECT; the CycL object for which you want to generate English.\n@param NL-PREDS; VALID-EXTERNAL-PPH-NL-PREDS?.\n@param FORCE; PPH-FORCE-P.\n@param LANGUAGE-MT; the microtheory from which to look for linguistic information.\n@param DOMAIN-MT; the microtheory from which to look for domain information.\n@return 0 NIL or PPH-JAVALIST-P;\n@return 1 BOOLEANP; Use arg-positions strictly?\n@return 2 LISTP; of PPH supports.");
+    static private final SubLList $list32 = list(list(makeSymbol("NIL-OR"), makeSymbol("PPH-JAVALIST-P")), makeSymbol("BOOLEAN?"), makeSymbol("LISTP"));
 
-    public static final SubLList $list31 = list(list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("VALID-PPH-LANGUAGE-MT-SPECIFIER?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("POSSIBLY-MT-P")));
+    static private final SubLString $str34$Fallback_method__S_is_not_a_known = makeString("Fallback method ~S is not a known function.");
 
-    public static final SubLList $list32 = list(list(makeSymbol("NIL-OR"), makeSymbol("PPH-JAVALIST-P")), makeSymbol("BOOLEAN?"), makeSymbol("LISTP"));
+    static private final SubLString $str35$Couldn_t_generate_a_string_for__S = makeString("Couldn't generate a string for ~S (fallback method was ~S)");
 
+    private static final SubLSymbol GENERATE_PHRASE_NO_CHECKS = makeSymbol("GENERATE-PHRASE-NO-CHECKS");
 
+    static private final SubLString $str37$Duplicate_javalist_____S = makeString("Duplicate javalist:~% ~S");
 
-    public static final SubLString $str34$Fallback_method__S_is_not_a_known = makeString("Fallback method ~S is not a known function.");
+    private static final SubLSymbol GEN_TEMPLATE_QUERY_SENTENCE_ASSERTION_P = makeSymbol("GEN-TEMPLATE-QUERY-SENTENCE-ASSERTION-P");
 
-    public static final SubLString $str35$Couldn_t_generate_a_string_for__S = makeString("Couldn't generate a string for ~S (fallback method was ~S)");
+    private static final SubLObject $$genTemplate_QuerySentence = reader_make_constant_shell("genTemplate-QuerySentence");
 
-    public static final SubLSymbol GENERATE_PHRASE_NO_CHECKS = makeSymbol("GENERATE-PHRASE-NO-CHECKS");
+    private static final SubLSymbol LIST_OF_STRING_P = makeSymbol("LIST-OF-STRING-P");
 
-    public static final SubLString $str37$Duplicate_javalist_____S = makeString("Duplicate javalist:~% ~S");
+    static private final SubLList $list43 = list(makeKeyword("REQUIRED"), makeKeyword("PREFERRED"), makeKeyword("DISALLOWED"));
 
-    public static final SubLSymbol GEN_TEMPLATE_QUERY_SENTENCE_ASSERTION_P = makeSymbol("GEN-TEMPLATE-QUERY-SENTENCE-ASSERTION-P");
+    private static final SubLSymbol USE_CACHED_GENERATIONS_P = makeSymbol("USE-CACHED-GENERATIONS-P");
 
-    private static final SubLObject $$genTemplate_QuerySentence = reader_make_constant_shell(makeString("genTemplate-QuerySentence"));
+    static private final SubLList $list47 = list(makeKeyword("DEFAULT"), $NONE);
 
+    static private final SubLList $list48 = list(makeKeyword("PREFERRED"), makeKeyword("REQUIRED"));
 
+    static private final SubLList $list49 = list(makeKeyword("ANY"), makeKeyword("DEFAULT"), list(reader_make_constant_shell("nonPlural-Generic")));
 
-    public static final SubLSymbol LIST_OF_STRING_P = makeSymbol("LIST-OF-STRING-P");
+    private static final SubLSymbol PPH_JAVALIST_STRING = makeSymbol("PPH-JAVALIST-STRING");
 
+    private static final SubLSymbol GENERATE_DISAMBIGUATION_PHRASES_FOR_JAVA = makeSymbol("GENERATE-DISAMBIGUATION-PHRASES-FOR-JAVA");
 
+    static private final SubLList $list53 = list(makeSymbol("OBJECTS"), makeSymbol("&OPTIONAL"), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("FORBIDDEN-STRINGS"), NIL), list(makeSymbol("USE-CACHED-GENERATIONS"), makeKeyword("REQUIRED")));
 
-    public static final SubLList $list43 = list(makeKeyword("REQUIRED"), makeKeyword("PREFERRED"), makeKeyword("DISALLOWED"));
+    static private final SubLString $str54$_param_FORCE__pph_force_p__param_ = makeString("@param FORCE; pph-force-p\n@param FORBIDDEN-STRINGS; listp of strings to *not* use as a paraphrase for any member of OBJECTS.\n@param USE-CACHED-GENERATIONS; :required, :preferred, or :disallowed.  Required means that it will only\n  use cached generations.  :disallowed means that it will never use them (and will always generate fresh from\n  the KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at\n  which point fresh generations from the KB will be used.\n@return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.\nAn effort is made to have the paraphrase for each item be sufficiently distinct\nto distinguish it from the other items.\n@sideeffects: Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.");
 
+    static private final SubLList $list55 = list(list(makeSymbol("OBJECTS"), makeSymbol("LISTP")), list(makeSymbol("FORCE"), makeSymbol("KEYWORDP")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("HLMT?")), list(makeSymbol("FORBIDDEN-STRINGS"), makeSymbol("LIST-OF-STRING-P")), list(makeSymbol("USE-CACHED-GENERATIONS"), makeSymbol("USE-CACHED-GENERATIONS-P")));
 
+    static private final SubLList $list56 = list(makeSymbol("LISTP"));
 
+    static private final SubLString $str57$ALPHABETIZE_PPH_JAVALISTS_passed_ = makeString("ALPHABETIZE-PPH-JAVALISTS passed ~S javalists, ~S objects.");
 
+    private static final SubLSymbol PPH_FORCE_P = makeSymbol("PPH-FORCE-P");
 
-    public static final SubLSymbol USE_CACHED_GENERATIONS_P = makeSymbol("USE-CACHED-GENERATIONS-P");
+    static private final SubLSymbol $sym59$VALID_PPH_BLACKLIST_ = makeSymbol("VALID-PPH-BLACKLIST?");
 
-    public static final SubLList $list47 = list(makeKeyword("DEFAULT"), makeKeyword("NONE"));
-
-    public static final SubLList $list48 = list(makeKeyword("PREFERRED"), makeKeyword("REQUIRED"));
-
-    public static final SubLList $list49 = list(makeKeyword("ANY"), makeKeyword("DEFAULT"), list(reader_make_constant_shell(makeString("nonPlural-Generic"))));
-
-    public static final SubLSymbol PPH_JAVALIST_STRING = makeSymbol("PPH-JAVALIST-STRING");
-
-
-
-    public static final SubLSymbol GENERATE_DISAMBIGUATION_PHRASES_FOR_JAVA = makeSymbol("GENERATE-DISAMBIGUATION-PHRASES-FOR-JAVA");
-
-    public static final SubLList $list53 = list(makeSymbol("OBJECTS"), makeSymbol("&OPTIONAL"), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("FORBIDDEN-STRINGS"), NIL), list(makeSymbol("USE-CACHED-GENERATIONS"), makeKeyword("REQUIRED")));
-
-    public static final SubLString $str54$_param_FORCE__pph_force_p__param_ = makeString("@param FORCE; pph-force-p\n@param FORBIDDEN-STRINGS; listp of strings to *not* use as a paraphrase for any member of OBJECTS.\n@param USE-CACHED-GENERATIONS; :required, :preferred, or :disallowed.  Required means that it will only\n  use cached generations.  :disallowed means that it will never use them (and will always generate fresh from\n  the KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at\n  which point fresh generations from the KB will be used.\n@return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.\nAn effort is made to have the paraphrase for each item be sufficiently distinct\nto distinguish it from the other items.\n@sideeffects: Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.");
-
-    public static final SubLList $list55 = list(list(makeSymbol("OBJECTS"), makeSymbol("LISTP")), list(makeSymbol("FORCE"), makeSymbol("KEYWORDP")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("HLMT?")), list(makeSymbol("FORBIDDEN-STRINGS"), makeSymbol("LIST-OF-STRING-P")), list(makeSymbol("USE-CACHED-GENERATIONS"), makeSymbol("USE-CACHED-GENERATIONS-P")));
-
-    public static final SubLList $list56 = list(makeSymbol("LISTP"));
-
-    public static final SubLString $str57$ALPHABETIZE_PPH_JAVALISTS_passed_ = makeString("ALPHABETIZE-PPH-JAVALISTS passed ~S javalists, ~S objects.");
-
-    public static final SubLSymbol PPH_FORCE_P = makeSymbol("PPH-FORCE-P");
-
-    public static final SubLSymbol $sym59$VALID_PPH_BLACKLIST_ = makeSymbol("VALID-PPH-BLACKLIST?");
-
-    public static final SubLString $str60$__Trying_default_precision___S___ = makeString("~&Trying default precision: ~S.~%");
-
-
+    static private final SubLString $str60$__Trying_default_precision___S___ = makeString("~&Trying default precision: ~S.~%");
 
     private static final SubLString $str62$__Working_on_dupe_list___S__ = makeString("~&Working on dupe list: ~S~%");
 
     private static final SubLString $str63$__Trying_to_reparaphrase__S___ = makeString("~&Trying to reparaphrase ~S.~%");
 
     private static final SubLString $str64$__Trying_targeted_precision__S_fo = makeString("~&Trying targeted precision ~S for ~S");
-
-
 
     private static final SubLString $str66$__New_paraphrase_with_precision__ = makeString("~&New paraphrase with precision ~S for ~S:~% ~S");
 
@@ -240,19 +240,9 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLString $str70$Timed_out_generating_disambiguati = makeString("Timed out generating disambiguation phrases for~% ~S~%");
 
-    private static final SubLList $list71 = list(reader_make_constant_shell(makeString("nonPlural-Generic")));
-
-
-
-
-
-
+    private static final SubLList $list71 = list(reader_make_constant_shell("nonPlural-Generic"));
 
     private static final SubLSymbol $sym75$_EXIT = makeSymbol("%EXIT");
-
-
-
-
 
     private static final SubLSymbol $TOP_LEVEL_ONLY = makeKeyword("TOP-LEVEL-ONLY");
 
@@ -262,29 +252,23 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLString $str81$CycL_on__S_doesn_t_match_CycL__S = makeString("CycL on ~S doesn't match CycL ~S");
 
-
-
     private static final SubLSymbol $sym83$KEYWORD_OR_HLMT_ = makeSymbol("KEYWORD-OR-HLMT?");
-
-
 
     private static final SubLSymbol $sym85$GENERATE_TEXT_W_SENTENTIAL_FORCE = makeSymbol("GENERATE-TEXT-W/SENTENTIAL-FORCE");
 
-    private static final SubLList $list86 = list(makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeKeyword("DEFAULT")), list(makeSymbol("DOMAIN-MT"), makeKeyword("DEFAULT")), list(makeSymbol("MODE"), makeKeyword("TEXT")), list(makeSymbol("FOCUS-ARG"), NIL));
+    private static final SubLList $list86 = list(makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeKeyword("DEFAULT")), list(makeSymbol("DOMAIN-MT"), makeKeyword("DEFAULT")), list(makeSymbol("MODE"), $TEXT), list(makeSymbol("FOCUS-ARG"), NIL));
 
     private static final SubLString $str87$generates_text_for_a_given_object = makeString("generates text for a given object.  This is intended to be the\n  main gateway into the generation code for formulas.\n  @param OBJECT CYCL-EXPRESSION-P; the object for which text should be generated.\n  @param FORCE pph-force-p; the sentential force of the text to be generated.\n@return 0 STRINGP or NIL; the string corresponding to object.\n@return 1 pred\n@return 2 justification\n@return 3 pph-output-list-p\n@return 4 non-negative-integer-p -- number of demerits associated with this paraphrase\n@return 5 pph-phrase-p or NIL -- root phrase for the paraphrase");
 
     private static final SubLList $list88 = list(list(makeSymbol("OBJECT"), makeSymbol("CYCL-EXPRESSION-P")), list(makeSymbol("FORCE"), makeSymbol("PPH-FORCE-P")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("VALID-PPH-LANGUAGE-MT-SPECIFIER?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("KEYWORD-OR-HLMT?")), list(makeSymbol("MODE"), makeSymbol("KEYWORDP")), list(makeSymbol("FOCUS-ARG"), list(makeSymbol("NIL-OR"), makeSymbol("NON-NEGATIVE-INTEGER-P"))));
 
-    public static final SubLList $list89 = list(makeSymbol("STRING-OR-NIL-P"), makeSymbol("PREDICATE-OR-NIL-P"), makeSymbol("LISTP"), makeSymbol("PPH-OUTPUT-LIST-P"));
+    static private final SubLList $list89 = list(makeSymbol("STRING-OR-NIL-P"), makeSymbol("PREDICATE-OR-NIL-P"), makeSymbol("LISTP"), makeSymbol("PPH-OUTPUT-LIST-P"));
 
     private static final SubLSymbol $generate_text_bad_results$ = makeSymbol("*GENERATE-TEXT-BAD-RESULTS*");
 
     private static final SubLSymbol $sym91$_ = makeSymbol(">");
 
     private static final SubLString $str92$_tmp_ = makeString("/tmp/");
-
-
 
     private static final SubLString $str94$Unable_to_open__S = makeString("Unable to open ~S");
 
@@ -306,13 +290,9 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLString $str103$__Suspending_discourse_referent_t = makeString("~&Suspending discourse referent tracking for ~S~%");
 
-
-
     private static final SubLString $str105$__Making_new_phrase_with_cycl__S_ = makeString("~&Making new phrase with cycl ~S~%");
 
-    private static final SubLSymbol $sym106$_PPH_INITIALIZED__ = makeSymbol("*PPH-INITIALIZED?*");
-
-
+    private static final SubLSymbol $pph_initializedP$ = makeSymbol("*PPH-INITIALIZED?*");
 
     private static final SubLString $str108$No_KB_loaded__Couldn_t_initialize = makeString("No KB loaded. Couldn't initialize paraphrase code.");
 
@@ -322,19 +302,15 @@ public final class pph_main extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$EnglishParaphraseMt = reader_make_constant_shell(makeString("EnglishParaphraseMt"));
-
     private static final SubLString $str113$__Entering_PPH_POSSIBLY_BINDING_V = makeString("~&Entering PPH-POSSIBLY-BINDING-VARIABLES(~S), *pph-var-types* are~% ~S~%");
 
     private static final SubLString $str114$__Using_mapped_string__S_for__S__ = makeString("~&Using mapped string ~S for ~S.~%");
 
-    private static final SubLObject $$PossessivePhrase = reader_make_constant_shell(makeString("PossessivePhrase"));
+
 
     private static final SubLString $str116$Recursion_limit_exceeded_on__S_ = makeString("Recursion limit exceeded on ~S.");
 
     private static final SubLString $str117$__Paraphrasing__S_with_agr___S___ = makeString("~&Paraphrasing ~S with agr: ~S...~%");
-
-
 
     private static final SubLString $str119$Abandoning_unexpressed_negations_ = makeString("Abandoning unexpressed negations: ~S");
 
@@ -346,15 +322,11 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLString $str123$Repeating_sequence_in_paraphrase_ = makeString("Repeating sequence in paraphrase args: ~s");
 
-
-
     private static final SubLString $str125$Inside_operator_scope__S = makeString("Inside operator scope ~S");
 
     private static final SubLString $str126$Leaving_operator_scope__S = makeString("Leaving operator scope ~S");
 
     private static final SubLString $str127$Skipping__S___ = makeString("Skipping ~S.~%");
-
-
 
     private static final SubLSymbol $DONT_NEED_BACKUP_PHRASE = makeKeyword("DONT-NEED-BACKUP-PHRASE");
 
@@ -362,31 +334,17 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLSymbol $NO_ZERO_DEMERIT_METHODS = makeKeyword("NO-ZERO-DEMERIT-METHODS");
 
-
-
-
-
     private static final SubLList $list134 = list(makeSymbol("METHOD-SYMBOL"), makeSymbol("METHOD-DEMERITS"));
 
     private static final SubLString $str135$_S_is_not_an_FBOUNDP_symbol_ = makeString("~S is not an FBOUNDP symbol.");
 
     private static final SubLString $str136$___S_demerits_exceeds_cutoff_of__ = makeString("~&~S demerits exceeds cutoff of ~S~% ~S from ~S,~% ~S from dtrs.~%");
 
-
-
-
-
-
-
-
-
     private static final SubLString $str141$__Trying__S___Remaining___S = makeString("~&Trying ~S~% Remaining: ~S");
 
     private static final SubLSymbol $TOO_MUCH_TIME = makeKeyword("TOO-MUCH-TIME");
 
     private static final SubLString $str143$Exceeded_timeout_on____S = makeString("Exceeded timeout on~% ~S");
-
-
 
     private static final SubLString $str145$Aborting_PPH_call___ = makeString("Aborting PPH call...");
 
@@ -438,11 +396,11 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLString $str169$_s = makeString("'s");
 
-    private static final SubLObject $$pronounStrings = reader_make_constant_shell(makeString("pronounStrings"));
 
-    private static final SubLObject $$PossessivePronoun_Post = reader_make_constant_shell(makeString("PossessivePronoun-Post"));
 
-    private static final SubLObject $$OrdinalPhrase = reader_make_constant_shell(makeString("OrdinalPhrase"));
+    private static final SubLObject $$PossessivePronoun_Post = reader_make_constant_shell("PossessivePronoun-Post");
+
+
 
     private static final SubLString $$$th = makeString("th");
 
@@ -454,9 +412,7 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLString $$$Output_List_Test_Battery = makeString("Output List Test Battery");
 
-
-
-    private static final SubLList $list179 = list(list(makeSymbol("*PPH-TMP-OUTPUT-LIST*"), list(makeSymbol("GENERATE-PPH-OUTPUT-LIST"), list(makeSymbol("PPH-NART-SUBSTITUTE"), makeSymbol("*PPH-TMP-TEST-OBJECT*")), makeKeyword("ANY"), list(makeSymbol("PPH-REGRESSION-ITEM-LANGUAGE-MT"), makeSymbol("*PPH-TMP-REGRESSION-ITEM*")), list(makeSymbol("PPH-REGRESSION-ITEM-DOMAIN-MT"), makeSymbol("*PPH-TMP-REGRESSION-ITEM*")), makeKeyword("TEXT"), makeSymbol("*PPH-TMP-FORCE*"))));
+    private static final SubLList $list179 = list(list(makeSymbol("*PPH-TMP-OUTPUT-LIST*"), list(makeSymbol("GENERATE-PPH-OUTPUT-LIST"), list(makeSymbol("PPH-NART-SUBSTITUTE"), makeSymbol("*PPH-TMP-TEST-OBJECT*")), makeKeyword("ANY"), list(makeSymbol("PPH-REGRESSION-ITEM-LANGUAGE-MT"), makeSymbol("*PPH-TMP-REGRESSION-ITEM*")), list(makeSymbol("PPH-REGRESSION-ITEM-DOMAIN-MT"), makeSymbol("*PPH-TMP-REGRESSION-ITEM*")), $TEXT, makeSymbol("*PPH-TMP-FORCE*"))));
 
     private static final SubLList $list180 = list(list(makeSymbol("SET"), makeSymbol("&KEY"), makeSymbol("FORCES"), makeSymbol("DO-IMPERATIVE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
@@ -464,13 +420,9 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-
-
-
-
     private static final SubLSymbol DO_PPH_REGRESSION_STORE = makeSymbol("DO-PPH-REGRESSION-STORE");
 
-    public static final SubLList $list186 = list(makeKeyword("TEST-FUNC"), list(makeSymbol("FUNCTION"), makeSymbol("PPH-MAIN-REGRESSION-PRESCREENING")));
+    static private final SubLList $list186 = list(makeKeyword("TEST-FUNC"), list(makeSymbol("FUNCTION"), makeSymbol("PPH-MAIN-REGRESSION-PRESCREENING")));
 
     private static final SubLSymbol DO_PPH_FORCES_LIST = makeSymbol("DO-PPH-FORCES-LIST");
 
@@ -480,26 +432,98 @@ public final class pph_main extends SubLTranslatedFile {
 
     private static final SubLList $list190 = list(makeSymbol("PWHEN"), list(makeSymbol("EL-FORMULA-P"), makeSymbol("*PPH-TMP-TEST-OBJECT*")), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("TEST-NO-CONSECUTIVE-DUPLICATES"))), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("VERIFY-ARG-POSITIONS-FAITHFUL"))), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("VERIFY-ARG-POSITIONS-CORRECT"))), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("TEST-REALLY-SANE"))));
 
-
-
-
-
-
-
     private static final SubLList $list194 = list(makeSymbol("PPH-TEST-CASE-TABLES"));
 
-
-
-
-
-
-
-    private static final SubLList $list198 = list(list(list(list(reader_make_constant_shell(makeString("elementTypesInFormula-List")), reader_make_constant_shell(makeString("Salt-NaCl")), list(reader_make_constant_shell(makeString("TheList")), reader_make_constant_shell(makeString("Sodium")), reader_make_constant_shell(makeString("Chlorine")))), makeKeyword("DECLARATIVE")), makeString("Sodium and chlorine are the complete list of elements in the chemical formula of sodium chloride.")), list(list(list(reader_make_constant_shell(makeString("elementTypesInFormula-List")), reader_make_constant_shell(makeString("Salt-NaCl")), list(reader_make_constant_shell(makeString("TheList")), reader_make_constant_shell(makeString("Sodium")), reader_make_constant_shell(makeString("Chlorine")))), makeKeyword("INTERROGATIVE")), makeString("Are sodium and chlorine the complete list of elements in the chemical formula of sodium chloride?")));
+    private static final SubLList $list198 = list(list(list(list(reader_make_constant_shell("elementTypesInFormula-List"), reader_make_constant_shell("Salt-NaCl"), list(reader_make_constant_shell("TheList"), reader_make_constant_shell("Sodium"), reader_make_constant_shell("Chlorine"))), makeKeyword("DECLARATIVE")), makeString("Sodium and chlorine are the complete list of elements in the chemical formula of sodium chloride.")), list(list(list(reader_make_constant_shell("elementTypesInFormula-List"), reader_make_constant_shell("Salt-NaCl"), list(reader_make_constant_shell("TheList"), reader_make_constant_shell("Sodium"), reader_make_constant_shell("Chlorine"))), makeKeyword("INTERROGATIVE")), makeString("Are sodium and chlorine the complete list of elements in the chemical formula of sodium chloride?")));
 
     private static final SubLSymbol GENERATE_DISAMBIGUATION_PHRASES_INT = makeSymbol("GENERATE-DISAMBIGUATION-PHRASES-INT");
 
-    private static final SubLList $list200 = list(list(list(list(reader_make_constant_shell(makeString("Plotting"))), makeKeyword("DEFAULT"), list(reader_make_constant_shell(makeString("gerund-Plural")), reader_make_constant_shell(makeString("wordStrings")), reader_make_constant_shell(makeString("properNameStrings"))), list(reader_make_constant_shell(makeString("MtSpace")), list(reader_make_constant_shell(makeString("MtUnionFn")), reader_make_constant_shell(makeString("CyclishParaphraseMt")), reader_make_constant_shell(makeString("MedicalLexicalMt")), reader_make_constant_shell(makeString("TechnicalEnglishLexicalMt"))), list(reader_make_constant_shell(makeString("MtTimeDimFn")), reader_make_constant_shell(makeString("Now")))), list(reader_make_constant_shell(makeString("MtSpace")), reader_make_constant_shell(makeString("CyclishParaphraseMt")), list(reader_make_constant_shell(makeString("MtTimeDimFn")), reader_make_constant_shell(makeString("Now")))), makeKeyword("TEXT"), makeKeyword("JAVALISTS"), NIL), list(list(makeString("plottings"), list(list(makeString("plottings"), reader_make_constant_shell(makeString("Plotting")), NIL, NIL, NIL, ZERO_INTEGER))))));
+    private static final SubLList $list200 = list(list(list(list(reader_make_constant_shell("Plotting")), makeKeyword("DEFAULT"), list(reader_make_constant_shell("gerund-Plural"), reader_make_constant_shell("wordStrings"), reader_make_constant_shell("properNameStrings")), list(reader_make_constant_shell("MtSpace"), list(reader_make_constant_shell("MtUnionFn"), reader_make_constant_shell("CyclishParaphraseMt"), reader_make_constant_shell("MedicalLexicalMt"), reader_make_constant_shell("TechnicalEnglishLexicalMt")), list(reader_make_constant_shell("MtTimeDimFn"), reader_make_constant_shell("Now"))), list(reader_make_constant_shell("MtSpace"), reader_make_constant_shell("CyclishParaphraseMt"), list(reader_make_constant_shell("MtTimeDimFn"), reader_make_constant_shell("Now"))), $TEXT, makeKeyword("JAVALISTS"), NIL), list(list(makeString("plottings"), list(list(makeString("plottings"), reader_make_constant_shell("Plotting"), NIL, NIL, NIL, ZERO_INTEGER))))));
 
+    /**
+     *
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @param NL-PREDS;
+     * 		a list of instances of #$SpeechPartPredicate.
+     * @param DETERMINER;
+     * 		a determiner keyword in *DETERMINER-KEYS*.
+     * @param LANGUAGE-MT;
+     * 		the microtheory from which to look for linguistic information.
+     * @param DOMAIN-MT;
+     * 		the microtheory from which to look for domain information.
+     * @return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT
+    into English with the given parameters.
+     * @return 1; pos-pred or NIL
+     * @return 2; LISTP of justifications
+     * @return 3; PPH-OUTPUT-LIST-P.
+     */
+    @LispMethod(comment = "@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@param NL-PREDS;\r\n\t\ta list of instances of #$SpeechPartPredicate.\r\n@param DETERMINER;\r\n\t\ta determiner keyword in *DETERMINER-KEYS*.\r\n@param LANGUAGE-MT;\r\n\t\tthe microtheory from which to look for linguistic information.\r\n@param DOMAIN-MT;\r\n\t\tthe microtheory from which to look for domain information.\r\n@return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT\r\ninto English with the given parameters.\r\n@return 1; pos-pred or NIL\r\n@return 2; LISTP of justifications\r\n@return 3; PPH-OUTPUT-LIST-P.")
+    public static final SubLObject generate_phrase_alt(SubLObject v_object, SubLObject nl_preds, SubLObject determiner, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject top, SubLObject focus_arg) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (determiner == UNPROVIDED) {
+            determiner = NIL;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (top == UNPROVIDED) {
+            top = NIL;
+        }
+        if (focus_arg == UNPROVIDED) {
+            focus_arg = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(v_object, CYCL_EXPRESSION_P);
+            SubLTrampolineFile.checkType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+            SubLTrampolineFile.checkType(determiner, KEYWORD_OR_NIL_P);
+            SubLTrampolineFile.checkType(language_mt, $sym5$HLMT_);
+            SubLTrampolineFile.checkType(domain_mt, $sym5$HLMT_);
+            SubLTrampolineFile.checkType(mode, KEYWORDP);
+            SubLTrampolineFile.checkType(top, BOOLEANP);
+            SubLTrampolineFile.checkType(focus_arg, NON_NEGATIVE_INTEGER_OR_NIL_P);
+            thread.resetMultipleValues();
+            {
+                SubLObject ret_string = com.cyc.cycjava.cycl.pph_main.generate_phrase_no_checks(v_object, nl_preds, determiner, language_mt, domain_mt, mode, top, focus_arg);
+                SubLObject pred = thread.secondMultipleValue();
+                SubLObject justifications = thread.thirdMultipleValue();
+                SubLObject output_list = thread.fourthMultipleValue();
+                thread.resetMultipleValues();
+                return values(ret_string, pred, justifications, output_list);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @param NL-PREDS;
+     * 		a list of instances of #$SpeechPartPredicate.
+     * @param DETERMINER;
+     * 		a determiner keyword in *DETERMINER-KEYS*.
+     * @param LANGUAGE-MT;
+     * 		the microtheory from which to look for linguistic information.
+     * @param DOMAIN-MT;
+     * 		the microtheory from which to look for domain information.
+     * @return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT
+    into English with the given parameters.
+     * @return 1; pos-pred or NIL
+     * @return 2; LISTP of justifications
+     * @return 3; PPH-OUTPUT-LIST-P.
+     */
+    @LispMethod(comment = "@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@param NL-PREDS;\r\n\t\ta list of instances of #$SpeechPartPredicate.\r\n@param DETERMINER;\r\n\t\ta determiner keyword in *DETERMINER-KEYS*.\r\n@param LANGUAGE-MT;\r\n\t\tthe microtheory from which to look for linguistic information.\r\n@param DOMAIN-MT;\r\n\t\tthe microtheory from which to look for domain information.\r\n@return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT\r\ninto English with the given parameters.\r\n@return 1; pos-pred or NIL\r\n@return 2; LISTP of justifications\r\n@return 3; PPH-OUTPUT-LIST-P.")
     public static SubLObject generate_phrase(final SubLObject v_object, SubLObject nl_preds, SubLObject determiner, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject top, SubLObject focus_arg) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -535,6 +559,557 @@ public final class pph_main extends SubLTranslatedFile {
         return generate_phrase_no_checks(v_object, nl_preds, determiner, language_mt, domain_mt, mode, top, focus_arg);
     }
 
+    /**
+     * Skips check-types on GENERATE-PHRASE, but assumes they all pass.
+     */
+    @LispMethod(comment = "Skips check-types on GENERATE-PHRASE, but assumes they all pass.")
+    public static final SubLObject generate_phrase_no_checks_alt(SubLObject v_object, SubLObject nl_preds, SubLObject determiner, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject top, SubLObject focus_arg) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (determiner == UNPROVIDED) {
+            determiner = NIL;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = pph_vars.$paraphrase_mode$.getDynamicValue();
+        }
+        if (top == UNPROVIDED) {
+            top = NIL;
+        }
+        if (focus_arg == UNPROVIDED) {
+            focus_arg = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject error_message = NIL;
+                SubLObject original = copy_expression(v_object);
+                SubLObject ret_string = NIL;
+                SubLObject pred = NIL;
+                SubLObject justifications = NIL;
+                SubLObject output_list = NIL;
+                SubLObject demerits = NIL;
+                {
+                    SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+                    try {
+                        Errors.$continue_cerrorP$.bind(NIL, thread);
+                        pph_error.$pph_error_handling_onP$.bind(T, thread);
+                        if (NIL != pph_error.pph_break_on_errorP()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject _prev_bind_0_1 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                try {
+                                    pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                    {
+                                        SubLObject reuseP = thread.secondMultipleValue();
+                                        thread.resetMultipleValues();
+                                        try {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_2 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                    {
+                                                        SubLObject new_or_reused = thread.secondMultipleValue();
+                                                        thread.resetMultipleValues();
+                                                        {
+                                                            SubLObject _prev_bind_0_3 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                {
+                                                                    SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                    {
+                                                                        SubLObject _prev_bind_0_4 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                        try {
+                                                                            memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                            {
+                                                                                SubLObject original_memoization_process = NIL;
+                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                    {
+                                                                                        SubLObject current_proc = current_process();
+                                                                                        if (NIL == original_memoization_process) {
+                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                        } else {
+                                                                                            if (original_memoization_process != current_proc) {
+                                                                                                Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                try {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_5 = pph_vars.$pph_cycls$.currentBinding(thread);
+                                                                                        try {
+                                                                                            pph_vars.$pph_cycls$.bind(cons(pph_utilities.pph_hl_to_el(v_object), pph_vars.$pph_cycls$.getDynamicValue(thread)), thread);
+                                                                                            if ($DEFAULT == nl_preds) {
+                                                                                                nl_preds = pph_utilities.pph_default_nl_preds(v_object, $NONE, language_mt, domain_mt);
+                                                                                            }
+                                                                                            {
+                                                                                                SubLObject top_levelP = pph_macros.handling_pph_method_failures_top_level_p();
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_6 = pph_macros.$suspended_paraphrase_methods$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_1_7 = pph_macros.$handling_pph_method_failuresP$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        pph_macros.$suspended_paraphrase_methods$.bind(NIL != top_levelP ? ((SubLObject) (set.new_set(symbol_function(EQUAL), pph_macros.max_suspended_method_depth()))) : pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread), thread);
+                                                                                                        pph_macros.$handling_pph_method_failuresP$.bind(T, thread);
+                                                                                                        {
+                                                                                                            SubLObject failed_method = NIL;
+                                                                                                            SubLObject tried_oneP = NIL;
+                                                                                                            while ((NIL != failed_method) || (NIL == tried_oneP)) {
+                                                                                                                if (NIL != failed_method) {
+                                                                                                                    pph_macros.note_suspended_paraphrase_method_plist(failed_method);
+                                                                                                                    failed_method = NIL;
+                                                                                                                }
+                                                                                                                try {
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_8 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                                                                                        SubLObject _prev_bind_1_9 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                                                                                                                        SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                                                                            pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                                                                                                                            pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                                                                                                                            try {
+                                                                                                                                {
+                                                                                                                                    SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_10 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
+                                                                                                                                        SubLObject _prev_bind_1_11 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
+                                                                                                                                        SubLObject _prev_bind_2_12 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, $pph_sbhl_spaces_to_resource$.getGlobalValue()), thread);
+                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
+                                                                                                                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
+                                                                                                                                            if (NIL != determiner) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt19$Don_t_know_what_to_do_with_determ) });
+                                                                                                                                                    pph_error.pph_handle_error(new_format_string, list(determiner));
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                            v_object = pph_utilities.do_tou_substitution(v_object);
+                                                                                                                                            v_object = pph_utilities.pph_nart_substitute(v_object);
+                                                                                                                                            {
+                                                                                                                                                SubLObject _prev_bind_0_13 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                                                                                                SubLObject _prev_bind_1_14 = pph_vars.$pph_domain_mt$.currentBinding(thread);
+                                                                                                                                                try {
+                                                                                                                                                    pph_vars.$pph_language_mt$.bind(language_mt, thread);
+                                                                                                                                                    pph_vars.$pph_domain_mt$.bind(domain_mt, thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject phrase = pph_phrase.new_pph_phrase_for_cycl(v_object, pph_utilities.pph_new_identity_map(), T);
+                                                                                                                                                        if (NIL != pph_phrase.pph_phrase_p(phrase, UNPROVIDED)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_15 = pph_vars.$paraphrase_mode$.currentBinding(thread);
+                                                                                                                                                                SubLObject _prev_bind_1_16 = pph_vars.$pph_track_discourse_referentsP$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    pph_vars.$paraphrase_mode$.bind(mode, thread);
+                                                                                                                                                                    pph_vars.$pph_track_discourse_referentsP$.bind(makeBoolean((NIL != pph_vars.$pph_track_discourse_referentsP$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.pph_main.pph_discourse_referent_tracking_pointlessP(v_object))), thread);
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject agr_preds = pph_utilities.pph_filter_preds(nl_preds, pph_phrase.pph_phrase_agr_preds(phrase, UNPROVIDED), UNPROVIDED);
+                                                                                                                                                                        pph_phrase.pph_phrase_set_agr_preds(phrase, agr_preds, UNPROVIDED);
+                                                                                                                                                                        pph_phrase.pph_phrase_set_focus_arg(phrase, focus_arg);
+                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject ret_string_17 = com.cyc.cycjava.cycl.pph_main.generate_phrase_int(phrase, top);
+                                                                                                                                                                            SubLObject pred_18 = thread.secondMultipleValue();
+                                                                                                                                                                            SubLObject justifications_19 = thread.thirdMultipleValue();
+                                                                                                                                                                            SubLObject output_list_20 = thread.fourthMultipleValue();
+                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                            ret_string = ret_string_17;
+                                                                                                                                                                            pred = pred_18;
+                                                                                                                                                                            justifications = justifications_19;
+                                                                                                                                                                            output_list = output_list_20;
+                                                                                                                                                                        }
+                                                                                                                                                                        demerits = pph_phrase.pph_phrase_top_level_demerits(phrase);
+                                                                                                                                                                    }
+                                                                                                                                                                } finally {
+                                                                                                                                                                    pph_vars.$pph_track_discourse_referentsP$.rebind(_prev_bind_1_16, thread);
+                                                                                                                                                                    pph_vars.$paraphrase_mode$.rebind(_prev_bind_0_15, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    pph_vars.$pph_domain_mt$.rebind(_prev_bind_1_14, thread);
+                                                                                                                                                    pph_vars.$pph_language_mt$.rebind(_prev_bind_0_13, thread);
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2_12, thread);
+                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1_11, thread);
+                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_10, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_21 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                        pph_macros.destroy_new_pph_phrases();
+                                                                                                                                    } finally {
+                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_21, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                                                                                                                            pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1_9, thread);
+                                                                                                                            pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_8, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } catch (Throwable ccatch_env_var) {
+                                                                                                                    failed_method = Errors.handleThrowable(ccatch_env_var, $PPH_METHOD_FAILURE);
+                                                                                                                }
+                                                                                                                tried_oneP = T;
+                                                                                                            } 
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        pph_macros.$handling_pph_method_failuresP$.rebind(_prev_bind_1_7, thread);
+                                                                                                        pph_macros.$suspended_paraphrase_methods$.rebind(_prev_bind_0_6, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            pph_vars.$pph_cycls$.rebind(_prev_bind_0_5, thread);
+                                                                                        }
+                                                                                    }
+                                                                                } finally {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_22 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                            }
+                                                                                        } finally {
+                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_22, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_4, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_3, thread);
+                                                            }
+                                                        }
+                                                        if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                            memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_2, thread);
+                                                }
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0_23 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                try {
+                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                    if (NIL == reuseP) {
+                                                        pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                    }
+                                                } finally {
+                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_23, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_1, thread);
+                                }
+                            }
+                        } else {
+                            try {
+                                {
+                                    SubLObject _prev_bind_0_24 = Errors.$error_handler$.currentBinding(thread);
+                                    try {
+                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                        try {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_25 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                    {
+                                                        SubLObject reuseP = thread.secondMultipleValue();
+                                                        thread.resetMultipleValues();
+                                                        try {
+                                                            thread.resetMultipleValues();
+                                                            {
+                                                                SubLObject _prev_bind_0_26 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                try {
+                                                                    pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                    {
+                                                                        SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                        thread.resetMultipleValues();
+                                                                        {
+                                                                            SubLObject _prev_bind_0_27 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                            try {
+                                                                                pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                {
+                                                                                    SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_28 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                        try {
+                                                                                            memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                            {
+                                                                                                SubLObject original_memoization_process = NIL;
+                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                    {
+                                                                                                        SubLObject current_proc = current_process();
+                                                                                                        if (NIL == original_memoization_process) {
+                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                        } else {
+                                                                                                            if (original_memoization_process != current_proc) {
+                                                                                                                Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                try {
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_29 = pph_vars.$pph_cycls$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            pph_vars.$pph_cycls$.bind(cons(pph_utilities.pph_hl_to_el(v_object), pph_vars.$pph_cycls$.getDynamicValue(thread)), thread);
+                                                                                                            if ($DEFAULT == nl_preds) {
+                                                                                                                nl_preds = pph_utilities.pph_default_nl_preds(v_object, $NONE, language_mt, domain_mt);
+                                                                                                            }
+                                                                                                            {
+                                                                                                                SubLObject top_levelP = pph_macros.handling_pph_method_failures_top_level_p();
+                                                                                                                {
+                                                                                                                    SubLObject _prev_bind_0_30 = pph_macros.$suspended_paraphrase_methods$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_1_31 = pph_macros.$handling_pph_method_failuresP$.currentBinding(thread);
+                                                                                                                    try {
+                                                                                                                        pph_macros.$suspended_paraphrase_methods$.bind(NIL != top_levelP ? ((SubLObject) (set.new_set(symbol_function(EQUAL), pph_macros.max_suspended_method_depth()))) : pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread), thread);
+                                                                                                                        pph_macros.$handling_pph_method_failuresP$.bind(T, thread);
+                                                                                                                        {
+                                                                                                                            SubLObject failed_method = NIL;
+                                                                                                                            SubLObject tried_oneP = NIL;
+                                                                                                                            while ((NIL != failed_method) || (NIL == tried_oneP)) {
+                                                                                                                                if (NIL != failed_method) {
+                                                                                                                                    pph_macros.note_suspended_paraphrase_method_plist(failed_method);
+                                                                                                                                    failed_method = NIL;
+                                                                                                                                }
+                                                                                                                                try {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_32 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                                                                                                        SubLObject _prev_bind_1_33 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                                                                                                                                        SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                                                                                            pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                                                                                                                                            pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                                                                                                                                            try {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject _prev_bind_0_34 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
+                                                                                                                                                        SubLObject _prev_bind_1_35 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
+                                                                                                                                                        SubLObject _prev_bind_2_36 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
+                                                                                                                                                        try {
+                                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, $pph_sbhl_spaces_to_resource$.getGlobalValue()), thread);
+                                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
+                                                                                                                                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
+                                                                                                                                                            if (NIL != determiner) {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt19$Don_t_know_what_to_do_with_determ) });
+                                                                                                                                                                    pph_error.pph_handle_error(new_format_string, list(determiner));
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                            v_object = pph_utilities.do_tou_substitution(v_object);
+                                                                                                                                                            v_object = pph_utilities.pph_nart_substitute(v_object);
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_37 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                                                                                                                SubLObject _prev_bind_1_38 = pph_vars.$pph_domain_mt$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    pph_vars.$pph_language_mt$.bind(language_mt, thread);
+                                                                                                                                                                    pph_vars.$pph_domain_mt$.bind(domain_mt, thread);
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject phrase = pph_phrase.new_pph_phrase_for_cycl(v_object, pph_utilities.pph_new_identity_map(), T);
+                                                                                                                                                                        if (NIL != pph_phrase.pph_phrase_p(phrase, UNPROVIDED)) {
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject _prev_bind_0_39 = pph_vars.$paraphrase_mode$.currentBinding(thread);
+                                                                                                                                                                                SubLObject _prev_bind_1_40 = pph_vars.$pph_track_discourse_referentsP$.currentBinding(thread);
+                                                                                                                                                                                try {
+                                                                                                                                                                                    pph_vars.$paraphrase_mode$.bind(mode, thread);
+                                                                                                                                                                                    pph_vars.$pph_track_discourse_referentsP$.bind(makeBoolean((NIL != pph_vars.$pph_track_discourse_referentsP$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.pph_main.pph_discourse_referent_tracking_pointlessP(v_object))), thread);
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject agr_preds = pph_utilities.pph_filter_preds(nl_preds, pph_phrase.pph_phrase_agr_preds(phrase, UNPROVIDED), UNPROVIDED);
+                                                                                                                                                                                        pph_phrase.pph_phrase_set_agr_preds(phrase, agr_preds, UNPROVIDED);
+                                                                                                                                                                                        pph_phrase.pph_phrase_set_focus_arg(phrase, focus_arg);
+                                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject ret_string_41 = com.cyc.cycjava.cycl.pph_main.generate_phrase_int(phrase, top);
+                                                                                                                                                                                            SubLObject pred_42 = thread.secondMultipleValue();
+                                                                                                                                                                                            SubLObject justifications_43 = thread.thirdMultipleValue();
+                                                                                                                                                                                            SubLObject output_list_44 = thread.fourthMultipleValue();
+                                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                                            ret_string = ret_string_41;
+                                                                                                                                                                                            pred = pred_42;
+                                                                                                                                                                                            justifications = justifications_43;
+                                                                                                                                                                                            output_list = output_list_44;
+                                                                                                                                                                                        }
+                                                                                                                                                                                        demerits = pph_phrase.pph_phrase_top_level_demerits(phrase);
+                                                                                                                                                                                    }
+                                                                                                                                                                                } finally {
+                                                                                                                                                                                    pph_vars.$pph_track_discourse_referentsP$.rebind(_prev_bind_1_40, thread);
+                                                                                                                                                                                    pph_vars.$paraphrase_mode$.rebind(_prev_bind_0_39, thread);
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } finally {
+                                                                                                                                                                    pph_vars.$pph_domain_mt$.rebind(_prev_bind_1_38, thread);
+                                                                                                                                                                    pph_vars.$pph_language_mt$.rebind(_prev_bind_0_37, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        } finally {
+                                                                                                                                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2_36, thread);
+                                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1_35, thread);
+                                                                                                                                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_34, thread);
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            } finally {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_45 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                        pph_macros.destroy_new_pph_phrases();
+                                                                                                                                                    } finally {
+                                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_45, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                                                                                                                                            pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1_33, thread);
+                                                                                                                                            pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_32, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                } catch (Throwable ccatch_env_var) {
+                                                                                                                                    failed_method = Errors.handleThrowable(ccatch_env_var, $PPH_METHOD_FAILURE);
+                                                                                                                                }
+                                                                                                                                tried_oneP = T;
+                                                                                                                            } 
+                                                                                                                        }
+                                                                                                                    } finally {
+                                                                                                                        pph_macros.$handling_pph_method_failuresP$.rebind(_prev_bind_1_31, thread);
+                                                                                                                        pph_macros.$suspended_paraphrase_methods$.rebind(_prev_bind_0_30, thread);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            pph_vars.$pph_cycls$.rebind(_prev_bind_0_29, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                } finally {
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_46 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_46, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_28, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_27, thread);
+                                                                            }
+                                                                        }
+                                                                        if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                            memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                        }
+                                                                    }
+                                                                } finally {
+                                                                    pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_26, thread);
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_47 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL == reuseP) {
+                                                                        pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_47, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_25, thread);
+                                                }
+                                            }
+                                        } catch (Throwable catch_var) {
+                                            Errors.handleThrowable(catch_var, NIL);
+                                        }
+                                    } finally {
+                                        Errors.$error_handler$.rebind(_prev_bind_0_24, thread);
+                                    }
+                                }
+                            } catch (Throwable ccatch_env_var) {
+                                error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                            }
+                            if (error_message.isString()) {
+                                Errors.warn(error_message);
+                            }
+                        }
+                    } finally {
+                        pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1, thread);
+                        Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != error_message) {
+                    ret_string = string_utilities.str_by_type(v_object);
+                }
+                {
+                    SubLObject any_changeP = NIL;
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject output_list_48 = com.cyc.cycjava.cycl.pph_main.pph_sanitize_output_list(output_list, original);
+                        SubLObject any_changeP_49 = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        output_list = output_list_48;
+                        any_changeP = any_changeP_49;
+                    }
+                    if (NIL != any_changeP) {
+                        ret_string = pph_phrase.pph_phrase_output_list_string(output_list, eq(mode, $HTML));
+                    }
+                }
+                return values(ret_string, pred, justifications, output_list, demerits);
+            }
+        }
+    }
+
+    /**
+     * Skips check-types on GENERATE-PHRASE, but assumes they all pass.
+     */
+    @LispMethod(comment = "Skips check-types on GENERATE-PHRASE, but assumes they all pass.")
     public static SubLObject generate_phrase_no_checks(final SubLObject v_object, SubLObject nl_preds, SubLObject determiner, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject top, SubLObject focus_arg) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -1040,6 +1615,23 @@ public final class pph_main extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     *
+     *
+     * @return STRINGP; the best string we can generate for PHRASE-NAUT.
+     */
+    @LispMethod(comment = "@return STRINGP; the best string we can generate for PHRASE-NAUT.")
+    public static final SubLObject generate_string_from_phrase_naut(SubLObject phrase_naut, SubLObject language_mt, SubLObject domain_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        SubLTrampolineFile.checkType(phrase_naut, $sym23$PPH_PHRASE_NAUT_);
+        return com.cyc.cycjava.cycl.pph_main.generate_phrase(phrase_naut, $ANY, NIL, language_mt, domain_mt, $TEXT, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject generate_string_from_phrase_naut(final SubLObject phrase_naut, SubLObject language_mt, SubLObject domain_mt, SubLObject force) {
         if (language_mt == UNPROVIDED) {
             language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
@@ -1050,7 +1642,7 @@ public final class pph_main extends SubLTranslatedFile {
         if (force == UNPROVIDED) {
             force = $NONE;
         }
-        assert NIL != pph_types.pph_phrase_nautP(phrase_naut) : "pph_types.pph_phrase_nautP(phrase_naut) " + "CommonSymbols.NIL != pph_types.pph_phrase_nautP(phrase_naut) " + phrase_naut;
+        assert NIL != pph_types.pph_phrase_nautP(phrase_naut) : "! pph_types.pph_phrase_nautP(phrase_naut) " + ("pph_types.pph_phrase_nautP(phrase_naut) " + "CommonSymbols.NIL != pph_types.pph_phrase_nautP(phrase_naut) ") + phrase_naut;
         SubLObject to_paraphrase = phrase_naut;
         SubLObject nl_preds = $DEFAULT;
         if (NIL != el_formula_with_operator_p(to_paraphrase, pph_functions.termparaphrasefn())) {
@@ -1062,6 +1654,67 @@ public final class pph_main extends SubLTranslatedFile {
             }
 
         return generate_text_wXsentential_force(to_paraphrase, force, nl_preds, language_mt, domain_mt, $TEXT, UNPROVIDED);
+    }
+
+    /**
+     * Try to generate a string for PHRASE-NAUT, but return NIL if no decent string
+     * can be generated.
+     */
+    @LispMethod(comment = "Try to generate a string for PHRASE-NAUT, but return NIL if no decent string\r\ncan be generated.\nTry to generate a string for PHRASE-NAUT, but return NIL if no decent string\ncan be generated.")
+    public static final SubLObject generate_good_string_from_phrase_naut(SubLObject phrase_naut, SubLObject language_mt, SubLObject domain_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject error_message = NIL;
+                SubLObject string = NIL;
+                {
+                    SubLObject _prev_bind_0 = pph_error.$pph_break_on_errorP$.currentBinding(thread);
+                    try {
+                        pph_error.$pph_break_on_errorP$.bind(T, thread);
+                        try {
+                            {
+                                SubLObject _prev_bind_0_50 = Errors.$error_handler$.currentBinding(thread);
+                                try {
+                                    Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                    try {
+                                        if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(TWO_INTEGER)))) {
+                                            {
+                                                SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(TWO_INTEGER), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                                pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                            }
+                                        }
+                                        {
+                                            SubLObject _prev_bind_0_51 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                                            try {
+                                                pph_vars.$pph_demerit_cutoff$.bind(TWO_INTEGER, thread);
+                                                string = com.cyc.cycjava.cycl.pph_main.generate_string_from_phrase_naut(phrase_naut, language_mt, domain_mt);
+                                            } finally {
+                                                pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0_51, thread);
+                                            }
+                                        }
+                                    } catch (Throwable catch_var) {
+                                        Errors.handleThrowable(catch_var, NIL);
+                                    }
+                                } finally {
+                                    Errors.$error_handler$.rebind(_prev_bind_0_50, thread);
+                                }
+                            }
+                        } catch (Throwable ccatch_env_var) {
+                            error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                        }
+                    } finally {
+                        pph_error.$pph_break_on_errorP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(string, error_message);
+            }
+        }
     }
 
     public static SubLObject generate_good_string_from_phrase_naut(final SubLObject phrase_naut, SubLObject language_mt, SubLObject domain_mt, SubLObject force) {
@@ -1110,6 +1763,68 @@ public final class pph_main extends SubLTranslatedFile {
         return values(string, error_message);
     }
 
+    /**
+     * Return paraphrase info in a java-friendly format, one big list with no structures.
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @param NL-PREDS;
+    VALID-EXTERNAL-PPH-NL-PREDS?.
+     * 		
+     * @param FORCE;
+    PPH-FORCE-P.
+     * 		
+     * @param LANGUAGE-MT;
+     * 		the microtheory from which to look for linguistic information.
+     * @param DOMAIN-MT;
+     * 		the microtheory from which to look for domain information.
+     * @return 0 NIL or PPH-JAVALIST-P;
+     * @return 1 BOOLEANP; Use arg-positions strictly?
+     * @return 2 LISTP; of PPH supports.
+     */
+    @LispMethod(comment = "Return paraphrase info in a java-friendly format, one big list with no structures.\r\n\r\n@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@param NL-PREDS;\nVALID-EXTERNAL-PPH-NL-PREDS?.\r\n\t\t\r\n@param FORCE;\nPPH-FORCE-P.\r\n\t\t\r\n@param LANGUAGE-MT;\r\n\t\tthe microtheory from which to look for linguistic information.\r\n@param DOMAIN-MT;\r\n\t\tthe microtheory from which to look for domain information.\r\n@return 0 NIL or PPH-JAVALIST-P;\r\n@return 1 BOOLEANP; Use arg-positions strictly?\r\n@return 2 LISTP; of PPH supports.")
+    public static final SubLObject generate_phrase_for_java_alt(SubLObject v_object, SubLObject nl_preds, SubLObject force, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $HTML;
+        }
+        SubLTrampolineFile.checkType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLTrampolineFile.checkType(language_mt, POSSIBLY_MT_P);
+        SubLTrampolineFile.checkType(domain_mt, POSSIBLY_MT_P);
+        return com.cyc.cycjava.cycl.pph_main.generate_phrase_for_java_no_checks(v_object, nl_preds, force, language_mt, domain_mt, mode);
+    }
+
+    /**
+     * Return paraphrase info in a java-friendly format, one big list with no structures.
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @param NL-PREDS;
+    		VALID-EXTERNAL-PPH-NL-PREDS?.
+     * 		
+     * @param FORCE;
+    		PPH-FORCE-P.
+     * 		
+     * @param LANGUAGE-MT;
+     * 		the microtheory from which to look for linguistic information.
+     * @param DOMAIN-MT;
+     * 		the microtheory from which to look for domain information.
+     * @return 0 NIL or PPH-JAVALIST-P;
+     * @return 1 BOOLEANP; Use arg-positions strictly?
+     * @return 2 LISTP; of PPH supports.
+     */
+    @LispMethod(comment = "Return paraphrase info in a java-friendly format, one big list with no structures.\r\n\r\n@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@param NL-PREDS;\n\t\tVALID-EXTERNAL-PPH-NL-PREDS?.\r\n\t\t\r\n@param FORCE;\n\t\tPPH-FORCE-P.\r\n\t\t\r\n@param LANGUAGE-MT;\r\n\t\tthe microtheory from which to look for linguistic information.\r\n@param DOMAIN-MT;\r\n\t\tthe microtheory from which to look for domain information.\r\n@return 0 NIL or PPH-JAVALIST-P;\r\n@return 1 BOOLEANP; Use arg-positions strictly?\r\n@return 2 LISTP; of PPH supports.")
     public static SubLObject generate_phrase_for_java(final SubLObject v_object, SubLObject nl_preds, SubLObject force, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -1132,6 +1847,97 @@ public final class pph_main extends SubLTranslatedFile {
         return generate_phrase_for_java_no_checks(v_object, nl_preds, force, language_mt, domain_mt, mode);
     }
 
+    /**
+     * Return paraphrase info in a java-friendly format, one big list with no structures.
+     * This function will only use cached paraphrases, and if none is available for OBJECT,
+     * it will just return the result of calling FALLBACK-METHOD on OBJECT.
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @return LISTP; (PPH-JAVALIST-P <OBJECT>).
+     */
+    @LispMethod(comment = "Return paraphrase info in a java-friendly format, one big list with no structures.\r\nThis function will only use cached paraphrases, and if none is available for OBJECT,\r\nit will just return the result of calling FALLBACK-METHOD on OBJECT.\r\n\r\n@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@return LISTP; (PPH-JAVALIST-P <OBJECT>).\nReturn paraphrase info in a java-friendly format, one big list with no structures.\nThis function will only use cached paraphrases, and if none is available for OBJECT,\nit will just return the result of calling FALLBACK-METHOD on OBJECT.")
+    public static final SubLObject cached_paraphrase_for_java_alt(SubLObject v_object, SubLObject fallback_method) {
+        if (fallback_method == UNPROVIDED) {
+            fallback_method = PRINC_TO_STRING;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(v_object, CYCL_EXPRESSION_P);
+            {
+                SubLObject string = NIL;
+                SubLObject item = NIL;
+                if (NIL != forts.fort_p(v_object)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject cached_string = pph_utilities.pph_fort_paraphrase_cache_lookup(v_object, UNPROVIDED, UNPROVIDED);
+                        SubLObject agr_pred = thread.secondMultipleValue();
+                        SubLObject demerits = thread.thirdMultipleValue();
+                        thread.resetMultipleValues();
+                        if ((cached_string.isString() && (NIL == pph_vars.pph_too_many_demerits_p(demerits, UNPROVIDED))) && ((NIL == pph_utilities.pph_name_string_predP(agr_pred)) || (NIL != pph_utilities.pph_genl_mtP(nl_generation_fort_cache.nl_generation_fort_cache_paraphrase_mt(UNPROVIDED), pph_vars.$pph_language_mt$.getDynamicValue(thread))))) {
+                            string = cached_string;
+                        }
+                    }
+                }
+                if (string.isString()) {
+                } else {
+                    if (NIL != fboundp(fallback_method)) {
+                        {
+                            SubLObject _prev_bind_0 = pph_vars.$paraphrase_mode$.currentBinding(thread);
+                            try {
+                                pph_vars.$paraphrase_mode$.bind($TEXT, thread);
+                                if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(number_utilities.positive_infinity())))) {
+                                    {
+                                        SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(number_utilities.positive_infinity()), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                        pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                    }
+                                }
+                                {
+                                    SubLObject _prev_bind_0_52 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                                    try {
+                                        pph_vars.$pph_demerit_cutoff$.bind(number_utilities.positive_infinity(), thread);
+                                        string = funcall(fallback_method, v_object);
+                                    } finally {
+                                        pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0_52, thread);
+                                    }
+                                }
+                            } finally {
+                                pph_vars.$paraphrase_mode$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    } else {
+                        Errors.error($str_alt34$Fallback_method__S_is_not_a_known, fallback_method);
+                    }
+                }
+                if (string.isString()) {
+                    item = new_pph_phrase_output_item(string, NIL, v_object, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                } else {
+                    Errors.error($str_alt35$Couldn_t_generate_a_string_for__S, v_object, fallback_method);
+                }
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$paraphrase_mode$.currentBinding(thread);
+                    try {
+                        pph_vars.$paraphrase_mode$.bind($HTML, thread);
+                        pph_phrase.pph_phrase_output_item_maybe_add_anchor_tags(item, v_object);
+                    } finally {
+                        pph_vars.$paraphrase_mode$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return list(pph_utilities.pph_output_list_to_javalist(list(item)), v_object);
+            }
+        }
+    }
+
+    /**
+     * Return paraphrase info in a java-friendly format, one big list with no structures.
+     * This function will only use cached paraphrases, and if none is available for OBJECT,
+     * it will just return the result of calling FALLBACK-METHOD on OBJECT.
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @return LISTP; (PPH-JAVALIST-P <OBJECT>).
+     */
+    @LispMethod(comment = "Return paraphrase info in a java-friendly format, one big list with no structures.\r\nThis function will only use cached paraphrases, and if none is available for OBJECT,\r\nit will just return the result of calling FALLBACK-METHOD on OBJECT.\r\n\r\n@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@return LISTP; (PPH-JAVALIST-P <OBJECT>).\nReturn paraphrase info in a java-friendly format, one big list with no structures.\nThis function will only use cached paraphrases, and if none is available for OBJECT,\nit will just return the result of calling FALLBACK-METHOD on OBJECT.")
     public static SubLObject cached_paraphrase_for_java(final SubLObject v_object, SubLObject fallback_method) {
         if (fallback_method == UNPROVIDED) {
             fallback_method = PRINC_TO_STRING;
@@ -1181,6 +1987,97 @@ public final class pph_main extends SubLTranslatedFile {
         return list(pph_utilities.pph_output_list_to_javalist(list(item)), v_object);
     }
 
+    /**
+     * Return a list of javalist paraphrases of the items in OBJECTS.
+     * This function will use cached paraphrases, and if none is available for an item,
+     * it will just return the result of calling FALLBACK-METHOD on the item.
+     *
+     * @param OBJECTS;
+     * 		the CycL objects for which you want to generate English.
+     * @return LISTP; of PPH-JAVALIST-P objects.
+     */
+    @LispMethod(comment = "Return a list of javalist paraphrases of the items in OBJECTS.\r\nThis function will use cached paraphrases, and if none is available for an item,\r\nit will just return the result of calling FALLBACK-METHOD on the item.\r\n\r\n@param OBJECTS;\r\n\t\tthe CycL objects for which you want to generate English.\r\n@return LISTP; of PPH-JAVALIST-P objects.\nReturn a list of javalist paraphrases of the items in OBJECTS.\nThis function will use cached paraphrases, and if none is available for an item,\nit will just return the result of calling FALLBACK-METHOD on the item.")
+    public static final SubLObject cached_disambiguation_paraphrases_for_java_alt(SubLObject objects, SubLObject fallback_method) {
+        if (fallback_method == UNPROVIDED) {
+            fallback_method = GENERATE_PHRASE_NO_CHECKS;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject abortP = NIL;
+                SubLObject strings = set.new_set(symbol_function(EQUALP), UNPROVIDED);
+                SubLObject javalists = NIL;
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$pph_ambiguous_strings$.currentBinding(thread);
+                    try {
+                        pph_vars.$pph_ambiguous_strings$.bind(NIL != pph_vars.$pph_ambiguous_strings$.getDynamicValue(thread) ? ((SubLObject) (pph_vars.$pph_ambiguous_strings$.getDynamicValue(thread))) : dictionary.new_dictionary(symbol_function(EQUALP), UNPROVIDED), thread);
+                        {
+                            SubLObject list_var = NIL;
+                            SubLObject v_object = NIL;
+                            SubLObject done_count = NIL;
+                            for (list_var = objects, v_object = list_var.first(), done_count = ZERO_INTEGER; !((NIL != abortP) || (NIL == list_var)); list_var = list_var.rest() , v_object = list_var.first() , done_count = add(ONE_INTEGER, done_count)) {
+                                {
+                                    SubLObject javalist = com.cyc.cycjava.cycl.pph_main.cached_paraphrase_for_java(v_object, fallback_method).first();
+                                    SubLObject string = pph_utilities.pph_javalist_string(javalist);
+                                    if (NIL != set.set_memberP(string, strings)) {
+                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                            format(T, $str_alt37$Duplicate_javalist_____S, javalist);
+                                        }
+                                        pph_disambiguation.pph_note_ambiguous_string(string, v_object);
+                                        {
+                                            SubLObject list_var_53 = NIL;
+                                            SubLObject javalist_54 = NIL;
+                                            SubLObject i = NIL;
+                                            for (list_var_53 = javalists, javalist_54 = list_var_53.first(), i = ZERO_INTEGER; NIL != list_var_53; list_var_53 = list_var_53.rest() , javalist_54 = list_var_53.first() , i = add(ONE_INTEGER, i)) {
+                                                if (pph_utilities.pph_javalist_string(javalist_54).equalp(string)) {
+                                                    {
+                                                        SubLObject n = number_utilities.f_1_(subtract(done_count, i));
+                                                        SubLObject other_cycl = nth(n, objects);
+                                                        pph_disambiguation.pph_note_ambiguous_string(string, other_cycl);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } else {
+                                        set.set_add(string, strings);
+                                    }
+                                    javalists = cons(javalist, javalists);
+                                }
+                            }
+                            if (NIL == abortP) {
+                                {
+                                    SubLObject cdolist_list_var = javalists;
+                                    SubLObject javalist = NIL;
+                                    for (javalist = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , javalist = cdolist_list_var.first()) {
+                                        if (NIL == pph_disambiguation.pph_string_ambiguous_p(pph_utilities.pph_javalist_string(javalist))) {
+                                            ans = cons(javalist, ans);
+                                        } else {
+                                            ans = cons(pph_disambiguation.pph_try_to_clarify_javalist(javalist, $NONE, $DEFAULT, UNPROVIDED, UNPROVIDED), ans);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_vars.$pph_ambiguous_strings$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ans;
+            }
+        }
+    }
+
+    /**
+     * Return a list of javalist paraphrases of the items in OBJECTS.
+     * This function will use cached paraphrases, and if none is available for an item,
+     * it will just return the result of calling FALLBACK-METHOD on the item.
+     *
+     * @param OBJECTS;
+     * 		the CycL objects for which you want to generate English.
+     * @return LISTP; of PPH-JAVALIST-P objects.
+     */
+    @LispMethod(comment = "Return a list of javalist paraphrases of the items in OBJECTS.\r\nThis function will use cached paraphrases, and if none is available for an item,\r\nit will just return the result of calling FALLBACK-METHOD on the item.\r\n\r\n@param OBJECTS;\r\n\t\tthe CycL objects for which you want to generate English.\r\n@return LISTP; of PPH-JAVALIST-P objects.\nReturn a list of javalist paraphrases of the items in OBJECTS.\nThis function will use cached paraphrases, and if none is available for an item,\nit will just return the result of calling FALLBACK-METHOD on the item.")
     public static SubLObject cached_disambiguation_paraphrases_for_java(final SubLObject objects, SubLObject fallback_method) {
         if (fallback_method == UNPROVIDED) {
             fallback_method = GENERATE_PHRASE_NO_CHECKS;
@@ -1243,6 +2140,152 @@ public final class pph_main extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     * Return paraphrase info in a java-friendly format, one big list with no structures.
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @param NL-PREDS;
+    VALID-EXTERNAL-PPH-NL-PREDS?.
+     * 		
+     * @param FORCE;
+    PPH-FORCE-P.
+     * 		
+     * @param LANGUAGE-MT;
+     * 		the microtheory from which to look for linguistic information.
+     * @param DOMAIN-MT;
+     * 		the microtheory from which to look for domain information.
+     * @return 0 NIL or PPH-JAVALIST-P;
+     * @return 1 BOOLEANP; Use arg-positions strictly?
+     * @return 2 LISTP; of PPH supports.
+     */
+    @LispMethod(comment = "Return paraphrase info in a java-friendly format, one big list with no structures.\r\n\r\n@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@param NL-PREDS;\nVALID-EXTERNAL-PPH-NL-PREDS?.\r\n\t\t\r\n@param FORCE;\nPPH-FORCE-P.\r\n\t\t\r\n@param LANGUAGE-MT;\r\n\t\tthe microtheory from which to look for linguistic information.\r\n@param DOMAIN-MT;\r\n\t\tthe microtheory from which to look for domain information.\r\n@return 0 NIL or PPH-JAVALIST-P;\r\n@return 1 BOOLEANP; Use arg-positions strictly?\r\n@return 2 LISTP; of PPH supports.")
+    public static final SubLObject generate_phrase_for_java_no_checks_alt(SubLObject v_object, SubLObject nl_preds, SubLObject force, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $HTML;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ($DEFAULT == nl_preds) {
+                nl_preds = pph_utilities.pph_default_nl_preds(narts_high.nart_substitute(v_object), force, language_mt, domain_mt);
+            }
+            {
+                SubLObject ans = NIL;
+                SubLObject error_message = NIL;
+                SubLObject use_arg_positions_strictlyP = NIL;
+                SubLObject justification = NIL;
+                language_mt = pph_utilities.pph_canonicalize_hlmt(language_mt);
+                domain_mt = pph_utilities.pph_canonicalize_hlmt(domain_mt);
+                nl_preds = pph_utilities.pph_convert_required_nl_preds_to_preferred(nl_preds);
+                {
+                    SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+                    try {
+                        Errors.$continue_cerrorP$.bind(NIL, thread);
+                        pph_error.$pph_error_handling_onP$.bind(T, thread);
+                        if (NIL != pph_error.pph_break_on_errorP()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject olist = com.cyc.cycjava.cycl.pph_main.generate_pph_output_list(narts_high.nart_substitute(v_object), nl_preds, language_mt, domain_mt, mode, force);
+                                SubLObject pred = thread.secondMultipleValue();
+                                SubLObject just = thread.thirdMultipleValue();
+                                thread.resetMultipleValues();
+                                justification = just;
+                                use_arg_positions_strictlyP = list_utilities.sublisp_boolean(find_if(GEN_TEMPLATE_QUERY_SENTENCE_ASSERTION_P, justification, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                                {
+                                    SubLObject _prev_bind_0_55 = pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.currentBinding(thread);
+                                    try {
+                                        pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.bind(makeBoolean((NIL != pph_vars.pph_link_unlinked_phrases_to_matrix_arg0P()) && (NIL == use_arg_positions_strictlyP)), thread);
+                                        ans = (NIL != olist) ? ((SubLObject) (pph_utilities.pph_output_list_to_javalist(olist))) : NIL;
+                                    } finally {
+                                        pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.rebind(_prev_bind_0_55, thread);
+                                    }
+                                }
+                            }
+                        } else {
+                            try {
+                                {
+                                    SubLObject _prev_bind_0_56 = Errors.$error_handler$.currentBinding(thread);
+                                    try {
+                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                        try {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject olist = com.cyc.cycjava.cycl.pph_main.generate_pph_output_list(narts_high.nart_substitute(v_object), nl_preds, language_mt, domain_mt, mode, force);
+                                                SubLObject pred = thread.secondMultipleValue();
+                                                SubLObject just = thread.thirdMultipleValue();
+                                                thread.resetMultipleValues();
+                                                justification = just;
+                                                use_arg_positions_strictlyP = list_utilities.sublisp_boolean(find_if(GEN_TEMPLATE_QUERY_SENTENCE_ASSERTION_P, justification, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                                                {
+                                                    SubLObject _prev_bind_0_57 = pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.currentBinding(thread);
+                                                    try {
+                                                        pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.bind(makeBoolean((NIL != pph_vars.pph_link_unlinked_phrases_to_matrix_arg0P()) && (NIL == use_arg_positions_strictlyP)), thread);
+                                                        ans = (NIL != olist) ? ((SubLObject) (pph_utilities.pph_output_list_to_javalist(olist))) : NIL;
+                                                    } finally {
+                                                        pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.rebind(_prev_bind_0_57, thread);
+                                                    }
+                                                }
+                                            }
+                                        } catch (Throwable catch_var) {
+                                            Errors.handleThrowable(catch_var, NIL);
+                                        }
+                                    } finally {
+                                        Errors.$error_handler$.rebind(_prev_bind_0_56, thread);
+                                    }
+                                }
+                            } catch (Throwable ccatch_env_var) {
+                                error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                            }
+                            if (error_message.isString()) {
+                                Errors.warn(error_message);
+                            }
+                        }
+                    } finally {
+                        pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1, thread);
+                        Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != error_message) {
+                    Errors.error(error_message);
+                }
+                return values(ans, use_arg_positions_strictlyP, justification);
+            }
+        }
+    }
+
+    /**
+     * Return paraphrase info in a java-friendly format, one big list with no structures.
+     *
+     * @param OBJECT;
+     * 		the CycL object for which you want to generate English.
+     * @param NL-PREDS;
+    		VALID-EXTERNAL-PPH-NL-PREDS?.
+     * 		
+     * @param FORCE;
+    		PPH-FORCE-P.
+     * 		
+     * @param LANGUAGE-MT;
+     * 		the microtheory from which to look for linguistic information.
+     * @param DOMAIN-MT;
+     * 		the microtheory from which to look for domain information.
+     * @return 0 NIL or PPH-JAVALIST-P;
+     * @return 1 BOOLEANP; Use arg-positions strictly?
+     * @return 2 LISTP; of PPH supports.
+     */
+    @LispMethod(comment = "Return paraphrase info in a java-friendly format, one big list with no structures.\r\n\r\n@param OBJECT;\r\n\t\tthe CycL object for which you want to generate English.\r\n@param NL-PREDS;\n\t\tVALID-EXTERNAL-PPH-NL-PREDS?.\r\n\t\t\r\n@param FORCE;\n\t\tPPH-FORCE-P.\r\n\t\t\r\n@param LANGUAGE-MT;\r\n\t\tthe microtheory from which to look for linguistic information.\r\n@param DOMAIN-MT;\r\n\t\tthe microtheory from which to look for domain information.\r\n@return 0 NIL or PPH-JAVALIST-P;\r\n@return 1 BOOLEANP; Use arg-positions strictly?\r\n@return 2 LISTP; of PPH supports.")
     public static SubLObject generate_phrase_for_java_no_checks(final SubLObject v_object, SubLObject nl_preds, SubLObject force, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -1333,10 +2376,60 @@ public final class pph_main extends SubLTranslatedFile {
         return values(ans, use_arg_positions_strictlyP, justification);
     }
 
+    public static final SubLObject gen_template_query_sentence_assertion_p_alt(SubLObject v_object) {
+        return makeBoolean(((NIL != assertion_handles.assertion_p(v_object)) && (NIL != assertions_high.gaf_assertionP(v_object))) && (assertions_high.gaf_arg0(v_object) == $$genTemplate_QuerySentence));
+    }
+
     public static SubLObject gen_template_query_sentence_assertion_p(final SubLObject v_object) {
         return makeBoolean(((NIL != assertion_handles.assertion_p(v_object)) && (NIL != assertions_high.gaf_assertionP(v_object))) && assertions_high.gaf_arg0(v_object).eql($$genTemplate_QuerySentence));
     }
 
+    /**
+     * The part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.
+     * Return types are same as for @xref GENERATE-PHRASE.
+     */
+    @LispMethod(comment = "The part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.\r\nReturn types are same as for @xref GENERATE-PHRASE.\nThe part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.\nReturn types are same as for @xref GENERATE-PHRASE.")
+    public static final SubLObject generate_phrase_int_alt(SubLObject phrase, SubLObject top) {
+        pph_utilities.pph_possibly_nartify_phrase(phrase);
+        {
+            SubLObject save_cycl = pph_macros.pph_phrase_restrict_cycl_to_mt_scope(phrase);
+            try {
+                com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(phrase, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            } finally {
+                {
+                    SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                    try {
+                        bind($is_thread_performing_cleanupP$, T);
+                        pph_macros.pph_phrase_restore_and_rephrase_cycl_if_mt_scoped(phrase, save_cycl, UNPROVIDED);
+                    } finally {
+                        rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                    }
+                }
+            }
+        }
+        if (NIL != top) {
+            pph_vars.$last_pph_sentence$.setDynamicValue(phrase);
+        }
+        {
+            SubLObject string = NIL;
+            SubLObject pred = NIL;
+            SubLObject justification = NIL;
+            SubLObject output_list = NIL;
+            if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+                string = pph_phrase.pph_phrase_string(phrase, UNPROVIDED);
+                pred = pph_phrase.pph_phrase_agr_pred(phrase);
+                justification = pph_phrase.pph_phrase_gather_supports(phrase);
+                output_list = pph_phrase.pph_phrase_output_list(phrase);
+            }
+            return values(string, pred, justification, output_list);
+        }
+    }
+
+    /**
+     * The part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.
+     * Return types are same as for @xref GENERATE-PHRASE.
+     */
+    @LispMethod(comment = "The part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.\r\nReturn types are same as for @xref GENERATE-PHRASE.\nThe part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.\nReturn types are same as for @xref GENERATE-PHRASE.")
     public static SubLObject generate_phrase_int(final SubLObject phrase, final SubLObject top) {
         pph_utilities.pph_possibly_nartify_phrase(phrase);
         final SubLObject save_cycl = pph_macros.pph_phrase_restrict_cycl_to_mt_scope(phrase);
@@ -1367,8 +2460,88 @@ public final class pph_main extends SubLTranslatedFile {
             output_list = pph_phrase.pph_phrase_output_list(phrase);
         }
         return values(string, pred, justification, output_list);
+    }/**
+     * The part of @xref GENERATE-PHRASE where we modify a PPH-PHRASE object.
+     * Return types are same as for @xref GENERATE-PHRASE.
+     */
+
+
+    /**
+     * Generate a string that a human should interpret as an unambiguous reference to OBJECT.
+     *
+     * @param FORCE;
+     * 		pph-force-p or :DEFAULT
+     * @return 0 STRINGP or NIL; the string corresponding to object.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "Generate a string that a human should interpret as an unambiguous reference to OBJECT.\r\n\r\n@param FORCE;\r\n\t\tpph-force-p or :DEFAULT\r\n@return 0 STRINGP or NIL; the string corresponding to object.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p")
+    public static final SubLObject generate_disambiguation_phrase_alt(SubLObject v_object, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ($DEFAULT == force) {
+                force = pph_utilities.pph_default_force_for_term(v_object);
+            }
+            if ($DEFAULT == nl_preds) {
+                nl_preds = pph_utilities.pph_default_nl_preds(v_object, force, language_mt, domain_mt);
+            }
+            {
+                SubLObject paraphrase = NIL;
+                SubLObject pred = NIL;
+                SubLObject justification = NIL;
+                SubLObject olist = NIL;
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$use_parenthetical_disambiguationsP$.currentBinding(thread);
+                    try {
+                        pph_vars.$use_parenthetical_disambiguationsP$.bind($TOP_LEVEL, thread);
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject paraphrase_58 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force(v_object, force, nl_preds, language_mt, domain_mt, mode, UNPROVIDED);
+                            SubLObject pred_59 = thread.secondMultipleValue();
+                            SubLObject justification_60 = thread.thirdMultipleValue();
+                            SubLObject olist_61 = thread.fourthMultipleValue();
+                            thread.resetMultipleValues();
+                            paraphrase = paraphrase_58;
+                            pred = pred_59;
+                            justification = justification_60;
+                            olist = olist_61;
+                        }
+                    } finally {
+                        pph_vars.$use_parenthetical_disambiguationsP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(paraphrase, pred, justification, olist);
+            }
+        }
     }
 
+    /**
+     * Generate a string that a human should interpret as an unambiguous reference to OBJECT.
+     *
+     * @param FORCE;
+     * 		pph-force-p or :DEFAULT
+     * @return 0 STRINGP or NIL; the string corresponding to object.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "Generate a string that a human should interpret as an unambiguous reference to OBJECT.\r\n\r\n@param FORCE;\r\n\t\tpph-force-p or :DEFAULT\r\n@return 0 STRINGP or NIL; the string corresponding to object.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p")
     public static SubLObject generate_disambiguation_phrase(final SubLObject v_object, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -1413,8 +2586,170 @@ public final class pph_main extends SubLTranslatedFile {
             pph_vars.$use_parenthetical_disambiguationsP$.rebind(_prev_bind_0, thread);
         }
         return values(paraphrase, pred, justification, olist);
+    }/**
+     * Generate a string that a human should interpret as an unambiguous reference to OBJECT.
+     *
+     * @param FORCE;
+     * 		pph-force-p or :DEFAULT
+     * @return 0 STRINGP or NIL; the string corresponding to object.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+
+
+    /**
+     *
+     *
+     * @param FORCE;
+     * 		pph-force-p or :DEFAULT
+     * @param FORBIDDEN-STRINGS;
+     * 		listp of strings to *not* use as a paraphrase for any member of OBJECTS.
+     * @return association LISTP of (<object> <string>) pairs, one for each item on OBJECTS.
+    An effort is made to have the paraphrase for each item be sufficiently distinct
+    to distinguish it from the other items.
+     */
+    @LispMethod(comment = "@param FORCE;\r\n\t\tpph-force-p or :DEFAULT\r\n@param FORBIDDEN-STRINGS;\r\n\t\tlistp of strings to *not* use as a paraphrase for any member of OBJECTS.\r\n@return association LISTP of (<object> <string>) pairs, one for each item on OBJECTS.\r\nAn effort is made to have the paraphrase for each item be sufficiently distinct\r\nto distinguish it from the other items.")
+    public static final SubLObject generate_disambiguation_phrases_alt(SubLObject objects, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject forbidden_strings) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (forbidden_strings == UNPROVIDED) {
+            forbidden_strings = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(forbidden_strings, LIST_OF_STRING_P);
+            if ($DEFAULT == force) {
+                force = pph_utilities.pph_default_force_for_term(objects.first());
+            }
+            if ($DEFAULT == nl_preds) {
+                nl_preds = pph_utilities.pph_default_nl_preds(objects.first(), force, language_mt, domain_mt);
+            }
+            {
+                SubLObject result = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                    try {
+                        pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                        {
+                            SubLObject reuseP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_62 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                    try {
+                                        pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                        {
+                                            SubLObject new_or_reused = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_63 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                    {
+                                                        SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_64 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                {
+                                                                    SubLObject original_memoization_process = NIL;
+                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                        {
+                                                                            SubLObject current_proc = current_process();
+                                                                            if (NIL == original_memoization_process) {
+                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                            } else {
+                                                                                if (original_memoization_process != current_proc) {
+                                                                                    Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    try {
+                                                                        result = com.cyc.cycjava.cycl.pph_main.generate_disambiguation_phrases_int(objects, force, nl_preds, language_mt, domain_mt, mode, $PAIRS, forbidden_strings);
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_65 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_65, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                memoization_state.$memoization_state$.rebind(_prev_bind_0_64, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_63, thread);
+                                                }
+                                            }
+                                            if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                            }
+                                        }
+                                    } finally {
+                                        pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_62, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_66 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuseP) {
+                                            pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_66, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
+    /**
+     *
+     *
+     * @param FORCE;
+     * 		pph-force-p or :DEFAULT
+     * @param FORBIDDEN-STRINGS;
+     * 		listp of strings to *not* use as a paraphrase for any member of OBJECTS.
+     * @return association LISTP of (<object> <string>) pairs, one for each item on OBJECTS.
+    An effort is made to have the paraphrase for each item be sufficiently distinct
+    to distinguish it from the other items.
+     */
+    @LispMethod(comment = "@param FORCE;\r\n\t\tpph-force-p or :DEFAULT\r\n@param FORBIDDEN-STRINGS;\r\n\t\tlistp of strings to *not* use as a paraphrase for any member of OBJECTS.\r\n@return association LISTP of (<object> <string>) pairs, one for each item on OBJECTS.\r\nAn effort is made to have the paraphrase for each item be sufficiently distinct\r\nto distinguish it from the other items.")
     public static SubLObject generate_disambiguation_phrases(final SubLObject objects, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject forbidden_strings) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -1435,7 +2770,7 @@ public final class pph_main extends SubLTranslatedFile {
             forbidden_strings = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != string_utilities.list_of_string_p(forbidden_strings) : "string_utilities.list_of_string_p(forbidden_strings) " + "CommonSymbols.NIL != string_utilities.list_of_string_p(forbidden_strings) " + forbidden_strings;
+        assert NIL != string_utilities.list_of_string_p(forbidden_strings) : "! string_utilities.list_of_string_p(forbidden_strings) " + ("string_utilities.list_of_string_p(forbidden_strings) " + "CommonSymbols.NIL != string_utilities.list_of_string_p(forbidden_strings) ") + forbidden_strings;
         if ($DEFAULT == force) {
             force = pph_utilities.pph_default_force_for_term(objects.first());
         }
@@ -1514,10 +2849,194 @@ public final class pph_main extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject use_cached_generations_p_alt(SubLObject obj) {
+        return subl_promotions.memberP(obj, $list_alt43, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject use_cached_generations_p(final SubLObject obj) {
         return subl_promotions.memberP(obj, $list43, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @param FORCE;
+    pph-force-p
+     * 		
+     * @param FORBIDDEN-STRINGS;
+     * 		listp of strings to *not* use as a paraphrase for any member of OBJECTS.
+     * @param USE-CACHED-GENERATIONS;
+     * 		:required, :preferred, or :disallowed.  Required means that it will only
+     * 		use cached generations.  :disallowed means that it will never use them (and will always generate fresh from
+     * 		the KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at
+     * 		which point fresh generations from the KB will be used.
+     * @return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.
+    An effort is made to have the paraphrase for each item be sufficiently distinct
+    to distinguish it from the other items.
+     * @unknown Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.
+     */
+    @LispMethod(comment = "@param FORCE;\npph-force-p\r\n\t\t\r\n@param FORBIDDEN-STRINGS;\r\n\t\tlistp of strings to *not* use as a paraphrase for any member of OBJECTS.\r\n@param USE-CACHED-GENERATIONS;\r\n\t\t:required, :preferred, or :disallowed.  Required means that it will only\r\n\t\tuse cached generations.  :disallowed means that it will never use them (and will always generate fresh from\r\n\t\tthe KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at\r\n\t\twhich point fresh generations from the KB will be used.\r\n@return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.\r\nAn effort is made to have the paraphrase for each item be sufficiently distinct\r\nto distinguish it from the other items.\r\n@unknown Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.")
+    public static final SubLObject generate_disambiguation_phrases_for_java_alt(SubLObject objects, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject forbidden_strings, SubLObject use_cached_generations) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (forbidden_strings == UNPROVIDED) {
+            forbidden_strings = NIL;
+        }
+        if (use_cached_generations == UNPROVIDED) {
+            use_cached_generations = $REQUIRED;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(objects, LISTP);
+            SubLTrampolineFile.checkType(force, KEYWORDP);
+            SubLTrampolineFile.checkType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+            SubLTrampolineFile.checkType(language_mt, $sym5$HLMT_);
+            SubLTrampolineFile.checkType(domain_mt, $sym5$HLMT_);
+            SubLTrampolineFile.checkType(forbidden_strings, LIST_OF_STRING_P);
+            SubLTrampolineFile.checkType(use_cached_generations, USE_CACHED_GENERATIONS_P);
+            {
+                SubLObject ans = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                    try {
+                        pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                        {
+                            SubLObject reuseP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_67 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                    try {
+                                        pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                        {
+                                            SubLObject new_or_reused = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_68 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                    {
+                                                        SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_69 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                {
+                                                                    SubLObject original_memoization_process = NIL;
+                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                        {
+                                                                            SubLObject current_proc = current_process();
+                                                                            if (NIL == original_memoization_process) {
+                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                            } else {
+                                                                                if (original_memoization_process != current_proc) {
+                                                                                    Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    try {
+                                                                        if (((NIL != subl_promotions.memberP(force, $list_alt47, UNPROVIDED, UNPROVIDED)) && (NIL != subl_promotions.memberP(use_cached_generations, $list_alt48, UNPROVIDED, UNPROVIDED))) && (NIL != subl_promotions.memberP(nl_preds, $list_alt49, symbol_function(EQUAL), UNPROVIDED))) {
+                                                                            {
+                                                                                SubLObject result = com.cyc.cycjava.cycl.pph_main.cached_disambiguation_paraphrases_for_java(objects, UNPROVIDED);
+                                                                                if ((use_cached_generations == $REQUIRED) || (NIL == list_utilities.duplicatesP(result, EQUAL, PPH_JAVALIST_STRING))) {
+                                                                                    ans = result;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_70 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if (NIL == ans) {
+                                                                                    if ($DEFAULT == nl_preds) {
+                                                                                        nl_preds = pph_utilities.pph_default_nl_preds(objects.first(), force, language_mt, domain_mt);
+                                                                                    }
+                                                                                    nl_preds = pph_utilities.pph_convert_required_nl_preds_to_preferred(nl_preds);
+                                                                                    ans = com.cyc.cycjava.cycl.pph_main.generate_disambiguation_phrases_int(objects, force, nl_preds, language_mt, domain_mt, $HTML, $JAVALISTS, forbidden_strings);
+                                                                                }
+                                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_70, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                memoization_state.$memoization_state$.rebind(_prev_bind_0_69, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_68, thread);
+                                                }
+                                            }
+                                            if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                            }
+                                        }
+                                    } finally {
+                                        pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_67, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_71 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuseP) {
+                                            pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_71, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ans;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param FORCE;
+    pph-force-p
+     * 		
+     * @param FORBIDDEN-STRINGS;
+     * 		listp of strings to *not* use as a paraphrase for any member of OBJECTS.
+     * @param USE-CACHED-GENERATIONS;
+     * 		:required, :preferred, or :disallowed.  Required means that it will only
+     * 		use cached generations.  :disallowed means that it will never use them (and will always generate fresh from
+     * 		the KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at
+     * 		which point fresh generations from the KB will be used.
+     * @return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.
+    An effort is made to have the paraphrase for each item be sufficiently distinct
+    to distinguish it from the other items.
+     * @unknown Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.
+     */
+    @LispMethod(comment = "@param FORCE;\npph-force-p\r\n\t\t\r\n@param FORBIDDEN-STRINGS;\r\n\t\tlistp of strings to *not* use as a paraphrase for any member of OBJECTS.\r\n@param USE-CACHED-GENERATIONS;\r\n\t\t:required, :preferred, or :disallowed.  Required means that it will only\r\n\t\tuse cached generations.  :disallowed means that it will never use them (and will always generate fresh from\r\n\t\tthe KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at\r\n\t\twhich point fresh generations from the KB will be used.\r\n@return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.\r\nAn effort is made to have the paraphrase for each item be sufficiently distinct\r\nto distinguish it from the other items.\r\n@unknown Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.")
     public static SubLObject generate_disambiguation_phrases_for_java(final SubLObject objects, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject forbidden_strings, SubLObject use_cached_generations) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -1629,13 +3148,49 @@ public final class pph_main extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     *
+     *
+     * @return 0; LISTP of PPH-JAVALIST-P, alphabetized.
+     * @return 1; LISTP of members of OBJECTS, in corresponding order.
+     */
+    @LispMethod(comment = "@return 0; LISTP of PPH-JAVALIST-P, alphabetized.\r\n@return 1; LISTP of members of OBJECTS, in corresponding order.")
+    public static final SubLObject alphabetize_pph_javalists_alt(SubLObject javalists, SubLObject objects, SubLObject case_sensitiveP) {
+        if (case_sensitiveP == UNPROVIDED) {
+            case_sensitiveP = T;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(javalists, LISTP);
+            SubLTrampolineFile.checkType(objects, LISTP);
+            if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                if (NIL == list_utilities.same_length_p(javalists, objects)) {
+                    Errors.error($str_alt57$ALPHABETIZE_PPH_JAVALISTS_passed_, length(javalists), length(objects));
+                }
+            }
+            {
+                SubLObject annotated = pph_utilities.pph_annotate_javalists(javalists, objects);
+                SubLObject optimized = pph_utilities.possibly_optimize_pph_annotated_javalists_for_alphabetization(annotated);
+                SubLObject sorted = pph_utilities.sort_pph_annotated_javalists(optimized, case_sensitiveP);
+                return pph_utilities.unannotate_pph_javalists(sorted);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return 0; LISTP of PPH-JAVALIST-P, alphabetized.
+     * @return 1; LISTP of members of OBJECTS, in corresponding order.
+     */
+    @LispMethod(comment = "@return 0; LISTP of PPH-JAVALIST-P, alphabetized.\r\n@return 1; LISTP of members of OBJECTS, in corresponding order.")
     public static SubLObject alphabetize_pph_javalists(final SubLObject javalists, final SubLObject objects, SubLObject case_sensitiveP) {
         if (case_sensitiveP == UNPROVIDED) {
             case_sensitiveP = T;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != listp(javalists) : "Types.listp(javalists) " + "CommonSymbols.NIL != Types.listp(javalists) " + javalists;
-        assert NIL != listp(objects) : "Types.listp(objects) " + "CommonSymbols.NIL != Types.listp(objects) " + objects;
+        assert NIL != listp(javalists) : "! listp(javalists) " + ("Types.listp(javalists) " + "CommonSymbols.NIL != Types.listp(javalists) ") + javalists;
+        assert NIL != listp(objects) : "! listp(objects) " + ("Types.listp(objects) " + "CommonSymbols.NIL != Types.listp(objects) ") + objects;
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == list_utilities.same_length_p(javalists, objects))) {
             Errors.error($str57$ALPHABETIZE_PPH_JAVALISTS_passed_, length(javalists), length(objects));
         }
@@ -1645,6 +3200,470 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_utilities.unannotate_pph_javalists(sorted);
     }
 
+    /**
+     *
+     *
+     * @param RETURN-STYLE
+     * 		keywordp; :PAIRS or :JAVALISTS
+     */
+    @LispMethod(comment = "@param RETURN-STYLE\r\n\t\tkeywordp; :PAIRS or :JAVALISTS")
+    public static final SubLObject generate_disambiguation_phrases_int_alt(SubLObject objects, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject return_style, SubLObject forbidden_strings) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (return_style == UNPROVIDED) {
+            return_style = $PAIRS;
+        }
+        if (forbidden_strings == UNPROVIDED) {
+            forbidden_strings = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(force, PPH_FORCE_P);
+            {
+                SubLObject output_lists = NIL;
+                SubLObject timed_outP = NIL;
+                SubLObject ans = NIL;
+                SubLObject blacklist = com.cyc.cycjava.cycl.pph_main.pph_blacklist_for_objects_and_strings(objects, forbidden_strings);
+                SubLObject resolved_domain_mt = date_utilities.possibly_bind_temporal_indexical_in_object(domain_mt);
+                SubLObject resolved_language_mt = date_utilities.possibly_bind_temporal_indexical_in_object(language_mt);
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                    try {
+                        pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                        pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                        pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                        try {
+                            {
+                                SubLObject default_timeout = pph_macros.pph_timeout();
+                                SubLObject timeout = (default_timeout.isNumber()) ? ((SubLObject) (multiply(default_timeout, length(objects)))) : NIL;
+                                SubLTrampolineFile.checkType(blacklist, $sym59$VALID_PPH_BLACKLIST_);
+                                {
+                                    SubLObject _prev_bind_0_72 = pph_vars.$pph_term_paraphrase_blacklist$.currentBinding(thread);
+                                    SubLObject _prev_bind_1_73 = pph_macros.$pph_timeout_time_check_count$.currentBinding(thread);
+                                    SubLObject _prev_bind_2_74 = pph_macros.$pph_timeout_time$.currentBinding(thread);
+                                    SubLObject _prev_bind_3 = pph_macros.$pph_timeout_reachedP$.currentBinding(thread);
+                                    try {
+                                        pph_vars.$pph_term_paraphrase_blacklist$.bind(blacklist, thread);
+                                        pph_macros.$pph_timeout_time_check_count$.bind(ZERO_INTEGER, thread);
+                                        pph_macros.$pph_timeout_time$.bind(pph_macros.pph_compute_timeout_time(timeout), thread);
+                                        pph_macros.$pph_timeout_reachedP$.bind(pph_macros.$pph_timeout_reachedP$.getDynamicValue(thread), thread);
+                                        pph_macros.$pph_timeout_reachedP$.setDynamicValue(pph_macros.pph_timeout_time_reachedP(), thread);
+                                        if (NIL == pph_macros.$pph_timeout_reachedP$.getDynamicValue(thread)) {
+                                            {
+                                                SubLObject top_levelP = pph_macros.handling_pph_method_failures_top_level_p();
+                                                {
+                                                    SubLObject _prev_bind_0_75 = pph_macros.$suspended_paraphrase_methods$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_76 = pph_macros.$handling_pph_method_failuresP$.currentBinding(thread);
+                                                    try {
+                                                        pph_macros.$suspended_paraphrase_methods$.bind(NIL != top_levelP ? ((SubLObject) (set.new_set(symbol_function(EQUAL), pph_macros.max_suspended_method_depth()))) : pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread), thread);
+                                                        pph_macros.$handling_pph_method_failuresP$.bind(T, thread);
+                                                        {
+                                                            SubLObject failed_method = NIL;
+                                                            SubLObject tried_oneP = NIL;
+                                                            while ((NIL != failed_method) || (NIL == tried_oneP)) {
+                                                                if (NIL != failed_method) {
+                                                                    pph_macros.note_suspended_paraphrase_method_plist(failed_method);
+                                                                    failed_method = NIL;
+                                                                }
+                                                                try {
+                                                                    thread.resetMultipleValues();
+                                                                    {
+                                                                        SubLObject _prev_bind_0_77 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                                        try {
+                                                                            pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                                            {
+                                                                                SubLObject reuseP = thread.secondMultipleValue();
+                                                                                thread.resetMultipleValues();
+                                                                                try {
+                                                                                    thread.resetMultipleValues();
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_78 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                                        try {
+                                                                                            pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                                            {
+                                                                                                SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                                                thread.resetMultipleValues();
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_79 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                                        {
+                                                                                                            SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_80 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                                                    {
+                                                                                                                        SubLObject original_memoization_process = NIL;
+                                                                                                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                                            {
+                                                                                                                                SubLObject current_proc = current_process();
+                                                                                                                                if (NIL == original_memoization_process) {
+                                                                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                                                } else {
+                                                                                                                                    if (original_memoization_process != current_proc) {
+                                                                                                                                        Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        try {
+                                                                                                                            {
+                                                                                                                                SubLObject output_lists_81 = NIL;
+                                                                                                                                SubLObject new_rms = NIL;
+                                                                                                                                SubLObject abortP = NIL;
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_82 = pph_vars.$pph_ambiguous_strings$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        pph_vars.$pph_ambiguous_strings$.bind(NIL != pph_vars.$pph_ambiguous_strings$.getDynamicValue(thread) ? ((SubLObject) (pph_vars.$pph_ambiguous_strings$.getDynamicValue(thread))) : dictionary.new_dictionary(symbol_function(EQUALP), UNPROVIDED), thread);
+                                                                                                                                        pph_disambiguation.pph_disambiguation_note(ONE_INTEGER, $str_alt60$__Trying_default_precision___S___, pph_utilities.pph_current_precision(), UNPROVIDED, UNPROVIDED);
+                                                                                                                                        {
+                                                                                                                                            SubLObject list_var = NIL;
+                                                                                                                                            SubLObject v_object = NIL;
+                                                                                                                                            SubLObject ignoreme = NIL;
+                                                                                                                                            for (list_var = objects, v_object = list_var.first(), ignoreme = ZERO_INTEGER; !((NIL != abortP) || (NIL == list_var)); list_var = list_var.rest() , v_object = list_var.first() , ignoreme = add(ONE_INTEGER, ignoreme)) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject matrix_rms = pph_drs.pph_discourse_context_rms(UNPROVIDED);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject _prev_bind_0_83 = pph_vars.$pph_discourse_context$.currentBinding(thread);
+                                                                                                                                                        try {
+                                                                                                                                                            pph_vars.$pph_discourse_context$.bind(pph_drs.pph_discourse_context_copy(), thread);
+                                                                                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                                                                                format(T, $str_alt61$__Shadowing_discourse_context____);
+                                                                                                                                                            }
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject olist = com.cyc.cycjava.cycl.pph_main.generate_pph_output_list_no_checks(v_object, nl_preds, resolved_language_mt, resolved_domain_mt, mode, force);
+                                                                                                                                                                pph_disambiguation.note_pph_output_list_for_disambiguation(ignoreme, olist);
+                                                                                                                                                                if (NIL != pph_phrase.pph_phrase_output_list_p(olist)) {
+                                                                                                                                                                    output_lists_81 = cons(olist, output_lists_81);
+                                                                                                                                                                } else {
+                                                                                                                                                                    abortP = T;
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                            new_rms = pph_macros.note_leaving_shadowed_discourse_context(pph_vars.$pph_discourse_context$.getDynamicValue(thread), matrix_rms);
+                                                                                                                                                        } finally {
+                                                                                                                                                            pph_vars.$pph_discourse_context$.rebind(_prev_bind_0_83, thread);
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        if (NIL != abortP) {
+                                                                                                                                            output_lists = $FAILURE;
+                                                                                                                                        } else {
+                                                                                                                                            output_lists_81 = nreverse(output_lists_81);
+                                                                                                                                            {
+                                                                                                                                                SubLObject dupe_index_lists = pph_disambiguation.pph_find_duplicates(output_lists_81);
+                                                                                                                                                SubLObject cdolist_list_var = dupe_index_lists;
+                                                                                                                                                SubLObject dupe_index_list = NIL;
+                                                                                                                                                for (dupe_index_list = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , dupe_index_list = cdolist_list_var.first()) {
+                                                                                                                                                    pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str_alt63$__Working_on_dupe_list___S__, dupe_index_list, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject dupe_objects = pph_disambiguation.pph_dereference_indexes(dupe_index_list, objects);
+                                                                                                                                                        SubLObject cdolist_list_var_84 = dupe_index_list;
+                                                                                                                                                        SubLObject ignoreme = NIL;
+                                                                                                                                                        for (ignoreme = cdolist_list_var_84.first(); NIL != cdolist_list_var_84; cdolist_list_var_84 = cdolist_list_var_84.rest() , ignoreme = cdolist_list_var_84.first()) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject v_object = nth(ignoreme, objects);
+                                                                                                                                                                pph_disambiguation.pph_disambiguation_note(ONE_INTEGER, $str_alt64$__Trying_to_reparaphrase__S___, v_object, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_precision = pph_utilities.pph_precision_for_object(v_object, dupe_objects);
+                                                                                                                                                                    SubLObject new_demerit_cutoff = pph_disambiguation.pph_demerit_cutoff_from_olist(ignoreme, output_lists_81);
+                                                                                                                                                                    SubLObject new_output_list = NIL;
+                                                                                                                                                                    if (!new_precision.equal(pph_utilities.pph_current_precision())) {
+                                                                                                                                                                        pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str_alt65$__Trying_targeted_precision__S_fo, new_precision, v_object, UNPROVIDED);
+                                                                                                                                                                        SubLTrampolineFile.checkType(new_precision, PPH_PRECISION_P);
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject _prev_bind_0_85 = pph_vars.$paraphrase_precision$.currentBinding(thread);
+                                                                                                                                                                            try {
+                                                                                                                                                                                pph_vars.$paraphrase_precision$.bind(new_precision, thread);
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject matrix_rms = pph_drs.pph_discourse_context_rms(UNPROVIDED);
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject _prev_bind_0_86 = pph_vars.$pph_discourse_context$.currentBinding(thread);
+                                                                                                                                                                                        try {
+                                                                                                                                                                                            pph_vars.$pph_discourse_context$.bind(pph_drs.pph_discourse_context_copy(), thread);
+                                                                                                                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                                                                                                                format(T, $str_alt61$__Shadowing_discourse_context____);
+                                                                                                                                                                                            }
+                                                                                                                                                                                            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(new_demerit_cutoff)))) {
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(new_demerit_cutoff), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                                                                                                                                                                                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject _prev_bind_0_87 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                                                                                                                                                                                                try {
+                                                                                                                                                                                                    pph_vars.$pph_demerit_cutoff$.bind(new_demerit_cutoff, thread);
+                                                                                                                                                                                                    new_output_list = com.cyc.cycjava.cycl.pph_main.generate_pph_output_list_no_checks(v_object, nl_preds, resolved_language_mt, resolved_domain_mt, mode, force);
+                                                                                                                                                                                                } finally {
+                                                                                                                                                                                                    pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0_87, thread);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                            new_rms = pph_macros.note_leaving_shadowed_discourse_context(pph_vars.$pph_discourse_context$.getDynamicValue(thread), matrix_rms);
+                                                                                                                                                                                        } finally {
+                                                                                                                                                                                            pph_vars.$pph_discourse_context$.rebind(_prev_bind_0_86, thread);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            } finally {
+                                                                                                                                                                                pph_vars.$paraphrase_precision$.rebind(_prev_bind_0_85, thread);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                        pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str_alt67$__New_paraphrase_with_precision__, new_precision, v_object, new_output_list);
+                                                                                                                                                                    }
+                                                                                                                                                                    if (new_precision.isList() && ((NIL == new_output_list) || (NIL != pph_disambiguation.pph_output_list_E(new_output_list, nth(ignoreme, output_lists_81))))) {
+                                                                                                                                                                        pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str_alt68$__Trying_full_precision_for__S, v_object, UNPROVIDED, UNPROVIDED);
+                                                                                                                                                                        SubLTrampolineFile.checkType(T, PPH_PRECISION_P);
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject _prev_bind_0_88 = pph_vars.$paraphrase_precision$.currentBinding(thread);
+                                                                                                                                                                            SubLObject _prev_bind_1_89 = pph_vars.$pph_ambiguous_strings$.currentBinding(thread);
+                                                                                                                                                                            try {
+                                                                                                                                                                                pph_vars.$paraphrase_precision$.bind(T, thread);
+                                                                                                                                                                                pph_vars.$pph_ambiguous_strings$.bind(NIL != pph_vars.$pph_ambiguous_strings$.getDynamicValue(thread) ? ((SubLObject) (pph_vars.$pph_ambiguous_strings$.getDynamicValue(thread))) : dictionary.new_dictionary(symbol_function(EQUALP), UNPROVIDED), thread);
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject matrix_rms = pph_drs.pph_discourse_context_rms(UNPROVIDED);
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject _prev_bind_0_90 = pph_vars.$pph_discourse_context$.currentBinding(thread);
+                                                                                                                                                                                        try {
+                                                                                                                                                                                            pph_vars.$pph_discourse_context$.bind(pph_drs.pph_discourse_context_copy(), thread);
+                                                                                                                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                                                                                                                format(T, $str_alt61$__Shadowing_discourse_context____);
+                                                                                                                                                                                            }
+                                                                                                                                                                                            if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(new_demerit_cutoff)))) {
+                                                                                                                                                                                                {
+                                                                                                                                                                                                    SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(new_demerit_cutoff), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                                                                                                                                                                                    pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject _prev_bind_0_91 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                                                                                                                                                                                                try {
+                                                                                                                                                                                                    pph_vars.$pph_demerit_cutoff$.bind(new_demerit_cutoff, thread);
+                                                                                                                                                                                                    new_output_list = com.cyc.cycjava.cycl.pph_main.generate_pph_output_list_no_checks(v_object, nl_preds, resolved_language_mt, resolved_domain_mt, mode, force);
+                                                                                                                                                                                                } finally {
+                                                                                                                                                                                                    pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0_91, thread);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                            new_rms = pph_macros.note_leaving_shadowed_discourse_context(pph_vars.$pph_discourse_context$.getDynamicValue(thread), matrix_rms);
+                                                                                                                                                                                        } finally {
+                                                                                                                                                                                            pph_vars.$pph_discourse_context$.rebind(_prev_bind_0_90, thread);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            } finally {
+                                                                                                                                                                                pph_vars.$pph_ambiguous_strings$.rebind(_prev_bind_1_89, thread);
+                                                                                                                                                                                pph_vars.$paraphrase_precision$.rebind(_prev_bind_0_88, thread);
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                        pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str_alt69$__New_paraphrase_with_full_precis, v_object, new_output_list, UNPROVIDED);
+                                                                                                                                                                    }
+                                                                                                                                                                    if (NIL != pph_disambiguation.pph_new_olist_better_than_oldP(new_output_list, nth(ignoreme, output_lists_81), v_object)) {
+                                                                                                                                                                        pph_disambiguation.pph_disambiguation_note(ONE_INTEGER, $str_alt70$__Changing_output_list_for__S_fro, v_object, nth(ignoreme, output_lists_81), new_output_list);
+                                                                                                                                                                        set_nth(ignoreme, output_lists_81, new_output_list);
+                                                                                                                                                                        pph_disambiguation.note_pph_output_list_for_disambiguation(ignoreme, new_output_list);
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                            if (NIL != pph_macros.pph_discourse_context_initializedP()) {
+                                                                                                                                                pph_drs.pph_ensure_discourse_participant_rms();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject cdolist_list_var = objects;
+                                                                                                                                                    SubLObject v_object = NIL;
+                                                                                                                                                    for (v_object = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_object = cdolist_list_var.first()) {
+                                                                                                                                                        pph_drs.pph_possibly_add_reference_marker(v_object);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            } else {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_92 = pph_vars.$pph_discourse_context$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        pph_vars.$pph_discourse_context$.bind(pph_drs.new_pph_discourse_context(), thread);
+                                                                                                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                                                                                            format(T, $str_alt71$__Entering_WITHIN_NEW_PPH_DISCOUR, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
+                                                                                                                                                        }
+                                                                                                                                                        try {
+                                                                                                                                                            pph_drs.pph_ensure_discourse_participant_rms();
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject cdolist_list_var = objects;
+                                                                                                                                                                SubLObject v_object = NIL;
+                                                                                                                                                                for (v_object = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_object = cdolist_list_var.first()) {
+                                                                                                                                                                    pph_drs.pph_possibly_add_reference_marker(v_object);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        } finally {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_93 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                                                                                                        format(T, $str_alt72$__Leaving_WITHIN_NEW_PPH_DISCOURS, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
+                                                                                                                                                                    }
+                                                                                                                                                                    pph_macros.clear_pph_discourse_context();
+                                                                                                                                                                } finally {
+                                                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_93, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } finally {
+                                                                                                                                                        pph_vars.$pph_discourse_context$.rebind(_prev_bind_0_92, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                            output_lists = append(output_lists, output_lists_81);
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        pph_vars.$pph_ambiguous_strings$.rebind(_prev_bind_0_82, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            {
+                                                                                                                                SubLObject _prev_bind_0_94 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                try {
+                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                                                    }
+                                                                                                                                } finally {
+                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_94, thread);
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_80, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_79, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                                if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                                                    memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_78, thread);
+                                                                                        }
+                                                                                    }
+                                                                                } finally {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_95 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                            if (NIL == reuseP) {
+                                                                                                pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                                            }
+                                                                                        } finally {
+                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_95, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_77, thread);
+                                                                        }
+                                                                    }
+                                                                } catch (Throwable ccatch_env_var) {
+                                                                    failed_method = Errors.handleThrowable(ccatch_env_var, $PPH_METHOD_FAILURE);
+                                                                }
+                                                                tried_oneP = T;
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        pph_macros.$handling_pph_method_failuresP$.rebind(_prev_bind_1_76, thread);
+                                                        pph_macros.$suspended_paraphrase_methods$.rebind(_prev_bind_0_75, thread);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        timed_outP = pph_macros.pph_timeout_time_reachedP();
+                                    } finally {
+                                        pph_macros.$pph_timeout_reachedP$.rebind(_prev_bind_3, thread);
+                                        pph_macros.$pph_timeout_time$.rebind(_prev_bind_2_74, thread);
+                                        pph_macros.$pph_timeout_time_check_count$.rebind(_prev_bind_1_73, thread);
+                                        pph_vars.$pph_term_paraphrase_blacklist$.rebind(_prev_bind_0_72, thread);
+                                    }
+                                }
+                                if (NIL != timed_outP) {
+                                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                        Errors.warn($str_alt73$Timed_out_generating_disambiguati, objects);
+                                    }
+                                }
+                                {
+                                    SubLObject output_list = NIL;
+                                    SubLObject output_list_96 = NIL;
+                                    SubLObject cycl = NIL;
+                                    SubLObject cycl_97 = NIL;
+                                    for (output_list = output_lists, output_list_96 = output_list.first(), cycl = objects, cycl_97 = cycl.first(); !((NIL == cycl) && (NIL == output_list)); output_list = output_list.rest() , output_list_96 = output_list.first() , cycl = cycl.rest() , cycl_97 = cycl.first()) {
+                                        {
+                                            SubLObject pcase_var = return_style;
+                                            if (pcase_var.eql($PAIRS)) {
+                                                {
+                                                    SubLObject string = pph_phrase.pph_phrase_output_list_string(output_list_96, UNPROVIDED);
+                                                    ans = cons(list(cycl_97, string), ans);
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($JAVALISTS)) {
+                                                    ans = cons(pph_utilities.pph_output_list_to_javalist(output_list_96), ans);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0_98 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    pph_macros.destroy_new_pph_phrases();
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_98, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                        pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1, thread);
+                        pph_macros.$new_pph_phrases$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(ans);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param RETURN-STYLE
+     * 		keywordp; :PAIRS or :JAVALISTS
+     */
+    @LispMethod(comment = "@param RETURN-STYLE\r\n\t\tkeywordp; :PAIRS or :JAVALISTS")
     public static SubLObject generate_disambiguation_phrases_int(final SubLObject objects, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject return_style, SubLObject forbidden_strings) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -1668,7 +3687,7 @@ public final class pph_main extends SubLTranslatedFile {
             forbidden_strings = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != pph_speech_act.pph_force_p(force) : "pph_speech_act.pph_force_p(force) " + "CommonSymbols.NIL != pph_speech_act.pph_force_p(force) " + force;
+        assert NIL != pph_speech_act.pph_force_p(force) : "! pph_speech_act.pph_force_p(force) " + ("pph_speech_act.pph_force_p(force) " + "CommonSymbols.NIL != pph_speech_act.pph_force_p(force) ") + force;
         SubLObject output_lists = NIL;
         SubLObject timed_outP = NIL;
         SubLObject ans = NIL;
@@ -1685,7 +3704,7 @@ public final class pph_main extends SubLTranslatedFile {
             try {
                 final SubLObject default_timeout = pph_macros.pph_timeout();
                 final SubLObject timeout = (default_timeout.isNumber()) ? multiply(default_timeout, length(objects)) : NIL;
-                assert NIL != pph_macros.valid_pph_blacklistP(blacklist) : "pph_macros.valid_pph_blacklistP(blacklist) " + "CommonSymbols.NIL != pph_macros.valid_pph_blacklistP(blacklist) " + blacklist;
+                assert NIL != pph_macros.valid_pph_blacklistP(blacklist) : "! pph_macros.valid_pph_blacklistP(blacklist) " + ("pph_macros.valid_pph_blacklistP(blacklist) " + "CommonSymbols.NIL != pph_macros.valid_pph_blacklistP(blacklist) ") + blacklist;
                 final SubLObject _prev_bind_0_$77 = pph_vars.$pph_term_paraphrase_blacklist$.currentBinding(thread);
                 final SubLObject _prev_bind_1_$78 = pph_macros.$pph_timeout_time_check_count$.currentBinding(thread);
                 final SubLObject _prev_bind_2_$79 = pph_macros.$pph_timeout_time$.currentBinding(thread);
@@ -1777,7 +3796,7 @@ public final class pph_main extends SubLTranslatedFile {
                                                                                 SubLObject new_output_list = NIL;
                                                                                 if (!new_precision.equal(pph_utilities.pph_current_precision())) {
                                                                                     pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str64$__Trying_targeted_precision__S_fo, new_precision, v_object2, UNPROVIDED);
-                                                                                    assert NIL != pph_utilities.pph_precision_p(new_precision) : "pph_utilities.pph_precision_p(new_precision) " + "CommonSymbols.NIL != pph_utilities.pph_precision_p(new_precision) " + new_precision;
+                                                                                    assert NIL != pph_utilities.pph_precision_p(new_precision) : "! pph_utilities.pph_precision_p(new_precision) " + ("pph_utilities.pph_precision_p(new_precision) " + "CommonSymbols.NIL != pph_utilities.pph_precision_p(new_precision) ") + new_precision;
                                                                                     final SubLObject _prev_bind_0_$85 = pph_vars.$paraphrase_precision$.currentBinding(thread);
                                                                                     final SubLObject _prev_bind_1_$80 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
                                                                                     try {
@@ -1792,7 +3811,7 @@ public final class pph_main extends SubLTranslatedFile {
                                                                                 }
                                                                                 if (new_precision.isList() && ((NIL == new_output_list) || (NIL != pph_disambiguation.pph_output_list_E(new_output_list, nth(ignoreme2, output_lists_$87))))) {
                                                                                     pph_disambiguation.pph_disambiguation_note(TWO_INTEGER, $str67$__Trying_full_precision_for__S, v_object2, UNPROVIDED, UNPROVIDED);
-                                                                                    assert NIL != pph_utilities.pph_precision_p(T) : "pph_utilities.pph_precision_p(CommonSymbols.T) " + "CommonSymbols.NIL != pph_utilities.pph_precision_p(CommonSymbols.T) " + T;
+                                                                                    assert NIL != pph_utilities.pph_precision_p(T) : "! pph_utilities.pph_precision_p( .T) " + ("pph_utilities.pph_precision_p(CommonSymbols.T) " + "CommonSymbols.NIL != pph_utilities.pph_precision_p(CommonSymbols.T) ") + T;
                                                                                     final SubLObject _prev_bind_0_$86 = pph_vars.$paraphrase_precision$.currentBinding(thread);
                                                                                     final SubLObject _prev_bind_1_$81 = pph_vars.$pph_ambiguous_strings$.currentBinding(thread);
                                                                                     final SubLObject _prev_bind_2_$80 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
@@ -1940,6 +3959,22 @@ public final class pph_main extends SubLTranslatedFile {
         return nreverse(ans);
     }
 
+    public static final SubLObject pph_blacklist_for_objects_and_strings_alt(SubLObject objects, SubLObject forbidden_strings) {
+        {
+            SubLObject blacklist = NIL;
+            if (NIL != forbidden_strings) {
+                {
+                    SubLObject cdolist_list_var = objects;
+                    SubLObject v_object = NIL;
+                    for (v_object = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_object = cdolist_list_var.first()) {
+                        blacklist = list_utilities.alist_enter(blacklist, v_object, forbidden_strings, UNPROVIDED);
+                    }
+                }
+            }
+            return blacklist;
+        }
+    }
+
     public static SubLObject pph_blacklist_for_objects_and_strings(final SubLObject objects, final SubLObject forbidden_strings) {
         SubLObject blacklist = NIL;
         if (NIL != forbidden_strings) {
@@ -1955,6 +3990,192 @@ public final class pph_main extends SubLTranslatedFile {
         return blacklist;
     }
 
+    /**
+     *
+     *
+     * @return association LISTP of (<object> <string> <type> <type-string>) tuples,
+    one for each item on OBJECTS.
+     * @param FORBIDDEN-STRINGS;
+     * 		listp of strings to *not* use as a paraphrase for any member of OBJECTS.
+     * 		An effort is made to have the paraphrase for each item be sufficiently distinct
+     * 		to distinguish it from the other items.
+     */
+    @LispMethod(comment = "@return association LISTP of (<object> <string> <type> <type-string>) tuples,\r\none for each item on OBJECTS.\r\n@param FORBIDDEN-STRINGS;\r\n\t\tlistp of strings to *not* use as a paraphrase for any member of OBJECTS.\r\n\t\tAn effort is made to have the paraphrase for each item be sufficiently distinct\r\n\t\tto distinguish it from the other items.")
+    public static final SubLObject generate_disambiguation_phrases_and_types_alt(SubLObject objects, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject forbidden_strings) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $list_alt74;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (forbidden_strings == UNPROVIDED) {
+            forbidden_strings = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(forbidden_strings, LIST_OF_STRING_P);
+            {
+                SubLObject ans = NIL;
+                SubLObject types = pph_disambiguation.pph_disambiguating_generalizations(objects, domain_mt);
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                    try {
+                        pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                        {
+                            SubLObject reuseP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_99 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                    try {
+                                        pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                        {
+                                            SubLObject new_or_reused = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_100 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                    {
+                                                        SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_101 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                {
+                                                                    SubLObject original_memoization_process = NIL;
+                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                        {
+                                                                            SubLObject current_proc = current_process();
+                                                                            if (NIL == original_memoization_process) {
+                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                            } else {
+                                                                                if (original_memoization_process != current_proc) {
+                                                                                    Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    try {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_102 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                                                                            try {
+                                                                                pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                                pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                                                                                pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                                                                                try {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_103 = pph_vars.$use_parenthetical_disambiguationsP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            pph_vars.$use_parenthetical_disambiguationsP$.bind($NEVER, thread);
+                                                                                            {
+                                                                                                SubLObject term_phrase_pairs = com.cyc.cycjava.cycl.pph_main.generate_disambiguation_phrases(objects, $NONE, nl_preds, language_mt, domain_mt, mode, forbidden_strings);
+                                                                                                SubLObject type_phrase_pairs = com.cyc.cycjava.cycl.pph_main.generate_disambiguation_phrases(types, $NONE, $list_alt74, language_mt, domain_mt, mode, forbidden_strings);
+                                                                                                SubLObject term_pair = NIL;
+                                                                                                SubLObject term_pair_104 = NIL;
+                                                                                                SubLObject type_pair = NIL;
+                                                                                                SubLObject type_pair_105 = NIL;
+                                                                                                for (term_pair = term_phrase_pairs, term_pair_104 = term_pair.first(), type_pair = type_phrase_pairs, type_pair_105 = type_pair.first(); !((NIL == type_pair) && (NIL == term_pair)); term_pair = term_pair.rest() , term_pair_104 = term_pair.first() , type_pair = type_pair.rest() , type_pair_105 = type_pair.first()) {
+                                                                                                    ans = cons(append(term_pair_104, type_pair_105), ans);
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            pph_vars.$use_parenthetical_disambiguationsP$.rebind(_prev_bind_0_103, thread);
+                                                                                        }
+                                                                                    }
+                                                                                } finally {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_106 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                            pph_macros.destroy_new_pph_phrases();
+                                                                                        } finally {
+                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_106, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                                                                                pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1, thread);
+                                                                                pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_102, thread);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_107 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_107, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                memoization_state.$memoization_state$.rebind(_prev_bind_0_101, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_100, thread);
+                                                }
+                                            }
+                                            if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                            }
+                                        }
+                                    } finally {
+                                        pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_99, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_108 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuseP) {
+                                            pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_108, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(ans);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return association LISTP of (<object> <string> <type> <type-string>) tuples,
+    one for each item on OBJECTS.
+     * @param FORBIDDEN-STRINGS;
+     * 		listp of strings to *not* use as a paraphrase for any member of OBJECTS.
+     * 		An effort is made to have the paraphrase for each item be sufficiently distinct
+     * 		to distinguish it from the other items.
+     */
+    @LispMethod(comment = "@return association LISTP of (<object> <string> <type> <type-string>) tuples,\r\none for each item on OBJECTS.\r\n@param FORBIDDEN-STRINGS;\r\n\t\tlistp of strings to *not* use as a paraphrase for any member of OBJECTS.\r\n\t\tAn effort is made to have the paraphrase for each item be sufficiently distinct\r\n\t\tto distinguish it from the other items.")
     public static SubLObject generate_disambiguation_phrases_and_types(final SubLObject objects, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject forbidden_strings) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $list71;
@@ -1972,7 +4193,7 @@ public final class pph_main extends SubLTranslatedFile {
             forbidden_strings = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != string_utilities.list_of_string_p(forbidden_strings) : "string_utilities.list_of_string_p(forbidden_strings) " + "CommonSymbols.NIL != string_utilities.list_of_string_p(forbidden_strings) " + forbidden_strings;
+        assert NIL != string_utilities.list_of_string_p(forbidden_strings) : "! string_utilities.list_of_string_p(forbidden_strings) " + ("string_utilities.list_of_string_p(forbidden_strings) " + "CommonSymbols.NIL != string_utilities.list_of_string_p(forbidden_strings) ") + forbidden_strings;
         SubLObject ans = NIL;
         final SubLObject types = pph_disambiguation.pph_disambiguating_generalizations(objects, domain_mt);
         final SubLObject _prev_bind_0 = pph_macros.$free_pph_problem_store_pointers$.currentBinding(thread);
@@ -2092,12 +4313,54 @@ public final class pph_main extends SubLTranslatedFile {
         return nreverse(ans);
     }
 
+    /**
+     *
+     *
+     * @return LISTP of paraphrase pieces for ASSERTION. The pieces include minimally
+    strings, and also arg-position pointers into the original assertion, and (non-anchor)
+    html tags when available.
+     */
+    @LispMethod(comment = "@return LISTP of paraphrase pieces for ASSERTION. The pieces include minimally\r\nstrings, and also arg-position pointers into the original assertion, and (non-anchor)\r\nhtml tags when available.")
+    public static final SubLObject generate_assertion_output_list_alt(SubLObject assertion, SubLObject language_mt) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            {
+                SubLObject olist = NIL;
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$constant_link_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_vars.$pph_use_bulleted_listsP$.currentBinding(thread);
+                    try {
+                        pph_vars.$constant_link_function$.bind($NONE, thread);
+                        pph_vars.$pph_use_bulleted_listsP$.bind(T, thread);
+                        olist = com.cyc.cycjava.cycl.pph_main.generate_pph_output_list(assertion, $DEFAULT, language_mt, assertions_high.assertion_mt(assertion), $HTML, $NONE);
+                    } finally {
+                        pph_vars.$pph_use_bulleted_listsP$.rebind(_prev_bind_1, thread);
+                        pph_vars.$constant_link_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return pph_methods.pph_output_list_to_assertion_output_list(olist);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return LISTP of paraphrase pieces for ASSERTION. The pieces include minimally
+    strings, and also arg-position pointers into the original assertion, and (non-anchor)
+    html tags when available.
+     */
+    @LispMethod(comment = "@return LISTP of paraphrase pieces for ASSERTION. The pieces include minimally\r\nstrings, and also arg-position pointers into the original assertion, and (non-anchor)\r\nhtml tags when available.")
     public static SubLObject generate_assertion_output_list(final SubLObject assertion, SubLObject language_mt) {
         if (language_mt == UNPROVIDED) {
             language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         SubLObject olist = NIL;
         final SubLObject _prev_bind_0 = pph_vars.$constant_link_function$.currentBinding(thread);
         final SubLObject _prev_bind_2 = pph_vars.$pph_use_bulleted_listsP$.currentBinding(thread);
@@ -2112,6 +4375,48 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_methods.pph_output_list_to_assertion_output_list(olist);
     }
 
+    /**
+     *
+     *
+     * @param FORCE
+    pph-force-p.
+     * 		
+     * @return 0 PPH-PHRASE-OUTPUT-LIST-P for the paraphrase of OBJECT.
+     * @return 1 NL pred
+     * @return 2 justification
+     */
+    @LispMethod(comment = "@param FORCE\npph-force-p.\r\n\t\t\r\n@return 0 PPH-PHRASE-OUTPUT-LIST-P for the paraphrase of OBJECT.\r\n@return 1 NL pred\r\n@return 2 justification")
+    public static final SubLObject generate_pph_output_list_alt(SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject force) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        SubLTrampolineFile.checkType(force, PPH_FORCE_P);
+        return com.cyc.cycjava.cycl.pph_main.generate_pph_output_list_internal(v_object, nl_preds, language_mt, domain_mt, mode, force, T);
+    }
+
+    /**
+     *
+     *
+     * @param FORCE
+    pph-force-p.
+     * 		
+     * @return 0 PPH-PHRASE-OUTPUT-LIST-P for the paraphrase of OBJECT.
+     * @return 1 NL pred
+     * @return 2 justification
+     */
+    @LispMethod(comment = "@param FORCE\npph-force-p.\r\n\t\t\r\n@return 0 PPH-PHRASE-OUTPUT-LIST-P for the paraphrase of OBJECT.\r\n@return 1 NL pred\r\n@return 2 justification")
     public static SubLObject generate_pph_output_list(final SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject force) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -2129,7 +4434,7 @@ public final class pph_main extends SubLTranslatedFile {
             force = $DEFAULT;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != pph_speech_act.pph_force_p(force) : "pph_speech_act.pph_force_p(force) " + "CommonSymbols.NIL != pph_speech_act.pph_force_p(force) " + force;
+        assert NIL != pph_speech_act.pph_force_p(force) : "! pph_speech_act.pph_force_p(force) " + ("pph_speech_act.pph_force_p(force) " + "CommonSymbols.NIL != pph_speech_act.pph_force_p(force) ") + force;
         if ($DEFAULT == nl_preds) {
             nl_preds = pph_utilities.pph_default_nl_preds(narts_high.nart_substitute(v_object), force, language_mt, domain_mt);
         }
@@ -2145,6 +4450,30 @@ public final class pph_main extends SubLTranslatedFile {
         return generate_pph_output_list_internal(v_object, nl_preds, language_mt, domain_mt, mode, force, T);
     }
 
+    /**
+     * Like GENERATE-PPH-OUTPUT-LIST, sans type-checking on the arguments.
+     */
+    @LispMethod(comment = "Like GENERATE-PPH-OUTPUT-LIST, sans type-checking on the arguments.")
+    public static final SubLObject generate_pph_output_list_no_checks_alt(SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject force) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        return com.cyc.cycjava.cycl.pph_main.generate_pph_output_list_internal(v_object, nl_preds, language_mt, domain_mt, mode, force, NIL);
+    }
+
+    @LispMethod(comment = "Like GENERATE-PPH-OUTPUT-LIST, sans type-checking on the arguments.")
     public static SubLObject generate_pph_output_list_no_checks(final SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject force) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -2162,6 +4491,58 @@ public final class pph_main extends SubLTranslatedFile {
             force = $DEFAULT;
         }
         return generate_pph_output_list_internal(v_object, nl_preds, language_mt, domain_mt, mode, force, NIL);
+    }/**
+     * Like GENERATE-PPH-OUTPUT-LIST, sans type-checking on the arguments.
+     */
+
+
+    public static final SubLObject generate_pph_output_list_internal_alt(SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject force, SubLObject checksP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject string = NIL;
+                SubLObject pred = NIL;
+                SubLObject justification = NIL;
+                SubLObject output_list = NIL;
+                if (NIL != checksP) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject string_109 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force(v_object, force, nl_preds, language_mt, domain_mt, mode, UNPROVIDED);
+                        SubLObject pred_110 = thread.secondMultipleValue();
+                        SubLObject justification_111 = thread.thirdMultipleValue();
+                        SubLObject output_list_112 = thread.fourthMultipleValue();
+                        thread.resetMultipleValues();
+                        string = string_109;
+                        pred = pred_110;
+                        justification = justification_111;
+                        output_list = output_list_112;
+                    }
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject string_113 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_no_checks(v_object, force, nl_preds, language_mt, domain_mt, mode, UNPROVIDED);
+                        SubLObject pred_114 = thread.secondMultipleValue();
+                        SubLObject justification_115 = thread.thirdMultipleValue();
+                        SubLObject output_list_116 = thread.fourthMultipleValue();
+                        thread.resetMultipleValues();
+                        string = string_113;
+                        pred = pred_114;
+                        justification = justification_115;
+                        output_list = output_list_116;
+                    }
+                }
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.currentBinding(thread);
+                    try {
+                        pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.bind(makeBoolean((NIL != pph_vars.pph_link_unlinked_phrases_to_matrix_arg0P()) && (NIL == find_if(GEN_TEMPLATE_QUERY_SENTENCE_ASSERTION_P, justification, UNPROVIDED, UNPROVIDED, UNPROVIDED))), thread);
+                        output_list = com.cyc.cycjava.cycl.pph_main.pph_sanitize_output_list(copy_list(output_list), v_object);
+                    } finally {
+                        pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(output_list, pred, justification);
+            }
+        }
     }
 
     public static SubLObject generate_pph_output_list_internal(final SubLObject v_object, final SubLObject nl_preds, final SubLObject language_mt, final SubLObject domain_mt, final SubLObject mode, final SubLObject force, final SubLObject checksP) {
@@ -2201,6 +4582,281 @@ public final class pph_main extends SubLTranslatedFile {
             pph_vars.$pph_link_unlinked_phrases_to_matrix_arg0P$.rebind(_prev_bind_0, thread);
         }
         return values(output_list, pred, justification);
+    }
+
+    public static final SubLObject generate_pph_output_lists_for_term(SubLObject v_term, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject allow_morphological_variantsP, SubLObject allow_nested_variantsP) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $ANY;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (allow_morphological_variantsP == UNPROVIDED) {
+            allow_morphological_variantsP = pph_vars.pph_generate_morphological_alternativesP();
+        }
+        if (allow_nested_variantsP == UNPROVIDED) {
+            allow_nested_variantsP = pph_vars.pph_generate_nested_alternativesP();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject error_message = NIL;
+                SubLObject output_lists = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                    try {
+                        pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                        {
+                            SubLObject reuseP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_117 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                    try {
+                                        pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                        {
+                                            SubLObject new_or_reused = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_118 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                    {
+                                                        SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_119 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                {
+                                                                    SubLObject original_memoization_process = NIL;
+                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                        {
+                                                                            SubLObject current_proc = current_process();
+                                                                            if (NIL == original_memoization_process) {
+                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                            } else {
+                                                                                if (original_memoization_process != current_proc) {
+                                                                                    Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    try {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_120 = Errors.$continue_cerrorP$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+                                                                            try {
+                                                                                Errors.$continue_cerrorP$.bind(NIL, thread);
+                                                                                pph_error.$pph_error_handling_onP$.bind(T, thread);
+                                                                                if (NIL != pph_error.pph_break_on_errorP()) {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_121 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                                                        SubLObject _prev_bind_1_122 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                                                                                        SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                                            pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                                                                                            pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                                                                                            try {
+                                                                                                if ($DEFAULT == nl_preds) {
+                                                                                                    nl_preds = pph_utilities.pph_default_nl_preds(v_term, $NONE, language_mt, domain_mt);
+                                                                                                }
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_123 = pph_vars.$pph_alternative_phrase_generation_level$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_1_124 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                                                    SubLObject _prev_bind_2_125 = pph_vars.$pph_domain_mt$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        pph_vars.$pph_alternative_phrase_generation_level$.bind(NIL != allow_morphological_variantsP ? ((SubLObject) ($ALL)) : NIL != allow_nested_variantsP ? ((SubLObject) ($LEXICAL_ONLY)) : $TOP_LEVEL_ONLY, thread);
+                                                                                                        pph_vars.$pph_language_mt$.bind(language_mt, thread);
+                                                                                                        pph_vars.$pph_domain_mt$.bind(domain_mt, thread);
+                                                                                                        {
+                                                                                                            SubLObject v_pph_phrase = pph_phrase.new_pph_phrase_for_cycl(v_term, UNPROVIDED, UNPROVIDED);
+                                                                                                            pph_phrase.pph_phrase_set_agr_preds(v_pph_phrase, nl_preds, UNPROVIDED);
+                                                                                                            com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(v_pph_phrase, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                            if (NIL != pph_phrase.pph_phrase_doneP(v_pph_phrase)) {
+                                                                                                                {
+                                                                                                                    SubLObject cdolist_list_var = pph_phrase.pph_phrase_all_output_lists(v_pph_phrase);
+                                                                                                                    SubLObject output_list = NIL;
+                                                                                                                    for (output_list = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , output_list = cdolist_list_var.first()) {
+                                                                                                                        {
+                                                                                                                            SubLObject item_var = output_list;
+                                                                                                                            if (NIL == member(item_var, output_lists, symbol_function(EQUALP), symbol_function(IDENTITY))) {
+                                                                                                                                output_lists = cons(item_var, output_lists);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } finally {
+                                                                                                        pph_vars.$pph_domain_mt$.rebind(_prev_bind_2_125, thread);
+                                                                                                        pph_vars.$pph_language_mt$.rebind(_prev_bind_1_124, thread);
+                                                                                                        pph_vars.$pph_alternative_phrase_generation_level$.rebind(_prev_bind_0_123, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            } finally {
+                                                                                                {
+                                                                                                    SubLObject _prev_bind_0_126 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                    try {
+                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                        pph_macros.destroy_new_pph_phrases();
+                                                                                                    } finally {
+                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_126, thread);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                                                                                            pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1_122, thread);
+                                                                                            pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_121, thread);
+                                                                                        }
+                                                                                    }
+                                                                                } else {
+                                                                                    try {
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_127 = Errors.$error_handler$.currentBinding(thread);
+                                                                                            try {
+                                                                                                Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                                                                                try {
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_128 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                                                                        SubLObject _prev_bind_1_129 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                                                                                                        SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                                                            pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                                                                                                            pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                                                                                                            try {
+                                                                                                                if ($DEFAULT == nl_preds) {
+                                                                                                                    nl_preds = pph_utilities.pph_default_nl_preds(v_term, $NONE, language_mt, domain_mt);
+                                                                                                                }
+                                                                                                                {
+                                                                                                                    SubLObject _prev_bind_0_130 = pph_vars.$pph_alternative_phrase_generation_level$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_1_131 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                                                                    SubLObject _prev_bind_2_132 = pph_vars.$pph_domain_mt$.currentBinding(thread);
+                                                                                                                    try {
+                                                                                                                        pph_vars.$pph_alternative_phrase_generation_level$.bind(NIL != allow_morphological_variantsP ? ((SubLObject) ($ALL)) : NIL != allow_nested_variantsP ? ((SubLObject) ($LEXICAL_ONLY)) : $TOP_LEVEL_ONLY, thread);
+                                                                                                                        pph_vars.$pph_language_mt$.bind(language_mt, thread);
+                                                                                                                        pph_vars.$pph_domain_mt$.bind(domain_mt, thread);
+                                                                                                                        {
+                                                                                                                            SubLObject v_pph_phrase = pph_phrase.new_pph_phrase_for_cycl(v_term, UNPROVIDED, UNPROVIDED);
+                                                                                                                            pph_phrase.pph_phrase_set_agr_preds(v_pph_phrase, nl_preds, UNPROVIDED);
+                                                                                                                            com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(v_pph_phrase, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                            if (NIL != pph_phrase.pph_phrase_doneP(v_pph_phrase)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject cdolist_list_var = pph_phrase.pph_phrase_all_output_lists(v_pph_phrase);
+                                                                                                                                    SubLObject output_list = NIL;
+                                                                                                                                    for (output_list = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , output_list = cdolist_list_var.first()) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject item_var = output_list;
+                                                                                                                                            if (NIL == member(item_var, output_lists, symbol_function(EQUALP), symbol_function(IDENTITY))) {
+                                                                                                                                                output_lists = cons(item_var, output_lists);
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } finally {
+                                                                                                                        pph_vars.$pph_domain_mt$.rebind(_prev_bind_2_132, thread);
+                                                                                                                        pph_vars.$pph_language_mt$.rebind(_prev_bind_1_131, thread);
+                                                                                                                        pph_vars.$pph_alternative_phrase_generation_level$.rebind(_prev_bind_0_130, thread);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } finally {
+                                                                                                                {
+                                                                                                                    SubLObject _prev_bind_0_133 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                    try {
+                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                        pph_macros.destroy_new_pph_phrases();
+                                                                                                                    } finally {
+                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_133, thread);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                                                                                                            pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1_129, thread);
+                                                                                                            pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_128, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                } catch (Throwable catch_var) {
+                                                                                                    Errors.handleThrowable(catch_var, NIL);
+                                                                                                }
+                                                                                            } finally {
+                                                                                                Errors.$error_handler$.rebind(_prev_bind_0_127, thread);
+                                                                                            }
+                                                                                        }
+                                                                                    } catch (Throwable ccatch_env_var) {
+                                                                                        error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                                                                                    }
+                                                                                    if (error_message.isString()) {
+                                                                                        Errors.warn(error_message);
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1, thread);
+                                                                                Errors.$continue_cerrorP$.rebind(_prev_bind_0_120, thread);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_134 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_134, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                memoization_state.$memoization_state$.rebind(_prev_bind_0_119, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_118, thread);
+                                                }
+                                            }
+                                            if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                            }
+                                        }
+                                    } finally {
+                                        pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_117, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_135 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuseP) {
+                                            pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_135, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return nreverse(output_lists);
+            }
+        }
     }
 
     public static SubLObject generate_pph_output_lists_for_term(final SubLObject v_term, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject allow_morphological_variantsP, SubLObject allow_nested_variantsP, SubLObject force) {
@@ -2639,6 +5295,39 @@ public final class pph_main extends SubLTranslatedFile {
         }
     }
 
+    /**
+     * Remove any information from OUTPUT-LIST that looks screwy.
+     */
+    @LispMethod(comment = "Remove any information from OUTPUT-LIST that looks screwy.")
+    public static final SubLObject pph_sanitize_output_list_alt(SubLObject output_list, SubLObject input_cycl) {
+        {
+            SubLObject any_changeP = NIL;
+            input_cycl = hl_to_el(input_cycl);
+            if (NIL != el_formula_p(input_cycl)) {
+                {
+                    SubLObject cdolist_list_var = output_list;
+                    SubLObject item = NIL;
+                    for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                        {
+                            SubLObject changeP = com.cyc.cycjava.cycl.pph_main.pph_sanitize_output_item(item, input_cycl);
+                            if (NIL != changeP) {
+                                any_changeP = T;
+                            }
+                        }
+                    }
+                }
+            }
+            if (NIL != any_changeP) {
+                output_list = pph_phrase.consolidate_same_arg_items(output_list);
+            }
+            return values(output_list, any_changeP);
+        }
+    }
+
+    /**
+     * Remove any information from OUTPUT-LIST that looks screwy.
+     */
+    @LispMethod(comment = "Remove any information from OUTPUT-LIST that looks screwy.")
     public static SubLObject pph_sanitize_output_list(SubLObject output_list, SubLObject input_cycl) {
         SubLObject any_changeP = NIL;
         input_cycl = cycl_utilities.hl_to_el(input_cycl);
@@ -2659,6 +5348,64 @@ public final class pph_main extends SubLTranslatedFile {
             output_list = pph_phrase.consolidate_same_arg_items(output_list);
         }
         return values(output_list, any_changeP);
+    }/**
+     * Remove any information from OUTPUT-LIST that looks screwy.
+     */
+
+
+    public static final SubLObject pph_sanitize_output_item_alt(SubLObject item, SubLObject input_cycl) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject arg_position = pph_phrase_output_item_arg_position(item);
+                SubLObject output_item_cycl = pph_phrase_output_item_cycl(item);
+                SubLObject changeP = NIL;
+                if (NIL != pph_utilities.pph_unknown_arg_position_p(arg_position)) {
+                    if (!((NIL != constant_p(output_item_cycl)) && constants_high.constant_name(output_item_cycl).equal(pph_phrase_output_item_string(item)))) {
+                        com.cyc.cycjava.cycl.pph_main.pph_phrase_output_item_strip_anchor_tags(item);
+                        if (!((NIL != pph_phrase.pph_unknown_cycl_p(output_item_cycl)) || (NIL != pph_phrase.pph_empty_cycl_p(output_item_cycl)))) {
+                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                Errors.warn($str_alt80$Setting_cycl_for__S_to__S_since_i, item, pph_phrase.pph_empty_cycl());
+                            }
+                            pph_phrase_output_item_set_cycl(item, pph_phrase.pph_empty_cycl());
+                        }
+                        changeP = T;
+                    }
+                } else {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject arg = pph_utilities.pph_dereference_arg_position(input_cycl, arg_position);
+                        SubLObject errorP = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != errorP) {
+                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                Errors.warn($str_alt81$Couldn_t_dereference_arg_position, arg_position, output_item_cycl);
+                            }
+                            pph_phrase_output_item_set_arg_position(item, pph_utilities.pph_unknown_arg_position());
+                            changeP = T;
+                        } else {
+                            if (!function_terms.nart_to_naut(output_item_cycl).equal(function_terms.nart_to_naut(arg))) {
+                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                    Errors.warn($str_alt82$CycL_on__S_doesn_t_match_CycL__S, item, arg);
+                                }
+                                {
+                                    SubLObject conservativeP = T;
+                                    if (NIL != conservativeP) {
+                                        pph_phrase_output_item_set_arg_position(item, pph_utilities.pph_unknown_arg_position());
+                                        com.cyc.cycjava.cycl.pph_main.pph_phrase_output_item_strip_anchor_tags(item);
+                                        pph_phrase_output_item_set_cycl(item, pph_phrase.pph_unknown_cycl());
+                                    } else {
+                                        pph_phrase_output_item_set_cycl(item, arg);
+                                    }
+                                    changeP = T;
+                                }
+                            }
+                        }
+                    }
+                }
+                return changeP;
+            }
+        }
     }
 
     public static SubLObject pph_sanitize_output_item(final SubLObject item, final SubLObject input_cycl) {
@@ -2711,6 +5458,17 @@ public final class pph_main extends SubLTranslatedFile {
         return changeP;
     }
 
+    public static final SubLObject pph_phrase_output_item_strip_anchor_tags_alt(SubLObject item) {
+        {
+            SubLObject open_tag = pph_phrase_output_item_html_open_tag(item);
+            SubLObject new_open_tag = com.cyc.cycjava.cycl.pph_main.pph_strip_anchor_tags(open_tag);
+            SubLObject close_tag = pph_phrase_output_item_html_close_tag(item);
+            SubLObject new_close_tag = com.cyc.cycjava.cycl.pph_main.pph_strip_anchor_tags(close_tag);
+            pph_phrase_output_item_set_html_tags(item, new_open_tag, new_close_tag);
+        }
+        return item;
+    }
+
     public static SubLObject pph_phrase_output_item_strip_anchor_tags(final SubLObject item) {
         final SubLObject open_tag = pph_data_structures.pph_phrase_output_item_html_open_tag(item);
         final SubLObject new_open_tag = pph_strip_anchor_tags(open_tag);
@@ -2720,11 +5478,75 @@ public final class pph_main extends SubLTranslatedFile {
         return item;
     }
 
+    /**
+     *
+     *
+     * @return STRINGP or NIL; TAG minus any anchor tags.
+     */
+    @LispMethod(comment = "@return STRINGP or NIL; TAG minus any anchor tags.")
+    public static final SubLObject pph_strip_anchor_tags_alt(SubLObject tag) {
+        {
+            SubLObject stripped = pph_utilities.pph_remove_html_tags(tag, T);
+            return NIL != string_utilities.non_empty_stringP(stripped) ? ((SubLObject) (stripped)) : NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return STRINGP or NIL; TAG minus any anchor tags.
+     */
+    @LispMethod(comment = "@return STRINGP or NIL; TAG minus any anchor tags.")
     public static SubLObject pph_strip_anchor_tags(final SubLObject tag) {
         final SubLObject stripped = pph_utilities.pph_remove_html_tags(tag, T);
         return NIL != string_utilities.non_empty_stringP(stripped) ? stripped : NIL;
     }
 
+    /**
+     *
+     *
+     * @param ARG-POSITION;
+    PPH-ARG-POSITION-P.
+     * 		
+     * @param OUTPUT-LIST;
+    PPH-PHRASE-OUTPUT-LIST-P.
+     * 		
+     * @param ADD-TAGS?;
+     * 		Should we add html tags, if available?
+     * @return STRINGP or NIL; the paraphrase for ARG-POSITION in OUTPUT-LIST.
+     */
+    @LispMethod(comment = "@param ARG-POSITION;\nPPH-ARG-POSITION-P.\r\n\t\t\r\n@param OUTPUT-LIST;\nPPH-PHRASE-OUTPUT-LIST-P.\r\n\t\t\r\n@param ADD-TAGS?;\r\n\t\tShould we add html tags, if available?\r\n@return STRINGP or NIL; the paraphrase for ARG-POSITION in OUTPUT-LIST.")
+    public static final SubLObject pph_string_for_arg_position_alt(SubLObject arg_position, SubLObject output_list, SubLObject add_tagsP) {
+        if (add_tagsP == UNPROVIDED) {
+            add_tagsP = T;
+        }
+        {
+            SubLObject arg_position_items = NIL;
+            SubLObject cdolist_list_var = output_list;
+            SubLObject item = NIL;
+            for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                if (NIL != pph_utilities.pph_arg_position_subsumesP(pph_phrase_output_item_arg_position(item), arg_position, UNPROVIDED)) {
+                    arg_position_items = cons(item, arg_position_items);
+                }
+            }
+            return pph_phrase.pph_phrase_output_list_string(nreverse(arg_position_items), add_tagsP);
+        }
+    }
+
+    /**
+     *
+     *
+     * @param ARG-POSITION;
+    PPH-ARG-POSITION-P.
+     * 		
+     * @param OUTPUT-LIST;
+    PPH-PHRASE-OUTPUT-LIST-P.
+     * 		
+     * @param ADD-TAGS?;
+     * 		Should we add html tags, if available?
+     * @return STRINGP or NIL; the paraphrase for ARG-POSITION in OUTPUT-LIST.
+     */
+    @LispMethod(comment = "@param ARG-POSITION;\nPPH-ARG-POSITION-P.\r\n\t\t\r\n@param OUTPUT-LIST;\nPPH-PHRASE-OUTPUT-LIST-P.\r\n\t\t\r\n@param ADD-TAGS?;\r\n\t\tShould we add html tags, if available?\r\n@return STRINGP or NIL; the paraphrase for ARG-POSITION in OUTPUT-LIST.")
     public static SubLObject pph_string_for_arg_position(final SubLObject arg_position, final SubLObject output_list, SubLObject add_tagsP) {
         if (add_tagsP == UNPROVIDED) {
             add_tagsP = T;
@@ -2743,8 +5565,71 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_phrase.pph_phrase_output_list_string(nreverse(arg_position_items), add_tagsP);
     }
 
+    /**
+     *
+     *
+     * @return BOOLEAN; Does ARG-POSITION1 precede ARG-POSITION2 in OUTPUT-LIST?
+     */
+    @LispMethod(comment = "@return BOOLEAN; Does ARG-POSITION1 precede ARG-POSITION2 in OUTPUT-LIST?")
+    public static final SubLObject pph_output_list_arg_position_precedesP_alt(SubLObject output_list, SubLObject arg_position1, SubLObject arg_position2) {
+        SubLTrampolineFile.checkType(output_list, PPH_PHRASE_OUTPUT_LIST_P);
+        {
+            SubLObject start_char_index = ZERO_INTEGER;
+            SubLObject end_char_index = ZERO_INTEGER;
+            SubLObject whole_html_string = pph_phrase.pph_phrase_output_list_string(output_list, T);
+            SubLObject whole_string = pph_utilities.pph_remove_html_tags(whole_html_string, NIL);
+            SubLObject iterator = new_pph_phrase_output_list_iterator(output_list);
+            while (NIL == pph_phrase_output_list_iterator_empty_p(iterator)) {
+                {
+                    SubLObject item = pph_phrase_output_list_iterator_next(iterator);
+                    SubLObject raw_item_string = pph_phrase.pph_phrase_output_item_get_string(item, NIL);
+                    start_char_index = pph_macros.pph_output_list_find_start_char(raw_item_string, whole_string, end_char_index);
+                    if (start_char_index.numG(end_char_index)) {
+                        {
+                            SubLObject string = pph_macros.pph_make_space_string(start_char_index, end_char_index);
+                            SubLObject arg_position = pph_utilities.pph_unknown_arg_position();
+                            SubLObject html_open_tag = NIL;
+                            SubLObject html_close_tag = NIL;
+                            SubLObject paranoid_arg = pph_phrase.pph_empty_cycl();
+                            SubLObject start_char_index_136 = end_char_index;
+                            if (NIL != pph_utilities.pph_arg_position_subsumesP(arg_position, arg_position1, UNPROVIDED)) {
+                                return T;
+                            } else {
+                                if (NIL != pph_utilities.pph_arg_position_subsumesP(arg_position, arg_position2, UNPROVIDED)) {
+                                    return NIL;
+                                }
+                            }
+                        }
+                    }
+                    end_char_index = pph_macros.pph_update_end_char_index(start_char_index, raw_item_string);
+                    {
+                        SubLObject string = pph_phrase.pph_phrase_output_item_get_string(item, NIL);
+                        SubLObject arg_position = pph_phrase_output_item_arg_position(item);
+                        SubLObject html_open_tag = pph_phrase_output_item_html_open_tag(item);
+                        SubLObject html_close_tag = pph_phrase_output_item_html_close_tag(item);
+                        SubLObject paranoid_arg = pph_phrase_output_item_cycl(item);
+                        if (NIL != pph_utilities.pph_arg_position_subsumesP(arg_position, arg_position1, UNPROVIDED)) {
+                            return T;
+                        } else {
+                            if (NIL != pph_utilities.pph_arg_position_subsumesP(arg_position, arg_position2, UNPROVIDED)) {
+                                return NIL;
+                            }
+                        }
+                    }
+                }
+            } 
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @return BOOLEAN; Does ARG-POSITION1 precede ARG-POSITION2 in OUTPUT-LIST?
+     */
+    @LispMethod(comment = "@return BOOLEAN; Does ARG-POSITION1 precede ARG-POSITION2 in OUTPUT-LIST?")
     public static SubLObject pph_output_list_arg_position_precedesP(final SubLObject output_list, final SubLObject arg_position1, final SubLObject arg_position2) {
-        assert NIL != pph_phrase.pph_phrase_output_list_p(output_list) : "pph_phrase.pph_phrase_output_list_p(output_list) " + "CommonSymbols.NIL != pph_phrase.pph_phrase_output_list_p(output_list) " + output_list;
+        assert NIL != pph_phrase.pph_phrase_output_list_p(output_list) : "! pph_phrase.pph_phrase_output_list_p(output_list) " + ("pph_phrase.pph_phrase_output_list_p(output_list) " + "CommonSymbols.NIL != pph_phrase.pph_phrase_output_list_p(output_list) ") + output_list;
         SubLObject start_char_index = ZERO_INTEGER;
         SubLObject end_char_index = ZERO_INTEGER;
         final SubLObject whole_html_string = pph_phrase.pph_phrase_output_list_string(output_list, T);
@@ -2786,6 +5671,52 @@ public final class pph_main extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     *
+     *
+     * @param ARG-POSITION;
+    PPH-ARG-POSITION-P.
+     * 		
+     * @param OUTPUT-LIST;
+    PPH-PHRASE-OUTPUT-LIST-P.
+     * 		
+     * @param ADD-TAGS?;
+     * 		Should we add html tags, if available?
+     * @return STRINGP; the paraphrase for ARG-POSITION in OUTPUT-LIST.
+     */
+    @LispMethod(comment = "@param ARG-POSITION;\nPPH-ARG-POSITION-P.\r\n\t\t\r\n@param OUTPUT-LIST;\nPPH-PHRASE-OUTPUT-LIST-P.\r\n\t\t\r\n@param ADD-TAGS?;\r\n\t\tShould we add html tags, if available?\r\n@return STRINGP; the paraphrase for ARG-POSITION in OUTPUT-LIST.")
+    public static final SubLObject pph_agr_pred_for_arg_position_alt(SubLObject arg_position, SubLObject output_list) {
+        {
+            SubLObject agr_pred = NIL;
+            if (NIL == agr_pred) {
+                {
+                    SubLObject csome_list_var = output_list;
+                    SubLObject item = NIL;
+                    for (item = csome_list_var.first(); !((NIL != agr_pred) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , item = csome_list_var.first()) {
+                        if (arg_position.equal(pph_phrase_output_item_arg_position(item))) {
+                            agr_pred = pph_phrase_output_item_agr_pred(item);
+                        }
+                    }
+                }
+            }
+            return pph_utilities.pph_peer_agr_for_pred(agr_pred, UNPROVIDED);
+        }
+    }
+
+    /**
+     *
+     *
+     * @param ARG-POSITION;
+    PPH-ARG-POSITION-P.
+     * 		
+     * @param OUTPUT-LIST;
+    PPH-PHRASE-OUTPUT-LIST-P.
+     * 		
+     * @param ADD-TAGS?;
+     * 		Should we add html tags, if available?
+     * @return STRINGP; the paraphrase for ARG-POSITION in OUTPUT-LIST.
+     */
+    @LispMethod(comment = "@param ARG-POSITION;\nPPH-ARG-POSITION-P.\r\n\t\t\r\n@param OUTPUT-LIST;\nPPH-PHRASE-OUTPUT-LIST-P.\r\n\t\t\r\n@param ADD-TAGS?;\r\n\t\tShould we add html tags, if available?\r\n@return STRINGP; the paraphrase for ARG-POSITION in OUTPUT-LIST.")
     public static SubLObject pph_agr_pred_for_arg_position(final SubLObject arg_position, final SubLObject output_list) {
         SubLObject agr_pred = NIL;
         if (NIL == agr_pred) {
@@ -2803,6 +5734,65 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_utilities.pph_peer_agr_for_pred(agr_pred, UNPROVIDED);
     }
 
+    /**
+     * generates text for a given object.  This is intended to be the
+     * main gateway into the generation code for formulas.
+     *
+     * @param OBJECT
+     * 		CYCL-EXPRESSION-P; the object for which text should be generated.
+     * @param FORCE
+     * 		pph-force-p; the sentential force of the text to be generated.
+     * @return 0 STRINGP or NIL; the string corresponding to object.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "generates text for a given object.  This is intended to be the\r\nmain gateway into the generation code for formulas.\r\n\r\n@param OBJECT\r\n\t\tCYCL-EXPRESSION-P; the object for which text should be generated.\r\n@param FORCE\r\n\t\tpph-force-p; the sentential force of the text to be generated.\r\n@return 0 STRINGP or NIL; the string corresponding to object.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p\ngenerates text for a given object.  This is intended to be the\nmain gateway into the generation code for formulas.")
+    public static final SubLObject generate_text_wXsentential_force_alt(SubLObject v_object, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = $DEFAULT;
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $DEFAULT;
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (focus_arg == UNPROVIDED) {
+            focus_arg = NIL;
+        }
+        SubLTrampolineFile.checkType(v_object, CYCL_EXPRESSION_P);
+        SubLTrampolineFile.checkType(force, PPH_FORCE_P);
+        SubLTrampolineFile.checkType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+        SubLTrampolineFile.checkType(language_mt, $sym84$KEYWORD_OR_HLMT_);
+        SubLTrampolineFile.checkType(domain_mt, $sym84$KEYWORD_OR_HLMT_);
+        SubLTrampolineFile.checkType(mode, KEYWORDP);
+        if (NIL != focus_arg) {
+            SubLTrampolineFile.checkType(focus_arg, NON_NEGATIVE_INTEGER_P);
+        }
+        return com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_no_checks(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+    }
+
+    /**
+     * generates text for a given object.  This is intended to be the
+     * main gateway into the generation code for formulas.
+     *
+     * @param OBJECT
+     * 		CYCL-EXPRESSION-P; the object for which text should be generated.
+     * @param FORCE
+     * 		pph-force-p; the sentential force of the text to be generated.
+     * @return 0 STRINGP or NIL; the string corresponding to object.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "generates text for a given object.  This is intended to be the\r\nmain gateway into the generation code for formulas.\r\n\r\n@param OBJECT\r\n\t\tCYCL-EXPRESSION-P; the object for which text should be generated.\r\n@param FORCE\r\n\t\tpph-force-p; the sentential force of the text to be generated.\r\n@return 0 STRINGP or NIL; the string corresponding to object.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p\ngenerates text for a given object.  This is intended to be the\nmain gateway into the generation code for formulas.")
     public static SubLObject generate_text_wXsentential_force(final SubLObject v_object, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -2836,7 +5826,20 @@ public final class pph_main extends SubLTranslatedFile {
         SubLTrampolineFile.enforceType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
         SubLTrampolineFile.enforceType(language_mt, $sym26$VALID_PPH_LANGUAGE_MT_SPECIFIER_);
         return generate_text_wXsentential_force_no_checks(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
-    }
+    }/**
+     * generates text for a given object.  This is intended to be the
+     * main gateway into the generation code for formulas.
+     *
+     * @param OBJECT
+     * 		CYCL-EXPRESSION-P; the object for which text should be generated.
+     * @param FORCE
+     * 		pph-force-p; the sentential force of the text to be generated.
+     * @return 0 STRINGP or NIL; the string corresponding to object.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+
 
     public static SubLObject valid_pph_language_mt_specifierP(final SubLObject obj) {
         return makeBoolean((NIL != pph_utilities.keyword_or_hlmtP(obj)) || (obj.isString() && (NIL != pph_utilities.get_pph_mt_for_code(obj))));
@@ -3048,6 +6051,421 @@ public final class pph_main extends SubLTranslatedFile {
         return $generate_text_bad_results$.getGlobalValue();
     }
 
+    /**
+     * Like GENERATE-TEXT-W/SENTENTIAL-FORCE, sans type-checking on the arguments.
+     */
+    @LispMethod(comment = "Like GENERATE-TEXT-W/SENTENTIAL-FORCE, sans type-checking on the arguments.")
+    public static final SubLObject generate_text_wXsentential_force_no_checks_alt(SubLObject v_object, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = $DEFAULT;
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $DEFAULT;
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (focus_arg == UNPROVIDED) {
+            focus_arg = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if ($DEFAULT == language_mt) {
+                language_mt = pph_vars.$pph_language_mt$.getDynamicValue(thread);
+            }
+            if ($DEFAULT == domain_mt) {
+                domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue(thread);
+            }
+            if ($DEFAULT == force) {
+                force = pph_utilities.pph_default_force_for_term(v_object);
+            }
+            if ($DEFAULT == nl_preds) {
+                nl_preds = pph_utilities.pph_default_nl_preds(v_object, force, language_mt, domain_mt);
+            }
+            {
+                SubLObject error_message = NIL;
+                SubLObject string = NIL;
+                SubLObject pred = NIL;
+                SubLObject just = NIL;
+                SubLObject olist = NIL;
+                {
+                    SubLObject _prev_bind_0 = Errors.$continue_cerrorP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+                    try {
+                        Errors.$continue_cerrorP$.bind(NIL, thread);
+                        pph_error.$pph_error_handling_onP$.bind(T, thread);
+                        if (NIL != pph_error.pph_break_on_errorP()) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject _prev_bind_0_137 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                try {
+                                    pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                    {
+                                        SubLObject reuseP = thread.secondMultipleValue();
+                                        thread.resetMultipleValues();
+                                        try {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_138 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                    {
+                                                        SubLObject new_or_reused = thread.secondMultipleValue();
+                                                        thread.resetMultipleValues();
+                                                        {
+                                                            SubLObject _prev_bind_0_139 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                {
+                                                                    SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                    {
+                                                                        SubLObject _prev_bind_0_140 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                        try {
+                                                                            memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                            {
+                                                                                SubLObject original_memoization_process = NIL;
+                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                    {
+                                                                                        SubLObject current_proc = current_process();
+                                                                                        if (NIL == original_memoization_process) {
+                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                        } else {
+                                                                                            if (original_memoization_process != current_proc) {
+                                                                                                Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                                try {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_141 = pph_vars.$pph_track_discourse_referentsP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            pph_vars.$pph_track_discourse_referentsP$.bind(makeBoolean((NIL != pph_vars.$pph_track_discourse_referentsP$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.pph_main.pph_discourse_referent_tracking_pointlessP(v_object))), thread);
+                                                                                            {
+                                                                                                SubLObject time = NIL;
+                                                                                                SubLObject time_var = get_internal_real_time();
+                                                                                                if ($ANY == nl_preds) {
+                                                                                                    thread.resetMultipleValues();
+                                                                                                    {
+                                                                                                        SubLObject string_142 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_int(v_object, force, $ANY, language_mt, domain_mt, mode, focus_arg);
+                                                                                                        SubLObject pred_143 = thread.secondMultipleValue();
+                                                                                                        SubLObject just_144 = thread.thirdMultipleValue();
+                                                                                                        SubLObject olist_145 = thread.fourthMultipleValue();
+                                                                                                        thread.resetMultipleValues();
+                                                                                                        string = string_142;
+                                                                                                        pred = pred_143;
+                                                                                                        just = just_144;
+                                                                                                        olist = olist_145;
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(TWO_INTEGER)))) {
+                                                                                                        {
+                                                                                                            SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(TWO_INTEGER), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                                                                                            pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                                                                                        }
+                                                                                                    }
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_146 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            pph_vars.$pph_demerit_cutoff$.bind(pph_macros.compute_new_pph_demerit_cutoff(TWO_INTEGER), thread);
+                                                                                                            thread.resetMultipleValues();
+                                                                                                            {
+                                                                                                                SubLObject string_147 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_int(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+                                                                                                                SubLObject pred_148 = thread.secondMultipleValue();
+                                                                                                                SubLObject just_149 = thread.thirdMultipleValue();
+                                                                                                                SubLObject olist_150 = thread.fourthMultipleValue();
+                                                                                                                thread.resetMultipleValues();
+                                                                                                                string = string_147;
+                                                                                                                pred = pred_148;
+                                                                                                                just = just_149;
+                                                                                                                olist = olist_150;
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0_146, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                    if (!((NIL != string) || (NIL != number_utilities.potentially_infinite_number_LE(pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread), pph_vars.$pph_suggested_demerit_cutoff$.getGlobalValue())))) {
+                                                                                                        thread.resetMultipleValues();
+                                                                                                        {
+                                                                                                            SubLObject string_151 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_int(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+                                                                                                            SubLObject pred_152 = thread.secondMultipleValue();
+                                                                                                            SubLObject just_153 = thread.thirdMultipleValue();
+                                                                                                            SubLObject olist_154 = thread.fourthMultipleValue();
+                                                                                                            thread.resetMultipleValues();
+                                                                                                            string = string_151;
+                                                                                                            pred = pred_152;
+                                                                                                            just = just_153;
+                                                                                                            olist = olist_154;
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
+                                                                                                if (time.numG(ONE_INTEGER)) {
+                                                                                                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                        Errors.warn($str_alt91$Took__S_seconds_to_paraphrase____, time, v_object);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            pph_vars.$pph_track_discourse_referentsP$.rebind(_prev_bind_0_141, thread);
+                                                                                        }
+                                                                                    }
+                                                                                } finally {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_155 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                            }
+                                                                                        } finally {
+                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_155, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_140, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_139, thread);
+                                                            }
+                                                        }
+                                                        if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                            memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_138, thread);
+                                                }
+                                            }
+                                        } finally {
+                                            {
+                                                SubLObject _prev_bind_0_156 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                try {
+                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                    if (NIL == reuseP) {
+                                                        pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                    }
+                                                } finally {
+                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_156, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_137, thread);
+                                }
+                            }
+                        } else {
+                            try {
+                                {
+                                    SubLObject _prev_bind_0_157 = Errors.$error_handler$.currentBinding(thread);
+                                    try {
+                                        Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                        try {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_158 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                    {
+                                                        SubLObject reuseP = thread.secondMultipleValue();
+                                                        thread.resetMultipleValues();
+                                                        try {
+                                                            thread.resetMultipleValues();
+                                                            {
+                                                                SubLObject _prev_bind_0_159 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                try {
+                                                                    pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                    {
+                                                                        SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                        thread.resetMultipleValues();
+                                                                        {
+                                                                            SubLObject _prev_bind_0_160 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                            try {
+                                                                                pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                {
+                                                                                    SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_161 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                        try {
+                                                                                            memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                            {
+                                                                                                SubLObject original_memoization_process = NIL;
+                                                                                                if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                    original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                    {
+                                                                                                        SubLObject current_proc = current_process();
+                                                                                                        if (NIL == original_memoization_process) {
+                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                        } else {
+                                                                                                            if (original_memoization_process != current_proc) {
+                                                                                                                Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                try {
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_162 = pph_vars.$pph_track_discourse_referentsP$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            pph_vars.$pph_track_discourse_referentsP$.bind(makeBoolean((NIL != pph_vars.$pph_track_discourse_referentsP$.getDynamicValue(thread)) && (NIL == com.cyc.cycjava.cycl.pph_main.pph_discourse_referent_tracking_pointlessP(v_object))), thread);
+                                                                                                            {
+                                                                                                                SubLObject time = NIL;
+                                                                                                                SubLObject time_var = get_internal_real_time();
+                                                                                                                if ($ANY == nl_preds) {
+                                                                                                                    thread.resetMultipleValues();
+                                                                                                                    {
+                                                                                                                        SubLObject string_163 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_int(v_object, force, $ANY, language_mt, domain_mt, mode, focus_arg);
+                                                                                                                        SubLObject pred_164 = thread.secondMultipleValue();
+                                                                                                                        SubLObject just_165 = thread.thirdMultipleValue();
+                                                                                                                        SubLObject olist_166 = thread.fourthMultipleValue();
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        string = string_163;
+                                                                                                                        pred = pred_164;
+                                                                                                                        just = just_165;
+                                                                                                                        olist = olist_166;
+                                                                                                                    }
+                                                                                                                } else {
+                                                                                                                    if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_macros.valid_pph_demerit_cutoff_p(TWO_INTEGER)))) {
+                                                                                                                        {
+                                                                                                                            SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy(TWO_INTEGER), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(VALID_PPH_DEMERIT_CUTOFF_P) })) });
+                                                                                                                            pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_167 = pph_vars.$pph_demerit_cutoff$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            pph_vars.$pph_demerit_cutoff$.bind(pph_macros.compute_new_pph_demerit_cutoff(TWO_INTEGER), thread);
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            {
+                                                                                                                                SubLObject string_168 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_int(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+                                                                                                                                SubLObject pred_169 = thread.secondMultipleValue();
+                                                                                                                                SubLObject just_170 = thread.thirdMultipleValue();
+                                                                                                                                SubLObject olist_171 = thread.fourthMultipleValue();
+                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                string = string_168;
+                                                                                                                                pred = pred_169;
+                                                                                                                                just = just_170;
+                                                                                                                                olist = olist_171;
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            pph_vars.$pph_demerit_cutoff$.rebind(_prev_bind_0_167, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                    if (!((NIL != string) || (NIL != number_utilities.potentially_infinite_number_LE(pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread), pph_vars.$pph_suggested_demerit_cutoff$.getGlobalValue())))) {
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject string_172 = com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force_int(v_object, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+                                                                                                                            SubLObject pred_173 = thread.secondMultipleValue();
+                                                                                                                            SubLObject just_174 = thread.thirdMultipleValue();
+                                                                                                                            SubLObject olist_175 = thread.fourthMultipleValue();
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            string = string_172;
+                                                                                                                            pred = pred_173;
+                                                                                                                            just = just_174;
+                                                                                                                            olist = olist_175;
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                                time = divide(subtract(get_internal_real_time(), time_var), time_high.$internal_time_units_per_second$.getGlobalValue());
+                                                                                                                if (time.numG(ONE_INTEGER)) {
+                                                                                                                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                                        Errors.warn($str_alt91$Took__S_seconds_to_paraphrase____, time, v_object);
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            pph_vars.$pph_track_discourse_referentsP$.rebind(_prev_bind_0_162, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                } finally {
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_176 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                            if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                            }
+                                                                                                        } finally {
+                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_176, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        } finally {
+                                                                                            memoization_state.$memoization_state$.rebind(_prev_bind_0_161, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_160, thread);
+                                                                            }
+                                                                        }
+                                                                        if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                            memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                        }
+                                                                    }
+                                                                } finally {
+                                                                    pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_159, thread);
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_177 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    if (NIL == reuseP) {
+                                                                        pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_177, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_158, thread);
+                                                }
+                                            }
+                                        } catch (Throwable catch_var) {
+                                            Errors.handleThrowable(catch_var, NIL);
+                                        }
+                                    } finally {
+                                        Errors.$error_handler$.rebind(_prev_bind_0_157, thread);
+                                    }
+                                }
+                            } catch (Throwable ccatch_env_var) {
+                                error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                            }
+                            if (error_message.isString()) {
+                                Errors.warn(error_message);
+                            }
+                        }
+                    } finally {
+                        pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1, thread);
+                        Errors.$continue_cerrorP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(string, pred, just, olist);
+            }
+        }
+    }
+
+    /**
+     * Like GENERATE-TEXT-W/SENTENTIAL-FORCE, sans type-checking on the arguments.
+     */
+    @LispMethod(comment = "Like GENERATE-TEXT-W/SENTENTIAL-FORCE, sans type-checking on the arguments.")
     public static SubLObject generate_text_wXsentential_force_no_checks(final SubLObject v_object, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -3383,8 +6801,48 @@ public final class pph_main extends SubLTranslatedFile {
         } finally {
             pph_vars.$pph_root_phrase$.rebind(_prev_bind_0, thread);
         }
+    }/**
+     * Like GENERATE-TEXT-W/SENTENTIAL-FORCE, sans type-checking on the arguments.
+     */
+
+
+    /**
+     *
+     *
+     * @return BOOLEANP; Can we safely suspend tracking discourse referents given
+    that what we're paraphrasing is OBJECT?
+     */
+    @LispMethod(comment = "@return BOOLEANP; Can we safely suspend tracking discourse referents given\r\nthat what we\'re paraphrasing is OBJECT?")
+    public static final SubLObject pph_discourse_referent_tracking_pointlessP_alt(SubLObject v_object) {
+        if (pph_vars.current_generation_level().isPositive()) {
+            return NIL;
+        } else {
+            if (NIL != assertion_handles.assertion_p(v_object)) {
+                return NIL;
+            } else {
+                if (NIL != nart_handles.nart_p(v_object)) {
+                    return NIL;
+                } else {
+                    if (NIL != el_formula_p(v_object)) {
+                        return NIL;
+                    } else {
+                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                            format(T, $str_alt92$__Suspending_discourse_referent_t, v_object);
+                        }
+                        return T;
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     *
+     *
+     * @return BOOLEANP; Can we safely suspend tracking discourse referents given
+    that what we're paraphrasing is OBJECT?
+     */
+    @LispMethod(comment = "@return BOOLEANP; Can we safely suspend tracking discourse referents given\r\nthat what we\'re paraphrasing is OBJECT?")
     public static SubLObject pph_discourse_referent_tracking_pointlessP(final SubLObject v_object) {
         if (pph_vars.current_generation_level().isPositive()) {
             return NIL;
@@ -3402,6 +6860,65 @@ public final class pph_main extends SubLTranslatedFile {
             format_nil.force_format(T, $str103$__Suspending_discourse_referent_t, v_object, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return T;
+    }
+
+    public static final SubLObject generate_text_wXsentential_force_int_alt(SubLObject formula, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
+        if (focus_arg == UNPROVIDED) {
+            focus_arg = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject string = NIL;
+                SubLObject result_agr_pred = NIL;
+                SubLObject justification = NIL;
+                SubLObject output_list = NIL;
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                    try {
+                        pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                        pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                        pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                        try {
+                            {
+                                SubLObject hl_formula = pph_utilities.pph_nart_substitute(formula);
+                                SubLObject v_pph_phrase = (force == $NONE) ? ((SubLObject) (new_pph_phrase(NIL, hl_formula, UNPROVIDED))) : pph_sentence_copy(new_pph_sentence(hl_formula, force, nl_preds), UNPROVIDED);
+                                if (force == $NONE) {
+                                    pph_phrase.pph_phrase_set_agr_preds(v_pph_phrase, nl_preds, UNPROVIDED);
+                                    com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(v_pph_phrase, language_mt, domain_mt, mode);
+                                } else {
+                                    pph_phrase.pph_phrase_set_focus_arg(v_pph_phrase, focus_arg);
+                                    pph_sentence_generate(v_pph_phrase, language_mt, domain_mt, mode);
+                                }
+                                if (NIL != pph_phrase.pph_phrase_doneP(v_pph_phrase)) {
+                                    string = pph_phrase.pph_phrase_string(v_pph_phrase, UNPROVIDED);
+                                    result_agr_pred = pph_phrase.pph_phrase_agr_pred(v_pph_phrase);
+                                    justification = pph_phrase.pph_phrase_justification(v_pph_phrase);
+                                    output_list = pph_phrase.pph_phrase_output_list(v_pph_phrase);
+                                }
+                            }
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0_178 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    pph_macros.destroy_new_pph_phrases();
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_178, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                        pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1, thread);
+                        pph_macros.$new_pph_phrases$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(string, result_agr_pred, justification, output_list);
+            }
+        }
     }
 
     public static SubLObject generate_text_wXsentential_force_int(final SubLObject formula, final SubLObject force, final SubLObject nl_preds, final SubLObject language_mt, final SubLObject domain_mt, final SubLObject mode, SubLObject focus_arg) {
@@ -3464,6 +6981,55 @@ public final class pph_main extends SubLTranslatedFile {
         return values(string, result_agr_pred, justification, output_list, demerits);
     }
 
+    /**
+     * generates text for a given formula with a specified argnum as the intended focus.
+     *
+     * @param FORMULA
+     * 		formula; the formula for which text should be generated.
+     * @param FOCUS-ARG
+     * 		non-negative-integer-p; the argnum of FORMULA we want to have focus.
+     * @param FORCE
+     * 		pph-force-p; the sentential force of the text to be generated.
+     * @return 0 STRINGP or NIL; the string corresponding to formula.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "generates text for a given formula with a specified argnum as the intended focus.\r\n\r\n@param FORMULA\r\n\t\tformula; the formula for which text should be generated.\r\n@param FOCUS-ARG\r\n\t\tnon-negative-integer-p; the argnum of FORMULA we want to have focus.\r\n@param FORCE\r\n\t\tpph-force-p; the sentential force of the text to be generated.\r\n@return 0 STRINGP or NIL; the string corresponding to formula.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p")
+    public static final SubLObject generate_text_wXsentential_force_and_focus_argnum_alt(SubLObject formula, SubLObject focus_arg, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
+        if (force == UNPROVIDED) {
+            force = $DEFAULT;
+        }
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = $DEFAULT;
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = $DEFAULT;
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        return com.cyc.cycjava.cycl.pph_main.generate_text_wXsentential_force(formula, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+    }
+
+    /**
+     * generates text for a given formula with a specified argnum as the intended focus.
+     *
+     * @param FORMULA
+     * 		formula; the formula for which text should be generated.
+     * @param FOCUS-ARG
+     * 		non-negative-integer-p; the argnum of FORMULA we want to have focus.
+     * @param FORCE
+     * 		pph-force-p; the sentential force of the text to be generated.
+     * @return 0 STRINGP or NIL; the string corresponding to formula.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "generates text for a given formula with a specified argnum as the intended focus.\r\n\r\n@param FORMULA\r\n\t\tformula; the formula for which text should be generated.\r\n@param FOCUS-ARG\r\n\t\tnon-negative-integer-p; the argnum of FORMULA we want to have focus.\r\n@param FORCE\r\n\t\tpph-force-p; the sentential force of the text to be generated.\r\n@return 0 STRINGP or NIL; the string corresponding to formula.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p")
     public static SubLObject generate_text_wXsentential_force_and_focus_argnum(final SubLObject formula, final SubLObject focus_arg, SubLObject force, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
         if (force == UNPROVIDED) {
             force = $DEFAULT;
@@ -3481,8 +7047,82 @@ public final class pph_main extends SubLTranslatedFile {
             mode = $TEXT;
         }
         return generate_text_wXsentential_force(formula, force, nl_preds, language_mt, domain_mt, mode, focus_arg);
+    }/**
+     * generates text for a given formula with a specified argnum as the intended focus.
+     *
+     * @param FORMULA
+     * 		formula; the formula for which text should be generated.
+     * @param FOCUS-ARG
+     * 		non-negative-integer-p; the argnum of FORMULA we want to have focus.
+     * @param FORCE
+     * 		pph-force-p; the sentential force of the text to be generated.
+     * @return 0 STRINGP or NIL; the string corresponding to formula.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+
+
+    /**
+     * Deprecated: Call GENERATE-TEXT-W/SENTENTIAL-FORCE instead.
+     *
+     * @see GENERATE-TEXT-W/SENTENTIAL-FORCE
+     * @return 0 string; the string corresponding to formula.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "Deprecated: Call GENERATE-TEXT-W/SENTENTIAL-FORCE instead.\r\n\r\n@see GENERATE-TEXT-W/SENTENTIAL-FORCE\r\n@return 0 string; the string corresponding to formula.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p")
+    public static final SubLObject generate_text_alt(SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (language_mt == UNPROVIDED) {
+            language_mt = pph_vars.$pph_language_mt$.getDynamicValue();
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = pph_vars.$pph_domain_mt$.getDynamicValue();
+        }
+        if (mode == UNPROVIDED) {
+            mode = $TEXT;
+        }
+        if (focus_arg == UNPROVIDED) {
+            focus_arg = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(nl_preds, $sym3$VALID_EXTERNAL_PPH_NL_PREDS_);
+            thread.resetMultipleValues();
+            {
+                SubLObject forceless_string = com.cyc.cycjava.cycl.pph_main.generate_phrase_no_checks(v_object, nl_preds, NIL, language_mt, domain_mt, mode, T, focus_arg);
+                SubLObject pred = thread.secondMultipleValue();
+                SubLObject just = thread.thirdMultipleValue();
+                SubLObject forceless_olist = thread.fourthMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject olist = copy_list(forceless_olist);
+                    if (NIL != forceless_string) {
+                        pph_phrase_output_list_add_sentential_force(olist, $DECLARATIVE);
+                    }
+                    {
+                        SubLObject string = pph_phrase.pph_phrase_output_list_string(olist, T);
+                        return values(string, pred, just, olist);
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * Deprecated: Call GENERATE-TEXT-W/SENTENTIAL-FORCE instead.
+     *
+     * @see GENERATE-TEXT-W/SENTENTIAL-FORCE
+     * @return 0 string; the string corresponding to formula.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+    @LispMethod(comment = "Deprecated: Call GENERATE-TEXT-W/SENTENTIAL-FORCE instead.\r\n\r\n@see GENERATE-TEXT-W/SENTENTIAL-FORCE\r\n@return 0 string; the string corresponding to formula.\r\n@return 1 pred\r\n@return 2 justification\r\n@return 3 pph-output-list-p")
     public static SubLObject generate_text(final SubLObject v_object, SubLObject nl_preds, SubLObject language_mt, SubLObject domain_mt, SubLObject mode, SubLObject focus_arg) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -3500,7 +7140,7 @@ public final class pph_main extends SubLTranslatedFile {
             focus_arg = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != pph_utilities.valid_external_pph_nl_predsP(nl_preds) : "pph_utilities.valid_external_pph_nl_predsP(nl_preds) " + "CommonSymbols.NIL != pph_utilities.valid_external_pph_nl_predsP(nl_preds) " + nl_preds;
+        assert NIL != pph_utilities.valid_external_pph_nl_predsP(nl_preds) : "! pph_utilities.valid_external_pph_nl_predsP(nl_preds) " + ("pph_utilities.valid_external_pph_nl_predsP(nl_preds) " + "CommonSymbols.NIL != pph_utilities.valid_external_pph_nl_predsP(nl_preds) ") + nl_preds;
         thread.resetMultipleValues();
         final SubLObject forceless_string = generate_phrase_no_checks(v_object, nl_preds, NIL, language_mt, domain_mt, mode, T, focus_arg);
         final SubLObject pred = thread.secondMultipleValue();
@@ -3514,8 +7154,41 @@ public final class pph_main extends SubLTranslatedFile {
         }
         final SubLObject string = pph_string.pph_string_if_non_null_to_output_format(pph_phrase.pph_phrase_output_list_string(olist, T), mode);
         return values(string, pred, just, olist, demerits);
+    }/**
+     * Deprecated: Call GENERATE-TEXT-W/SENTENTIAL-FORCE instead.
+     *
+     * @see GENERATE-TEXT-W/SENTENTIAL-FORCE
+     * @return 0 string; the string corresponding to formula.
+     * @return 1 pred
+     * @return 2 justification
+     * @return 3 pph-output-list-p
+     */
+
+
+    /**
+     * Like calling (GENERATE-PHRASE OBJECT), but possessivize the result
+     */
+    @LispMethod(comment = "Like calling (GENERATE-PHRASE OBJECT), but possessivize the result")
+    public static final SubLObject generate_poss_alt(SubLObject v_object, SubLObject nl_preds) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject string = com.cyc.cycjava.cycl.pph_main.generate_phrase_no_checks(v_object, nl_preds, NIL, pph_vars.$pph_language_mt$.getDynamicValue(thread), pph_vars.$pph_domain_mt$.getDynamicValue(thread), pph_vars.$paraphrase_mode$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED);
+                SubLObject pred = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                return morphology.possessivize_string(string, pred);
+            }
+        }
     }
 
+    /**
+     * Like calling (GENERATE-PHRASE OBJECT), but possessivize the result
+     */
+    @LispMethod(comment = "Like calling (GENERATE-PHRASE OBJECT), but possessivize the result")
     public static SubLObject generate_poss(final SubLObject v_object, SubLObject nl_preds) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = NIL;
@@ -3526,8 +7199,102 @@ public final class pph_main extends SubLTranslatedFile {
         final SubLObject pred = thread.secondMultipleValue();
         thread.resetMultipleValues();
         return morphology.possessivize_string(string, pred);
+    }/**
+     * Like calling (GENERATE-PHRASE OBJECT), but possessivize the result
+     */
+
+
+    /**
+     *
+     *
+     * @return 0 STRINGP or NIL; Paraphrase of CYCL using NL-PREDS and the current settings for
+    mts, paraphrase mode, etc.
+     */
+    @LispMethod(comment = "@return 0 STRINGP or NIL; Paraphrase of CYCL using NL-PREDS and the current settings for\r\nmts, paraphrase mode, etc.")
+    public static final SubLObject pph_phrase_generate_string_from_cycl_alt(SubLObject cycl, SubLObject nl_preds, SubLObject arg_position_map) {
+        if (nl_preds == UNPROVIDED) {
+            nl_preds = $DEFAULT;
+        }
+        if (arg_position_map == UNPROVIDED) {
+            arg_position_map = pph_utilities.pph_new_identity_map();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject string = NIL;
+                SubLObject agr_pred = NIL;
+                SubLObject justification = NIL;
+                SubLObject output_list = NIL;
+                if ($DEFAULT == nl_preds) {
+                    nl_preds = pph_utilities.pph_default_nl_preds(cycl, $NONE, UNPROVIDED, UNPROVIDED);
+                }
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = pph_macros.$new_pph_phrase_count$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = pph_macros.$destroy_new_pph_phrasesP$.currentBinding(thread);
+                    try {
+                        pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                        pph_macros.$new_pph_phrase_count$.bind(pph_macros.get_new_pph_phrase_count(), thread);
+                        pph_macros.$destroy_new_pph_phrasesP$.bind(T, thread);
+                        try {
+                            {
+                                SubLObject phrase = pph_phrase.pph_phrase_copy(pph_phrase.new_pph_phrase_for_cycl(cycl, arg_position_map, UNPROVIDED), UNPROVIDED, UNPROVIDED);
+                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                    format(T, $str_alt94$__Making_new_phrase_with_cycl__S_, pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED));
+                                }
+                                pph_phrase.pph_phrase_set_agr_preds(phrase, nl_preds, UNPROVIDED);
+                                {
+                                    SubLObject save_cycl = pph_macros.pph_phrase_restrict_cycl_to_mt_scope(phrase);
+                                    try {
+                                        com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(phrase, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0_179 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                            try {
+                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                pph_macros.pph_phrase_restore_and_rephrase_cycl_if_mt_scoped(phrase, save_cycl, UNPROVIDED);
+                                            } finally {
+                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_179, thread);
+                                            }
+                                        }
+                                    }
+                                }
+                                if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+                                    string = pph_phrase.pph_phrase_string(phrase, UNPROVIDED);
+                                    agr_pred = pph_phrase.pph_phrase_agr_pred(phrase);
+                                    justification = pph_phrase.pph_phrase_justification(phrase);
+                                    output_list = pph_phrase.pph_phrase_output_list(phrase);
+                                }
+                            }
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0_180 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    pph_macros.destroy_new_pph_phrases();
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_180, thread);
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$destroy_new_pph_phrasesP$.rebind(_prev_bind_2, thread);
+                        pph_macros.$new_pph_phrase_count$.rebind(_prev_bind_1, thread);
+                        pph_macros.$new_pph_phrases$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return values(string, agr_pred, justification, output_list);
+            }
+        }
     }
 
+    /**
+     *
+     *
+     * @return 0 STRINGP or NIL; Paraphrase of CYCL using NL-PREDS and the current settings for
+    mts, paraphrase mode, etc.
+     */
+    @LispMethod(comment = "@return 0 STRINGP or NIL; Paraphrase of CYCL using NL-PREDS and the current settings for\r\nmts, paraphrase mode, etc.")
     public static SubLObject pph_phrase_generate_string_from_cycl(final SubLObject cycl, SubLObject nl_preds, SubLObject arg_position_map) {
         if (nl_preds == UNPROVIDED) {
             nl_preds = $DEFAULT;
@@ -3595,22 +7362,81 @@ public final class pph_main extends SubLTranslatedFile {
         return values(string, agr_pred, justification, output_list);
     }
 
+    public static final SubLObject set_pph_initialized_alt() {
+        $pph_initializedP$.setGlobalValue($INITIALIZED);
+        return $pph_initializedP$.getGlobalValue();
+    }
+
     public static SubLObject set_pph_initialized() {
         $pph_initializedP$.setGlobalValue($INITIALIZED);
         return $pph_initializedP$.getGlobalValue();
+    }
+
+    public static final SubLObject pph_initializedP_alt() {
+        return list_utilities.sublisp_boolean($pph_initializedP$.getGlobalValue());
     }
 
     public static SubLObject pph_initializedP() {
         return list_utilities.sublisp_boolean($pph_initializedP$.getGlobalValue());
     }
 
+    /**
+     * Ensure that the paraphrase code is initialized.
+     *
+     * @unknown This depends on having a KB loaded.
+     */
+    @LispMethod(comment = "Ensure that the paraphrase code is initialized.\r\n\r\n@unknown This depends on having a KB loaded.")
+    public static final SubLObject ensure_pph_initialized_alt() {
+        if (NIL != com.cyc.cycjava.cycl.pph_main.pph_initializedP()) {
+            return $INITIALIZED;
+        } else {
+            return com.cyc.cycjava.cycl.pph_main.initialize_paraphrase_cycl();
+        }
+    }
+
+    /**
+     * Ensure that the paraphrase code is initialized.
+     *
+     * @unknown This depends on having a KB loaded.
+     */
+    @LispMethod(comment = "Ensure that the paraphrase code is initialized.\r\n\r\n@unknown This depends on having a KB loaded.")
     public static SubLObject ensure_pph_initialized() {
         if (NIL != pph_initializedP()) {
             return $INITIALIZED;
         }
         return initialize_paraphrase_cycl();
+    }/**
+     * Ensure that the paraphrase code is initialized.
+     *
+     * @unknown This depends on having a KB loaded.
+     */
+
+
+    /**
+     * Initialize or re-initialize the paraphrase-cycl code.
+     */
+    @LispMethod(comment = "Initialize or re-initialize the paraphrase-cycl code.")
+    public static final SubLObject initialize_paraphrase_cycl_alt() {
+        if (NIL != kb_loaded()) {
+            pph_vars.initialize_pph_vars();
+            pph_utilities.initialize_pph_constant_key_ids();
+            pph_methods.init_pph_name_string_preds();
+            pph_templates.initialize_gen_template_store();
+            com.cyc.cycjava.cycl.pph_main.clear_paraphrase_caches(UNPROVIDED, UNPROVIDED);
+            $pph_initializedP$.setGlobalValue(T);
+            return $INITIALIZED;
+        }
+        {
+            SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt97$No_KB_loaded__Couldn_t_initialize) });
+            pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+        }
+        return $NO_KB_LOADED;
     }
 
+    /**
+     * Initialize or re-initialize the paraphrase-cycl code.
+     */
+    @LispMethod(comment = "Initialize or re-initialize the paraphrase-cycl code.")
     public static SubLObject initialize_paraphrase_cycl() {
         if (NIL != kb_loaded()) {
             pph_vars.initialize_pph_vars();
@@ -3622,8 +7448,47 @@ public final class pph_main extends SubLTranslatedFile {
         final SubLObject new_format_string = cconcatenate($str17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str18$__, format_nil.format_nil_a_no_copy($str108$No_KB_loaded__Couldn_t_initialize) });
         pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
         return $NO_KB_LOADED;
+    }/**
+     * Initialize or re-initialize the paraphrase-cycl code.
+     */
+
+
+    /**
+     * Clears all previously cached paraphrases.  The ignored
+     * optional arguments are to allow this procedure to be used
+     * as an afterAdding.
+     */
+    @LispMethod(comment = "Clears all previously cached paraphrases.  The ignored\r\noptional arguments are to allow this procedure to be used\r\nas an afterAdding.\nClears all previously cached paraphrases.  The ignored\noptional arguments are to allow this procedure to be used\nas an afterAdding.")
+    public static final SubLObject clear_paraphrase_caches_alt(SubLObject source, SubLObject assertion) {
+        if (source == UNPROVIDED) {
+            source = NIL;
+        }
+        if (assertion == UNPROVIDED) {
+            assertion = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread))) {
+                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+            }
+            pph_methods.clear_pph_methods_caches();
+            pph_methods_formulas.clear_quant_over_arg_tuples();
+            lexicon_accessors.clear_cached_lexical_access_functions();
+            pph_methods_lexicon.clear_pph_arg_in_reln_preds();
+            pph_utilities.clear_pph_english_contextP();
+            pph_utilities.clear_pph_prefer_assertionP();
+            pph_utilities.clear_pph_nl_generation_predP();
+            pph_methods.clear_pph_enhanced_domain_mt();
+            return NIL;
+        }
     }
 
+    /**
+     * Clears all previously cached paraphrases.  The ignored
+     * optional arguments are to allow this procedure to be used
+     * as an afterAdding.
+     */
+    @LispMethod(comment = "Clears all previously cached paraphrases.  The ignored\r\noptional arguments are to allow this procedure to be used\r\nas an afterAdding.\nClears all previously cached paraphrases.  The ignored\noptional arguments are to allow this procedure to be used\nas an afterAdding.")
     public static SubLObject clear_paraphrase_caches(SubLObject source, SubLObject assertion) {
         if (source == UNPROVIDED) {
             source = NIL;
@@ -3644,6 +7509,792 @@ public final class pph_main extends SubLTranslatedFile {
         pph_utilities.clear_pph_nl_generation_predP();
         pph_methods.clear_pph_enhanced_domain_mt();
         return NIL;
+    }/**
+     * Clears all previously cached paraphrases.  The ignored
+     * optional arguments are to allow this procedure to be used
+     * as an afterAdding.
+     */
+
+
+    public static final SubLObject pph_phrase_generate_alt(SubLObject phrase, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
+        if (language_mt == UNPROVIDED) {
+            language_mt = (NIL != pph_vars.$pph_language_mt$.getDynamicValue()) ? ((SubLObject) (pph_vars.$pph_language_mt$.getDynamicValue())) : $$EnglishParaphraseMt;
+        }
+        if (domain_mt == UNPROVIDED) {
+            domain_mt = (NIL != pph_vars.$pph_domain_mt$.getDynamicValue()) ? ((SubLObject) (pph_vars.$pph_domain_mt$.getDynamicValue())) : $$EnglishParaphraseMt;
+        }
+        if (mode == UNPROVIDED) {
+            mode = (NIL != pph_vars.$paraphrase_mode$.getDynamicValue()) ? ((SubLObject) (pph_vars.$paraphrase_mode$.getDynamicValue())) : $TEXT;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject _prev_bind_0 = $within_assert$.currentBinding(thread);
+                SubLObject _prev_bind_1 = wff_utilities.$check_arg_typesP$.currentBinding(thread);
+                SubLObject _prev_bind_2 = at_vars.$at_check_arg_typesP$.currentBinding(thread);
+                SubLObject _prev_bind_3 = wff_utilities.$check_wff_semanticsP$.currentBinding(thread);
+                SubLObject _prev_bind_4 = wff_utilities.$check_wff_coherenceP$.currentBinding(thread);
+                SubLObject _prev_bind_5 = wff_utilities.$check_var_typesP$.currentBinding(thread);
+                SubLObject _prev_bind_6 = czer_vars.$simplify_literalP$.currentBinding(thread);
+                SubLObject _prev_bind_7 = at_vars.$at_check_relator_constraintsP$.currentBinding(thread);
+                SubLObject _prev_bind_8 = at_vars.$at_check_arg_formatP$.currentBinding(thread);
+                SubLObject _prev_bind_9 = wff_vars.$validate_constantsP$.currentBinding(thread);
+                SubLObject _prev_bind_10 = system_parameters.$suspend_sbhl_type_checkingP$.currentBinding(thread);
+                SubLObject _prev_bind_11 = wff_utilities.$check_arityP$.currentBinding(thread);
+                SubLObject _prev_bind_12 = sbhl_paranoia.$suppress_sbhl_recachingP$.currentBinding(thread);
+                SubLObject _prev_bind_13 = pph_vars.$generation_level$.currentBinding(thread);
+                SubLObject _prev_bind_14 = pph_vars.$pph_use_expansions_for_precisionP$.currentBinding(thread);
+                try {
+                    $within_assert$.bind(NIL, thread);
+                    wff_utilities.$check_arg_typesP$.bind(NIL, thread);
+                    at_vars.$at_check_arg_typesP$.bind(NIL, thread);
+                    wff_utilities.$check_wff_semanticsP$.bind(NIL, thread);
+                    wff_utilities.$check_wff_coherenceP$.bind(NIL, thread);
+                    wff_utilities.$check_var_typesP$.bind(NIL, thread);
+                    czer_vars.$simplify_literalP$.bind(NIL, thread);
+                    at_vars.$at_check_relator_constraintsP$.bind(NIL, thread);
+                    at_vars.$at_check_arg_formatP$.bind(NIL, thread);
+                    wff_vars.$validate_constantsP$.bind(NIL, thread);
+                    system_parameters.$suspend_sbhl_type_checkingP$.bind(T, thread);
+                    wff_utilities.$check_arityP$.bind(T, thread);
+                    sbhl_paranoia.$suppress_sbhl_recachingP$.bind(T, thread);
+                    pph_vars.$generation_level$.bind(number_utilities.f_1X(pph_vars.current_generation_level()), thread);
+                    pph_vars.$pph_use_expansions_for_precisionP$.bind(pph_vars.$pph_use_expansions_for_precisionP$.getDynamicValue(thread), thread);
+                    {
+                        SubLObject cycl = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
+                        SubLObject mapped_string = pph_macros.pph_mapped_string_for_term(cycl);
+                        SubLObject error_message = NIL;
+                        {
+                            SubLObject _prev_bind_0_181 = Errors.$continue_cerrorP$.currentBinding(thread);
+                            SubLObject _prev_bind_1_182 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+                            try {
+                                Errors.$continue_cerrorP$.bind(NIL, thread);
+                                pph_error.$pph_error_handling_onP$.bind(T, thread);
+                                if (NIL != pph_error.pph_break_on_errorP()) {
+                                    pph_utilities.pph_phrase_rephrase_cycl(phrase, UNPROVIDED, UNPROVIDED);
+                                    {
+                                        SubLObject _prev_bind_0_183 = pph_vars.$pph_var_types$.currentBinding(thread);
+                                        try {
+                                            pph_vars.$pph_var_types$.bind(NIL != dictionary.dictionary_p(pph_vars.$pph_var_types$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_var_types$.getDynamicValue(thread))) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED), thread);
+                                            {
+                                                SubLObject old_pph_vars = pph_variable_handling.pph_registered_vars();
+                                                {
+                                                    SubLObject _prev_bind_0_184 = pph_variable_handling.$pph_different_vars$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_185 = pph_vars.$pph_noted_var_types$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2_186 = pph_vars.$pph_possibly_binding_variables_counter$.currentBinding(thread);
+                                                    try {
+                                                        pph_variable_handling.$pph_different_vars$.bind(pph_variable_handling.$pph_different_vars$.getDynamicValue(thread), thread);
+                                                        pph_vars.$pph_noted_var_types$.bind(NIL != dictionary.dictionary_p(pph_vars.$pph_noted_var_types$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_noted_var_types$.getDynamicValue(thread))) : dictionary.new_dictionary(symbol_function(EQL), SIXTEEN_INTEGER), thread);
+                                                        pph_vars.$pph_possibly_binding_variables_counter$.bind(number_utilities.f_1X(pph_vars.$pph_possibly_binding_variables_counter$.getDynamicValue(thread)), thread);
+                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                            format(T, $str_alt102$__Entering_PPH_POSSIBLY_BINDING_V, pph_vars.$pph_possibly_binding_variables_counter$.getDynamicValue(thread), dictionary.dictionary_values(pph_vars.$pph_var_types$.getDynamicValue(thread)));
+                                                        }
+                                                        try {
+                                                            if (NIL != mapped_string) {
+                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                    format(T, $str_alt103$__Using_mapped_string__S_for__S__, mapped_string, cycl);
+                                                                }
+                                                                pph_phrase.pph_phrase_set_string(phrase, mapped_string);
+                                                                if (pph_phrase.pph_phrase_category(phrase, UNPROVIDED) == $$PossessivePhrase) {
+                                                                    com.cyc.cycjava.cycl.pph_main.possessivize_pph_phrase(phrase);
+                                                                }
+                                                            } else {
+                                                                if (pph_vars.current_generation_level().numG($pph_recursion_limit$.getGlobalValue())) {
+                                                                    {
+                                                                        SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt105$Recursion_limit_exceeded_on__S_) });
+                                                                        pph_error.pph_handle_error(new_format_string, list(pph_vars.pph_top_level_cycl()));
+                                                                    }
+                                                                } else {
+                                                                    pph_phrase.pph_phrase_set_absolute_agr_from_phrase(phrase);
+                                                                    if (NIL == pph_phrase.pph_phrase_impossible_p(phrase, T)) {
+                                                                        if (NIL != pph_phrase.pph_phrase_has_known_cyclP(phrase)) {
+                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                format(T, $str_alt106$__Paraphrasing__S_with_agr___S___, cycl, pph_phrase.pph_phrase_agr(phrase));
+                                                                            }
+                                                                        }
+                                                                        {
+                                                                            SubLObject _prev_bind_0_187 = pph_utilities.$pph_current_environment$.currentBinding(thread);
+                                                                            try {
+                                                                                pph_utilities.$pph_current_environment$.bind(pph_utilities.find_or_create_pph_context(), thread);
+                                                                                pph_utilities.pph_push_environment($GENERATE);
+                                                                                try {
+                                                                                    pph_utilities.pph_phrase_maybe_mark_type_level_violation(phrase);
+                                                                                } finally {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_188 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                        try {
+                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                            {
+                                                                                                SubLObject _prev_bind_0_189 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_1_190 = pph_vars.$pph_domain_mt$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_2_191 = lexicon_vars.$lexicon_lookup_mt$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_3_192 = pph_vars.$paraphrase_mode$.currentBinding(thread);
+                                                                                                SubLObject _prev_bind_4_193 = pph_vars.$pph_type_level_violations$.currentBinding(thread);
+                                                                                                try {
+                                                                                                    pph_vars.$pph_language_mt$.bind(language_mt, thread);
+                                                                                                    pph_vars.$pph_domain_mt$.bind(domain_mt, thread);
+                                                                                                    lexicon_vars.$lexicon_lookup_mt$.bind(pph_vars.$pph_language_mt$.getDynamicValue(thread), thread);
+                                                                                                    pph_vars.$paraphrase_mode$.bind(mode, thread);
+                                                                                                    pph_vars.$pph_type_level_violations$.bind(NIL != set.set_p(pph_vars.$pph_type_level_violations$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_type_level_violations$.getDynamicValue(thread))) : pph_utilities.pph_type_level_violations(cycl), thread);
+                                                                                                    if (NIL != pph_macros.pph_discourse_context_initializedP()) {
+                                                                                                        pph_drs.pph_ensure_discourse_participant_rms();
+                                                                                                        thread.resetMultipleValues();
+                                                                                                        {
+                                                                                                            SubLObject _prev_bind_0_194 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                                                                            try {
+                                                                                                                pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                                                                                {
+                                                                                                                    SubLObject reuseP = thread.secondMultipleValue();
+                                                                                                                    thread.resetMultipleValues();
+                                                                                                                    try {
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_195 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                                                                                {
+                                                                                                                                    SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_196 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                                                                            {
+                                                                                                                                                SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_197 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject original_memoization_process = NIL;
+                                                                                                                                                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                                                                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject current_proc = current_process();
+                                                                                                                                                                    if (NIL == original_memoization_process) {
+                                                                                                                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                                                                                    } else {
+                                                                                                                                                                        if (original_memoization_process != current_proc) {
+                                                                                                                                                                            Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                            try {
+                                                                                                                                                                com.cyc.cycjava.cycl.pph_main.pph_phrase_generate_1(phrase);
+                                                                                                                                                            } finally {
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject _prev_bind_0_198 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                                    try {
+                                                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                                                                                        }
+                                                                                                                                                                    } finally {
+                                                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_198, thread);
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } finally {
+                                                                                                                                                        memoization_state.$memoization_state$.rebind(_prev_bind_0_197, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_196, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                    if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                                                                                        memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_195, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } finally {
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_199 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                if (NIL == reuseP) {
+                                                                                                                                    pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_199, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } finally {
+                                                                                                                pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_194, thread);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        {
+                                                                                                            SubLObject _prev_bind_0_200 = pph_vars.$pph_discourse_context$.currentBinding(thread);
+                                                                                                            try {
+                                                                                                                pph_vars.$pph_discourse_context$.bind(pph_drs.new_pph_discourse_context(), thread);
+                                                                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                                                    format(T, $str_alt71$__Entering_WITHIN_NEW_PPH_DISCOUR, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
+                                                                                                                }
+                                                                                                                try {
+                                                                                                                    pph_drs.pph_ensure_discourse_participant_rms();
+                                                                                                                    thread.resetMultipleValues();
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_201 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                                                                                            {
+                                                                                                                                SubLObject reuseP = thread.secondMultipleValue();
+                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                try {
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_202 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                                                                                            {
+                                                                                                                                                SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_203 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_204 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject original_memoization_process = NIL;
+                                                                                                                                                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                                                                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject current_proc = current_process();
+                                                                                                                                                                                if (NIL == original_memoization_process) {
+                                                                                                                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                                                                                                } else {
+                                                                                                                                                                                    if (original_memoization_process != current_proc) {
+                                                                                                                                                                                        Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                        try {
+                                                                                                                                                                            com.cyc.cycjava.cycl.pph_main.pph_phrase_generate_1(phrase);
+                                                                                                                                                                        } finally {
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject _prev_bind_0_205 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                                                try {
+                                                                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                                                                                                    }
+                                                                                                                                                                                } finally {
+                                                                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_205, thread);
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } finally {
+                                                                                                                                                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_204, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } finally {
+                                                                                                                                                        pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_203, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                                if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                                                                                                    memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_202, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                } finally {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_206 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                            if (NIL == reuseP) {
+                                                                                                                                                pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_206, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        } finally {
+                                                                                                                            pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_201, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    {
+                                                                                                                        SubLObject _prev_bind_0_207 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                        try {
+                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                                                                format(T, $str_alt72$__Leaving_WITHIN_NEW_PPH_DISCOURS, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
+                                                                                                                            }
+                                                                                                                            pph_macros.clear_pph_discourse_context();
+                                                                                                                        } finally {
+                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_207, thread);
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } finally {
+                                                                                                                pph_vars.$pph_discourse_context$.rebind(_prev_bind_0_200, thread);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                } finally {
+                                                                                                    pph_vars.$pph_type_level_violations$.rebind(_prev_bind_4_193, thread);
+                                                                                                    pph_vars.$paraphrase_mode$.rebind(_prev_bind_3_192, thread);
+                                                                                                    lexicon_vars.$lexicon_lookup_mt$.rebind(_prev_bind_2_191, thread);
+                                                                                                    pph_vars.$pph_domain_mt$.rebind(_prev_bind_1_190, thread);
+                                                                                                    pph_vars.$pph_language_mt$.rebind(_prev_bind_0_189, thread);
+                                                                                                }
+                                                                                            }
+                                                                                            pph_utilities.pph_pop_environment();
+                                                                                        } finally {
+                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_188, thread);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_utilities.$pph_current_environment$.rebind(_prev_bind_0_187, thread);
+                                                                            }
+                                                                        }
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                            format(T, $str_alt108$__PPH_PHRASE_GENERATE_Output_list, pph_phrase.pph_phrase_output_list(phrase));
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            {
+                                                                SubLObject _prev_bind_0_208 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                try {
+                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                    {
+                                                                        SubLObject local_vars = set_difference(pph_variable_handling.pph_registered_vars(), old_pph_vars, UNPROVIDED, UNPROVIDED);
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                            format(T, $str_alt109$__Leaving_PPH_POSSIBLY_BINDING_VA, pph_vars.$pph_possibly_binding_variables_counter$.getDynamicValue(thread), pph_variable_handling.pph_registered_vars());
+                                                                        }
+                                                                        pph_macros.pph_handle_local_vars(local_vars);
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                            format(T, $str_alt110$______and__pph_var_types__are_now, pph_variable_handling.pph_registered_vars());
+                                                                        }
+                                                                    }
+                                                                } finally {
+                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_208, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        pph_vars.$pph_possibly_binding_variables_counter$.rebind(_prev_bind_2_186, thread);
+                                                        pph_vars.$pph_noted_var_types$.rebind(_prev_bind_1_185, thread);
+                                                        pph_variable_handling.$pph_different_vars$.rebind(_prev_bind_0_184, thread);
+                                                    }
+                                                }
+                                            }
+                                        } finally {
+                                            pph_vars.$pph_var_types$.rebind(_prev_bind_0_183, thread);
+                                        }
+                                    }
+                                } else {
+                                    try {
+                                        {
+                                            SubLObject _prev_bind_0_209 = Errors.$error_handler$.currentBinding(thread);
+                                            try {
+                                                Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                                try {
+                                                    pph_utilities.pph_phrase_rephrase_cycl(phrase, UNPROVIDED, UNPROVIDED);
+                                                    {
+                                                        SubLObject _prev_bind_0_210 = pph_vars.$pph_var_types$.currentBinding(thread);
+                                                        try {
+                                                            pph_vars.$pph_var_types$.bind(NIL != dictionary.dictionary_p(pph_vars.$pph_var_types$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_var_types$.getDynamicValue(thread))) : dictionary.new_dictionary(UNPROVIDED, UNPROVIDED), thread);
+                                                            {
+                                                                SubLObject old_pph_vars = pph_variable_handling.pph_registered_vars();
+                                                                {
+                                                                    SubLObject _prev_bind_0_211 = pph_variable_handling.$pph_different_vars$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_212 = pph_vars.$pph_noted_var_types$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_2_213 = pph_vars.$pph_possibly_binding_variables_counter$.currentBinding(thread);
+                                                                    try {
+                                                                        pph_variable_handling.$pph_different_vars$.bind(pph_variable_handling.$pph_different_vars$.getDynamicValue(thread), thread);
+                                                                        pph_vars.$pph_noted_var_types$.bind(NIL != dictionary.dictionary_p(pph_vars.$pph_noted_var_types$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_noted_var_types$.getDynamicValue(thread))) : dictionary.new_dictionary(symbol_function(EQL), SIXTEEN_INTEGER), thread);
+                                                                        pph_vars.$pph_possibly_binding_variables_counter$.bind(number_utilities.f_1X(pph_vars.$pph_possibly_binding_variables_counter$.getDynamicValue(thread)), thread);
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                            format(T, $str_alt102$__Entering_PPH_POSSIBLY_BINDING_V, pph_vars.$pph_possibly_binding_variables_counter$.getDynamicValue(thread), dictionary.dictionary_values(pph_vars.$pph_var_types$.getDynamicValue(thread)));
+                                                                        }
+                                                                        try {
+                                                                            if (NIL != mapped_string) {
+                                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                    format(T, $str_alt103$__Using_mapped_string__S_for__S__, mapped_string, cycl);
+                                                                                }
+                                                                                pph_phrase.pph_phrase_set_string(phrase, mapped_string);
+                                                                                if (pph_phrase.pph_phrase_category(phrase, UNPROVIDED) == $$PossessivePhrase) {
+                                                                                    com.cyc.cycjava.cycl.pph_main.possessivize_pph_phrase(phrase);
+                                                                                }
+                                                                            } else {
+                                                                                if (pph_vars.current_generation_level().numG($pph_recursion_limit$.getGlobalValue())) {
+                                                                                    {
+                                                                                        SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt105$Recursion_limit_exceeded_on__S_) });
+                                                                                        pph_error.pph_handle_error(new_format_string, list(pph_vars.pph_top_level_cycl()));
+                                                                                    }
+                                                                                } else {
+                                                                                    pph_phrase.pph_phrase_set_absolute_agr_from_phrase(phrase);
+                                                                                    if (NIL == pph_phrase.pph_phrase_impossible_p(phrase, T)) {
+                                                                                        if (NIL != pph_phrase.pph_phrase_has_known_cyclP(phrase)) {
+                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                format(T, $str_alt106$__Paraphrasing__S_with_agr___S___, cycl, pph_phrase.pph_phrase_agr(phrase));
+                                                                                            }
+                                                                                        }
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_214 = pph_utilities.$pph_current_environment$.currentBinding(thread);
+                                                                                            try {
+                                                                                                pph_utilities.$pph_current_environment$.bind(pph_utilities.find_or_create_pph_context(), thread);
+                                                                                                pph_utilities.pph_push_environment($GENERATE);
+                                                                                                try {
+                                                                                                    pph_utilities.pph_phrase_maybe_mark_type_level_violation(phrase);
+                                                                                                } finally {
+                                                                                                    {
+                                                                                                        SubLObject _prev_bind_0_215 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                        try {
+                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_216 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_1_217 = pph_vars.$pph_domain_mt$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_2_218 = lexicon_vars.$lexicon_lookup_mt$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_3_219 = pph_vars.$paraphrase_mode$.currentBinding(thread);
+                                                                                                                SubLObject _prev_bind_4_220 = pph_vars.$pph_type_level_violations$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    pph_vars.$pph_language_mt$.bind(language_mt, thread);
+                                                                                                                    pph_vars.$pph_domain_mt$.bind(domain_mt, thread);
+                                                                                                                    lexicon_vars.$lexicon_lookup_mt$.bind(pph_vars.$pph_language_mt$.getDynamicValue(thread), thread);
+                                                                                                                    pph_vars.$paraphrase_mode$.bind(mode, thread);
+                                                                                                                    pph_vars.$pph_type_level_violations$.bind(NIL != set.set_p(pph_vars.$pph_type_level_violations$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_type_level_violations$.getDynamicValue(thread))) : pph_utilities.pph_type_level_violations(cycl), thread);
+                                                                                                                    if (NIL != pph_macros.pph_discourse_context_initializedP()) {
+                                                                                                                        pph_drs.pph_ensure_discourse_participant_rms();
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_221 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                                                                                                {
+                                                                                                                                    SubLObject reuseP = thread.secondMultipleValue();
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    try {
+                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                        {
+                                                                                                                                            SubLObject _prev_bind_0_222 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                                                                                            try {
+                                                                                                                                                pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                                                                                                {
+                                                                                                                                                    SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject _prev_bind_0_223 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                                                                                                        try {
+                                                                                                                                                            pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject _prev_bind_0_224 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                                                                                                    try {
+                                                                                                                                                                        memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject original_memoization_process = NIL;
+                                                                                                                                                                            if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                                                                                                original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject current_proc = current_process();
+                                                                                                                                                                                    if (NIL == original_memoization_process) {
+                                                                                                                                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                                                                                                    } else {
+                                                                                                                                                                                        if (original_memoization_process != current_proc) {
+                                                                                                                                                                                            Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                            try {
+                                                                                                                                                                                com.cyc.cycjava.cycl.pph_main.pph_phrase_generate_1(phrase);
+                                                                                                                                                                            } finally {
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject _prev_bind_0_225 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                                                    try {
+                                                                                                                                                                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                                                                                            memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    } finally {
+                                                                                                                                                                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_225, thread);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    } finally {
+                                                                                                                                                                        memoization_state.$memoization_state$.rebind(_prev_bind_0_224, thread);
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        } finally {
+                                                                                                                                                            pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_223, thread);
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                                                                                                        memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            } finally {
+                                                                                                                                                pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_222, thread);
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        {
+                                                                                                                                            SubLObject _prev_bind_0_226 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                            try {
+                                                                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                if (NIL == reuseP) {
+                                                                                                                                                    pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                                                                                                }
+                                                                                                                                            } finally {
+                                                                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_226, thread);
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_221, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        {
+                                                                                                                            SubLObject _prev_bind_0_227 = pph_vars.$pph_discourse_context$.currentBinding(thread);
+                                                                                                                            try {
+                                                                                                                                pph_vars.$pph_discourse_context$.bind(pph_drs.new_pph_discourse_context(), thread);
+                                                                                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                                                                    format(T, $str_alt71$__Entering_WITHIN_NEW_PPH_DISCOUR, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
+                                                                                                                                }
+                                                                                                                                try {
+                                                                                                                                    pph_drs.pph_ensure_discourse_participant_rms();
+                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_228 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                                                                                                                                            {
+                                                                                                                                                SubLObject reuseP = thread.secondMultipleValue();
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                try {
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject _prev_bind_0_229 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                                                                                                                                        try {
+                                                                                                                                                            pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject new_or_reused = thread.secondMultipleValue();
+                                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject _prev_bind_0_230 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                                                                                                                                    try {
+                                                                                                                                                                        pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                                                                                                                                            {
+                                                                                                                                                                                SubLObject _prev_bind_0_231 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                                                                                                                                                try {
+                                                                                                                                                                                    memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject original_memoization_process = NIL;
+                                                                                                                                                                                        if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                                                                                                                                            original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject current_proc = current_process();
+                                                                                                                                                                                                if (NIL == original_memoization_process) {
+                                                                                                                                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                                                                                                                                                } else {
+                                                                                                                                                                                                    if (original_memoization_process != current_proc) {
+                                                                                                                                                                                                        Errors.error($str_alt14$Invalid_attempt_to_reuse_memoizat);
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                        try {
+                                                                                                                                                                                            com.cyc.cycjava.cycl.pph_main.pph_phrase_generate_1(phrase);
+                                                                                                                                                                                        } finally {
+                                                                                                                                                                                            {
+                                                                                                                                                                                                SubLObject _prev_bind_0_232 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                                                                try {
+                                                                                                                                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                                                                    if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                                                                                                                                        memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                } finally {
+                                                                                                                                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_232, thread);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                } finally {
+                                                                                                                                                                                    memoization_state.$memoization_state$.rebind(_prev_bind_0_231, thread);
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    } finally {
+                                                                                                                                                                        pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_230, thread);
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                                if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                                                                                                                                    memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        } finally {
+                                                                                                                                                            pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_229, thread);
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                } finally {
+                                                                                                                                                    {
+                                                                                                                                                        SubLObject _prev_bind_0_233 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                                        try {
+                                                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                                            if (NIL == reuseP) {
+                                                                                                                                                                pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                                                                                                                                            }
+                                                                                                                                                        } finally {
+                                                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_233, thread);
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0_228, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                } finally {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_234 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                                                                                format(T, $str_alt72$__Leaving_WITHIN_NEW_PPH_DISCOURS, pph_vars.$pph_discourse_context$.getDynamicValue(thread));
+                                                                                                                                            }
+                                                                                                                                            pph_macros.clear_pph_discourse_context();
+                                                                                                                                        } finally {
+                                                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_234, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } finally {
+                                                                                                                                pph_vars.$pph_discourse_context$.rebind(_prev_bind_0_227, thread);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    pph_vars.$pph_type_level_violations$.rebind(_prev_bind_4_220, thread);
+                                                                                                                    pph_vars.$paraphrase_mode$.rebind(_prev_bind_3_219, thread);
+                                                                                                                    lexicon_vars.$lexicon_lookup_mt$.rebind(_prev_bind_2_218, thread);
+                                                                                                                    pph_vars.$pph_domain_mt$.rebind(_prev_bind_1_217, thread);
+                                                                                                                    pph_vars.$pph_language_mt$.rebind(_prev_bind_0_216, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                            pph_utilities.pph_pop_environment();
+                                                                                                        } finally {
+                                                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_215, thread);
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            } finally {
+                                                                                                pph_utilities.$pph_current_environment$.rebind(_prev_bind_0_214, thread);
+                                                                                            }
+                                                                                        }
+                                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                            format(T, $str_alt108$__PPH_PHRASE_GENERATE_Output_list, pph_phrase.pph_phrase_output_list(phrase));
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            {
+                                                                                SubLObject _prev_bind_0_235 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                try {
+                                                                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                    {
+                                                                                        SubLObject local_vars = set_difference(pph_variable_handling.pph_registered_vars(), old_pph_vars, UNPROVIDED, UNPROVIDED);
+                                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                            format(T, $str_alt109$__Leaving_PPH_POSSIBLY_BINDING_VA, pph_vars.$pph_possibly_binding_variables_counter$.getDynamicValue(thread), pph_variable_handling.pph_registered_vars());
+                                                                                        }
+                                                                                        pph_macros.pph_handle_local_vars(local_vars);
+                                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(TWO_INTEGER)) {
+                                                                                            format(T, $str_alt110$______and__pph_var_types__are_now, pph_variable_handling.pph_registered_vars());
+                                                                                        }
+                                                                                    }
+                                                                                } finally {
+                                                                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0_235, thread);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        pph_vars.$pph_possibly_binding_variables_counter$.rebind(_prev_bind_2_213, thread);
+                                                                        pph_vars.$pph_noted_var_types$.rebind(_prev_bind_1_212, thread);
+                                                                        pph_variable_handling.$pph_different_vars$.rebind(_prev_bind_0_211, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            pph_vars.$pph_var_types$.rebind(_prev_bind_0_210, thread);
+                                                        }
+                                                    }
+                                                } catch (Throwable catch_var) {
+                                                    Errors.handleThrowable(catch_var, NIL);
+                                                }
+                                            } finally {
+                                                Errors.$error_handler$.rebind(_prev_bind_0_209, thread);
+                                            }
+                                        }
+                                    } catch (Throwable ccatch_env_var) {
+                                        error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                                    }
+                                    if (error_message.isString()) {
+                                        Errors.warn(error_message);
+                                    }
+                                }
+                            } finally {
+                                pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1_182, thread);
+                                Errors.$continue_cerrorP$.rebind(_prev_bind_0_181, thread);
+                            }
+                        }
+                        if (NIL != error_message) {
+                            com.cyc.cycjava.cycl.pph_main.pph_phrase_possibly_generate_foolproof(phrase);
+                        }
+                    }
+                } finally {
+                    pph_vars.$pph_use_expansions_for_precisionP$.rebind(_prev_bind_14, thread);
+                    pph_vars.$generation_level$.rebind(_prev_bind_13, thread);
+                    sbhl_paranoia.$suppress_sbhl_recachingP$.rebind(_prev_bind_12, thread);
+                    wff_utilities.$check_arityP$.rebind(_prev_bind_11, thread);
+                    system_parameters.$suspend_sbhl_type_checkingP$.rebind(_prev_bind_10, thread);
+                    wff_vars.$validate_constantsP$.rebind(_prev_bind_9, thread);
+                    at_vars.$at_check_arg_formatP$.rebind(_prev_bind_8, thread);
+                    at_vars.$at_check_relator_constraintsP$.rebind(_prev_bind_7, thread);
+                    czer_vars.$simplify_literalP$.rebind(_prev_bind_6, thread);
+                    wff_utilities.$check_var_typesP$.rebind(_prev_bind_5, thread);
+                    wff_utilities.$check_wff_coherenceP$.rebind(_prev_bind_4, thread);
+                    wff_utilities.$check_wff_semanticsP$.rebind(_prev_bind_3, thread);
+                    at_vars.$at_check_arg_typesP$.rebind(_prev_bind_2, thread);
+                    wff_utilities.$check_arg_typesP$.rebind(_prev_bind_1, thread);
+                    $within_assert$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return pph_phrase.pph_phrase_output_list(phrase);
+        }
     }
 
     public static SubLObject pph_phrase_generate(SubLObject phrase, SubLObject language_mt, SubLObject domain_mt, SubLObject mode) {
@@ -5160,6 +9811,81 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_phrase.pph_phrase_output_list(phrase);
     }
 
+    public static final SubLObject pph_phrase_generate_1_alt(SubLObject phrase) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_object = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = pph_vars.$pph_cycls$.currentBinding(thread);
+                    try {
+                        pph_vars.$pph_cycls$.bind(cons(v_object, pph_vars.$pph_cycls$.getDynamicValue(thread)), thread);
+                        {
+                            SubLObject doneP = pph_phrase.pph_phrase_doneP(phrase);
+                            if (NIL != doneP) {
+                            } else {
+                                if (NIL != list_utilities.list_starts_with_repeating_sequenceP(pph_vars.$pph_cycls$.getDynamicValue(thread), symbol_function(EQUAL), THREE_INTEGER, UNPROVIDED)) {
+                                    {
+                                        SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt111$Repeating_sequence_in_paraphrase_) });
+                                        pph_error.pph_handle_error(new_format_string, list(pph_vars.$pph_cycls$.getDynamicValue(thread)));
+                                    }
+                                } else {
+                                    if ((NIL != pph_phrase.pph_phrase_has_dtrsP(phrase)) || (NIL != pph_phrase.pph_cycl_phrase_p(phrase))) {
+                                        pph_methods_formulas.do_generate_phrase_from_template(phrase);
+                                    } else {
+                                        if (pph_phrase.pph_phrase_category(phrase, UNPROVIDED) == $$PossessivePhrase) {
+                                            com.cyc.cycjava.cycl.pph_main.generate_poss_phrase(phrase);
+                                        } else {
+                                            if (NIL != com.cyc.cycjava.cycl.pph_main.pph_ordinal_phrase_requiring_special_handlingP(phrase)) {
+                                                com.cyc.cycjava.cycl.pph_main.generate_ordinal_phrase(phrase);
+                                            } else {
+                                                if (NIL == pph_phrase.pph_phrase_has_known_cyclP(phrase)) {
+                                                    pph_phrase_get_string(phrase, UNPROVIDED, UNPROVIDED);
+                                                } else {
+                                                    if (NIL != pph_methods_formulas.pph_negative_polarity_sentenceP(v_object)) {
+                                                        if (!((NIL != pph_error.$suspend_pph_type_checkingP$.getDynamicValue(thread)) || (NIL != pph_vars.pph_quantifier_keyword_p($NO)))) {
+                                                            {
+                                                                SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy(cconcatenate(format_nil.format_nil_s_no_copy($NO), new SubLObject[]{ $str_alt25$_is_not_a_, format_nil.format_nil_s_no_copy(PPH_QUANTIFIER_KEYWORD_P) })) });
+                                                                pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+                                                            }
+                                                        }
+                                                        {
+                                                            SubLObject _prev_bind_0_236 = pph_vars.$pph_operator_scope_context$.currentBinding(thread);
+                                                            try {
+                                                                pph_vars.$pph_operator_scope_context$.bind(cons($NO, pph_vars.$pph_operator_scope_context$.getDynamicValue(thread)), thread);
+                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                    format(T, $str_alt114$Inside_operator_scope__S, $NO);
+                                                                }
+                                                                com.cyc.cycjava.cycl.pph_main.pph_phrase_try_methods(phrase);
+                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                    format(T, $str_alt115$Leaving_operator_scope__S, $NO);
+                                                                }
+                                                            } finally {
+                                                                pph_vars.$pph_operator_scope_context$.rebind(_prev_bind_0_236, thread);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        com.cyc.cycjava.cycl.pph_main.pph_phrase_try_methods(phrase);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_vars.$pph_cycls$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            if (NIL == pph_phrase.pph_phrase_doneP(phrase)) {
+                com.cyc.cycjava.cycl.pph_main.pph_phrase_possibly_generate_foolproof(phrase);
+            }
+            return pph_phrase.pph_phrase_output_list(phrase);
+        }
+    }
+
     public static SubLObject pph_phrase_generate_1(final SubLObject phrase) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_object = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
@@ -5216,14 +9942,40 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_phrase.pph_phrase_output_list(phrase);
     }
 
+    public static final SubLObject pph_skip_methodP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean((NIL != pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread)) && (NIL != com.cyc.cycjava.cycl.pph_main.pph_skip_methodP_internal($pph_method_stack$.getDynamicValue(thread))));
+        }
+    }
+
     public static SubLObject pph_skip_methodP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean((NIL != pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread)) && (NIL != pph_skip_methodP_internal($pph_method_stack$.getDynamicValue(thread))));
     }
 
+    public static final SubLObject pph_skip_methodP_internal_alt(SubLObject current) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return com.cyc.cycjava.cycl.pph_main.pph_skip_methodP_internal_two(current, pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread));
+        }
+    }
+
     public static SubLObject pph_skip_methodP_internal(final SubLObject current) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return pph_skip_methodP_internal_two(current, pph_macros.$suspended_paraphrase_methods$.getDynamicValue(thread));
+    }
+
+    public static final SubLObject pph_skip_methodP_internal_two_alt(SubLObject current, SubLObject suspended) {
+        {
+            SubLObject skipP = set.set_memberP(current, suspended);
+            if (NIL != skipP) {
+                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                    format(T, $str_alt116$Skipping__S___, current);
+                }
+            }
+            return skipP;
+        }
     }
 
     public static SubLObject pph_skip_methodP_internal_two(final SubLObject current, final SubLObject suspended) {
@@ -5234,6 +9986,25 @@ public final class pph_main extends SubLTranslatedFile {
         return skipP;
     }
 
+    /**
+     *
+     *
+     * @unknown - non-destructive.
+     */
+    @LispMethod(comment = "@unknown - non-destructive.")
+    public static final SubLObject pph_truncate_method_context_alt(SubLObject method, SubLObject leave_top) {
+        if (leave_top == UNPROVIDED) {
+            leave_top = ONE_INTEGER;
+        }
+        return com.cyc.cycjava.cycl.pph_main.pph_ntruncate_method_context(method, leave_top);
+    }
+
+    /**
+     *
+     *
+     * @unknown - non-destructive.
+     */
+    @LispMethod(comment = "@unknown - non-destructive.")
     public static SubLObject pph_truncate_method_context(final SubLObject method, SubLObject leave_top) {
         if (leave_top == UNPROVIDED) {
             leave_top = ONE_INTEGER;
@@ -5241,6 +10012,49 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_ntruncate_method_context(method, leave_top);
     }
 
+    /**
+     *
+     *
+     * @unknown - destructive.
+     */
+    @LispMethod(comment = "@unknown - destructive.")
+    public static final SubLObject pph_ntruncate_method_context_alt(SubLObject method, SubLObject leave_top) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == getf(method, $CONTEXT, UNPROVIDED)) {
+                return values(method, ZERO_INTEGER);
+            } else {
+                if (leave_top.isPositive()) {
+                    {
+                        SubLObject matrix_method = getf(method, $CONTEXT, NIL);
+                        if (NIL != matrix_method) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject truncated_matrix_method = com.cyc.cycjava.cycl.pph_main.pph_ntruncate_method_context(matrix_method, leave_top);
+                                SubLObject depth = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                if (leave_top.numG(depth)) {
+                                    return values(putf(method, $CONTEXT, truncated_matrix_method), number_utilities.f_1X(depth));
+                                } else {
+                                    return values(putf(method, $CONTEXT, getf(truncated_matrix_method, $CONTEXT, UNPROVIDED)), depth);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    return values(remf(method, $CONTEXT), ZERO_INTEGER);
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown - destructive.
+     */
+    @LispMethod(comment = "@unknown - destructive.")
     public static SubLObject pph_ntruncate_method_context(final SubLObject method, final SubLObject leave_top) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == getf(method, $CONTEXT, UNPROVIDED)) {
@@ -5263,10 +10077,146 @@ public final class pph_main extends SubLTranslatedFile {
         return values(putf(method, $CONTEXT, getf(truncated_matrix_method, $CONTEXT, UNPROVIDED)), depth);
     }
 
+    public static final SubLObject pph_phrase_try_methods_alt(SubLObject phrase) {
+        {
+            SubLObject v_object = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
+            SubLObject v_methods = get_paraphrase_methods(v_object);
+            return com.cyc.cycjava.cycl.pph_main.pph_phrase_try_these_methods(phrase, v_methods);
+        }
+    }
+
     public static SubLObject pph_phrase_try_methods(final SubLObject phrase) {
         final SubLObject v_object = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
         final SubLObject v_methods = pph_types.get_paraphrase_methods(v_object);
         return pph_phrase_try_these_methods(phrase, v_methods);
+    }
+
+    public static final SubLObject pph_phrase_try_these_methods_alt(SubLObject phrase, SubLObject v_methods) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_object = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
+                SubLObject successful_method = NIL;
+                SubLObject backup_phrase = ((NIL != pph_macros.handling_pph_method_failures_p()) && (NIL == pph_vars.pph_generate_alternative_phrasesP())) ? ((SubLObject) ($DONT_NEED_BACKUP_PHRASE)) : pph_phrase.pph_phrase_create_backup(phrase);
+                SubLObject dtr_demerits = subtract(pph_phrase.pph_phrase_demerits(phrase), pph_phrase.pph_phrase_top_level_demerits(phrase));
+                SubLObject best_method = v_methods.first();
+                SubLObject minimum_demerits = second(best_method);
+                SubLObject failed_zero_demerit_methods = NIL;
+                if (!ZERO_INTEGER.eql(minimum_demerits)) {
+                    pph_phrase.pph_phrase_maybe_note_problem(phrase, PPH_PHRASE_TRY_METHODS, $NO_ZERO_DEMERIT_METHODS, list($CYCL, v_object, $BEST_METHOD, best_method));
+                }
+                {
+                    SubLObject remaining = NIL;
+                    for (remaining = v_methods; !((NIL == remaining) || ((NIL != successful_method) && (NIL == pph_vars.pph_generate_alternative_phrasesP()))); remaining = remaining.rest()) {
+                        {
+                            SubLObject method = remaining.first();
+                            SubLObject datum = method;
+                            SubLObject current = datum;
+                            SubLObject method_symbol = NIL;
+                            SubLObject method_demerits = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt123);
+                            method_symbol = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt123);
+                            method_demerits = current.first();
+                            current = current.rest();
+                            if (NIL == current) {
+                                if (!(method_symbol.isSymbol() && (NIL != fboundp(method_symbol)))) {
+                                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                        Errors.warn($str_alt124$_S_is_not_an_FBOUNDP_symbol_, method_symbol);
+                                    }
+                                } else {
+                                    if (NIL != pph_vars.pph_too_many_demerits_p(add(dtr_demerits, method_demerits), UNPROVIDED)) {
+                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                            Errors.warn($str_alt125$___S_demerits_exceeds_cutoff_of__, new SubLObject[]{ add(dtr_demerits, method_demerits), pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread), method_demerits, method, dtr_demerits });
+                                        }
+                                    } else {
+                                        {
+                                            SubLObject timed_outP = NIL;
+                                            SubLObject method_failure = NIL;
+                                            SubLObject old_pph_method_stack = $pph_method_stack$.getDynamicValue(thread);
+                                            {
+                                                SubLObject _prev_bind_0 = $pph_method_stack$.currentBinding(thread);
+                                                try {
+                                                    $pph_method_stack$.bind(list($METHOD, method_symbol, $CYCL, v_object, $AGR_PREDS, pph_phrase.pph_phrase_agr_preds(phrase, UNPROVIDED), $CATEGORY, pph_phrase.pph_phrase_category(phrase, UNPROVIDED)), thread);
+                                                    if (NIL != old_pph_method_stack) {
+                                                        $pph_method_stack$.setDynamicValue(com.cyc.cycjava.cycl.pph_main.pph_truncate_method_context(putf($pph_method_stack$.getDynamicValue(thread), $CONTEXT, old_pph_method_stack), UNPROVIDED), thread);
+                                                    }
+                                                    if (NIL == com.cyc.cycjava.cycl.pph_main.pph_skip_methodP()) {
+                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                            format(T, $str_alt129$__Trying__S___Remaining___S, method, remaining);
+                                                        }
+                                                        {
+                                                            SubLObject current_phrase = (NIL != pph_phrase.pph_phrase_doneP(phrase)) ? ((SubLObject) (pph_phrase.pph_phrase_copy(backup_phrase, NIL, NIL))) : phrase;
+                                                            {
+                                                                SubLObject _prev_bind_0_237 = pph_macros.$pph_timeout_time_check_count$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1 = pph_macros.$pph_timeout_time$.currentBinding(thread);
+                                                                SubLObject _prev_bind_2 = pph_macros.$pph_timeout_reachedP$.currentBinding(thread);
+                                                                try {
+                                                                    pph_macros.$pph_timeout_time_check_count$.bind(ZERO_INTEGER, thread);
+                                                                    pph_macros.$pph_timeout_time$.bind(pph_macros.pph_compute_timeout_time(NIL), thread);
+                                                                    pph_macros.$pph_timeout_reachedP$.bind(pph_macros.$pph_timeout_reachedP$.getDynamicValue(thread), thread);
+                                                                    pph_macros.$pph_timeout_reachedP$.setDynamicValue(pph_macros.pph_timeout_time_reachedP(), thread);
+                                                                    if (NIL == pph_macros.$pph_timeout_reachedP$.getDynamicValue(thread)) {
+                                                                        try {
+                                                                            com.cyc.cycjava.cycl.pph_main.pph_phrase_try_method(current_phrase, method_symbol, method_demerits, backup_phrase);
+                                                                        } catch (Throwable ccatch_env_var) {
+                                                                            method_failure = Errors.handleThrowable(ccatch_env_var, $PPH_METHOD_FAILURE);
+                                                                        }
+                                                                    }
+                                                                    timed_outP = pph_macros.pph_timeout_time_reachedP();
+                                                                } finally {
+                                                                    pph_macros.$pph_timeout_reachedP$.rebind(_prev_bind_2, thread);
+                                                                    pph_macros.$pph_timeout_time$.rebind(_prev_bind_1, thread);
+                                                                    pph_macros.$pph_timeout_time_check_count$.rebind(_prev_bind_0_237, thread);
+                                                                }
+                                                            }
+                                                            if ((current_phrase == phrase) && (NIL != pph_phrase.pph_phrase_doneP(current_phrase))) {
+                                                                successful_method = method_symbol;
+                                                                if (NIL != cycl_variables.el_varP(v_object)) {
+                                                                    pph_variable_handling.pph_register_var_paraphrase(v_object, phrase);
+                                                                }
+                                                            } else {
+                                                                if (NIL != pph_phrase.pph_phrase_doneP(current_phrase)) {
+                                                                    pph_phrase.pph_phrase_add_alternative(phrase, current_phrase);
+                                                                } else {
+                                                                    if ((NIL != pph_vars.pph_problem_reporting_on_p()) && method_demerits.isZero()) {
+                                                                        failed_zero_demerit_methods = cons(method_symbol, failed_zero_demerit_methods);
+                                                                    }
+                                                                }
+                                                            }
+                                                            if (NIL != timed_outP) {
+                                                                pph_phrase.pph_phrase_maybe_note_problem(phrase, PPH_PHRASE_TRY_METHODS, $TOO_MUCH_TIME, UNPROVIDED);
+                                                                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                    Errors.warn($str_alt131$Exceeded_timeout_on____S, current_phrase);
+                                                                }
+                                                                com.cyc.cycjava.cycl.pph_main.pph_abort();
+                                                            }
+                                                            if ((NIL != method_failure) && (NIL != remaining)) {
+                                                                pph_macros.throw_pph_method_failure(method_failure);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    $pph_method_stack$.rebind(_prev_bind_0, thread);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            } else {
+                                cdestructuring_bind_error(datum, $list_alt123);
+                            }
+                        }
+                    }
+                }
+                if ((($VERBOSE == pph_vars.$pph_problem_reporting_mode$.getDynamicValue(thread)) && ((NIL == pph_phrase.pph_phrase_doneP(phrase)) || pph_phrase.pph_phrase_top_level_demerits(phrase).isPositive())) && (NIL != failed_zero_demerit_methods)) {
+                    com.cyc.cycjava.cycl.pph_main.pph_phrase_report_problems(phrase, failed_zero_demerit_methods, successful_method);
+                }
+                pph_phrase.pph_phrase_maybe_dump_problem_reports(phrase, UNPROVIDED);
+                return values(pph_phrase.pph_phrase_output_list(phrase), successful_method);
+            }
+        }
     }
 
     public static SubLObject pph_phrase_try_these_methods(final SubLObject phrase, final SubLObject v_methods) {
@@ -5416,10 +10366,42 @@ public final class pph_main extends SubLTranslatedFile {
         return values(pph_phrase.pph_phrase_output_list(phrase), successful_method);
     }
 
+    public static final SubLObject pph_abort_alt() {
+        {
+            SubLObject new_format_string = cconcatenate($str_alt17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str_alt18$__, format_nil.format_nil_a_no_copy($str_alt133$Aborting_PPH_call___) });
+            pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
+        }
+        return NIL;
+    }
+
     public static SubLObject pph_abort() {
         final SubLObject new_format_string = cconcatenate($str17$_PPH_error_level_, new SubLObject[]{ format_nil.format_nil_s_no_copy(ONE_INTEGER), $str18$__, format_nil.format_nil_a_no_copy($str145$Aborting_PPH_call___) });
         pph_error.pph_handle_error(new_format_string, list(EMPTY_SUBL_OBJECT_ARRAY));
         return NIL;
+    }
+
+    public static final SubLObject pph_phrase_report_problems_alt(SubLObject phrase, SubLObject failed_zero_demerit_methods, SubLObject successful_method) {
+        {
+            SubLObject v_object = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
+            if (((NIL == pph_phrase.pph_phrase_doneP(phrase)) || pph_phrase.pph_phrase_top_level_demerits(phrase).isPositive()) && (NIL != failed_zero_demerit_methods)) {
+                Errors.warn($str_alt134$Zero_demerit_methods_failed____In, v_object, pph_phrase.pph_phrase_agr_preds(phrase, UNPROVIDED));
+                {
+                    SubLObject cdolist_list_var = failed_zero_demerit_methods;
+                    SubLObject failed_method = NIL;
+                    for (failed_method = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , failed_method = cdolist_list_var.first()) {
+                        {
+                            SubLObject problems = pph_phrase.pph_phrase_reporter_problems(phrase, failed_method);
+                            format(T, $str_alt135$_____S____Reported_Problems___S__, failed_method, problems);
+                        }
+                    }
+                }
+                if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+                    format(T, $str_alt136$___Successful_method___S__demerit, new SubLObject[]{ successful_method, pph_phrase.pph_phrase_top_level_demerits(phrase), pph_phrase.pph_phrase_string(phrase, UNPROVIDED) });
+                }
+                com.cyc.cycjava.cycl.pph_main.pph_print_context(UNPROVIDED);
+            }
+        }
+        return phrase;
     }
 
     public static SubLObject pph_phrase_report_problems(final SubLObject phrase, final SubLObject failed_zero_demerit_methods, final SubLObject successful_method) {
@@ -5443,6 +10425,20 @@ public final class pph_main extends SubLTranslatedFile {
         return phrase;
     }
 
+    public static final SubLObject pph_print_context_alt(SubLObject stream) {
+        if (stream == UNPROVIDED) {
+            stream = StreamsLow.$standard_output$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            format(stream, $str_alt137$__Context____Top_level_CycL___S__, new SubLObject[]{ pph_vars.pph_top_level_cycl(), pph_vars.$pph_language_mt$.getDynamicValue(thread), pph_vars.$pph_domain_mt$.getDynamicValue(thread), pph_vars.$paraphrase_mode$.getDynamicValue(thread) });
+            if (NIL != pph_vars.$paraphrase_precision$.getDynamicValue(thread)) {
+                format(stream, $str_alt138$_Precision___S__, pph_vars.$paraphrase_precision$.getDynamicValue(thread));
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject pph_print_context(SubLObject stream) {
         if (stream == UNPROVIDED) {
             stream = StreamsLow.$standard_output$.getDynamicValue();
@@ -5455,6 +10451,260 @@ public final class pph_main extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Try METHOD-SYMBOL to generate a string for PHRASE.
+     */
+    @LispMethod(comment = "Try METHOD-SYMBOL to generate a string for PHRASE.")
+    public static final SubLObject pph_phrase_try_method_alt(SubLObject phrase, SubLObject method_symbol, SubLObject method_demerits, SubLObject backup_phrase) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject error_message = NIL;
+                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                    format(T, $str_alt139$__Trying__S_____, $pph_method_stack$.getDynamicValue(thread));
+                }
+                {
+                    SubLObject var_types_shadow = copy_dictionary(pph_vars.$pph_var_types$.getDynamicValue(thread));
+                    {
+                        SubLObject _prev_bind_0 = pph_vars.$pph_noted_var_types$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = pph_macros.$pph_var_types_counter$.currentBinding(thread);
+                        try {
+                            pph_vars.$pph_noted_var_types$.bind(NIL != dictionary.dictionary_p(pph_vars.$pph_noted_var_types$.getDynamicValue(thread)) ? ((SubLObject) (pph_vars.$pph_noted_var_types$.getDynamicValue(thread))) : dictionary.new_dictionary(symbol_function(EQL), SIXTEEN_INTEGER), thread);
+                            pph_macros.$pph_var_types_counter$.bind(number_utilities.f_1X(pph_macros.$pph_var_types_counter$.getDynamicValue(thread)), thread);
+                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                format(T, $str_alt140$__Entering_PPH_SETTING_VAR_TYPES_, pph_macros.$pph_var_types_counter$.getDynamicValue(thread), dictionary.dictionary_values(pph_vars.$pph_var_types$.getDynamicValue(thread)));
+                            }
+                            try {
+                                {
+                                    SubLObject _prev_bind_0_238 = pph_vars.$pph_var_types$.currentBinding(thread);
+                                    try {
+                                        pph_vars.$pph_var_types$.bind(var_types_shadow, thread);
+                                        {
+                                            SubLObject _prev_bind_0_239 = Errors.$continue_cerrorP$.currentBinding(thread);
+                                            SubLObject _prev_bind_1_240 = pph_error.$pph_error_handling_onP$.currentBinding(thread);
+                                            try {
+                                                Errors.$continue_cerrorP$.bind(NIL, thread);
+                                                pph_error.$pph_error_handling_onP$.bind(T, thread);
+                                                if (NIL != pph_error.pph_break_on_errorP()) {
+                                                    if (method_demerits.isPositive()) {
+                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                            Errors.warn($str_alt141$__Adding__S_demerits_for__S____S, method_demerits, method_symbol, phrase);
+                                                        }
+                                                        pph_phrase.pph_phrase_set_top_level_demerits(phrase, add(pph_phrase.pph_phrase_demerits(NIL != pph_phrase.pph_phrase_p(backup_phrase, UNPROVIDED) ? ((SubLObject) (backup_phrase)) : phrase), method_demerits), method_symbol);
+                                                    }
+                                                    {
+                                                        SubLObject matrix_new_pph_phrases = pph_macros.$new_pph_phrases$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_241 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                            try {
+                                                                pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                {
+                                                                    SubLObject failedP = NIL;
+                                                                    try {
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(THREE_INTEGER)) {
+                                                                            format(T, $str_alt142$__PPH_phrase_immediately_before_c, method_symbol, phrase);
+                                                                        }
+                                                                        pph_methods.funcall_pph_method(method_symbol, phrase);
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(THREE_INTEGER)) {
+                                                                            format(T, $str_alt143$__PPH_phrase_immediately_after_ca, method_symbol, phrase);
+                                                                        }
+                                                                        if (((NIL == pph_phrase.pph_phrase_doneP(phrase)) || error_message.isString()) || (NIL != pph_vars.pph_too_many_demerits_p(pph_phrase.pph_phrase_demerits(phrase), UNPROVIDED))) {
+                                                                            failedP = T;
+                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                format(T, $str_alt144$_S_failed_, method_symbol);
+                                                                            }
+                                                                            if (NIL != pph_macros.handling_pph_method_failures_p()) {
+                                                                                pph_macros.throw_pph_method_failure($pph_method_stack$.getDynamicValue(thread));
+                                                                            } else {
+                                                                                pph_phrase.pph_phrase_revert_to_backup(phrase, backup_phrase);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_242 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if (NIL != failedP) {
+                                                                                    pph_macros.destroy_new_pph_phrases();
+                                                                                } else {
+                                                                                    {
+                                                                                        SubLObject cdolist_list_var = stacks.do_stack_elements_stack_elements(pph_macros.$new_pph_phrases$.getDynamicValue(thread));
+                                                                                        SubLObject phrase_243 = NIL;
+                                                                                        for (phrase_243 = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , phrase_243 = cdolist_list_var.first()) {
+                                                                                            stacks.stack_push(phrase_243, matrix_new_pph_phrases);
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_242, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_241, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } else {
+                                                    try {
+                                                        {
+                                                            SubLObject _prev_bind_0_244 = Errors.$error_handler$.currentBinding(thread);
+                                                            try {
+                                                                Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
+                                                                try {
+                                                                    if (method_demerits.isPositive()) {
+                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                            Errors.warn($str_alt141$__Adding__S_demerits_for__S____S, method_demerits, method_symbol, phrase);
+                                                                        }
+                                                                        pph_phrase.pph_phrase_set_top_level_demerits(phrase, add(pph_phrase.pph_phrase_demerits(NIL != pph_phrase.pph_phrase_p(backup_phrase, UNPROVIDED) ? ((SubLObject) (backup_phrase)) : phrase), method_demerits), method_symbol);
+                                                                    }
+                                                                    {
+                                                                        SubLObject matrix_new_pph_phrases = pph_macros.$new_pph_phrases$.getDynamicValue(thread);
+                                                                        {
+                                                                            SubLObject _prev_bind_0_245 = pph_macros.$new_pph_phrases$.currentBinding(thread);
+                                                                            try {
+                                                                                pph_macros.$new_pph_phrases$.bind(stacks.create_stack(), thread);
+                                                                                {
+                                                                                    SubLObject failedP = NIL;
+                                                                                    try {
+                                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(THREE_INTEGER)) {
+                                                                                            format(T, $str_alt142$__PPH_phrase_immediately_before_c, method_symbol, phrase);
+                                                                                        }
+                                                                                        pph_methods.funcall_pph_method(method_symbol, phrase);
+                                                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(THREE_INTEGER)) {
+                                                                                            format(T, $str_alt143$__PPH_phrase_immediately_after_ca, method_symbol, phrase);
+                                                                                        }
+                                                                                        if (((NIL == pph_phrase.pph_phrase_doneP(phrase)) || error_message.isString()) || (NIL != pph_vars.pph_too_many_demerits_p(pph_phrase.pph_phrase_demerits(phrase), UNPROVIDED))) {
+                                                                                            failedP = T;
+                                                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                                                format(T, $str_alt144$_S_failed_, method_symbol);
+                                                                                            }
+                                                                                            if (NIL != pph_macros.handling_pph_method_failures_p()) {
+                                                                                                pph_macros.throw_pph_method_failure($pph_method_stack$.getDynamicValue(thread));
+                                                                                            } else {
+                                                                                                pph_phrase.pph_phrase_revert_to_backup(phrase, backup_phrase);
+                                                                                            }
+                                                                                        }
+                                                                                    } finally {
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_246 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                                            try {
+                                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                                if (NIL != failedP) {
+                                                                                                    pph_macros.destroy_new_pph_phrases();
+                                                                                                } else {
+                                                                                                    {
+                                                                                                        SubLObject cdolist_list_var = stacks.do_stack_elements_stack_elements(pph_macros.$new_pph_phrases$.getDynamicValue(thread));
+                                                                                                        SubLObject phrase_247 = NIL;
+                                                                                                        for (phrase_247 = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , phrase_247 = cdolist_list_var.first()) {
+                                                                                                            stacks.stack_push(phrase_247, matrix_new_pph_phrases);
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            } finally {
+                                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_246, thread);
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_macros.$new_pph_phrases$.rebind(_prev_bind_0_245, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                } catch (Throwable catch_var) {
+                                                                    Errors.handleThrowable(catch_var, NIL);
+                                                                }
+                                                            } finally {
+                                                                Errors.$error_handler$.rebind(_prev_bind_0_244, thread);
+                                                            }
+                                                        }
+                                                    } catch (Throwable ccatch_env_var) {
+                                                        error_message = Errors.handleThrowable(ccatch_env_var, $catch_error_message_target$.getGlobalValue());
+                                                    }
+                                                    if (error_message.isString()) {
+                                                        Errors.warn(error_message);
+                                                    }
+                                                }
+                                            } finally {
+                                                pph_error.$pph_error_handling_onP$.rebind(_prev_bind_1_240, thread);
+                                                Errors.$continue_cerrorP$.rebind(_prev_bind_0_239, thread);
+                                            }
+                                        }
+                                        {
+                                            SubLObject total_demerits = pph_phrase.pph_phrase_demerits(phrase);
+                                            if (NIL != error_message) {
+                                            } else {
+                                                if (NIL != pph_vars.pph_too_many_demerits_p(total_demerits, UNPROVIDED)) {
+                                                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                        Errors.warn($str_alt145$___S_demerits_exceeds_cutoff_of__, total_demerits, pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread), phrase);
+                                                    }
+                                                } else {
+                                                    if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+                                                        pph_diagnostics.pph_cinc_method_count(method_symbol, UNPROVIDED);
+                                                        if (NIL != subl_promotions.positive_integer_p(total_demerits)) {
+                                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                                format(T, $str_alt146$___S_____S_demerits___S___, new SubLObject[]{ pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED), pph_phrase.pph_phrase_output_list(phrase), total_demerits });
+                                                            }
+                                                        }
+                                                        pph_phrase.pph_phrase_add_justification(phrase, pph_phrase.pph_code_justification(method_symbol, UNPROVIDED));
+                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                            format(T, $str_alt147$____S__S______S___S__, new SubLObject[]{ method_symbol, pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED), pph_phrase.pph_phrase_output_list(phrase), pph_phrase.pph_phrase_agr_pred(phrase) });
+                                                        }
+                                                    } else {
+                                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(THREE_INTEGER)) {
+                                                            format(T, $str_alt148$____S__S______S, new SubLObject[]{ method_symbol, pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED), pph_phrase.pph_phrase_output_list(phrase) });
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } finally {
+                                        pph_vars.$pph_var_types$.rebind(_prev_bind_0_238, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_248 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                            format(T, $str_alt149$__Leaving_PPH_SETTING_VAR_TYPES_I, pph_macros.$pph_var_types_counter$.getDynamicValue(thread));
+                                        }
+                                        if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                format(T, $str_alt150$___Output_list___S__, pph_phrase.pph_phrase_output_list(phrase));
+                                            }
+                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                format(T, $str_alt151$___Setting__S_to____S, pph_vars.$pph_var_types$.getDynamicValue(thread), dictionary.dictionary_values(var_types_shadow));
+                                            }
+                                            pph_macros.pph_reset_var_types(var_types_shadow);
+                                        } else {
+                                            if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                                                format(T, $str_alt152$___Leaving__PPH_VAR_TYPES___S, dictionary.dictionary_values(pph_vars.$pph_var_types$.getDynamicValue(thread)));
+                                            }
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_248, thread);
+                                    }
+                                }
+                            }
+                        } finally {
+                            pph_macros.$pph_var_types_counter$.rebind(_prev_bind_1, thread);
+                            pph_vars.$pph_noted_var_types$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return pph_phrase.pph_phrase_output_list(phrase);
+        }
+    }
+
+    /**
+     * Try METHOD-SYMBOL to generate a string for PHRASE.
+     */
+    @LispMethod(comment = "Try METHOD-SYMBOL to generate a string for PHRASE.")
     public static SubLObject pph_phrase_try_method(final SubLObject phrase, final SubLObject method_symbol, final SubLObject method_demerits, final SubLObject backup_phrase) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject error_message = NIL;
@@ -5613,6 +10863,36 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_phrase.pph_phrase_output_list(phrase);
     }
 
+    /**
+     * When all else fails, generate some string representation of the CycL for PHRASE,
+     * unless we have a demerit cutoff.
+     */
+    @LispMethod(comment = "When all else fails, generate some string representation of the CycL for PHRASE,\r\nunless we have a demerit cutoff.\nWhen all else fails, generate some string representation of the CycL for PHRASE,\nunless we have a demerit cutoff.")
+    public static final SubLObject pph_phrase_possibly_generate_foolproof_alt(SubLObject phrase) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread).isInteger()) {
+                if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                    Errors.warn($str_alt153$Can_t_use_foolproof_generation_wi, pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread));
+                }
+            } else {
+                if (NIL == pph_phrase.pph_phrase_has_known_cyclP(phrase)) {
+                    if (NIL != pph_error.pph_trace_level_exceeds_minimumP(ONE_INTEGER)) {
+                        Errors.warn($str_alt154$Can_t_use_foolproof_generation_on);
+                    }
+                } else {
+                    pph_phrase.pph_phrase_set_string(phrase, string_utilities.str_by_type(pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED)));
+                }
+            }
+            return pph_phrase.pph_phrase_output_list(phrase);
+        }
+    }
+
+    /**
+     * When all else fails, generate some string representation of the CycL for PHRASE,
+     * unless we have a demerit cutoff.
+     */
+    @LispMethod(comment = "When all else fails, generate some string representation of the CycL for PHRASE,\r\nunless we have a demerit cutoff.\nWhen all else fails, generate some string representation of the CycL for PHRASE,\nunless we have a demerit cutoff.")
     public static SubLObject pph_phrase_possibly_generate_foolproof(final SubLObject phrase) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (pph_vars.$pph_demerit_cutoff$.getDynamicValue(thread).isInteger()) {
@@ -5631,8 +10911,32 @@ public final class pph_main extends SubLTranslatedFile {
             }
 
         return pph_phrase.pph_phrase_output_list(phrase);
+    }/**
+     * When all else fails, generate some string representation of the CycL for PHRASE,
+     * unless we have a demerit cutoff.
+     */
+
+
+    /**
+     * Generate PHRASE with as a possessive (e.g. 'Muffet's').
+     */
+    @LispMethod(comment = "Generate PHRASE with as a possessive (e.g. \'Muffet\'s\').")
+    public static final SubLObject generate_poss_phrase_alt(SubLObject phrase) {
+        if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+            return phrase;
+        }
+        pph_phrase.pph_phrase_set_category_to_np(phrase);
+        com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(phrase, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+            com.cyc.cycjava.cycl.pph_main.possessivize_pph_phrase(phrase);
+        }
+        return phrase;
     }
 
+    /**
+     * Generate PHRASE with as a possessive (e.g. 'Muffet's').
+     */
+    @LispMethod(comment = "Generate PHRASE with as a possessive (e.g. \'Muffet\'s\').")
     public static SubLObject generate_poss_phrase(final SubLObject phrase) {
         if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
             return phrase;
@@ -5643,6 +10947,55 @@ public final class pph_main extends SubLTranslatedFile {
             possessivize_pph_phrase(phrase);
         }
         return phrase;
+    }/**
+     * Generate PHRASE with as a possessive (e.g. 'Muffet's').
+     */
+
+
+    public static final SubLObject possessivize_pph_phrase_alt(SubLObject phrase) {
+        pph_phrase.pph_phrase_set_category(phrase, $$PossessivePhrase, UNPROVIDED);
+        {
+            SubLObject output_list = pph_phrase.pph_phrase_output_list(phrase);
+            SubLObject new_item = pph_phrase_output_item_copy(list_utilities.last_one(output_list));
+            SubLObject the_cycl = pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED);
+            SubLObject use_possessive_pronounP = NIL;
+            if (NIL != list_utilities.singletonP(output_list)) {
+                {
+                    SubLObject binders_of_phrase = pph_phrase_could_bind_possessive_here(phrase);
+                    SubLObject binders_cycls = pph_phrase.pph_phrase_cycls_of_phrases(binders_of_phrase);
+                    use_possessive_pronounP = subl_promotions.memberP(the_cycl, binders_cycls, UNPROVIDED, UNPROVIDED);
+                }
+            }
+            if (NIL != pph_phrase_output_item_nospace_group_p(new_item)) {
+                {
+                    SubLObject apostrophe_item = new_pph_phrase_filler_item($str_alt155$_s);
+                    SubLObject existing_olists = pph_phrase_output_item_nospace_group_items(new_item);
+                    pph_phrase_output_item_nospace_group_set_items(new_item, append(existing_olists, list(list(apostrophe_item))));
+                }
+            } else {
+                if (NIL != use_possessive_pronounP) {
+                    {
+                        SubLObject person = pph_methods.pph_person(the_cycl);
+                        SubLObject number = pph_methods.pph_number(the_cycl);
+                        SubLObject gender = pph_methods.pph_gender(the_cycl);
+                        SubLObject pronoun_nart = pph_methods_lexicon.pph_pronoun_nart(pph_methods_lexicon.new_pph_pronoun_agr(person, number, gender), $$PossessivePronoun_Post);
+                        pph_phrase_output_item_set_string(new_item, com.cyc.cycjava.cycl.pph_main.generate_phrase_no_checks(pronoun_nart, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                        pph_phrase_output_item_set_agr_pred(new_item, $$pronounStrings);
+                    }
+                } else {
+                    new_item = pph_methods_formulas.pph_possessivize_output_item(new_item);
+                }
+            }
+            pph_phrase.pph_phrase_set_output_list(phrase, list_utilities.replace_last(output_list, new_item), UNPROVIDED);
+        }
+        {
+            SubLObject cdolist_list_var = pph_phrase.pph_phrase_alternatives(phrase);
+            SubLObject alternative = NIL;
+            for (alternative = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , alternative = cdolist_list_var.first()) {
+                com.cyc.cycjava.cycl.pph_main.possessivize_pph_phrase(alternative);
+            }
+        }
+        return pph_phrase.pph_phrase_output_list(phrase);
     }
 
     public static SubLObject possessivize_pph_phrase(final SubLObject phrase) {
@@ -5699,10 +11052,34 @@ public final class pph_main extends SubLTranslatedFile {
         return generate_phrase_no_checks(pronoun_nart, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject pph_ordinal_phrase_requiring_special_handlingP_alt(SubLObject phrase) {
+        return makeBoolean((NIL != pph_phrase.pph_ordinal_phraseP(phrase)) && (!pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED).isNumber()));
+    }
+
     public static SubLObject pph_ordinal_phrase_requiring_special_handlingP(final SubLObject phrase) {
         return makeBoolean((NIL != pph_phrase.pph_ordinal_phraseP(phrase)) && (!pph_phrase.pph_phrase_cycl(phrase, UNPROVIDED).isNumber()));
     }
 
+    /**
+     * Generate PHRASE with as a ordinal (e.g. 'Nth').
+     */
+    @LispMethod(comment = "Generate PHRASE with as a ordinal (e.g. \'Nth\').")
+    public static final SubLObject generate_ordinal_phrase_alt(SubLObject phrase) {
+        if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+            return phrase;
+        }
+        pph_phrase.pph_phrase_set_category(phrase, pph_utilities.pph_nbar_category(), UNPROVIDED);
+        com.cyc.cycjava.cycl.pph_main.pph_phrase_generate(phrase, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
+            com.cyc.cycjava.cycl.pph_main.ordinalize_pph_phrase(phrase);
+        }
+        return phrase;
+    }
+
+    /**
+     * Generate PHRASE with as a ordinal (e.g. 'Nth').
+     */
+    @LispMethod(comment = "Generate PHRASE with as a ordinal (e.g. \'Nth\').")
     public static SubLObject generate_ordinal_phrase(final SubLObject phrase) {
         if (NIL != pph_phrase.pph_phrase_doneP(phrase)) {
             return phrase;
@@ -5713,6 +11090,31 @@ public final class pph_main extends SubLTranslatedFile {
             ordinalize_pph_phrase(phrase);
         }
         return phrase;
+    }/**
+     * Generate PHRASE with as a ordinal (e.g. 'Nth').
+     */
+
+
+    public static final SubLObject ordinalize_pph_phrase_alt(SubLObject phrase) {
+        pph_phrase.pph_phrase_set_category(phrase, $$OrdinalPhrase, UNPROVIDED);
+        {
+            SubLObject output_list = pph_phrase.pph_phrase_output_list(phrase);
+            SubLObject new_item = pph_phrase_output_item_copy(list_utilities.last_one(output_list));
+            if (NIL != pph_phrase_output_item_nospace_group_p(new_item)) {
+                {
+                    SubLObject suffix_item = new_pph_phrase_filler_item($$$th);
+                    SubLObject existing_olists = pph_phrase_output_item_nospace_group_items(new_item);
+                    pph_phrase_output_item_nospace_group_set_items(new_item, append(existing_olists, list(list(suffix_item))));
+                }
+            } else {
+                {
+                    SubLObject ordinalized_string = pph_methods_formulas.ordinal_form(pph_phrase_output_item_string(new_item));
+                    pph_phrase_output_item_set_string(new_item, ordinalized_string);
+                }
+            }
+            pph_phrase.pph_phrase_set_output_list(phrase, list_utilities.replace_last(output_list, new_item), UNPROVIDED);
+        }
+        return pph_phrase.pph_phrase_output_list(phrase);
     }
 
     public static SubLObject ordinalize_pph_phrase(final SubLObject phrase) {
@@ -5731,13 +11133,98 @@ public final class pph_main extends SubLTranslatedFile {
         return pph_phrase.pph_phrase_output_list(phrase);
     }
 
+    /**
+     * Wrapper macro to isolate calls to generate-pph-output-list (or whatever)
+     */
+    @LispMethod(comment = "Wrapper macro to isolate calls to generate-pph-output-list (or whatever)")
+    public static final SubLObject with_output_list_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject body = current;
+            return listS(CLET, $list_alt185, append(body, NIL));
+        }
+    }
+
+    /**
+     * Wrapper macro to isolate calls to generate-pph-output-list (or whatever)
+     */
+    @LispMethod(comment = "Wrapper macro to isolate calls to generate-pph-output-list (or whatever)")
     public static SubLObject with_output_list(final SubLObject macroform, final SubLObject environment) {
         final SubLObject datum = macroform.rest();
         final SubLObject body;
         final SubLObject current = body = datum;
         return listS(CLET, $list179, append(body, NIL));
+    }/**
+     * Wrapper macro to isolate calls to generate-pph-output-list (or whatever)
+     */
+
+
+    /**
+     * Loop through a group of pph-regression-items. For each item, generate an output-list for
+     * each specified force level (defaulting to all but :imperative), using the language-mt
+     * and domain-mt specified in the regression item, if any. Each resulting output list
+     * is then run through tests as described in ,@body. This loop only checks :text results.
+     */
+    @LispMethod(comment = "Loop through a group of pph-regression-items. For each item, generate an output-list for\r\neach specified force level (defaulting to all but :imperative), using the language-mt\r\nand domain-mt specified in the regression item, if any. Each resulting output list\r\nis then run through tests as described in ,@body. This loop only checks :text results.\nLoop through a group of pph-regression-items. For each item, generate an output-list for\neach specified force level (defaulting to all but :imperative), using the language-mt\nand domain-mt specified in the regression item, if any. Each resulting output list\nis then run through tests as described in ,@body. This loop only checks :text results.")
+    public static final SubLObject do_output_list_test_method_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt186);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject v_set = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt186);
+                    v_set = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_249 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt186);
+                            current_249 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt186);
+                            if (NIL == member(current_249, $list_alt187, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_249 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt186);
+                        }
+                        {
+                            SubLObject forces_tail = property_list_member($FORCES, current);
+                            SubLObject forces = (NIL != forces_tail) ? ((SubLObject) (cadr(forces_tail))) : NIL;
+                            SubLObject do_imperative_tail = property_list_member($DO_IMPERATIVE, current);
+                            SubLObject do_imperative = (NIL != do_imperative_tail) ? ((SubLObject) (cadr(do_imperative_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                return list(DO_PPH_REGRESSION_STORE, bq_cons(v_set, $list_alt192), list(DO_PPH_FORCES_LIST, list($FORCES, forces, $DO_IMPERATIVE, do_imperative), list(WITH_PPH_TEST_OBJECT, bq_cons(WITH_OUTPUT_LIST, append(body, NIL)))));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * Loop through a group of pph-regression-items. For each item, generate an output-list for
+     * each specified force level (defaulting to all but :imperative), using the language-mt
+     * and domain-mt specified in the regression item, if any. Each resulting output list
+     * is then run through tests as described in ,@body. This loop only checks :text results.
+     */
+    @LispMethod(comment = "Loop through a group of pph-regression-items. For each item, generate an output-list for\r\neach specified force level (defaulting to all but :imperative), using the language-mt\r\nand domain-mt specified in the regression item, if any. Each resulting output list\r\nis then run through tests as described in ,@body. This loop only checks :text results.\nLoop through a group of pph-regression-items. For each item, generate an output-list for\neach specified force level (defaulting to all but :imperative), using the language-mt\nand domain-mt specified in the regression item, if any. Each resulting output list\nis then run through tests as described in ,@body. This loop only checks :text results.")
     public static SubLObject do_output_list_test_method(final SubLObject macroform, final SubLObject environment) {
         SubLObject current;
         final SubLObject datum = current = macroform.rest();
@@ -5775,100 +11262,320 @@ public final class pph_main extends SubLTranslatedFile {
         final SubLObject body;
         current = body = temp;
         return list(DO_PPH_REGRESSION_STORE, bq_cons(v_set, $list186), list(DO_PPH_FORCES_LIST, list($FORCES, forces, $DO_IMPERATIVE, do_imperative), list(WITH_PPH_TEST_OBJECT, bq_cons(WITH_OUTPUT_LIST, append(body, NIL)))));
+    }/**
+     * Loop through a group of pph-regression-items. For each item, generate an output-list for
+     * each specified force level (defaulting to all but :imperative), using the language-mt
+     * and domain-mt specified in the regression item, if any. Each resulting output list
+     * is then run through tests as described in ,@body. This loop only checks :text results.
+     */
+
+
+    /**
+     * The (presently 4) tests which are run on everything
+     */
+    @LispMethod(comment = "The (presently 4) tests which are run on everything")
+    public static final SubLObject do_core_output_list_regression_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            if (NIL != datum) {
+                cdestructuring_bind_error(datum, NIL);
+            }
+            return $list_alt196;
+        }
     }
 
+    /**
+     * The (presently 4) tests which are run on everything
+     */
+    @LispMethod(comment = "The (presently 4) tests which are run on everything")
     public static SubLObject do_core_output_list_regression(final SubLObject macroform, final SubLObject environment) {
         final SubLObject datum = macroform.rest();
         if (NIL != datum) {
             cdestructuring_bind_error(datum, NIL);
         }
         return $list190;
+    }/**
+     * The (presently 4) tests which are run on everything
+     */
+
+
+    public static final SubLObject declare_pph_main_file_alt() {
+        declareFunction("generate_phrase", "GENERATE-PHRASE", 1, 7, false);
+        declareFunction("generate_phrase_no_checks", "GENERATE-PHRASE-NO-CHECKS", 1, 7, false);
+        declareFunction("generate_string_from_phrase_naut", "GENERATE-STRING-FROM-PHRASE-NAUT", 1, 2, false);
+        declareFunction("generate_good_string_from_phrase_naut", "GENERATE-GOOD-STRING-FROM-PHRASE-NAUT", 1, 2, false);
+        declareFunction("generate_phrase_for_java", "GENERATE-PHRASE-FOR-JAVA", 1, 5, false);
+        declareFunction("cached_paraphrase_for_java", "CACHED-PARAPHRASE-FOR-JAVA", 1, 1, false);
+        declareFunction("cached_disambiguation_paraphrases_for_java", "CACHED-DISAMBIGUATION-PARAPHRASES-FOR-JAVA", 1, 1, false);
+        declareFunction("generate_phrase_for_java_no_checks", "GENERATE-PHRASE-FOR-JAVA-NO-CHECKS", 1, 5, false);
+        declareFunction("gen_template_query_sentence_assertion_p", "GEN-TEMPLATE-QUERY-SENTENCE-ASSERTION-P", 1, 0, false);
+        declareFunction("generate_phrase_int", "GENERATE-PHRASE-INT", 2, 0, false);
+        declareFunction("generate_disambiguation_phrase", "GENERATE-DISAMBIGUATION-PHRASE", 1, 5, false);
+        declareFunction("generate_disambiguation_phrases", "GENERATE-DISAMBIGUATION-PHRASES", 1, 6, false);
+        declareFunction("use_cached_generations_p", "USE-CACHED-GENERATIONS-P", 1, 0, false);
+        declareFunction("generate_disambiguation_phrases_for_java", "GENERATE-DISAMBIGUATION-PHRASES-FOR-JAVA", 1, 6, false);
+        declareFunction("alphabetize_pph_javalists", "ALPHABETIZE-PPH-JAVALISTS", 2, 1, false);
+        declareFunction("generate_disambiguation_phrases_int", "GENERATE-DISAMBIGUATION-PHRASES-INT", 1, 7, false);
+        declareFunction("pph_blacklist_for_objects_and_strings", "PPH-BLACKLIST-FOR-OBJECTS-AND-STRINGS", 2, 0, false);
+        declareFunction("generate_disambiguation_phrases_and_types", "GENERATE-DISAMBIGUATION-PHRASES-AND-TYPES", 1, 5, false);
+        declareFunction("generate_assertion_output_list", "GENERATE-ASSERTION-OUTPUT-LIST", 1, 1, false);
+        declareFunction("generate_pph_output_list", "GENERATE-PPH-OUTPUT-LIST", 1, 5, false);
+        declareFunction("generate_pph_output_list_no_checks", "GENERATE-PPH-OUTPUT-LIST-NO-CHECKS", 1, 5, false);
+        declareFunction("generate_pph_output_list_internal", "GENERATE-PPH-OUTPUT-LIST-INTERNAL", 7, 0, false);
+        declareFunction("generate_pph_output_lists_for_term", "GENERATE-PPH-OUTPUT-LISTS-FOR-TERM", 1, 5, false);
+        declareFunction("pph_sanitize_output_list", "PPH-SANITIZE-OUTPUT-LIST", 2, 0, false);
+        declareFunction("pph_sanitize_output_item", "PPH-SANITIZE-OUTPUT-ITEM", 2, 0, false);
+        declareFunction("pph_phrase_output_item_strip_anchor_tags", "PPH-PHRASE-OUTPUT-ITEM-STRIP-ANCHOR-TAGS", 1, 0, false);
+        declareFunction("pph_strip_anchor_tags", "PPH-STRIP-ANCHOR-TAGS", 1, 0, false);
+        declareFunction("pph_string_for_arg_position", "PPH-STRING-FOR-ARG-POSITION", 2, 1, false);
+        declareFunction("pph_output_list_arg_position_precedesP", "PPH-OUTPUT-LIST-ARG-POSITION-PRECEDES?", 3, 0, false);
+        declareFunction("pph_agr_pred_for_arg_position", "PPH-AGR-PRED-FOR-ARG-POSITION", 2, 0, false);
+        declareFunction("generate_text_wXsentential_force", "GENERATE-TEXT-W/SENTENTIAL-FORCE", 1, 6, false);
+        declareFunction("generate_text_wXsentential_force_no_checks", "GENERATE-TEXT-W/SENTENTIAL-FORCE-NO-CHECKS", 1, 6, false);
+        declareFunction("pph_discourse_referent_tracking_pointlessP", "PPH-DISCOURSE-REFERENT-TRACKING-POINTLESS?", 1, 0, false);
+        declareFunction("generate_text_wXsentential_force_int", "GENERATE-TEXT-W/SENTENTIAL-FORCE-INT", 6, 1, false);
+        declareFunction("generate_text_wXsentential_force_and_focus_argnum", "GENERATE-TEXT-W/SENTENTIAL-FORCE-AND-FOCUS-ARGNUM", 2, 5, false);
+        declareFunction("generate_text", "GENERATE-TEXT", 1, 5, false);
+        declareFunction("generate_poss", "GENERATE-POSS", 1, 1, false);
+        declareFunction("pph_phrase_generate_string_from_cycl", "PPH-PHRASE-GENERATE-STRING-FROM-CYCL", 1, 2, false);
+        declareFunction("set_pph_initialized", "SET-PPH-INITIALIZED", 0, 0, false);
+        declareFunction("pph_initializedP", "PPH-INITIALIZED?", 0, 0, false);
+        declareFunction("ensure_pph_initialized", "ENSURE-PPH-INITIALIZED", 0, 0, false);
+        declareFunction("initialize_paraphrase_cycl", "INITIALIZE-PARAPHRASE-CYCL", 0, 0, false);
+        declareFunction("clear_paraphrase_caches", "CLEAR-PARAPHRASE-CACHES", 0, 2, false);
+        declareFunction("pph_phrase_generate", "PPH-PHRASE-GENERATE", 1, 3, false);
+        declareFunction("pph_phrase_generate_1", "PPH-PHRASE-GENERATE-1", 1, 0, false);
+        declareFunction("pph_skip_methodP", "PPH-SKIP-METHOD?", 0, 0, false);
+        declareFunction("pph_skip_methodP_internal", "PPH-SKIP-METHOD?-INTERNAL", 1, 0, false);
+        declareFunction("pph_skip_methodP_internal_two", "PPH-SKIP-METHOD?-INTERNAL-TWO", 2, 0, false);
+        declareFunction("pph_truncate_method_context", "PPH-TRUNCATE-METHOD-CONTEXT", 1, 1, false);
+        declareFunction("pph_ntruncate_method_context", "PPH-NTRUNCATE-METHOD-CONTEXT", 2, 0, false);
+        declareFunction("pph_phrase_try_methods", "PPH-PHRASE-TRY-METHODS", 1, 0, false);
+        declareFunction("pph_phrase_try_these_methods", "PPH-PHRASE-TRY-THESE-METHODS", 2, 0, false);
+        declareFunction("pph_abort", "PPH-ABORT", 0, 0, false);
+        declareFunction("pph_phrase_report_problems", "PPH-PHRASE-REPORT-PROBLEMS", 3, 0, false);
+        declareFunction("pph_print_context", "PPH-PRINT-CONTEXT", 0, 1, false);
+        declareFunction("pph_phrase_try_method", "PPH-PHRASE-TRY-METHOD", 4, 0, false);
+        declareFunction("pph_phrase_possibly_generate_foolproof", "PPH-PHRASE-POSSIBLY-GENERATE-FOOLPROOF", 1, 0, false);
+        declareFunction("generate_poss_phrase", "GENERATE-POSS-PHRASE", 1, 0, false);
+        declareFunction("possessivize_pph_phrase", "POSSESSIVIZE-PPH-PHRASE", 1, 0, false);
+        declareFunction("pph_ordinal_phrase_requiring_special_handlingP", "PPH-ORDINAL-PHRASE-REQUIRING-SPECIAL-HANDLING?", 1, 0, false);
+        declareFunction("generate_ordinal_phrase", "GENERATE-ORDINAL-PHRASE", 1, 0, false);
+        declareFunction("ordinalize_pph_phrase", "ORDINALIZE-PPH-PHRASE", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_test_battery_for_output_lists_class", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-OUTPUT-LISTS-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_test_battery_for_output_lists_instance", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-OUTPUT-LISTS-INSTANCE", 1, 0, false);
+        declareFunction("test_battery_for_output_lists_p", "TEST-BATTERY-FOR-OUTPUT-LISTS-P", 1, 0, false);
+        declareMacro("with_output_list", "WITH-OUTPUT-LIST");
+        declareMacro("do_output_list_test_method", "DO-OUTPUT-LIST-TEST-METHOD");
+        declareMacro("do_core_output_list_regression", "DO-CORE-OUTPUT-LIST-REGRESSION");
+        declareFunction("subloop_reserved_initialize_test_battery_for_java_phrases_class", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-JAVA-PHRASES-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_test_battery_for_java_phrases_instance", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-JAVA-PHRASES-INSTANCE", 1, 0, false);
+        declareFunction("test_battery_for_java_phrases_p", "TEST-BATTERY-FOR-JAVA-PHRASES-P", 1, 0, false);
+        return NIL;
     }
 
     public static SubLObject declare_pph_main_file() {
-        declareFunction(me, "generate_phrase", "GENERATE-PHRASE", 1, 7, false);
-        declareFunction(me, "generate_phrase_no_checks", "GENERATE-PHRASE-NO-CHECKS", 1, 7, false);
-        declareFunction(me, "generate_phrase_no_checks_memoized_internal", "GENERATE-PHRASE-NO-CHECKS-MEMOIZED-INTERNAL", 9, 0, false);
-        declareFunction(me, "generate_phrase_no_checks_memoized", "GENERATE-PHRASE-NO-CHECKS-MEMOIZED", 9, 0, false);
-        declareFunction(me, "generate_string_from_phrase_naut", "GENERATE-STRING-FROM-PHRASE-NAUT", 1, 3, false);
-        declareFunction(me, "generate_good_string_from_phrase_naut", "GENERATE-GOOD-STRING-FROM-PHRASE-NAUT", 1, 3, false);
-        declareFunction(me, "generate_phrase_for_java", "GENERATE-PHRASE-FOR-JAVA", 1, 5, false);
-        declareFunction(me, "cached_paraphrase_for_java", "CACHED-PARAPHRASE-FOR-JAVA", 1, 1, false);
-        declareFunction(me, "cached_disambiguation_paraphrases_for_java", "CACHED-DISAMBIGUATION-PARAPHRASES-FOR-JAVA", 1, 1, false);
-        declareFunction(me, "generate_phrase_for_java_no_checks", "GENERATE-PHRASE-FOR-JAVA-NO-CHECKS", 1, 5, false);
-        declareFunction(me, "gen_template_query_sentence_assertion_p", "GEN-TEMPLATE-QUERY-SENTENCE-ASSERTION-P", 1, 0, false);
-        declareFunction(me, "generate_phrase_int", "GENERATE-PHRASE-INT", 2, 0, false);
-        declareFunction(me, "generate_disambiguation_phrase", "GENERATE-DISAMBIGUATION-PHRASE", 1, 5, false);
-        declareFunction(me, "generate_disambiguation_phrases", "GENERATE-DISAMBIGUATION-PHRASES", 1, 6, false);
-        declareFunction(me, "use_cached_generations_p", "USE-CACHED-GENERATIONS-P", 1, 0, false);
-        declareFunction(me, "generate_disambiguation_phrases_for_java", "GENERATE-DISAMBIGUATION-PHRASES-FOR-JAVA", 1, 6, false);
-        declareFunction(me, "alphabetize_pph_javalists", "ALPHABETIZE-PPH-JAVALISTS", 2, 1, false);
-        declareFunction(me, "generate_disambiguation_phrases_int", "GENERATE-DISAMBIGUATION-PHRASES-INT", 1, 7, false);
-        declareFunction(me, "pph_blacklist_for_objects_and_strings", "PPH-BLACKLIST-FOR-OBJECTS-AND-STRINGS", 2, 0, false);
-        declareFunction(me, "generate_disambiguation_phrases_and_types", "GENERATE-DISAMBIGUATION-PHRASES-AND-TYPES", 1, 5, false);
-        declareFunction(me, "generate_assertion_output_list", "GENERATE-ASSERTION-OUTPUT-LIST", 1, 1, false);
-        declareFunction(me, "generate_pph_output_list", "GENERATE-PPH-OUTPUT-LIST", 1, 5, false);
-        declareFunction(me, "generate_pph_output_list_no_checks", "GENERATE-PPH-OUTPUT-LIST-NO-CHECKS", 1, 5, false);
-        declareFunction(me, "generate_pph_output_list_internal", "GENERATE-PPH-OUTPUT-LIST-INTERNAL", 7, 0, false);
-        declareFunction(me, "generate_pph_output_lists_for_term", "GENERATE-PPH-OUTPUT-LISTS-FOR-TERM", 1, 6, false);
-        declareFunction(me, "generate_pph_string_combo_for_term", "GENERATE-PPH-STRING-COMBO-FOR-TERM", 1, 6, false);
-        declareFunction(me, "pph_phrase_with_alternatives_for_term", "PPH-PHRASE-WITH-ALTERNATIVES-FOR-TERM", 7, 0, false);
-        declareFunction(me, "pph_sanitize_output_list", "PPH-SANITIZE-OUTPUT-LIST", 2, 0, false);
-        declareFunction(me, "pph_sanitize_output_item", "PPH-SANITIZE-OUTPUT-ITEM", 2, 0, false);
-        declareFunction(me, "pph_phrase_output_item_strip_anchor_tags", "PPH-PHRASE-OUTPUT-ITEM-STRIP-ANCHOR-TAGS", 1, 0, false);
-        declareFunction(me, "pph_strip_anchor_tags", "PPH-STRIP-ANCHOR-TAGS", 1, 0, false);
-        declareFunction(me, "pph_string_for_arg_position", "PPH-STRING-FOR-ARG-POSITION", 2, 1, false);
-        declareFunction(me, "pph_output_list_arg_position_precedesP", "PPH-OUTPUT-LIST-ARG-POSITION-PRECEDES?", 3, 0, false);
-        declareFunction(me, "pph_agr_pred_for_arg_position", "PPH-AGR-PRED-FOR-ARG-POSITION", 2, 0, false);
-        declareFunction(me, "generate_text_wXsentential_force", "GENERATE-TEXT-W/SENTENTIAL-FORCE", 1, 6, false);
-        declareFunction(me, "valid_pph_language_mt_specifierP", "VALID-PPH-LANGUAGE-MT-SPECIFIER?", 1, 0, false);
-        declareFunction(me, "maybe_note_bad_generate_text_result", "MAYBE-NOTE-BAD-GENERATE-TEXT-RESULT", 9, 1, false);
-        declareFunction(me, "note_bad_generate_text_result", "NOTE-BAD-GENERATE-TEXT-RESULT", 9, 1, false);
-        declareFunction(me, "output_generate_text_bad_results", "OUTPUT-GENERATE-TEXT-BAD-RESULTS", 0, 0, false);
-        declareFunction(me, "output_generate_text_bad_results_to_tsv", "OUTPUT-GENERATE-TEXT-BAD-RESULTS-TO-TSV", 0, 0, false);
-        declareFunction(me, "recheck_generate_text_bad_results", "RECHECK-GENERATE-TEXT-BAD-RESULTS", 0, 0, false);
-        declareFunction(me, "generate_text_wXsentential_force_no_checks", "GENERATE-TEXT-W/SENTENTIAL-FORCE-NO-CHECKS", 1, 6, false);
-        declareFunction(me, "pph_discourse_referent_tracking_pointlessP", "PPH-DISCOURSE-REFERENT-TRACKING-POINTLESS?", 1, 0, false);
-        declareFunction(me, "generate_text_wXsentential_force_int", "GENERATE-TEXT-W/SENTENTIAL-FORCE-INT", 6, 1, false);
-        declareFunction(me, "generate_text_wXsentential_force_and_focus_argnum", "GENERATE-TEXT-W/SENTENTIAL-FORCE-AND-FOCUS-ARGNUM", 2, 5, false);
-        declareFunction(me, "generate_text", "GENERATE-TEXT", 1, 5, false);
-        declareFunction(me, "generate_poss", "GENERATE-POSS", 1, 1, false);
-        declareFunction(me, "pph_phrase_generate_string_from_cycl", "PPH-PHRASE-GENERATE-STRING-FROM-CYCL", 1, 2, false);
-        declareFunction(me, "set_pph_initialized", "SET-PPH-INITIALIZED", 0, 0, false);
-        declareFunction(me, "pph_initializedP", "PPH-INITIALIZED?", 0, 0, false);
-        declareFunction(me, "ensure_pph_initialized", "ENSURE-PPH-INITIALIZED", 0, 0, false);
-        declareFunction(me, "initialize_paraphrase_cycl", "INITIALIZE-PARAPHRASE-CYCL", 0, 0, false);
-        declareFunction(me, "clear_paraphrase_caches", "CLEAR-PARAPHRASE-CACHES", 0, 2, false);
-        declareFunction(me, "pph_phrase_generate", "PPH-PHRASE-GENERATE", 1, 3, false);
-        declareFunction(me, "pph_phrase_generate_1", "PPH-PHRASE-GENERATE-1", 1, 0, false);
-        declareFunction(me, "pph_skip_methodP", "PPH-SKIP-METHOD?", 0, 0, false);
-        declareFunction(me, "pph_skip_methodP_internal", "PPH-SKIP-METHOD?-INTERNAL", 1, 0, false);
-        declareFunction(me, "pph_skip_methodP_internal_two", "PPH-SKIP-METHOD?-INTERNAL-TWO", 2, 0, false);
-        declareFunction(me, "pph_truncate_method_context", "PPH-TRUNCATE-METHOD-CONTEXT", 1, 1, false);
-        declareFunction(me, "pph_ntruncate_method_context", "PPH-NTRUNCATE-METHOD-CONTEXT", 2, 0, false);
-        declareFunction(me, "pph_phrase_try_methods", "PPH-PHRASE-TRY-METHODS", 1, 0, false);
-        declareFunction(me, "pph_phrase_try_these_methods", "PPH-PHRASE-TRY-THESE-METHODS", 2, 0, false);
-        declareFunction(me, "pph_abort", "PPH-ABORT", 0, 0, false);
-        declareFunction(me, "pph_phrase_report_problems", "PPH-PHRASE-REPORT-PROBLEMS", 3, 0, false);
-        declareFunction(me, "pph_print_context", "PPH-PRINT-CONTEXT", 0, 1, false);
-        declareFunction(me, "pph_phrase_try_method", "PPH-PHRASE-TRY-METHOD", 4, 0, false);
-        declareFunction(me, "pph_phrase_possibly_generate_foolproof", "PPH-PHRASE-POSSIBLY-GENERATE-FOOLPROOF", 1, 0, false);
-        declareFunction(me, "generate_poss_phrase", "GENERATE-POSS-PHRASE", 1, 0, false);
-        declareFunction(me, "possessivize_pph_phrase", "POSSESSIVIZE-PPH-PHRASE", 1, 0, false);
-        declareFunction(me, "pph_possessive_pronoun_for_cycl", "PPH-POSSESSIVE-PRONOUN-FOR-CYCL", 1, 0, false);
-        declareFunction(me, "pph_ordinal_phrase_requiring_special_handlingP", "PPH-ORDINAL-PHRASE-REQUIRING-SPECIAL-HANDLING?", 1, 0, false);
-        declareFunction(me, "generate_ordinal_phrase", "GENERATE-ORDINAL-PHRASE", 1, 0, false);
-        declareFunction(me, "ordinalize_pph_phrase", "ORDINALIZE-PPH-PHRASE", 1, 0, false);
-        declareMacro(me, "with_output_list", "WITH-OUTPUT-LIST");
-        declareMacro(me, "do_output_list_test_method", "DO-OUTPUT-LIST-TEST-METHOD");
-        declareMacro(me, "do_core_output_list_regression", "DO-CORE-OUTPUT-LIST-REGRESSION");
+        if (SubLFiles.USE_V1) {
+            declareFunction("generate_phrase", "GENERATE-PHRASE", 1, 7, false);
+            declareFunction("generate_phrase_no_checks", "GENERATE-PHRASE-NO-CHECKS", 1, 7, false);
+            declareFunction("generate_phrase_no_checks_memoized_internal", "GENERATE-PHRASE-NO-CHECKS-MEMOIZED-INTERNAL", 9, 0, false);
+            declareFunction("generate_phrase_no_checks_memoized", "GENERATE-PHRASE-NO-CHECKS-MEMOIZED", 9, 0, false);
+            declareFunction("generate_string_from_phrase_naut", "GENERATE-STRING-FROM-PHRASE-NAUT", 1, 3, false);
+            declareFunction("generate_good_string_from_phrase_naut", "GENERATE-GOOD-STRING-FROM-PHRASE-NAUT", 1, 3, false);
+            declareFunction("generate_phrase_for_java", "GENERATE-PHRASE-FOR-JAVA", 1, 5, false);
+            declareFunction("cached_paraphrase_for_java", "CACHED-PARAPHRASE-FOR-JAVA", 1, 1, false);
+            declareFunction("cached_disambiguation_paraphrases_for_java", "CACHED-DISAMBIGUATION-PARAPHRASES-FOR-JAVA", 1, 1, false);
+            declareFunction("generate_phrase_for_java_no_checks", "GENERATE-PHRASE-FOR-JAVA-NO-CHECKS", 1, 5, false);
+            declareFunction("gen_template_query_sentence_assertion_p", "GEN-TEMPLATE-QUERY-SENTENCE-ASSERTION-P", 1, 0, false);
+            declareFunction("generate_phrase_int", "GENERATE-PHRASE-INT", 2, 0, false);
+            declareFunction("generate_disambiguation_phrase", "GENERATE-DISAMBIGUATION-PHRASE", 1, 5, false);
+            declareFunction("generate_disambiguation_phrases", "GENERATE-DISAMBIGUATION-PHRASES", 1, 6, false);
+            declareFunction("use_cached_generations_p", "USE-CACHED-GENERATIONS-P", 1, 0, false);
+            declareFunction("generate_disambiguation_phrases_for_java", "GENERATE-DISAMBIGUATION-PHRASES-FOR-JAVA", 1, 6, false);
+            declareFunction("alphabetize_pph_javalists", "ALPHABETIZE-PPH-JAVALISTS", 2, 1, false);
+            declareFunction("generate_disambiguation_phrases_int", "GENERATE-DISAMBIGUATION-PHRASES-INT", 1, 7, false);
+            declareFunction("pph_blacklist_for_objects_and_strings", "PPH-BLACKLIST-FOR-OBJECTS-AND-STRINGS", 2, 0, false);
+            declareFunction("generate_disambiguation_phrases_and_types", "GENERATE-DISAMBIGUATION-PHRASES-AND-TYPES", 1, 5, false);
+            declareFunction("generate_assertion_output_list", "GENERATE-ASSERTION-OUTPUT-LIST", 1, 1, false);
+            declareFunction("generate_pph_output_list", "GENERATE-PPH-OUTPUT-LIST", 1, 5, false);
+            declareFunction("generate_pph_output_list_no_checks", "GENERATE-PPH-OUTPUT-LIST-NO-CHECKS", 1, 5, false);
+            declareFunction("generate_pph_output_list_internal", "GENERATE-PPH-OUTPUT-LIST-INTERNAL", 7, 0, false);
+            declareFunction("generate_pph_output_lists_for_term", "GENERATE-PPH-OUTPUT-LISTS-FOR-TERM", 1, 6, false);
+            declareFunction("generate_pph_string_combo_for_term", "GENERATE-PPH-STRING-COMBO-FOR-TERM", 1, 6, false);
+            declareFunction("pph_phrase_with_alternatives_for_term", "PPH-PHRASE-WITH-ALTERNATIVES-FOR-TERM", 7, 0, false);
+            declareFunction("pph_sanitize_output_list", "PPH-SANITIZE-OUTPUT-LIST", 2, 0, false);
+            declareFunction("pph_sanitize_output_item", "PPH-SANITIZE-OUTPUT-ITEM", 2, 0, false);
+            declareFunction("pph_phrase_output_item_strip_anchor_tags", "PPH-PHRASE-OUTPUT-ITEM-STRIP-ANCHOR-TAGS", 1, 0, false);
+            declareFunction("pph_strip_anchor_tags", "PPH-STRIP-ANCHOR-TAGS", 1, 0, false);
+            declareFunction("pph_string_for_arg_position", "PPH-STRING-FOR-ARG-POSITION", 2, 1, false);
+            declareFunction("pph_output_list_arg_position_precedesP", "PPH-OUTPUT-LIST-ARG-POSITION-PRECEDES?", 3, 0, false);
+            declareFunction("pph_agr_pred_for_arg_position", "PPH-AGR-PRED-FOR-ARG-POSITION", 2, 0, false);
+            declareFunction("generate_text_wXsentential_force", "GENERATE-TEXT-W/SENTENTIAL-FORCE", 1, 6, false);
+            declareFunction("valid_pph_language_mt_specifierP", "VALID-PPH-LANGUAGE-MT-SPECIFIER?", 1, 0, false);
+            declareFunction("maybe_note_bad_generate_text_result", "MAYBE-NOTE-BAD-GENERATE-TEXT-RESULT", 9, 1, false);
+            declareFunction("note_bad_generate_text_result", "NOTE-BAD-GENERATE-TEXT-RESULT", 9, 1, false);
+            declareFunction("output_generate_text_bad_results", "OUTPUT-GENERATE-TEXT-BAD-RESULTS", 0, 0, false);
+            declareFunction("output_generate_text_bad_results_to_tsv", "OUTPUT-GENERATE-TEXT-BAD-RESULTS-TO-TSV", 0, 0, false);
+            declareFunction("recheck_generate_text_bad_results", "RECHECK-GENERATE-TEXT-BAD-RESULTS", 0, 0, false);
+            declareFunction("generate_text_wXsentential_force_no_checks", "GENERATE-TEXT-W/SENTENTIAL-FORCE-NO-CHECKS", 1, 6, false);
+            declareFunction("pph_discourse_referent_tracking_pointlessP", "PPH-DISCOURSE-REFERENT-TRACKING-POINTLESS?", 1, 0, false);
+            declareFunction("generate_text_wXsentential_force_int", "GENERATE-TEXT-W/SENTENTIAL-FORCE-INT", 6, 1, false);
+            declareFunction("generate_text_wXsentential_force_and_focus_argnum", "GENERATE-TEXT-W/SENTENTIAL-FORCE-AND-FOCUS-ARGNUM", 2, 5, false);
+            declareFunction("generate_text", "GENERATE-TEXT", 1, 5, false);
+            declareFunction("generate_poss", "GENERATE-POSS", 1, 1, false);
+            declareFunction("pph_phrase_generate_string_from_cycl", "PPH-PHRASE-GENERATE-STRING-FROM-CYCL", 1, 2, false);
+            declareFunction("set_pph_initialized", "SET-PPH-INITIALIZED", 0, 0, false);
+            declareFunction("pph_initializedP", "PPH-INITIALIZED?", 0, 0, false);
+            declareFunction("ensure_pph_initialized", "ENSURE-PPH-INITIALIZED", 0, 0, false);
+            declareFunction("initialize_paraphrase_cycl", "INITIALIZE-PARAPHRASE-CYCL", 0, 0, false);
+            declareFunction("clear_paraphrase_caches", "CLEAR-PARAPHRASE-CACHES", 0, 2, false);
+            declareFunction("pph_phrase_generate", "PPH-PHRASE-GENERATE", 1, 3, false);
+            declareFunction("pph_phrase_generate_1", "PPH-PHRASE-GENERATE-1", 1, 0, false);
+            declareFunction("pph_skip_methodP", "PPH-SKIP-METHOD?", 0, 0, false);
+            declareFunction("pph_skip_methodP_internal", "PPH-SKIP-METHOD?-INTERNAL", 1, 0, false);
+            declareFunction("pph_skip_methodP_internal_two", "PPH-SKIP-METHOD?-INTERNAL-TWO", 2, 0, false);
+            declareFunction("pph_truncate_method_context", "PPH-TRUNCATE-METHOD-CONTEXT", 1, 1, false);
+            declareFunction("pph_ntruncate_method_context", "PPH-NTRUNCATE-METHOD-CONTEXT", 2, 0, false);
+            declareFunction("pph_phrase_try_methods", "PPH-PHRASE-TRY-METHODS", 1, 0, false);
+            declareFunction("pph_phrase_try_these_methods", "PPH-PHRASE-TRY-THESE-METHODS", 2, 0, false);
+            declareFunction("pph_abort", "PPH-ABORT", 0, 0, false);
+            declareFunction("pph_phrase_report_problems", "PPH-PHRASE-REPORT-PROBLEMS", 3, 0, false);
+            declareFunction("pph_print_context", "PPH-PRINT-CONTEXT", 0, 1, false);
+            declareFunction("pph_phrase_try_method", "PPH-PHRASE-TRY-METHOD", 4, 0, false);
+            declareFunction("pph_phrase_possibly_generate_foolproof", "PPH-PHRASE-POSSIBLY-GENERATE-FOOLPROOF", 1, 0, false);
+            declareFunction("generate_poss_phrase", "GENERATE-POSS-PHRASE", 1, 0, false);
+            declareFunction("possessivize_pph_phrase", "POSSESSIVIZE-PPH-PHRASE", 1, 0, false);
+            declareFunction("pph_possessive_pronoun_for_cycl", "PPH-POSSESSIVE-PRONOUN-FOR-CYCL", 1, 0, false);
+            declareFunction("pph_ordinal_phrase_requiring_special_handlingP", "PPH-ORDINAL-PHRASE-REQUIRING-SPECIAL-HANDLING?", 1, 0, false);
+            declareFunction("generate_ordinal_phrase", "GENERATE-ORDINAL-PHRASE", 1, 0, false);
+            declareFunction("ordinalize_pph_phrase", "ORDINALIZE-PPH-PHRASE", 1, 0, false);
+            declareMacro("with_output_list", "WITH-OUTPUT-LIST");
+            declareMacro("do_output_list_test_method", "DO-OUTPUT-LIST-TEST-METHOD");
+            declareMacro("do_core_output_list_regression", "DO-CORE-OUTPUT-LIST-REGRESSION");
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("generate_string_from_phrase_naut", "GENERATE-STRING-FROM-PHRASE-NAUT", 1, 2, false);
+            declareFunction("generate_good_string_from_phrase_naut", "GENERATE-GOOD-STRING-FROM-PHRASE-NAUT", 1, 2, false);
+            declareFunction("generate_pph_output_lists_for_term", "GENERATE-PPH-OUTPUT-LISTS-FOR-TERM", 1, 5, false);
+            declareFunction("subloop_reserved_initialize_test_battery_for_output_lists_class", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-OUTPUT-LISTS-CLASS", 1, 0, false);
+            declareFunction("subloop_reserved_initialize_test_battery_for_output_lists_instance", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-OUTPUT-LISTS-INSTANCE", 1, 0, false);
+            declareFunction("test_battery_for_output_lists_p", "TEST-BATTERY-FOR-OUTPUT-LISTS-P", 1, 0, false);
+            declareFunction("subloop_reserved_initialize_test_battery_for_java_phrases_class", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-JAVA-PHRASES-CLASS", 1, 0, false);
+            declareFunction("subloop_reserved_initialize_test_battery_for_java_phrases_instance", "SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-JAVA-PHRASES-INSTANCE", 1, 0, false);
+            declareFunction("test_battery_for_java_phrases_p", "TEST-BATTERY-FOR-JAVA-PHRASES-P", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_pph_main_file_Previous() {
+        declareFunction("generate_phrase", "GENERATE-PHRASE", 1, 7, false);
+        declareFunction("generate_phrase_no_checks", "GENERATE-PHRASE-NO-CHECKS", 1, 7, false);
+        declareFunction("generate_phrase_no_checks_memoized_internal", "GENERATE-PHRASE-NO-CHECKS-MEMOIZED-INTERNAL", 9, 0, false);
+        declareFunction("generate_phrase_no_checks_memoized", "GENERATE-PHRASE-NO-CHECKS-MEMOIZED", 9, 0, false);
+        declareFunction("generate_string_from_phrase_naut", "GENERATE-STRING-FROM-PHRASE-NAUT", 1, 3, false);
+        declareFunction("generate_good_string_from_phrase_naut", "GENERATE-GOOD-STRING-FROM-PHRASE-NAUT", 1, 3, false);
+        declareFunction("generate_phrase_for_java", "GENERATE-PHRASE-FOR-JAVA", 1, 5, false);
+        declareFunction("cached_paraphrase_for_java", "CACHED-PARAPHRASE-FOR-JAVA", 1, 1, false);
+        declareFunction("cached_disambiguation_paraphrases_for_java", "CACHED-DISAMBIGUATION-PARAPHRASES-FOR-JAVA", 1, 1, false);
+        declareFunction("generate_phrase_for_java_no_checks", "GENERATE-PHRASE-FOR-JAVA-NO-CHECKS", 1, 5, false);
+        declareFunction("gen_template_query_sentence_assertion_p", "GEN-TEMPLATE-QUERY-SENTENCE-ASSERTION-P", 1, 0, false);
+        declareFunction("generate_phrase_int", "GENERATE-PHRASE-INT", 2, 0, false);
+        declareFunction("generate_disambiguation_phrase", "GENERATE-DISAMBIGUATION-PHRASE", 1, 5, false);
+        declareFunction("generate_disambiguation_phrases", "GENERATE-DISAMBIGUATION-PHRASES", 1, 6, false);
+        declareFunction("use_cached_generations_p", "USE-CACHED-GENERATIONS-P", 1, 0, false);
+        declareFunction("generate_disambiguation_phrases_for_java", "GENERATE-DISAMBIGUATION-PHRASES-FOR-JAVA", 1, 6, false);
+        declareFunction("alphabetize_pph_javalists", "ALPHABETIZE-PPH-JAVALISTS", 2, 1, false);
+        declareFunction("generate_disambiguation_phrases_int", "GENERATE-DISAMBIGUATION-PHRASES-INT", 1, 7, false);
+        declareFunction("pph_blacklist_for_objects_and_strings", "PPH-BLACKLIST-FOR-OBJECTS-AND-STRINGS", 2, 0, false);
+        declareFunction("generate_disambiguation_phrases_and_types", "GENERATE-DISAMBIGUATION-PHRASES-AND-TYPES", 1, 5, false);
+        declareFunction("generate_assertion_output_list", "GENERATE-ASSERTION-OUTPUT-LIST", 1, 1, false);
+        declareFunction("generate_pph_output_list", "GENERATE-PPH-OUTPUT-LIST", 1, 5, false);
+        declareFunction("generate_pph_output_list_no_checks", "GENERATE-PPH-OUTPUT-LIST-NO-CHECKS", 1, 5, false);
+        declareFunction("generate_pph_output_list_internal", "GENERATE-PPH-OUTPUT-LIST-INTERNAL", 7, 0, false);
+        declareFunction("generate_pph_output_lists_for_term", "GENERATE-PPH-OUTPUT-LISTS-FOR-TERM", 1, 6, false);
+        declareFunction("generate_pph_string_combo_for_term", "GENERATE-PPH-STRING-COMBO-FOR-TERM", 1, 6, false);
+        declareFunction("pph_phrase_with_alternatives_for_term", "PPH-PHRASE-WITH-ALTERNATIVES-FOR-TERM", 7, 0, false);
+        declareFunction("pph_sanitize_output_list", "PPH-SANITIZE-OUTPUT-LIST", 2, 0, false);
+        declareFunction("pph_sanitize_output_item", "PPH-SANITIZE-OUTPUT-ITEM", 2, 0, false);
+        declareFunction("pph_phrase_output_item_strip_anchor_tags", "PPH-PHRASE-OUTPUT-ITEM-STRIP-ANCHOR-TAGS", 1, 0, false);
+        declareFunction("pph_strip_anchor_tags", "PPH-STRIP-ANCHOR-TAGS", 1, 0, false);
+        declareFunction("pph_string_for_arg_position", "PPH-STRING-FOR-ARG-POSITION", 2, 1, false);
+        declareFunction("pph_output_list_arg_position_precedesP", "PPH-OUTPUT-LIST-ARG-POSITION-PRECEDES?", 3, 0, false);
+        declareFunction("pph_agr_pred_for_arg_position", "PPH-AGR-PRED-FOR-ARG-POSITION", 2, 0, false);
+        declareFunction("generate_text_wXsentential_force", "GENERATE-TEXT-W/SENTENTIAL-FORCE", 1, 6, false);
+        declareFunction("valid_pph_language_mt_specifierP", "VALID-PPH-LANGUAGE-MT-SPECIFIER?", 1, 0, false);
+        declareFunction("maybe_note_bad_generate_text_result", "MAYBE-NOTE-BAD-GENERATE-TEXT-RESULT", 9, 1, false);
+        declareFunction("note_bad_generate_text_result", "NOTE-BAD-GENERATE-TEXT-RESULT", 9, 1, false);
+        declareFunction("output_generate_text_bad_results", "OUTPUT-GENERATE-TEXT-BAD-RESULTS", 0, 0, false);
+        declareFunction("output_generate_text_bad_results_to_tsv", "OUTPUT-GENERATE-TEXT-BAD-RESULTS-TO-TSV", 0, 0, false);
+        declareFunction("recheck_generate_text_bad_results", "RECHECK-GENERATE-TEXT-BAD-RESULTS", 0, 0, false);
+        declareFunction("generate_text_wXsentential_force_no_checks", "GENERATE-TEXT-W/SENTENTIAL-FORCE-NO-CHECKS", 1, 6, false);
+        declareFunction("pph_discourse_referent_tracking_pointlessP", "PPH-DISCOURSE-REFERENT-TRACKING-POINTLESS?", 1, 0, false);
+        declareFunction("generate_text_wXsentential_force_int", "GENERATE-TEXT-W/SENTENTIAL-FORCE-INT", 6, 1, false);
+        declareFunction("generate_text_wXsentential_force_and_focus_argnum", "GENERATE-TEXT-W/SENTENTIAL-FORCE-AND-FOCUS-ARGNUM", 2, 5, false);
+        declareFunction("generate_text", "GENERATE-TEXT", 1, 5, false);
+        declareFunction("generate_poss", "GENERATE-POSS", 1, 1, false);
+        declareFunction("pph_phrase_generate_string_from_cycl", "PPH-PHRASE-GENERATE-STRING-FROM-CYCL", 1, 2, false);
+        declareFunction("set_pph_initialized", "SET-PPH-INITIALIZED", 0, 0, false);
+        declareFunction("pph_initializedP", "PPH-INITIALIZED?", 0, 0, false);
+        declareFunction("ensure_pph_initialized", "ENSURE-PPH-INITIALIZED", 0, 0, false);
+        declareFunction("initialize_paraphrase_cycl", "INITIALIZE-PARAPHRASE-CYCL", 0, 0, false);
+        declareFunction("clear_paraphrase_caches", "CLEAR-PARAPHRASE-CACHES", 0, 2, false);
+        declareFunction("pph_phrase_generate", "PPH-PHRASE-GENERATE", 1, 3, false);
+        declareFunction("pph_phrase_generate_1", "PPH-PHRASE-GENERATE-1", 1, 0, false);
+        declareFunction("pph_skip_methodP", "PPH-SKIP-METHOD?", 0, 0, false);
+        declareFunction("pph_skip_methodP_internal", "PPH-SKIP-METHOD?-INTERNAL", 1, 0, false);
+        declareFunction("pph_skip_methodP_internal_two", "PPH-SKIP-METHOD?-INTERNAL-TWO", 2, 0, false);
+        declareFunction("pph_truncate_method_context", "PPH-TRUNCATE-METHOD-CONTEXT", 1, 1, false);
+        declareFunction("pph_ntruncate_method_context", "PPH-NTRUNCATE-METHOD-CONTEXT", 2, 0, false);
+        declareFunction("pph_phrase_try_methods", "PPH-PHRASE-TRY-METHODS", 1, 0, false);
+        declareFunction("pph_phrase_try_these_methods", "PPH-PHRASE-TRY-THESE-METHODS", 2, 0, false);
+        declareFunction("pph_abort", "PPH-ABORT", 0, 0, false);
+        declareFunction("pph_phrase_report_problems", "PPH-PHRASE-REPORT-PROBLEMS", 3, 0, false);
+        declareFunction("pph_print_context", "PPH-PRINT-CONTEXT", 0, 1, false);
+        declareFunction("pph_phrase_try_method", "PPH-PHRASE-TRY-METHOD", 4, 0, false);
+        declareFunction("pph_phrase_possibly_generate_foolproof", "PPH-PHRASE-POSSIBLY-GENERATE-FOOLPROOF", 1, 0, false);
+        declareFunction("generate_poss_phrase", "GENERATE-POSS-PHRASE", 1, 0, false);
+        declareFunction("possessivize_pph_phrase", "POSSESSIVIZE-PPH-PHRASE", 1, 0, false);
+        declareFunction("pph_possessive_pronoun_for_cycl", "PPH-POSSESSIVE-PRONOUN-FOR-CYCL", 1, 0, false);
+        declareFunction("pph_ordinal_phrase_requiring_special_handlingP", "PPH-ORDINAL-PHRASE-REQUIRING-SPECIAL-HANDLING?", 1, 0, false);
+        declareFunction("generate_ordinal_phrase", "GENERATE-ORDINAL-PHRASE", 1, 0, false);
+        declareFunction("ordinalize_pph_phrase", "ORDINALIZE-PPH-PHRASE", 1, 0, false);
+        declareMacro("with_output_list", "WITH-OUTPUT-LIST");
+        declareMacro("do_output_list_test_method", "DO-OUTPUT-LIST-TEST-METHOD");
+        declareMacro("do_core_output_list_regression", "DO-CORE-OUTPUT-LIST-REGRESSION");
+        return NIL;
+    }
+
+    public static final SubLObject init_pph_main_file_alt() {
+        defconstant("*PPH-SBHL-SPACES-TO-RESOURCE*", SIX_INTEGER);
+        deflexical("*PPH-INITIALIZED?*", NIL != boundp($pph_initializedP$) ? ((SubLObject) ($pph_initializedP$.getGlobalValue())) : NIL);
+        deflexical("*PPH-RECURSION-LIMIT*", NIL != boundp($pph_recursion_limit$) ? ((SubLObject) ($pph_recursion_limit$.getGlobalValue())) : $int$100);
+        defparameter("*PPH-METHOD-STACK*", NIL);
         return NIL;
     }
 
     public static SubLObject init_pph_main_file() {
+        if (SubLFiles.USE_V1) {
+            defconstant("*PPH-SBHL-SPACES-TO-RESOURCE*", SIX_INTEGER);
+            deflexical("*GENERATE-TEXT-BAD-RESULTS*", SubLTrampolineFile.maybeDefault($generate_text_bad_results$, $generate_text_bad_results$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
+            deflexical("*PPH-INITIALIZED?*", SubLTrampolineFile.maybeDefault($pph_initializedP$, $pph_initializedP$, NIL));
+            deflexical("*PPH-RECURSION-LIMIT*", SubLTrampolineFile.maybeDefault($pph_recursion_limit$, $pph_recursion_limit$, $int$100));
+            defparameter("*PPH-METHOD-STACK*", NIL);
+            defparameter("*PPH-PHRASE-METHOD-TIMES*", misc_utilities.uninitialized());
+            defparameter("*CURRENTLY-METERED-PPH-PHRASE-METHODS*", NIL);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*PPH-INITIALIZED?*", NIL != boundp($pph_initializedP$) ? ((SubLObject) ($pph_initializedP$.getGlobalValue())) : NIL);
+            deflexical("*PPH-RECURSION-LIMIT*", NIL != boundp($pph_recursion_limit$) ? ((SubLObject) ($pph_recursion_limit$.getGlobalValue())) : $int$100);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_pph_main_file_Previous() {
         defconstant("*PPH-SBHL-SPACES-TO-RESOURCE*", SIX_INTEGER);
         deflexical("*GENERATE-TEXT-BAD-RESULTS*", SubLTrampolineFile.maybeDefault($generate_text_bad_results$, $generate_text_bad_results$, () -> dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED)));
-        deflexical("*PPH-INITIALIZED?*", SubLTrampolineFile.maybeDefault($sym106$_PPH_INITIALIZED__, $pph_initializedP$, NIL));
+        deflexical("*PPH-INITIALIZED?*", SubLTrampolineFile.maybeDefault($pph_initializedP$, $pph_initializedP$, NIL));
         deflexical("*PPH-RECURSION-LIMIT*", SubLTrampolineFile.maybeDefault($pph_recursion_limit$, $pph_recursion_limit$, $int$100));
         defparameter("*PPH-METHOD-STACK*", NIL);
         defparameter("*PPH-PHRASE-METHOD-TIMES*", misc_utilities.uninitialized());
@@ -5876,14 +11583,106 @@ public final class pph_main extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_pph_main_file_alt() {
+        register_cyc_api_function(GENERATE_PHRASE, $list_alt10, $str_alt11$_param_OBJECT__the_CycL_object_fo, $list_alt12, $list_alt13);
+        register_cyc_api_function(GENERATE_PHRASE_FOR_JAVA, $list_alt29, $str_alt30$Return_paraphrase_info_in_a_java_, $list_alt31, $list_alt32);
+        register_cyc_api_function(GENERATE_DISAMBIGUATION_PHRASES_FOR_JAVA, $list_alt53, $str_alt54$_param_FORCE__pph_force_p__param_, $list_alt55, $list_alt56);
+        register_cyc_api_function($sym86$GENERATE_TEXT_W_SENTENTIAL_FORCE, $list_alt87, $str_alt88$generates_text_for_a_given_object, $list_alt89, $list_alt90);
+        declare_defglobal($pph_initializedP$);
+        declare_defglobal($pph_recursion_limit$);
+        sunit_external.define_test_category($$$Java_Phrase_Supercategory, UNPROVIDED);
+        sunit_external.define_test_category($$$Output_List_Subcategory, list($$$Java_Phrase_Supercategory));
+        sunit_external.define_test_suite($$$Java_Phrase_Test_Battery, list($$$Java_Phrase_Supercategory), UNPROVIDED, UNPROVIDED);
+        sunit_external.define_test_suite($$$Output_List_Test_Battery, list($$$Output_List_Subcategory), UNPROVIDED, UNPROVIDED);
+        sunit_macros.$current_module_sunit_tests$.setDynamicValue(cons(TEST_BATTERY_FOR_OUTPUT_LISTS, sunit_macros.$current_module_sunit_tests$.getDynamicValue()));
+        sunit_macros.define_test_case_preamble(TEST_BATTERY_FOR_OUTPUT_LISTS);
+        classes.subloop_new_class(TEST_BATTERY_FOR_OUTPUT_LISTS, TEST_CASE, NIL, NIL, $list_alt166);
+        classes.class_set_implements_slot_listeners(TEST_BATTERY_FOR_OUTPUT_LISTS, NIL);
+        classes.subloop_note_class_initialization_function(TEST_BATTERY_FOR_OUTPUT_LISTS, SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_OUTPUT_LISTS_CLASS);
+        classes.subloop_note_instance_initialization_function(TEST_BATTERY_FOR_OUTPUT_LISTS, $sym180$SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_OUTPUT_LISTS_INSTANC);
+        com.cyc.cycjava.cycl.pph_main.subloop_reserved_initialize_test_battery_for_output_lists_class(TEST_BATTERY_FOR_OUTPUT_LISTS);
+        sunit_macros.define_test_case_postamble(TEST_BATTERY_FOR_OUTPUT_LISTS, $str_alt181$pph_main, $$$cycl, $list_alt183);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_MESSY_QUERIES);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_SIMPLE_QUERIES);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_CONNECTIVES);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_SIMPLE_EL_FORMULAS);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_ITEMS_ONLY);
+        sunit_macros.$current_module_sunit_tests$.setDynamicValue(cons(TEST_BATTERY_FOR_JAVA_PHRASES, sunit_macros.$current_module_sunit_tests$.getDynamicValue()));
+        sunit_macros.define_test_case_preamble(TEST_BATTERY_FOR_JAVA_PHRASES);
+        classes.subloop_new_class(TEST_BATTERY_FOR_JAVA_PHRASES, TEST_CASE, NIL, NIL, $list_alt166);
+        classes.class_set_implements_slot_listeners(TEST_BATTERY_FOR_JAVA_PHRASES, NIL);
+        classes.subloop_note_class_initialization_function(TEST_BATTERY_FOR_JAVA_PHRASES, SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_JAVA_PHRASES_CLASS);
+        classes.subloop_note_instance_initialization_function(TEST_BATTERY_FOR_JAVA_PHRASES, $sym204$SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_JAVA_PHRASES_INSTANC);
+        com.cyc.cycjava.cycl.pph_main.subloop_reserved_initialize_test_battery_for_java_phrases_class(TEST_BATTERY_FOR_JAVA_PHRASES);
+        sunit_macros.define_test_case_postamble(TEST_BATTERY_FOR_JAVA_PHRASES, $str_alt181$pph_main, $$$cycl, $list_alt205);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_MESSY_QUERIES);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_SIMPLE_QUERIES);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_CONNECTIVES);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_SIMPLE_EL_FORMULAS);
+        sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_ITEMS_ONLY);
+        define_test_case_table_int($sym86$GENERATE_TEXT_W_SENTENTIAL_FORCE, list(new SubLObject[]{ $TEST, EQUAL, $OWNER, $$$daves, $CLASSES, $list_alt210, $KB, $FULL, $WORKING_, T }), $list_alt214);
+        return NIL;
+    }
+
     public static SubLObject setup_pph_main_file() {
+        if (SubLFiles.USE_V1) {
+            register_cyc_api_function(GENERATE_PHRASE, $list10, $str11$_param_OBJECT__the_CycL_object_fo, $list12, $list13);
+            memoization_state.note_memoized_function(GENERATE_PHRASE_NO_CHECKS_MEMOIZED);
+            register_cyc_api_function(GENERATE_PHRASE_FOR_JAVA, $list29, $str30$Return_paraphrase_info_in_a_java_, $list31, $list32);
+            register_cyc_api_function(GENERATE_DISAMBIGUATION_PHRASES_FOR_JAVA, $list53, $str54$_param_FORCE__pph_force_p__param_, $list55, $list56);
+            register_cyc_api_function($sym85$GENERATE_TEXT_W_SENTENTIAL_FORCE, $list86, $str87$generates_text_for_a_given_object, $list88, $list89);
+            declare_defglobal($generate_text_bad_results$);
+            declare_defglobal($pph_initializedP$);
+            declare_defglobal($pph_recursion_limit$);
+            sunit_external.define_test_category($$$Java_Phrase_Supercategory, UNPROVIDED);
+            sunit_external.define_test_category($$$Output_List_Subcategory, list($$$Java_Phrase_Supercategory));
+            sunit_external.define_test_suite($$$Java_Phrase_Test_Battery, list($$$Java_Phrase_Supercategory), UNPROVIDED, UNPROVIDED);
+            sunit_external.define_test_suite($$$Output_List_Test_Battery, list($$$Output_List_Subcategory), UNPROVIDED, UNPROVIDED);
+            define_test_case_table_int($sym85$GENERATE_TEXT_W_SENTENTIAL_FORCE, list(new SubLObject[]{ $TEST, EQUAL, $OWNER, NIL, $CLASSES, $list194, $KB, $FULL, $WORKING_, T }), $list198);
+            define_test_case_table_int(GENERATE_DISAMBIGUATION_PHRASES_INT, list(new SubLObject[]{ $TEST, EQUAL, $OWNER, NIL, $CLASSES, $list194, $KB, $FULL, $WORKING_, T }), $list200);
+        }
+        if (SubLFiles.USE_V2) {
+            register_cyc_api_function($sym86$GENERATE_TEXT_W_SENTENTIAL_FORCE, $list_alt87, $str_alt88$generates_text_for_a_given_object, $list_alt89, $list_alt90);
+            declare_defglobal($pph_initializedP$);
+            sunit_macros.$current_module_sunit_tests$.setDynamicValue(cons(TEST_BATTERY_FOR_OUTPUT_LISTS, sunit_macros.$current_module_sunit_tests$.getDynamicValue()));
+            sunit_macros.define_test_case_preamble(TEST_BATTERY_FOR_OUTPUT_LISTS);
+            classes.subloop_new_class(TEST_BATTERY_FOR_OUTPUT_LISTS, TEST_CASE, NIL, NIL, $list_alt166);
+            classes.class_set_implements_slot_listeners(TEST_BATTERY_FOR_OUTPUT_LISTS, NIL);
+            classes.subloop_note_class_initialization_function(TEST_BATTERY_FOR_OUTPUT_LISTS, SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_OUTPUT_LISTS_CLASS);
+            classes.subloop_note_instance_initialization_function(TEST_BATTERY_FOR_OUTPUT_LISTS, $sym180$SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_OUTPUT_LISTS_INSTANC);
+            com.cyc.cycjava.cycl.pph_main.subloop_reserved_initialize_test_battery_for_output_lists_class(TEST_BATTERY_FOR_OUTPUT_LISTS);
+            sunit_macros.define_test_case_postamble(TEST_BATTERY_FOR_OUTPUT_LISTS, $str_alt181$pph_main, $$$cycl, $list_alt183);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_MESSY_QUERIES);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_SIMPLE_QUERIES);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_CONNECTIVES);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_SIMPLE_EL_FORMULAS);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_OUTPUT_LISTS, REGRESS_ITEMS_ONLY);
+            sunit_macros.$current_module_sunit_tests$.setDynamicValue(cons(TEST_BATTERY_FOR_JAVA_PHRASES, sunit_macros.$current_module_sunit_tests$.getDynamicValue()));
+            sunit_macros.define_test_case_preamble(TEST_BATTERY_FOR_JAVA_PHRASES);
+            classes.subloop_new_class(TEST_BATTERY_FOR_JAVA_PHRASES, TEST_CASE, NIL, NIL, $list_alt166);
+            classes.class_set_implements_slot_listeners(TEST_BATTERY_FOR_JAVA_PHRASES, NIL);
+            classes.subloop_note_class_initialization_function(TEST_BATTERY_FOR_JAVA_PHRASES, SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_JAVA_PHRASES_CLASS);
+            classes.subloop_note_instance_initialization_function(TEST_BATTERY_FOR_JAVA_PHRASES, $sym204$SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_JAVA_PHRASES_INSTANC);
+            com.cyc.cycjava.cycl.pph_main.subloop_reserved_initialize_test_battery_for_java_phrases_class(TEST_BATTERY_FOR_JAVA_PHRASES);
+            sunit_macros.define_test_case_postamble(TEST_BATTERY_FOR_JAVA_PHRASES, $str_alt181$pph_main, $$$cycl, $list_alt205);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_MESSY_QUERIES);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_SIMPLE_QUERIES);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_CONNECTIVES);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_SIMPLE_EL_FORMULAS);
+            sunit_macros.def_test_method_register(TEST_BATTERY_FOR_JAVA_PHRASES, REGRESS_ITEMS_ONLY);
+            define_test_case_table_int($sym86$GENERATE_TEXT_W_SENTENTIAL_FORCE, list(new SubLObject[]{ $TEST, EQUAL, $OWNER, $$$daves, $CLASSES, $list_alt210, $KB, $FULL, $WORKING_, T }), $list_alt214);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_pph_main_file_Previous() {
         register_cyc_api_function(GENERATE_PHRASE, $list10, $str11$_param_OBJECT__the_CycL_object_fo, $list12, $list13);
         memoization_state.note_memoized_function(GENERATE_PHRASE_NO_CHECKS_MEMOIZED);
         register_cyc_api_function(GENERATE_PHRASE_FOR_JAVA, $list29, $str30$Return_paraphrase_info_in_a_java_, $list31, $list32);
         register_cyc_api_function(GENERATE_DISAMBIGUATION_PHRASES_FOR_JAVA, $list53, $str54$_param_FORCE__pph_force_p__param_, $list55, $list56);
         register_cyc_api_function($sym85$GENERATE_TEXT_W_SENTENTIAL_FORCE, $list86, $str87$generates_text_for_a_given_object, $list88, $list89);
         declare_defglobal($generate_text_bad_results$);
-        declare_defglobal($sym106$_PPH_INITIALIZED__);
+        declare_defglobal($pph_initializedP$);
         declare_defglobal($pph_recursion_limit$);
         sunit_external.define_test_category($$$Java_Phrase_Supercategory, UNPROVIDED);
         sunit_external.define_test_category($$$Output_List_Subcategory, list($$$Java_Phrase_Supercategory));
@@ -5910,216 +11709,239 @@ public final class pph_main extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLList $list_alt10 = list(new SubLObject[]{ makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("DETERMINER"), NIL), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("MODE"), $TEXT), list(makeSymbol("TOP"), NIL), list(makeSymbol("FOCUS-ARG"), NIL) });
+
+    static private final SubLString $str_alt11$_param_OBJECT__the_CycL_object_fo = makeString("@param OBJECT; the CycL object for which you want to generate English.\n@param NL-PREDS; a list of instances of #$SpeechPartPredicate.\n@param DETERMINER; a determiner keyword in *DETERMINER-KEYS*.\n@param LANGUAGE-MT; the microtheory from which to look for linguistic information.\n@param DOMAIN-MT; the microtheory from which to look for domain information.\n@return 0 STRINGP or NIL; a string representing our best attempt to paraphrase OBJECT\n into English with the given parameters.\n@return 1; pos-pred or NIL\n@return 2; LISTP of justifications\n@return 3; PPH-OUTPUT-LIST-P.");
+
+    static private final SubLList $list_alt12 = list(list(makeSymbol("OBJECT"), makeSymbol("CYCL-EXPRESSION-P")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("DETERMINER"), makeSymbol("KEYWORD-OR-NIL-P")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("HLMT?")), list(makeSymbol("MODE"), makeSymbol("KEYWORDP")), list(makeSymbol("TOP"), makeSymbol("BOOLEANP")), list(makeSymbol("FOCUS-ARG"), makeSymbol("NON-NEGATIVE-INTEGER-OR-NIL-P")));
+
+    static private final SubLList $list_alt13 = list(makeSymbol("STRING-OR-NIL-P"), makeSymbol("PREDICATE?-OR-NIL-P"), makeSymbol("LISTP"), makeSymbol("PPH-OUTPUT-LIST-P"));
+
+    static private final SubLString $str_alt14$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+
+    static private final SubLString $str_alt17$_PPH_error_level_ = makeString("(PPH error level ");
+
+    static private final SubLString $str_alt18$__ = makeString(") ");
+
+    static private final SubLString $str_alt19$Don_t_know_what_to_do_with_determ = makeString("Don't know what to do with determiner ~S passed to GENERATE-PHRASE.");
+
+    static private final SubLSymbol $sym23$PPH_PHRASE_NAUT_ = makeSymbol("PPH-PHRASE-NAUT?");
+
+    static private final SubLString $str_alt25$_is_not_a_ = makeString(" is not a ");
+
+    static private final SubLList $list_alt29 = list(makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("MODE"), $HTML));
+
+    static private final SubLString $str_alt30$Return_paraphrase_info_in_a_java_ = makeString("Return paraphrase info in a java-friendly format, one big list with no structures.\n@param OBJECT; the CycL object for which you want to generate English.\n@param NL-PREDS; VALID-EXTERNAL-PPH-NL-PREDS?.\n@param FORCE; PPH-FORCE-P.\n@param LANGUAGE-MT; the microtheory from which to look for linguistic information.\n@param DOMAIN-MT; the microtheory from which to look for domain information.\n@return 0 NIL or PPH-JAVALIST-P;\n@return 1 BOOLEANP; Use arg-positions strictly?\n@return 2 LISTP; of PPH supports.");
+
+    static private final SubLList $list_alt31 = list(list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("POSSIBLY-MT-P")), list(makeSymbol("DOMAIN-MT"), makeSymbol("POSSIBLY-MT-P")));
+
+    static private final SubLList $list_alt32 = list(list(makeSymbol("NIL-OR"), makeSymbol("PPH-JAVALIST-P")), makeSymbol("BOOLEAN?"), makeSymbol("LISTP"));
+
+    static private final SubLString $str_alt34$Fallback_method__S_is_not_a_known = makeString("Fallback method ~S is not a known function.");
+
+    static private final SubLString $str_alt35$Couldn_t_generate_a_string_for__S = makeString("Couldn't generate a string for ~S (fallback method was ~S)");
+
+    static private final SubLString $str_alt37$Duplicate_javalist_____S = makeString("Duplicate javalist:~% ~S");
+
+    static private final SubLList $list_alt43 = list(makeKeyword("REQUIRED"), makeKeyword("PREFERRED"), makeKeyword("DISALLOWED"));
+
+    static private final SubLList $list_alt47 = list(makeKeyword("DEFAULT"), $NONE);
+
+    static private final SubLList $list_alt48 = list(makeKeyword("PREFERRED"), makeKeyword("REQUIRED"));
+
+    static private final SubLList $list_alt49 = list(makeKeyword("ANY"), makeKeyword("DEFAULT"), list(reader_make_constant_shell("nonPlural-Generic")));
+
+    static private final SubLList $list_alt53 = list(makeSymbol("OBJECTS"), makeSymbol("&OPTIONAL"), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("*PPH-LANGUAGE-MT*")), list(makeSymbol("DOMAIN-MT"), makeSymbol("*PPH-DOMAIN-MT*")), list(makeSymbol("FORBIDDEN-STRINGS"), NIL), list(makeSymbol("USE-CACHED-GENERATIONS"), makeKeyword("REQUIRED")));
+
+    static private final SubLString $str_alt54$_param_FORCE__pph_force_p__param_ = makeString("@param FORCE; pph-force-p\n@param FORBIDDEN-STRINGS; listp of strings to *not* use as a paraphrase for any member of OBJECTS.\n@param USE-CACHED-GENERATIONS; :required, :preferred, or :disallowed.  Required means that it will only\n  use cached generations.  :disallowed means that it will never use them (and will always generate fresh from\n  the KB, and :preferred means that it will use the cached generations unless they turn out ambiguous, at\n  which point fresh generations from the KB will be used.\n@return LISTP of PPH-JAVALIST-P objects, one for each item on OBJECTS.\nAn effort is made to have the paraphrase for each item be sufficiently distinct\nto distinguish it from the other items.\n@sideeffects: Calls *PARTIAL-RESULTS-NOTIFICATION-FN* with a dictionary of new INDEX -> JAVALIST mappings.");
+
+    static private final SubLList $list_alt55 = list(list(makeSymbol("OBJECTS"), makeSymbol("LISTP")), list(makeSymbol("FORCE"), makeSymbol("KEYWORDP")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("HLMT?")), list(makeSymbol("FORBIDDEN-STRINGS"), makeSymbol("LIST-OF-STRING-P")), list(makeSymbol("USE-CACHED-GENERATIONS"), makeSymbol("USE-CACHED-GENERATIONS-P")));
+
+    static private final SubLList $list_alt56 = list(makeSymbol("LISTP"));
+
+    static private final SubLString $str_alt57$ALPHABETIZE_PPH_JAVALISTS_passed_ = makeString("ALPHABETIZE-PPH-JAVALISTS passed ~S javalists, ~S objects.");
+
+    static private final SubLString $str_alt60$__Trying_default_precision___S___ = makeString("~&Trying default precision: ~S.~%");
+
+    static private final SubLString $str_alt61$__Shadowing_discourse_context____ = makeString("~&Shadowing discourse context...~%");
+
+    static private final SubLString $str_alt63$__Working_on_dupe_list___S__ = makeString("~&Working on dupe list: ~S~%");
+
+    static private final SubLString $str_alt64$__Trying_to_reparaphrase__S___ = makeString("~&Trying to reparaphrase ~S.~%");
+
+    static private final SubLString $str_alt65$__Trying_targeted_precision__S_fo = makeString("~&Trying targeted precision ~S for ~S");
+
+    static private final SubLString $str_alt67$__New_paraphrase_with_precision__ = makeString("~&New paraphrase with precision ~S for ~S:~% ~S");
+
+    static private final SubLString $str_alt68$__Trying_full_precision_for__S = makeString("~&Trying full precision for ~S");
+
+    static private final SubLString $str_alt69$__New_paraphrase_with_full_precis = makeString("~&New paraphrase with full precision for ~S:~% ~S");
+
+    static private final SubLString $str_alt70$__Changing_output_list_for__S_fro = makeString("~&Changing output-list for ~S from~% ~S to~% ~S.~%");
+
+    static private final SubLString $str_alt71$__Entering_WITHIN_NEW_PPH_DISCOUR = makeString("~&Entering WITHIN-NEW-PPH-DISCOURSE-CONTEXT, *pph-discourse-context* is~% ~S~%");
+
+    static private final SubLString $str_alt72$__Leaving_WITHIN_NEW_PPH_DISCOURS = makeString("~&Leaving WITHIN-NEW-PPH-DISCOURSE-CONTEXT, *pph-discourse-context* is~% ~S~%");
+
+    static private final SubLString $str_alt73$Timed_out_generating_disambiguati = makeString("Timed out generating disambiguation phrases for~% ~S~%");
+
+    static private final SubLList $list_alt74 = list(reader_make_constant_shell("nonPlural-Generic"));
+
+    static private final SubLString $str_alt80$Setting_cycl_for__S_to__S_since_i = makeString("Setting cycl for ~S to ~S since it lacks a valid arg-position.");
+
+    static private final SubLString $str_alt81$Couldn_t_dereference_arg_position = makeString("Couldn't dereference arg-position ~S of ~S");
+
+    static private final SubLString $str_alt82$CycL_on__S_doesn_t_match_CycL__S = makeString("CycL on ~S doesn't match CycL ~S");
+
+    static private final SubLSymbol $sym84$KEYWORD_OR_HLMT_ = makeSymbol("KEYWORD-OR-HLMT?");
+
+    static private final SubLSymbol $sym86$GENERATE_TEXT_W_SENTENTIAL_FORCE = makeSymbol("GENERATE-TEXT-W/SENTENTIAL-FORCE");
+
+    static private final SubLList $list_alt87 = list(makeSymbol("OBJECT"), makeSymbol("&OPTIONAL"), list(makeSymbol("FORCE"), makeKeyword("DEFAULT")), list(makeSymbol("NL-PREDS"), makeKeyword("DEFAULT")), list(makeSymbol("LANGUAGE-MT"), makeKeyword("DEFAULT")), list(makeSymbol("DOMAIN-MT"), makeKeyword("DEFAULT")), list(makeSymbol("MODE"), $TEXT), list(makeSymbol("FOCUS-ARG"), NIL));
+
+    static private final SubLString $str_alt88$generates_text_for_a_given_object = makeString("generates text for a given object.  This is intended to be the\n  main gateway into the generation code for formulas.\n  @param OBJECT CYCL-EXPRESSION-P; the object for which text should be generated.\n  @param FORCE pph-force-p; the sentential force of the text to be generated.\n@return 0 STRINGP or NIL; the string corresponding to object.\n@return 1 pred\n@return 2 justification\n@return 3 pph-output-list-p");
+
+    static private final SubLList $list_alt89 = list(list(makeSymbol("OBJECT"), makeSymbol("CYCL-EXPRESSION-P")), list(makeSymbol("FORCE"), makeSymbol("PPH-FORCE-P")), list(makeSymbol("NL-PREDS"), makeSymbol("VALID-EXTERNAL-PPH-NL-PREDS?")), list(makeSymbol("LANGUAGE-MT"), makeSymbol("KEYWORD-OR-HLMT?")), list(makeSymbol("DOMAIN-MT"), makeSymbol("KEYWORD-OR-HLMT?")), list(makeSymbol("MODE"), makeSymbol("KEYWORDP")), list(makeSymbol("FOCUS-ARG"), list(makeSymbol("NIL-OR"), makeSymbol("NON-NEGATIVE-INTEGER-P"))));
+
+    static private final SubLList $list_alt90 = list(makeSymbol("STRING-OR-NIL-P"), makeSymbol("PREDICATE-OR-NIL-P"), makeSymbol("LISTP"), makeSymbol("PPH-OUTPUT-LIST-P"));
+
+    static private final SubLString $str_alt91$Took__S_seconds_to_paraphrase____ = makeString("Took ~S seconds to paraphrase~% ~S~%");
+
+    static private final SubLString $str_alt92$__Suspending_discourse_referent_t = makeString("~&Suspending discourse referent tracking for ~S~%");
+
+    static private final SubLString $str_alt94$__Making_new_phrase_with_cycl__S_ = makeString("~&Making new phrase with cycl ~S~%");
+
+    static private final SubLString $str_alt97$No_KB_loaded__Couldn_t_initialize = makeString("No KB loaded. Couldn't initialize paraphrase code.");
+
+    static private final SubLString $str_alt102$__Entering_PPH_POSSIBLY_BINDING_V = makeString("~&Entering PPH-POSSIBLY-BINDING-VARIABLES(~S), *pph-var-types* are~% ~S~%");
+
+    static private final SubLString $str_alt103$__Using_mapped_string__S_for__S__ = makeString("~&Using mapped string ~S for ~S.~%");
+
+    static private final SubLString $str_alt105$Recursion_limit_exceeded_on__S_ = makeString("Recursion limit exceeded on ~S.");
+
+    static private final SubLString $str_alt106$__Paraphrasing__S_with_agr___S___ = makeString("~&Paraphrasing ~S with agr: ~S...~%");
+
+    static private final SubLString $str_alt108$__PPH_PHRASE_GENERATE_Output_list = makeString("~&PPH-PHRASE-GENERATE Output list is ~S.~%");
+
+    static private final SubLString $str_alt109$__Leaving_PPH_POSSIBLY_BINDING_VA = makeString("~&Leaving PPH-POSSIBLY-BINDING-VARIABLES(~S), vars in local *pph-var-types* were ~s ");
+
+    static private final SubLString $str_alt110$______and__pph_var_types__are_now = makeString("~&... and *pph-var-types* are now ~S~%");
+
+    static private final SubLString $str_alt111$Repeating_sequence_in_paraphrase_ = makeString("Repeating sequence in paraphrase args: ~s");
+
+    private static final SubLSymbol PPH_QUANTIFIER_KEYWORD_P = makeSymbol("PPH-QUANTIFIER-KEYWORD-P");
+
+    static private final SubLString $str_alt114$Inside_operator_scope__S = makeString("Inside operator scope ~S");
+
+    static private final SubLString $str_alt115$Leaving_operator_scope__S = makeString("Leaving operator scope ~S");
+
+    static private final SubLString $str_alt116$Skipping__S___ = makeString("Skipping ~S.~%");
+
+    static private final SubLList $list_alt123 = list(makeSymbol("METHOD-SYMBOL"), makeSymbol("METHOD-DEMERITS"));
+
+    static private final SubLString $str_alt124$_S_is_not_an_FBOUNDP_symbol_ = makeString("~S is not an FBOUNDP symbol.");
+
+    static private final SubLString $str_alt125$___S_demerits_exceeds_cutoff_of__ = makeString("~&~S demerits exceeds cutoff of ~S~% ~S from ~S,~% ~S from dtrs.~%");
+
+    static private final SubLString $str_alt129$__Trying__S___Remaining___S = makeString("~&Trying ~S~% Remaining: ~S");
+
+    static private final SubLString $str_alt131$Exceeded_timeout_on____S = makeString("Exceeded timeout on~% ~S");
+
+    static private final SubLString $str_alt133$Aborting_PPH_call___ = makeString("Aborting PPH call...");
+
+    static private final SubLString $str_alt134$Zero_demerit_methods_failed____In = makeString("Zero-demerit methods failed:~% Input: ~S~% Agr-preds: ~S~% Failed methods:");
+
+    static private final SubLString $str_alt135$_____S____Reported_Problems___S__ = makeString("~%  ~S~%  Reported Problems: ~S~%");
+
+    static private final SubLString $str_alt136$___Successful_method___S__demerit = makeString("~& Successful method: ~S (demerits ~S)~% Paraphrase: ~S~%");
+
+    static private final SubLString $str_alt137$__Context____Top_level_CycL___S__ = makeString("~&Context:~% Top-level CycL: ~S~% Language mt: ~S~% Domain mt: ~S~% Mode: ~S~%");
+
+    static private final SubLString $str_alt138$_Precision___S__ = makeString(" Precision: ~S~%");
+
+    static private final SubLString $str_alt139$__Trying__S_____ = makeString("~&Trying ~S...~%");
+
+    static private final SubLString $str_alt140$__Entering_PPH_SETTING_VAR_TYPES_ = makeString("~&Entering PPH-SETTING-VAR-TYPES-IF-SUCCESSFUL(~S), *pph-var-types* are~% ~s~%");
+
+    static private final SubLString $str_alt141$__Adding__S_demerits_for__S____S = makeString("~&Adding ~S demerits for ~S~% ~S");
+
+    static private final SubLString $str_alt142$__PPH_phrase_immediately_before_c = makeString("~%PPH phrase immediately before calling ~S:~% ~S");
+
+    static private final SubLString $str_alt143$__PPH_phrase_immediately_after_ca = makeString("~%PPH phrase immediately after calling ~S:~% ~S");
+
+    static private final SubLString $str_alt144$_S_failed_ = makeString("~S failed.");
+
+    static private final SubLString $str_alt145$___S_demerits_exceeds_cutoff_of__ = makeString("~&~S demerits exceeds cutoff of ~S~% ~S");
+
+    static private final SubLString $str_alt146$___S_____S_demerits___S___ = makeString("~&~S -> ~S demerits: ~S.~%");
+
+    static private final SubLString $str_alt147$____S__S______S___S__ = makeString("~%(~S ~S):~% ~S (~S).");
+
+    static private final SubLString $str_alt148$____S__S______S = makeString("~%(~S ~S):~% ~S");
+
+    static private final SubLString $str_alt149$__Leaving_PPH_SETTING_VAR_TYPES_I = makeString("~&Leaving PPH-SETTING-VAR-TYPES-IF-SUCCESSFUL(~S). ");
+
+    static private final SubLString $str_alt150$___Output_list___S__ = makeString("~& Output list: ~S~%");
+
+    static private final SubLString $str_alt151$___Setting__S_to____S = makeString("~& Setting ~S to~% ~S");
+
+    static private final SubLString $str_alt152$___Leaving__PPH_VAR_TYPES___S = makeString("~% Leaving *PPH-VAR-TYPES* ~S");
+
+    static private final SubLString $str_alt153$Can_t_use_foolproof_generation_wi = makeString("Can't use foolproof generation with demerit cutoff: ~S.~%");
+
+    static private final SubLString $str_alt154$Can_t_use_foolproof_generation_on = makeString("Can't use foolproof generation on unknown CycL.~%");
+
+    static private final SubLString $str_alt155$_s = makeString("'s");
+
+    private static final SubLSymbol TEST_BATTERY_FOR_OUTPUT_LISTS = makeSymbol("TEST-BATTERY-FOR-OUTPUT-LISTS");
+
+    static private final SubLList $list_alt166 = list(list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("SETUP"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("CLEANUP"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REGRESS-MESSY-QUERIES"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REGRESS-SIMPLE-QUERIES"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REGRESS-CONNECTIVES"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REGRESS-SIMPLE-EL-FORMULAS"), NIL, makeKeyword("PROTECTED")), list(makeSymbol("DEF-INSTANCE-METHOD"), makeSymbol("REGRESS-ITEMS-ONLY"), NIL, makeKeyword("PROTECTED")));
+
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_OUTPUT_LISTS_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-OUTPUT-LISTS-CLASS");
+
+    static private final SubLSymbol $sym180$SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_OUTPUT_LISTS_INSTANC = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-OUTPUT-LISTS-INSTANCE");
+
+    static private final SubLString $str_alt181$pph_main = makeString("pph-main");
+
+    static private final SubLString $$$cycl = makeString("cycl");
+
+    static private final SubLList $list_alt183 = list(makeString("Output List Subcategory"));
+
+    static private final SubLList $list_alt185 = list(list(makeSymbol("*PPH-TMP-OUTPUT-LIST*"), list(makeSymbol("GENERATE-PPH-OUTPUT-LIST"), list(makeSymbol("PPH-NART-SUBSTITUTE"), makeSymbol("*PPH-TMP-TEST-OBJECT*")), makeKeyword("ANY"), list(makeSymbol("PPH-REGRESSION-ITEM-LANGUAGE-MT"), makeSymbol("*PPH-TMP-REGRESSION-ITEM*")), list(makeSymbol("PPH-REGRESSION-ITEM-DOMAIN-MT"), makeSymbol("*PPH-TMP-REGRESSION-ITEM*")), $TEXT, makeSymbol("*PPH-TMP-FORCE*"))));
+
+    static private final SubLList $list_alt186 = list(list(makeSymbol("SET"), makeSymbol("&KEY"), makeSymbol("FORCES"), makeSymbol("DO-IMPERATIVE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt187 = list(makeKeyword("FORCES"), makeKeyword("DO-IMPERATIVE"));
+
+    static private final SubLList $list_alt192 = list(makeKeyword("TEST-FUNC"), list(makeSymbol("FUNCTION"), makeSymbol("PPH-MAIN-REGRESSION-PRESCREENING")));
+
+    static private final SubLList $list_alt196 = list(makeSymbol("PWHEN"), list(makeSymbol("EL-FORMULA-P"), makeSymbol("*PPH-TMP-TEST-OBJECT*")), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("TEST-NO-CONSECUTIVE-DUPLICATES"))), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("VERIFY-ARG-POSITIONS-FAITHFUL"))), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("VERIFY-ARG-POSITIONS-CORRECT"))), list(makeSymbol("CALL-PPH-TEST-FUNCTION-INTELLIGENTLY"), list(makeSymbol("FUNCTION"), makeSymbol("TEST-REALLY-SANE"))));
+
+    private static final SubLSymbol REGRESS_MESSY_QUERIES = makeSymbol("REGRESS-MESSY-QUERIES");
+
+    private static final SubLSymbol REGRESS_SIMPLE_QUERIES = makeSymbol("REGRESS-SIMPLE-QUERIES");
+
+    private static final SubLSymbol REGRESS_CONNECTIVES = makeSymbol("REGRESS-CONNECTIVES");
+
+    private static final SubLSymbol REGRESS_SIMPLE_EL_FORMULAS = makeSymbol("REGRESS-SIMPLE-EL-FORMULAS");
+
+    private static final SubLSymbol REGRESS_ITEMS_ONLY = makeSymbol("REGRESS-ITEMS-ONLY");
+
+    private static final SubLSymbol TEST_BATTERY_FOR_JAVA_PHRASES = makeSymbol("TEST-BATTERY-FOR-JAVA-PHRASES");
+
+    private static final SubLSymbol SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_JAVA_PHRASES_CLASS = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-JAVA-PHRASES-CLASS");
+
+    static private final SubLSymbol $sym204$SUBLOOP_RESERVED_INITIALIZE_TEST_BATTERY_FOR_JAVA_PHRASES_INSTANC = makeSymbol("SUBLOOP-RESERVED-INITIALIZE-TEST-BATTERY-FOR-JAVA-PHRASES-INSTANCE");
+
+    static private final SubLList $list_alt205 = list(makeString("Java Phrase Supercategory"));
+
+    static private final SubLString $$$daves = makeString("daves");
+
+    static private final SubLList $list_alt210 = list(makeSymbol("PPH-TEST-CASE-TABLES"));
+
+    static private final SubLList $list_alt214 = list(list(list(list(reader_make_constant_shell("elementTypesInFormula-List"), reader_make_constant_shell("Salt-NaCl"), list(reader_make_constant_shell("TheList"), reader_make_constant_shell("Sodium"), reader_make_constant_shell("Chlorine"))), makeKeyword("DECLARATIVE")), makeString("Sodium and chlorine are the complete list of elements in the chemical formula of sodium chloride.")), list(list(list(reader_make_constant_shell("elementTypesInFormula-List"), reader_make_constant_shell("Salt-NaCl"), list(reader_make_constant_shell("TheList"), reader_make_constant_shell("Sodium"), reader_make_constant_shell("Chlorine"))), makeKeyword("INTERROGATIVE")), makeString("Are sodium and chlorine the complete list of elements in the chemical formula of sodium chloride?")));
 }
 
 /**

@@ -1,8 +1,24 @@
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.mt_context;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -16,47 +32,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.mt_context.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class mt_context extends SubLTranslatedFile {
+public final class mt_context extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new mt_context();
 
-    public static final String myName = "com.cyc.cycjava.cycl.mt_context";
+    public static final String myName = "com.cyc.cycjava_2.cycl.mt_context";
 
-    public static final String myFingerPrint = "ce7e5518990a3c7ef5cbccccde967c638c5a4835dcb979e9da707c94be977310";
 
 
 
@@ -699,31 +680,31 @@ public final class mt_context extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_mt_context_file() {
-        declareFunction(me, "useful_mt_for_queryP", "USEFUL-MT-FOR-QUERY?", 2, 0, false);
-        declareFunction(me, "check_topic_compatibility", "CHECK-TOPIC-COMPATIBILITY", 4, 0, false);
-        declareFunction(me, "find_context_of_complex_query", "FIND-CONTEXT-OF-COMPLEX-QUERY", 1, 0, false);
-        declareFunction(me, "find_predicates_in_query", "FIND-PREDICATES-IN-QUERY", 1, 0, false);
-        declareFunction(me, "find_context_of_query", "FIND-CONTEXT-OF-QUERY", 1, 0, false);
-        declareFunction(me, "get_context_for_collection", "GET-CONTEXT-FOR-COLLECTION", 1, 0, false);
-        declareFunction(me, "get_context_for_individual", "GET-CONTEXT-FOR-INDIVIDUAL", 1, 0, false);
-        declareFunction(me, "ask_mt_query", "ASK-MT-QUERY", 1, 3, false);
-        declareFunction(me, "cosine_similarity", "COSINE-SIMILARITY", 2, 0, false);
-        declareFunction(me, "get_mt_information_from_file", "GET-MT-INFORMATION-FROM-FILE", 1, 0, false);
-        declareFunction(me, "find_useful_mts_for_query", "FIND-USEFUL-MTS-FOR-QUERY", 1, 0, false);
-        declareFunction(me, "check_tkb_related_query", "CHECK-TKB-RELATED-QUERY", 2, 0, false);
-        declareFunction(me, "check_mt_topics", "CHECK-MT-TOPICS", 3, 0, false);
-        declareFunction(me, "find_topic_of_mt", "FIND-TOPIC-OF-MT", 1, 0, false);
-        declareFunction(me, "terrorism_related_mtP", "TERRORISM-RELATED-MT?", 1, 0, false);
-        declareFunction(me, "find_cols_for_topic_1", "FIND-COLS-FOR-TOPIC-1", 1, 0, false);
-        declareFunction(me, "find_preds_for_topic", "FIND-PREDS-FOR-TOPIC", 1, 0, false);
-        declareFunction(me, "find_cols_for_topic_2", "FIND-COLS-FOR-TOPIC-2", 1, 0, false);
-        declareFunction(me, "check_membership_in_topic_cols", "CHECK-MEMBERSHIP-IN-TOPIC-COLS", 2, 1, false);
-        declareFunction(me, "find_individual_for_mt", "FIND-INDIVIDUAL-FOR-MT", 1, 0, false);
-        declareFunction(me, "check_membership_in_topic_preds", "CHECK-MEMBERSHIP-IN-TOPIC-PREDS", 2, 0, false);
-        declareFunction(me, "get_all_mt_vectors", "GET-ALL-MT-VECTORS", 0, 0, false);
-        declareFunction(me, "sort_similarity_estimates", "SORT-SIMILARITY-ESTIMATES", 1, 0, false);
-        declareFunction(me, "aggregate_results", "AGGREGATE-RESULTS", 1, 0, false);
-        declareFunction(me, "init_mt_vectors", "INIT-MT-VECTORS", 0, 0, false);
+        declareFunction("useful_mt_for_queryP", "USEFUL-MT-FOR-QUERY?", 2, 0, false);
+        declareFunction("check_topic_compatibility", "CHECK-TOPIC-COMPATIBILITY", 4, 0, false);
+        declareFunction("find_context_of_complex_query", "FIND-CONTEXT-OF-COMPLEX-QUERY", 1, 0, false);
+        declareFunction("find_predicates_in_query", "FIND-PREDICATES-IN-QUERY", 1, 0, false);
+        declareFunction("find_context_of_query", "FIND-CONTEXT-OF-QUERY", 1, 0, false);
+        declareFunction("get_context_for_collection", "GET-CONTEXT-FOR-COLLECTION", 1, 0, false);
+        declareFunction("get_context_for_individual", "GET-CONTEXT-FOR-INDIVIDUAL", 1, 0, false);
+        declareFunction("ask_mt_query", "ASK-MT-QUERY", 1, 3, false);
+        declareFunction("cosine_similarity", "COSINE-SIMILARITY", 2, 0, false);
+        declareFunction("get_mt_information_from_file", "GET-MT-INFORMATION-FROM-FILE", 1, 0, false);
+        declareFunction("find_useful_mts_for_query", "FIND-USEFUL-MTS-FOR-QUERY", 1, 0, false);
+        declareFunction("check_tkb_related_query", "CHECK-TKB-RELATED-QUERY", 2, 0, false);
+        declareFunction("check_mt_topics", "CHECK-MT-TOPICS", 3, 0, false);
+        declareFunction("find_topic_of_mt", "FIND-TOPIC-OF-MT", 1, 0, false);
+        declareFunction("terrorism_related_mtP", "TERRORISM-RELATED-MT?", 1, 0, false);
+        declareFunction("find_cols_for_topic_1", "FIND-COLS-FOR-TOPIC-1", 1, 0, false);
+        declareFunction("find_preds_for_topic", "FIND-PREDS-FOR-TOPIC", 1, 0, false);
+        declareFunction("find_cols_for_topic_2", "FIND-COLS-FOR-TOPIC-2", 1, 0, false);
+        declareFunction("check_membership_in_topic_cols", "CHECK-MEMBERSHIP-IN-TOPIC-COLS", 2, 1, false);
+        declareFunction("find_individual_for_mt", "FIND-INDIVIDUAL-FOR-MT", 1, 0, false);
+        declareFunction("check_membership_in_topic_preds", "CHECK-MEMBERSHIP-IN-TOPIC-PREDS", 2, 0, false);
+        declareFunction("get_all_mt_vectors", "GET-ALL-MT-VECTORS", 0, 0, false);
+        declareFunction("sort_similarity_estimates", "SORT-SIMILARITY-ESTIMATES", 1, 0, false);
+        declareFunction("aggregate_results", "AGGREGATE-RESULTS", 1, 0, false);
+        declareFunction("init_mt_vectors", "INIT-MT-VECTORS", 0, 0, false);
         return NIL;
     }
 

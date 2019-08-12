@@ -1,7 +1,24 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.system_parameter_export;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -16,42 +33,12 @@ import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.system_parameter_export.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.$features$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class system_parameter_export extends SubLTranslatedFile {
+public final class system_parameter_export extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new system_parameter_export();
 
-    public static final String myName = "com.cyc.cycjava.cycl.system_parameter_export";
+    public static final String myName = "com.cyc.cycjava_2.cycl.system_parameter_export";
 
-    public static final String myFingerPrint = "c7e99ddb7744656f20457b5cd959197428ed2944e77824c79b8f84949e7fa08c";
 
     // deflexical
     public static final SubLSymbol $system_parameter_name_space$ = makeSymbol("*SYSTEM-PARAMETER-NAME-SPACE*");
@@ -798,20 +785,20 @@ public final class system_parameter_export extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_system_parameter_export_file() {
-        declareFunction(me, "generate_system_parameter_xml_file", "GENERATE-SYSTEM-PARAMETER-XML-FILE", 1, 0, false);
-        declareFunction(me, "generate_one_system_parameter_in_xml", "GENERATE-ONE-SYSTEM-PARAMETER-IN-XML", 2, 0, false);
-        declareFunction(me, "system_parameter_has_nested_elementsP", "SYSTEM-PARAMETER-HAS-NESTED-ELEMENTS?", 1, 0, false);
-        declareFunction(me, "gensysparam_symbol_name_to_parameter_name", "GENSYSPARAM-SYMBOL-NAME-TO-PARAMETER-NAME", 1, 1, false);
-        declareFunction(me, "gensysparam_type_to_final_tag_name", "GENSYSPARAM-TYPE-TO-FINAL-TAG-NAME", 1, 0, false);
-        declareFunction(me, "gensysparam_type_to_tag_name", "GENSYSPARAM-TYPE-TO-TAG-NAME", 1, 0, false);
-        declareFunction(me, "generate_xml_prolegomena", "GENERATE-XML-PROLEGOMENA", 0, 1, false);
-        declareMacro(me, "with_xsd_schema", "WITH-XSD-SCHEMA");
-        declareFunction(me, "generate_system_parameter_types_xsd", "GENERATE-SYSTEM-PARAMETER-TYPES-XSD", 2, 0, false);
-        declareFunction(me, "compile_default_xsd_attribute_list", "COMPILE-DEFAULT-XSD-ATTRIBUTE-LIST", 0, 0, false);
-        declareFunction(me, "xsd_add_target_name_space", "XSD-ADD-TARGET-NAME-SPACE", 2, 0, false);
-        declareFunction(me, "generate_xsd_prolegomena", "GENERATE-XSD-PROLEGOMENA", 0, 1, false);
-        declareFunction(me, "generate_xsd_epilogue", "GENERATE-XSD-EPILOGUE", 0, 0, false);
-        declareFunction(me, "generate_xsd_definition_for_type", "GENERATE-XSD-DEFINITION-FOR-TYPE", 1, 0, false);
+        declareFunction("generate_system_parameter_xml_file", "GENERATE-SYSTEM-PARAMETER-XML-FILE", 1, 0, false);
+        declareFunction("generate_one_system_parameter_in_xml", "GENERATE-ONE-SYSTEM-PARAMETER-IN-XML", 2, 0, false);
+        declareFunction("system_parameter_has_nested_elementsP", "SYSTEM-PARAMETER-HAS-NESTED-ELEMENTS?", 1, 0, false);
+        declareFunction("gensysparam_symbol_name_to_parameter_name", "GENSYSPARAM-SYMBOL-NAME-TO-PARAMETER-NAME", 1, 1, false);
+        declareFunction("gensysparam_type_to_final_tag_name", "GENSYSPARAM-TYPE-TO-FINAL-TAG-NAME", 1, 0, false);
+        declareFunction("gensysparam_type_to_tag_name", "GENSYSPARAM-TYPE-TO-TAG-NAME", 1, 0, false);
+        declareFunction("generate_xml_prolegomena", "GENERATE-XML-PROLEGOMENA", 0, 1, false);
+        declareMacro("with_xsd_schema", "WITH-XSD-SCHEMA");
+        declareFunction("generate_system_parameter_types_xsd", "GENERATE-SYSTEM-PARAMETER-TYPES-XSD", 2, 0, false);
+        declareFunction("compile_default_xsd_attribute_list", "COMPILE-DEFAULT-XSD-ATTRIBUTE-LIST", 0, 0, false);
+        declareFunction("xsd_add_target_name_space", "XSD-ADD-TARGET-NAME-SPACE", 2, 0, false);
+        declareFunction("generate_xsd_prolegomena", "GENERATE-XSD-PROLEGOMENA", 0, 1, false);
+        declareFunction("generate_xsd_epilogue", "GENERATE-XSD-EPILOGUE", 0, 0, false);
+        declareFunction("generate_xsd_definition_for_type", "GENERATE-XSD-DEFINITION-FOR-TYPE", 1, 0, false);
         return NIL;
     }
 

@@ -176,8 +176,7 @@ public  final class kb_indexing_declarations extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_kb_indexing_declarations_file() {
-    // CVS_ID("Id: kb-indexing-declarations.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_KB_INDEXING_DECLARATION_STORE_);
+        subl_macro_promotions.declare_defglobal($sym0$_KB_INDEXING_DECLARATION_STORE_);
     access_macros.register_macro_helper($sym7$KB_INDEXING_DECLARATION_STORE, $sym8$DO_KB_INDICES);
     declare_index($kw14$GAF_ARG, $list15);
     declare_index($kw16$NART_ARG, $list17);

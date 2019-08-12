@@ -792,8 +792,7 @@ public  final class sbhl_search_implied_relations extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_search_implied_relations_file() {
-    // CVS_ID("Id: sbhl-search-implied-relations.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

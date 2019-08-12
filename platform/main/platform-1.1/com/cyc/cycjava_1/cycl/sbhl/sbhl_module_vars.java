@@ -912,8 +912,7 @@ extent.   The two possible values are t (assume nonempty) and nil (assume nothin
   }
 
   public static final SubLObject setup_sbhl_module_vars_file() {
-    // CVS_ID("Id: sbhl-module-vars.lisp 128897 2009-10-03 02:11:28Z rck ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_module$.getGlobalValue(), Symbols.symbol_function($sym7$SBHL_MODULE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_module$.getGlobalValue(), Symbols.symbol_function($sym7$SBHL_MODULE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$SBHL_MOD_LINK_PRED, $sym9$_CSETF_SBHL_MOD_LINK_PRED);
     Structures.def_csetf($sym10$SBHL_MOD_ACCESSIBLE_LINK_PREDS, $sym11$_CSETF_SBHL_MOD_ACCESSIBLE_LINK_PREDS);
     Structures.def_csetf($sym12$SBHL_MOD_GRAPH, $sym13$_CSETF_SBHL_MOD_GRAPH);

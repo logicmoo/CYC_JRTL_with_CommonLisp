@@ -144,8 +144,7 @@ public  final class transformation_tactician_datastructures extends SubLTranslat
   }
 
   public static final SubLObject setup_transformation_tactician_datastructures_file() {
-    // CVS_ID("Id: inference-transformation-tactician-datastructures.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_transformation_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym8$TRANSFORMATION_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_transformation_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym8$TRANSFORMATION_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$TRANS_STRAT_DATA_LINK_HEADS_MOTIVATED, $sym10$_CSETF_TRANS_STRAT_DATA_LINK_HEADS_MOTIVATED);
     Structures.def_csetf($sym11$TRANS_STRAT_DATA_PROBLEMS_PENDING, $sym12$_CSETF_TRANS_STRAT_DATA_PROBLEMS_PENDING);
     Structures.def_csetf($sym13$TRANS_STRAT_DATA_TRANSFORMATION_STRATEGEM_INDEX, $sym14$_CSETF_TRANS_STRAT_DATA_TRANSFORMATION_STRATEGEM_INDEX);

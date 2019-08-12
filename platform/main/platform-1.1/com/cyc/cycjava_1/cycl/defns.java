@@ -2076,8 +2076,7 @@ Will delegate to the correct defns checks for quoted/non-quoted using QUOTED? */
   }
 
   public static final SubLObject setup_defns_file() {
-    // CVS_ID("Id: defns.lisp 126660 2008-12-06 00:38:39Z goolsbey ");
-    {
+        {
       SubLObject item_var = $sym0$_NEW_DEFNS_ADMIT__METERS_;
       if ((NIL == conses_high.member(item_var, utilities_macros.$defn_state_variables$.getGlobalValue(), Symbols.symbol_function(EQL), Symbols.symbol_function(IDENTITY)))) {
         utilities_macros.$defn_state_variables$.setGlobalValue(cons(item_var, utilities_macros.$defn_state_variables$.getGlobalValue()));

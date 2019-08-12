@@ -893,8 +893,7 @@ public  final class sbhl_cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_cache_file() {
-    // CVS_ID("Id: sbhl-cache.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_SBHL_CACHES_INITIALIZED__);
+        subl_macro_promotions.declare_defglobal($sym0$_SBHL_CACHES_INITIALIZED__);
     subl_macro_promotions.declare_defglobal($sym1$_CACHED_GENL_PREDICATES_);
     subl_macro_promotions.declare_defglobal($sym3$_CACHED_GENL_PREDICATES_SET_);
     subl_macro_promotions.declare_defglobal($sym4$_GENL_PREDICATE_CACHE_);

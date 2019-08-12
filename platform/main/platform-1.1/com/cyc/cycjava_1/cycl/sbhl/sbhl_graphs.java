@@ -515,8 +515,7 @@ public  final class sbhl_graphs extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_graphs_file() {
-    // CVS_ID("Id: sbhl-graphs.lisp 128884 2009-10-02 20:37:03Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_SBHL_BACKING_FILE_VECTOR_);
+        subl_macro_promotions.declare_defglobal($sym0$_SBHL_BACKING_FILE_VECTOR_);
     subl_macro_promotions.declare_defglobal($sym1$_SBHL_BACKING_FILE_VECTOR_CACHES_FOR_MODULES_);
     subl_macro_promotions.declare_defglobal($sym3$_SBHL_FILE_VECTOR_DATA_STREAM_LOCK_);
     return NIL;

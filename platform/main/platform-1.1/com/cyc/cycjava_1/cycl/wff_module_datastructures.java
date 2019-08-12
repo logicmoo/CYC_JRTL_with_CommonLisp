@@ -278,8 +278,7 @@ public  final class wff_module_datastructures extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_wff_module_datastructures_file() {
-    // CVS_ID("Id: wff-module-datastructures.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_wff_module$.getGlobalValue(), Symbols.symbol_function($sym7$WFF_MODULE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_wff_module$.getGlobalValue(), Symbols.symbol_function($sym7$WFF_MODULE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$WFF_MOD_NAME, $sym9$_CSETF_WFF_MOD_NAME);
     Structures.def_csetf($sym10$WFF_MOD_PLIST, $sym11$_CSETF_WFF_MOD_PLIST);
     Equality.identity($sym0$WFF_MODULE);

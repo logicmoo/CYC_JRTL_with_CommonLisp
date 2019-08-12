@@ -86,8 +86,7 @@ public  final class new_root_tactician_datastructures extends SubLTranslatedFile
   }
 
   public static final SubLObject setup_new_root_tactician_datastructures_file() {
-    // CVS_ID("Id: inference-new-root-tactician-datastructures.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_new_root_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym7$NEW_ROOT_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_new_root_strategy_data$.getGlobalValue(), Symbols.symbol_function($sym7$NEW_ROOT_STRATEGY_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$NR_STRAT_DATA_NEW_ROOT_INDEX, $sym9$_CSETF_NR_STRAT_DATA_NEW_ROOT_INDEX);
     Equality.identity($sym0$NEW_ROOT_STRATEGY_DATA);
     return NIL;

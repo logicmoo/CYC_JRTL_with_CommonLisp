@@ -581,8 +581,7 @@ public  final class collection_defns extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_collection_defns_file() {
-    // CVS_ID("Id: collection-defns.lisp 126640 2008-12-04 13:39:36Z builder ");
-    {
+        {
       SubLObject cdolist_list_var = $subl_functions_used_as_collection_defns$.getGlobalValue();
       SubLObject symbol = NIL;
       for (symbol = cdolist_list_var.first(); (NIL != cdolist_list_var); cdolist_list_var = cdolist_list_var.rest(), symbol = cdolist_list_var.first()) {

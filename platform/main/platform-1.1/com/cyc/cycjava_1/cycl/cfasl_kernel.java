@@ -277,8 +277,7 @@ public  final class cfasl_kernel extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cfasl_kernel_file() {
-    // CVS_ID("Id: cfasl-kernel.lisp 126640 2008-12-04 13:39:36Z builder ");
-    tcp_server_utilities.register_tcp_server_type($kw0$CFASL, $sym1$CFASL_SERVER_HANDLER, $kw2$BINARY);
+        tcp_server_utilities.register_tcp_server_type($kw0$CFASL, $sym1$CFASL_SERVER_HANDLER, $kw2$BINARY);
     utilities_macros.register_cyc_api_function($sym25$TASK_PROCESSOR_REQUEST, $list26, $str27$_param_REQUEST__consp_for_evaluat, $list28, $list29);
     return NIL;
   }

@@ -23,127 +23,125 @@ package org.armedbear.j;
 
 import javax.swing.SwingUtilities;
 
-public final class Debug
-{
+public final class Debug {
     // Assertions.
-    public static final void assertTrue(boolean b)
-    {
-        if (!b) {
-            Log.error("Assertion failed!");
-            AssertionException e = new AssertionException();
-            Log.error(e);
-            throw e;
-        }
+    public static final boolean assertTrue(boolean b) {
+	if (!b) {
+	    Log.error("Assertion failed!");
+	    AssertionException e = new AssertionException();
+	    Log.error(e);
+	    throw e;
+	}
+	return true;
     }
 
-    public static final void assertFalse(boolean b)
-    {
-        if (b) {
-            Log.error("Assertion failed!");
-            AssertionException e = new AssertionException();
-            Log.error(e);
-            throw e;
-        }
+    public static final boolean assertTrue(boolean b, String why) {
+	if (!b) {
+	    Log.error("Assertion failed! : " + why);
+	    AssertionException e = new AssertionException();
+	    Log.error(e);
+	    throw e;
+	}
+	return true;
+    }
+
+    public static final void assertFalse(boolean b) {
+	if (b) {
+	    Log.error("Assertion failed!");
+	    AssertionException e = new AssertionException();
+	    Log.error(e);
+	    throw e;
+	}
     }
 
     // Does not throw an exception.
-    public static void bug(String s)
-    {
-        Log.error("BUG! " + s);
-        bug();
+    public static void bug(String s) {
+	Log.error("BUG! " + s);
+	bug();
     }
 
     // Does not throw an exception.
-    public static void bug()
-    {
-        Log.error(new Exception("BUG!"));
+    public static void bug() {
+	Log.error(new Exception("BUG!"));
     }
 
     // A kinder, gentler form of assertion.
-    public static void bugIfNot(boolean b)
-    {
-        if (!b)
-            bug();
+    public static void bugIfNot(boolean b) {
+	if (!b)
+	    bug();
     }
 
-    public static void bugIf(boolean b)
-    {
-        if (b)
-            bug();
+    public static void bugIf(boolean b) {
+	if (b)
+	    bug();
     }
 
-    public static void dumpStack()
-    {
-        if (Editor.isDebugEnabled())
-            Log.debug(new Exception("Stack trace"));
+    public static void dumpStack() {
+	if (Editor.isDebugEnabled())
+	    Log.debug(new Exception("Stack trace"));
     }
 
-    public static void throttle()
-    {
-        if (Editor.isDebugEnabled() && !SwingUtilities.isEventDispatchThread()) {
-            String throttle = Editor.preferences().getStringProperty("throttle");
-            if (throttle != null) {
-                try {
-                    int delay = Integer.parseInt(throttle);
-                    Thread.sleep(delay);
-                }
-                catch (NumberFormatException e ) {
-                    Log.error(e);
-                }
-                catch (InterruptedException e) {}
-            }
-        }
+    public static void throttle() {
+	if (Editor.isDebugEnabled() && !SwingUtilities.isEventDispatchThread()) {
+	    String throttle = Editor.preferences().getStringProperty("throttle");
+	    if (throttle != null) {
+		try {
+		    int delay = Integer.parseInt(throttle);
+		    Thread.sleep(delay);
+		} catch (NumberFormatException e) {
+		    Log.error(e);
+		} catch (InterruptedException e) {
+		}
+	    }
+	}
     }
 
-    public static void listThreads()
-    {
-        int threadCount = Thread.currentThread().activeCount();
-        Thread[] threads = new Thread[threadCount];
-        threadCount = Thread.currentThread().enumerate(threads);
-        FastStringBuffer sb = new FastStringBuffer();
-        Log.debug("----- listThreads -----");
-        for (int i = 0; i < threadCount; i++) {
-            Thread thread = threads[i];
-            sb.setText(thread.getName());
-            sb.append(' '); // Follow with at least one space.
-            while (sb.length() < 24)
-                sb.append(' ');
-            sb.append(thread.getPriority());
-            if (thread.isDaemon())
-                sb.append(" (daemon)");
-            Log.debug(sb.toString());
-        }
-        int processCount = 0;
-        String output = null;
-        if (Platform.isPlatformLinux()) {
-            String[] cmdarray = {"bash", "-c",
-                "ps -o pid,pri,%cpu,rss,start,time,command"};
-            output = Utilities.exec(cmdarray);
-        } else if (Platform.isPlatformSunOS()) {
-            String[] cmdarray = {"sh", "-c",
-                "ps -efo pid,pri,pcpu,rss,time,args"};
-            output = Utilities.exec(cmdarray);
-        }
-        if (output != null) {
-            FastStringReader reader = new FastStringReader(output);
-            String s = reader.readLine();
-            if (s != null)
-                Log.debug(s);
-            while ((s = reader.readLine()) != null) {
-                if (s.indexOf("java") >= 0) {
-                    Log.debug(s);
-                    ++processCount;
-                }
-            }
-        }
-        sb.setText("listThreads: ");
-        sb.append(threadCount);
-        sb.append(" Java threads");
-        if (processCount > 0) {
-            sb.append(", ");
-            sb.append(processCount);
-            sb.append(" processes");
-        }
-        Log.debug(sb.toString());
+    public static void listThreads() {
+	int threadCount = Thread.currentThread().activeCount();
+	Thread[] threads = new Thread[threadCount];
+	threadCount = Thread.currentThread().enumerate(threads);
+	FastStringBuffer sb = new FastStringBuffer();
+	Log.debug("----- listThreads -----");
+	for (int i = 0; i < threadCount; i++) {
+	    Thread thread = threads[i];
+	    sb.setText(thread.getName());
+	    sb.append(' '); // Follow with at least one space.
+	    while (sb.length() < 24)
+		sb.append(' ');
+	    sb.append(thread.getPriority());
+	    if (thread.isDaemon())
+		sb.append(" (daemon)");
+	    Log.debug(sb.toString());
+	}
+	int processCount = 0;
+	String output = null;
+	if (Platform.isPlatformLinux()) {
+	    String[] cmdarray = { "bash", "-c", "ps -o pid,pri,%cpu,rss,start,time,command" };
+	    output = Utilities.exec(cmdarray);
+	} else if (Platform.isPlatformSunOS()) {
+	    String[] cmdarray = { "sh", "-c", "ps -efo pid,pri,pcpu,rss,time,args" };
+	    output = Utilities.exec(cmdarray);
+	}
+	if (output != null) {
+	    FastStringReader reader = new FastStringReader(output);
+	    String s = reader.readLine();
+	    if (s != null)
+		Log.debug(s);
+	    while ((s = reader.readLine()) != null) {
+		if (s.indexOf("java") >= 0) {
+		    Log.debug(s);
+		    ++processCount;
+		}
+	    }
+	}
+	sb.setText("listThreads: ");
+	sb.append(threadCount);
+	sb.append(" Java threads");
+	if (processCount > 0) {
+	    sb.append(", ");
+	    sb.append(processCount);
+	    sb.append(" processes");
+	}
+	Log.debug(sb.toString());
     }
 }

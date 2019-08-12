@@ -146,8 +146,7 @@ public  final class sbhl_iteration extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_iteration_file() {
-    // CVS_ID("Id: sbhl-iteration.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_iterator$.getGlobalValue(), Symbols.symbol_function($sym9$SBHL_ITERATOR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_iterator$.getGlobalValue(), Symbols.symbol_function($sym9$SBHL_ITERATOR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym10$SBHL_IT_STATE, $sym11$_CSETF_SBHL_IT_STATE);
     Structures.def_csetf($sym12$SBHL_IT_DONE, $sym13$_CSETF_SBHL_IT_DONE);
     Structures.def_csetf($sym14$SBHL_IT_NEXT, $sym15$_CSETF_SBHL_IT_NEXT);

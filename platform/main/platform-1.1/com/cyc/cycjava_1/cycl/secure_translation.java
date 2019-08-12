@@ -197,8 +197,7 @@ public  final class secure_translation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_secure_translation_file() {
-    // CVS_ID("Id: secure-translation.lisp 128436 2009-07-28 22:59:45Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_secure_id_database$.getGlobalValue(), Symbols.symbol_function($sym8$SECURE_ID_DATABASE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_secure_id_database$.getGlobalValue(), Symbols.symbol_function($sym8$SECURE_ID_DATABASE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$SID_DB_SECURITY_LEVEL, $sym10$_CSETF_SID_DB_SECURITY_LEVEL);
     Structures.def_csetf($sym11$SID_DB_ID_MODULE_TABLE, $sym12$_CSETF_SID_DB_ID_MODULE_TABLE);
     Structures.def_csetf($sym13$SID_DB_MODULE_ID_TABLE, $sym14$_CSETF_SID_DB_MODULE_ID_TABLE);

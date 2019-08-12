@@ -671,8 +671,7 @@ on the list.  If a stream, the messages are output to it. */
   }
 
   public static final SubLObject setup_api_kernel_file() {
-    // CVS_ID("Id: api-kernel.lisp 128510 2009-08-07 20:29:23Z tbrussea ");
-    tcp_server_utilities.register_tcp_server_type($kw0$CYC_API, $sym1$API_SERVER_HANDLER, $kw2$TEXT);
+        tcp_server_utilities.register_tcp_server_type($kw0$CYC_API, $sym1$API_SERVER_HANDLER, $kw2$TEXT);
     utilities_macros.register_cyc_api_function($sym6$API_QUIT, NIL, $str7$Explicitly_quit_this_api_connecti, NIL, NIL);
     subl_macro_promotions.declare_defglobal($sym17$_API_INPUT_EOF_MARKER_);
     utilities_macros.register_cyc_api_function($sym36$CYC_API_REMOTE_EVAL, $list37, $str38$Evaluate_API_REQUEST_on_MACHINE_u, $list39, NIL);

@@ -1,42 +1,22 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
-
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_indexical_referent;
-import com.cyc.cycjava.cycl.simplifier;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 import static com.cyc.cycjava.cycl.access_macros.*;
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.czer_utilities.*;
+import static com.cyc.cycjava.cycl.czer_vars.*;
+import static com.cyc.cycjava.cycl.dictionary.*;
+import static com.cyc.cycjava.cycl.dictionary_contents.*;
+import static com.cyc.cycjava.cycl.dictionary_utilities.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
 import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.simplifier.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EIGHT_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
+import static com.cyc.cycjava.cycl.list_utilities.*;
+import static com.cyc.cycjava.cycl.mt_relevance_macros.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
@@ -52,20 +32,43 @@ import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_indexical_referent;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.BinaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.UnaryFunction;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class simplifier extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      SIMPLIFIER
+ * source file: /cyc/top/cycl/simplifier.lisp
+ * created:     2019/07/03 17:37:29
+ */
+public final class simplifier extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new simplifier();
 
-    public static final String myName = "com.cyc.cycjava.cycl.simplifier";
+ public static final String myName = "com.cyc.cycjava.cycl.simplifier";
 
-    public static final String myFingerPrint = "6b5ea5092cbbc49203f98616e281e996b9f5dce5fdda9f4908ce5ec61d951511";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $simplify_cycl_sentence_and_subsentencesP$ = makeSymbol("*SIMPLIFY-CYCL-SENTENCE-AND-SUBSENTENCES?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $simplify_individualasfn_expressions_isa_sentences_to_add$ = makeSymbol("*SIMPLIFY-INDIVIDUALASFN-EXPRESSIONS-ISA-SENTENCES-TO-ADD*");
 
     // defparameter
@@ -73,6 +76,7 @@ public final class simplifier extends SubLTranslatedFile {
      * dynamically bound to t when we're in @xref simplify-sequence-variables, to
      * avoid unnecessary recursion
      */
+    @LispMethod(comment = "dynamically bound to t when we\'re in @xref simplify-sequence-variables, to\r\navoid unnecessary recursion\ndefparameter\ndynamically bound to t when we\'re in @xref simplify-sequence-variables, to\navoid unnecessary recursion")
     private static final SubLSymbol $simplifying_sequence_variablesP$ = makeSymbol("*SIMPLIFYING-SEQUENCE-VARIABLES?*");
 
     // defparameter
@@ -80,6 +84,7 @@ public final class simplifier extends SubLTranslatedFile {
      * dynamically bound to t when we're in @xref simplify-transitive-redundancies
      * to avoid unnecessary recursion
      */
+    @LispMethod(comment = "dynamically bound to t when we\'re in @xref simplify-transitive-redundancies\r\nto avoid unnecessary recursion\ndefparameter\ndynamically bound to t when we\'re in @xref simplify-transitive-redundancies\nto avoid unnecessary recursion")
     private static final SubLSymbol $simplifying_redundanciesP$ = makeSymbol("*SIMPLIFYING-REDUNDANCIES?*");
 
     // defparameter
@@ -89,13 +94,12 @@ public final class simplifier extends SubLTranslatedFile {
      * where RELN is one of these. Assumes that they are binary and that the arg1 is
      * constrained to bear the relation to the arg2.
      */
+    @LispMethod(comment = "Transitive (or sort of transitive) predicates that can be used to constrain\r\narguments, i.e. the argument must bear the relation RELN to something else,\r\nwhere RELN is one of these. Assumes that they are binary and that the arg1 is\r\nconstrained to bear the relation to the arg2.\ndefparameter\nTransitive (or sort of transitive) predicates that can be used to constrain\narguments, i.e. the argument must bear the relation RELN to something else,\nwhere RELN is one of these. Assumes that they are binary and that the arg1 is\nconstrained to bear the relation to the arg2.")
     private static final SubLSymbol $transitive_constraint_preds$ = makeSymbol("*TRANSITIVE-CONSTRAINT-PREDS*");
 
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
+
 
     private static final SubLSymbol $sym1$_EXIT = makeSymbol("%EXIT");
-
-
 
     private static final SubLSymbol SIMPLIFY_UNARY_JUNCTS = makeSymbol("SIMPLIFY-UNARY-JUNCTS");
 
@@ -113,29 +117,21 @@ public final class simplifier extends SubLTranslatedFile {
 
     private static final SubLSymbol GET_SIMPLIFIED_CYCL_SENTENCE = makeSymbol("GET-SIMPLIFIED-CYCL-SENTENCE");
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
-    private static final SubLObject $$True = reader_make_constant_shell(makeString("True"));
 
-    private static final SubLObject $$False = reader_make_constant_shell(makeString("False"));
+
+
+
 
     private static final SubLString $str14$_S_is_not_well_formed_ = makeString("~S is not well formed.");
 
-
-
-
-
-
-
     private static final SubLSymbol SIMPLIFY_CYCL_SENTENCE_INT = makeSymbol("SIMPLIFY-CYCL-SENTENCE-INT");
 
-    private static final SubLObject $$distributesOutOfArg = reader_make_constant_shell(makeString("distributesOutOfArg"));
 
 
 
-    private static final SubLObject $$Unity = reader_make_constant_shell(makeString("Unity"));
 
-    private static final SubLObject $$inverseFunctions = reader_make_constant_shell(makeString("inverseFunctions"));
+
 
     private static final SubLString $str23$You_tried_to_negate__S___That_was = makeString("You tried to negate ~S.  That was a bad idea, because it's neither a sentence nor a sentence.");
 
@@ -145,9 +141,9 @@ public final class simplifier extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym26$_ = makeSymbol(">");
 
-    private static final SubLList $list27 = list(reader_make_constant_shell(makeString("equalSymbols")), reader_make_constant_shell(makeString("indexicalReferent")), reader_make_constant_shell(makeString("termOfUnit")));
+    private static final SubLList $list27 = list(reader_make_constant_shell("equalSymbols"), reader_make_constant_shell("indexicalReferent"), reader_make_constant_shell("termOfUnit"));
 
-    private static final SubLObject $$equals = reader_make_constant_shell(makeString("equals"));
+
 
     private static final SubLSymbol $SIMPLIFICATION_TO_TAUTOLOGY_DUE_TO_POS_AND_NEG_LITERAL = makeKeyword("SIMPLIFICATION-TO-TAUTOLOGY-DUE-TO-POS-AND-NEG-LITERAL");
 
@@ -155,37 +151,31 @@ public final class simplifier extends SubLTranslatedFile {
 
     private static final SubLSymbol TRANSFORM_NESTED_COLLECTIONSUBSETFN_EXPRESSION = makeSymbol("TRANSFORM-NESTED-COLLECTIONSUBSETFN-EXPRESSION");
 
-    private static final SubLObject $$CollectionSubsetFn = reader_make_constant_shell(makeString("CollectionSubsetFn"));
 
-    private static final SubLObject $$TheSetOf = reader_make_constant_shell(makeString("TheSetOf"));
+
+
 
     private static final SubLSymbol $sym34$INDIVIDUALASFN_EXPRESSION_ = makeSymbol("INDIVIDUALASFN-EXPRESSION?");
 
     private static final SubLSymbol TRANSFORM_INDIVIDUALASFN_EXPRESSION = makeSymbol("TRANSFORM-INDIVIDUALASFN-EXPRESSION");
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
-
-    private static final SubLObject $$IndividualAsFn = reader_make_constant_shell(makeString("IndividualAsFn"));
-
-    private static final SubLObject $$trueSentence = reader_make_constant_shell(makeString("trueSentence"));
-
-    private static final SubLObject $$ist = reader_make_constant_shell(makeString("ist"));
 
 
 
-    private static final SubLObject $$indexicalReferent = reader_make_constant_shell(makeString("indexicalReferent"));
+
+
+
+
+
+
 
     private static final SubLList $list42 = cons(makeSymbol("VAR"), makeSymbol("BINDING"));
 
-
-
     private static final SubLSymbol $sym44$FORMULA_WITH_SEQUENCE_TERM_ = makeSymbol("FORMULA-WITH-SEQUENCE-TERM?");
-
-
 
     private static final SubLString $str46$Splitting_sequence_variables_into = makeString("Splitting sequence variables into other sequence variables is currently not supported. -ECA");
 
-    private static final SubLList $list47 = list(reader_make_constant_shell(makeString("isa")), reader_make_constant_shell(makeString("genls")));
+    private static final SubLList $list47 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genls"));
 
     private static final SubLSymbol WEAKEST_ARGS = makeSymbol("WEAKEST-ARGS");
 
@@ -195,9 +185,9 @@ public final class simplifier extends SubLTranslatedFile {
 
     private static final SubLList $list51 = list(makeKeyword("MAL-ARG-WRT-IFF-DEFN"), makeKeyword("MAL-ARG-WRT-QUOTED-IFF-DEFN"), makeKeyword("MAL-ARG-WRT-SUF-DEFNS"), makeKeyword("MAL-ARG-WRT-QUOTED-SUF-DEFNS"), makeKeyword("MAL-ARG-WRT-COL-DEFN"));
 
-    private static final SubLList $list52 = list(reader_make_constant_shell(makeString("RealNumber")), reader_make_constant_shell(makeString("SubLRealNumber")));
+    private static final SubLList $list52 = list(reader_make_constant_shell("RealNumber"), reader_make_constant_shell("SubLRealNumber"));
 
-    private static final SubLList $list53 = list(reader_make_constant_shell(makeString("CharacterString")), reader_make_constant_shell(makeString("SubLString")));
+    private static final SubLList $list53 = list(reader_make_constant_shell("CharacterString"), reader_make_constant_shell("SubLString"));
 
     public static SubLObject fast_simplify_cycl_sentence(final SubLObject sentence, SubLObject mt, SubLObject aggressively_simplifyP) {
         if (mt == UNPROVIDED) {
@@ -254,10 +244,78 @@ public final class simplifier extends SubLTranslatedFile {
         }
     }
 
+    // Definitions
+    /**
+     * Flattens a list of disjuncts as much as possible starting from the top level.
+     * e.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.
+     */
+    @LispMethod(comment = "Flattens a list of disjuncts as much as possible starting from the top level.\r\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.\nFlattens a list of disjuncts as much as possible starting from the top level.\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.")
+    public static final SubLObject lift_disjuncts_alt(SubLObject disjuncts) {
+        return com.cyc.cycjava.cycl.simplifier.nlift_disjuncts(copy_tree(disjuncts));
+    }
+
+    // Definitions
+    /**
+     * Flattens a list of disjuncts as much as possible starting from the top level.
+     * e.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.
+     */
+    @LispMethod(comment = "Flattens a list of disjuncts as much as possible starting from the top level.\r\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.\nFlattens a list of disjuncts as much as possible starting from the top level.\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.")
     public static SubLObject lift_disjuncts(final SubLObject disjuncts) {
         return nlift_disjuncts(copy_tree(disjuncts));
     }
 
+    /**
+     * A destructive version of @xref lift-disjuncts.
+     */
+    @LispMethod(comment = "A destructive version of @xref lift-disjuncts.")
+    public static final SubLObject nlift_disjuncts_alt(SubLObject disjuncts) {
+        {
+            SubLObject last_done = NIL;
+            SubLObject undone = NIL;
+            SubLObject disjunct = NIL;
+            for (undone = disjuncts, disjunct = first_in_sequence(undone); NIL != undone; undone = rest_of_sequence(undone) , disjunct = first_in_sequence(undone)) {
+                if (NIL != el_disjunction_p(disjunct)) {
+                    {
+                        SubLObject nested_disjuncts = cycl_utilities.sentence_args(disjunct, UNPROVIDED);
+                        SubLObject still_undone = rest_of_sequence(undone);
+                        SubLObject replacements = com.cyc.cycjava.cycl.simplifier.nlift_disjuncts(nested_disjuncts);
+                        SubLObject splice_cons = last(replacements, UNPROVIDED);
+                        if (NIL == replacements) {
+                            if (NIL == last_done) {
+                                disjuncts = still_undone;
+                            } else {
+                                rplacd(last_done, still_undone);
+                            }
+                        } else {
+                            if (replacements == splice_cons) {
+                                rplaca(undone, first_in_sequence(replacements));
+                            } else {
+                                rplacd(splice_cons, still_undone);
+                                rplaca(undone, first_in_sequence(replacements));
+                                rplacd(undone, rest_of_sequence(replacements));
+                                undone = splice_cons;
+                            }
+                            last_done = undone;
+                        }
+                    }
+                } else {
+                    last_done = undone;
+                }
+            }
+            return disjuncts;
+        }
+    }
+
+    /**
+     * A destructive version of @xref lift-disjuncts.
+     */
+    @LispMethod(comment = "A destructive version of @xref lift-disjuncts.")
     public static SubLObject nlift_disjuncts(SubLObject disjuncts) {
         SubLObject last_done = NIL;
         SubLObject undone = NIL;
@@ -296,6 +354,35 @@ public final class simplifier extends SubLTranslatedFile {
         return disjuncts;
     }
 
+    /**
+     * Returns the disjunction of the sentences in the list SENTENCE-LIST.
+     * If SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:
+     * i.e. no resulting disjunct will itself be a disjunct (simplification is destructive).
+     * e.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.
+     * Also, if SIMPLIFY? is true and SENTENCE-LIST is of length 1, it will return the sentence in SENTENCE-LIST.
+     */
+    @LispMethod(comment = "Returns the disjunction of the sentences in the list SENTENCE-LIST.\r\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:\r\ni.e. no resulting disjunct will itself be a disjunct (simplification is destructive).\r\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.\r\nAlso, if SIMPLIFY? is true and SENTENCE-LIST is of length 1, it will return the sentence in SENTENCE-LIST.\nReturns the disjunction of the sentences in the list SENTENCE-LIST.\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:\ni.e. no resulting disjunct will itself be a disjunct (simplification is destructive).\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.\nAlso, if SIMPLIFY? is true and SENTENCE-LIST is of length 1, it will return the sentence in SENTENCE-LIST.")
+    public static final SubLObject disjoin_alt(SubLObject sentence_list, SubLObject simplifyP) {
+        if (simplifyP == UNPROVIDED) {
+            simplifyP = NIL;
+        }
+        return com.cyc.cycjava.cycl.simplifier.ndisjoin(NIL != simplifyP ? ((SubLObject) (copy_tree(sentence_list))) : sentence_list, simplifyP);
+    }
+
+    /**
+     * Returns the disjunction of the sentences in the list SENTENCE-LIST.
+     * If SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:
+     * i.e. no resulting disjunct will itself be a disjunct (simplification is destructive).
+     * e.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.
+     * Also, if SIMPLIFY? is true and SENTENCE-LIST is of length 1, it will return the sentence in SENTENCE-LIST.
+     */
+    @LispMethod(comment = "Returns the disjunction of the sentences in the list SENTENCE-LIST.\r\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:\r\ni.e. no resulting disjunct will itself be a disjunct (simplification is destructive).\r\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.\r\nAlso, if SIMPLIFY? is true and SENTENCE-LIST is of length 1, it will return the sentence in SENTENCE-LIST.\nReturns the disjunction of the sentences in the list SENTENCE-LIST.\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are disjunctions themselves, they will be flattened:\ni.e. no resulting disjunct will itself be a disjunct (simplification is destructive).\ne.g. (<form1> (#$or <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$or (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$and (#$or <form1> (#$or <form2> <form3>)) <form4>) <form5>) will not change.\nAlso, if SIMPLIFY? is true and SENTENCE-LIST is of length 1, it will return the sentence in SENTENCE-LIST.")
     public static SubLObject disjoin(final SubLObject sentence_list, SubLObject simplifyP) {
         if (simplifyP == UNPROVIDED) {
             simplifyP = NIL;
@@ -303,15 +390,56 @@ public final class simplifier extends SubLTranslatedFile {
         return ndisjoin(NIL != simplifyP ? copy_tree(sentence_list) : sentence_list, simplifyP);
     }
 
+    /**
+     * A destructive version of @xref disjoin.
+     */
+    @LispMethod(comment = "A destructive version of @xref disjoin.")
+    public static final SubLObject ndisjoin_alt(SubLObject sentence_list, SubLObject simplifyP) {
+        if (simplifyP == UNPROVIDED) {
+            simplifyP = T;
+        }
+        SubLTrampolineFile.checkType(sentence_list, LISTP);
+        {
+            SubLObject disjuncts = (NIL != simplifyP) ? ((SubLObject) (com.cyc.cycjava.cycl.simplifier.nlift_disjuncts(sentence_list))) : sentence_list;
+            return make_disjunction(disjuncts);
+        }
+    }
+
+    /**
+     * A destructive version of @xref disjoin.
+     */
+    @LispMethod(comment = "A destructive version of @xref disjoin.")
     public static SubLObject ndisjoin(final SubLObject sentence_list, SubLObject simplifyP) {
         if (simplifyP == UNPROVIDED) {
             simplifyP = T;
         }
-        assert NIL != listp(sentence_list) : "Types.listp(sentence_list) " + "CommonSymbols.NIL != Types.listp(sentence_list) " + sentence_list;
+        assert NIL != listp(sentence_list) : "! listp(sentence_list) " + ("Types.listp(sentence_list) " + "CommonSymbols.NIL != Types.listp(sentence_list) ") + sentence_list;
         final SubLObject disjuncts = (NIL != simplifyP) ? nlift_disjuncts(sentence_list) : sentence_list;
         return make_disjunction(disjuncts);
     }
 
+    /**
+     * Removes unary disjuncts and conjuncts.
+     * Assumes that SENTENCE is in CNF.
+     * i.e. if SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.
+     * Otherwise returns SENTENCE.
+     */
+    @LispMethod(comment = "Removes unary disjuncts and conjuncts.\r\nAssumes that SENTENCE is in CNF.\r\ni.e. if SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\r\nOtherwise returns SENTENCE.\nRemoves unary disjuncts and conjuncts.\nAssumes that SENTENCE is in CNF.\ni.e. if SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\nOtherwise returns SENTENCE.")
+    public static final SubLObject simplify_unary_junct_alt(SubLObject sentence) {
+        if ((NIL != el_grammar.el_unary_sentence_p(sentence)) && ((NIL != el_disjunction_p(sentence)) || (NIL != el_conjunction_p(sentence)))) {
+            return cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
+        } else {
+            return sentence;
+        }
+    }
+
+    /**
+     * Removes unary disjuncts and conjuncts.
+     * Assumes that SENTENCE is in CNF.
+     * i.e. if SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.
+     * Otherwise returns SENTENCE.
+     */
+    @LispMethod(comment = "Removes unary disjuncts and conjuncts.\r\nAssumes that SENTENCE is in CNF.\r\ni.e. if SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\r\nOtherwise returns SENTENCE.\nRemoves unary disjuncts and conjuncts.\nAssumes that SENTENCE is in CNF.\ni.e. if SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\nOtherwise returns SENTENCE.")
     public static SubLObject simplify_unary_junct(final SubLObject sentence) {
         if ((NIL != el_grammar.el_unary_sentence_p(sentence)) && ((NIL != el_disjunction_p(sentence)) || (NIL != el_conjunction_p(sentence)))) {
             return cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
@@ -319,6 +447,37 @@ public final class simplifier extends SubLTranslatedFile {
         return sentence;
     }
 
+    /**
+     * This is a recursive version of @xref simplify-unary-junct.
+     * Assumes that the only logical operators in SENTENCE are #$and, #$or, and #$not,
+     * and that #$not only encloses atomic sentences.
+     * If SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.
+     * If SENTENCE is of the form (#$or (#$and (#$and <form1>))) or any other series of nested unary disjuncts or conjuncts,
+     * it will return <form1>.
+     * If there are no unary disjuncts or conjuncts to simplify, it returns SENTENCE.
+     */
+    @LispMethod(comment = "This is a recursive version of @xref simplify-unary-junct.\r\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not,\r\nand that #$not only encloses atomic sentences.\r\nIf SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\r\nIf SENTENCE is of the form (#$or (#$and (#$and <form1>))) or any other series of nested unary disjuncts or conjuncts,\r\nit will return <form1>.\r\nIf there are no unary disjuncts or conjuncts to simplify, it returns SENTENCE.\nThis is a recursive version of @xref simplify-unary-junct.\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not,\nand that #$not only encloses atomic sentences.\nIf SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\nIf SENTENCE is of the form (#$or (#$and (#$and <form1>))) or any other series of nested unary disjuncts or conjuncts,\nit will return <form1>.\nIf there are no unary disjuncts or conjuncts to simplify, it returns SENTENCE.")
+    public static final SubLObject simplify_unary_juncts_alt(SubLObject sentence) {
+        if (!((NIL != el_disjunction_p(sentence)) || (NIL != el_conjunction_p(sentence)))) {
+            return sentence;
+        }
+        if (NIL != el_grammar.el_unary_sentence_p(sentence)) {
+            return com.cyc.cycjava.cycl.simplifier.simplify_unary_juncts(cycl_utilities.sentence_arg1(sentence, UNPROVIDED));
+        } else {
+            return map_formula_args(symbol_function(SIMPLIFY_UNARY_JUNCTS), sentence, UNPROVIDED);
+        }
+    }
+
+    /**
+     * This is a recursive version of @xref simplify-unary-junct.
+     * Assumes that the only logical operators in SENTENCE are #$and, #$or, and #$not,
+     * and that #$not only encloses atomic sentences.
+     * If SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.
+     * If SENTENCE is of the form (#$or (#$and (#$and <form1>))) or any other series of nested unary disjuncts or conjuncts,
+     * it will return <form1>.
+     * If there are no unary disjuncts or conjuncts to simplify, it returns SENTENCE.
+     */
+    @LispMethod(comment = "This is a recursive version of @xref simplify-unary-junct.\r\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not,\r\nand that #$not only encloses atomic sentences.\r\nIf SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\r\nIf SENTENCE is of the form (#$or (#$and (#$and <form1>))) or any other series of nested unary disjuncts or conjuncts,\r\nit will return <form1>.\r\nIf there are no unary disjuncts or conjuncts to simplify, it returns SENTENCE.\nThis is a recursive version of @xref simplify-unary-junct.\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not,\nand that #$not only encloses atomic sentences.\nIf SENTENCE is of the form (#$or <form1>) or (#$and <form1>), returns <form1>.\nIf SENTENCE is of the form (#$or (#$and (#$and <form1>))) or any other series of nested unary disjuncts or conjuncts,\nit will return <form1>.\nIf there are no unary disjuncts or conjuncts to simplify, it returns SENTENCE.")
     public static SubLObject simplify_unary_juncts(final SubLObject sentence) {
         if ((NIL == el_disjunction_p(sentence)) && (NIL == el_conjunction_p(sentence))) {
             return sentence;
@@ -329,6 +488,30 @@ public final class simplifier extends SubLTranslatedFile {
         return map_formula_args(symbol_function(SIMPLIFY_UNARY_JUNCTS), sentence, UNPROVIDED);
     }
 
+    /**
+     * Removes duplicate conjuncts or disjuncts from SENTENCE and its subsentences.
+     * e.g. Given (#$and <form1> <form2> <form3> <form2>), returns (#$and <form1> <form2> <form3>).
+     * Assumes that the only logical operators in SENTENCE are #$and, #$or, and #$not, and that #$not only encloses atomic sentences,
+     * because it will stop recursing when it hits something that is not a conjunction or disjunction.
+     * Note that sentences like (#$and (#$or <form1> <form2>) (#$or <form2> <form1>)) will not be simplified.
+     */
+    @LispMethod(comment = "Removes duplicate conjuncts or disjuncts from SENTENCE and its subsentences.\r\ne.g. Given (#$and <form1> <form2> <form3> <form2>), returns (#$and <form1> <form2> <form3>).\r\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not, and that #$not only encloses atomic sentences,\r\nbecause it will stop recursing when it hits something that is not a conjunction or disjunction.\r\nNote that sentences like (#$and (#$or <form1> <form2>) (#$or <form2> <form1>)) will not be simplified.\nRemoves duplicate conjuncts or disjuncts from SENTENCE and its subsentences.\ne.g. Given (#$and <form1> <form2> <form3> <form2>), returns (#$and <form1> <form2> <form3>).\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not, and that #$not only encloses atomic sentences,\nbecause it will stop recursing when it hits something that is not a conjunction or disjunction.\nNote that sentences like (#$and (#$or <form1> <form2>) (#$or <form2> <form1>)) will not be simplified.")
+    public static final SubLObject simplify_duplicate_juncts_alt(SubLObject sentence) {
+        if ((NIL != el_disjunction_p(sentence)) || (NIL != el_conjunction_p(sentence))) {
+            return remove_duplicates(map_formula_args(symbol_function(SIMPLIFY_DUPLICATE_JUNCTS), sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        } else {
+            return sentence;
+        }
+    }
+
+    /**
+     * Removes duplicate conjuncts or disjuncts from SENTENCE and its subsentences.
+     * e.g. Given (#$and <form1> <form2> <form3> <form2>), returns (#$and <form1> <form2> <form3>).
+     * Assumes that the only logical operators in SENTENCE are #$and, #$or, and #$not, and that #$not only encloses atomic sentences,
+     * because it will stop recursing when it hits something that is not a conjunction or disjunction.
+     * Note that sentences like (#$and (#$or <form1> <form2>) (#$or <form2> <form1>)) will not be simplified.
+     */
+    @LispMethod(comment = "Removes duplicate conjuncts or disjuncts from SENTENCE and its subsentences.\r\ne.g. Given (#$and <form1> <form2> <form3> <form2>), returns (#$and <form1> <form2> <form3>).\r\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not, and that #$not only encloses atomic sentences,\r\nbecause it will stop recursing when it hits something that is not a conjunction or disjunction.\r\nNote that sentences like (#$and (#$or <form1> <form2>) (#$or <form2> <form1>)) will not be simplified.\nRemoves duplicate conjuncts or disjuncts from SENTENCE and its subsentences.\ne.g. Given (#$and <form1> <form2> <form3> <form2>), returns (#$and <form1> <form2> <form3>).\nAssumes that the only logical operators in SENTENCE are #$and, #$or, and #$not, and that #$not only encloses atomic sentences,\nbecause it will stop recursing when it hits something that is not a conjunction or disjunction.\nNote that sentences like (#$and (#$or <form1> <form2>) (#$or <form2> <form1>)) will not be simplified.")
     public static SubLObject simplify_duplicate_juncts(final SubLObject sentence) {
         if ((NIL != el_disjunction_p(sentence)) || (NIL != el_conjunction_p(sentence))) {
             return remove_duplicates(map_formula_args(symbol_function(SIMPLIFY_DUPLICATE_JUNCTS), sentence, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
@@ -336,10 +519,76 @@ public final class simplifier extends SubLTranslatedFile {
         return sentence;
     }
 
+    /**
+     * Flattens a list of conjuncts as much as possible starting from the top level.
+     * e.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.
+     */
+    @LispMethod(comment = "Flattens a list of conjuncts as much as possible starting from the top level.\r\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.\nFlattens a list of conjuncts as much as possible starting from the top level.\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.")
+    public static final SubLObject lift_conjuncts_alt(SubLObject conjuncts) {
+        return com.cyc.cycjava.cycl.simplifier.nlift_conjuncts(copy_tree(conjuncts));
+    }
+
+    /**
+     * Flattens a list of conjuncts as much as possible starting from the top level.
+     * e.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.
+     */
+    @LispMethod(comment = "Flattens a list of conjuncts as much as possible starting from the top level.\r\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.\nFlattens a list of conjuncts as much as possible starting from the top level.\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.")
     public static SubLObject lift_conjuncts(final SubLObject conjuncts) {
         return nlift_conjuncts(copy_tree(conjuncts));
     }
 
+    /**
+     * A destructive version of @xref lift-conjuncts.
+     */
+    @LispMethod(comment = "A destructive version of @xref lift-conjuncts.")
+    public static final SubLObject nlift_conjuncts_alt(SubLObject conjuncts) {
+        {
+            SubLObject last_done = NIL;
+            SubLObject undone = NIL;
+            SubLObject conjunct = NIL;
+            for (undone = conjuncts, conjunct = first_in_sequence(undone); NIL != undone; undone = rest_of_sequence(undone) , conjunct = first_in_sequence(undone)) {
+                if (NIL != el_conjunction_p(conjunct)) {
+                    {
+                        SubLObject nested_conjuncts = cycl_utilities.sentence_args(conjunct, UNPROVIDED);
+                        SubLObject still_undone = rest_of_sequence(undone);
+                        SubLObject replacements = com.cyc.cycjava.cycl.simplifier.nlift_conjuncts(nested_conjuncts);
+                        SubLObject splice_cons = last(replacements, UNPROVIDED);
+                        if (NIL == replacements) {
+                            if (NIL == last_done) {
+                                conjuncts = still_undone;
+                            } else {
+                                rplacd(last_done, still_undone);
+                            }
+                        } else {
+                            if (replacements == splice_cons) {
+                                rplaca(undone, first_in_sequence(replacements));
+                            } else {
+                                rplacd(splice_cons, still_undone);
+                                rplaca(undone, first_in_sequence(replacements));
+                                rplacd(undone, rest_of_sequence(replacements));
+                                undone = splice_cons;
+                            }
+                            last_done = undone;
+                        }
+                    }
+                } else {
+                    last_done = undone;
+                }
+            }
+            return conjuncts;
+        }
+    }
+
+    /**
+     * A destructive version of @xref lift-conjuncts.
+     */
+    @LispMethod(comment = "A destructive version of @xref lift-conjuncts.")
     public static SubLObject nlift_conjuncts(SubLObject conjuncts) {
         SubLObject last_done = NIL;
         SubLObject undone = NIL;
@@ -378,6 +627,33 @@ public final class simplifier extends SubLTranslatedFile {
         return conjuncts;
     }
 
+    /**
+     * Returns the conjunction of the sentences in the list SENTENCE-LIST.
+     * If SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are conjunctions themselves, they will be flattened:
+     * i.e. no resulting conjunct will itself be a conjunct (simplification is destructive).
+     * e.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.
+     */
+    @LispMethod(comment = "Returns the conjunction of the sentences in the list SENTENCE-LIST.\r\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are conjunctions themselves, they will be flattened:\r\ni.e. no resulting conjunct will itself be a conjunct (simplification is destructive).\r\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.\nReturns the conjunction of the sentences in the list SENTENCE-LIST.\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are conjunctions themselves, they will be flattened:\ni.e. no resulting conjunct will itself be a conjunct (simplification is destructive).\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.")
+    public static final SubLObject conjoin_alt(SubLObject sentence_list, SubLObject simplifyP) {
+        if (simplifyP == UNPROVIDED) {
+            simplifyP = NIL;
+        }
+        return com.cyc.cycjava.cycl.simplifier.nconjoin(NIL != simplifyP ? ((SubLObject) (copy_tree(sentence_list))) : sentence_list, simplifyP);
+    }
+
+    /**
+     * Returns the conjunction of the sentences in the list SENTENCE-LIST.
+     * If SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are conjunctions themselves, they will be flattened:
+     * i.e. no resulting conjunct will itself be a conjunct (simplification is destructive).
+     * e.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),
+     * ((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)
+     * will become (<form1> <form2> <form3> <form4> <form5>),
+     * but ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.
+     */
+    @LispMethod(comment = "Returns the conjunction of the sentences in the list SENTENCE-LIST.\r\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are conjunctions themselves, they will be flattened:\r\ni.e. no resulting conjunct will itself be a conjunct (simplification is destructive).\r\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\r\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\r\nwill become (<form1> <form2> <form3> <form4> <form5>),\r\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.\nReturns the conjunction of the sentences in the list SENTENCE-LIST.\nIf SIMPLIFY? is true, then if any of the sentences in SENTENCE-LIST are conjunctions themselves, they will be flattened:\ni.e. no resulting conjunct will itself be a conjunct (simplification is destructive).\ne.g. (<form1> (#$and <form2> <form3>)) will become (<form1> <form2> <form3>),\n((#$and (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>)\nwill become (<form1> <form2> <form3> <form4> <form5>),\nbut ((#$or (#$and <form1> (#$and <form2> <form3>)) <form4>) <form5>) will not change.")
     public static SubLObject conjoin(final SubLObject sentence_list, SubLObject simplifyP) {
         if (simplifyP == UNPROVIDED) {
             simplifyP = NIL;
@@ -385,11 +661,27 @@ public final class simplifier extends SubLTranslatedFile {
         return nconjoin(NIL != simplifyP ? copy_tree(sentence_list) : sentence_list, simplifyP);
     }
 
+    /**
+     * A destructive version of @xref conjoin.
+     */
+    @LispMethod(comment = "A destructive version of @xref conjoin.")
+    public static final SubLObject nconjoin_alt(SubLObject sentence_list, SubLObject simplifyP) {
+        if (simplifyP == UNPROVIDED) {
+            simplifyP = T;
+        }
+        SubLTrampolineFile.checkType(sentence_list, LISTP);
+        return make_conjunction(NIL != simplifyP ? ((SubLObject) (com.cyc.cycjava.cycl.simplifier.nlift_conjuncts(sentence_list))) : sentence_list);
+    }
+
+    /**
+     * A destructive version of @xref conjoin.
+     */
+    @LispMethod(comment = "A destructive version of @xref conjoin.")
     public static SubLObject nconjoin(final SubLObject sentence_list, SubLObject simplifyP) {
         if (simplifyP == UNPROVIDED) {
             simplifyP = T;
         }
-        assert NIL != listp(sentence_list) : "Types.listp(sentence_list) " + "CommonSymbols.NIL != Types.listp(sentence_list) " + sentence_list;
+        assert NIL != listp(sentence_list) : "! listp(sentence_list) " + ("Types.listp(sentence_list) " + "CommonSymbols.NIL != Types.listp(sentence_list) ") + sentence_list;
         return make_conjunction(NIL != simplifyP ? nlift_conjuncts(sentence_list) : sentence_list);
     }
 
@@ -406,12 +698,50 @@ public final class simplifier extends SubLTranslatedFile {
         return conjoin(sentence_list, simplifyP);
     }
 
+    /**
+     * Like @xref lift-conjuncts-recursive except recurses into subformulas.
+     */
+    @LispMethod(comment = "Like @xref lift-conjuncts-recursive except recurses into subformulas.")
+    public static final SubLObject lift_conjuncts_recursive_alt(SubLObject conjuncts) {
+        return cycl_utilities.expression_transform(conjuncts, $sym3$LIFTABLE_CONJUNCTS_, NLIFT_CONJUNCTS, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     * Like @xref lift-conjuncts-recursive except recurses into subformulas.
+     */
+    @LispMethod(comment = "Like @xref lift-conjuncts-recursive except recurses into subformulas.")
     public static SubLObject lift_conjuncts_recursive(final SubLObject conjuncts) {
         return cycl_utilities.expression_transform(conjuncts, $sym5$LIFTABLE_CONJUNCTS_, NLIFT_CONJUNCTS, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject liftable_conjunctsP_alt(SubLObject conjuncts) {
+        return makeBoolean((conjuncts.isList() && (NIL != any_in_list(EL_CONJUNCTION_P, conjuncts, UNPROVIDED))) && (!conjuncts.equal(com.cyc.cycjava.cycl.simplifier.lift_conjuncts(conjuncts))));
+    }
+
     public static SubLObject liftable_conjunctsP(final SubLObject conjuncts) {
         return makeBoolean((conjuncts.isList() && (NIL != list_utilities.any_in_list(EL_CONJUNCTION_P, conjuncts, UNPROVIDED))) && (!conjuncts.equal(lift_conjuncts(conjuncts))));
+    }
+
+    public static final SubLObject simplify_el_syntax_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $simplify_non_wff_literalP$.currentBinding(thread);
+                    try {
+                        $simplify_non_wff_literalP$.bind(NIL, thread);
+                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence(sentence, varP);
+                    } finally {
+                        $simplify_non_wff_literalP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject simplify_el_syntax(final SubLObject sentence, SubLObject varP) {
@@ -430,6 +760,53 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * Assumes that NON-WFF is an ill-formed sentence.  Tries to simplify it into a well-formed sentence.
+     *
+     * @return 0 sentence; the simplified version of NON-WFF.
+     * @return 1 boolean; t iff the simplified version of NON-WFF is well-formed.
+    Assumes that the EL variable namespace is bound.
+     */
+    @LispMethod(comment = "Assumes that NON-WFF is an ill-formed sentence.  Tries to simplify it into a well-formed sentence.\r\n\r\n@return 0 sentence; the simplified version of NON-WFF.\r\n@return 1 boolean; t iff the simplified version of NON-WFF is well-formed.\r\nAssumes that the EL variable namespace is bound.")
+    public static final SubLObject try_to_simplify_non_wff_into_wff_alt(SubLObject non_wff, SubLObject wff_function, SubLObject arg2_to_wff_function) {
+        if (wff_function == UNPROVIDED) {
+            wff_function = symbol_function($sym7$EL_WFF_);
+        }
+        if (arg2_to_wff_function == UNPROVIDED) {
+            arg2_to_wff_function = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $try_to_simplify_non_wff_into_wffP$.getDynamicValue(thread)) {
+                {
+                    SubLObject simpler_sentence = NIL;
+                    SubLObject is_it_wff_nowP = NIL;
+                    {
+                        SubLObject _prev_bind_0 = $trying_to_simplify_non_wff_into_wffP$.currentBinding(thread);
+                        try {
+                            $trying_to_simplify_non_wff_into_wffP$.bind(T, thread);
+                            simpler_sentence = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_deep(non_wff, UNPROVIDED);
+                            is_it_wff_nowP = makeBoolean((!non_wff.equal(simpler_sentence)) && (NIL != (NIL != arg2_to_wff_function ? ((SubLObject) (funcall(wff_function, simpler_sentence, arg2_to_wff_function))) : funcall(wff_function, simpler_sentence))));
+                        } finally {
+                            $trying_to_simplify_non_wff_into_wffP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    return values(simpler_sentence, is_it_wff_nowP);
+                }
+            } else {
+                return values(non_wff, NIL);
+            }
+        }
+    }
+
+    /**
+     * Assumes that NON-WFF is an ill-formed sentence.  Tries to simplify it into a well-formed sentence.
+     *
+     * @return 0 sentence; the simplified version of NON-WFF.
+     * @return 1 boolean; t iff the simplified version of NON-WFF is well-formed.
+    Assumes that the EL variable namespace is bound.
+     */
+    @LispMethod(comment = "Assumes that NON-WFF is an ill-formed sentence.  Tries to simplify it into a well-formed sentence.\r\n\r\n@return 0 sentence; the simplified version of NON-WFF.\r\n@return 1 boolean; t iff the simplified version of NON-WFF is well-formed.\r\nAssumes that the EL variable namespace is bound.")
     public static SubLObject try_to_simplify_non_wff_into_wff(final SubLObject non_wff, SubLObject wff_function, SubLObject arg2_to_wff_function) {
         if (wff_function == UNPROVIDED) {
             wff_function = symbol_function($sym9$EL_WFF_);
@@ -454,6 +831,25 @@ public final class simplifier extends SubLTranslatedFile {
         return values(non_wff, NIL);
     }
 
+    /**
+     * Performs deeper simplifications on SENTENCE than @xref simplify-cycl-sentence.
+     * Assumes that the EL variable namespace is bound.
+     */
+    @LispMethod(comment = "Performs deeper simplifications on SENTENCE than @xref simplify-cycl-sentence.\r\nAssumes that the EL variable namespace is bound.\nPerforms deeper simplifications on SENTENCE than @xref simplify-cycl-sentence.\nAssumes that the EL variable namespace is bound.")
+    public static final SubLObject simplify_cycl_sentence_deep_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        sentence = com.cyc.cycjava.cycl.simplifier.simplify_sequence_variables_1(sentence);
+        sentence = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence(sentence, varP);
+        return sentence;
+    }
+
+    /**
+     * Performs deeper simplifications on SENTENCE than @xref simplify-cycl-sentence.
+     * Assumes that the EL variable namespace is bound.
+     */
+    @LispMethod(comment = "Performs deeper simplifications on SENTENCE than @xref simplify-cycl-sentence.\r\nAssumes that the EL variable namespace is bound.\nPerforms deeper simplifications on SENTENCE than @xref simplify-cycl-sentence.\nAssumes that the EL variable namespace is bound.")
     public static SubLObject simplify_cycl_sentence_deep(SubLObject sentence, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -485,6 +881,18 @@ public final class simplifier extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject simplify_cycl_sentence_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        sentence = com.cyc.cycjava.cycl.simplifier.simplify_special_cases(sentence);
+        sentence = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sentence, varP);
+        if (NIL != com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundanciesP()) {
+            sentence = com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundancies(sentence, UNPROVIDED);
+        }
+        return sentence;
+    }
+
     public static SubLObject simplify_cycl_sentence(SubLObject sentence, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -497,6 +905,36 @@ public final class simplifier extends SubLTranslatedFile {
         return sentence;
     }
 
+    /**
+     * Like @xref simplify-cycl-sentence, but only does syntactic simplification.
+     */
+    @LispMethod(comment = "Like @xref simplify-cycl-sentence, but only does syntactic simplification.")
+    public static final SubLObject simplify_cycl_sentence_syntax_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $simplify_using_semanticsP$.currentBinding(thread);
+                    try {
+                        $simplify_using_semanticsP$.bind(NIL, thread);
+                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence(sentence, varP);
+                    } finally {
+                        $simplify_using_semanticsP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Like @xref simplify-cycl-sentence, but only does syntactic simplification.
+     */
+    @LispMethod(comment = "Like @xref simplify-cycl-sentence, but only does syntactic simplification.")
     public static SubLObject simplify_cycl_sentence_syntax(final SubLObject sentence, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -511,6 +949,181 @@ public final class simplifier extends SubLTranslatedFile {
             czer_vars.$simplify_using_semanticsP$.rebind(_prev_bind_0, thread);
         }
         return result;
+    }
+
+    public static final SubLObject simplify_cycl_sentence_int_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = sentence;
+                if (NIL == $simplify_sentenceP$.getDynamicValue(thread)) {
+                } else {
+                    if ($$True == sentence) {
+                    } else {
+                        if ($$False == sentence) {
+                        } else {
+                            if (NIL != subl_escape_p(sentence)) {
+                            } else {
+                                if (NIL != cycl_grammar.fast_cycl_quoted_term_p(sentence)) {
+                                } else {
+                                    if (NIL != funcall(varP, sentence)) {
+                                    } else {
+                                        if (NIL != assertion_handles.assertion_p(sentence)) {
+                                        } else {
+                                            if (sentence.isAtom()) {
+                                                el_error(FOUR_INTEGER, $str_alt10$_S_is_not_well_formed_, sentence, UNPROVIDED, UNPROVIDED);
+                                                wff.note_wff_violation(list($INVALID_SENTENCE, sentence, $mt$.getDynamicValue(thread)));
+                                            } else {
+                                                if (NIL != el_negation_p(sentence)) {
+                                                    {
+                                                        SubLObject seqvar = sequence_var(sentence, UNPROVIDED);
+                                                        SubLObject sub_sentence = NIL;
+                                                        {
+                                                            SubLObject _prev_bind_0 = $within_negationP$.currentBinding(thread);
+                                                            try {
+                                                                $within_negationP$.bind(makeBoolean(NIL == $within_negationP$.getDynamicValue(thread)), thread);
+                                                                sub_sentence = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg1(sentence, UNPROVIDED), varP);
+                                                            } finally {
+                                                                $within_negationP$.rebind(_prev_bind_0, thread);
+                                                            }
+                                                        }
+                                                        result = maybe_add_sequence_var_to_end(seqvar, com.cyc.cycjava.cycl.simplifier.simplify_cycl_negation(make_unary_formula(cycl_utilities.sentence_arg0(sentence), sub_sentence), varP));
+                                                    }
+                                                } else {
+                                                    if (NIL != el_conjunction_p(sentence)) {
+                                                        if ((NIL != formula_arityE(sentence, ZERO_INTEGER, $IGNORE)) && (NIL != formula_arityE(sentence, ONE_INTEGER, $REGULARIZE))) {
+                                                            result = sentence;
+                                                        } else {
+                                                            {
+                                                                SubLObject _prev_bind_0 = at_vars.$within_conjunctionP$.currentBinding(thread);
+                                                                SubLObject _prev_bind_1 = at_vars.$within_negated_conjunctionP$.currentBinding(thread);
+                                                                try {
+                                                                    at_vars.$within_conjunctionP$.bind(T, thread);
+                                                                    at_vars.$within_negated_conjunctionP$.bind($within_negationP$.getDynamicValue(thread), thread);
+                                                                    result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_conjunction(map_formula_args(symbol_function(SIMPLIFY_CYCL_SENTENCE_INT), sentence, UNPROVIDED), varP);
+                                                                } finally {
+                                                                    at_vars.$within_negated_conjunctionP$.rebind(_prev_bind_1, thread);
+                                                                    at_vars.$within_conjunctionP$.rebind(_prev_bind_0, thread);
+                                                                }
+                                                            }
+                                                        }
+                                                    } else {
+                                                        if (NIL != el_disjunction_p(sentence)) {
+                                                            if ((NIL != formula_arityE(sentence, ZERO_INTEGER, $IGNORE)) && (NIL != formula_arityE(sentence, ONE_INTEGER, $REGULARIZE))) {
+                                                                result = sentence;
+                                                            } else {
+                                                                {
+                                                                    SubLObject _prev_bind_0 = at_vars.$within_disjunctionP$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1 = at_vars.$within_negated_disjunctionP$.currentBinding(thread);
+                                                                    try {
+                                                                        at_vars.$within_disjunctionP$.bind(T, thread);
+                                                                        at_vars.$within_negated_disjunctionP$.bind($within_negationP$.getDynamicValue(thread), thread);
+                                                                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_disjunction(map_formula_args(symbol_function(SIMPLIFY_CYCL_SENTENCE_INT), sentence, UNPROVIDED), varP);
+                                                                    } finally {
+                                                                        at_vars.$within_negated_disjunctionP$.rebind(_prev_bind_1, thread);
+                                                                        at_vars.$within_disjunctionP$.rebind(_prev_bind_0, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        } else {
+                                                            if (NIL != el_implication_p(sentence)) {
+                                                                {
+                                                                    SubLObject seqvar = sequence_var(sentence, UNPROVIDED);
+                                                                    SubLObject antecedent = NIL;
+                                                                    SubLObject consequent = NIL;
+                                                                    {
+                                                                        SubLObject _prev_bind_0 = at_vars.$within_disjunctionP$.currentBinding(thread);
+                                                                        SubLObject _prev_bind_1 = at_vars.$within_negated_disjunctionP$.currentBinding(thread);
+                                                                        try {
+                                                                            at_vars.$within_disjunctionP$.bind(T, thread);
+                                                                            at_vars.$within_negated_disjunctionP$.bind($within_negationP$.getDynamicValue(thread), thread);
+                                                                            {
+                                                                                SubLObject _prev_bind_0_1 = $within_negationP$.currentBinding(thread);
+                                                                                try {
+                                                                                    $within_negationP$.bind(makeBoolean(NIL == $within_negationP$.getDynamicValue(thread)), thread);
+                                                                                    antecedent = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg1(sentence, UNPROVIDED), varP);
+                                                                                } finally {
+                                                                                    $within_negationP$.rebind(_prev_bind_0_1, thread);
+                                                                                }
+                                                                            }
+                                                                            consequent = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg2(sentence, UNPROVIDED), varP);
+                                                                        } finally {
+                                                                            at_vars.$within_negated_disjunctionP$.rebind(_prev_bind_1, thread);
+                                                                            at_vars.$within_disjunctionP$.rebind(_prev_bind_0, thread);
+                                                                        }
+                                                                    }
+                                                                    result = maybe_add_sequence_var_to_end(seqvar, com.cyc.cycjava.cycl.simplifier.simplify_cycl_implication(make_binary_formula(cycl_utilities.sentence_arg0(sentence), antecedent, consequent), varP));
+                                                                }
+                                                            } else {
+                                                                if (NIL != el_exception_p(sentence)) {
+                                                                    result = com.cyc.cycjava.cycl.simplifier.simplify_exception(sentence, varP);
+                                                                } else {
+                                                                    if (NIL != el_universal_p(sentence)) {
+                                                                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_universal(make_regularly_quantified_sentence(sentence_quantifier(sentence), quantified_var(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(quantified_sub_sentence(sentence), varP)));
+                                                                    } else {
+                                                                        if (NIL != el_existential_p(sentence)) {
+                                                                            result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_existential(make_regularly_quantified_sentence(sentence_quantifier(sentence), quantified_var(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(quantified_sub_sentence(sentence), UNPROVIDED)));
+                                                                        } else {
+                                                                            if (NIL != el_bounded_existential_p(sentence)) {
+                                                                                result = make_bounded_existential(sentence_quantifier(sentence), existential_bound(sentence), quantified_var(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(quantified_sub_sentence(sentence), varP));
+                                                                            } else {
+                                                                                if (NIL != atomic_sentenceP(sentence)) {
+                                                                                    result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal(sentence, varP);
+                                                                                } else {
+                                                                                    if (NIL == $simplify_using_semanticsP$.getDynamicValue(thread)) {
+                                                                                    } else {
+                                                                                        if (NIL != at_utilities.formula_denoting_functionP(sentence, UNPROVIDED)) {
+                                                                                            result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_relation(sentence);
+                                                                                        } else {
+                                                                                            if (NIL != term.unreified_skolem_termP(sentence)) {
+                                                                                                result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_relation(sentence);
+                                                                                            } else {
+                                                                                                if (NIL != relation_expressionP(sentence)) {
+                                                                                                    if (NIL != wff_vars.$within_wffP$.getDynamicValue(thread)) {
+                                                                                                        wff.note_wff_violation(list($INVALID_SENTENCE, sentence, $mt$.getDynamicValue(thread)));
+                                                                                                    }
+                                                                                                    thread.resetMultipleValues();
+                                                                                                    {
+                                                                                                        SubLObject simplified_sentence = com.cyc.cycjava.cycl.simplifier.simplify_cycl_relation(sentence);
+                                                                                                        SubLObject changedP = thread.secondMultipleValue();
+                                                                                                        thread.resetMultipleValues();
+                                                                                                        if (NIL != changedP) {
+                                                                                                            result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(simplified_sentence, UNPROVIDED);
+                                                                                                        } else {
+                                                                                                            result = simplified_sentence;
+                                                                                                        }
+                                                                                                    }
+                                                                                                } else {
+                                                                                                    if (NIL != wff_vars.$within_wffP$.getDynamicValue(thread)) {
+                                                                                                        wff.note_wff_violation(list($INVALID_SENTENCE, sentence, $mt$.getDynamicValue(thread)));
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject simplify_cycl_sentence_int(final SubLObject sentence, SubLObject varP) {
@@ -664,6 +1277,63 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject simplify_true_sentence_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sub_sentence = cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
+                if (NIL != subl_escape_p(sentence)) {
+                    return sentence;
+                } else {
+                    if (NIL != cycl_grammar.fast_cycl_quoted_term_p(sentence)) {
+                        return sentence;
+                    } else {
+                        if (NIL != funcall(varP, sub_sentence)) {
+                            return sentence;
+                        } else {
+                            if ((NIL != possibly_sentence_p(sub_sentence)) && (NIL != funcall(varP, cycl_utilities.sentence_arg0(sub_sentence)))) {
+                                return make_unary_formula(cycl_utilities.sentence_arg0(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP));
+                            } else {
+                                if ((NIL != possibly_sentence_p(sub_sentence)) && (NIL != true_sentenceP(sub_sentence))) {
+                                    return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP);
+                                } else {
+                                    if (NIL != $simplify_true_sentence_awayP$.getDynamicValue(thread)) {
+                                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP);
+                                    } else {
+                                        if ((NIL != within_disjunctionP()) || ((NIL != within_askP()) && (NIL != within_conjunctionP()))) {
+                                            return make_unary_formula(cycl_utilities.sentence_arg0(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP));
+                                        } else {
+                                            if (((NIL != within_askP()) && (NIL != within_negationP())) && (NIL != el_general_existential_p(sub_sentence))) {
+                                                return make_unary_formula(cycl_utilities.sentence_arg0(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP));
+                                            } else {
+                                                if (((NIL != within_askP()) && (NIL != el_universal_p(sub_sentence))) && (NIL == within_negationP())) {
+                                                    return make_unary_formula(cycl_utilities.sentence_arg0(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP));
+                                                } else {
+                                                    if ((NIL != within_askP()) && (NIL != el_universal_negation_p(sub_sentence))) {
+                                                        return make_unary_formula(cycl_utilities.sentence_arg0(sentence), com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP));
+                                                    } else {
+                                                        if (NIL != sub_sentence) {
+                                                            return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(sub_sentence, varP);
+                                                        } else {
+                                                            return sentence;
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject simplify_true_sentence(final SubLObject sentence, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -706,6 +1376,18 @@ public final class simplifier extends SubLTranslatedFile {
         return sentence;
     }
 
+    public static final SubLObject simplify_exception_alt(SubLObject sentence, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            SubLObject except_op = cycl_utilities.sentence_arg0(sentence);
+            SubLObject antecedent = cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
+            SubLObject consequent = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg2(sentence, UNPROVIDED), varP);
+            return make_binary_formula(except_op, antecedent, consequent);
+        }
+    }
+
     public static SubLObject simplify_exception(final SubLObject sentence, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -716,6 +1398,36 @@ public final class simplifier extends SubLTranslatedFile {
         return make_binary_formula(except_op, antecedent, consequent);
     }
 
+    /**
+     * Like @xref simplify-cycl-literal, but only does syntactic simplification.
+     */
+    @LispMethod(comment = "Like @xref simplify-cycl-literal, but only does syntactic simplification.")
+    public static final SubLObject simplify_cycl_literal_syntax_alt(SubLObject literal, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $simplify_using_semanticsP$.currentBinding(thread);
+                    try {
+                        $simplify_using_semanticsP$.bind(NIL, thread);
+                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal(literal, varP);
+                    } finally {
+                        $simplify_using_semanticsP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Like @xref simplify-cycl-literal, but only does syntactic simplification.
+     */
+    @LispMethod(comment = "Like @xref simplify-cycl-literal, but only does syntactic simplification.")
     public static SubLObject simplify_cycl_literal_syntax(final SubLObject literal, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -730,6 +1442,51 @@ public final class simplifier extends SubLTranslatedFile {
             czer_vars.$simplify_using_semanticsP$.rebind(_prev_bind_0, thread);
         }
         return result;
+    }
+
+    public static final SubLObject simplify_cycl_literal_alt(SubLObject literal, SubLObject var_func) {
+        if (var_func == UNPROVIDED) {
+            var_func = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != subl_escape_p(literal)) {
+                return literal;
+            } else {
+                if (NIL != cycl_grammar.fast_cycl_quoted_term_p(literal)) {
+                    return literal;
+                } else {
+                    if (NIL != true_sentenceP(literal)) {
+                        return com.cyc.cycjava.cycl.simplifier.simplify_true_sentence(literal, var_func);
+                    } else {
+                        if (NIL != $recanonicalizingP$.getDynamicValue(thread)) {
+                            return literal;
+                        } else {
+                            if (NIL != ist_sentence_p(literal)) {
+                                {
+                                    SubLObject result = com.cyc.cycjava.cycl.simplifier.simplify_ist_sentence(literal);
+                                    if (!result.equal(literal)) {
+                                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence(result, UNPROVIDED);
+                                    }
+                                }
+                            }
+                            if (NIL == $simplify_literalP$.getDynamicValue(thread)) {
+                                return literal;
+                            }
+                            if (NIL != kappa_asent_p(literal)) {
+                                {
+                                    SubLObject result = com.cyc.cycjava.cycl.simplifier.simplify_kappa_asent(literal);
+                                    if (!result.equal(literal)) {
+                                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence(result, UNPROVIDED);
+                                    }
+                                }
+                            }
+                            return com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_int(literal, var_func);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject simplify_cycl_literal(SubLObject literal, SubLObject var_func) {
@@ -784,6 +1541,53 @@ public final class simplifier extends SubLTranslatedFile {
         return simplify_cycl_literal_int(literal, var_func);
     }
 
+    public static final SubLObject simplify_cycl_literal_int_alt(SubLObject literal, SubLObject var_func) {
+        if (var_func == UNPROVIDED) {
+            var_func = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                if (NIL != $simplify_using_semanticsP$.getDynamicValue(thread)) {
+                    {
+                        SubLObject _prev_bind_0 = wff_utilities.$check_wff_semanticsP$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = wff_utilities.$check_var_typesP$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = wff_utilities.$check_wff_coherenceP$.currentBinding(thread);
+                        try {
+                            wff_utilities.$check_wff_semanticsP$.bind(T, thread);
+                            wff_utilities.$check_var_typesP$.bind(NIL, thread);
+                            wff_utilities.$check_wff_coherenceP$.bind(NIL, thread);
+                            if ((((NIL != within_assertP()) || (NIL != $trying_to_simplify_non_wff_into_wffP$.getDynamicValue(thread))) || (NIL == $simplify_non_wff_literalP$.getDynamicValue(thread))) || (NIL != wff.semantically_wf_literalP(literal, $mt$.getDynamicValue(thread)))) {
+                                result = com.cyc.cycjava.cycl.simplifier.simplify_distributing_out_args(com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms(literal, var_func));
+                            } else {
+                                if (NIL != $try_to_simplify_non_wff_into_wffP$.getDynamicValue(thread)) {
+                                    {
+                                        SubLObject simplified_literal = com.cyc.cycjava.cycl.simplifier.simplify_distributing_out_args(com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms(literal, var_func));
+                                        if (NIL != wff.semantically_wf_literalP(simplified_literal, $mt$.getDynamicValue(thread))) {
+                                            result = simplified_literal;
+                                        } else {
+                                            result = $$False;
+                                        }
+                                    }
+                                } else {
+                                    result = $$False;
+                                }
+                            }
+                        } finally {
+                            wff_utilities.$check_wff_coherenceP$.rebind(_prev_bind_2, thread);
+                            wff_utilities.$check_var_typesP$.rebind(_prev_bind_1, thread);
+                            wff_utilities.$check_wff_semanticsP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                } else {
+                    result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms(literal, UNPROVIDED);
+                }
+                return result;
+            }
+        }
+    }
+
     public static SubLObject simplify_cycl_literal_int(final SubLObject literal, SubLObject var_func) {
         if (var_func == UNPROVIDED) {
             var_func = symbol_function($sym8$CYC_VAR_);
@@ -823,6 +1627,16 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject distributes_out_of_argP_alt(SubLObject reln, SubLObject pred, SubLObject arg, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (NIL != forts.fort_p(pred)) {
+            return kb_mapping_utilities.tuple_holds_in_relevant_mts(make_ternary_formula($$distributesOutOfArg, reln, pred, arg), mt, TWO_INTEGER, UNPROVIDED);
+        }
+        return NIL;
+    }
+
     public static SubLObject distributes_out_of_argP(final SubLObject reln, final SubLObject pred, final SubLObject arg, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -831,6 +1645,48 @@ public final class simplifier extends SubLTranslatedFile {
             return kb_mapping_utilities.tuple_holds_in_relevant_mts(make_ternary_formula($$distributesOutOfArg, reln, pred, arg), mt, TWO_INTEGER, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject simplify_distributing_out_args_alt(SubLObject literal) {
+        {
+            SubLObject pred = literal_arg0(literal, UNPROVIDED);
+            SubLObject arg = ZERO_INTEGER;
+            SubLObject result = NIL;
+            if (NIL == result) {
+                {
+                    SubLObject csome_list_var = literal_args(literal, UNPROVIDED);
+                    SubLObject v_term = NIL;
+                    for (v_term = csome_list_var.first(); !((NIL != result) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , v_term = csome_list_var.first()) {
+                        arg = add(arg, ONE_INTEGER);
+                        if (NIL != el_relation_expressionP(v_term)) {
+                            {
+                                SubLObject reln = cycl_utilities.formula_arg0(v_term);
+                                if (NIL != com.cyc.cycjava.cycl.simplifier.distributes_out_of_argP(reln, pred, arg, UNPROVIDED)) {
+                                    {
+                                        SubLObject literals = NIL;
+                                        SubLObject sentence = NIL;
+                                        SubLObject cdolist_list_var = cycl_utilities.formula_args(v_term, UNPROVIDED);
+                                        SubLObject sub_arg = NIL;
+                                        for (sub_arg = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_arg = cdolist_list_var.first()) {
+                                            literals = cons(replace_nth(arg, sub_arg, literal), literals);
+                                        }
+                                        sentence = make_el_formula(reln, reverse(literals), UNPROVIDED);
+                                        if (NIL != czer_main.canon_wffP(sentence, UNPROVIDED)) {
+                                            result = sentence;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (NIL != result) {
+                return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(result, UNPROVIDED);
+            } else {
+                return literal;
+            }
+        }
     }
 
     public static SubLObject simplify_distributing_out_args(final SubLObject literal) {
@@ -872,6 +1728,17 @@ public final class simplifier extends SubLTranslatedFile {
         return literal;
     }
 
+    public static final SubLObject simplify_cycl_literal_terms_alt(SubLObject literal, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        if (NIL != mt_designating_literalP(literal)) {
+            return com.cyc.cycjava.cycl.simplifier.simplify_mt_literal_terms(literal, varP);
+        } else {
+            return com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms_int(literal, varP);
+        }
+    }
+
     public static SubLObject simplify_cycl_literal_terms(final SubLObject literal, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -880,6 +1747,78 @@ public final class simplifier extends SubLTranslatedFile {
             return simplify_mt_literal_terms(literal, varP);
         }
         return simplify_cycl_literal_terms_int(literal, varP);
+    }
+
+    public static final SubLObject simplify_mt_literal_terms_alt(SubLObject literal, SubLObject varP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt_arg = designated_mt(literal);
+                SubLObject result = NIL;
+                if (NIL != fort_types_interface.mtP(mt_arg)) {
+                    {
+                        SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
+                        try {
+                            $relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
+                            $mt$.bind(mt_arg, thread);
+                            result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms_int(literal, varP);
+                        } finally {
+                            $mt$.rebind(_prev_bind_1, thread);
+                            $relevant_mt_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                } else {
+                    if (NIL != cycl_variables.cyc_varP(mt_arg)) {
+                        if ((NIL != within_askP()) || ((NIL != within_negationP()) && (NIL != within_disjunctionP()))) {
+                            {
+                                SubLObject _prev_bind_0 = $simplify_literalP$.currentBinding(thread);
+                                try {
+                                    $simplify_literalP$.bind(NIL, thread);
+                                    result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms_int(literal, varP);
+                                } finally {
+                                    $simplify_literalP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        } else {
+                            if (NIL != within_assertP()) {
+                                {
+                                    SubLObject mt_var = with_inference_mt_relevance_validate(mt_vars.$assertible_theory_mt_root$.getGlobalValue());
+                                    {
+                                        SubLObject _prev_bind_0 = $mt$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = $relevant_mt_function$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = $relevant_mts$.currentBinding(thread);
+                                        try {
+                                            $mt$.bind(update_inference_mt_relevance_mt(mt_var), thread);
+                                            $relevant_mt_function$.bind(update_inference_mt_relevance_function(mt_var), thread);
+                                            $relevant_mts$.bind(update_inference_mt_relevance_mt_list(mt_var), thread);
+                                            result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms_int(literal, varP);
+                                        } finally {
+                                            $relevant_mts$.rebind(_prev_bind_2, thread);
+                                            $relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                            $mt$.rebind(_prev_bind_0, thread);
+                                        }
+                                    }
+                                }
+                            } else {
+                                {
+                                    SubLObject _prev_bind_0 = $simplify_literalP$.currentBinding(thread);
+                                    try {
+                                        $simplify_literalP$.bind(NIL, thread);
+                                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_literal_terms_int(literal, varP);
+                                    } finally {
+                                        $simplify_literalP$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        result = literal;
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject simplify_mt_literal_terms(final SubLObject literal, final SubLObject varP) {
@@ -940,6 +1879,56 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject simplify_cycl_literal_terms_int_alt(SubLObject literal, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt = $mt$.getDynamicValue(thread);
+                SubLObject pred = literal_arg0(literal, UNPROVIDED);
+                SubLObject sequence_var = sequence_var(literal, UNPROVIDED);
+                SubLObject result = NIL;
+                SubLObject terms = cycl_utilities.formula_terms(literal, $IGNORE);
+                SubLObject list_var = NIL;
+                SubLObject v_term = NIL;
+                SubLObject argnum = NIL;
+                for (list_var = terms, v_term = list_var.first(), argnum = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , v_term = list_var.first() , argnum = number_utilities.f_1X(argnum)) {
+                    {
+                        SubLObject _prev_bind_0 = wff_vars.$permit_keyword_variablesP$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = wff_vars.$permit_generic_arg_variablesP$.currentBinding(thread);
+                        try {
+                            wff_vars.$permit_keyword_variablesP$.bind(makeBoolean((NIL != wff_vars.$permit_keyword_variablesP$.getDynamicValue(thread)) || (NIL != arg_permits_keyword_variablesP(pred, argnum, mt))), thread);
+                            wff_vars.$permit_generic_arg_variablesP$.bind(makeBoolean((NIL != wff_vars.$permit_generic_arg_variablesP$.getDynamicValue(thread)) || (NIL != arg_permits_generic_arg_variablesP(pred, argnum, mt))), thread);
+                            {
+                                SubLObject sentence_argP = sentence_argP(pred, argnum, mt);
+                                SubLObject mal_true_sentence_argP = (NIL != sentence_argP) ? ((SubLObject) (NIL != indexed_argP(pred, argnum) ? ((SubLObject) (NIL)) : true_sentenceP(v_term))) : NIL;
+                                if (NIL != mal_true_sentence_argP) {
+                                    result = cons(com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.formula_arg1(v_term, UNPROVIDED), varP), result);
+                                } else {
+                                    if (NIL != sentence_argP) {
+                                        result = cons(com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(v_term, varP), result);
+                                    } else {
+                                        result = cons(com.cyc.cycjava.cycl.simplifier.simplify_cycl_term(v_term, varP), result);
+                                    }
+                                }
+                            }
+                        } finally {
+                            wff_vars.$permit_generic_arg_variablesP$.rebind(_prev_bind_1, thread);
+                            wff_vars.$permit_keyword_variablesP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                result = nreverse(result);
+                if (NIL != sequence_var) {
+                    result = nadd_sequence_var_to_end(sequence_var, result);
+                }
+                return result;
+            }
+        }
+    }
+
     public static SubLObject simplify_cycl_literal_terms_int(final SubLObject literal, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -982,6 +1971,71 @@ public final class simplifier extends SubLTranslatedFile {
             result = nadd_sequence_var_to_end(sequence_var, result);
         }
         return result;
+    }
+
+    public static final SubLObject simplify_cycl_term_alt(SubLObject v_term, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != subl_escape_p(v_term)) {
+                return v_term;
+            } else {
+                if (NIL != cycl_grammar.fast_cycl_quoted_term_p(v_term)) {
+                    return v_term;
+                } else {
+                    if (NIL != term.nautP(v_term, UNPROVIDED)) {
+                        {
+                            SubLObject functor = cycl_utilities.nat_functor(v_term);
+                            SubLObject sequence_var = sequence_var(v_term, UNPROVIDED);
+                            SubLObject arg = ZERO_INTEGER;
+                            SubLObject new_term = NIL;
+                            SubLObject terms = cycl_utilities.formula_terms(v_term, $IGNORE);
+                            SubLObject cdolist_list_var = terms;
+                            SubLObject subterm = NIL;
+                            for (subterm = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subterm = cdolist_list_var.first()) {
+                                {
+                                    SubLObject sentence_argP = sentence_argP(functor, arg, $mt$.getDynamicValue(thread));
+                                    SubLObject mal_true_sentence_argP = (NIL != sentence_argP) ? ((SubLObject) (NIL != indexed_argP(functor, arg) ? ((SubLObject) (NIL)) : true_sentenceP(subterm))) : NIL;
+                                    if (NIL != mal_true_sentence_argP) {
+                                        new_term = cons(com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.formula_arg1(subterm, UNPROVIDED), varP), new_term);
+                                    } else {
+                                        if (NIL != sentence_argP) {
+                                            new_term = cons(com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(subterm, varP), new_term);
+                                        } else {
+                                            new_term = cons(com.cyc.cycjava.cycl.simplifier.simplify_cycl_term(subterm, varP), new_term);
+                                        }
+                                    }
+                                }
+                                arg = add(arg, ONE_INTEGER);
+                            }
+                            new_term = nreverse(new_term);
+                            if (NIL != sequence_var) {
+                                new_term = nadd_sequence_var_to_end(sequence_var, new_term);
+                            }
+                            return new_term;
+                        }
+                    } else {
+                        if (NIL != relation_expressionP(v_term)) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject simplified_term = com.cyc.cycjava.cycl.simplifier.simplify_cycl_relation(v_term);
+                                SubLObject changedP = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                if (NIL != changedP) {
+                                    return com.cyc.cycjava.cycl.simplifier.simplify_cycl_term(simplified_term, UNPROVIDED);
+                                } else {
+                                    return simplified_term;
+                                }
+                            }
+                        } else {
+                            return v_term;
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject simplify_cycl_term(final SubLObject v_term, SubLObject varP) {
@@ -1080,6 +2134,31 @@ public final class simplifier extends SubLTranslatedFile {
         return simplified_term;
     }
 
+    /**
+     * Returns the negation of SENTENCE.
+     * If SENTENCE is of the form (#$not <subform>), it returns <subform> instead of (#$not (#$not <subform>)).
+     * Can also handle #$True, #$False, or variables.
+     */
+    @LispMethod(comment = "Returns the negation of SENTENCE.\r\nIf SENTENCE is of the form (#$not <subform>), it returns <subform> instead of (#$not (#$not <subform>)).\r\nCan also handle #$True, #$False, or variables.\nReturns the negation of SENTENCE.\nIf SENTENCE is of the form (#$not <subform>), it returns <subform> instead of (#$not (#$not <subform>)).\nCan also handle #$True, #$False, or variables.")
+    public static final SubLObject el_negate_alt(SubLObject sentence) {
+        if (NIL != el_negation_p(sentence)) {
+            return cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
+        } else {
+            if ((((NIL != possibly_sentence_p(sentence)) || ($$True == sentence)) || ($$False == sentence)) || (NIL != cycl_variables.el_varP(sentence))) {
+                return make_negation(sentence);
+            } else {
+                el_error(FOUR_INTEGER, $str_alt17$You_tried_to_negate__S___That_was, sentence, UNPROVIDED, UNPROVIDED);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Returns the negation of SENTENCE.
+     * If SENTENCE is of the form (#$not <subform>), it returns <subform> instead of (#$not (#$not <subform>)).
+     * Can also handle #$True, #$False, or variables.
+     */
+    @LispMethod(comment = "Returns the negation of SENTENCE.\r\nIf SENTENCE is of the form (#$not <subform>), it returns <subform> instead of (#$not (#$not <subform>)).\r\nCan also handle #$True, #$False, or variables.\nReturns the negation of SENTENCE.\nIf SENTENCE is of the form (#$not <subform>), it returns <subform> instead of (#$not (#$not <subform>)).\nCan also handle #$True, #$False, or variables.")
     public static SubLObject el_negate(final SubLObject sentence) {
         if (NIL != el_negation_p(sentence)) {
             return cycl_utilities.sentence_arg1(sentence, UNPROVIDED);
@@ -1088,6 +2167,29 @@ public final class simplifier extends SubLTranslatedFile {
             return make_negation(sentence);
         }
         el_error(FOUR_INTEGER, $str23$You_tried_to_negate__S___That_was, sentence, UNPROVIDED, UNPROVIDED);
+        return NIL;
+    }
+
+    public static final SubLObject simplify_cycl_negation_alt(SubLObject negation, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        if (NIL == el_negation_p(negation)) {
+        } else {
+            if ($$False == cycl_utilities.sentence_arg1(negation, UNPROVIDED)) {
+                return $$True;
+            } else {
+                if ($$True == cycl_utilities.sentence_arg1(negation, UNPROVIDED)) {
+                    return $$False;
+                } else {
+                    if (NIL != el_negation_p(cycl_utilities.sentence_arg1(negation, UNPROVIDED))) {
+                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg1(cycl_utilities.sentence_arg1(negation, UNPROVIDED), UNPROVIDED), varP);
+                    } else {
+                        return negation;
+                    }
+                }
+            }
+        }
         return NIL;
     }
 
@@ -1108,6 +2210,120 @@ public final class simplifier extends SubLTranslatedFile {
             return simplify_cycl_sentence_int(cycl_utilities.sentence_arg1(cycl_utilities.sentence_arg1(negation, UNPROVIDED), UNPROVIDED), varP);
         }
         return negation;
+    }
+
+    public static final SubLObject simplify_cycl_conjunction_alt(SubLObject conjunction, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == el_conjunction_p(conjunction)) {
+            } else {
+                if (NIL == cycl_utilities.sentence_args(conjunction, $REGULARIZE)) {
+                    return $$True;
+                } else {
+                    if ((NIL == sequence_var(conjunction, UNPROVIDED)) && (NIL != singletonP(cycl_utilities.sentence_args(conjunction, $IGNORE)))) {
+                        return cycl_utilities.sentence_arg1(conjunction, $IGNORE);
+                    } else {
+                        if (NIL != subl_promotions.memberP($$False, cycl_utilities.sentence_args(conjunction, $IGNORE), UNPROVIDED, UNPROVIDED)) {
+                            return $$False;
+                        } else {
+                            if (NIL != subl_promotions.memberP($$True, cycl_utilities.sentence_args(conjunction, $IGNORE), UNPROVIDED, UNPROVIDED)) {
+                                return com.cyc.cycjava.cycl.simplifier.simplify_cycl_conjunction(remove($$True, conjunction, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), varP);
+                            } else {
+                                if (NIL != duplicatesP(cycl_utilities.sentence_args(conjunction, $IGNORE), symbol_function(EQUAL), UNPROVIDED)) {
+                                    {
+                                        SubLObject seqvar = sequence_var(conjunction, UNPROVIDED);
+                                        SubLObject new_args = remove_duplicates(cycl_utilities.sentence_args(conjunction, $IGNORE), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_conjunction(make_el_formula(cycl_utilities.sentence_arg0(conjunction), new_args, seqvar), varP);
+                                    }
+                                } else {
+                                    if (NIL != find_if(symbol_function(EL_CONJUNCTION_P), cycl_utilities.sentence_args(conjunction, $IGNORE), UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                                        {
+                                            SubLObject seqvar = sequence_var(conjunction, UNPROVIDED);
+                                            if (NIL != seqvar) {
+                                                return com.cyc.cycjava.cycl.simplifier.simplify_cycl_conjunction(append(com.cyc.cycjava.cycl.simplifier.nconjoin(cycl_utilities.sentence_args(conjunction, $IGNORE), T), seqvar), UNPROVIDED);
+                                            } else {
+                                                return com.cyc.cycjava.cycl.simplifier.simplify_cycl_conjunction(com.cyc.cycjava.cycl.simplifier.conjoin(cycl_utilities.sentence_args(conjunction, UNPROVIDED), T), UNPROVIDED);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject negations = el_negative_sentences(cycl_utilities.sentence_args(conjunction, $IGNORE));
+                SubLObject positives = ((NIL != negations) || (NIL != com.cyc.cycjava.cycl.simplifier.simplify_redundanciesP())) ? ((SubLObject) (el_positive_sentences(cycl_utilities.sentence_args(conjunction, $IGNORE)))) : NIL;
+                SubLObject disjunctions = (NIL != com.cyc.cycjava.cycl.simplifier.simplify_redundanciesP()) ? ((SubLObject) (remove_if_not(symbol_function(EL_DISJUNCTION_P), positives, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) : NIL;
+                SubLObject falseP = NIL;
+                if (NIL == falseP) {
+                    {
+                        SubLObject csome_list_var = negations;
+                        SubLObject negation = NIL;
+                        for (negation = csome_list_var.first(); !((NIL != falseP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , negation = csome_list_var.first()) {
+                            falseP = subl_promotions.memberP(cycl_utilities.sentence_arg1(negation, $IGNORE), positives, symbol_function(EQUAL), UNPROVIDED);
+                        }
+                    }
+                }
+                if (NIL != falseP) {
+                    return $$False;
+                }
+                if (NIL != disjunctions) {
+                    {
+                        SubLObject non_disjunctions = delete_if(symbol_function(EL_DISJUNCTION_P), positives, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject new_conjuncts = NIL;
+                        SubLObject cdolist_list_var = disjunctions;
+                        SubLObject disjunction = NIL;
+                        for (disjunction = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , disjunction = cdolist_list_var.first()) {
+                            {
+                                SubLObject conjuncts = cycl_utilities.sentence_args(conjunction, UNPROVIDED);
+                                SubLObject disjuncts = cycl_utilities.sentence_args(disjunction, UNPROVIDED);
+                                if (NIL == intersectP(conjuncts, disjuncts, symbol_function(EQUAL), UNPROVIDED)) {
+                                    new_conjuncts = cons(disjunction, new_conjuncts);
+                                }
+                            }
+                        }
+                        return com.cyc.cycjava.cycl.simplifier.nconjoin(append(non_disjunctions, nreverse(new_conjuncts)), UNPROVIDED);
+                    }
+                }
+            }
+            if ((NIL != $simplify_equal_symbols_literalP$.getDynamicValue(thread)) && ((NIL == within_negationP()) || (NIL != within_disjunctionP()))) {
+                {
+                    SubLObject argnum = ZERO_INTEGER;
+                    SubLObject args = cycl_utilities.formula_args(conjunction, $IGNORE);
+                    SubLObject cdolist_list_var = args;
+                    SubLObject conjunct = NIL;
+                    for (conjunct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , conjunct = cdolist_list_var.first()) {
+                        argnum = add(argnum, ONE_INTEGER);
+                        if (NIL != el_formula_with_any_of_operators_p(conjunct, $list_alt19)) {
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject equal_op = unmake_binary_formula(conjunct);
+                                SubLObject arg1 = thread.secondMultipleValue();
+                                SubLObject arg2 = thread.thirdMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject var_arg1P = funcall(varP, arg1);
+                                    SubLObject var_arg = (NIL != var_arg1P) ? ((SubLObject) (arg1)) : arg2;
+                                    SubLObject bound_arg = (NIL != var_arg1P) ? ((SubLObject) (arg2)) : arg1;
+                                    if (NIL != groundP(bound_arg, varP)) {
+                                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_conjunction(cycl_utilities.expression_subst(bound_arg, var_arg, remove_formula_arg(argnum, conjunction), UNPROVIDED, UNPROVIDED), UNPROVIDED);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (NIL != com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundanciesP()) {
+                conjunction = com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundancies(conjunction, UNPROVIDED);
+            }
+            return conjunction;
+        }
     }
 
     public static SubLObject simplify_cycl_conjunction(SubLObject conjunctionIn, SubLObject varP) {
@@ -1424,6 +2640,34 @@ public final class simplifier extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject simplify_cycl_disjunction_alt(SubLObject disjunction, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = at_vars.$within_disjunctionP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = at_vars.$within_negated_disjunctionP$.currentBinding(thread);
+                    try {
+                        at_vars.$within_disjunctionP$.bind(T, thread);
+                        at_vars.$within_negated_disjunctionP$.bind($within_negationP$.getDynamicValue(thread), thread);
+                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_disjunction_int(disjunction, varP);
+                    } finally {
+                        at_vars.$within_negated_disjunctionP$.rebind(_prev_bind_1, thread);
+                        at_vars.$within_disjunctionP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundanciesP()) {
+                    disjunction = com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundancies_in_cycl_disjunction(disjunction, UNPROVIDED);
+                }
+                return result;
+            }
+        }
+    }
+
     public static SubLObject simplify_cycl_disjunction(SubLObject disjunction, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -1444,6 +2688,70 @@ public final class simplifier extends SubLTranslatedFile {
             disjunction = simplify_transitive_redundancies_in_cycl_disjunction(disjunction, UNPROVIDED);
         }
         return result;
+    }
+
+    public static final SubLObject simplify_cycl_disjunction_int_alt(SubLObject disjunction, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        if (NIL == el_disjunction_p(disjunction)) {
+        } else {
+            if (NIL == cycl_utilities.sentence_args(disjunction, $REGULARIZE)) {
+                return $$False;
+            } else {
+                if ((NIL == sequence_var(disjunction, UNPROVIDED)) && (NIL != singletonP(cycl_utilities.sentence_args(disjunction, $IGNORE)))) {
+                    return cycl_utilities.sentence_arg1(disjunction, $IGNORE);
+                } else {
+                    if (NIL != subl_promotions.memberP($$True, cycl_utilities.sentence_args(disjunction, $IGNORE), UNPROVIDED, UNPROVIDED)) {
+                        return $$True;
+                    } else {
+                        if (NIL != subl_promotions.memberP($$False, cycl_utilities.sentence_args(disjunction, $IGNORE), UNPROVIDED, UNPROVIDED)) {
+                            return com.cyc.cycjava.cycl.simplifier.simplify_cycl_disjunction_int(remove($$False, disjunction, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), varP);
+                        } else {
+                            if (NIL != duplicatesP(cycl_utilities.sentence_args(disjunction, $IGNORE), symbol_function(EQUAL), UNPROVIDED)) {
+                                {
+                                    SubLObject seqvar = sequence_var(disjunction, UNPROVIDED);
+                                    SubLObject new_args = remove_duplicates(cycl_utilities.sentence_args(disjunction, $IGNORE), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    return com.cyc.cycjava.cycl.simplifier.simplify_cycl_disjunction_int(make_el_formula(cycl_utilities.sentence_arg0(disjunction), new_args, seqvar), varP);
+                                }
+                            } else {
+                                if (NIL != find_if(symbol_function(EL_DISJUNCTION_P), cycl_utilities.sentence_args(disjunction, $IGNORE), UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                                    {
+                                        SubLObject seqvar = sequence_var(disjunction, UNPROVIDED);
+                                        if (NIL != seqvar) {
+                                            return com.cyc.cycjava.cycl.simplifier.simplify_cycl_disjunction_int(append(com.cyc.cycjava.cycl.simplifier.ndisjoin(cycl_utilities.sentence_args(disjunction, $IGNORE), T), seqvar), UNPROVIDED);
+                                        } else {
+                                            return com.cyc.cycjava.cycl.simplifier.simplify_cycl_disjunction_int(com.cyc.cycjava.cycl.simplifier.disjoin(cycl_utilities.sentence_args(disjunction, UNPROVIDED), T), UNPROVIDED);
+                                        }
+                                    }
+                                } else {
+                                    {
+                                        SubLObject negations = el_negative_sentences(cycl_utilities.sentence_args(disjunction, $IGNORE));
+                                        SubLObject positives = (NIL != negations) ? ((SubLObject) (el_positive_sentences(cycl_utilities.sentence_args(disjunction, $IGNORE)))) : NIL;
+                                        SubLObject trueP = NIL;
+                                        if (NIL == trueP) {
+                                            {
+                                                SubLObject csome_list_var = negations;
+                                                SubLObject negation = NIL;
+                                                for (negation = csome_list_var.first(); !((NIL != trueP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , negation = csome_list_var.first()) {
+                                                    trueP = subl_promotions.memberP(cycl_utilities.sentence_arg1(negation, $IGNORE), positives, symbol_function(EQUAL), UNPROVIDED);
+                                                }
+                                            }
+                                        }
+                                        if (NIL != trueP) {
+                                            return $$True;
+                                        } else {
+                                            return disjunction;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject simplify_cycl_disjunction_int(final SubLObject disjunction, SubLObject varP) {
@@ -1500,6 +2808,56 @@ public final class simplifier extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject simplify_cycl_implication_alt(SubLObject implication, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == el_implication_p(implication)) {
+            } else {
+                if (NIL == $simplify_implicationP$.getDynamicValue(thread)) {
+                    return implication;
+                } else {
+                    if (NIL != singletonP(cycl_utilities.sentence_args(implication, UNPROVIDED))) {
+                        return com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.negate(cycl_utilities.sentence_arg1(implication, UNPROVIDED)), varP);
+                    } else {
+                        if ($$True == cycl_utilities.sentence_arg2(implication, UNPROVIDED)) {
+                            return $$True;
+                        } else {
+                            if ($$False == cycl_utilities.sentence_arg1(implication, UNPROVIDED)) {
+                                return $$True;
+                            } else {
+                                if ($$True == cycl_utilities.sentence_arg1(implication, UNPROVIDED)) {
+                                    return cycl_utilities.sentence_arg2(implication, UNPROVIDED);
+                                } else {
+                                    if ($$False == cycl_utilities.sentence_arg2(implication, UNPROVIDED)) {
+                                        return cycl_utilities.negate(cycl_utilities.sentence_arg1(implication, UNPROVIDED));
+                                    } else {
+                                        if (NIL != $within_unassert$.getDynamicValue(thread)) {
+                                            return implication;
+                                        } else {
+                                            if (NIL != $recanonicalizingP$.getDynamicValue(thread)) {
+                                                return implication;
+                                            } else {
+                                                if (cycl_utilities.sentence_arg1(implication, UNPROVIDED).equal(cycl_utilities.sentence_arg2(implication, UNPROVIDED))) {
+                                                    return $$True;
+                                                } else {
+                                                    return implication;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject simplify_cycl_implication(final SubLObject implication, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -1538,6 +2896,41 @@ public final class simplifier extends SubLTranslatedFile {
         return implication;
     }
 
+    public static final SubLObject equal_implication_argsP_alt(SubLObject implication, SubLObject varP) {
+        if (varP == UNPROVIDED) {
+            varP = symbol_function($sym6$CYC_VAR_);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject antecedent = NIL;
+                SubLObject consequent = NIL;
+                {
+                    SubLObject _prev_bind_0 = at_vars.$within_disjunctionP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = at_vars.$within_negated_disjunctionP$.currentBinding(thread);
+                    try {
+                        at_vars.$within_disjunctionP$.bind(T, thread);
+                        at_vars.$within_negated_disjunctionP$.bind($within_negationP$.getDynamicValue(thread), thread);
+                        {
+                            SubLObject _prev_bind_0_2 = $within_negationP$.currentBinding(thread);
+                            try {
+                                $within_negationP$.bind(makeBoolean(NIL == $within_negationP$.getDynamicValue(thread)), thread);
+                                antecedent = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg1(implication, UNPROVIDED), varP);
+                            } finally {
+                                $within_negationP$.rebind(_prev_bind_0_2, thread);
+                            }
+                        }
+                        consequent = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(cycl_utilities.sentence_arg2(implication, UNPROVIDED), varP);
+                    } finally {
+                        at_vars.$within_negated_disjunctionP$.rebind(_prev_bind_1, thread);
+                        at_vars.$within_disjunctionP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return equal(antecedent, consequent);
+            }
+        }
+    }
+
     public static SubLObject equal_implication_argsP(final SubLObject implication, SubLObject varP) {
         if (varP == UNPROVIDED) {
             varP = symbol_function($sym8$CYC_VAR_);
@@ -1565,6 +2958,18 @@ public final class simplifier extends SubLTranslatedFile {
         return equal(antecedent, consequent);
     }
 
+    public static final SubLObject simplify_cycl_universal_alt(SubLObject universal) {
+        {
+            SubLObject var = quantified_var(universal);
+            SubLObject sub_sentence = quantified_sub_sentence(universal);
+            if (NIL != cycl_utilities.expression_find(var, sub_sentence, T, UNPROVIDED, UNPROVIDED)) {
+                return universal;
+            } else {
+                return sub_sentence;
+            }
+        }
+    }
+
     public static SubLObject simplify_cycl_universal(final SubLObject universal) {
         final SubLObject var = quantified_var(universal);
         final SubLObject sub_sentence = quantified_sub_sentence(universal);
@@ -1572,6 +2977,18 @@ public final class simplifier extends SubLTranslatedFile {
             return universal;
         }
         return sub_sentence;
+    }
+
+    public static final SubLObject simplify_cycl_existential_alt(SubLObject existential) {
+        {
+            SubLObject var = quantified_var(existential);
+            SubLObject sub_sentence = quantified_sub_sentence(existential);
+            if (NIL != cycl_utilities.expression_find(var, sub_sentence, T, UNPROVIDED, UNPROVIDED)) {
+                return existential;
+            } else {
+                return sub_sentence;
+            }
+        }
     }
 
     public static SubLObject simplify_cycl_existential(final SubLObject existential) {
@@ -1600,8 +3017,30 @@ public final class simplifier extends SubLTranslatedFile {
         return make_multiply_quantified_sentence(sentence_quantifier(quantified), nreverse(attested_vars), sub_sentence);
     }
 
+    /**
+     * Performs minor recursive simplifications on the relation expression RELATION.
+     */
+    @LispMethod(comment = "Performs minor recursive simplifications on the relation expression RELATION.")
+    public static final SubLObject simplify_cycl_relation_alt(SubLObject relation) {
+        return relation;
+    }
+
+    /**
+     * Performs minor recursive simplifications on the relation expression RELATION.
+     */
+    @LispMethod(comment = "Performs minor recursive simplifications on the relation expression RELATION.")
     public static SubLObject simplify_cycl_relation(final SubLObject relation_expression) {
         return values(relation_expression, NIL);
+    }
+
+    public static final SubLObject simplify_special_cases_alt(SubLObject formula) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $simplify_using_semanticsP$.getDynamicValue(thread)) {
+                formula = com.cyc.cycjava.cycl.simplifier.simplify_nested_collectionsubsetfn_expression(formula);
+            }
+            return formula;
+        }
     }
 
     public static SubLObject simplify_special_cases(SubLObject formula) {
@@ -1613,10 +3052,62 @@ public final class simplifier extends SubLTranslatedFile {
         return formula;
     }
 
+    public static final SubLObject simplify_nested_collectionsubsetfn_expression_alt(SubLObject formula) {
+        return transform_list_utilities.transform(formula, symbol_function($sym20$NESTED_COLLECTIONSUBSETFN_EXPRESSION_), symbol_function(TRANSFORM_NESTED_COLLECTIONSUBSETFN_EXPRESSION), UNPROVIDED);
+    }
+
     public static SubLObject simplify_nested_collectionsubsetfn_expression(final SubLObject formula) {
         return transform_list_utilities.transform(formula, symbol_function($sym30$NESTED_COLLECTIONSUBSETFN_EXPRESSION_), symbol_function(TRANSFORM_NESTED_COLLECTIONSUBSETFN_EXPRESSION), UNPROVIDED);
     }
 
+    /**
+     *
+     *
+     * @param expression
+     * 		EL formula; assumed to be of the form
+     * 		(CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))
+     * 		(TheSetOf ?Y <bleh>))
+     * @return EL formula; a simplified version of EXPRESSION, of the form
+    (CollectionSubsetFn COL (TheSetOf ?X (and <blah> <bleh[?X/?Y]>)))
+     */
+    @LispMethod(comment = "@param expression\r\n\t\tEL formula; assumed to be of the form\r\n\t\t(CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))\r\n\t\t(TheSetOf ?Y <bleh>))\r\n@return EL formula; a simplified version of EXPRESSION, of the form\r\n(CollectionSubsetFn COL (TheSetOf ?X (and <blah> <bleh[?X/?Y]>)))")
+    public static final SubLObject transform_nested_collectionsubsetfn_expression_alt(SubLObject expression) {
+        {
+            SubLObject nested_expression = cycl_utilities.formula_arg1(expression, UNPROVIDED);
+            SubLObject nested_col = cycl_utilities.formula_arg1(nested_expression, UNPROVIDED);
+            SubLObject nested_set = cycl_utilities.formula_arg2(nested_expression, UNPROVIDED);
+            SubLObject nested_set_var = cycl_utilities.formula_arg1(nested_set, UNPROVIDED);
+            SubLObject nested_set_sentence = cycl_utilities.formula_arg2(nested_set, UNPROVIDED);
+            SubLObject v_set = cycl_utilities.formula_arg2(expression, UNPROVIDED);
+            SubLObject set_var = cycl_utilities.formula_arg1(v_set, UNPROVIDED);
+            SubLObject set_sentence = cycl_utilities.formula_arg2(v_set, UNPROVIDED);
+            if ((!set_var.equal(nested_set_var)) && (NIL != tree_find(nested_set_var, set_sentence, UNPROVIDED, UNPROVIDED))) {
+                {
+                    SubLObject done = NIL;
+                    SubLObject new_var = NIL;
+                    for (new_var = cycl_variables.make_el_var(symbol_name(cycl_variables.gensym_el_var(symbol_name(nested_set_var)))); NIL == done; new_var = cycl_variables.make_el_var(symbol_name(cycl_variables.gensym_el_var(symbol_name(nested_set_var))))) {
+                        if (NIL == tree_find(new_var, set_sentence, UNPROVIDED, UNPROVIDED)) {
+                            nsubst(new_var, nested_set_var, set_sentence, UNPROVIDED, UNPROVIDED);
+                            done = T;
+                        }
+                    }
+                }
+            }
+            return make_binary_formula($$CollectionSubsetFn, nested_col, make_binary_formula($$TheSetOf, nested_set_var, com.cyc.cycjava.cycl.simplifier.conjoin(list(nested_set_sentence, nsubst(nested_set_var, set_var, set_sentence, UNPROVIDED, UNPROVIDED)), T)));
+        }
+    }
+
+    /**
+     *
+     *
+     * @param expression
+     * 		EL formula; assumed to be of the form
+     * 		(CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))
+     * 		(TheSetOf ?Y <bleh>))
+     * @return EL formula; a simplified version of EXPRESSION, of the form
+    (CollectionSubsetFn COL (TheSetOf ?X (and <blah> <bleh[?X/?Y]>)))
+     */
+    @LispMethod(comment = "@param expression\r\n\t\tEL formula; assumed to be of the form\r\n\t\t(CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))\r\n\t\t(TheSetOf ?Y <bleh>))\r\n@return EL formula; a simplified version of EXPRESSION, of the form\r\n(CollectionSubsetFn COL (TheSetOf ?X (and <blah> <bleh[?X/?Y]>)))")
     public static SubLObject transform_nested_collectionsubsetfn_expression(final SubLObject expression) {
         final SubLObject nested_expression = cycl_utilities.formula_arg1(expression, UNPROVIDED);
         final SubLObject nested_col = cycl_utilities.formula_arg1(nested_expression, UNPROVIDED);
@@ -1641,6 +3132,26 @@ public final class simplifier extends SubLTranslatedFile {
         return make_binary_formula($$CollectionSubsetFn, nested_col, make_binary_formula($$TheSetOf, nested_set_var, conjoin(list(nested_set_sentence, nsubst(nested_set_var, set_var, set_sentence, UNPROVIDED, UNPROVIDED)), T)));
     }
 
+    /**
+     *
+     *
+     * @return boolean; t iff EXPRESSION is of the form
+    (CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))
+    (TheSetOf ?Y <bleh>))
+     */
+    @LispMethod(comment = "@return boolean; t iff EXPRESSION is of the form\r\n(CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))\r\n(TheSetOf ?Y <bleh>))")
+    public static final SubLObject nested_collectionsubsetfn_expressionP_alt(SubLObject expression) {
+        return makeBoolean((((((((NIL != el_formula_p(expression)) && ($$CollectionSubsetFn == cycl_utilities.formula_arg0(expression))) && (NIL != el_formula_p(cycl_utilities.formula_arg1(expression, UNPROVIDED)))) && ($$CollectionSubsetFn == cycl_utilities.formula_arg0(cycl_utilities.formula_arg1(expression, UNPROVIDED)))) && (NIL != el_formula_p(cycl_utilities.formula_arg2(expression, UNPROVIDED)))) && ($$TheSetOf == cycl_utilities.formula_arg0(cycl_utilities.formula_arg2(expression, UNPROVIDED)))) && (NIL != el_formula_p(cycl_utilities.formula_arg2(cycl_utilities.formula_arg1(expression, UNPROVIDED), UNPROVIDED)))) && ($$TheSetOf == cycl_utilities.formula_arg0(cycl_utilities.formula_arg2(cycl_utilities.formula_arg1(expression, UNPROVIDED), UNPROVIDED))));
+    }
+
+    /**
+     *
+     *
+     * @return boolean; t iff EXPRESSION is of the form
+    (CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))
+    (TheSetOf ?Y <bleh>))
+     */
+    @LispMethod(comment = "@return boolean; t iff EXPRESSION is of the form\r\n(CollectionSubsetFn (CollectionSubsetFn COL (TheSetOf ?X <blah>))\r\n(TheSetOf ?Y <bleh>))")
     public static SubLObject nested_collectionsubsetfn_expressionP(final SubLObject expression) {
         return makeBoolean((((((((NIL != el_formula_p(expression)) && $$CollectionSubsetFn.eql(cycl_utilities.formula_arg0(expression))) && (NIL != el_formula_p(cycl_utilities.formula_arg1(expression, UNPROVIDED)))) && $$CollectionSubsetFn.eql(cycl_utilities.formula_arg0(cycl_utilities.formula_arg1(expression, UNPROVIDED)))) && (NIL != el_formula_p(cycl_utilities.formula_arg2(expression, UNPROVIDED)))) && $$TheSetOf.eql(cycl_utilities.formula_arg0(cycl_utilities.formula_arg2(expression, UNPROVIDED)))) && (NIL != el_formula_p(cycl_utilities.formula_arg2(cycl_utilities.formula_arg1(expression, UNPROVIDED), UNPROVIDED)))) && $$TheSetOf.eql(cycl_utilities.formula_arg0(cycl_utilities.formula_arg2(cycl_utilities.formula_arg1(expression, UNPROVIDED), UNPROVIDED))));
     }
@@ -1680,11 +3191,56 @@ public final class simplifier extends SubLTranslatedFile {
         return makeBoolean((NIL != possibly_naut_p(expression)) && (NIL != kb_utilities.kbeq($$IndividualAsFn, cycl_utilities.formula_arg0(expression))));
     }
 
+    public static final SubLObject simplify_redundanciesP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return $simplify_redundanciesP$.getDynamicValue(thread);
+        }
+    }
+
     public static SubLObject simplify_redundanciesP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return czer_vars.$simplify_redundanciesP$.getDynamicValue(thread);
     }
 
+    /**
+     * A #$Kappa expression can be simplified by substituting the
+     * arguments of the kappa expression into the arg2 of #$Kappa.
+     *
+     * @see :kappa-simplify-unary
+     * @see :simplifier-kappa-test
+     */
+    @LispMethod(comment = "A #$Kappa expression can be simplified by substituting the\r\narguments of the kappa expression into the arg2 of #$Kappa.\r\n\r\n@see :kappa-simplify-unary\r\n@see :simplifier-kappa-test\nA #$Kappa expression can be simplified by substituting the\narguments of the kappa expression into the arg2 of #$Kappa.")
+    public static final SubLObject simplify_kappa_asent_alt(SubLObject asent) {
+        {
+            SubLObject kappa_pred = cycl_utilities.formula_operator(asent);
+            if (formula_arity(asent, UNPROVIDED).numE(kappa_predicate_arity(kappa_pred))) {
+                {
+                    SubLObject actual_args = cycl_utilities.formula_args(asent, UNPROVIDED);
+                    SubLObject formal_args = kappa_predicate_formal_args(kappa_pred);
+                    SubLObject kappa_query = kappa_predicate_query(kappa_pred);
+                    SubLObject actual_arg = NIL;
+                    SubLObject actual_arg_3 = NIL;
+                    SubLObject formal_arg = NIL;
+                    SubLObject formal_arg_4 = NIL;
+                    for (actual_arg = actual_args, actual_arg_3 = actual_arg.first(), formal_arg = formal_args, formal_arg_4 = formal_arg.first(); !((NIL == formal_arg) && (NIL == actual_arg)); actual_arg = actual_arg.rest() , actual_arg_3 = actual_arg.first() , formal_arg = formal_arg.rest() , formal_arg_4 = formal_arg.first()) {
+                        kappa_query = cycl_utilities.formula_subst(actual_arg_3, formal_arg_4, kappa_query, UNPROVIDED, UNPROVIDED);
+                    }
+                    asent = make_unary_formula($$trueSentence, kappa_query);
+                }
+            }
+            return asent;
+        }
+    }
+
+    /**
+     * A #$Kappa expression can be simplified by substituting the
+     * arguments of the kappa expression into the arg2 of #$Kappa.
+     *
+     * @see :kappa-simplify-unary
+     * @see :simplifier-kappa-test
+     */
+    @LispMethod(comment = "A #$Kappa expression can be simplified by substituting the\r\narguments of the kappa expression into the arg2 of #$Kappa.\r\n\r\n@see :kappa-simplify-unary\r\n@see :simplifier-kappa-test\nA #$Kappa expression can be simplified by substituting the\narguments of the kappa expression into the arg2 of #$Kappa.")
     public static SubLObject simplify_kappa_asent(SubLObject asent) {
         final SubLObject kappa_pred = cycl_utilities.formula_operator(asent);
         if (formula_arity(asent, UNPROVIDED).numE(kappa_predicate_arity(kappa_pred))) {
@@ -1711,6 +3267,43 @@ public final class simplifier extends SubLTranslatedFile {
         return asent;
     }
 
+    /**
+     * distribute #$ist over #$and
+     * turn (#$ist #$FooMt (#$ist #$BarMt ...)) into (#$ist #$BarMt ...)
+     */
+    @LispMethod(comment = "distribute #$ist over #$and\r\nturn (#$ist #$FooMt (#$ist #$BarMt ...)) into (#$ist #$BarMt ...)\ndistribute #$ist over #$and\nturn (#$ist #$FooMt (#$ist #$BarMt ...)) into (#$ist #$BarMt ...)")
+    public static final SubLObject simplify_ist_sentence_alt(SubLObject ist_sentence) {
+        {
+            SubLObject mt = designated_mt(ist_sentence);
+            SubLObject subsentence = designated_sentence(ist_sentence);
+            if (NIL != el_conjunction_p(subsentence)) {
+                {
+                    SubLObject new_args = NIL;
+                    SubLObject args = cycl_utilities.formula_args(subsentence, $IGNORE);
+                    SubLObject cdolist_list_var = args;
+                    SubLObject conjunct = NIL;
+                    for (conjunct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , conjunct = cdolist_list_var.first()) {
+                        {
+                            SubLObject new_arg = list($$ist, mt, conjunct);
+                            new_args = cons(new_arg, new_args);
+                        }
+                    }
+                    return make_conjunction(nreverse(new_args));
+                }
+            } else {
+                if (NIL != ist_sentence_p(subsentence)) {
+                    return com.cyc.cycjava.cycl.simplifier.simplify_ist_sentence(subsentence);
+                }
+            }
+        }
+        return ist_sentence;
+    }
+
+    /**
+     * distribute #$ist over #$and
+     * turn (#$ist #$FooMt (#$ist #$BarMt ...)) into (#$ist #$BarMt ...)
+     */
+    @LispMethod(comment = "distribute #$ist over #$and\r\nturn (#$ist #$FooMt (#$ist #$BarMt ...)) into (#$ist #$BarMt ...)\ndistribute #$ist over #$and\nturn (#$ist #$FooMt (#$ist #$BarMt ...)) into (#$ist #$BarMt ...)")
     public static SubLObject simplify_ist_sentence(final SubLObject ist_sentence) {
         final SubLObject mt = designated_mt(ist_sentence);
         final SubLObject subsentence = designated_sentence(ist_sentence);
@@ -1819,6 +3412,40 @@ public final class simplifier extends SubLTranslatedFile {
         return dictionary.dictionary_enter(equality_dict, var, binding);
     }
 
+    /**
+     *
+     *
+     * @return EL formula; a recursively simplified version of FORMULA wrt sequence variables.
+     */
+    @LispMethod(comment = "@return EL formula; a recursively simplified version of FORMULA wrt sequence variables.")
+    public static final SubLObject simplify_sequence_variables_alt(SubLObject formula) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = $el_symbol_suffix_table$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $standardize_variables_memory$.currentBinding(thread);
+                    try {
+                        $el_symbol_suffix_table$.bind(NIL != $el_symbol_suffix_table$.getDynamicValue(thread) ? ((SubLObject) ($el_symbol_suffix_table$.getDynamicValue(thread))) : make_hash_table($int$32, symbol_function(EQL), UNPROVIDED), thread);
+                        $standardize_variables_memory$.bind(NIL != $standardize_variables_memory$.getDynamicValue(thread) ? ((SubLObject) ($standardize_variables_memory$.getDynamicValue(thread))) : NIL, thread);
+                        result = com.cyc.cycjava.cycl.simplifier.simplify_sequence_variables_1(formula);
+                    } finally {
+                        $standardize_variables_memory$.rebind(_prev_bind_1, thread);
+                        $el_symbol_suffix_table$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return EL formula; a recursively simplified version of FORMULA wrt sequence variables.
+     */
+    @LispMethod(comment = "@return EL formula; a recursively simplified version of FORMULA wrt sequence variables.")
     public static SubLObject simplify_sequence_variables(final SubLObject formula) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject result = NIL;
@@ -1835,6 +3462,48 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * A version of @xref simplify-sequence-variables to call if you already have the EL variable namespace bound.
+     */
+    @LispMethod(comment = "A version of @xref simplify-sequence-variables to call if you already have the EL variable namespace bound.")
+    public static final SubLObject simplify_sequence_variables_1_alt(SubLObject formula) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == possibly_sentence_p(formula)) {
+                return formula;
+            }
+            {
+                SubLObject result = NIL;
+                if (NIL != $simplifying_sequence_variablesP$.getDynamicValue(thread)) {
+                    result = formula;
+                } else {
+                    if (NIL != cycl_utilities.formula_find_if(symbol_function($sym27$FORMULA_WITH_SEQUENCE_TERM_), formula, NIL, UNPROVIDED)) {
+                        if (NIL != subformulas_wf_wrt_sequence_varsP(formula)) {
+                            {
+                                SubLObject _prev_bind_0 = $simplifying_sequence_variablesP$.currentBinding(thread);
+                                try {
+                                    $simplifying_sequence_variablesP$.bind(T, thread);
+                                    result = com.cyc.cycjava.cycl.simplifier.simplify_sequence_variables_int(formula, NIL, NIL);
+                                } finally {
+                                    $simplifying_sequence_variablesP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        } else {
+                            result = NIL;
+                        }
+                    } else {
+                        result = formula;
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * A version of @xref simplify-sequence-variables to call if you already have the EL variable namespace bound.
+     */
+    @LispMethod(comment = "A version of @xref simplify-sequence-variables to call if you already have the EL variable namespace bound.")
     public static SubLObject simplify_sequence_variables_1(final SubLObject formula) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == possibly_sentence_p(formula)) {
@@ -1863,6 +3532,145 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     *
+     *
+     * @return 0 formula			; a potentially simplified version of FORMULA
+     * @return 1 queue			; a list of (<keyword> . <info>) dotted pairs, indicating simplifications to be tried.
+     */
+    @LispMethod(comment = "@return 0 formula\t\t\t; a potentially simplified version of FORMULA\r\n@return 1 queue\t\t\t; a list of (<keyword> . <info>) dotted pairs, indicating simplifications to be tried.")
+    public static final SubLObject simplify_sequence_variables_int_alt(SubLObject formula, SubLObject dont_mess_with_these_variables, SubLObject scoped_variables) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (((NIL == relation_expressionP(formula)) || (NIL != subl_escape_p(formula))) || (NIL != cycl_grammar.fast_cycl_quoted_term_p(formula))) {
+                return values(formula, NIL);
+            }
+            {
+                SubLObject sentence_free_variables = sentence_free_variables(formula, scoped_variables, UNPROVIDED, UNPROVIDED);
+                SubLObject new_scoped_vars = scoped_vars(formula, UNPROVIDED);
+                SubLObject seqvar = sequence_var(formula, UNPROVIDED);
+                SubLObject issue = com.cyc.cycjava.cycl.simplifier.possible_sequence_var_simplification(formula, seqvar);
+                SubLObject queue = NIL;
+                SubLObject new_terms = NIL;
+                scoped_variables = fast_delete_duplicates(append(scoped_variables, new_scoped_vars), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                {
+                    SubLObject cdolist_list_var = cycl_utilities.formula_terms(formula, $IGNORE);
+                    SubLObject subformula = NIL;
+                    for (subformula = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , subformula = cdolist_list_var.first()) {
+                        {
+                            SubLObject subsentence_free_variables = sentence_free_variables(subformula, scoped_variables, UNPROVIDED, UNPROVIDED);
+                            SubLObject new_dont_touch_vars = fast_delete_duplicates(append(dont_mess_with_these_variables, set_difference(intersection(subsentence_free_variables, sentence_free_variables, UNPROVIDED, UNPROVIDED), new_scoped_vars, UNPROVIDED, UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject simplified_subformula = com.cyc.cycjava.cycl.simplifier.simplify_sequence_variables_int(subformula, new_dont_touch_vars, scoped_variables);
+                                SubLObject sub_queue = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                queue = append(queue, sub_queue);
+                                new_terms = cons(simplified_subformula, new_terms);
+                            }
+                        }
+                    }
+                }
+                new_terms = nreverse(new_terms);
+                formula = make_formula(new_terms.first(), new_terms.rest(), seqvar);
+                dont_mess_with_these_variables = append(appearing_as_both_sequence_and_term_variables(formula), dont_mess_with_these_variables);
+                if (NIL != issue) {
+                    queue = cons(issue, queue);
+                }
+                queue = fast_delete_duplicates(queue, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                {
+                    SubLObject processed_pairs = NIL;
+                    {
+                        SubLObject cdolist_list_var = queue;
+                        SubLObject pair = NIL;
+                        for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
+                            {
+                                SubLObject method = pair.first();
+                                SubLObject info = pair.rest();
+                                SubLObject sub_seqvar = (method == $SPLIT) ? ((SubLObject) (fourth(info))) : info;
+                                if (NIL == subl_promotions.memberP(sub_seqvar, dont_mess_with_these_variables, UNPROVIDED, UNPROVIDED)) {
+                                    {
+                                        SubLObject pcase_var = method;
+                                        if (pcase_var.eql($IGNORE)) {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject new_formula = com.cyc.cycjava.cycl.simplifier.ignore_sequence_var_if_wff(formula, sub_seqvar, UNPROVIDED);
+                                                SubLObject wffP = thread.secondMultipleValue();
+                                                thread.resetMultipleValues();
+                                                if (NIL != wffP) {
+                                                    formula = new_formula;
+                                                    processed_pairs = cons(pair, processed_pairs);
+                                                }
+                                            }
+                                        } else {
+                                            if (pcase_var.eql($REGULARIZE)) {
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject new_formula = com.cyc.cycjava.cycl.simplifier.regularize_sequence_var_if_wff(formula, sub_seqvar, UNPROVIDED);
+                                                    SubLObject wffP = thread.secondMultipleValue();
+                                                    thread.resetMultipleValues();
+                                                    if (NIL != wffP) {
+                                                        formula = new_formula;
+                                                        processed_pairs = cons(pair, processed_pairs);
+                                                    }
+                                                }
+                                            } else {
+                                                if (pcase_var.eql($SPLIT)) {
+                                                    if (NIL == subl_promotions.memberP(sub_seqvar, scoped_variables, UNPROVIDED, UNPROVIDED)) {
+                                                        thread.resetMultipleValues();
+                                                        {
+                                                            SubLObject new_formula = com.cyc.cycjava.cycl.simplifier.split_sequence_var_if_wff(formula, info.first(), second(info), third(info), fourth(info), UNPROVIDED);
+                                                            SubLObject wffP = thread.secondMultipleValue();
+                                                            thread.resetMultipleValues();
+                                                            if (NIL != wffP) {
+                                                                formula = new_formula;
+                                                                processed_pairs = cons(pair, processed_pairs);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject cdolist_list_var = processed_pairs;
+                        SubLObject pair = NIL;
+                        for (pair = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pair = cdolist_list_var.first()) {
+                            queue = delete(pair, queue, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        }
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = new_scoped_vars;
+                    SubLObject scoped_var = NIL;
+                    for (scoped_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , scoped_var = cdolist_list_var.first()) {
+                        {
+                            SubLObject cdolist_list_var_5 = queue;
+                            SubLObject pair = NIL;
+                            for (pair = cdolist_list_var_5.first(); NIL != cdolist_list_var_5; cdolist_list_var_5 = cdolist_list_var_5.rest() , pair = cdolist_list_var_5.first()) {
+                                if (scoped_var.eql(pair.rest())) {
+                                    queue = delete(pair, queue, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                }
+                            }
+                        }
+                    }
+                }
+                return values(formula, queue);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return 0 formula			; a potentially simplified version of FORMULA
+     * @return 1 queue			; a list of (<keyword> . <info>) dotted pairs, indicating simplifications to be tried.
+     */
+    @LispMethod(comment = "@return 0 formula\t\t\t; a potentially simplified version of FORMULA\r\n@return 1 queue\t\t\t; a list of (<keyword> . <info>) dotted pairs, indicating simplifications to be tried.")
     public static SubLObject simplify_sequence_variables_int(SubLObject formula, SubLObject dont_mess_with_these_variables, SubLObject scoped_variables) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (((NIL == relation_expressionP(formula)) || (NIL != subl_escape_p(formula))) || (NIL != cycl_grammar.fast_cycl_quoted_term_p(formula))) {
@@ -1971,6 +3779,59 @@ public final class simplifier extends SubLTranslatedFile {
         return values(formula, queue);
     }
 
+    /**
+     *
+     *
+     * @param seqvar
+     * 		EL variable; the EL variable at the end of FORMULA.
+     * 		Returns a (<keyword> . <info>) dotted pair if FORMULA could be simplified by doing <keyword>.
+     * 		Returns NIL if no simplification is possible.
+     */
+    @LispMethod(comment = "@param seqvar\r\n\t\tEL variable; the EL variable at the end of FORMULA.\r\n\t\tReturns a (<keyword> . <info>) dotted pair if FORMULA could be simplified by doing <keyword>.\r\n\t\tReturns NIL if no simplification is possible.")
+    public static final SubLObject possible_sequence_var_simplification_alt(SubLObject formula, SubLObject seqvar) {
+        if (NIL == seqvar) {
+            return NIL;
+        }
+        if ((NIL != com.cyc.cycjava.cycl.simplifier.simplify_sequence_vars_using_kb_arityP()) || (NIL != cyc_const_logical_operator_p(cycl_utilities.formula_arg0(formula)))) {
+            {
+                SubLObject reln_arity_max = (NIL != cyc_const_logical_operator_p(cycl_utilities.formula_arg0(formula))) ? ((SubLObject) (arity.logical_operator_arity(cycl_utilities.formula_arg0(formula)))) : arity.max_arity(cycl_utilities.formula_arg0(formula));
+                SubLObject reln_arity_min = (NIL != cyc_const_logical_operator_p(cycl_utilities.formula_arg0(formula))) ? ((SubLObject) (arity.logical_operator_arity(cycl_utilities.formula_arg0(formula)))) : arity.min_arity(cycl_utilities.formula_arg0(formula));
+                SubLObject formula_arity = formula_arity(formula, $IGNORE);
+                if (!reln_arity_max.isInteger()) {
+                    return NIL;
+                } else {
+                    if (formula_arity.numE(subtract(reln_arity_max, ONE_INTEGER))) {
+                        return cons($REGULARIZE, seqvar);
+                    } else {
+                        if (formula_arity.numE(reln_arity_max)) {
+                            return cons($IGNORE, seqvar);
+                        } else {
+                            if (!reln_arity_min.isInteger()) {
+                                return NIL;
+                            } else {
+                                if (formula_arity.numL(subtract(reln_arity_min, ONE_INTEGER)) && reln_arity_min.numE(reln_arity_max)) {
+                                    return cons($SPLIT, list(arity.variable_arityP(formula), reln_arity_min, formula_arity, seqvar));
+                                } else {
+                                    return NIL;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     *
+     *
+     * @param seqvar
+     * 		EL variable; the EL variable at the end of FORMULA.
+     * 		Returns a (<keyword> . <info>) dotted pair if FORMULA could be simplified by doing <keyword>.
+     * 		Returns NIL if no simplification is possible.
+     */
+    @LispMethod(comment = "@param seqvar\r\n\t\tEL variable; the EL variable at the end of FORMULA.\r\n\t\tReturns a (<keyword> . <info>) dotted pair if FORMULA could be simplified by doing <keyword>.\r\n\t\tReturns NIL if no simplification is possible.")
     public static SubLObject possible_sequence_var_simplification(final SubLObject formula, final SubLObject seqvar) {
         if (NIL == seqvar) {
             return NIL;
@@ -1999,11 +3860,69 @@ public final class simplifier extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject simplify_sequence_vars_using_kb_arityP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean((NIL != $simplify_sequence_vars_using_kb_arityP$.getDynamicValue(thread)) && (NIL != $simplify_using_semanticsP$.getDynamicValue(thread)));
+        }
+    }
+
     public static SubLObject simplify_sequence_vars_using_kb_arityP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean((NIL != czer_vars.$simplify_sequence_vars_using_kb_arityP$.getDynamicValue(thread)) && (NIL != czer_vars.$simplify_using_semanticsP$.getDynamicValue(thread)));
     }
 
+    /**
+     * Replaces SEQVAR with NIL in FORMULA if the result is wff.
+     *
+     * @return 0 formula
+     * @return 1 boolean; t iff a change was made to FORMULA.
+    e.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y) iff (<pred> ?X ?Y) is wff.
+     */
+    @LispMethod(comment = "Replaces SEQVAR with NIL in FORMULA if the result is wff.\r\n\r\n@return 0 formula\r\n@return 1 boolean; t iff a change was made to FORMULA.\r\ne.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y) iff (<pred> ?X ?Y) is wff.")
+    public static final SubLObject ignore_sequence_var_if_wff_alt(SubLObject formula, SubLObject seqvar, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == seqvar) {
+                return values(formula, NIL);
+            }
+            {
+                SubLObject new_formula = variable_subst(NIL, seqvar, formula);
+                SubLObject wffP = NIL;
+                {
+                    SubLObject _prev_bind_0 = at_vars.$noting_at_violationsP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = at_vars.$accumulating_at_violationsP$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = wff_vars.$noting_wff_violationsP$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = wff_vars.$accumulating_wff_violationsP$.currentBinding(thread);
+                    try {
+                        at_vars.$noting_at_violationsP$.bind(NIL, thread);
+                        at_vars.$accumulating_at_violationsP$.bind(NIL, thread);
+                        wff_vars.$noting_wff_violationsP$.bind(NIL, thread);
+                        wff_vars.$accumulating_wff_violationsP$.bind(NIL, thread);
+                        wffP = wff.el_wffP(new_formula, mt, UNPROVIDED);
+                    } finally {
+                        wff_vars.$accumulating_wff_violationsP$.rebind(_prev_bind_3, thread);
+                        wff_vars.$noting_wff_violationsP$.rebind(_prev_bind_2, thread);
+                        at_vars.$accumulating_at_violationsP$.rebind(_prev_bind_1, thread);
+                        at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return NIL != wffP ? ((SubLObject) (values(new_formula, T))) : values(formula, NIL);
+            }
+        }
+    }
+
+    /**
+     * Replaces SEQVAR with NIL in FORMULA if the result is wff.
+     *
+     * @return 0 formula
+     * @return 1 boolean; t iff a change was made to FORMULA.
+    e.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y) iff (<pred> ?X ?Y) is wff.
+     */
+    @LispMethod(comment = "Replaces SEQVAR with NIL in FORMULA if the result is wff.\r\n\r\n@return 0 formula\r\n@return 1 boolean; t iff a change was made to FORMULA.\r\ne.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y) iff (<pred> ?X ?Y) is wff.")
     public static SubLObject ignore_sequence_var_if_wff(final SubLObject formula, final SubLObject seqvar, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -2033,6 +3952,57 @@ public final class simplifier extends SubLTranslatedFile {
         return NIL != wffP ? values(new_formula, T) : values(formula, NIL);
     }
 
+    /**
+     * Replaces SEQVAR with (SEQVAR) in FORMULA if the result is wff.
+     *
+     * @return 0 formula
+     * @return 1 boolean; t iff a change was made to FORMULA.
+    e.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y ?Z) iff (<pred> ?X ?Y ?Z) is wff.
+     */
+    @LispMethod(comment = "Replaces SEQVAR with (SEQVAR) in FORMULA if the result is wff.\r\n\r\n@return 0 formula\r\n@return 1 boolean; t iff a change was made to FORMULA.\r\ne.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y ?Z) iff (<pred> ?X ?Y ?Z) is wff.")
+    public static final SubLObject regularize_sequence_var_if_wff_alt(SubLObject formula, SubLObject seqvar, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = $mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == seqvar) {
+                return values(formula, NIL);
+            }
+            {
+                SubLObject new_formula = variable_subst(list(seqvar), seqvar, formula);
+                SubLObject wffP = NIL;
+                {
+                    SubLObject _prev_bind_0 = at_vars.$noting_at_violationsP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = at_vars.$accumulating_at_violationsP$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = wff_vars.$noting_wff_violationsP$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = wff_vars.$accumulating_wff_violationsP$.currentBinding(thread);
+                    try {
+                        at_vars.$noting_at_violationsP$.bind(NIL, thread);
+                        at_vars.$accumulating_at_violationsP$.bind(NIL, thread);
+                        wff_vars.$noting_wff_violationsP$.bind(NIL, thread);
+                        wff_vars.$accumulating_wff_violationsP$.bind(NIL, thread);
+                        wffP = wff.el_wffP(new_formula, mt, UNPROVIDED);
+                    } finally {
+                        wff_vars.$accumulating_wff_violationsP$.rebind(_prev_bind_3, thread);
+                        wff_vars.$noting_wff_violationsP$.rebind(_prev_bind_2, thread);
+                        at_vars.$accumulating_at_violationsP$.rebind(_prev_bind_1, thread);
+                        at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return NIL != wffP ? ((SubLObject) (values(new_formula, T))) : values(formula, NIL);
+            }
+        }
+    }
+
+    /**
+     * Replaces SEQVAR with (SEQVAR) in FORMULA if the result is wff.
+     *
+     * @return 0 formula
+     * @return 1 boolean; t iff a change was made to FORMULA.
+    e.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y ?Z) iff (<pred> ?X ?Y ?Z) is wff.
+     */
+    @LispMethod(comment = "Replaces SEQVAR with (SEQVAR) in FORMULA if the result is wff.\r\n\r\n@return 0 formula\r\n@return 1 boolean; t iff a change was made to FORMULA.\r\ne.g. transforms (<pred> ?X ?Y . ?Z) into (<pred> ?X ?Y ?Z) iff (<pred> ?X ?Y ?Z) is wff.")
     public static SubLObject regularize_sequence_var_if_wff(final SubLObject formula, final SubLObject seqvar, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -2062,6 +4032,111 @@ public final class simplifier extends SubLTranslatedFile {
         return NIL != wffP ? values(new_formula, T) : values(formula, NIL);
     }
 
+    /**
+     *
+     *
+     * @return 0 formula
+     * @return 1 boolean; t iff a change was made to FORMULA.
+    Splits a sequence variable into several new EL variables,
+    enough so that the new formula will have an arity of ARITY-MIN, not including the sequence variable (if any).
+    If SEQVAR occurs in a subformula of FORMULA as a sequence variable, it is also split.
+    If reattach-sequence-variable? is t, a new sequence variable is created and attached to the end of the new formula.
+    This is a destructive operation.
+     * @param formula-arity
+     * 		the arity of FORMULA.
+     * @param seqvar
+     * 		the sequence variable occurring in FORMULA.
+     */
+    @LispMethod(comment = "@return 0 formula\r\n@return 1 boolean; t iff a change was made to FORMULA.\r\nSplits a sequence variable into several new EL variables,\r\nenough so that the new formula will have an arity of ARITY-MIN, not including the sequence variable (if any).\r\nIf SEQVAR occurs in a subformula of FORMULA as a sequence variable, it is also split.\r\nIf reattach-sequence-variable? is t, a new sequence variable is created and attached to the end of the new formula.\r\nThis is a destructive operation.\r\n@param formula-arity\r\n\t\tthe arity of FORMULA.\r\n@param seqvar\r\n\t\tthe sequence variable occurring in FORMULA.")
+    public static final SubLObject split_sequence_var_if_wff_alt(SubLObject formula, SubLObject reattach_sequence_variableP, SubLObject arity_min, SubLObject formula_arity, SubLObject seqvar, SubLObject mt) {
+        if (reattach_sequence_variableP == UNPROVIDED) {
+            reattach_sequence_variableP = NIL;
+        }
+        if (arity_min == UNPROVIDED) {
+            arity_min = NIL;
+        }
+        if (formula_arity == UNPROVIDED) {
+            formula_arity = NIL;
+        }
+        if (seqvar == UNPROVIDED) {
+            seqvar = NIL;
+        }
+        if (mt == UNPROVIDED) {
+            mt = $mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != reattach_sequence_variableP) {
+                el_error(TWO_INTEGER, $str_alt29$Splitting_sequence_variables_into, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+            if (!arity_min.isInteger()) {
+                arity_min = arity.min_arity(cycl_utilities.formula_arg0(formula));
+                if (!arity_min.isInteger()) {
+                    return formula;
+                }
+            }
+            if (!formula_arity.isInteger()) {
+                formula_arity = formula_arity(formula, $IGNORE);
+                if (!formula_arity.isInteger()) {
+                    return formula;
+                }
+            }
+            if (NIL == cycl_variables.el_varP(seqvar)) {
+                seqvar = sequence_var(formula, UNPROVIDED);
+                if (NIL == cycl_variables.el_varP(seqvar)) {
+                    return formula;
+                }
+            }
+            {
+                SubLObject new_variables = NIL;
+                SubLObject cdotimes_end_var = subtract(arity_min, formula_arity);
+                SubLObject i = NIL;
+                for (i = ZERO_INTEGER; i.numL(cdotimes_end_var); i = add(i, ONE_INTEGER)) {
+                    new_variables = cons(clausifier.el_uniquify(seqvar), new_variables);
+                }
+                {
+                    SubLObject new_formula = variable_subst(nreverse(new_variables), seqvar, formula);
+                    SubLObject wffP = NIL;
+                    {
+                        SubLObject _prev_bind_0 = at_vars.$noting_at_violationsP$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = at_vars.$accumulating_at_violationsP$.currentBinding(thread);
+                        SubLObject _prev_bind_2 = wff_vars.$noting_wff_violationsP$.currentBinding(thread);
+                        SubLObject _prev_bind_3 = wff_vars.$accumulating_wff_violationsP$.currentBinding(thread);
+                        try {
+                            at_vars.$noting_at_violationsP$.bind(NIL, thread);
+                            at_vars.$accumulating_at_violationsP$.bind(NIL, thread);
+                            wff_vars.$noting_wff_violationsP$.bind(NIL, thread);
+                            wff_vars.$accumulating_wff_violationsP$.bind(NIL, thread);
+                            wffP = wff.el_wffP(new_formula, mt, UNPROVIDED);
+                        } finally {
+                            wff_vars.$accumulating_wff_violationsP$.rebind(_prev_bind_3, thread);
+                            wff_vars.$noting_wff_violationsP$.rebind(_prev_bind_2, thread);
+                            at_vars.$accumulating_at_violationsP$.rebind(_prev_bind_1, thread);
+                            at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    return NIL != wffP ? ((SubLObject) (values(new_formula, T))) : values(formula, NIL);
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return 0 formula
+     * @return 1 boolean; t iff a change was made to FORMULA.
+    Splits a sequence variable into several new EL variables,
+    enough so that the new formula will have an arity of ARITY-MIN, not including the sequence variable (if any).
+    If SEQVAR occurs in a subformula of FORMULA as a sequence variable, it is also split.
+    If reattach-sequence-variable? is t, a new sequence variable is created and attached to the end of the new formula.
+    This is a destructive operation.
+     * @param formula-arity
+     * 		the arity of FORMULA.
+     * @param seqvar
+     * 		the sequence variable occurring in FORMULA.
+     */
+    @LispMethod(comment = "@return 0 formula\r\n@return 1 boolean; t iff a change was made to FORMULA.\r\nSplits a sequence variable into several new EL variables,\r\nenough so that the new formula will have an arity of ARITY-MIN, not including the sequence variable (if any).\r\nIf SEQVAR occurs in a subformula of FORMULA as a sequence variable, it is also split.\r\nIf reattach-sequence-variable? is t, a new sequence variable is created and attached to the end of the new formula.\r\nThis is a destructive operation.\r\n@param formula-arity\r\n\t\tthe arity of FORMULA.\r\n@param seqvar\r\n\t\tthe sequence variable occurring in FORMULA.")
     public static SubLObject split_sequence_var_if_wff(final SubLObject formula, SubLObject reattach_sequence_variableP, SubLObject arity_min, SubLObject formula_arity, SubLObject seqvar, SubLObject mt) {
         if (reattach_sequence_variableP == UNPROVIDED) {
             reattach_sequence_variableP = NIL;
@@ -2125,6 +4200,10 @@ public final class simplifier extends SubLTranslatedFile {
             at_vars.$noting_at_violationsP$.rebind(_prev_bind_0, thread);
         }
         return NIL != wffP ? values(new_formula, T) : values(formula, NIL);
+    }
+
+    public static final SubLObject sequence_var_simplifiableP_alt(SubLObject formula) {
+        return makeBoolean(!formula.equal(com.cyc.cycjava.cycl.simplifier.simplify_sequence_variables(formula)));
     }
 
     public static SubLObject sequence_var_simplifiableP(final SubLObject formula) {
@@ -2207,6 +4286,90 @@ public final class simplifier extends SubLTranslatedFile {
         return sentence;
     }
 
+    /**
+     * Simplifies transitive redundancies.
+     * e.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)
+     * Doesn't specially handle scoped variables with the same name as other variables.
+     */
+    @LispMethod(comment = "Simplifies transitive redundancies.\r\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\r\nDoesn\'t specially handle scoped variables with the same name as other variables.\nSimplifies transitive redundancies.\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\nDoesn\'t specially handle scoped variables with the same name as other variables.")
+    public static final SubLObject simplify_transitive_redundancies_alt(SubLObject sentence, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == possibly_sentence_p(sentence)) {
+                return sentence;
+            }
+            {
+                SubLObject result = NIL;
+                SubLObject mt_var = mt;
+                {
+                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $simplifying_redundanciesP$.currentBinding(thread);
+                    try {
+                        $relevant_mt_function$.bind(possibly_in_mt_determine_function(mt_var), thread);
+                        $mt$.bind(possibly_in_mt_determine_mt(mt_var), thread);
+                        $simplifying_redundanciesP$.bind(T, thread);
+                        {
+                            SubLObject new_conjuncts = NIL;
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject cnf_sentence = clausifier.el_cnf(sentence, $mt$.getDynamicValue(thread));
+                                SubLObject new_mt = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject mt_var_6 = new_mt;
+                                    {
+                                        SubLObject _prev_bind_0_7 = $relevant_mt_function$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_8 = $mt$.currentBinding(thread);
+                                        try {
+                                            $relevant_mt_function$.bind(possibly_in_mt_determine_function(mt_var_6), thread);
+                                            $mt$.bind(possibly_in_mt_determine_mt(mt_var_6), thread);
+                                            cnf_sentence = clausifier.force_into_cnf(cnf_sentence);
+                                            if (NIL == el_conjunction_p(cnf_sentence)) {
+                                                cnf_sentence = make_conjunction(list(cnf_sentence));
+                                            }
+                                            {
+                                                SubLObject all_conjuncts = cycl_utilities.sentence_args(cnf_sentence, $IGNORE);
+                                                SubLObject args = cycl_utilities.formula_args(cnf_sentence, $IGNORE);
+                                                SubLObject cdolist_list_var = args;
+                                                SubLObject conjunct = NIL;
+                                                for (conjunct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , conjunct = cdolist_list_var.first()) {
+                                                    if (NIL != com.cyc.cycjava.cycl.simplifier.subsumed_by_another_conjunctP(conjunct, remove(conjunct, all_conjuncts, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) {
+                                                        all_conjuncts = remove(conjunct, all_conjuncts, symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    } else {
+                                                        new_conjuncts = cons(com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundancies_in_disjunction(conjunct), new_conjuncts);
+                                                    }
+                                                }
+                                            }
+                                            result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(com.cyc.cycjava.cycl.simplifier.conjoin(nreverse(new_conjuncts), T), UNPROVIDED);
+                                        } finally {
+                                            $mt$.rebind(_prev_bind_1_8, thread);
+                                            $relevant_mt_function$.rebind(_prev_bind_0_7, thread);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        $simplifying_redundanciesP$.rebind(_prev_bind_2, thread);
+                        $mt$.rebind(_prev_bind_1, thread);
+                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Simplifies transitive redundancies.
+     * e.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)
+     * Doesn't specially handle scoped variables with the same name as other variables.
+     */
+    @LispMethod(comment = "Simplifies transitive redundancies.\r\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\r\nDoesn\'t specially handle scoped variables with the same name as other variables.\nSimplifies transitive redundancies.\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\nDoesn\'t specially handle scoped variables with the same name as other variables.")
     public static SubLObject simplify_transitive_redundancies(final SubLObject sentence, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2266,6 +4429,58 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * Simplifies transitive redundancies in flat disjunctions only. For complex
+     * disjunctions returns the input SENTENCE without simplifying any transitive
+     * redundancies.
+     *
+     * @unknown @xref simplify-transitive-redundancies already works for arbitrarily complex
+    disjunctions, but its output is always a conjunction. We devise this function
+    to use in @xref simplify-cycl-disjunction only, where the output is desired to be
+    a disjunction (rather than a conjunction).
+     * @unknown This function will eventually be replaced by one that works for all
+    sorts of disjunctions.
+     */
+    @LispMethod(comment = "Simplifies transitive redundancies in flat disjunctions only. For complex\r\ndisjunctions returns the input SENTENCE without simplifying any transitive\r\nredundancies.\r\n\r\n@unknown @xref simplify-transitive-redundancies already works for arbitrarily complex\r\ndisjunctions, but its output is always a conjunction. We devise this function\r\nto use in @xref simplify-cycl-disjunction only, where the output is desired to be\r\na disjunction (rather than a conjunction).\r\n@unknown This function will eventually be replaced by one that works for all\r\nsorts of disjunctions.\nSimplifies transitive redundancies in flat disjunctions only. For complex\ndisjunctions returns the input SENTENCE without simplifying any transitive\nredundancies.")
+    public static final SubLObject simplify_transitive_redundancies_in_cycl_disjunction_alt(SubLObject sentence, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject mt_var = mt;
+                {
+                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
+                    try {
+                        $relevant_mt_function$.bind(possibly_in_mt_determine_function(mt_var), thread);
+                        $mt$.bind(possibly_in_mt_determine_mt(mt_var), thread);
+                        result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundancies_in_disjunction(sentence), UNPROVIDED);
+                    } finally {
+                        $mt$.rebind(_prev_bind_1, thread);
+                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Simplifies transitive redundancies in flat disjunctions only. For complex
+     * disjunctions returns the input SENTENCE without simplifying any transitive
+     * redundancies.
+     *
+     * @unknown @xref simplify-transitive-redundancies already works for arbitrarily complex
+    disjunctions, but its output is always a conjunction. We devise this function
+    to use in @xref simplify-cycl-disjunction only, where the output is desired to be
+    a disjunction (rather than a conjunction).
+     * @unknown This function will eventually be replaced by one that works for all
+    sorts of disjunctions.
+     */
+    @LispMethod(comment = "Simplifies transitive redundancies in flat disjunctions only. For complex\r\ndisjunctions returns the input SENTENCE without simplifying any transitive\r\nredundancies.\r\n\r\n@unknown @xref simplify-transitive-redundancies already works for arbitrarily complex\r\ndisjunctions, but its output is always a conjunction. We devise this function\r\nto use in @xref simplify-cycl-disjunction only, where the output is desired to be\r\na disjunction (rather than a conjunction).\r\n@unknown This function will eventually be replaced by one that works for all\r\nsorts of disjunctions.\nSimplifies transitive redundancies in flat disjunctions only. For complex\ndisjunctions returns the input SENTENCE without simplifying any transitive\nredundancies.")
     public static SubLObject simplify_transitive_redundancies_in_cycl_disjunction(final SubLObject sentence, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2286,6 +4501,50 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     *
+     *
+     * @param conjunct;
+    el-disjunction-p
+     * 		
+     * @param all-conjuncts;
+    listp
+     * 		
+     * @return boolean: T if CONJUNCT is subsumed by any of the disjunctions in ALL-CONJUNCTS;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param conjunct;\nel-disjunction-p\r\n\t\t\r\n@param all-conjuncts;\nlistp\r\n\t\t\r\n@return boolean: T if CONJUNCT is subsumed by any of the disjunctions in ALL-CONJUNCTS;\r\nnil otherwise")
+    public static final SubLObject subsumed_by_another_conjunctP_alt(SubLObject conjunct, SubLObject all_conjuncts) {
+        {
+            SubLObject flag = NIL;
+            if (NIL == flag) {
+                {
+                    SubLObject csome_list_var = all_conjuncts;
+                    SubLObject each_conjunct = NIL;
+                    for (each_conjunct = csome_list_var.first(); !((NIL != flag) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , each_conjunct = csome_list_var.first()) {
+                        if (((NIL != el_disjunction_p(each_conjunct)) && (NIL != com.cyc.cycjava.cycl.simplifier.conjunct_subsumed_by_conjunctP(conjunct, each_conjunct))) && (NIL == com.cyc.cycjava.cycl.simplifier.conjunct_subsumed_by_conjunctP(each_conjunct, conjunct))) {
+                            flag = T;
+                        }
+                    }
+                }
+            }
+            return flag;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param conjunct;
+    el-disjunction-p
+     * 		
+     * @param all-conjuncts;
+    listp
+     * 		
+     * @return boolean: T if CONJUNCT is subsumed by any of the disjunctions in ALL-CONJUNCTS;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param conjunct;\nel-disjunction-p\r\n\t\t\r\n@param all-conjuncts;\nlistp\r\n\t\t\r\n@return boolean: T if CONJUNCT is subsumed by any of the disjunctions in ALL-CONJUNCTS;\r\nnil otherwise")
     public static SubLObject subsumed_by_another_conjunctP(final SubLObject conjunct, final SubLObject all_conjuncts) {
         SubLObject flag = NIL;
         if (NIL == flag) {
@@ -2303,6 +4562,69 @@ public final class simplifier extends SubLTranslatedFile {
         return flag;
     }
 
+    /**
+     *
+     *
+     * @param disjunction1;
+    el-disjunction-p
+     * 		
+     * @param disjunction2;
+    el-disjunction-p
+     * 		
+     * @return boolean: T if DISJUNCTION1 is subsumed by (more general than) DISJUNCTION2;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param disjunction1;\nel-disjunction-p\r\n\t\t\r\n@param disjunction2;\nel-disjunction-p\r\n\t\t\r\n@return boolean: T if DISJUNCTION1 is subsumed by (more general than) DISJUNCTION2;\r\nnil otherwise")
+    public static final SubLObject conjunct_subsumed_by_conjunctP_alt(SubLObject disjunction1, SubLObject disjunction2) {
+        {
+            SubLObject flag = T;
+            SubLObject constraint_dict = new_dictionary(symbol_function(EQUAL), UNPROVIDED);
+            SubLObject all_disjuncts = cycl_utilities.sentence_args(disjunction2, $IGNORE);
+            {
+                SubLObject args = cycl_utilities.formula_args(disjunction1, $IGNORE);
+                SubLObject cdolist_list_var = args;
+                SubLObject disjunct = NIL;
+                for (disjunct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , disjunct = cdolist_list_var.first()) {
+                    {
+                        SubLObject sentence_pred = cycl_utilities.sentence_arg0(disjunct);
+                        SubLObject sentence_vars = cycl_utilities.sentence_args(disjunct, $IGNORE);
+                        dictionary_push(constraint_dict, sentence_pred, sentence_vars);
+                    }
+                }
+            }
+            {
+                SubLObject disjuncts = NIL;
+                for (disjuncts = all_disjuncts; !((NIL == disjuncts) || (NIL == flag)); disjuncts = disjuncts.rest()) {
+                    {
+                        SubLObject disjunct = disjuncts.first();
+                        SubLObject sentence_pred = cycl_utilities.sentence_arg0(disjunct);
+                        SubLObject sentence_vars = cycl_utilities.sentence_args(disjunct, $IGNORE);
+                        SubLObject existing_consts = dictionary_lookup(constraint_dict, sentence_pred, UNPROVIDED);
+                        if (NIL != existing_consts) {
+                            flag = com.cyc.cycjava.cycl.simplifier.subsumed_args_by_constsP(sentence_pred, sentence_vars, existing_consts);
+                        } else {
+                            flag = NIL;
+                        }
+                    }
+                }
+            }
+            return flag;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param disjunction1;
+    el-disjunction-p
+     * 		
+     * @param disjunction2;
+    el-disjunction-p
+     * 		
+     * @return boolean: T if DISJUNCTION1 is subsumed by (more general than) DISJUNCTION2;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param disjunction1;\nel-disjunction-p\r\n\t\t\r\n@param disjunction2;\nel-disjunction-p\r\n\t\t\r\n@return boolean: T if DISJUNCTION1 is subsumed by (more general than) DISJUNCTION2;\r\nnil otherwise")
     public static SubLObject conjunct_subsumed_by_conjunctP(final SubLObject disjunction1, final SubLObject disjunction2) {
         SubLObject flag = T;
         final SubLObject constraint_dict = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
@@ -2337,6 +4659,56 @@ public final class simplifier extends SubLTranslatedFile {
         return flag;
     }
 
+    /**
+     *
+     *
+     * @param pred;
+    fort-p
+     * 		
+     * @param formula-vars;
+    listp
+     * 		
+     * @param existing-const;
+    listp
+     * 		
+     * @return boolean: T if FORMULA-VARS is subsumed by any of the constraints in EXISTING-CONSTS;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param pred;\nfort-p\r\n\t\t\r\n@param formula-vars;\nlistp\r\n\t\t\r\n@param existing-const;\nlistp\r\n\t\t\r\n@return boolean: T if FORMULA-VARS is subsumed by any of the constraints in EXISTING-CONSTS;\r\nnil otherwise")
+    public static final SubLObject subsumed_args_by_constsP_alt(SubLObject pred, SubLObject formula_vars, SubLObject existing_consts) {
+        {
+            SubLObject flag = NIL;
+            if (NIL == flag) {
+                {
+                    SubLObject csome_list_var = existing_consts;
+                    SubLObject existing_const = NIL;
+                    for (existing_const = csome_list_var.first(); !((NIL != flag) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , existing_const = csome_list_var.first()) {
+                        if (NIL != com.cyc.cycjava.cycl.simplifier.subsumed_argsP(pred, formula_vars, existing_const)) {
+                            flag = T;
+                        }
+                    }
+                }
+            }
+            return flag;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param pred;
+    fort-p
+     * 		
+     * @param formula-vars;
+    listp
+     * 		
+     * @param existing-const;
+    listp
+     * 		
+     * @return boolean: T if FORMULA-VARS is subsumed by any of the constraints in EXISTING-CONSTS;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param pred;\nfort-p\r\n\t\t\r\n@param formula-vars;\nlistp\r\n\t\t\r\n@param existing-const;\nlistp\r\n\t\t\r\n@return boolean: T if FORMULA-VARS is subsumed by any of the constraints in EXISTING-CONSTS;\r\nnil otherwise")
     public static SubLObject subsumed_args_by_constsP(final SubLObject pred, final SubLObject formula_vars, final SubLObject existing_consts) {
         SubLObject flag = NIL;
         if (NIL == flag) {
@@ -2354,6 +4726,57 @@ public final class simplifier extends SubLTranslatedFile {
         return flag;
     }
 
+    /**
+     *
+     *
+     * @param pred;
+    fort-p
+     * 		
+     * @param formula-vars;
+    listp
+     * 		
+     * @param existing-const;
+    listp
+     * 		
+     * @return boolean: T if each element of EXISTING-CONST is subsumed by the
+    respective element of FORMULA-VARS, given PRED;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param pred;\nfort-p\r\n\t\t\r\n@param formula-vars;\nlistp\r\n\t\t\r\n@param existing-const;\nlistp\r\n\t\t\r\n@return boolean: T if each element of EXISTING-CONST is subsumed by the\r\nrespective element of FORMULA-VARS, given PRED;\r\nnil otherwise")
+    public static final SubLObject subsumed_argsP_alt(SubLObject pred, SubLObject formula_vars, SubLObject existing_const) {
+        if (NIL == same_length_p(formula_vars, existing_const)) {
+            return NIL;
+        }
+        {
+            SubLObject flag = T;
+            SubLObject no_of_args = list_length(formula_vars);
+            SubLObject index = NIL;
+            for (index = ZERO_INTEGER; !(index.numE(no_of_args) || (NIL == flag)); index = add(index, ONE_INTEGER)) {
+                if (NIL == ke_tools.subsumed_by_stronger_argsP(pred, add(index, ONE_INTEGER), list(nth(index, existing_const)), list(nth(index, formula_vars)), UNPROVIDED)) {
+                    flag = NIL;
+                }
+            }
+            return flag;
+        }
+    }
+
+    /**
+     *
+     *
+     * @param pred;
+    fort-p
+     * 		
+     * @param formula-vars;
+    listp
+     * 		
+     * @param existing-const;
+    listp
+     * 		
+     * @return boolean: T if each element of EXISTING-CONST is subsumed by the
+    respective element of FORMULA-VARS, given PRED;
+    nil otherwise
+     */
+    @LispMethod(comment = "@param pred;\nfort-p\r\n\t\t\r\n@param formula-vars;\nlistp\r\n\t\t\r\n@param existing-const;\nlistp\r\n\t\t\r\n@return boolean: T if each element of EXISTING-CONST is subsumed by the\r\nrespective element of FORMULA-VARS, given PRED;\r\nnil otherwise")
     public static SubLObject subsumed_argsP(final SubLObject pred, final SubLObject formula_vars, final SubLObject existing_const) {
         if (NIL == list_utilities.same_length_p(formula_vars, existing_const)) {
             return NIL;
@@ -2369,9 +4792,69 @@ public final class simplifier extends SubLTranslatedFile {
         return flag;
     }
 
+    public static final SubLObject simplify_transitive_redundancies_in_disjunction_alt(SubLObject disjunction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(disjunction, EL_DISJUNCTION_P);
+            {
+                SubLObject disjunct_constraint_dict = com.cyc.cycjava.cycl.simplifier.transitive_constraint_dict(disjunction, symbol_function(WEAKEST_ARGS));
+                SubLObject new_disjuncts = NIL;
+                {
+                    SubLObject args = cycl_utilities.formula_args(disjunction, $IGNORE);
+                    SubLObject cdolist_list_var = args;
+                    SubLObject disjunct = NIL;
+                    for (disjunct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , disjunct = cdolist_list_var.first()) {
+                        {
+                            SubLObject sentence_pred = cycl_utilities.sentence_arg0(disjunct);
+                            SubLObject sentence_var = cycl_utilities.sentence_arg1(disjunct, UNPROVIDED);
+                            SubLObject sentence_constraints = list(cycl_utilities.sentence_arg2(disjunct, UNPROVIDED));
+                            if (NIL != subl_promotions.memberP(sentence_pred, $transitive_constraint_preds$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) {
+                                {
+                                    SubLObject key = list(sentence_pred, sentence_var);
+                                    SubLObject disjunct_constraints = dictionary_lookup(disjunct_constraint_dict, key, UNPROVIDED);
+                                    if (NIL != ke_tools.subsumed_by_stronger_argsP(sentence_pred, TWO_INTEGER, disjunct_constraints, sentence_constraints, UNPROVIDED)) {
+                                    } else {
+                                        new_disjuncts = cons(disjunct, new_disjuncts);
+                                    }
+                                }
+                            } else {
+                                new_disjuncts = cons(disjunct, new_disjuncts);
+                            }
+                        }
+                    }
+                }
+                {
+                    SubLObject iteration_state = do_dictionary_contents_state(dictionary_contents(disjunct_constraint_dict));
+                    while (NIL == do_dictionary_contents_doneP(iteration_state)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject key = do_dictionary_contents_key_value(iteration_state);
+                            SubLObject constraints = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject pred = key.first();
+                                SubLObject var = second(key);
+                                SubLObject cdolist_list_var = constraints;
+                                SubLObject constraint = NIL;
+                                for (constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constraint = cdolist_list_var.first()) {
+                                    if (NIL != constraint) {
+                                        new_disjuncts = cons(make_binary_formula(pred, var, constraint), new_disjuncts);
+                                    }
+                                }
+                            }
+                            iteration_state = do_dictionary_contents_next(iteration_state);
+                        }
+                    } 
+                    do_dictionary_contents_finalize(iteration_state);
+                }
+                return com.cyc.cycjava.cycl.simplifier.ndisjoin(nreverse(new_disjuncts), T);
+            }
+        }
+    }
+
     public static SubLObject simplify_transitive_redundancies_in_disjunction(final SubLObject disjunction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != el_disjunction_p(disjunction) : "el_utilities.el_disjunction_p(disjunction) " + "CommonSymbols.NIL != el_utilities.el_disjunction_p(disjunction) " + disjunction;
+        assert NIL != el_disjunction_p(disjunction) : "! el_utilities.el_disjunction_p(disjunction) " + ("el_utilities.el_disjunction_p(disjunction) " + "CommonSymbols.NIL != el_utilities.el_disjunction_p(disjunction) ") + disjunction;
         final SubLObject disjunct_constraint_dict = transitive_constraint_dict(disjunction, symbol_function(WEAKEST_ARGS));
         SubLObject new_disjuncts = NIL;
         SubLObject cdolist_list_var;
@@ -2417,6 +4900,48 @@ public final class simplifier extends SubLTranslatedFile {
         return ndisjoin(nreverse(new_disjuncts), T);
     }
 
+    /**
+     *
+     *
+     * @return dictionary; for each (pred var) key, the dictionary contains a list of necessary constraints to impose.
+    These constraints come from weak-dict, but they only remain if they are not subsumed by a constraint in strong-dict.
+     */
+    @LispMethod(comment = "@return dictionary; for each (pred var) key, the dictionary contains a list of necessary constraints to impose.\r\nThese constraints come from weak-dict, but they only remain if they are not subsumed by a constraint in strong-dict.")
+    public static final SubLObject necessary_constraint_dict_alt(SubLObject weak_dict, SubLObject strong_dict) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject dict = new_dictionary(symbol_function(EQUAL), UNPROVIDED);
+                SubLObject iteration_state = do_dictionary_contents_state(dictionary_contents(weak_dict));
+                while (NIL == do_dictionary_contents_doneP(iteration_state)) {
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject key = do_dictionary_contents_key_value(iteration_state);
+                        SubLObject weak_constraints = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject pred = key.first();
+                            SubLObject strong_constraints = dictionary_lookup(strong_dict, key, UNPROVIDED);
+                            SubLObject merged_constraints = ke_tools.strongest_args(pred, TWO_INTEGER, append(weak_constraints, strong_constraints), UNPROVIDED);
+                            SubLObject necessary_constraints = fast_set_difference(keyhash_utilities.fast_intersection(weak_constraints, merged_constraints, UNPROVIDED, UNPROVIDED, UNPROVIDED), strong_constraints, UNPROVIDED);
+                            dictionary_enter(dict, key, necessary_constraints);
+                        }
+                        iteration_state = do_dictionary_contents_next(iteration_state);
+                    }
+                } 
+                do_dictionary_contents_finalize(iteration_state);
+                return dict;
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @return dictionary; for each (pred var) key, the dictionary contains a list of necessary constraints to impose.
+    These constraints come from weak-dict, but they only remain if they are not subsumed by a constraint in strong-dict.
+     */
+    @LispMethod(comment = "@return dictionary; for each (pred var) key, the dictionary contains a list of necessary constraints to impose.\r\nThese constraints come from weak-dict, but they only remain if they are not subsumed by a constraint in strong-dict.")
     public static SubLObject necessary_constraint_dict(final SubLObject weak_dict, final SubLObject strong_dict) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject dict = dictionary.new_dictionary(symbol_function(EQUAL), UNPROVIDED);
@@ -2434,6 +4959,36 @@ public final class simplifier extends SubLTranslatedFile {
         }
         dictionary_contents.do_dictionary_contents_finalize(iteration_state);
         return dict;
+    }
+
+    public static final SubLObject transitive_constraint_dict_alt(SubLObject formula, SubLObject constraint_merging_func) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject dict = new_dictionary(symbol_function(EQUAL), UNPROVIDED);
+                thread.resetMultipleValues();
+                {
+                    SubLObject raw_hash = com.cyc.cycjava.cycl.simplifier.transitive_constraint_raw_info(formula);
+                    SubLObject constrained_vars = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    clear_dictionary(dict);
+                    {
+                        SubLObject cdolist_list_var = constrained_vars;
+                        SubLObject var = NIL;
+                        for (var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , var = cdolist_list_var.first()) {
+                            {
+                                SubLObject cdolist_list_var_9 = $transitive_constraint_preds$.getDynamicValue(thread);
+                                SubLObject pred = NIL;
+                                for (pred = cdolist_list_var_9.first(); NIL != cdolist_list_var_9; cdolist_list_var_9 = cdolist_list_var_9.rest() , pred = cdolist_list_var_9.first()) {
+                                    dictionary_enter(dict, list(pred, var), funcall(constraint_merging_func, pred, TWO_INTEGER, gethash(list(pred, var), raw_hash, UNPROVIDED)));
+                                }
+                            }
+                        }
+                    }
+                }
+                return dict;
+            }
+        }
     }
 
     public static SubLObject transitive_constraint_dict(final SubLObject formula, final SubLObject constraint_merging_func) {
@@ -2462,6 +5017,34 @@ public final class simplifier extends SubLTranslatedFile {
         return dict;
     }
 
+    public static final SubLObject transitive_constraint_raw_info_alt(SubLObject junction) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject hash = make_hash_table(FOUR_INTEGER, symbol_function(EQUAL), UNPROVIDED);
+                SubLObject constrained_vars = NIL;
+                SubLObject args = cycl_utilities.formula_args(junction, $IGNORE);
+                SubLObject cdolist_list_var = args;
+                SubLObject junct = NIL;
+                for (junct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , junct = cdolist_list_var.first()) {
+                    {
+                        SubLObject pred = cycl_utilities.sentence_arg0(junct);
+                        if (NIL != subl_promotions.memberP(pred, $transitive_constraint_preds$.getDynamicValue(thread), symbol_function(EQ), UNPROVIDED)) {
+                            {
+                                SubLObject item_var = cycl_utilities.sentence_arg1(junct, UNPROVIDED);
+                                if (NIL == member(item_var, constrained_vars, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                    constrained_vars = cons(item_var, constrained_vars);
+                                }
+                            }
+                            hash_table_utilities.pushnew_hash(list(pred, cycl_utilities.sentence_arg1(junct, UNPROVIDED)), cycl_utilities.sentence_arg2(junct, UNPROVIDED), hash, UNPROVIDED);
+                        }
+                    }
+                }
+                return values(hash, constrained_vars);
+            }
+        }
+    }
+
     public static SubLObject transitive_constraint_raw_info(final SubLObject junction) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject hash = make_hash_table(FOUR_INTEGER, symbol_function(EQUAL), UNPROVIDED);
@@ -2485,6 +5068,13 @@ public final class simplifier extends SubLTranslatedFile {
         return values(hash, constrained_vars);
     }
 
+    public static final SubLObject simplify_transitive_redundanciesP_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            return makeBoolean(((NIL != com.cyc.cycjava.cycl.simplifier.simplify_redundanciesP()) && (NIL != $simplify_transitive_redundanciesP$.getDynamicValue(thread))) && (NIL == $simplifying_redundanciesP$.getDynamicValue(thread)));
+        }
+    }
+
     public static SubLObject simplify_transitive_redundanciesP() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         return makeBoolean(((NIL != simplify_redundanciesP()) && (NIL != czer_vars.$simplify_transitive_redundanciesP$.getDynamicValue(thread))) && (NIL == $simplifying_redundanciesP$.getDynamicValue(thread)));
@@ -2495,6 +5085,119 @@ public final class simplifier extends SubLTranslatedFile {
         return makeBoolean((NIL != $simplify_cycl_sentence_and_subsentencesP$.getDynamicValue(thread)) && (NIL != czer_vars.$simplify_contradictionsP$.getDynamicValue(thread)));
     }
 
+    /**
+     * Simplifies transitive redundancies.
+     * e.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)
+     * Doesn't specially handle scoped variables with the same name as other variables.
+     */
+    @LispMethod(comment = "Simplifies transitive redundancies.\r\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\r\nDoesn\'t specially handle scoped variables with the same name as other variables.\nSimplifies transitive redundancies.\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\nDoesn\'t specially handle scoped variables with the same name as other variables.")
+    public static final SubLObject simplify_transitive_redundancies_old_alt(SubLObject sentence, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == possibly_sentence_p(sentence)) {
+                return sentence;
+            }
+            {
+                SubLObject result = NIL;
+                SubLObject mt_var = mt;
+                {
+                    SubLObject _prev_bind_0 = $relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = $mt$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = $simplifying_redundanciesP$.currentBinding(thread);
+                    try {
+                        $relevant_mt_function$.bind(possibly_in_mt_determine_function(mt_var), thread);
+                        $mt$.bind(possibly_in_mt_determine_mt(mt_var), thread);
+                        $simplifying_redundanciesP$.bind(T, thread);
+                        {
+                            SubLObject new_conjuncts = NIL;
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject cnf_sentence = clausifier.el_cnf(sentence, mt);
+                                SubLObject mt_10 = thread.secondMultipleValue();
+                                thread.resetMultipleValues();
+                                clausifier.force_into_cnf(cnf_sentence);
+                                if (NIL == el_conjunction_p(cnf_sentence)) {
+                                    cnf_sentence = make_conjunction(list(cnf_sentence));
+                                }
+                                {
+                                    SubLObject constraints = at_var_types.inter_query_variables_arg_constraints(sentence, mt_10, UNPROVIDED);
+                                    SubLObject args = NIL;
+                                    if (NIL != constraints) {
+                                        args = cycl_utilities.sentence_args(cnf_sentence, $IGNORE);
+                                        if (NIL != el_conjunction_p(constraints)) {
+                                            {
+                                                SubLObject args_11 = cycl_utilities.formula_args(constraints, $IGNORE);
+                                                SubLObject cdolist_list_var = args_11;
+                                                SubLObject constraint = NIL;
+                                                for (constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constraint = cdolist_list_var.first()) {
+                                                    args = cons(constraint, args);
+                                                }
+                                                cnf_sentence = com.cyc.cycjava.cycl.simplifier.conjoin(args, UNPROVIDED);
+                                            }
+                                        } else {
+                                            cnf_sentence = com.cyc.cycjava.cycl.simplifier.conjoin(adjoin(constraints, args, UNPROVIDED, UNPROVIDED), UNPROVIDED);
+                                        }
+                                    }
+                                }
+                                {
+                                    SubLObject conjunct_constraint_dict = com.cyc.cycjava.cycl.simplifier.transitive_constraint_dict(cnf_sentence, symbol_function(STRONGEST_ARGS));
+                                    {
+                                        SubLObject args = cycl_utilities.formula_args(cnf_sentence, $IGNORE);
+                                        SubLObject cdolist_list_var = args;
+                                        SubLObject conjunct = NIL;
+                                        for (conjunct = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , conjunct = cdolist_list_var.first()) {
+                                            if (NIL != el_disjunction_p(conjunct)) {
+                                                new_conjuncts = cons(com.cyc.cycjava.cycl.simplifier.simplify_transitive_redundancies_in_disjunction_old(conjunct, conjunct_constraint_dict), new_conjuncts);
+                                            } else {
+                                                new_conjuncts = cons(conjunct, new_conjuncts);
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject iteration_state = do_dictionary_contents_state(dictionary_contents(conjunct_constraint_dict));
+                                        while (NIL == do_dictionary_contents_doneP(iteration_state)) {
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject key = do_dictionary_contents_key_value(iteration_state);
+                                                SubLObject constraints = thread.secondMultipleValue();
+                                                thread.resetMultipleValues();
+                                                {
+                                                    SubLObject pred = key.first();
+                                                    SubLObject var = second(key);
+                                                    SubLObject cdolist_list_var = constraints;
+                                                    SubLObject constraint = NIL;
+                                                    for (constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constraint = cdolist_list_var.first()) {
+                                                        if (NIL != constraint) {
+                                                            new_conjuncts = cons(make_binary_formula(pred, var, constraint), new_conjuncts);
+                                                        }
+                                                    }
+                                                }
+                                                iteration_state = do_dictionary_contents_next(iteration_state);
+                                            }
+                                        } 
+                                        do_dictionary_contents_finalize(iteration_state);
+                                    }
+                                }
+                                result = com.cyc.cycjava.cycl.simplifier.simplify_cycl_sentence_int(com.cyc.cycjava.cycl.simplifier.conjoin(nreverse(new_conjuncts), T), UNPROVIDED);
+                            }
+                        }
+                    } finally {
+                        $simplifying_redundanciesP$.rebind(_prev_bind_2, thread);
+                        $mt$.rebind(_prev_bind_1, thread);
+                        $relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
+    }
+
+    /**
+     * Simplifies transitive redundancies.
+     * e.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)
+     * Doesn't specially handle scoped variables with the same name as other variables.
+     */
+    @LispMethod(comment = "Simplifies transitive redundancies.\r\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\r\nDoesn\'t specially handle scoped variables with the same name as other variables.\nSimplifies transitive redundancies.\ne.g. (#$or (#$isa ?X #$Dog) (#$isa ?X #$Poodle)) -> (#$isa ?X #$Dog)\nDoesn\'t specially handle scoped variables with the same name as other variables.")
     public static SubLObject simplify_transitive_redundancies_old(final SubLObject sentence, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL == possibly_sentence_p(sentence)) {
@@ -2579,9 +5282,76 @@ public final class simplifier extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject simplify_transitive_redundancies_in_disjunction_old_alt(SubLObject disjunction, SubLObject external_constraint_dict) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(disjunction, EL_DISJUNCTION_P);
+            {
+                SubLObject disjunct_constraint_dict = com.cyc.cycjava.cycl.simplifier.transitive_constraint_dict(disjunction, symbol_function(WEAKEST_ARGS));
+                SubLObject new_disjuncts = NIL;
+                SubLObject vacuousP = NIL;
+                SubLObject args = cycl_utilities.formula_args(disjunction, $IGNORE);
+                SubLObject rest = NIL;
+                for (rest = args; !((NIL != vacuousP) || (NIL == rest)); rest = rest.rest()) {
+                    {
+                        SubLObject disjunct = rest.first();
+                        SubLObject sentence_pred = cycl_utilities.sentence_arg0(disjunct);
+                        SubLObject sentence_var = cycl_utilities.sentence_arg1(disjunct, UNPROVIDED);
+                        SubLObject sentence_constraints = list(cycl_utilities.sentence_arg2(disjunct, UNPROVIDED));
+                        if ((NIL != subl_promotions.memberP(sentence_pred, $transitive_constraint_preds$.getDynamicValue(thread), UNPROVIDED, UNPROVIDED)) && (NIL != cycl_variables.el_varP(sentence_var))) {
+                            {
+                                SubLObject key = list(sentence_pred, sentence_var);
+                                SubLObject external_constraints = dictionary_lookup(external_constraint_dict, key, UNPROVIDED);
+                                SubLObject disjunct_constraints = dictionary_lookup(disjunct_constraint_dict, key, UNPROVIDED);
+                                if (NIL != ke_tools.subsumed_by_stronger_argsP(sentence_pred, TWO_INTEGER, sentence_constraints, external_constraints, UNPROVIDED)) {
+                                    vacuousP = T;
+                                } else {
+                                    if (NIL != ke_tools.subsumed_by_stronger_argsP(sentence_pred, TWO_INTEGER, sentence_constraints, disjunct_constraints, UNPROVIDED)) {
+                                    } else {
+                                        new_disjuncts = cons(disjunct, new_disjuncts);
+                                    }
+                                }
+                            }
+                        } else {
+                            new_disjuncts = cons(disjunct, new_disjuncts);
+                        }
+                    }
+                }
+                if (NIL != vacuousP) {
+                    return make_disjunction(list($$True));
+                }
+                {
+                    SubLObject iteration_state = do_dictionary_contents_state(dictionary_contents(disjunct_constraint_dict));
+                    while (NIL == do_dictionary_contents_doneP(iteration_state)) {
+                        thread.resetMultipleValues();
+                        {
+                            SubLObject key = do_dictionary_contents_key_value(iteration_state);
+                            SubLObject constraints = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            {
+                                SubLObject pred = key.first();
+                                SubLObject var = second(key);
+                                SubLObject cdolist_list_var = constraints;
+                                SubLObject constraint = NIL;
+                                for (constraint = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , constraint = cdolist_list_var.first()) {
+                                    if (NIL != constraint) {
+                                        new_disjuncts = cons(make_binary_formula(pred, var, constraint), new_disjuncts);
+                                    }
+                                }
+                            }
+                            iteration_state = do_dictionary_contents_next(iteration_state);
+                        }
+                    } 
+                    do_dictionary_contents_finalize(iteration_state);
+                }
+                return com.cyc.cycjava.cycl.simplifier.ndisjoin(nreverse(new_disjuncts), T);
+            }
+        }
+    }
+
     public static SubLObject simplify_transitive_redundancies_in_disjunction_old(final SubLObject disjunction, final SubLObject external_constraint_dict) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != el_disjunction_p(disjunction) : "el_utilities.el_disjunction_p(disjunction) " + "CommonSymbols.NIL != el_utilities.el_disjunction_p(disjunction) " + disjunction;
+        assert NIL != el_disjunction_p(disjunction) : "! el_utilities.el_disjunction_p(disjunction) " + ("el_utilities.el_disjunction_p(disjunction) " + "CommonSymbols.NIL != el_utilities.el_disjunction_p(disjunction) ") + disjunction;
         final SubLObject disjunct_constraint_dict = transitive_constraint_dict(disjunction, symbol_function(WEAKEST_ARGS));
         SubLObject new_disjuncts = NIL;
         SubLObject vacuousP = NIL;
@@ -2638,6 +5408,14 @@ public final class simplifier extends SubLTranslatedFile {
         }
         dictionary_contents.do_dictionary_contents_finalize(iteration_state);
         return ndisjoin(nreverse(new_disjuncts), T);
+    }
+
+    public static final SubLObject simplify_number_expression_alt(SubLObject expression) {
+        if (NIL != el_formula_p(expression)) {
+            return evaluatable_expressions_out(expression);
+        } else {
+            return expression;
+        }
     }
 
     public static SubLObject simplify_number_expression(final SubLObject expression) {
@@ -2731,108 +5509,155 @@ public final class simplifier extends SubLTranslatedFile {
         return values(result, explanation);
     }
 
+    static private final SubLSymbol $sym3$LIFTABLE_CONJUNCTS_ = makeSymbol("LIFTABLE-CONJUNCTS?");
+
+    static private final SubLSymbol $sym6$CYC_VAR_ = makeSymbol("CYC-VAR?");
+
+    static private final SubLSymbol $sym7$EL_WFF_ = makeSymbol("EL-WFF?");
+
     public static SubLObject declare_simplifier_file() {
-        declareFunction(me, "fast_simplify_cycl_sentence", "FAST-SIMPLIFY-CYCL-SENTENCE", 1, 2, false);
-        declareFunction(me, "scg_simplify", "SCG-SIMPLIFY", 1, 1, false);
-        declareFunction(me, "lift_disjuncts", "LIFT-DISJUNCTS", 1, 0, false);
-        declareFunction(me, "nlift_disjuncts", "NLIFT-DISJUNCTS", 1, 0, false);
-        declareFunction(me, "disjoin", "DISJOIN", 1, 1, false);
-        declareFunction(me, "ndisjoin", "NDISJOIN", 1, 1, false);
-        declareFunction(me, "simplify_unary_junct", "SIMPLIFY-UNARY-JUNCT", 1, 0, false);
-        declareFunction(me, "simplify_unary_juncts", "SIMPLIFY-UNARY-JUNCTS", 1, 0, false);
-        declareFunction(me, "simplify_duplicate_juncts", "SIMPLIFY-DUPLICATE-JUNCTS", 1, 0, false);
-        declareFunction(me, "lift_conjuncts", "LIFT-CONJUNCTS", 1, 0, false);
-        declareFunction(me, "nlift_conjuncts", "NLIFT-CONJUNCTS", 1, 0, false);
-        declareFunction(me, "conjoin", "CONJOIN", 1, 1, false);
-        declareFunction(me, "nconjoin", "NCONJOIN", 1, 1, false);
-        declareFunction(me, "possibly_conjoin", "POSSIBLY-CONJOIN", 1, 1, false);
-        declareFunction(me, "lift_conjuncts_recursive", "LIFT-CONJUNCTS-RECURSIVE", 1, 0, false);
-        declareFunction(me, "liftable_conjunctsP", "LIFTABLE-CONJUNCTS?", 1, 0, false);
-        declareFunction(me, "simplify_el_syntax", "SIMPLIFY-EL-SYNTAX", 1, 1, false);
-        declareFunction(me, "try_to_simplify_non_wff_into_wff", "TRY-TO-SIMPLIFY-NON-WFF-INTO-WFF", 1, 2, false);
-        declareFunction(me, "simplify_cycl_sentence_deep", "SIMPLIFY-CYCL-SENTENCE-DEEP", 1, 1, false);
-        declareFunction(me, "get_simplified_cycl_sentence", "GET-SIMPLIFIED-CYCL-SENTENCE", 1, 1, false);
-        declareFunction(me, "simplify_cycl_sentence", "SIMPLIFY-CYCL-SENTENCE", 1, 1, false);
-        declareFunction(me, "simplify_cycl_sentence_syntax", "SIMPLIFY-CYCL-SENTENCE-SYNTAX", 1, 1, false);
-        declareFunction(me, "simplify_cycl_sentence_int", "SIMPLIFY-CYCL-SENTENCE-INT", 1, 1, false);
+        declareFunction("fast_simplify_cycl_sentence", "FAST-SIMPLIFY-CYCL-SENTENCE", 1, 2, false);
+        declareFunction("scg_simplify", "SCG-SIMPLIFY", 1, 1, false);
+        declareFunction("lift_disjuncts", "LIFT-DISJUNCTS", 1, 0, false);
+        declareFunction("nlift_disjuncts", "NLIFT-DISJUNCTS", 1, 0, false);
+        declareFunction("disjoin", "DISJOIN", 1, 1, false);
+        declareFunction("ndisjoin", "NDISJOIN", 1, 1, false);
+        declareFunction("simplify_unary_junct", "SIMPLIFY-UNARY-JUNCT", 1, 0, false);
+        declareFunction("simplify_unary_juncts", "SIMPLIFY-UNARY-JUNCTS", 1, 0, false);
+        declareFunction("simplify_duplicate_juncts", "SIMPLIFY-DUPLICATE-JUNCTS", 1, 0, false);
+        declareFunction("lift_conjuncts", "LIFT-CONJUNCTS", 1, 0, false);
+        declareFunction("nlift_conjuncts", "NLIFT-CONJUNCTS", 1, 0, false);
+        declareFunction("conjoin", "CONJOIN", 1, 1, false);
+        declareFunction("nconjoin", "NCONJOIN", 1, 1, false);
+        declareFunction("possibly_conjoin", "POSSIBLY-CONJOIN", 1, 1, false);
+        declareFunction("lift_conjuncts_recursive", "LIFT-CONJUNCTS-RECURSIVE", 1, 0, false);
+        declareFunction("liftable_conjunctsP", "LIFTABLE-CONJUNCTS?", 1, 0, false);
+        declareFunction("simplify_el_syntax", "SIMPLIFY-EL-SYNTAX", 1, 1, false);
+        declareFunction("try_to_simplify_non_wff_into_wff", "TRY-TO-SIMPLIFY-NON-WFF-INTO-WFF", 1, 2, false);
+        declareFunction("simplify_cycl_sentence_deep", "SIMPLIFY-CYCL-SENTENCE-DEEP", 1, 1, false);
+        declareFunction("get_simplified_cycl_sentence", "GET-SIMPLIFIED-CYCL-SENTENCE", 1, 1, false);
+        declareFunction("simplify_cycl_sentence", "SIMPLIFY-CYCL-SENTENCE", 1, 1, false);
+        declareFunction("simplify_cycl_sentence_syntax", "SIMPLIFY-CYCL-SENTENCE-SYNTAX", 1, 1, false);
+        declareFunction("simplify_cycl_sentence_int", "SIMPLIFY-CYCL-SENTENCE-INT", 1, 1, false);
         new simplifier.$simplify_cycl_sentence_int$UnaryFunction();
         new simplifier.$simplify_cycl_sentence_int$BinaryFunction();
-        declareFunction(me, "simplify_true_sentence", "SIMPLIFY-TRUE-SENTENCE", 1, 1, false);
-        declareFunction(me, "simplify_exception", "SIMPLIFY-EXCEPTION", 1, 1, false);
-        declareFunction(me, "simplify_cycl_literal_syntax", "SIMPLIFY-CYCL-LITERAL-SYNTAX", 1, 1, false);
-        declareFunction(me, "simplify_cycl_literal", "SIMPLIFY-CYCL-LITERAL", 1, 1, false);
-        declareFunction(me, "simplify_cycl_literal_int", "SIMPLIFY-CYCL-LITERAL-INT", 1, 1, false);
-        declareFunction(me, "distributes_out_of_argP", "DISTRIBUTES-OUT-OF-ARG?", 3, 1, false);
-        declareFunction(me, "simplify_distributing_out_args", "SIMPLIFY-DISTRIBUTING-OUT-ARGS", 1, 0, false);
-        declareFunction(me, "simplify_cycl_literal_terms", "SIMPLIFY-CYCL-LITERAL-TERMS", 1, 1, false);
-        declareFunction(me, "simplify_mt_literal_terms", "SIMPLIFY-MT-LITERAL-TERMS", 2, 0, false);
-        declareFunction(me, "simplify_cycl_literal_terms_int", "SIMPLIFY-CYCL-LITERAL-TERMS-INT", 1, 1, false);
-        declareFunction(me, "simplify_cycl_term", "SIMPLIFY-CYCL-TERM", 1, 1, false);
-        declareFunction(me, "el_negate", "EL-NEGATE", 1, 0, false);
-        declareFunction(me, "simplify_cycl_negation", "SIMPLIFY-CYCL-NEGATION", 1, 1, false);
-        declareFunction(me, "simplify_cycl_conjunction", "SIMPLIFY-CYCL-CONJUNCTION", 1, 1, false);
-        declareFunction(me, "simplify_equality_literals", "SIMPLIFY-EQUALITY-LITERALS", 2, 0, false);
-        declareFunction(me, "simplify_one_open_open_equality_literal", "SIMPLIFY-ONE-OPEN-OPEN-EQUALITY-LITERAL", 2, 0, false);
-        declareFunction(me, "simplify_one_var_var_equality_literal", "SIMPLIFY-ONE-VAR-VAR-EQUALITY-LITERAL", 2, 0, false);
-        declareFunction(me, "simplify_one_open_open_equality_literal_int", "SIMPLIFY-ONE-OPEN-OPEN-EQUALITY-LITERAL-INT", 3, 0, false);
-        declareFunction(me, "simplify_one_symmetric_equality_literal", "SIMPLIFY-ONE-SYMMETRIC-EQUALITY-LITERAL", 1, 0, false);
-        declareFunction(me, "simplify_open_closed_equality_literals", "SIMPLIFY-OPEN-CLOSED-EQUALITY-LITERALS", 2, 0, false);
-        declareFunction(me, "equality_literalP", "EQUALITY-LITERAL?", 2, 0, false);
-        declareFunction(me, "open_open_equality_literalP", "OPEN-OPEN-EQUALITY-LITERAL?", 4, 0, false);
-        declareFunction(me, "symmetric_equality_literalP", "SYMMETRIC-EQUALITY-LITERAL?", 2, 0, false);
-        declareFunction(me, "simplify_cycl_disjunction", "SIMPLIFY-CYCL-DISJUNCTION", 1, 1, false);
-        declareFunction(me, "simplify_cycl_disjunction_int", "SIMPLIFY-CYCL-DISJUNCTION-INT", 1, 1, false);
-        declareFunction(me, "simplify_cycl_implication", "SIMPLIFY-CYCL-IMPLICATION", 1, 1, false);
-        declareFunction(me, "equal_implication_argsP", "EQUAL-IMPLICATION-ARGS?", 1, 1, false);
-        declareFunction(me, "simplify_cycl_universal", "SIMPLIFY-CYCL-UNIVERSAL", 1, 0, false);
-        declareFunction(me, "simplify_cycl_existential", "SIMPLIFY-CYCL-EXISTENTIAL", 1, 0, false);
-        declareFunction(me, "simplify_cycl_multiply_quantified_sentence", "SIMPLIFY-CYCL-MULTIPLY-QUANTIFIED-SENTENCE", 1, 0, false);
-        declareFunction(me, "simplify_cycl_relation", "SIMPLIFY-CYCL-RELATION", 1, 0, false);
-        declareFunction(me, "simplify_special_cases", "SIMPLIFY-SPECIAL-CASES", 1, 0, false);
-        declareFunction(me, "simplify_nested_collectionsubsetfn_expression", "SIMPLIFY-NESTED-COLLECTIONSUBSETFN-EXPRESSION", 1, 0, false);
-        declareFunction(me, "transform_nested_collectionsubsetfn_expression", "TRANSFORM-NESTED-COLLECTIONSUBSETFN-EXPRESSION", 1, 0, false);
-        declareFunction(me, "nested_collectionsubsetfn_expressionP", "NESTED-COLLECTIONSUBSETFN-EXPRESSION?", 1, 0, false);
+        declareFunction("simplify_true_sentence", "SIMPLIFY-TRUE-SENTENCE", 1, 1, false);
+        declareFunction("simplify_exception", "SIMPLIFY-EXCEPTION", 1, 1, false);
+        declareFunction("simplify_cycl_literal_syntax", "SIMPLIFY-CYCL-LITERAL-SYNTAX", 1, 1, false);
+        declareFunction("simplify_cycl_literal", "SIMPLIFY-CYCL-LITERAL", 1, 1, false);
+        declareFunction("simplify_cycl_literal_int", "SIMPLIFY-CYCL-LITERAL-INT", 1, 1, false);
+        declareFunction("distributes_out_of_argP", "DISTRIBUTES-OUT-OF-ARG?", 3, 1, false);
+        declareFunction("simplify_distributing_out_args", "SIMPLIFY-DISTRIBUTING-OUT-ARGS", 1, 0, false);
+        declareFunction("simplify_cycl_literal_terms", "SIMPLIFY-CYCL-LITERAL-TERMS", 1, 1, false);
+        declareFunction("simplify_mt_literal_terms", "SIMPLIFY-MT-LITERAL-TERMS", 2, 0, false);
+        declareFunction("simplify_cycl_literal_terms_int", "SIMPLIFY-CYCL-LITERAL-TERMS-INT", 1, 1, false);
+        declareFunction("simplify_cycl_term", "SIMPLIFY-CYCL-TERM", 1, 1, false);
+        declareFunction("el_negate", "EL-NEGATE", 1, 0, false);
+        declareFunction("simplify_cycl_negation", "SIMPLIFY-CYCL-NEGATION", 1, 1, false);
+        declareFunction("simplify_cycl_conjunction", "SIMPLIFY-CYCL-CONJUNCTION", 1, 1, false);
+        declareFunction("simplify_equality_literals", "SIMPLIFY-EQUALITY-LITERALS", 2, 0, false);
+        declareFunction("simplify_one_open_open_equality_literal", "SIMPLIFY-ONE-OPEN-OPEN-EQUALITY-LITERAL", 2, 0, false);
+        declareFunction("simplify_one_var_var_equality_literal", "SIMPLIFY-ONE-VAR-VAR-EQUALITY-LITERAL", 2, 0, false);
+        declareFunction("simplify_one_open_open_equality_literal_int", "SIMPLIFY-ONE-OPEN-OPEN-EQUALITY-LITERAL-INT", 3, 0, false);
+        declareFunction("simplify_one_symmetric_equality_literal", "SIMPLIFY-ONE-SYMMETRIC-EQUALITY-LITERAL", 1, 0, false);
+        declareFunction("simplify_open_closed_equality_literals", "SIMPLIFY-OPEN-CLOSED-EQUALITY-LITERALS", 2, 0, false);
+        declareFunction("equality_literalP", "EQUALITY-LITERAL?", 2, 0, false);
+        declareFunction("open_open_equality_literalP", "OPEN-OPEN-EQUALITY-LITERAL?", 4, 0, false);
+        declareFunction("symmetric_equality_literalP", "SYMMETRIC-EQUALITY-LITERAL?", 2, 0, false);
+        declareFunction("simplify_cycl_disjunction", "SIMPLIFY-CYCL-DISJUNCTION", 1, 1, false);
+        declareFunction("simplify_cycl_disjunction_int", "SIMPLIFY-CYCL-DISJUNCTION-INT", 1, 1, false);
+        declareFunction("simplify_cycl_implication", "SIMPLIFY-CYCL-IMPLICATION", 1, 1, false);
+        declareFunction("equal_implication_argsP", "EQUAL-IMPLICATION-ARGS?", 1, 1, false);
+        declareFunction("simplify_cycl_universal", "SIMPLIFY-CYCL-UNIVERSAL", 1, 0, false);
+        declareFunction("simplify_cycl_existential", "SIMPLIFY-CYCL-EXISTENTIAL", 1, 0, false);
+        declareFunction("simplify_cycl_multiply_quantified_sentence", "SIMPLIFY-CYCL-MULTIPLY-QUANTIFIED-SENTENCE", 1, 0, false);
+        declareFunction("simplify_cycl_relation", "SIMPLIFY-CYCL-RELATION", 1, 0, false);
+        declareFunction("simplify_special_cases", "SIMPLIFY-SPECIAL-CASES", 1, 0, false);
+        declareFunction("simplify_nested_collectionsubsetfn_expression", "SIMPLIFY-NESTED-COLLECTIONSUBSETFN-EXPRESSION", 1, 0, false);
+        declareFunction("transform_nested_collectionsubsetfn_expression", "TRANSFORM-NESTED-COLLECTIONSUBSETFN-EXPRESSION", 1, 0, false);
+        declareFunction("nested_collectionsubsetfn_expressionP", "NESTED-COLLECTIONSUBSETFN-EXPRESSION?", 1, 0, false);
         new simplifier.$nested_collectionsubsetfn_expressionP$UnaryFunction();
-        declareFunction(me, "simplify_individualasfn_expressions", "SIMPLIFY-INDIVIDUALASFN-EXPRESSIONS", 1, 0, false);
-        declareFunction(me, "transform_individualasfn_expression", "TRANSFORM-INDIVIDUALASFN-EXPRESSION", 1, 0, false);
-        declareFunction(me, "individualasfn_expressionP", "INDIVIDUALASFN-EXPRESSION?", 1, 0, false);
-        declareFunction(me, "simplify_redundanciesP", "SIMPLIFY-REDUNDANCIES?", 0, 0, false);
-        declareFunction(me, "simplify_kappa_asent", "SIMPLIFY-KAPPA-ASENT", 1, 0, false);
-        declareFunction(me, "simplify_ist_sentence", "SIMPLIFY-IST-SENTENCE", 1, 0, false);
-        declareFunction(me, "fold_equals", "FOLD-EQUALS", 1, 0, false);
-        declareFunction(me, "fold_equals_in_asent", "FOLD-EQUALS-IN-ASENT", 2, 3, false);
-        declareFunction(me, "do_fold_equals_in_asent", "DO-FOLD-EQUALS-IN-ASENT", 4, 0, false);
-        declareFunction(me, "note_fold_equals_binding", "NOTE-FOLD-EQUALS-BINDING", 3, 0, false);
-        declareFunction(me, "simplify_sequence_variables", "SIMPLIFY-SEQUENCE-VARIABLES", 1, 0, false);
-        declareFunction(me, "simplify_sequence_variables_1", "SIMPLIFY-SEQUENCE-VARIABLES-1", 1, 0, false);
-        declareFunction(me, "simplify_sequence_variables_int", "SIMPLIFY-SEQUENCE-VARIABLES-INT", 3, 0, false);
-        declareFunction(me, "possible_sequence_var_simplification", "POSSIBLE-SEQUENCE-VAR-SIMPLIFICATION", 2, 0, false);
-        declareFunction(me, "simplify_sequence_vars_using_kb_arityP", "SIMPLIFY-SEQUENCE-VARS-USING-KB-ARITY?", 0, 0, false);
-        declareFunction(me, "ignore_sequence_var_if_wff", "IGNORE-SEQUENCE-VAR-IF-WFF", 2, 1, false);
-        declareFunction(me, "regularize_sequence_var_if_wff", "REGULARIZE-SEQUENCE-VAR-IF-WFF", 2, 1, false);
-        declareFunction(me, "split_sequence_var_if_wff", "SPLIT-SEQUENCE-VAR-IF-WFF", 1, 5, false);
-        declareFunction(me, "sequence_var_simplifiableP", "SEQUENCE-VAR-SIMPLIFIABLE?", 1, 0, false);
-        declareFunction(me, "simplify_contradictions", "SIMPLIFY-CONTRADICTIONS", 1, 0, false);
-        declareFunction(me, "simplify_transitive_redundancies", "SIMPLIFY-TRANSITIVE-REDUNDANCIES", 1, 1, false);
-        declareFunction(me, "simplify_transitive_redundancies_in_cycl_disjunction", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-IN-CYCL-DISJUNCTION", 1, 1, false);
-        declareFunction(me, "subsumed_by_another_conjunctP", "SUBSUMED-BY-ANOTHER-CONJUNCT?", 2, 0, false);
-        declareFunction(me, "conjunct_subsumed_by_conjunctP", "CONJUNCT-SUBSUMED-BY-CONJUNCT?", 2, 0, false);
-        declareFunction(me, "subsumed_args_by_constsP", "SUBSUMED-ARGS-BY-CONSTS?", 3, 0, false);
-        declareFunction(me, "subsumed_argsP", "SUBSUMED-ARGS?", 3, 0, false);
-        declareFunction(me, "simplify_transitive_redundancies_in_disjunction", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-IN-DISJUNCTION", 1, 0, false);
-        declareFunction(me, "necessary_constraint_dict", "NECESSARY-CONSTRAINT-DICT", 2, 0, false);
-        declareFunction(me, "transitive_constraint_dict", "TRANSITIVE-CONSTRAINT-DICT", 2, 0, false);
-        declareFunction(me, "transitive_constraint_raw_info", "TRANSITIVE-CONSTRAINT-RAW-INFO", 1, 0, false);
-        declareFunction(me, "simplify_transitive_redundanciesP", "SIMPLIFY-TRANSITIVE-REDUNDANCIES?", 0, 0, false);
-        declareFunction(me, "simplify_contradictionsP", "SIMPLIFY-CONTRADICTIONS?", 0, 0, false);
-        declareFunction(me, "simplify_transitive_redundancies_old", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-OLD", 2, 0, false);
-        declareFunction(me, "simplify_transitive_redundancies_in_disjunction_old", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-IN-DISJUNCTION-OLD", 2, 0, false);
-        declareFunction(me, "simplify_number_expression", "SIMPLIFY-NUMBER-EXPRESSION", 1, 0, false);
-        declareFunction(me, "cycl_coerce_types", "CYCL-COERCE-TYPES", 1, 2, false);
+        declareFunction("simplify_individualasfn_expressions", "SIMPLIFY-INDIVIDUALASFN-EXPRESSIONS", 1, 0, false);
+        declareFunction("transform_individualasfn_expression", "TRANSFORM-INDIVIDUALASFN-EXPRESSION", 1, 0, false);
+        declareFunction("individualasfn_expressionP", "INDIVIDUALASFN-EXPRESSION?", 1, 0, false);
+        declareFunction("simplify_redundanciesP", "SIMPLIFY-REDUNDANCIES?", 0, 0, false);
+        declareFunction("simplify_kappa_asent", "SIMPLIFY-KAPPA-ASENT", 1, 0, false);
+        declareFunction("simplify_ist_sentence", "SIMPLIFY-IST-SENTENCE", 1, 0, false);
+        declareFunction("fold_equals", "FOLD-EQUALS", 1, 0, false);
+        declareFunction("fold_equals_in_asent", "FOLD-EQUALS-IN-ASENT", 2, 3, false);
+        declareFunction("do_fold_equals_in_asent", "DO-FOLD-EQUALS-IN-ASENT", 4, 0, false);
+        declareFunction("note_fold_equals_binding", "NOTE-FOLD-EQUALS-BINDING", 3, 0, false);
+        declareFunction("simplify_sequence_variables", "SIMPLIFY-SEQUENCE-VARIABLES", 1, 0, false);
+        declareFunction("simplify_sequence_variables_1", "SIMPLIFY-SEQUENCE-VARIABLES-1", 1, 0, false);
+        declareFunction("simplify_sequence_variables_int", "SIMPLIFY-SEQUENCE-VARIABLES-INT", 3, 0, false);
+        declareFunction("possible_sequence_var_simplification", "POSSIBLE-SEQUENCE-VAR-SIMPLIFICATION", 2, 0, false);
+        declareFunction("simplify_sequence_vars_using_kb_arityP", "SIMPLIFY-SEQUENCE-VARS-USING-KB-ARITY?", 0, 0, false);
+        declareFunction("ignore_sequence_var_if_wff", "IGNORE-SEQUENCE-VAR-IF-WFF", 2, 1, false);
+        declareFunction("regularize_sequence_var_if_wff", "REGULARIZE-SEQUENCE-VAR-IF-WFF", 2, 1, false);
+        declareFunction("split_sequence_var_if_wff", "SPLIT-SEQUENCE-VAR-IF-WFF", 1, 5, false);
+        declareFunction("sequence_var_simplifiableP", "SEQUENCE-VAR-SIMPLIFIABLE?", 1, 0, false);
+        declareFunction("simplify_contradictions", "SIMPLIFY-CONTRADICTIONS", 1, 0, false);
+        declareFunction("simplify_transitive_redundancies", "SIMPLIFY-TRANSITIVE-REDUNDANCIES", 1, 1, false);
+        declareFunction("simplify_transitive_redundancies_in_cycl_disjunction", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-IN-CYCL-DISJUNCTION", 1, 1, false);
+        declareFunction("subsumed_by_another_conjunctP", "SUBSUMED-BY-ANOTHER-CONJUNCT?", 2, 0, false);
+        declareFunction("conjunct_subsumed_by_conjunctP", "CONJUNCT-SUBSUMED-BY-CONJUNCT?", 2, 0, false);
+        declareFunction("subsumed_args_by_constsP", "SUBSUMED-ARGS-BY-CONSTS?", 3, 0, false);
+        declareFunction("subsumed_argsP", "SUBSUMED-ARGS?", 3, 0, false);
+        declareFunction("simplify_transitive_redundancies_in_disjunction", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-IN-DISJUNCTION", 1, 0, false);
+        declareFunction("necessary_constraint_dict", "NECESSARY-CONSTRAINT-DICT", 2, 0, false);
+        declareFunction("transitive_constraint_dict", "TRANSITIVE-CONSTRAINT-DICT", 2, 0, false);
+        declareFunction("transitive_constraint_raw_info", "TRANSITIVE-CONSTRAINT-RAW-INFO", 1, 0, false);
+        declareFunction("simplify_transitive_redundanciesP", "SIMPLIFY-TRANSITIVE-REDUNDANCIES?", 0, 0, false);
+        declareFunction("simplify_contradictionsP", "SIMPLIFY-CONTRADICTIONS?", 0, 0, false);
+        declareFunction("simplify_transitive_redundancies_old", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-OLD", 2, 0, false);
+        declareFunction("simplify_transitive_redundancies_in_disjunction_old", "SIMPLIFY-TRANSITIVE-REDUNDANCIES-IN-DISJUNCTION-OLD", 2, 0, false);
+        declareFunction("simplify_number_expression", "SIMPLIFY-NUMBER-EXPRESSION", 1, 0, false);
+        declareFunction("cycl_coerce_types", "CYCL-COERCE-TYPES", 1, 2, false);
+        return NIL;
+    }
+
+    static private final SubLString $str_alt10$_S_is_not_well_formed_ = makeString("~S is not well formed.");
+
+    static private final SubLString $str_alt17$You_tried_to_negate__S___That_was = makeString("You tried to negate ~S.  That was a bad idea, because it's neither a sentence nor a sentence.");
+
+    static private final SubLList $list_alt19 = list(reader_make_constant_shell("equalSymbols"));
+
+    static private final SubLSymbol $sym20$NESTED_COLLECTIONSUBSETFN_EXPRESSION_ = makeSymbol("NESTED-COLLECTIONSUBSETFN-EXPRESSION?");
+
+    static private final SubLSymbol $sym27$FORMULA_WITH_SEQUENCE_TERM_ = makeSymbol("FORMULA-WITH-SEQUENCE-TERM?");
+
+    static private final SubLString $str_alt29$Splitting_sequence_variables_into = makeString("Splitting sequence variables into other sequence variables is currently not supported. -ECA");
+
+    static private final SubLList $list_alt30 = list(reader_make_constant_shell("isa"), reader_make_constant_shell("genls"));
+
+    private static final SubLSymbol SIMPLIFY_IST_SENTENCE = makeSymbol("SIMPLIFY-IST-SENTENCE");
+
+    static private final SubLString $$$pace = makeString("pace");
+
+    static private final SubLList $list_alt41 = list(list(list(list(reader_make_constant_shell("ist"), reader_make_constant_shell("BaseKB"), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("isa"), makeString("a"), reader_make_constant_shell("Thing")), list(reader_make_constant_shell("isa"), makeString("b"), reader_make_constant_shell("Thing"))))), list(reader_make_constant_shell("and"), list(reader_make_constant_shell("ist"), reader_make_constant_shell("BaseKB"), list(reader_make_constant_shell("isa"), makeString("a"), reader_make_constant_shell("Thing"))), list(reader_make_constant_shell("ist"), reader_make_constant_shell("BaseKB"), list(reader_make_constant_shell("isa"), makeString("b"), reader_make_constant_shell("Thing"))))));
+
+    public static final SubLObject init_simplifier_file_alt() {
+        defparameter("*SIMPLIFYING-SEQUENCE-VARIABLES?*", NIL);
+        defparameter("*SIMPLIFYING-REDUNDANCIES?*", NIL);
+        defparameter("*TRANSITIVE-CONSTRAINT-PREDS*", $list_alt30);
         return NIL;
     }
 
     public static SubLObject init_simplifier_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*SIMPLIFY-CYCL-SENTENCE-AND-SUBSENTENCES?*", NIL);
+            defparameter("*SIMPLIFY-INDIVIDUALASFN-EXPRESSIONS-ISA-SENTENCES-TO-ADD*", NIL);
+            defparameter("*SIMPLIFYING-SEQUENCE-VARIABLES?*", NIL);
+            defparameter("*SIMPLIFYING-REDUNDANCIES?*", NIL);
+            defparameter("*TRANSITIVE-CONSTRAINT-PREDS*", $list47);
+        }
+        if (SubLFiles.USE_V2) {
+            defparameter("*TRANSITIVE-CONSTRAINT-PREDS*", $list_alt30);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_simplifier_file_Previous() {
         defparameter("*SIMPLIFY-CYCL-SENTENCE-AND-SUBSENTENCES?*", NIL);
         defparameter("*SIMPLIFY-INDIVIDUALASFN-EXPRESSIONS-ISA-SENTENCES-TO-ADD*", NIL);
         defparameter("*SIMPLIFYING-SEQUENCE-VARIABLES?*", NIL);
@@ -2841,7 +5666,22 @@ public final class simplifier extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_simplifier_file_alt() {
+        define_test_case_table_int(SIMPLIFY_IST_SENTENCE, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$pace, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt41);
+        return NIL;
+    }
+
     public static SubLObject setup_simplifier_file() {
+        if (SubLFiles.USE_V1) {
+            register_external_symbol(GET_SIMPLIFIED_CYCL_SENTENCE);
+        }
+        if (SubLFiles.USE_V2) {
+            define_test_case_table_int(SIMPLIFY_IST_SENTENCE, list(new SubLObject[]{ $TEST, NIL, $OWNER, $$$pace, $CLASSES, NIL, $KB, $TINY, $WORKING_, T }), $list_alt41);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_simplifier_file_Previous() {
         register_external_symbol(GET_SIMPLIFIED_CYCL_SENTENCE);
         return NIL;
     }
@@ -2862,66 +5702,6 @@ public final class simplifier extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $simplify_cycl_sentence_int$UnaryFunction extends UnaryFunction {

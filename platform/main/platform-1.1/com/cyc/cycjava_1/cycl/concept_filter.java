@@ -210,8 +210,7 @@ public  final class concept_filter extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_concept_filter_file() {
-    // CVS_ID("Id: concept-filter.lisp 128019 2009-06-17 16:11:46Z builder ");
-    memoization_state.note_globally_cached_function($sym6$CONCEPT_FILTER_SPECIFICATION_P);
+        memoization_state.note_globally_cached_function($sym6$CONCEPT_FILTER_SPECIFICATION_P);
     utilities_macros.register_kb_function($sym14$NODES_FOR_CONCEPT_FILTER_AFTER_ADDING);
     utilities_macros.register_kb_function($sym15$NODES_FOR_CONCEPT_FILTER_AFTER_REMOVING);
     memoization_state.note_globally_cached_function($sym16$CONCEPT_FILTER_ALL_ISA);

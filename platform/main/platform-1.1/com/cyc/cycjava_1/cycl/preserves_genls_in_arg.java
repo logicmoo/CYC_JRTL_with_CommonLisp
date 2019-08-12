@@ -348,8 +348,7 @@ public  final class preserves_genls_in_arg extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_preserves_genls_in_arg_file() {
-    // CVS_ID("Id: preserves-genls-in-arg.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_PGIA_MT_);
+        subl_macro_promotions.declare_defglobal($sym0$_PGIA_MT_);
     mt_vars.note_mt_var($sym0$_PGIA_MT_, NIL);
     utilities_macros.register_kb_function($sym5$PGIA_AFTER_ADDING_PGIA);
     utilities_macros.register_kb_function($sym19$PGIA_AFTER_ADDING_ISA);

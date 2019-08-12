@@ -1,56 +1,31 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.sksi.sksi_infrastructure;
 
 
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.backward;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.deck;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.evaluation_defns;
-import com.cyc.cycjava.cycl.fi;
-import com.cyc.cycjava.cycl.fort_types_interface;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.function_terms;
-import com.cyc.cycjava.cycl.genl_mts;
-import com.cyc.cycjava.cycl.genl_predicates;
-import com.cyc.cycjava.cycl.gt_methods;
-import com.cyc.cycjava.cycl.gt_vars;
-import com.cyc.cycjava.cycl.hlmt;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_indexing;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.keyhash_utilities;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.nart_handles;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.obsolete;
-import com.cyc.cycjava.cycl.pred_relevance_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_contents;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.sbhl.*;
 import com.cyc.cycjava.cycl.sksi.query_sks.sksi_hl_support_utilities;
-import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
-import com.cyc.cycjava.cycl.string_utilities;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.term;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
@@ -63,59 +38,85 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SEVEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      SKSI-KB-ACCESSORS
+ * source file: /cyc/top/cycl/sksi/sksi-infrastructure/sksi-kb-accessors.lisp
+ * created:     2019/07/03 17:37:53
+ */
+public final class sksi_kb_accessors extends SubLTranslatedFile implements V12 {
+    public static final SubLObject sksi_determine_relevant_logical_fields_for_physical_field_internal(SubLObject physical_field, SubLObject physical_schema, SubLObject all_logical_fields, SubLObject logical_schema) {
+        {
+            SubLObject field_encodings = sksi_field_translation_utilities.relevant_field_encodings(physical_field, physical_schema, logical_schema);
+            SubLObject logical_fields = NIL;
+            SubLObject cdolist_list_var = field_encodings;
+            SubLObject field_encoding = NIL;
+            for (field_encoding = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , field_encoding = cdolist_list_var.first()) {
+                logical_fields = nconc(logical_fields, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.extract_logical_fields(field_encoding, all_logical_fields));
+            }
+            return logical_fields;
+        }
+    }
 
-public final class sksi_kb_accessors extends SubLTranslatedFile {
+    public static final SubLObject sksi_determine_relevant_logical_fields_for_physical_field(SubLObject physical_field, SubLObject physical_schema, SubLObject all_logical_fields, SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_determine_relevant_logical_fields_for_physical_field_internal(physical_field, physical_schema, all_logical_fields, logical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SKSI_DETERMINE_RELEVANT_LOGICAL_FIELDS_FOR_PHYSICAL_FIELD, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SKSI_DETERMINE_RELEVANT_LOGICAL_FIELDS_FOR_PHYSICAL_FIELD, FOUR_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SKSI_DETERMINE_RELEVANT_LOGICAL_FIELDS_FOR_PHYSICAL_FIELD, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_4(physical_field, physical_schema, all_logical_fields, logical_schema);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (physical_field.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (physical_schema.equal(cached_args.first())) {
+                                            cached_args = cached_args.rest();
+                                            if (all_logical_fields.equal(cached_args.first())) {
+                                                cached_args = cached_args.rest();
+                                                if (((NIL != cached_args) && (NIL == cached_args.rest())) && logical_schema.equal(cached_args.first())) {
+                                                    return memoization_state.caching_results(results2);
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_determine_relevant_logical_fields_for_physical_field_internal(physical_field, physical_schema, all_logical_fields, logical_schema)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(physical_field, physical_schema, all_logical_fields, logical_schema));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
+    }
+
     public static final SubLFile me = new sksi_kb_accessors();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors";
+ public static final String myName = "com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors";
 
-    public static final String myFingerPrint = "f475944d95de66268df05b3a8cccaca85c1511aa02d7cfb9f9c6512adb0d7ee9";
 
     // deflexical
     /**
@@ -123,54 +124,50 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
      * which should only be the case if there is no such default (assuming knowledge
      * source representations in the KB are always complete)
      */
+    @LispMethod(comment = "this should only be used if the default value for a given field is not known,\r\nwhich should only be the case if there is no such default (assuming knowledge\r\nsource representations in the KB are always complete)\ndeflexical\nthis should only be used if the default value for a given field is not known,\nwhich should only be the case if there is no such default (assuming knowledge\nsource representations in the KB are always complete)")
     private static final SubLSymbol $sksi_default_field_value$ = makeSymbol("*SKSI-DEFAULT-FIELD-VALUE*");
 
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $use_legacy_simple_table_implementationP$ = makeSymbol("*USE-LEGACY-SIMPLE-TABLE-IMPLEMENTATION?*");
 
-    private static final SubLObject $$contentMt = reader_make_constant_shell(makeString("contentMt"));
+
+
+    private static final SubLSymbol CONTENT_MT_SK_SOURCE = makeSymbol("CONTENT-MT-SK-SOURCE");
 
 
 
-    public static final SubLSymbol CONTENT_MT_SK_SOURCE = makeSymbol("CONTENT-MT-SK-SOURCE");
 
-    private static final SubLObject $$mtSpindleMember = reader_make_constant_shell(makeString("mtSpindleMember"));
-
-    private static final SubLObject $$StructuredKnowledgeSource = reader_make_constant_shell(makeString("StructuredKnowledgeSource"));
 
     private static final SubLSymbol SK_SOURCE_IN_ANY_MT_P = makeSymbol("SK-SOURCE-IN-ANY-MT-P");
 
-    private static final SubLObject $$sksModifiable = reader_make_constant_shell(makeString("sksModifiable"));
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
 
-    private static final SubLObject $$codeMapping = reader_make_constant_shell(makeString("codeMapping"));
+
 
     private static final SubLSymbol GET_SK_SOURCE_PROPERTY_FROM_KB = makeSymbol("GET-SK-SOURCE-PROPERTY-FROM-KB");
 
     private static final SubLSymbol SK_SOURCE_CONTENT_MT = makeSymbol("SK-SOURCE-CONTENT-MT");
 
-    private static final SubLObject $$contentMtHead = reader_make_constant_shell(makeString("contentMtHead"));
+
 
     private static final SubLSymbol SK_SOURCE_CONTENT_MT_HEAD = makeSymbol("SK-SOURCE-CONTENT-MT-HEAD");
 
     private static final SubLSymbol SK_SOURCE_MAPPING_MT = makeSymbol("SK-SOURCE-MAPPING-MT");
 
-    private static final SubLObject $$mappingMt = reader_make_constant_shell(makeString("mappingMt"));
 
-    private static final SubLObject $$sksLogicalSchemaDescriptionMt = reader_make_constant_shell(makeString("sksLogicalSchemaDescriptionMt"));
 
-    private static final SubLObject $$sksSourceDescriptionMt = reader_make_constant_shell(makeString("sksSourceDescriptionMt"));
 
-    private static final SubLObject $$sksSchemaTranslationMt = reader_make_constant_shell(makeString("sksSchemaTranslationMt"));
 
-    private static final SubLObject $$rowCount_SKS = reader_make_constant_shell(makeString("rowCount-SKS"));
 
-    private static final SubLObject $$structuredKnowledgeSourceName = reader_make_constant_shell(makeString("structuredKnowledgeSourceName"));
+
+
+
+    private static final SubLObject $$rowCount_SKS = reader_make_constant_shell("rowCount-SKS");
+
+
 
     private static final SubLSymbol $sym21$_EXIT = makeSymbol("%EXIT");
 
@@ -178,67 +175,47 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     private static final SubLString $str23$Multiple_namespaces_for__A___S__S = makeString("Multiple namespaces for ~A: ~S ~S");
 
-    private static final SubLObject $const24$structuredKnowledgeSourceNamespac = reader_make_constant_shell(makeString("structuredKnowledgeSourceNamespace"));
+    private static final SubLObject $const24$structuredKnowledgeSourceNamespac = reader_make_constant_shell("structuredKnowledgeSourceNamespace");
 
     private static final SubLSymbol SK_SOURCE_BY_SKS_NAME = makeSymbol("SK-SOURCE-BY-SKS-NAME");
 
 
 
-
-
-    private static final SubLObject $$physicalSchemaSourceMap = reader_make_constant_shell(makeString("physicalSchemaSourceMap"));
-
-
-
     private static final SubLSymbol KBEQ = makeSymbol("KBEQ");
 
-    private static final SubLObject $$subKS_Direct = reader_make_constant_shell(makeString("subKS-Direct"));
+    private static final SubLObject $$subKS_Direct = reader_make_constant_shell("subKS-Direct");
 
-    private static final SubLObject $$meaningSentencePredicateForSource = reader_make_constant_shell(makeString("meaningSentencePredicateForSource"));
 
-    private static final SubLObject $$meaningSentencePredicateForSchema = reader_make_constant_shell(makeString("meaningSentencePredicateForSchema"));
+
+
 
     private static final SubLSymbol GET_SKS_SINGLE_LITERAL_LOOKUP_DIRECTION_FROM_KB = makeSymbol("GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB");
-
-    private static final SubLObject $$SKSISingleLiteralRemovalModule = reader_make_constant_shell(makeString("SKSISingleLiteralRemovalModule"));
 
 
 
     private static final SubLSymbol GET_SKS_MULTI_LITERAL_LOOKUP_DIRECTION_FROM_KB = makeSymbol("GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB");
 
-    private static final SubLObject $$SKSIMultiLiteralRemovalModule = reader_make_constant_shell(makeString("SKSIMultiLiteralRemovalModule"));
+
 
     private static final SubLSymbol GET_SKS_STORAGE_DIRECTION_FROM_KB = makeSymbol("GET-SKS-STORAGE-DIRECTION-FROM-KB");
 
-    private static final SubLObject $$SKSIStorageModule = reader_make_constant_shell(makeString("SKSIStorageModule"));
 
 
 
-    private static final SubLObject $$sksModuleTypeDirection = reader_make_constant_shell(makeString("sksModuleTypeDirection"));
 
-    private static final SubLObject $$Backward_AssertionDirection = reader_make_constant_shell(makeString("Backward-AssertionDirection"));
+    private static final SubLObject $$Backward_AssertionDirection = reader_make_constant_shell("Backward-AssertionDirection");
 
-    private static final SubLObject $$Forward_AssertionDirection = reader_make_constant_shell(makeString("Forward-AssertionDirection"));
+    private static final SubLObject $$Forward_AssertionDirection = reader_make_constant_shell("Forward-AssertionDirection");
 
     private static final SubLList $list45 = list(list(makeSymbol("SUB-KS"), makeSymbol("SK-SOURCE"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list46 = list(makeKeyword("DONE"));
+    private static final SubLList $list46 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
-
-
 
     private static final SubLSymbol $sym49$GAF = makeUninternedSymbol("GAF");
 
     private static final SubLSymbol SKSI_DO_GAF_ARG_INDEX_TRUE = makeSymbol("SKSI-DO-GAF-ARG-INDEX-TRUE");
-
-
-
-
-
-
-
-
 
     private static final SubLSymbol SK_SOURCE_SUB_KS_CLOSURE = makeSymbol("SK-SOURCE-SUB-KS-CLOSURE");
 
@@ -256,11 +233,11 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym62$SINGLETON_ = makeSymbol("SINGLETON?");
 
-    private static final SubLObject $$schemaRepresentationComplete = reader_make_constant_shell(makeString("schemaRepresentationComplete"));
+
 
     private static final SubLSymbol $sym64$ISA_PHYSICAL_SCHEMA_ = makeSymbol("ISA-PHYSICAL-SCHEMA?");
 
-    private static final SubLObject $$PhysicalSchema = reader_make_constant_shell(makeString("PhysicalSchema"));
+
 
     private static final SubLInteger $int$50 = makeInteger(50);
 
@@ -268,89 +245,73 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     private static final SubLSymbol PHYSICAL_SCHEMA_FIELDS = makeSymbol("PHYSICAL-SCHEMA-FIELDS");
 
-    private static final SubLObject $$physicalFields = reader_make_constant_shell(makeString("physicalFields"));
+
 
     private static final SubLSymbol PHYSICAL_SCHEMA_PRIMARY_KEY = makeSymbol("PHYSICAL-SCHEMA-PRIMARY-KEY");
 
-    private static final SubLObject $$primaryKey = reader_make_constant_shell(makeString("primaryKey"));
+
 
     private static final SubLSymbol $sym72$PHYSICAL_SCHEMA_PRIMARY_KEY_COMPENSATE_FOR_TABLE_COLUMN_REPRESENT = makeSymbol("PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION");
 
-    private static final SubLObject $const73$suppressConvertingComparisonLiter = reader_make_constant_shell(makeString("suppressConvertingComparisonLiteralsToSQL"));
+    private static final SubLObject $const73$suppressConvertingComparisonLiter = reader_make_constant_shell("suppressConvertingComparisonLiteralsToSQL");
 
-    private static final SubLObject $$foreignKeyMap = reader_make_constant_shell(makeString("foreignKeyMap"));
 
-    private static final SubLObject $$foreignKeyMap_Restrict = reader_make_constant_shell(makeString("foreignKeyMap-Restrict"));
 
-    private static final SubLObject $$foreignKeyMap_Cascade = reader_make_constant_shell(makeString("foreignKeyMap-Cascade"));
+    private static final SubLObject $$foreignKeyMap_Restrict = reader_make_constant_shell("foreignKeyMap-Restrict");
 
-    private static final SubLObject $$foreignKeyMap_SetNull = reader_make_constant_shell(makeString("foreignKeyMap-SetNull"));
+    private static final SubLObject $$foreignKeyMap_Cascade = reader_make_constant_shell("foreignKeyMap-Cascade");
 
-    private static final SubLObject $$foreignKeyMap_SetDefault = reader_make_constant_shell(makeString("foreignKeyMap-SetDefault"));
+    private static final SubLObject $$foreignKeyMap_SetNull = reader_make_constant_shell("foreignKeyMap-SetNull");
 
-    private static final SubLObject $$uniqueFieldList = reader_make_constant_shell(makeString("uniqueFieldList"));
+    private static final SubLObject $$foreignKeyMap_SetDefault = reader_make_constant_shell("foreignKeyMap-SetDefault");
 
-    private static final SubLObject $$requiredFields = reader_make_constant_shell(makeString("requiredFields"));
+
+
+
 
     private static final SubLSymbol PHYSICAL_FIELD_NAME = makeSymbol("PHYSICAL-FIELD-NAME");
 
-    private static final SubLObject $$indexedFields = reader_make_constant_shell(makeString("indexedFields"));
+
 
     private static final SubLSymbol $sym83$PHYSICAL_SCHEMA_ENUMERABLE_ = makeSymbol("PHYSICAL-SCHEMA-ENUMERABLE?");
 
-    private static final SubLObject $$enumerableSchema = reader_make_constant_shell(makeString("enumerableSchema"));
+
 
     private static final SubLSymbol PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS = makeSymbol("PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS");
 
-    private static final SubLObject $$resultSetCardinality = reader_make_constant_shell(makeString("resultSetCardinality"));
+
 
     private static final SubLSymbol $sym87$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS = makeSymbol("PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS");
 
-    private static final SubLObject $const88$resultSetCardinalityWithConstrain = reader_make_constant_shell(makeString("resultSetCardinalityWithConstraints"));
+    private static final SubLObject $const88$resultSetCardinalityWithConstrain = reader_make_constant_shell("resultSetCardinalityWithConstraints");
 
-    private static final SubLObject $$logicalPhysicalSchemaMap = reader_make_constant_shell(makeString("logicalPhysicalSchemaMap"));
 
-    private static final SubLObject $$exampleTuple = reader_make_constant_shell(makeString("exampleTuple"));
 
-    private static final SubLObject $$fieldEncoding = reader_make_constant_shell(makeString("fieldEncoding"));
+
+
+
 
     private static final SubLSymbol PHYSICAL_SCHEMA_ORDERED_FIELD_LIST = makeSymbol("PHYSICAL-SCHEMA-ORDERED-FIELD-LIST");
 
-    private static final SubLObject $$schemaFieldNameList = reader_make_constant_shell(makeString("schemaFieldNameList"));
+
 
     private static final SubLSymbol LOGICAL_SCHEMA_PHYSICAL_SCHEMATA = makeSymbol("LOGICAL-SCHEMA-PHYSICAL-SCHEMATA");
 
     private static final SubLSymbol LOGICAL_SCHEMA_FIELDS = makeSymbol("LOGICAL-SCHEMA-FIELDS");
 
-    private static final SubLObject $$logicalFields = reader_make_constant_shell(makeString("logicalFields"));
+
 
     private static final SubLSymbol LOGICAL_SCHEMA_FIELD_INDEXICALS = makeSymbol("LOGICAL-SCHEMA-FIELD-INDEXICALS");
-
-    private static final SubLObject $$logicalFieldIndexicals = reader_make_constant_shell(makeString("logicalFieldIndexicals"));
-
-
-
-
-
-
-
-
 
 
 
     private static final SubLString $str104$_A_is_not_a__A = makeString("~A is not a ~A");
 
-
-
-
-
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
-
-
 
     private static final SubLString $str109$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
-    private static final SubLObject $$genlPreds = reader_make_constant_shell(makeString("genlPreds"));
+
 
     private static final SubLString $str111$_A_is_neither_SET_P_nor_LISTP_ = makeString("~A is neither SET-P nor LISTP.");
 
@@ -358,97 +319,91 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     private static final SubLString $str113$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
 
-    private static final SubLObject $$schemaExampleSentence = reader_make_constant_shell(makeString("schemaExampleSentence"));
 
-    private static final SubLObject $$logicalSchemaKeys = reader_make_constant_shell(makeString("logicalSchemaKeys"));
+
+
 
     private static final SubLSymbol LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS = makeSymbol("LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS");
 
-    private static final SubLObject $$logicalResultSetCardinality = reader_make_constant_shell(makeString("logicalResultSetCardinality"));
+
 
     private static final SubLSymbol LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_WRT_VALUE_GAFS = makeSymbol("LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS");
 
-    private static final SubLObject $const119$logicalResultSetCardinalityWRTVal = reader_make_constant_shell(makeString("logicalResultSetCardinalityWRTValue"));
+    private static final SubLObject $const119$logicalResultSetCardinalityWRTVal = reader_make_constant_shell("logicalResultSetCardinalityWRTValue");
 
-    private static final SubLObject $$fieldDecoding = reader_make_constant_shell(makeString("fieldDecoding"));
 
-    private static final SubLObject $$logicalSchemaSourceMap = reader_make_constant_shell(makeString("logicalSchemaSourceMap"));
+
+
 
     private static final SubLSymbol LOGICAL_SCHEMA_SK_SOURCES_MEMOIZED = makeSymbol("LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED");
 
-    private static final SubLObject $$schemaCompleteExtentKnown = reader_make_constant_shell(makeString("schemaCompleteExtentKnown"));
 
-    private static final SubLObject $$contentSentenceOfSchema = reader_make_constant_shell(makeString("contentSentenceOfSchema"));
+
+
 
     private static final SubLSymbol LOGICAL_FIELD_P_MEMOIZED = makeSymbol("LOGICAL-FIELD-P-MEMOIZED");
 
-    private static final SubLObject $$LogicalFieldFn = reader_make_constant_shell(makeString("LogicalFieldFn"));
 
-    private static final SubLObject $$LogicalField = reader_make_constant_shell(makeString("LogicalField"));
 
-    private static final SubLObject $$LFAliasFn = reader_make_constant_shell(makeString("LFAliasFn"));
+
+
+
 
     private static final SubLSymbol LOGICAL_FIELD_INDEXICAL_P_MEMOIZED = makeSymbol("LOGICAL-FIELD-INDEXICAL-P-MEMOIZED");
 
-    private static final SubLObject $$TheLogicalFieldValueFn = reader_make_constant_shell(makeString("TheLogicalFieldValueFn"));
 
-    private static final SubLObject $$LFIAliasFn = reader_make_constant_shell(makeString("LFIAliasFn"));
+
+
 
     private static final SubLSymbol LOGICAL_FIELD_INDEXICAL_FORT_FOR_SCHEMA = makeSymbol("LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA");
 
     private static final SubLSymbol $sym133$ISA_LOGICAL_SCHEMA_ = makeSymbol("ISA-LOGICAL-SCHEMA?");
 
-    private static final SubLObject $$LogicalSchema = reader_make_constant_shell(makeString("LogicalSchema"));
+
 
     private static final SubLSymbol $sym135$IS_FORT_A_REIFIED_MAPPING_ = makeSymbol("IS-FORT-A-REIFIED-MAPPING?");
 
-    private static final SubLObject $$ReifiedMapping = reader_make_constant_shell(makeString("ReifiedMapping"));
+
 
     private static final SubLSymbol CYCL_TERMS_MAPPED_TO_BY_CODE_MAPPING_SCHEMA = makeSymbol("CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA");
 
-    public static final SubLList $list138 = list(reader_make_constant_shell(makeString("SchemaObjectFn")), reader_make_constant_shell(makeString("SourceSchemaObjectFn")));
+    static private final SubLList $list138 = list(reader_make_constant_shell("SchemaObjectFn"), reader_make_constant_shell("SourceSchemaObjectFn"));
 
-    private static final SubLObject $$SchemaObjectFn = reader_make_constant_shell(makeString("SchemaObjectFn"));
+
 
     private static final SubLSymbol SCHEMA_ISA = makeSymbol("SCHEMA-ISA");
 
-    private static final SubLObject $$schemaIsa = reader_make_constant_shell(makeString("schemaIsa"));
 
-    private static final SubLObject $$objectField = reader_make_constant_shell(makeString("objectField"));
 
-    private static final SubLObject $$SchemaObjectIDFn = reader_make_constant_shell(makeString("SchemaObjectIDFn"));
 
-    private static final SubLObject $$SourceSchemaObjectIDFn = reader_make_constant_shell(makeString("SourceSchemaObjectIDFn"));
 
-    private static final SubLObject $$SourceSchemaObjectFn = reader_make_constant_shell(makeString("SourceSchemaObjectFn"));
+
+
+
+
+
 
     private static final SubLList $list146 = list(list(makeSymbol("ODS"), makeSymbol("SUB-EXPRESSION")), makeSymbol("EXPRESSION"), makeSymbol("&BODY"), makeSymbol("BODY"));
-
-
-
-
 
     private static final SubLList $list149 = list(list(makeSymbol("SKS"), makeSymbol("ODS"), makeSymbol("SUB-EXPRESSION")), makeSymbol("EXPRESSION"), makeSymbol("&BODY"), makeSymbol("BODY"));
 
     private static final SubLSymbol PHYSICAL_FIELD_FOR_INDEXICAL_FORT = makeSymbol("PHYSICAL-FIELD-FOR-INDEXICAL-FORT");
 
-    private static final SubLObject $$indexicalForPhysicalField = reader_make_constant_shell(makeString("indexicalForPhysicalField"));
+
 
     private static final SubLSymbol INDEXICAL_FOR_PHYSICAL_FIELD = makeSymbol("INDEXICAL-FOR-PHYSICAL-FIELD");
 
-    private static final SubLObject $$nonNullFields = reader_make_constant_shell(makeString("nonNullFields"));
+
 
     private static final SubLSymbol NOT_NULL_PHYSICAL_FIELDS_FOR_PS = makeSymbol("NOT-NULL-PHYSICAL-FIELDS-FOR-PS");
 
-
-
     private static final SubLSymbol PHYSICAL_FIELD_DEFAULT_VALUE = makeSymbol("PHYSICAL-FIELD-DEFAULT-VALUE");
 
-    private static final SubLObject $$defaultFieldValue = reader_make_constant_shell(makeString("defaultFieldValue"));
 
-    private static final SubLObject $$ISNull = reader_make_constant_shell(makeString("ISNull"));
 
-    private static final SubLObject $$PhysicalFieldFn = reader_make_constant_shell(makeString("PhysicalFieldFn"));
+
+
+
 
     private static final SubLSymbol PHYSICAL_FIELD_SCHEMA = makeSymbol("PHYSICAL-FIELD-SCHEMA");
 
@@ -466,39 +421,37 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym167$PHYSICAL_FIELD_VIRTUAL_ = makeSymbol("PHYSICAL-FIELD-VIRTUAL?");
 
-    private static final SubLObject $$VirtualPhysicalFieldFn = reader_make_constant_shell(makeString("VirtualPhysicalFieldFn"));
 
-    private static final SubLObject $$virtualPhysicalFields = reader_make_constant_shell(makeString("virtualPhysicalFields"));
 
-    private static final SubLObject $$PFAliasFn = reader_make_constant_shell(makeString("PFAliasFn"));
 
-    private static final SubLObject $$ThePhysicalFieldValueFn = reader_make_constant_shell(makeString("ThePhysicalFieldValueFn"));
 
-    private static final SubLObject $$PFIAliasFn = reader_make_constant_shell(makeString("PFIAliasFn"));
+
+
+
+
+
 
     private static final SubLSymbol PHYSICAL_SCHEMA_FOR_SKS_NAME = makeSymbol("PHYSICAL-SCHEMA-FOR-SKS-NAME");
 
     private static final SubLSymbol PHYSICAL_FIELD_INDEXICAL_FOR_SKS_AND_FIELD_NAMES = makeSymbol("PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES");
 
-
-
     private static final SubLSymbol INTEGER_SEQUENCE_GENERATOR_FOR_PHYSICAL_FIELD = makeSymbol("INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD");
 
-    private static final SubLObject $const177$integerSequenceGeneratorIncrement = reader_make_constant_shell(makeString("integerSequenceGeneratorIncrementsField"));
+    private static final SubLObject $const177$integerSequenceGeneratorIncrement = reader_make_constant_shell("integerSequenceGeneratorIncrementsField");
 
     private static final SubLSymbol INTEGER_SEQUENCE_GENERATOR_NAME = makeSymbol("INTEGER-SEQUENCE-GENERATOR-NAME");
 
-    private static final SubLObject $$integerSequenceGeneratorName = reader_make_constant_shell(makeString("integerSequenceGeneratorName"));
+
 
     private static final SubLSymbol $sym180$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_ = makeSymbol("PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?");
 
-    private static final SubLObject $$TheNextSequenceValueFn = reader_make_constant_shell(makeString("TheNextSequenceValueFn"));
+
 
     private static final SubLString $str182$logical_field_indexical_without_c = makeString("logical field indexical without corresponding logical field: ~s");
 
     private static final SubLSymbol LOGICAL_FIELD_FOR_INDEXICAL_FORT = makeSymbol("LOGICAL-FIELD-FOR-INDEXICAL-FORT");
 
-    private static final SubLObject $$indexicalForLogicalField = reader_make_constant_shell(makeString("indexicalForLogicalField"));
+
 
     private static final SubLSymbol INDEXICAL_FOR_LOGICAL_FIELD = makeSymbol("INDEXICAL-FOR-LOGICAL-FIELD");
 
@@ -508,83 +461,81 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$joinable = reader_make_constant_shell(makeString("joinable"));
-
     private static final SubLSymbol $sym190$LOGICAL_FIELDS_JOINABLE_ = makeSymbol("LOGICAL-FIELDS-JOINABLE?");
 
-    private static final SubLObject $$fieldIsa = reader_make_constant_shell(makeString("fieldIsa"));
 
-    private static final SubLObject $$logicalSchemaFieldTypeList = reader_make_constant_shell(makeString("logicalSchemaFieldTypeList"));
 
-    private static final SubLObject $$logicalFieldMapping = reader_make_constant_shell(makeString("logicalFieldMapping"));
+
+
+
 
     private static final SubLSymbol SKSI_GET_MAPPED_PHYSICAL_FIELDS_FOR_LOGICAL_FIELD_INT = makeSymbol("SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT");
 
-    private static final SubLObject $$logicalPhysicalFieldMap = reader_make_constant_shell(makeString("logicalPhysicalFieldMap"));
 
-    private static final SubLObject $const196$logicalPhysicalFieldMap_DecodeClo = reader_make_constant_shell(makeString("logicalPhysicalFieldMap-DecodeClosed"));
 
-    private static final SubLObject $const197$logicalPhysicalFieldMap_EncodeClo = reader_make_constant_shell(makeString("logicalPhysicalFieldMap-EncodeClosed"));
+    private static final SubLObject $const196$logicalPhysicalFieldMap_DecodeClo = reader_make_constant_shell("logicalPhysicalFieldMap-DecodeClosed");
 
-    private static final SubLObject $$fieldDataType = reader_make_constant_shell(makeString("fieldDataType"));
+    private static final SubLObject $const197$logicalPhysicalFieldMap_EncodeClo = reader_make_constant_shell("logicalPhysicalFieldMap-EncodeClosed");
 
-    private static final SubLObject $$SQLBoolean = reader_make_constant_shell(makeString("SQLBoolean"));
 
-    private static final SubLObject $$programDataTypeNameString = reader_make_constant_shell(makeString("programDataTypeNameString"));
 
-    private static final SubLObject $$schemaFieldsIndex = reader_make_constant_shell(makeString("schemaFieldsIndex"));
 
-    private static final SubLObject $$indexType = reader_make_constant_shell(makeString("indexType"));
 
-    private static final SubLObject $$indexName = reader_make_constant_shell(makeString("indexName"));
 
-    private static final SubLObject $$programIndexTypeNameString = reader_make_constant_shell(makeString("programIndexTypeNameString"));
+
+
+
+
+
+
+
+
 
     private static final SubLSymbol CYCL_OPERATOR_TO_CSQL_OPERATOR = makeSymbol("CYCL-OPERATOR-TO-CSQL-OPERATOR");
 
-    private static final SubLObject $$cyclOperatorToCSQLOperator = reader_make_constant_shell(makeString("cyclOperatorToCSQLOperator"));
+
 
     private static final SubLSymbol CSQL_OPERATOR_TO_CYCL_OPERATOR = makeSymbol("CSQL-OPERATOR-TO-CYCL-OPERATOR");
 
     private static final SubLSymbol CSQL_OPERATOR_TO_SQL_OPERATOR = makeSymbol("CSQL-OPERATOR-TO-SQL-OPERATOR");
 
-    private static final SubLObject $$csqlOperatorToSQLOperator = reader_make_constant_shell(makeString("csqlOperatorToSQLOperator"));
+
 
     private static final SubLSymbol CSQL_OPERATOR_TO_SQL_OPERATOR_SYNTAX = makeSymbol("CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX");
 
-    private static final SubLObject $$SQLOperatorSyntax_Prefix = reader_make_constant_shell(makeString("SQLOperatorSyntax-Prefix"));
+    private static final SubLObject $$SQLOperatorSyntax_Prefix = reader_make_constant_shell("SQLOperatorSyntax-Prefix");
 
-    private static final SubLObject $$SQLOperatorSyntax_Infix = reader_make_constant_shell(makeString("SQLOperatorSyntax-Infix"));
+    private static final SubLObject $$SQLOperatorSyntax_Infix = reader_make_constant_shell("SQLOperatorSyntax-Infix");
 
-    private static final SubLObject $$SQLOperatorSyntax_Postfix = reader_make_constant_shell(makeString("SQLOperatorSyntax-Postfix"));
+    private static final SubLObject $$SQLOperatorSyntax_Postfix = reader_make_constant_shell("SQLOperatorSyntax-Postfix");
 
-    private static final SubLObject $$SQLOperatorSyntax_InverseInfix = reader_make_constant_shell(makeString("SQLOperatorSyntax-InverseInfix"));
+    private static final SubLObject $$SQLOperatorSyntax_InverseInfix = reader_make_constant_shell("SQLOperatorSyntax-InverseInfix");
 
-    private static final SubLObject $$SQLFunctionSyntax = reader_make_constant_shell(makeString("SQLFunctionSyntax"));
+
 
     private static final SubLSymbol CSQL_TO_SQL_TRANSLATION_FORMAT_GAF = makeSymbol("CSQL-TO-SQL-TRANSLATION-FORMAT-GAF");
 
-    private static final SubLObject $$csqlToSQLTranslationFormat = reader_make_constant_shell(makeString("csqlToSQLTranslationFormat"));
 
-    private static final SubLObject $$SKSIMappingMicrotheory = reader_make_constant_shell(makeString("SKSIMappingMicrotheory"));
+
+
 
     private static final SubLSymbol SKSI_CONTENT_MT_P = makeSymbol("SKSI-CONTENT-MT-P");
 
     private static final SubLSymbol SKSI_CONTENT_MTS = makeSymbol("SKSI-CONTENT-MTS");
 
-    private static final SubLObject $$SKSIContentMicrotheory = reader_make_constant_shell(makeString("SKSIContentMicrotheory"));
+
 
     private static final SubLSymbol $sksi_content_mts_caching_state$ = makeSymbol("*SKSI-CONTENT-MTS-CACHING-STATE*");
 
     private static final SubLSymbol CLEAR_SKSI_CONTENT_MTS = makeSymbol("CLEAR-SKSI-CONTENT-MTS");
 
-    private static final SubLObject $$sksRepresentationComplete = reader_make_constant_shell(makeString("sksRepresentationComplete"));
+
 
     private static final SubLSymbol SKSI_SUPPORTED_DATABASE_SERVER_PROGRAM_P = makeSymbol("SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P");
 
-    private static final SubLObject $const226$SKSISupportedDatabaseServerProgra = reader_make_constant_shell(makeString("SKSISupportedDatabaseServerProgram"));
+    private static final SubLObject $const226$SKSISupportedDatabaseServerProgra = reader_make_constant_shell("SKSISupportedDatabaseServerProgram");
 
-    private static final SubLObject $const227$defaultSKSForDatabaseServerProgra = reader_make_constant_shell(makeString("defaultSKSForDatabaseServerProgram"));
+    private static final SubLObject $const227$defaultSKSForDatabaseServerProgra = reader_make_constant_shell("defaultSKSForDatabaseServerProgram");
 
     private static final SubLString $str228$Primary_keys_for__S_in__S_were_no = makeString("Primary keys for ~S in ~S were not found");
 
@@ -592,23 +543,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$columnInDBTableNamed = reader_make_constant_shell(makeString("columnInDBTableNamed"));
-
-    private static final SubLObject $$fieldName_SKS = reader_make_constant_shell(makeString("fieldName-SKS"));
+    private static final SubLObject $$fieldName_SKS = reader_make_constant_shell("fieldName-SKS");
 
     private static final SubLString $str233$Could_not_determine_the_column_na = makeString("Could not determine the column name (via ~A) for ~a in ~a");
 
     private static final SubLString $str234$Could_not_find_the_primary_key_co = makeString("Could not find the primary key column ~a in the ~A ~a for ~a in ~a");
 
-    private static final SubLObject $$tableFieldNameList = reader_make_constant_shell(makeString("tableFieldNameList"));
 
-    private static final SubLObject $$tablePrimaryKey = reader_make_constant_shell(makeString("tablePrimaryKey"));
+
+
 
     private static final SubLString $str237$Could_not_get_the___tableFieldNam = makeString("Could not get the #$tableFieldNameList for ~a in ~a");
 
     private static final SubLString $str238$Could_not_determine_the___tablePr = makeString("Could not determine the #$tablePrimaryKey for ~a in ~a");
-
-
 
     private static final SubLString $str240$Could_not_find_a_physical_schema_ = makeString("Could not find a physical schema for table ~A in ~A");
 
@@ -618,10 +565,6 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$assertedSentence = reader_make_constant_shell(makeString("assertedSentence"));
-
-    private static final SubLObject $$tableInDBNamed = reader_make_constant_shell(makeString("tableInDBNamed"));
-
 
 
     private static final SubLList $list247 = list(makeKeyword("TABLE-NAME"));
@@ -630,32 +573,42 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     private static final SubLString $str249$_A___A = makeString("~A: ~A");
 
-
-
-
-
-
-
     private static final SubLList $list253 = list(makeSymbol("ERROR-TYPE"), makeSymbol("ERROR-STRING"));
 
     private static final SubLString $$$_ = makeString(" ");
 
 
 
-    private static final SubLObject $$CycKBSubsetCollection = reader_make_constant_shell(makeString("CycKBSubsetCollection"));
 
-    private static final SubLObject $$BookkeepingMt = reader_make_constant_shell(makeString("BookkeepingMt"));
 
     private static final SubLString $str258$No___CycKBSubsetCollections_found = makeString("No #$CycKBSubsetCollections found to inherit from ~A to ~A~%");
 
-    private static final SubLObject $$quotedIsa = reader_make_constant_shell(makeString("quotedIsa"));
-
-    private static final SubLObject $$temporalFieldNullMapsTo = reader_make_constant_shell(makeString("temporalFieldNullMapsTo"));
 
 
 
+
+    // Definitions
+    public static final SubLObject content_mt_sk_source_gaf_alt(SubLObject mt) {
+        return kb_mapping_utilities.fpred_value_gaf(mt, $$contentMt, TWO_INTEGER, $TRUE);
+    }
+
+    // Definitions
     public static SubLObject content_mt_sk_source_gaf(final SubLObject mt) {
         return kb_mapping_utilities.fpred_value_gaf(mt, $$contentMt, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject content_mt_sk_source_internal_alt(SubLObject mt, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            SubLObject gaf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.content_mt_sk_source_gaf(mt);
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                return assertions_high.gaf_arg1(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject content_mt_sk_source_internal(final SubLObject mt, SubLObject mt_info) {
@@ -668,6 +621,54 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return assertions_high.gaf_arg1(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject content_mt_sk_source_alt(SubLObject mt, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.content_mt_sk_source_internal(mt, mt_info);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CONTENT_MT_SK_SOURCE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CONTENT_MT_SK_SOURCE, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CONTENT_MT_SK_SOURCE, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(mt, mt_info);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (mt == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (mt_info == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.content_mt_sk_source_internal(mt, mt_info)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(mt, mt_info));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject content_mt_sk_source(final SubLObject mt, SubLObject mt_info) {
@@ -709,16 +710,54 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject content_mt_spindle_member_p_alt(SubLObject content_mt) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(content_mt, $$mtSpindleMember, TWO_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
     public static SubLObject content_mt_spindle_member_p(final SubLObject content_mt) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(content_mt, $$mtSpindleMember, TWO_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
+    public static final SubLObject sk_source_p_alt(SubLObject v_object) {
+        return isa.isaP(v_object, $$StructuredKnowledgeSource, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject sk_source_p(final SubLObject v_object) {
         return isa.isaP(v_object, $$StructuredKnowledgeSource, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject sk_source_in_any_mt_p_internal_alt(SubLObject v_object) {
+        return isa.isa_in_any_mtP(v_object, $$StructuredKnowledgeSource);
+    }
+
     public static SubLObject sk_source_in_any_mt_p_internal(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$StructuredKnowledgeSource);
+    }
+
+    public static final SubLObject sk_source_in_any_mt_p_alt(SubLObject v_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_in_any_mt_p_internal(v_object);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SK_SOURCE_IN_ANY_MT_P, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SK_SOURCE_IN_ANY_MT_P, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SK_SOURCE_IN_ANY_MT_P, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, v_object, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_in_any_mt_p_internal(v_object)));
+                        memoization_state.caching_state_put(caching_state, v_object, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject sk_source_in_any_mt_p(final SubLObject v_object) {
@@ -741,8 +780,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject modifiable_sk_source_p_alt(SubLObject v_object) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(v_object, $$sksModifiable, ONE_INTEGER, ONE_INTEGER, $TRUE));
+    }
+
     public static SubLObject modifiable_sk_source_p(final SubLObject v_object) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(v_object, $$sksModifiable, ONE_INTEGER, ONE_INTEGER, $TRUE));
+    }
+
+    public static final SubLObject modifiable_sk_source_in_any_mt_p_alt(SubLObject v_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject modifiableP = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        modifiableP = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.modifiable_sk_source_p(v_object);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return modifiableP;
+            }
+        }
     }
 
     public static SubLObject modifiable_sk_source_in_any_mt_p(final SubLObject v_object) {
@@ -761,10 +826,64 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return modifiableP;
     }
 
+    public static final SubLObject code_mapping_knowledge_sourceP_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.meaning_sentence_predicate_for_sk_sourceP($$codeMapping, sk_source);
+    }
+
     public static SubLObject code_mapping_knowledge_sourceP(final SubLObject sk_source) {
         return meaning_sentence_predicate_for_sk_sourceP($$codeMapping, sk_source);
     }
 
+    /**
+     * Looks up the KB for a PRED GAF where SK-SOURCE is the INDEX-ARGNUMth argument.
+     * Walks up the #$subKS-Direct hierarchy until it finds such a GAF. Returns the
+     * GATHER-ARGNUMth argument of the GAF. If CHECK-ARG and CHECK-ARGNUM are not null
+     * then the CHECK-ARGNUMth argument of the GAF in question must be eq to CHECK-ARG.
+     */
+    @LispMethod(comment = "Looks up the KB for a PRED GAF where SK-SOURCE is the INDEX-ARGNUMth argument.\r\nWalks up the #$subKS-Direct hierarchy until it finds such a GAF. Returns the\r\nGATHER-ARGNUMth argument of the GAF. If CHECK-ARG and CHECK-ARGNUM are not null\r\nthen the CHECK-ARGNUMth argument of the GAF in question must be eq to CHECK-ARG.\nLooks up the KB for a PRED GAF where SK-SOURCE is the INDEX-ARGNUMth argument.\nWalks up the #$subKS-Direct hierarchy until it finds such a GAF. Returns the\nGATHER-ARGNUMth argument of the GAF. If CHECK-ARG and CHECK-ARGNUM are not null\nthen the CHECK-ARGNUMth argument of the GAF in question must be eq to CHECK-ARG.")
+    public static final SubLObject get_sk_source_property_from_kb_internal_alt(SubLObject sk_source, SubLObject pred, SubLObject index_argnum, SubLObject gather_argnum, SubLObject note_csql_supportP, SubLObject check_arg, SubLObject check_argnum) {
+        if (index_argnum == UNPROVIDED) {
+            index_argnum = ONE_INTEGER;
+        }
+        if (gather_argnum == UNPROVIDED) {
+            gather_argnum = TWO_INTEGER;
+        }
+        if (note_csql_supportP == UNPROVIDED) {
+            note_csql_supportP = T;
+        }
+        if (check_arg == UNPROVIDED) {
+            check_arg = NIL;
+        }
+        if (check_argnum == UNPROVIDED) {
+            check_argnum = NIL;
+        }
+        {
+            SubLObject sk_source_to_look = sk_source;
+            SubLObject spec_preds = cons(pred, genl_predicates.spec_predicates(pred, UNPROVIDED, UNPROVIDED));
+            SubLObject gaf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb_int(sk_source_to_look, spec_preds, index_argnum, check_arg, check_argnum);
+            while (!((NIL != gaf) || (NIL == sk_source_to_look))) {
+                sk_source_to_look = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.immediate_genl_ks(sk_source_to_look);
+                if (NIL != forts.fort_p(sk_source_to_look)) {
+                    gaf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb_int(sk_source_to_look, spec_preds, index_argnum, check_arg, check_argnum);
+                }
+            } 
+            if (NIL != gaf) {
+                if (NIL != note_csql_supportP) {
+                    sksi_hl_support_utilities.note_csql_support(gaf);
+                }
+                return assertions_high.gaf_arg(gaf, gather_argnum);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Looks up the KB for a PRED GAF where SK-SOURCE is the INDEX-ARGNUMth argument.
+     * Walks up the #$subKS-Direct hierarchy until it finds such a GAF. Returns the
+     * GATHER-ARGNUMth argument of the GAF. If CHECK-ARG and CHECK-ARGNUM are not null
+     * then the CHECK-ARGNUMth argument of the GAF in question must be eq to CHECK-ARG.
+     */
+    @LispMethod(comment = "Looks up the KB for a PRED GAF where SK-SOURCE is the INDEX-ARGNUMth argument.\r\nWalks up the #$subKS-Direct hierarchy until it finds such a GAF. Returns the\r\nGATHER-ARGNUMth argument of the GAF. If CHECK-ARG and CHECK-ARGNUM are not null\r\nthen the CHECK-ARGNUMth argument of the GAF in question must be eq to CHECK-ARG.\nLooks up the KB for a PRED GAF where SK-SOURCE is the INDEX-ARGNUMth argument.\nWalks up the #$subKS-Direct hierarchy until it finds such a GAF. Returns the\nGATHER-ARGNUMth argument of the GAF. If CHECK-ARG and CHECK-ARGNUM are not null\nthen the CHECK-ARGNUMth argument of the GAF in question must be eq to CHECK-ARG.")
     public static SubLObject get_sk_source_property_from_kb_internal(final SubLObject sk_source, final SubLObject pred, SubLObject index_argnum, SubLObject gather_argnum, SubLObject note_csql_supportP, SubLObject check_arg, SubLObject check_argnum) {
         if (index_argnum == UNPROVIDED) {
             index_argnum = ONE_INTEGER;
@@ -796,6 +915,81 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return assertions_high.gaf_arg(gaf, gather_argnum);
         }
         return NIL;
+    }
+
+    public static final SubLObject get_sk_source_property_from_kb_alt(SubLObject sk_source, SubLObject pred, SubLObject index_argnum, SubLObject gather_argnum, SubLObject note_csql_supportP, SubLObject check_arg, SubLObject check_argnum) {
+        if (index_argnum == UNPROVIDED) {
+            index_argnum = ONE_INTEGER;
+        }
+        if (gather_argnum == UNPROVIDED) {
+            gather_argnum = TWO_INTEGER;
+        }
+        if (note_csql_supportP == UNPROVIDED) {
+            note_csql_supportP = T;
+        }
+        if (check_arg == UNPROVIDED) {
+            check_arg = NIL;
+        }
+        if (check_argnum == UNPROVIDED) {
+            check_argnum = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb_internal(sk_source, pred, index_argnum, gather_argnum, note_csql_supportP, check_arg, check_argnum);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, GET_SK_SOURCE_PROPERTY_FROM_KB, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), GET_SK_SOURCE_PROPERTY_FROM_KB, SEVEN_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, GET_SK_SOURCE_PROPERTY_FROM_KB, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_7(sk_source, pred, index_argnum, gather_argnum, note_csql_supportP, check_arg, check_argnum);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (sk_source == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (pred == cached_args.first()) {
+                                            cached_args = cached_args.rest();
+                                            if (index_argnum == cached_args.first()) {
+                                                cached_args = cached_args.rest();
+                                                if (gather_argnum == cached_args.first()) {
+                                                    cached_args = cached_args.rest();
+                                                    if (note_csql_supportP == cached_args.first()) {
+                                                        cached_args = cached_args.rest();
+                                                        if (check_arg == cached_args.first()) {
+                                                            cached_args = cached_args.rest();
+                                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && (check_argnum == cached_args.first())) {
+                                                                return memoization_state.caching_results(results2);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb_internal(sk_source, pred, index_argnum, gather_argnum, note_csql_supportP, check_arg, check_argnum)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(sk_source, pred, index_argnum, gather_argnum, note_csql_supportP, check_arg, check_argnum));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject get_sk_source_property_from_kb(final SubLObject sk_source, final SubLObject pred, SubLObject index_argnum, SubLObject gather_argnum, SubLObject note_csql_supportP, SubLObject check_arg, SubLObject check_argnum) {
@@ -864,6 +1058,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject get_sk_source_property_from_kb_int_alt(SubLObject sk_source, SubLObject preds, SubLObject index_argnum, SubLObject check_arg, SubLObject check_argnum) {
+        {
+            SubLObject gaf = NIL;
+            if (NIL == gaf) {
+                {
+                    SubLObject csome_list_var = preds;
+                    SubLObject pred = NIL;
+                    for (pred = csome_list_var.first(); !((NIL != gaf) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , pred = csome_list_var.first()) {
+                        if ((NIL != check_argnum) && (NIL != check_arg)) {
+                            gaf = kb_mapping_utilities.fpred_u_v_holds_gaf(pred, sk_source, check_arg, index_argnum, check_argnum, $TRUE);
+                        } else {
+                            gaf = kb_mapping_utilities.fpred_value_gaf(sk_source, pred, index_argnum, $TRUE);
+                        }
+                    }
+                }
+            }
+            return gaf;
+        }
+    }
+
     public static SubLObject get_sk_source_property_from_kb_int(final SubLObject sk_source, final SubLObject preds, final SubLObject index_argnum, final SubLObject check_arg, final SubLObject check_argnum) {
         SubLObject gaf = NIL;
         if (NIL == gaf) {
@@ -883,8 +1097,23 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return gaf;
     }
 
+    public static final SubLObject sk_source_content_mt_gaf_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.fpred_value_gaf(sk_source, $$contentMt, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject sk_source_content_mt_gaf(final SubLObject sk_source) {
         return kb_mapping_utilities.fpred_value_gaf(sk_source, $$contentMt, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sk_source_content_mt_internal_alt(SubLObject sk_source) {
+        {
+            SubLObject gaf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt_gaf(sk_source);
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                return assertions_high.gaf_arg2(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject sk_source_content_mt_internal(final SubLObject sk_source) {
@@ -894,6 +1123,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return assertions_high.gaf_arg2(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject sk_source_content_mt_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SK_SOURCE_CONTENT_MT, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SK_SOURCE_CONTENT_MT, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SK_SOURCE_CONTENT_MT, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject sk_source_content_mt(final SubLObject sk_source) {
@@ -916,12 +1171,31 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject sk_source_content_mt_in_any_mt_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.fpred_value_in_any_mt(sk_source, $$contentMt, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject sk_source_content_mt_in_any_mt(final SubLObject sk_source) {
         return kb_mapping_utilities.fpred_value_in_any_mt(sk_source, $$contentMt, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject sk_source_content_mt_head_gaf_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.fpred_value_gaf(sk_source, $$contentMtHead, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject sk_source_content_mt_head_gaf(final SubLObject sk_source) {
         return kb_mapping_utilities.fpred_value_gaf(sk_source, $$contentMtHead, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sk_source_content_mt_head_internal_alt(SubLObject sk_source) {
+        {
+            SubLObject gaf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt_head_gaf(sk_source);
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                return assertions_high.gaf_arg2(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject sk_source_content_mt_head_internal(final SubLObject sk_source) {
@@ -931,6 +1205,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return assertions_high.gaf_arg2(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject sk_source_content_mt_head_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt_head_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SK_SOURCE_CONTENT_MT_HEAD, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SK_SOURCE_CONTENT_MT_HEAD, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SK_SOURCE_CONTENT_MT_HEAD, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt_head_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject sk_source_content_mt_head(final SubLObject sk_source) {
@@ -953,8 +1253,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject sk_source_content_mt_head_in_any_mt_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.fpred_value_in_any_mt(sk_source, $$contentMtHead, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject sk_source_content_mt_head_in_any_mt(final SubLObject sk_source) {
         return kb_mapping_utilities.fpred_value_in_any_mt(sk_source, $$contentMtHead, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sk_source_mapping_mt_internal_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        mt = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb(sk_source, $$mappingMt, ONE_INTEGER, TWO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return mt;
+            }
+        }
     }
 
     public static SubLObject sk_source_mapping_mt_internal(final SubLObject sk_source) {
@@ -971,6 +1297,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         return mt;
+    }
+
+    public static final SubLObject sk_source_mapping_mt_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_mapping_mt_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SK_SOURCE_MAPPING_MT, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SK_SOURCE_MAPPING_MT, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SK_SOURCE_MAPPING_MT, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_mapping_mt_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject sk_source_mapping_mt(final SubLObject sk_source) {
@@ -993,6 +1345,28 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject sk_source_logical_schema_description_mt_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        mt = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb(sk_source, $$sksLogicalSchemaDescriptionMt, ONE_INTEGER, TWO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return mt;
+            }
+        }
+    }
+
     public static SubLObject sk_source_logical_schema_description_mt(final SubLObject sk_source) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject mt = NIL;
@@ -1009,8 +1383,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return mt;
     }
 
+    public static final SubLObject logical_schema_description_mt_sk_source_in_any_mt_alt(SubLObject mt) {
+        return kb_mapping_utilities.fpred_value_in_any_mt(mt, $$sksLogicalSchemaDescriptionMt, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_schema_description_mt_sk_source_in_any_mt(final SubLObject mt) {
         return kb_mapping_utilities.fpred_value_in_any_mt(mt, $$sksLogicalSchemaDescriptionMt, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sk_source_source_description_mt_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        mt = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb(sk_source, $$sksSourceDescriptionMt, ONE_INTEGER, TWO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return mt;
+            }
+        }
     }
 
     public static SubLObject sk_source_source_description_mt(final SubLObject sk_source) {
@@ -1029,6 +1429,28 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return mt;
     }
 
+    public static final SubLObject sk_source_schema_translation_mt_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        mt = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb(sk_source, $$sksSchemaTranslationMt, ONE_INTEGER, TWO_INTEGER, NIL, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return mt;
+            }
+        }
+    }
+
     public static SubLObject sk_source_schema_translation_mt(final SubLObject sk_source) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject mt = NIL;
@@ -1045,16 +1467,39 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return mt;
     }
 
+    public static final SubLObject schema_translation_mt_sk_source_in_any_mt_alt(SubLObject mt) {
+        return kb_mapping_utilities.fpred_value_in_any_mt(mt, $$sksSchemaTranslationMt, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject schema_translation_mt_sk_source_in_any_mt(final SubLObject mt) {
         return kb_mapping_utilities.fpred_value_in_any_mt(mt, $$sksSchemaTranslationMt, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sk_source_ks_type_alt(SubLObject sk_source) {
+        return sksi_access_path.get_sks_type(sk_source);
     }
 
     public static SubLObject sk_source_ks_type(final SubLObject sk_source) {
         return sksi_access_path.get_sks_type(sk_source);
     }
 
+    public static final SubLObject sk_source_row_count_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb(sk_source, $$rowCount_SKS, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject sk_source_row_count(final SubLObject sk_source) {
         return get_sk_source_property_from_kb(sk_source, $$rowCount_SKS, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sk_source_name_alt(SubLObject sk_source) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(sk_source, $$structuredKnowledgeSourceName, ONE_INTEGER, $TRUE);
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_csql_support(gaf);
+                return assertions_high.gaf_arg2(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject sk_source_name(final SubLObject sk_source) {
@@ -1145,6 +1590,64 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
 
     public static SubLObject sk_source_asserted_namespace_gaf(final SubLObject sk_source) {
         return kb_mapping_utilities.fpred_value_gaf(sk_source, $const24$structuredKnowledgeSourceNamespac, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sk_source_by_sks_name_internal(SubLObject name) {
+        {
+            SubLObject sks = NIL;
+            SubLObject pred_var = $$structuredKnowledgeSourceName;
+            if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                    SubLObject done_var = sks;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_1 = sks;
+                                            SubLObject token_var_2 = NIL;
+                                            while (NIL == done_var_1) {
+                                                {
+                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_2);
+                                                    SubLObject valid_3 = makeBoolean(token_var_2 != gaf);
+                                                    if (NIL != valid_3) {
+                                                        if (NIL != string_utilities.weak_string_equal(name, assertions_high.gaf_arg2(gaf))) {
+                                                            sks = assertions_high.gaf_arg1(gaf);
+                                                        }
+                                                    }
+                                                    done_var_1 = makeBoolean((NIL == valid_3) || (NIL != sks));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != sks));
+                        }
+                    } 
+                }
+            }
+            return sks;
+        }
     }
 
     public static SubLObject sk_source_by_sks_name_internal(final SubLObject name, SubLObject mapping_mt) {
@@ -1307,6 +1810,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return sks;
     }
 
+    public static final SubLObject sk_source_by_sks_name(SubLObject name) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_by_sks_name_internal(name);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SK_SOURCE_BY_SKS_NAME, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SK_SOURCE_BY_SKS_NAME, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SK_SOURCE_BY_SKS_NAME, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, name, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_by_sks_name_internal(name)));
+                        memoization_state.caching_state_put(caching_state, name, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
+    }
+
     public static SubLObject sk_source_by_sks_name(final SubLObject name, SubLObject mapping_mt) {
         if (mapping_mt == UNPROVIDED) {
             mapping_mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -1346,8 +1875,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject sk_source_physical_schema_gafs_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.pred_value_gafs(sk_source, $$physicalSchemaSourceMap, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject sk_source_physical_schema_gafs(final SubLObject sk_source) {
         return list_utilities.fast_remove_duplicates(kb_mapping_utilities.pred_value_gafs(sk_source, $$physicalSchemaSourceMap, TWO_INTEGER, $TRUE), symbol_function(EQUAL), ASSERTION_FORMULA, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sk_source_physical_schemata_alt(SubLObject sk_source) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_physical_schema_gafs(sk_source);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg1(gaf), result);
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject sk_source_physical_schemata(final SubLObject sk_source) {
@@ -1368,8 +1915,39 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    /**
+     * This is distinguished from sk-source-physical-schemata by walking down the
+     * #$subKS hierarchy and grabbing the physical schemata from those source below.
+     */
+    @LispMethod(comment = "This is distinguished from sk-source-physical-schemata by walking down the\r\n#$subKS hierarchy and grabbing the physical schemata from those source below.\nThis is distinguished from sk-source-physical-schemata by walking down the\n#$subKS hierarchy and grabbing the physical schemata from those source below.")
+    public static final SubLObject sk_source_complex_physical_schemata_alt(SubLObject sk_source) {
+        return list_utilities.fast_delete_duplicates(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_complex_physical_schemata_int(sk_source), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     * This is distinguished from sk-source-physical-schemata by walking down the
+     * #$subKS hierarchy and grabbing the physical schemata from those source below.
+     */
+    @LispMethod(comment = "This is distinguished from sk-source-physical-schemata by walking down the\r\n#$subKS hierarchy and grabbing the physical schemata from those source below.\nThis is distinguished from sk-source-physical-schemata by walking down the\n#$subKS hierarchy and grabbing the physical schemata from those source below.")
     public static SubLObject sk_source_complex_physical_schemata(final SubLObject sk_source) {
         return list_utilities.fast_delete_duplicates(sk_source_complex_physical_schemata_int(sk_source), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sk_source_complex_physical_schemata_int_alt(SubLObject sk_source) {
+        {
+            SubLObject physical_schemata = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_physical_schemata(sk_source);
+            if (NIL == sksi_infrastructure_utilities.sk_source_atomicP(sk_source)) {
+                {
+                    SubLObject sub_sk_sources = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_immediate_spec_sk_sources(sk_source, UNPROVIDED);
+                    SubLObject cdolist_list_var = sub_sk_sources;
+                    SubLObject sub_sk_source = NIL;
+                    for (sub_sk_source = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_sk_source = cdolist_list_var.first()) {
+                        physical_schemata = append(physical_schemata, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_complex_physical_schemata_int(sub_sk_source));
+                    }
+                }
+            }
+            return physical_schemata;
+        }
     }
 
     public static SubLObject sk_source_complex_physical_schemata_int(final SubLObject sk_source) {
@@ -1388,6 +1966,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return physical_schemata;
     }
 
+    public static final SubLObject sk_source_logical_schemata_alt(SubLObject sk_source) {
+        {
+            SubLObject physical_schemata = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_physical_schemata(sk_source);
+            SubLObject logical_schemata = NIL;
+            SubLObject cdolist_list_var = physical_schemata;
+            SubLObject physical_schema = NIL;
+            for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                logical_schemata = append(logical_schemata, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_logical_schemata(physical_schema));
+            }
+            return list_utilities.fast_delete_duplicates(logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject sk_source_logical_schemata(final SubLObject sk_source) {
         final SubLObject physical_schemata = sk_source_physical_schemata(sk_source);
         SubLObject logical_schemata = NIL;
@@ -1402,6 +1993,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject sk_source_complex_logical_schemata_alt(SubLObject sk_source) {
+        {
+            SubLObject physical_schemata = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_complex_physical_schemata(sk_source);
+            SubLObject logical_schemata = NIL;
+            SubLObject cdolist_list_var = physical_schemata;
+            SubLObject physical_schema = NIL;
+            for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                logical_schemata = append(logical_schemata, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_logical_schemata(physical_schema));
+            }
+            return list_utilities.fast_delete_duplicates(logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject sk_source_complex_logical_schemata(final SubLObject sk_source) {
         final SubLObject physical_schemata = sk_source_complex_physical_schemata(sk_source);
         SubLObject logical_schemata = NIL;
@@ -1414,6 +2018,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             physical_schema = cdolist_list_var.first();
         } 
         return list_utilities.fast_delete_duplicates(logical_schemata, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sk_source_physical_logical_schema_pairs_alt(SubLObject sk_source) {
+        {
+            SubLObject physical_schemata = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_physical_schemata(sk_source);
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = physical_schemata;
+            SubLObject physical_schema = NIL;
+            for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                {
+                    SubLObject logical_schemata = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_logical_schemata(physical_schema);
+                    SubLObject cdolist_list_var_4 = logical_schemata;
+                    SubLObject logical_schema = NIL;
+                    for (logical_schema = cdolist_list_var_4.first(); NIL != cdolist_list_var_4; cdolist_list_var_4 = cdolist_list_var_4.rest() , logical_schema = cdolist_list_var_4.first()) {
+                        result = cons(list(physical_schema, logical_schema), result);
+                    }
+                }
+            }
+            return result;
+        }
     }
 
     public static SubLObject sk_source_physical_logical_schema_pairs(final SubLObject sk_source) {
@@ -1438,6 +2062,21 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return result;
     }
 
+    /**
+     * Return the immediate specKS values for SK-SOURCE in META-MT
+     */
+    @LispMethod(comment = "Return the immediate specKS values for SK-SOURCE in META-MT")
+    public static final SubLObject sk_source_immediate_spec_sk_sources_alt(SubLObject sk_source, SubLObject meta_mt) {
+        if (meta_mt == UNPROVIDED) {
+            meta_mt = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_mapping_mt(sk_source);
+        }
+        return kb_mapping_utilities.pred_values_in_relevant_mts(sk_source, $$subKS_Direct, meta_mt, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    /**
+     * Return the immediate specKS values for SK-SOURCE in META-MT
+     */
+    @LispMethod(comment = "Return the immediate specKS values for SK-SOURCE in META-MT")
     public static SubLObject sk_source_immediate_spec_sk_sources(final SubLObject sk_source, SubLObject meta_mt) {
         if (meta_mt == UNPROVIDED) {
             meta_mt = sk_source_mapping_mt(sk_source);
@@ -1445,8 +2084,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return kb_mapping_utilities.pred_values_in_relevant_mts(sk_source, $$subKS_Direct, meta_mt, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject meaning_sentence_predicate_for_sk_sourceP_alt(SubLObject pred, SubLObject sk_source) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$meaningSentencePredicateForSource, sk_source, pred, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
     public static SubLObject meaning_sentence_predicate_for_sk_sourceP(final SubLObject pred, final SubLObject sk_source) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$meaningSentencePredicateForSource, sk_source, pred, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
+    public static final SubLObject logical_schema_for_meaning_sentence_predicate_alt(SubLObject pred, SubLObject mapping_mt) {
+        if (mapping_mt == UNPROVIDED) {
+            mapping_mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject mt_var = mapping_mt;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
+                        result = kb_mapping_utilities.fpred_value(pred, $$meaningSentencePredicateForSchema, TWO_INTEGER, ONE_INTEGER, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject logical_schema_for_meaning_sentence_predicate(final SubLObject pred, SubLObject mapping_mt) {
@@ -1469,8 +2138,16 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject sk_source_complex_required_fields_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schemata_required_fields(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_complex_physical_schemata(sk_source));
+    }
+
     public static SubLObject sk_source_complex_required_fields(final SubLObject sk_source) {
         return physical_schemata_required_fields(sk_source_complex_physical_schemata(sk_source));
+    }
+
+    public static final SubLObject sk_source_required_fields_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schemata_required_fields(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_physical_schemata(sk_source));
     }
 
     public static SubLObject sk_source_required_fields(final SubLObject sk_source) {
@@ -1481,8 +2158,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return sksi_access_path.access_path_sql_flavor(sksi_access_path.sksi_determine_access_path(sk_source, UNPROVIDED, UNPROVIDED));
     }
 
+    public static final SubLObject get_sks_single_literal_lookup_direction_from_kb_internal_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_module_direction_from_kb(sk_source, $$SKSISingleLiteralRemovalModule, $BACKWARD);
+    }
+
     public static SubLObject get_sks_single_literal_lookup_direction_from_kb_internal(final SubLObject sk_source) {
         return get_sks_module_direction_from_kb(sk_source, $$SKSISingleLiteralRemovalModule, $BACKWARD);
+    }
+
+    public static final SubLObject get_sks_single_literal_lookup_direction_from_kb_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_single_literal_lookup_direction_from_kb_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, GET_SKS_SINGLE_LITERAL_LOOKUP_DIRECTION_FROM_KB, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), GET_SKS_SINGLE_LITERAL_LOOKUP_DIRECTION_FROM_KB, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, GET_SKS_SINGLE_LITERAL_LOOKUP_DIRECTION_FROM_KB, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_single_literal_lookup_direction_from_kb_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject get_sks_single_literal_lookup_direction_from_kb(final SubLObject sk_source) {
@@ -1505,8 +2212,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject get_sks_multi_literal_lookup_direction_from_kb_internal_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_module_direction_from_kb(sk_source, $$SKSIMultiLiteralRemovalModule, $BACKWARD);
+    }
+
     public static SubLObject get_sks_multi_literal_lookup_direction_from_kb_internal(final SubLObject sk_source) {
         return get_sks_module_direction_from_kb(sk_source, $$SKSIMultiLiteralRemovalModule, $BACKWARD);
+    }
+
+    public static final SubLObject get_sks_multi_literal_lookup_direction_from_kb_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_multi_literal_lookup_direction_from_kb_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, GET_SKS_MULTI_LITERAL_LOOKUP_DIRECTION_FROM_KB, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), GET_SKS_MULTI_LITERAL_LOOKUP_DIRECTION_FROM_KB, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, GET_SKS_MULTI_LITERAL_LOOKUP_DIRECTION_FROM_KB, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_multi_literal_lookup_direction_from_kb_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject get_sks_multi_literal_lookup_direction_from_kb(final SubLObject sk_source) {
@@ -1529,8 +2266,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject get_sks_storage_direction_from_kb_internal_alt(SubLObject sk_source) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_module_direction_from_kb(sk_source, $$SKSIStorageModule, $FORWARD);
+    }
+
     public static SubLObject get_sks_storage_direction_from_kb_internal(final SubLObject sk_source) {
         return get_sks_module_direction_from_kb(sk_source, $$SKSIStorageModule, $FORWARD);
+    }
+
+    public static final SubLObject get_sks_storage_direction_from_kb_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_storage_direction_from_kb_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, GET_SKS_STORAGE_DIRECTION_FROM_KB, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), GET_SKS_STORAGE_DIRECTION_FROM_KB, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, GET_SKS_STORAGE_DIRECTION_FROM_KB, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sks_storage_direction_from_kb_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject get_sks_storage_direction_from_kb(final SubLObject sk_source) {
@@ -1553,6 +2320,23 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject get_sks_module_direction_from_kb_alt(SubLObject sk_source, SubLObject module_type, SubLObject default_direction) {
+        {
+            SubLObject kb_direction = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_sk_source_property_from_kb(sk_source, $$sksModuleTypeDirection, ONE_INTEGER, THREE_INTEGER, NIL, module_type, TWO_INTEGER);
+            SubLObject direction = (NIL != kb_direction) ? ((SubLObject) (kb_direction)) : default_direction;
+            SubLObject pcase_var = direction;
+            if (pcase_var.eql($$Backward_AssertionDirection)) {
+                return $BACKWARD;
+            } else {
+                if (pcase_var.eql($$Forward_AssertionDirection)) {
+                    return $FORWARD;
+                } else {
+                    return direction;
+                }
+            }
+        }
+    }
+
     public static SubLObject get_sks_module_direction_from_kb(final SubLObject sk_source, final SubLObject module_type, final SubLObject default_direction) {
         final SubLObject kb_direction = get_sk_source_property_from_kb(sk_source, $$sksModuleTypeDirection, ONE_INTEGER, THREE_INTEGER, NIL, module_type, TWO_INTEGER);
         final SubLObject pcase_var;
@@ -1566,8 +2350,66 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return direction;
     }
 
+    public static final SubLObject sk_source_sub_ks_direct_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.pred_values(sk_source, $$subKS_Direct, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject sk_source_sub_ks_direct(final SubLObject sk_source) {
         return kb_mapping_utilities.pred_values(sk_source, $$subKS_Direct, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject do_sk_source_sub_ks_direct_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt39);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject sub_ks = NIL;
+                    SubLObject sk_source = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt39);
+                    sub_ks = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt39);
+                    sk_source = current.first();
+                    current = current.rest();
+                    {
+                        SubLObject allow_other_keys_p = NIL;
+                        SubLObject rest = current;
+                        SubLObject bad = NIL;
+                        SubLObject current_5 = NIL;
+                        for (; NIL != rest;) {
+                            destructuring_bind_must_consp(rest, datum, $list_alt39);
+                            current_5 = rest.first();
+                            rest = rest.rest();
+                            destructuring_bind_must_consp(rest, datum, $list_alt39);
+                            if (NIL == member(current_5, $list_alt40, UNPROVIDED, UNPROVIDED)) {
+                                bad = T;
+                            }
+                            if (current_5 == $ALLOW_OTHER_KEYS) {
+                                allow_other_keys_p = rest.first();
+                            }
+                            rest = rest.rest();
+                        }
+                        if ((NIL != bad) && (NIL == allow_other_keys_p)) {
+                            cdestructuring_bind_error(datum, $list_alt39);
+                        }
+                        {
+                            SubLObject done_tail = property_list_member($DONE, current);
+                            SubLObject done = (NIL != done_tail) ? ((SubLObject) (cadr(done_tail))) : NIL;
+                            current = temp;
+                            {
+                                SubLObject body = current;
+                                SubLObject gaf = $sym43$GAF;
+                                return list(SKSI_DO_GAF_ARG_INDEX_TRUE, list(gaf, sk_source, $PREDICATE, $$subKS_Direct, $INDEX, ONE_INTEGER, $DONE, done), listS(CLET, list(list(sub_ks, list(GAF_ARG2, gaf))), append(body, NIL)));
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject do_sk_source_sub_ks_direct(final SubLObject macroform, final SubLObject environment) {
@@ -1612,8 +2454,35 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list(SKSI_DO_GAF_ARG_INDEX_TRUE, list(gaf, sk_source, $PREDICATE, $$subKS_Direct, $INDEX, ONE_INTEGER, $DONE, done), listS(CLET, list(list(sub_ks, list(GAF_ARG2, gaf))), append(body, NIL)));
     }
 
+    public static final SubLObject sk_source_proper_sub_ks_closure_alt(SubLObject sk_source) {
+        return Mapping.mapcan(symbol_function(SK_SOURCE_SUB_KS_CLOSURE), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_sub_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY);
+    }
+
     public static SubLObject sk_source_proper_sub_ks_closure(final SubLObject sk_source) {
         return Mapping.mapcan(symbol_function(SK_SOURCE_SUB_KS_CLOSURE), sk_source_sub_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY);
+    }
+
+    public static final SubLObject sk_source_proper_sub_ks_closure_in_mapping_mt_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject closure = NIL;
+                SubLObject mt_var = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_mapping_mt(sk_source);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.possibly_in_mt_determine_function(mt_var), thread);
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.possibly_in_mt_determine_mt(mt_var), thread);
+                        closure = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_proper_sub_ks_closure(sk_source);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return closure;
+            }
+        }
     }
 
     public static SubLObject sk_source_proper_sub_ks_closure_in_mapping_mt(final SubLObject sk_source) {
@@ -1636,8 +2505,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return closure;
     }
 
+    public static final SubLObject sk_source_sub_ks_closure_alt(SubLObject sk_source) {
+        return cons(sk_source, Mapping.mapcan(symbol_function(SK_SOURCE_SUB_KS_CLOSURE), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_sub_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY));
+    }
+
     public static SubLObject sk_source_sub_ks_closure(final SubLObject sk_source) {
         return cons(sk_source, Mapping.mapcan(symbol_function(SK_SOURCE_SUB_KS_CLOSURE), sk_source_sub_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY));
+    }
+
+    public static final SubLObject sk_source_sub_ks_min_alt(SubLObject sk_source) {
+        {
+            SubLObject direct_sub_ks_list = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_sub_ks_direct(sk_source);
+            return NIL != direct_sub_ks_list ? ((SubLObject) (Mapping.mapcan(symbol_function(SK_SOURCE_SUB_KS_MIN), direct_sub_ks_list, EMPTY_SUBL_OBJECT_ARRAY))) : list(sk_source);
+        }
     }
 
     public static SubLObject sk_source_sub_ks_min(final SubLObject sk_source) {
@@ -1645,8 +2525,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != direct_sub_ks_list ? Mapping.mapcan(symbol_function(SK_SOURCE_SUB_KS_MIN), direct_sub_ks_list, EMPTY_SUBL_OBJECT_ARRAY) : list(sk_source);
     }
 
+    public static final SubLObject sk_source_sub_ksP_alt(SubLObject super_ks, SubLObject sub_ks) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ksP(sub_ks, super_ks);
+    }
+
     public static SubLObject sk_source_sub_ksP(final SubLObject super_ks, final SubLObject sub_ks) {
         return sk_source_super_ksP(sub_ks, super_ks);
+    }
+
+    public static final SubLObject sk_source_sub_ks_in_any_mtP_alt(SubLObject super_ks, SubLObject sub_ks) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        result = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ksP(sub_ks, super_ks);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject sk_source_sub_ks_in_any_mtP(final SubLObject super_ks, final SubLObject sub_ks) {
@@ -1665,20 +2571,43 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject sk_source_proper_sub_ksP_alt(SubLObject super_ks, SubLObject sub_ks) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_proper_super_ksP(sub_ks, super_ks);
+    }
+
     public static SubLObject sk_source_proper_sub_ksP(final SubLObject super_ks, final SubLObject sub_ks) {
         return sk_source_proper_super_ksP(sub_ks, super_ks);
+    }
+
+    public static final SubLObject sk_source_super_ks_direct_alt(SubLObject sk_source) {
+        return kb_mapping_utilities.pred_values(sk_source, $$subKS_Direct, TWO_INTEGER, ONE_INTEGER, $TRUE);
     }
 
     public static SubLObject sk_source_super_ks_direct(final SubLObject sk_source) {
         return kb_mapping_utilities.pred_values(sk_source, $$subKS_Direct, TWO_INTEGER, ONE_INTEGER, $TRUE);
     }
 
+    public static final SubLObject sk_source_proper_super_ks_closure_alt(SubLObject sk_source) {
+        return Mapping.mapcan(symbol_function(SK_SOURCE_SUPER_KS_CLOSURE), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY);
+    }
+
     public static SubLObject sk_source_proper_super_ks_closure(final SubLObject sk_source) {
         return Mapping.mapcan(symbol_function(SK_SOURCE_SUPER_KS_CLOSURE), sk_source_super_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY);
     }
 
+    public static final SubLObject sk_source_super_ks_closure_alt(SubLObject sk_source) {
+        return cons(sk_source, Mapping.mapcan(symbol_function(SK_SOURCE_SUPER_KS_CLOSURE), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY));
+    }
+
     public static SubLObject sk_source_super_ks_closure(final SubLObject sk_source) {
         return cons(sk_source, Mapping.mapcan(symbol_function(SK_SOURCE_SUPER_KS_CLOSURE), sk_source_super_ks_direct(sk_source), EMPTY_SUBL_OBJECT_ARRAY));
+    }
+
+    public static final SubLObject sk_source_super_ks_max_alt(SubLObject sk_source) {
+        {
+            SubLObject direct_super_ks_list = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_direct(sk_source);
+            return NIL != direct_super_ks_list ? ((SubLObject) (Mapping.mapcan(symbol_function(SK_SOURCE_SUPER_KS_MAX), direct_super_ks_list, EMPTY_SUBL_OBJECT_ARRAY))) : list(sk_source);
+        }
     }
 
     public static SubLObject sk_source_super_ks_max(final SubLObject sk_source) {
@@ -1686,8 +2615,71 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != direct_super_ks_list ? Mapping.mapcan(symbol_function(SK_SOURCE_SUPER_KS_MAX), direct_super_ks_list, EMPTY_SUBL_OBJECT_ARRAY) : list(sk_source);
     }
 
+    public static final SubLObject sk_source_super_ksP_alt(SubLObject sub_ks, SubLObject super_ks) {
+        return makeBoolean((sub_ks == super_ks) || (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_proper_super_ksP(sub_ks, super_ks)));
+    }
+
     public static SubLObject sk_source_super_ksP(final SubLObject sub_ks, final SubLObject super_ks) {
         return makeBoolean((NIL != kb_utilities.kbeq(sub_ks, super_ks)) || (NIL != sk_source_proper_super_ksP(sub_ks, super_ks)));
+    }
+
+    public static final SubLObject sk_source_proper_super_ksP_internal_alt(SubLObject sub_ks, SubLObject super_ks) {
+        {
+            SubLObject super_ksP = NIL;
+            SubLObject pred_var = $$subKS_Direct;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(sub_ks, TWO_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(sub_ks, TWO_INTEGER, pred_var);
+                    SubLObject done_var = super_ksP;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_6 = super_ksP;
+                                            SubLObject token_var_7 = NIL;
+                                            while (NIL == done_var_6) {
+                                                {
+                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_7);
+                                                    SubLObject valid_8 = makeBoolean(token_var_7 != gaf);
+                                                    if (NIL != valid_8) {
+                                                        {
+                                                            SubLObject sks = assertions_high.gaf_arg1(gaf);
+                                                            super_ksP = makeBoolean((sks == super_ks) || (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_proper_super_ksP(sks, super_ks)));
+                                                        }
+                                                    }
+                                                    done_var_6 = makeBoolean((NIL == valid_8) || (NIL != super_ksP));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != super_ksP));
+                        }
+                    } 
+                }
+            }
+            return super_ksP;
+        }
     }
 
     public static SubLObject sk_source_proper_super_ksP_internal(final SubLObject sub_ks, final SubLObject super_ks) {
@@ -1735,6 +2727,51 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return super_ksP;
     }
 
+    public static final SubLObject sk_source_proper_super_ksP_alt(SubLObject sub_ks, SubLObject super_ks) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_proper_super_ksP_internal(sub_ks, super_ks);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym53$SK_SOURCE_PROPER_SUPER_KS_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym53$SK_SOURCE_PROPER_SUPER_KS_, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym53$SK_SOURCE_PROPER_SUPER_KS_, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(sub_ks, super_ks);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (sub_ks == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (super_ks == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_proper_super_ksP_internal(sub_ks, super_ks)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(sub_ks, super_ks));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
+    }
+
     public static SubLObject sk_source_proper_super_ksP(final SubLObject sub_ks, final SubLObject super_ks) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
@@ -1771,6 +2808,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject common_super_ksP_alt(SubLObject sk_source1, SubLObject sk_source2) {
+        if (sk_source1 == sk_source2) {
+            return T;
+        } else {
+            {
+                SubLObject tops1 = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_max(sk_source1);
+                SubLObject tops2 = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_max(sk_source2);
+                return keyhash_utilities.fast_intersectP(tops1, tops2, symbol_function(EQ), UNPROVIDED, UNPROVIDED);
+            }
+        }
+    }
+
     public static SubLObject common_super_ksP(final SubLObject sk_source1, final SubLObject sk_source2) {
         if (NIL != kb_utilities.kbeq(sk_source1, sk_source2)) {
             return T;
@@ -1780,8 +2829,23 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return keyhash_utilities.fast_intersectP(tops1, tops2, symbol_function(EQ), UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject super_ks_closure_intersection_alt(SubLObject sk_source1, SubLObject sk_source2) {
+        return keyhash_utilities.fast_intersection(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_closure(sk_source1), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_super_ks_closure(sk_source2), symbol_function(EQ), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject super_ks_closure_intersection(final SubLObject sk_source1, final SubLObject sk_source2) {
         return keyhash_utilities.fast_intersection(sk_source_super_ks_closure(sk_source1), sk_source_super_ks_closure(sk_source2), symbol_function(EQ), UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject immediate_genl_ks_internal_alt(SubLObject sk_source) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(sk_source, $$subKS_Direct, TWO_INTEGER, UNPROVIDED);
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_csql_support(gaf);
+                return assertions_high.gaf_arg1(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject immediate_genl_ks_internal(final SubLObject sk_source) {
@@ -1791,6 +2855,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return assertions_high.gaf_arg1(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject immediate_genl_ks_alt(SubLObject sk_source) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.immediate_genl_ks_internal(sk_source);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, IMMEDIATE_GENL_KS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), IMMEDIATE_GENL_KS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, IMMEDIATE_GENL_KS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, sk_source, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.immediate_genl_ks_internal(sk_source)));
+                        memoization_state.caching_state_put(caching_state, sk_source, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject immediate_genl_ks(final SubLObject sk_source) {
@@ -1813,6 +2903,21 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject max_genl_ks_alt(SubLObject sk_source) {
+        {
+            SubLObject genl_ks = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.immediate_genl_ks(sk_source);
+            if (genl_ks == sk_source) {
+                return sk_source;
+            } else {
+                if (NIL != forts.fort_p(genl_ks)) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.max_genl_ks(genl_ks);
+                } else {
+                    return sk_source;
+                }
+            }
+        }
+    }
+
     public static SubLObject max_genl_ks(final SubLObject sk_source) {
         final SubLObject genl_ks = immediate_genl_ks(sk_source);
         if (NIL != kb_utilities.kbeq(genl_ks, sk_source)) {
@@ -1822,6 +2927,40 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return max_genl_ks(genl_ks);
         }
         return sk_source;
+    }
+
+    public static final SubLObject nearest_common_super_ks_alt(SubLObject sks_list) {
+        {
+            SubLObject new_sks_list = list_utilities.fast_delete_duplicates(sks_list, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            if (NIL != list_utilities.singletonP(new_sks_list)) {
+                return new_sks_list.first();
+            } else {
+                {
+                    SubLObject first = new_sks_list.first();
+                    SubLObject rest = new_sks_list.rest();
+                    SubLObject foundP = NIL;
+                    SubLObject v_super = NIL;
+                    for (v_super = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.immediate_genl_ks(first); !((NIL != foundP) || (NIL == v_super)); v_super = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.immediate_genl_ks(first)) {
+                        {
+                            SubLObject failP = NIL;
+                            if (NIL == failP) {
+                                {
+                                    SubLObject csome_list_var = rest;
+                                    SubLObject ks = NIL;
+                                    for (ks = csome_list_var.first(); !((NIL != failP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , ks = csome_list_var.first()) {
+                                        failP = makeBoolean(NIL == com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_sub_ksP(v_super, ks));
+                                    }
+                                }
+                            }
+                            if (NIL == failP) {
+                                foundP = v_super;
+                            }
+                        }
+                    }
+                    return foundP;
+                }
+            }
+        }
     }
 
     public static SubLObject nearest_common_super_ks(final SubLObject sks_list) {
@@ -1849,6 +2988,16 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return foundP;
     }
 
+    public static final SubLObject nearest_common_super_ks_for_ls_list_alt(SubLObject ls_list) {
+        {
+            SubLObject ant_ks_list = Mapping.mapcar(LOGICAL_SCHEMA_SOURCES, ls_list);
+            if (NIL == list_utilities.every_in_list($sym56$SINGLETON_, ant_ks_list, UNPROVIDED)) {
+                return NIL;
+            }
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.nearest_common_super_ks(list_utilities.flatten(ant_ks_list));
+        }
+    }
+
     public static SubLObject nearest_common_super_ks_for_ls_list(final SubLObject ls_list) {
         final SubLObject ant_ks_list = Mapping.mapcar(LOGICAL_SCHEMA_SOURCES, ls_list);
         if (NIL == list_utilities.every_in_list($sym62$SINGLETON_, ant_ks_list, UNPROVIDED)) {
@@ -1857,12 +3006,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nearest_common_super_ks(list_utilities.flatten(ant_ks_list));
     }
 
+    public static final SubLObject schema_representation_completeP_alt(SubLObject schema) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(schema, $$schemaRepresentationComplete, ONE_INTEGER, ONE_INTEGER, $TRUE));
+    }
+
     public static SubLObject schema_representation_completeP(final SubLObject schema) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(schema, $$schemaRepresentationComplete, ONE_INTEGER, ONE_INTEGER, $TRUE));
     }
 
+    public static final SubLObject isa_physical_schemaP_internal_alt(SubLObject v_object) {
+        return isa.isa_in_any_mtP(v_object, $$PhysicalSchema);
+    }
+
     public static SubLObject isa_physical_schemaP_internal(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$PhysicalSchema);
+    }
+
+    public static final SubLObject isa_physical_schemaP_alt(SubLObject v_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.isa_physical_schemaP_internal(v_object);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym58$ISA_PHYSICAL_SCHEMA_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym58$ISA_PHYSICAL_SCHEMA_, ONE_INTEGER, $int$50, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym58$ISA_PHYSICAL_SCHEMA_, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, v_object, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.isa_physical_schemaP_internal(v_object)));
+                        memoization_state.caching_state_put(caching_state, v_object, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject isa_physical_schemaP(final SubLObject v_object) {
@@ -1885,6 +3068,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schema_sk_sources_alt(SubLObject physical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(physical_schema, $$physicalSchemaSourceMap, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg2(gaf), result);
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject physical_schema_sk_sources(final SubLObject physical_schema) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var;
@@ -1900,8 +3097,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject physical_schema_sk_sources_memoized_internal_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_sk_sources(physical_schema);
+    }
+
     public static SubLObject physical_schema_sk_sources_memoized_internal(final SubLObject physical_schema) {
         return physical_schema_sk_sources(physical_schema);
+    }
+
+    public static final SubLObject physical_schema_sk_sources_memoized_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_sk_sources_memoized_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_SCHEMA_SK_SOURCES_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_SCHEMA_SK_SOURCES_MEMOIZED, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_SCHEMA_SK_SOURCES_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_sk_sources_memoized_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_sk_sources_memoized(final SubLObject physical_schema) {
@@ -1924,8 +3151,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schema_fields_internal_alt(SubLObject physical_schema) {
+        return kb_mapping_utilities.pred_values(physical_schema, $$physicalFields, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject physical_schema_fields_internal(final SubLObject physical_schema) {
         return kb_mapping_utilities.pred_values(physical_schema, $$physicalFields, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject physical_schema_fields_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_fields_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_SCHEMA_FIELDS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_SCHEMA_FIELDS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_SCHEMA_FIELDS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_fields_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_fields(final SubLObject physical_schema) {
@@ -1948,6 +3205,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schema_primary_key_internal_alt(SubLObject physical_schema) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(physical_schema, $$primaryKey, ONE_INTEGER, $TRUE);
+            SubLObject el_key_list = NIL;
+            if (NIL != assertions_high.gaf_assertionP(gaf)) {
+                el_key_list = assertions_high.gaf_arg2(gaf);
+                if (NIL != el_list_p(el_key_list)) {
+                    return evaluation_defns.el_list_to_subl_list(el_key_list);
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject physical_schema_primary_key_internal(final SubLObject physical_schema) {
         final SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(physical_schema, $$primaryKey, ONE_INTEGER, $TRUE);
         SubLObject el_key_list = NIL;
@@ -1958,6 +3229,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject physical_schema_primary_key_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_primary_key_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_SCHEMA_PRIMARY_KEY, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_SCHEMA_PRIMARY_KEY, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_SCHEMA_PRIMARY_KEY, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_primary_key_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_primary_key(final SubLObject physical_schema) {
@@ -2016,36 +3313,86 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schema_primary_key_p_alt(SubLObject physical_schema, SubLObject physical_fields) {
+        return makeBoolean((NIL != physical_fields) && physical_fields.equal(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_primary_key(physical_schema)));
+    }
+
     public static SubLObject physical_schema_primary_key_p(final SubLObject physical_schema, final SubLObject physical_fields) {
         return makeBoolean((NIL != physical_fields) && physical_fields.equal(physical_schema_primary_key(physical_schema)));
+    }
+
+    public static final SubLObject physical_schema_forbidden_comparison_operators_alt(SubLObject physical_schema) {
+        return kb_mapping_utilities.pred_values(physical_schema, $const66$suppressConvertingComparisonLiter, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
     public static SubLObject physical_schema_forbidden_comparison_operators(final SubLObject physical_schema) {
         return kb_mapping_utilities.pred_values(physical_schema, $const73$suppressConvertingComparisonLiter, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject physical_schema_forbidden_comparison_operator_p_alt(SubLObject physical_schema, SubLObject operator) {
+        return list_utilities.member_eqP(operator, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_forbidden_comparison_operators(physical_schema));
+    }
+
     public static SubLObject physical_schema_forbidden_comparison_operator_p(final SubLObject physical_schema, final SubLObject operator) {
         return list_utilities.member_eqP(operator, physical_schema_forbidden_comparison_operators(physical_schema));
+    }
+
+    public static final SubLObject physical_schema_foreign_keys_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap);
     }
 
     public static SubLObject physical_schema_foreign_keys(final SubLObject physical_schema) {
         return physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap);
     }
 
+    public static final SubLObject physical_schema_foreign_keys_restrict_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_Restrict);
+    }
+
     public static SubLObject physical_schema_foreign_keys_restrict(final SubLObject physical_schema) {
         return physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_Restrict);
+    }
+
+    public static final SubLObject physical_schema_foreign_keys_cascade_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_Cascade);
     }
 
     public static SubLObject physical_schema_foreign_keys_cascade(final SubLObject physical_schema) {
         return physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_Cascade);
     }
 
+    public static final SubLObject physical_schema_foreign_keys_set_null_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_SetNull);
+    }
+
     public static SubLObject physical_schema_foreign_keys_set_null(final SubLObject physical_schema) {
         return physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_SetNull);
     }
 
+    public static final SubLObject physical_schema_foreign_keys_set_default_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_SetDefault);
+    }
+
     public static SubLObject physical_schema_foreign_keys_set_default(final SubLObject physical_schema) {
         return physical_schema_foreign_keys_int(physical_schema, $$foreignKeyMap_SetDefault);
+    }
+
+    public static final SubLObject physical_schema_foreign_keys_int_alt(SubLObject physical_schema, SubLObject pred) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(physical_schema, pred, THREE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                {
+                    SubLObject foreign_key_list = evaluation_defns.el_list_to_subl_list(assertions_high.gaf_arg4(gaf));
+                    SubLObject referenced_physical_schema = assertions_high.gaf_arg1(gaf);
+                    SubLObject referenced_field_list = evaluation_defns.el_list_to_subl_list(assertions_high.gaf_arg2(gaf));
+                    result = cons(list(foreign_key_list, referenced_physical_schema, referenced_field_list), result);
+                }
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject physical_schema_foreign_keys_int(final SubLObject physical_schema, final SubLObject pred) {
@@ -2065,6 +3412,22 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject physical_schema_unique_fields_tuples_alt(SubLObject physical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(physical_schema, $$uniqueFieldList, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                {
+                    SubLObject unique_fields_list = evaluation_defns.el_list_to_subl_list(assertions_high.gaf_arg2(gaf));
+                    result = cons(unique_fields_list, result);
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject physical_schema_unique_fields_tuples(final SubLObject physical_schema) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var;
@@ -2080,8 +3443,27 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject physical_schema_required_fields_alt(SubLObject physical_schema) {
+        return kb_mapping_utilities.pred_values(physical_schema, $$requiredFields, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject physical_schema_required_fields(final SubLObject physical_schema) {
         return kb_mapping_utilities.pred_values(physical_schema, $$requiredFields, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject physical_schemata_required_fields_alt(SubLObject physical_schemata) {
+        {
+            SubLObject required_fields = NIL;
+            SubLObject cdolist_list_var = physical_schemata;
+            SubLObject physical_schema = NIL;
+            for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                {
+                    SubLObject ps_required_fields = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_required_fields(physical_schema);
+                    required_fields = append(required_fields, ps_required_fields);
+                }
+            }
+            return required_fields;
+        }
     }
 
     public static SubLObject physical_schemata_required_fields(final SubLObject physical_schemata) {
@@ -2098,9 +3480,30 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return required_fields;
     }
 
+    public static final SubLObject physical_schema_required_field_names_alt(SubLObject physical_schema) {
+        {
+            SubLObject required_fields = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_required_fields(physical_schema);
+            return Mapping.mapcar(PHYSICAL_FIELD_NAME, required_fields);
+        }
+    }
+
     public static SubLObject physical_schema_required_field_names(final SubLObject physical_schema) {
         final SubLObject required_fields = physical_schema_required_fields(physical_schema);
         return Mapping.mapcar(PHYSICAL_FIELD_NAME, required_fields);
+    }
+
+    public static final SubLObject physical_schema_indexed_fields_alt(SubLObject physical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(physical_schema, $$indexedFields, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(el_list_items(assertions_high.gaf_arg2(gaf)), result);
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject physical_schema_indexed_fields(final SubLObject physical_schema) {
@@ -2118,8 +3521,23 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject sksi_determine_singly_indexed_schema_indexed_field_alt(SubLObject physical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_name(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_indexed_fields(physical_schema).first().first());
+    }
+
     public static SubLObject sksi_determine_singly_indexed_schema_indexed_field(final SubLObject physical_schema) {
         return physical_field_name(physical_schema_indexed_fields(physical_schema).first().first());
+    }
+
+    public static final SubLObject physical_field_indexedP_alt(SubLObject physical_field, SubLObject physical_schema) {
+        {
+            SubLObject gaf = kb_indexing.find_gaf_in_relevant_mt(list($$indexedFields, physical_schema, physical_field));
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                return T;
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject physical_field_indexedP(final SubLObject physical_field, final SubLObject physical_schema) {
@@ -2131,12 +3549,48 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject physical_schema_enumerableP_internal_alt(SubLObject physical_schema) {
+        {
+            SubLObject gaf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.enumerable_schema_gaf(physical_schema);
+            if (NIL != gaf) {
+                return T;
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject physical_schema_enumerableP_internal(final SubLObject physical_schema) {
         final SubLObject gaf = enumerable_schema_gaf(physical_schema);
         if (NIL != gaf) {
             return T;
         }
         return NIL;
+    }
+
+    public static final SubLObject physical_schema_enumerableP_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_enumerableP_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym76$PHYSICAL_SCHEMA_ENUMERABLE_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym76$PHYSICAL_SCHEMA_ENUMERABLE_, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym76$PHYSICAL_SCHEMA_ENUMERABLE_, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_enumerableP_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_enumerableP(final SubLObject physical_schema) {
@@ -2159,13 +3613,50 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject enumerable_schema_gaf_alt(SubLObject physical_schema) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(physical_schema, $$enumerableSchema, ONE_INTEGER, $TRUE);
+            return gaf;
+        }
+    }
+
     public static SubLObject enumerable_schema_gaf(final SubLObject physical_schema) {
         final SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(physical_schema, $$enumerableSchema, ONE_INTEGER, $TRUE);
         return gaf;
     }
 
+    public static final SubLObject physical_schema_result_set_cardinality_gafs_internal_alt(SubLObject physical_schema) {
+        return kb_mapping_utilities.pred_value_gafs(physical_schema, $$resultSetCardinality, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject physical_schema_result_set_cardinality_gafs_internal(final SubLObject physical_schema) {
         return kb_mapping_utilities.pred_value_gafs(physical_schema, $$resultSetCardinality, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject physical_schema_result_set_cardinality_gafs_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_result_set_cardinality_gafs_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_result_set_cardinality_gafs_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_result_set_cardinality_gafs(final SubLObject physical_schema) {
@@ -2188,6 +3679,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schemata_result_set_cardinality_gafs_alt(SubLObject physical_schemata) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = physical_schemata;
+            SubLObject physical_schema = NIL;
+            for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                result = append(result, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_result_set_cardinality_gafs(physical_schema));
+            }
+            return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject physical_schemata_result_set_cardinality_gafs(final SubLObject physical_schemata) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = physical_schemata;
@@ -2201,8 +3704,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject physical_schema_result_set_cardinality_wXconstraints_gafs_internal_alt(SubLObject physical_schema) {
+        return kb_mapping_utilities.pred_value_gafs(physical_schema, $const81$resultSetCardinalityWithConstrain, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject physical_schema_result_set_cardinality_wXconstraints_gafs_internal(final SubLObject physical_schema) {
         return kb_mapping_utilities.pred_value_gafs(physical_schema, $const88$resultSetCardinalityWithConstrain, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject physical_schema_result_set_cardinality_wXconstraints_gafs_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_result_set_cardinality_wXconstraints_gafs_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym80$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym80$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym80$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_result_set_cardinality_wXconstraints_gafs_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_result_set_cardinality_wXconstraints_gafs(final SubLObject physical_schema) {
@@ -2225,6 +3758,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schemata_result_set_cardinality_wXconstraints_gafs_alt(SubLObject physical_schemata) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = physical_schemata;
+            SubLObject physical_schema = NIL;
+            for (physical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , physical_schema = cdolist_list_var.first()) {
+                result = append(result, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_result_set_cardinality_wXconstraints_gafs(physical_schema));
+            }
+            return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject physical_schemata_result_set_cardinality_wXconstraints_gafs(final SubLObject physical_schemata) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = physical_schemata;
@@ -2238,24 +3783,58 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject result_set_cardinality_gaf_unbound_fields_set_alt(SubLObject rs_cardinality_gaf) {
+        return assertions_high.gaf_arg2(rs_cardinality_gaf);
+    }
+
     public static SubLObject result_set_cardinality_gaf_unbound_fields_set(final SubLObject rs_cardinality_gaf) {
         return assertions_high.gaf_arg2(rs_cardinality_gaf);
+    }
+
+    public static final SubLObject result_set_cardinality_gaf_bound_fields_set_alt(SubLObject rs_cardinality_gaf) {
+        return assertions_high.gaf_arg3(rs_cardinality_gaf);
     }
 
     public static SubLObject result_set_cardinality_gaf_bound_fields_set(final SubLObject rs_cardinality_gaf) {
         return assertions_high.gaf_arg3(rs_cardinality_gaf);
     }
 
+    public static final SubLObject result_set_cardinality_gaf_constraints_alt(SubLObject rs_cardinality_gaf) {
+        return assertions_high.gaf_predicate(rs_cardinality_gaf) == $const81$resultSetCardinalityWithConstrain ? ((SubLObject) (assertions_high.gaf_arg4(rs_cardinality_gaf))) : NIL;
+    }
+
     public static SubLObject result_set_cardinality_gaf_constraints(final SubLObject rs_cardinality_gaf) {
         return NIL != kb_utilities.kbeq(assertions_high.gaf_predicate(rs_cardinality_gaf), $const88$resultSetCardinalityWithConstrain) ? assertions_high.gaf_arg4(rs_cardinality_gaf) : NIL;
+    }
+
+    public static final SubLObject result_set_cardinality_gaf_cost_expression_alt(SubLObject rs_cardinality_gaf) {
+        return assertions_high.gaf_predicate(rs_cardinality_gaf) == $$resultSetCardinality ? ((SubLObject) (assertions_high.gaf_arg4(rs_cardinality_gaf))) : assertions_high.gaf_arg5(rs_cardinality_gaf);
     }
 
     public static SubLObject result_set_cardinality_gaf_cost_expression(final SubLObject rs_cardinality_gaf) {
         return NIL != kb_utilities.kbeq(assertions_high.gaf_predicate(rs_cardinality_gaf), $$resultSetCardinality) ? assertions_high.gaf_arg4(rs_cardinality_gaf) : assertions_high.gaf_arg5(rs_cardinality_gaf);
     }
 
+    public static final SubLObject physical_schema_logical_schema_gafs_alt(SubLObject physical_schema) {
+        return kb_mapping_utilities.pred_value_gafs(physical_schema, $$logicalPhysicalSchemaMap, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject physical_schema_logical_schema_gafs(final SubLObject physical_schema) {
         return kb_mapping_utilities.pred_value_gafs(physical_schema, $$logicalPhysicalSchemaMap, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject physical_schema_logical_schemata_alt(SubLObject physical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_logical_schema_gafs(physical_schema);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg1(gaf), result);
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject physical_schema_logical_schemata(final SubLObject physical_schema) {
@@ -2273,6 +3852,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject physical_schema_example_tuple_alt(SubLObject physical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(physical_schema, $$exampleTuple, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg2(gaf), result);
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject physical_schema_example_tuple(final SubLObject physical_schema) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var;
@@ -2288,6 +3881,85 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    /**
+     *
+     *
+     * @return listp; a list of triples of the form
+    (<physical field indexical> <logical schema>
+    <logical recipe of how to fill in the logical field>)
+     */
+    @LispMethod(comment = "@return listp; a list of triples of the form\r\n(<physical field indexical> <logical schema>\r\n<logical recipe of how to fill in the logical field>)")
+    public static final SubLObject physical_schema_field_encodings_alt(SubLObject physical_schema) {
+        {
+            SubLObject triples = NIL;
+            SubLObject pred_var = $$fieldEncoding;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(physical_schema, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(physical_schema, ONE_INTEGER, pred_var);
+                    SubLObject done_var = NIL;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_9 = NIL;
+                                            SubLObject token_var_10 = NIL;
+                                            while (NIL == done_var_9) {
+                                                {
+                                                    SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_10);
+                                                    SubLObject valid_11 = makeBoolean(token_var_10 != ass);
+                                                    if (NIL != valid_11) {
+                                                        sksi_hl_support_utilities.note_sksi_support(ass);
+                                                        {
+                                                            SubLObject physical_field_indexical = assertions_high.gaf_arg2(ass);
+                                                            SubLObject logical_schema = assertions_high.gaf_arg3(ass);
+                                                            SubLObject logical_recipe = assertions_high.gaf_arg4(ass);
+                                                            SubLObject triple = list(physical_field_indexical, logical_schema, logical_recipe);
+                                                            triples = cons(triple, triples);
+                                                        }
+                                                    }
+                                                    done_var_9 = makeBoolean(NIL == valid_11);
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean(NIL == valid);
+                        }
+                    } 
+                }
+            }
+            return triples;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return listp; a list of triples of the form
+    (<physical field indexical> <logical schema>
+    <logical recipe of how to fill in the logical field>)
+     */
+    @LispMethod(comment = "@return listp; a list of triples of the form\r\n(<physical field indexical> <logical schema>\r\n<logical recipe of how to fill in the logical field>)")
     public static SubLObject physical_schema_field_encodings(final SubLObject physical_schema) {
         SubLObject triples = NIL;
         final SubLObject pred_var = $$fieldEncoding;
@@ -2337,6 +4009,33 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return triples;
     }
 
+    /**
+     * This differs from @xref physical-schema-fields in that
+     * it returns an ordered list of physical fields, according
+     * to the ordering in the #$schemaFieldNameList assertion
+     * on PHYSICAL-SCHEMA.
+     */
+    @LispMethod(comment = "This differs from @xref physical-schema-fields in that\r\nit returns an ordered list of physical fields, according\r\nto the ordering in the #$schemaFieldNameList assertion\r\non PHYSICAL-SCHEMA.\nThis differs from @xref physical-schema-fields in that\nit returns an ordered list of physical fields, according\nto the ordering in the #$schemaFieldNameList assertion\non PHYSICAL-SCHEMA.")
+    public static final SubLObject physical_schema_ordered_field_list_internal_alt(SubLObject physical_schema) {
+        {
+            SubLObject schema_field_name_list = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_field_name_list(physical_schema);
+            SubLObject schema_field_list = NIL;
+            SubLObject cdolist_list_var = schema_field_name_list;
+            SubLObject field_name = NIL;
+            for (field_name = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , field_name = cdolist_list_var.first()) {
+                schema_field_list = cons(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_schema_and_name(physical_schema, field_name), schema_field_list);
+            }
+            return nreverse(schema_field_list);
+        }
+    }
+
+    /**
+     * This differs from @xref physical-schema-fields in that
+     * it returns an ordered list of physical fields, according
+     * to the ordering in the #$schemaFieldNameList assertion
+     * on PHYSICAL-SCHEMA.
+     */
+    @LispMethod(comment = "This differs from @xref physical-schema-fields in that\r\nit returns an ordered list of physical fields, according\r\nto the ordering in the #$schemaFieldNameList assertion\r\non PHYSICAL-SCHEMA.\nThis differs from @xref physical-schema-fields in that\nit returns an ordered list of physical fields, according\nto the ordering in the #$schemaFieldNameList assertion\non PHYSICAL-SCHEMA.")
     public static SubLObject physical_schema_ordered_field_list_internal(final SubLObject physical_schema) {
         final SubLObject schema_field_name_list = physical_schema_field_name_list(physical_schema);
         SubLObject schema_field_list = NIL;
@@ -2349,6 +4048,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             field_name = cdolist_list_var.first();
         } 
         return nreverse(schema_field_list);
+    }
+
+    public static final SubLObject physical_schema_ordered_field_list_alt(SubLObject physical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_ordered_field_list_internal(physical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_SCHEMA_ORDERED_FIELD_LIST, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_SCHEMA_ORDERED_FIELD_LIST, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_SCHEMA_ORDERED_FIELD_LIST, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_ordered_field_list_internal(physical_schema)));
+                        memoization_state.caching_state_put(caching_state, physical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_ordered_field_list(final SubLObject physical_schema) {
@@ -2371,12 +4096,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_schema_field_name_list_alt(SubLObject physical_schema) {
+        return cycl_utilities.formula_args(kb_mapping_utilities.fpred_value(physical_schema, $$schemaFieldNameList, ONE_INTEGER, TWO_INTEGER, $TRUE), UNPROVIDED);
+    }
+
     public static SubLObject physical_schema_field_name_list(final SubLObject physical_schema) {
         return copy_list(cycl_utilities.formula_args(kb_mapping_utilities.fpred_value(physical_schema, $$schemaFieldNameList, ONE_INTEGER, TWO_INTEGER, $TRUE), UNPROVIDED));
     }
 
+    public static final SubLObject logical_schemata_physical_schemata_alt(SubLObject logical_schemata) {
+        return list_utilities.fast_delete_duplicates(Mapping.mapcan(LOGICAL_SCHEMA_PHYSICAL_SCHEMATA, logical_schemata, EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject logical_schemata_physical_schemata(final SubLObject logical_schemata) {
         return list_utilities.fast_delete_duplicates(Mapping.mapcan(LOGICAL_SCHEMA_PHYSICAL_SCHEMATA, logical_schemata, EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject logical_schema_physical_schemata_alt(SubLObject logical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(logical_schema, $$logicalPhysicalSchemaMap, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg2(gaf), result);
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject logical_schema_physical_schemata(final SubLObject logical_schema) {
@@ -2394,8 +4141,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject logical_schema_fields_internal_alt(SubLObject logical_schema) {
+        return kb_mapping_utilities.pred_values(logical_schema, $$logicalFields, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_schema_fields_internal(final SubLObject logical_schema) {
         return kb_mapping_utilities.pred_values(logical_schema, $$logicalFields, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject logical_schema_fields_alt(SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_fields_internal(logical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_SCHEMA_FIELDS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_SCHEMA_FIELDS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_SCHEMA_FIELDS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, logical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_fields_internal(logical_schema)));
+                        memoization_state.caching_state_put(caching_state, logical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_schema_fields(final SubLObject logical_schema) {
@@ -2416,6 +4193,250 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, logical_schema, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject logical_schema_field_indexicals_internal_alt(SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject node_var = $$logicalFieldIndexicals;
+                SubLObject deck_type = (false) ? ((SubLObject) ($STACK)) : $QUEUE;
+                SubLObject recur_deck = deck.create_deck(deck_type);
+                SubLObject node_and_predicate_mode = NIL;
+                {
+                    SubLObject _prev_bind_0 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                    try {
+                        sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                        {
+                            SubLObject tv_var = NIL;
+                            {
+                                SubLObject _prev_bind_0_12 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                try {
+                                    sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                    sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                    if (NIL != tv_var) {
+                                        if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                            if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                {
+                                                    SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                    if (pcase_var.eql($ERROR)) {
+                                                        sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt97$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                    } else {
+                                                        if (pcase_var.eql($CERROR)) {
+                                                            sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt97$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                        } else {
+                                                            if (pcase_var.eql($WARN)) {
+                                                                Errors.warn($str_alt97$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                            } else {
+                                                                Errors.warn($str_alt102$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                Errors.cerror($$$continue_anyway, $str_alt97$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                    {
+                                        SubLObject _prev_bind_0_13 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                        SubLObject _prev_bind_1_14 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                        SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                        SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                        try {
+                                            sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_vars.get_sbhl_module($$genlPreds), thread);
+                                            sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_vars.get_sbhl_module($$genlPreds)), thread);
+                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_vars.get_sbhl_module($$genlPreds)), thread);
+                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                            sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$genlPreds), thread);
+                                            if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test($$logicalFieldIndexicals, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                {
+                                                    SubLObject _prev_bind_0_15 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_16 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                    SubLObject _prev_bind_2_17 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                    try {
+                                                        sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
+                                                        sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_vars.get_sbhl_module($$genlPreds)), thread);
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_var, UNPROVIDED);
+                                                        node_and_predicate_mode = list($$logicalFieldIndexicals, sbhl_search_vars.genl_inverse_mode_p());
+                                                        while (NIL != node_and_predicate_mode) {
+                                                            {
+                                                                SubLObject node_var_18 = node_and_predicate_mode.first();
+                                                                SubLObject predicate_mode = second(node_and_predicate_mode);
+                                                                SubLObject spec_pred = node_var_18;
+                                                                {
+                                                                    SubLObject _prev_bind_0_19 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                    try {
+                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(predicate_mode, thread);
+                                                                        if (NIL != sbhl_search_utilities.apply_sbhl_add_node_test(sbhl_search_vars.get_sbhl_search_add_node_test(), node_var_18)) {
+                                                                            {
+                                                                                SubLObject partial_result = kb_mapping_utilities.pred_values(logical_schema, spec_pred, ONE_INTEGER, TWO_INTEGER, $TRUE);
+                                                                                result = append(partial_result, result);
+                                                                            }
+                                                                        }
+                                                                        {
+                                                                            SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$genlPreds));
+                                                                            SubLObject cdolist_list_var = accessible_modules;
+                                                                            SubLObject module_var = NIL;
+                                                                            for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_20 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                    SubLObject _prev_bind_1_21 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                    try {
+                                                                                        sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                        {
+                                                                                            SubLObject node = function_terms.naut_to_nart(node_var_18);
+                                                                                            if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                {
+                                                                                                    SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                    if (NIL != d_link) {
+                                                                                                        {
+                                                                                                            SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                            if (NIL != mt_links) {
+                                                                                                                {
+                                                                                                                    SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                        thread.resetMultipleValues();
+                                                                                                                        {
+                                                                                                                            SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                            SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                            thread.resetMultipleValues();
+                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                {
+                                                                                                                                    SubLObject _prev_bind_0_22 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                    try {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                        {
+                                                                                                                                            SubLObject iteration_state_23 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_23)) {
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_23);
+                                                                                                                                                    SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_24 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                    SubLObject cdolist_list_var_25 = new_list;
+                                                                                                                                                                    SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                    for (node_vars_link_node = cdolist_list_var_25.first(); NIL != cdolist_list_var_25; cdolist_list_var_25 = cdolist_list_var_25.rest() , node_vars_link_node = cdolist_list_var_25.first()) {
+                                                                                                                                                                        if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                            deck.deck_push(list(node_vars_link_node, sbhl_search_vars.genl_inverse_mode_p()), recur_deck);
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_24, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    iteration_state_23 = dictionary_contents.do_dictionary_contents_next(iteration_state_23);
+                                                                                                                                                }
+                                                                                                                                            } 
+                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state_23);
+                                                                                                                                        }
+                                                                                                                                    } finally {
+                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_22, thread);
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                            iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                        }
+                                                                                                                    } 
+                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    } else {
+                                                                                                        sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt104$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                    }
+                                                                                                }
+                                                                                            } else {
+                                                                                                if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                    {
+                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                        SubLObject cdolist_list_var_26 = new_list;
+                                                                                                        SubLObject generating_fn = NIL;
+                                                                                                        for (generating_fn = cdolist_list_var_26.first(); NIL != cdolist_list_var_26; cdolist_list_var_26 = cdolist_list_var_26.rest() , generating_fn = cdolist_list_var_26.first()) {
+                                                                                                            {
+                                                                                                                SubLObject _prev_bind_0_27 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                try {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                    {
+                                                                                                                        SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                        SubLObject new_list_28 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                        SubLObject cdolist_list_var_29 = new_list_28;
+                                                                                                                        SubLObject node_vars_link_node = NIL;
+                                                                                                                        for (node_vars_link_node = cdolist_list_var_29.first(); NIL != cdolist_list_var_29; cdolist_list_var_29 = cdolist_list_var_29.rest() , node_vars_link_node = cdolist_list_var_29.first()) {
+                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                deck.deck_push(list(node_vars_link_node, sbhl_search_vars.genl_inverse_mode_p()), recur_deck);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                } finally {
+                                                                                                                    sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_27, thread);
+                                                                                                                }
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    } finally {
+                                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_21, thread);
+                                                                                        sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_20, thread);
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_0_19, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                            node_and_predicate_mode = deck.deck_pop(recur_deck);
+                                                        } 
+                                                    } finally {
+                                                        sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_17, thread);
+                                                        sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_16, thread);
+                                                        sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_15, thread);
+                                                    }
+                                                }
+                                            } else {
+                                                sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt105$Node__a_does_not_pass_sbhl_type_t, $$logicalFieldIndexicals, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                            }
+                                        } finally {
+                                            sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                            sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2, thread);
+                                            sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_14, thread);
+                                            sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_13, thread);
+                                        }
+                                    }
+                                } finally {
+                                    sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1, thread);
+                                    sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_12, thread);
+                                }
+                            }
+                            sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                        }
+                    } finally {
+                        sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+        }
     }
 
     public static SubLObject logical_schema_field_indexicals_internal(final SubLObject logical_schema) {
@@ -2661,6 +4682,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject logical_schema_field_indexicals_alt(SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_field_indexicals_internal(logical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_SCHEMA_FIELD_INDEXICALS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_SCHEMA_FIELD_INDEXICALS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_SCHEMA_FIELD_INDEXICALS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, logical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_field_indexicals_internal(logical_schema)));
+                        memoization_state.caching_state_put(caching_state, logical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
+    }
+
     public static SubLObject logical_schema_field_indexicals(final SubLObject logical_schema) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
@@ -2681,6 +4728,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_schema_example_sentences_alt(SubLObject logical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(logical_schema, $$schemaExampleSentence, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg2(gaf), result);
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject logical_schema_example_sentences(final SubLObject logical_schema) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var;
@@ -2694,6 +4755,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             gaf = cdolist_list_var.first();
         } 
         return nreverse(result);
+    }
+
+    public static final SubLObject logical_schema_keys_alt(SubLObject logical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(logical_schema, $$logicalSchemaKeys, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(el_extensional_set_elements(assertions_high.gaf_arg2(gaf)), result);
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject logical_schema_keys(final SubLObject logical_schema) {
@@ -2711,8 +4786,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject logical_schema_result_set_cardinality_gafs_internal_alt(SubLObject logical_schema) {
+        return kb_mapping_utilities.pred_value_gafs(logical_schema, $$logicalResultSetCardinality, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject logical_schema_result_set_cardinality_gafs_internal(final SubLObject logical_schema) {
         return kb_mapping_utilities.pred_value_gafs(logical_schema, $$logicalResultSetCardinality, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject logical_schema_result_set_cardinality_gafs_alt(SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_result_set_cardinality_gafs_internal(logical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, logical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_result_set_cardinality_gafs_internal(logical_schema)));
+                        memoization_state.caching_state_put(caching_state, logical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_schema_result_set_cardinality_gafs(final SubLObject logical_schema) {
@@ -2735,6 +4840,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_schemata_result_set_cardinality_gafs_alt(SubLObject logical_schemata) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = logical_schemata;
+            SubLObject logical_schema = NIL;
+            for (logical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , logical_schema = cdolist_list_var.first()) {
+                result = append(result, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_result_set_cardinality_gafs(logical_schema));
+            }
+            return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject logical_schemata_result_set_cardinality_gafs(final SubLObject logical_schemata) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = logical_schemata;
@@ -2748,20 +4865,62 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject logical_result_set_cardinality_gaf_unbound_fields_set_alt(SubLObject lrs_cardinality_gaf) {
+        return assertions_high.gaf_arg2(lrs_cardinality_gaf);
+    }
+
     public static SubLObject logical_result_set_cardinality_gaf_unbound_fields_set(final SubLObject lrs_cardinality_gaf) {
         return assertions_high.gaf_arg2(lrs_cardinality_gaf);
+    }
+
+    public static final SubLObject logical_result_set_cardinality_gaf_bound_fields_set_alt(SubLObject lrs_cardinality_gaf) {
+        return assertions_high.gaf_arg3(lrs_cardinality_gaf);
     }
 
     public static SubLObject logical_result_set_cardinality_gaf_bound_fields_set(final SubLObject lrs_cardinality_gaf) {
         return assertions_high.gaf_arg3(lrs_cardinality_gaf);
     }
 
+    public static final SubLObject logical_result_set_cardinality_gaf_cost_expression_alt(SubLObject lrs_cardinality_gaf) {
+        return assertions_high.gaf_arg4(lrs_cardinality_gaf);
+    }
+
     public static SubLObject logical_result_set_cardinality_gaf_cost_expression(final SubLObject lrs_cardinality_gaf) {
         return assertions_high.gaf_arg4(lrs_cardinality_gaf);
     }
 
+    public static final SubLObject logical_schema_result_set_cardinality_wrt_value_gafs_internal_alt(SubLObject logical_schema) {
+        return kb_mapping_utilities.pred_value_gafs(logical_schema, $const111$logicalResultSetCardinalityWRTVal, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject logical_schema_result_set_cardinality_wrt_value_gafs_internal(final SubLObject logical_schema) {
         return kb_mapping_utilities.pred_value_gafs(logical_schema, $const119$logicalResultSetCardinalityWRTVal, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject logical_schema_result_set_cardinality_wrt_value_gafs_alt(SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_result_set_cardinality_wrt_value_gafs_internal(logical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_WRT_VALUE_GAFS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_WRT_VALUE_GAFS, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_WRT_VALUE_GAFS, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, logical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_result_set_cardinality_wrt_value_gafs_internal(logical_schema)));
+                        memoization_state.caching_state_put(caching_state, logical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_schema_result_set_cardinality_wrt_value_gafs(final SubLObject logical_schema) {
@@ -2784,6 +4943,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_schemata_result_set_cardinality_wrt_value_gafs_alt(SubLObject logical_schemata) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = logical_schemata;
+            SubLObject logical_schema = NIL;
+            for (logical_schema = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , logical_schema = cdolist_list_var.first()) {
+                result = append(result, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_result_set_cardinality_wrt_value_gafs(logical_schema));
+            }
+            return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject logical_schemata_result_set_cardinality_wrt_value_gafs(final SubLObject logical_schemata) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = logical_schemata;
@@ -2797,22 +4968,117 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject logical_result_set_cardinality_wrt_value_gaf_unbound_fields_set_alt(SubLObject lrs_cardinality_wrt_value_gaf) {
+        return assertions_high.gaf_arg2(lrs_cardinality_wrt_value_gaf);
+    }
+
     public static SubLObject logical_result_set_cardinality_wrt_value_gaf_unbound_fields_set(final SubLObject lrs_cardinality_wrt_value_gaf) {
         return assertions_high.gaf_arg2(lrs_cardinality_wrt_value_gaf);
+    }
+
+    public static final SubLObject logical_result_set_cardinality_wrt_value_gaf_bound_fields_set_alt(SubLObject lrs_cardinality_wrt_value_gaf) {
+        return assertions_high.gaf_arg3(lrs_cardinality_wrt_value_gaf);
     }
 
     public static SubLObject logical_result_set_cardinality_wrt_value_gaf_bound_fields_set(final SubLObject lrs_cardinality_wrt_value_gaf) {
         return assertions_high.gaf_arg3(lrs_cardinality_wrt_value_gaf);
     }
 
+    public static final SubLObject logical_result_set_cardinality_wrt_value_gaf_cost_expression_alt(SubLObject lrs_cardinality_wrt_value_gaf) {
+        return assertions_high.gaf_arg4(lrs_cardinality_wrt_value_gaf);
+    }
+
     public static SubLObject logical_result_set_cardinality_wrt_value_gaf_cost_expression(final SubLObject lrs_cardinality_wrt_value_gaf) {
         return assertions_high.gaf_arg4(lrs_cardinality_wrt_value_gaf);
+    }
+
+    public static final SubLObject logical_result_set_cardinality_wrt_value_gaf_value_alt(SubLObject lrs_cardinality_wrt_value_gaf) {
+        return assertions_high.gaf_arg5(lrs_cardinality_wrt_value_gaf);
     }
 
     public static SubLObject logical_result_set_cardinality_wrt_value_gaf_value(final SubLObject lrs_cardinality_wrt_value_gaf) {
         return assertions_high.gaf_arg5(lrs_cardinality_wrt_value_gaf);
     }
 
+    /**
+     *
+     *
+     * @return listp; a list of triples of the form
+    (<logical field> <physical schema>
+    <physical recipe of how to fill in the logical field>)
+     */
+    @LispMethod(comment = "@return listp; a list of triples of the form\r\n(<logical field> <physical schema>\r\n<physical recipe of how to fill in the logical field>)")
+    public static final SubLObject logical_schema_field_decodings_alt(SubLObject logical_schema) {
+        {
+            SubLObject triples = NIL;
+            SubLObject pred_var = $$fieldDecoding;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(logical_schema, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(logical_schema, ONE_INTEGER, pred_var);
+                    SubLObject done_var = NIL;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_30 = NIL;
+                                            SubLObject token_var_31 = NIL;
+                                            while (NIL == done_var_30) {
+                                                {
+                                                    SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_31);
+                                                    SubLObject valid_32 = makeBoolean(token_var_31 != ass);
+                                                    if (NIL != valid_32) {
+                                                        sksi_hl_support_utilities.note_sksi_support(ass);
+                                                        {
+                                                            SubLObject logical_field = assertions_high.gaf_arg2(ass);
+                                                            SubLObject physical_schema = assertions_high.gaf_arg3(ass);
+                                                            SubLObject physical_recipe = assertions_high.gaf_arg4(ass);
+                                                            SubLObject triple = list(logical_field, physical_schema, physical_recipe);
+                                                            triples = cons(triple, triples);
+                                                        }
+                                                    }
+                                                    done_var_30 = makeBoolean(NIL == valid_32);
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean(NIL == valid);
+                        }
+                    } 
+                }
+            }
+            return triples;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return listp; a list of triples of the form
+    (<logical field> <physical schema>
+    <physical recipe of how to fill in the logical field>)
+     */
+    @LispMethod(comment = "@return listp; a list of triples of the form\r\n(<logical field> <physical schema>\r\n<physical recipe of how to fill in the logical field>)")
     public static SubLObject logical_schema_field_decodings(final SubLObject logical_schema) {
         SubLObject triples = NIL;
         final SubLObject pred_var = $$fieldDecoding;
@@ -2862,6 +5128,13 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return triples;
     }
 
+    public static final SubLObject logical_schema_source_gafs_alt(SubLObject logical_schema, SubLObject sks) {
+        if (sks == UNPROVIDED) {
+            sks = NIL;
+        }
+        return NIL != sks ? ((SubLObject) (kb_mapping_utilities.pred_u_v_holds_gafs($$logicalSchemaSourceMap, logical_schema, sks, ONE_INTEGER, TWO_INTEGER, $TRUE))) : kb_mapping_utilities.pred_value_gafs(logical_schema, $$logicalSchemaSourceMap, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_schema_source_gafs(final SubLObject logical_schema, SubLObject sks) {
         if (sks == UNPROVIDED) {
             sks = NIL;
@@ -2869,12 +5142,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != sks ? kb_mapping_utilities.pred_u_v_holds_gafs($$logicalSchemaSourceMap, logical_schema, sks, ONE_INTEGER, TWO_INTEGER, $TRUE) : kb_mapping_utilities.pred_value_gafs(logical_schema, $$logicalSchemaSourceMap, ONE_INTEGER, $TRUE);
     }
 
+    public static final SubLObject logical_schema_sources_alt(SubLObject logical_schema) {
+        return kb_mapping_utilities.pred_values(logical_schema, $$logicalSchemaSourceMap, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_schema_sources(final SubLObject logical_schema) {
         return kb_mapping_utilities.pred_values(logical_schema, $$logicalSchemaSourceMap, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject logical_schema_sk_sources_memoized_internal_alt(SubLObject logical_schema) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_sources(logical_schema);
+    }
+
     public static SubLObject logical_schema_sk_sources_memoized_internal(final SubLObject logical_schema) {
         return logical_schema_sources(logical_schema);
+    }
+
+    public static final SubLObject logical_schema_sk_sources_memoized_alt(SubLObject logical_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_sk_sources_memoized_internal(logical_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_SCHEMA_SK_SOURCES_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_SCHEMA_SK_SOURCES_MEMOIZED, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_SCHEMA_SK_SOURCES_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, logical_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_sk_sources_memoized_internal(logical_schema)));
+                        memoization_state.caching_state_put(caching_state, logical_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_schema_sk_sources_memoized(final SubLObject logical_schema) {
@@ -2897,8 +5204,68 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_schemata_sources_alt(SubLObject logical_schemata) {
+        return list_utilities.fast_delete_duplicates(Mapping.mapcan(LOGICAL_SCHEMA_SOURCES, logical_schemata, EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject logical_schemata_sources(final SubLObject logical_schemata) {
         return list_utilities.fast_delete_duplicates(Mapping.mapcan(LOGICAL_SCHEMA_SOURCES, logical_schemata, EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject logical_schema_sourceP_alt(SubLObject logical_schema, SubLObject sk_source) {
+        {
+            SubLObject sourceP = NIL;
+            SubLObject pred_var = $$logicalSchemaSourceMap;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(logical_schema, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(logical_schema, ONE_INTEGER, pred_var);
+                    SubLObject done_var = sourceP;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_33 = sourceP;
+                                            SubLObject token_var_34 = NIL;
+                                            while (NIL == done_var_33) {
+                                                {
+                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_34);
+                                                    SubLObject valid_35 = makeBoolean(token_var_34 != gaf);
+                                                    if (NIL != valid_35) {
+                                                        sourceP = eq(sk_source, assertions_high.gaf_arg2(gaf));
+                                                    }
+                                                    done_var_33 = makeBoolean((NIL == valid_35) || (NIL != sourceP));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != sourceP));
+                        }
+                    } 
+                }
+            }
+            return sourceP;
+        }
     }
 
     public static SubLObject logical_schema_sourceP(final SubLObject logical_schema, final SubLObject sk_source) {
@@ -2945,6 +5312,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return sourceP;
     }
 
+    public static final SubLObject logical_schema_complete_extent_knownP_alt(SubLObject logical_schema) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(logical_schema, $$schemaCompleteExtentKnown, ONE_INTEGER, $TRUE);
+            if (NIL != gaf) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                return T;
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject logical_schema_complete_extent_knownP(final SubLObject logical_schema) {
         final SubLObject gaf = kb_mapping_utilities.fpred_value_gaf(logical_schema, $$schemaCompleteExtentKnown, ONE_INTEGER, $TRUE);
         if (NIL != gaf) {
@@ -2952,6 +5330,65 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return T;
         }
         return NIL;
+    }
+
+    public static final SubLObject logical_schema_complete_extent_known_for_predicateP_alt(SubLObject logical_schema, SubLObject predicate, SubLObject test) {
+        if (test == UNPROVIDED) {
+            test = symbol_function(EQ);
+        }
+        {
+            SubLObject completeP = NIL;
+            SubLObject pred_var = $$schemaCompleteExtentKnown;
+            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(logical_schema, ONE_INTEGER, pred_var)) {
+                {
+                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(logical_schema, ONE_INTEGER, pred_var);
+                    SubLObject done_var = completeP;
+                    SubLObject token_var = NIL;
+                    while (NIL == done_var) {
+                        {
+                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                            if (NIL != valid) {
+                                {
+                                    SubLObject final_index_iterator = NIL;
+                                    try {
+                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, $TRUE, NIL);
+                                        {
+                                            SubLObject done_var_36 = completeP;
+                                            SubLObject token_var_37 = NIL;
+                                            while (NIL == done_var_36) {
+                                                {
+                                                    SubLObject gaf = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_37);
+                                                    SubLObject valid_38 = makeBoolean(token_var_37 != gaf);
+                                                    if (NIL != valid_38) {
+                                                        completeP = funcall(test, predicate, assertions_high.gaf_arg2(gaf));
+                                                    }
+                                                    done_var_36 = makeBoolean((NIL == valid_38) || (NIL != completeP));
+                                                }
+                                            } 
+                                        }
+                                    } finally {
+                                        {
+                                            SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                                            try {
+                                                bind($is_thread_performing_cleanupP$, T);
+                                                if (NIL != final_index_iterator) {
+                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                }
+                                            } finally {
+                                                rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            done_var = makeBoolean((NIL == valid) || (NIL != completeP));
+                        }
+                    } 
+                }
+            }
+            return completeP;
+        }
     }
 
     public static SubLObject logical_schema_complete_extent_known_for_predicateP(final SubLObject logical_schema, final SubLObject predicate, SubLObject test) {
@@ -3001,6 +5438,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return completeP;
     }
 
+    public static final SubLObject logical_schema_content_sentences_alt(SubLObject logical_schema) {
+        {
+            SubLObject result = NIL;
+            SubLObject gafs = kb_mapping_utilities.pred_value_gafs(logical_schema, $$contentSentenceOfSchema, ONE_INTEGER, $TRUE);
+            SubLObject cdolist_list_var = gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                sksi_hl_support_utilities.note_sksi_support(gaf);
+                result = cons(assertions_high.gaf_arg2(gaf), result);
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject logical_schema_content_sentences(final SubLObject logical_schema) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var;
@@ -3016,12 +5467,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    public static final SubLObject logical_field_p_alt(SubLObject v_object) {
+        return NIL != forts.fort_p(v_object) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_p_memoized(v_object))) : NIL;
+    }
+
     public static SubLObject logical_field_p(final SubLObject v_object) {
         return NIL != forts.fort_p(v_object) ? logical_field_p_memoized(v_object) : NIL;
     }
 
+    public static final SubLObject logical_field_p_memoized_internal_alt(SubLObject fort) {
+        return makeBoolean(((NIL != nart_handles.nart_p(fort)) && ($$LogicalFieldFn == cycl_utilities.nat_functor(fort))) || (NIL != isa.isaP(fort, $$LogicalField, UNPROVIDED, UNPROVIDED)));
+    }
+
     public static SubLObject logical_field_p_memoized_internal(final SubLObject fort) {
         return makeBoolean(((NIL != nart_handles.nart_p(fort)) && (NIL != kb_utilities.kbeq($$LogicalFieldFn, cycl_utilities.nat_functor(fort)))) || (NIL != isa.isaP(fort, $$LogicalField, UNPROVIDED, UNPROVIDED)));
+    }
+
+    public static final SubLObject logical_field_p_memoized_alt(SubLObject fort) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_p_memoized_internal(fort);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_FIELD_P_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_FIELD_P_MEMOIZED, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_FIELD_P_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_p_memoized_internal(fort)));
+                        memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_field_p_memoized(final SubLObject fort) {
@@ -3044,16 +5529,39 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject lf_alias_fn_naut_p_alt(SubLObject v_object) {
+        return NIL != term.nautP(v_object, UNPROVIDED) ? ((SubLObject) (eq(cycl_utilities.formula_operator(v_object), $$LFAliasFn))) : NIL;
+    }
+
     public static SubLObject lf_alias_fn_naut_p(final SubLObject v_object) {
         return NIL != term.nautP(v_object, UNPROVIDED) ? kb_utilities.kbeq(cycl_utilities.formula_operator(v_object), $$LFAliasFn) : NIL;
+    }
+
+    public static final SubLObject lf_alias_fn_naut_lf_alt(SubLObject lf_alias_naut) {
+        return cycl_utilities.formula_arg2(lf_alias_naut, UNPROVIDED);
     }
 
     public static SubLObject lf_alias_fn_naut_lf(final SubLObject lf_alias_naut) {
         return cycl_utilities.formula_arg2(lf_alias_naut, UNPROVIDED);
     }
 
+    public static final SubLObject lf_alias_fn_naut_index_alt(SubLObject lf_alias_naut) {
+        return cycl_utilities.formula_arg1(lf_alias_naut, UNPROVIDED);
+    }
+
     public static SubLObject lf_alias_fn_naut_index(final SubLObject lf_alias_naut) {
         return cycl_utilities.formula_arg1(lf_alias_naut, UNPROVIDED);
+    }
+
+    public static final SubLObject lf_fort_for_lf_alt(SubLObject lf) {
+        if (NIL != forts.fort_p(lf)) {
+            return lf;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_p(lf)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_lf(lf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject lf_fort_for_lf(final SubLObject lf) {
@@ -3066,16 +5574,54 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject lf_alias_naut_for_lf_and_alias_index_alt(SubLObject lf_fort, SubLObject alias_index) {
+        return make_binary_formula($$LFAliasFn, alias_index, lf_fort);
+    }
+
     public static SubLObject lf_alias_naut_for_lf_and_alias_index(final SubLObject lf_fort, final SubLObject alias_index) {
         return make_binary_formula($$LFAliasFn, alias_index, lf_fort);
+    }
+
+    public static final SubLObject logical_field_indexical_p_alt(SubLObject v_object) {
+        return NIL != forts.fort_p(v_object) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_fort_p(v_object))) : com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(v_object);
     }
 
     public static SubLObject logical_field_indexical_p(final SubLObject v_object) {
         return NIL != forts.fort_p(v_object) ? logical_field_indexical_fort_p(v_object) : lfi_alias_fn_naut_p(v_object);
     }
 
+    public static final SubLObject logical_field_indexical_p_memoized_internal_alt(SubLObject fort) {
+        return makeBoolean(((NIL != nart_handles.nart_p(fort)) && ($$TheLogicalFieldValueFn == cycl_utilities.nat_functor(fort))) || (NIL != sksi_infrastructure_utilities.non_thelogicalfieldvaluefn_lfi_fort_p(fort)));
+    }
+
     public static SubLObject logical_field_indexical_p_memoized_internal(final SubLObject fort) {
         return makeBoolean(((NIL != nart_handles.nart_p(fort)) && (NIL != kb_utilities.kbeq($$TheLogicalFieldValueFn, cycl_utilities.nat_functor(fort)))) || (NIL != sksi_infrastructure_utilities.non_thelogicalfieldvaluefn_lfi_fort_p(fort)));
+    }
+
+    public static final SubLObject logical_field_indexical_p_memoized_alt(SubLObject fort) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_p_memoized_internal(fort);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_FIELD_INDEXICAL_P_MEMOIZED, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_FIELD_INDEXICAL_P_MEMOIZED, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_FIELD_INDEXICAL_P_MEMOIZED, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_p_memoized_internal(fort)));
+                        memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_field_indexical_p_memoized(final SubLObject fort) {
@@ -3098,24 +5644,55 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_field_indexical_fort_p_alt(SubLObject fort) {
+        return makeBoolean(((NIL != nart_handles.nart_p(fort)) && ($$TheLogicalFieldValueFn == cycl_utilities.nat_functor(fort))) || (NIL != sksi_infrastructure_utilities.non_thelogicalfieldvaluefn_lfi_fort_p(fort)));
+    }
+
     public static SubLObject logical_field_indexical_fort_p(final SubLObject fort) {
         return makeBoolean(((NIL != nart_handles.nart_p(fort)) && (NIL != kb_utilities.kbeq($$TheLogicalFieldValueFn, cycl_utilities.nat_functor(fort)))) || (NIL != sksi_infrastructure_utilities.non_thelogicalfieldvaluefn_lfi_fort_p(fort)));
+    }
+
+    public static final SubLObject lfi_alias_fn_naut_p_alt(SubLObject v_object) {
+        return NIL != possibly_naut_p(v_object) ? ((SubLObject) (eq(cycl_utilities.formula_operator(v_object), $$LFIAliasFn))) : NIL;
     }
 
     public static SubLObject lfi_alias_fn_naut_p(final SubLObject v_object) {
         return NIL != possibly_naut_p(v_object) ? kb_utilities.kbeq(cycl_utilities.formula_operator(v_object), $$LFIAliasFn) : NIL;
     }
 
+    public static final SubLObject lfi_alias_fn_naut_lfi_alt(SubLObject lfi_alias_naut) {
+        return cycl_utilities.formula_arg2(lfi_alias_naut, UNPROVIDED);
+    }
+
     public static SubLObject lfi_alias_fn_naut_lfi(final SubLObject lfi_alias_naut) {
         return cycl_utilities.formula_arg2(lfi_alias_naut, UNPROVIDED);
+    }
+
+    public static final SubLObject lfi_alias_fn_naut_index_alt(SubLObject lfi_alias_naut) {
+        return cycl_utilities.formula_arg1(lfi_alias_naut, UNPROVIDED);
     }
 
     public static SubLObject lfi_alias_fn_naut_index(final SubLObject lfi_alias_naut) {
         return cycl_utilities.formula_arg1(lfi_alias_naut, UNPROVIDED);
     }
 
+    public static final SubLObject lfi_alias_naut_for_lfi_and_alias_index_alt(SubLObject lfi_fort, SubLObject alias_index) {
+        return make_binary_formula($$LFIAliasFn, alias_index, lfi_fort);
+    }
+
     public static SubLObject lfi_alias_naut_for_lfi_and_alias_index(final SubLObject lfi_fort, final SubLObject alias_index) {
         return make_binary_formula($$LFIAliasFn, alias_index, lfi_fort);
+    }
+
+    public static final SubLObject lfi_fort_for_lfi_alt(SubLObject lfi) {
+        if (NIL != forts.fort_p(lfi)) {
+            return lfi;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(lfi)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_lfi(lfi);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject lfi_fort_for_lfi(final SubLObject lfi) {
@@ -3128,11 +5705,29 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject lfi_index_for_lfi_alt(SubLObject lfi, SubLObject v_default) {
+        if (v_default == UNPROVIDED) {
+            v_default = NIL;
+        }
+        return NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(lfi) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_index(lfi))) : v_default;
+    }
+
     public static SubLObject lfi_index_for_lfi(final SubLObject lfi, SubLObject v_default) {
         if (v_default == UNPROVIDED) {
             v_default = NIL;
         }
         return NIL != lfi_alias_fn_naut_p(lfi) ? lfi_alias_fn_naut_index(lfi) : v_default;
+    }
+
+    public static final SubLObject pfi_for_lfi_alt(SubLObject pfi, SubLObject lfi) {
+        if (NIL != forts.fort_p(lfi)) {
+            return pfi;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(lfi)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_naut_for_pfi_and_alias_index(pfi, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_index(lfi));
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject pfi_for_lfi(final SubLObject pfi, final SubLObject lfi) {
@@ -3141,6 +5736,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         }
         if (NIL != lfi_alias_fn_naut_p(lfi)) {
             return pfi_alias_naut_for_pfi_and_alias_index(pfi, lfi_alias_fn_naut_index(lfi));
+        }
+        return NIL;
+    }
+
+    public static final SubLObject lfi_for_pfi_alt(SubLObject lfi, SubLObject pfi) {
+        if (NIL != forts.fort_p(pfi)) {
+            return lfi;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_p(pfi)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_naut_for_lfi_and_alias_index(lfi, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_index(pfi));
+            }
         }
         return NIL;
     }
@@ -3155,12 +5761,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pf_for_lfi_alt(SubLObject pf, SubLObject lfi) {
+        if (NIL != forts.fort_p(lfi)) {
+            return pf;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(lfi)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_naut_for_pf_and_alias_index(pf, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_index(lfi));
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject pf_for_lfi(final SubLObject pf, final SubLObject lfi) {
         if (NIL != forts.fort_p(lfi)) {
             return pf;
         }
         if (NIL != lfi_alias_fn_naut_p(lfi)) {
             return pf_alias_naut_for_pf_and_alias_index(pf, lfi_alias_fn_naut_index(lfi));
+        }
+        return NIL;
+    }
+
+    public static final SubLObject logical_field_indexical_for_schemaP_alt(SubLObject lfi, SubLObject ls) {
+        if (NIL != forts.fort_p(lfi)) {
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_fort_for_schema(lfi, ls);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(lfi)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_fort_for_schema(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_lfi(lfi), ls);
+            }
         }
         return NIL;
     }
@@ -3175,8 +5803,57 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject logical_field_indexical_fort_for_schema_internal_alt(SubLObject lfi, SubLObject ls) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$logicalFieldIndexicals, ls, lfi, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
     public static SubLObject logical_field_indexical_fort_for_schema_internal(final SubLObject lfi, final SubLObject ls) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$logicalFieldIndexicals, ls, lfi, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
+    public static final SubLObject logical_field_indexical_fort_for_schema_alt(SubLObject lfi, SubLObject ls) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_fort_for_schema_internal(lfi, ls);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_FIELD_INDEXICAL_FORT_FOR_SCHEMA, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_FIELD_INDEXICAL_FORT_FOR_SCHEMA, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_FIELD_INDEXICAL_FORT_FOR_SCHEMA, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(lfi, ls);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (lfi == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (ls == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_fort_for_schema_internal(lfi, ls)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(lfi, ls));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject logical_field_indexical_fort_for_schema(final SubLObject lfi, final SubLObject ls) {
@@ -3215,12 +5892,40 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject logical_field_for_schemaP_alt(SubLObject lf, SubLObject ls) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$logicalFields, ls, lf, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
     public static SubLObject logical_field_for_schemaP(final SubLObject lf, final SubLObject ls) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$logicalFields, ls, lf, ONE_INTEGER, TWO_INTEGER, $TRUE));
     }
 
+    public static final SubLObject virtual_logical_field_indexical_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_p(v_object)) && (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_virtualP(v_object)));
+    }
+
     public static SubLObject virtual_logical_field_indexical_p(final SubLObject v_object) {
         return makeBoolean((NIL != logical_field_indexical_p(v_object)) && (NIL != logical_field_indexical_virtualP(v_object)));
+    }
+
+    public static final SubLObject logical_field_indexical_virtualP_alt(SubLObject logical_field_indexical) {
+        {
+            SubLObject lf = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_for_indexical(logical_field_indexical);
+            SubLObject pf_list = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field(lf);
+            SubLObject virtualP = NIL;
+            if (NIL == virtualP) {
+                {
+                    SubLObject csome_list_var = pf_list;
+                    SubLObject pf = NIL;
+                    for (pf = csome_list_var.first(); !((NIL != virtualP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , pf = csome_list_var.first()) {
+                        if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_virtualP(pf)) {
+                            virtualP = T;
+                        }
+                    }
+                }
+            }
+            return virtualP;
+        }
     }
 
     public static SubLObject logical_field_indexical_virtualP(final SubLObject logical_field_indexical) {
@@ -3242,8 +5947,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return virtualP;
     }
 
+    public static final SubLObject isa_logical_schemaP_internal_alt(SubLObject v_object) {
+        return isa.isa_in_any_mtP(v_object, $$LogicalSchema);
+    }
+
     public static SubLObject isa_logical_schemaP_internal(final SubLObject v_object) {
         return isa.isa_in_any_mtP(v_object, $$LogicalSchema);
+    }
+
+    public static final SubLObject isa_logical_schemaP_alt(SubLObject v_object) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.isa_logical_schemaP_internal(v_object);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym125$ISA_LOGICAL_SCHEMA_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym125$ISA_LOGICAL_SCHEMA_, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym125$ISA_LOGICAL_SCHEMA_, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, v_object, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.isa_logical_schemaP_internal(v_object)));
+                        memoization_state.caching_state_put(caching_state, v_object, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject isa_logical_schemaP(final SubLObject v_object) {
@@ -3266,12 +6001,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject isa_reified_mappingP_alt(SubLObject schema) {
+        return makeBoolean((NIL != forts.fort_p(schema)) && (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.is_fort_a_reified_mappingP(schema)));
+    }
+
     public static SubLObject isa_reified_mappingP(final SubLObject schema) {
         return makeBoolean((NIL != forts.fort_p(schema)) && (NIL != is_fort_a_reified_mappingP(schema)));
     }
 
+    public static final SubLObject is_fort_a_reified_mappingP_internal_alt(SubLObject fort) {
+        return isa.isa_in_any_mtP(fort, $$ReifiedMapping);
+    }
+
     public static SubLObject is_fort_a_reified_mappingP_internal(final SubLObject fort) {
         return isa.isa_in_any_mtP(fort, $$ReifiedMapping);
+    }
+
+    public static final SubLObject is_fort_a_reified_mappingP_alt(SubLObject fort) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.is_fort_a_reified_mappingP_internal(fort);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym127$IS_FORT_A_REIFIED_MAPPING_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym127$IS_FORT_A_REIFIED_MAPPING_, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym127$IS_FORT_A_REIFIED_MAPPING_, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, fort, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.is_fort_a_reified_mappingP_internal(fort)));
+                        memoization_state.caching_state_put(caching_state, fort, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject is_fort_a_reified_mappingP(final SubLObject fort) {
@@ -3294,8 +6063,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject cycl_terms_mapped_to_by_code_mapping_schema_internal_alt(SubLObject code_mapping_schema) {
+        return list_utilities.fast_delete_duplicates(kb_mapping_utilities.pred_values(code_mapping_schema, $$codeMapping, ONE_INTEGER, THREE_INTEGER, $TRUE), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject cycl_terms_mapped_to_by_code_mapping_schema_internal(final SubLObject code_mapping_schema) {
         return list_utilities.fast_delete_duplicates(kb_mapping_utilities.pred_values(code_mapping_schema, $$codeMapping, ONE_INTEGER, THREE_INTEGER, $TRUE), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject cycl_terms_mapped_to_by_code_mapping_schema_alt(SubLObject code_mapping_schema) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.cycl_terms_mapped_to_by_code_mapping_schema_internal(code_mapping_schema);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CYCL_TERMS_MAPPED_TO_BY_CODE_MAPPING_SCHEMA, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CYCL_TERMS_MAPPED_TO_BY_CODE_MAPPING_SCHEMA, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CYCL_TERMS_MAPPED_TO_BY_CODE_MAPPING_SCHEMA, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, code_mapping_schema, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.cycl_terms_mapped_to_by_code_mapping_schema_internal(code_mapping_schema)));
+                        memoization_state.caching_state_put(caching_state, code_mapping_schema, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject cycl_terms_mapped_to_by_code_mapping_schema(final SubLObject code_mapping_schema) {
@@ -3318,6 +6117,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject cyc_terms_corresponding_to_code_mapping_schema_code_alt(SubLObject code_mapping_schema, SubLObject code) {
+        {
+            SubLObject code_mapping_gafs = kb_mapping_utilities.pred_u_v_holds_gafs_in_any_mt($$codeMapping, code_mapping_schema, code, ONE_INTEGER, TWO_INTEGER, $TRUE);
+            SubLObject v_answer = NIL;
+            SubLObject cdolist_list_var = code_mapping_gafs;
+            SubLObject gaf = NIL;
+            for (gaf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , gaf = cdolist_list_var.first()) {
+                v_answer = cons(assertions_high.gaf_arg3(gaf), v_answer);
+            }
+            return list_utilities.fast_delete_duplicates(v_answer, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
+    }
+
     public static SubLObject cyc_terms_corresponding_to_code_mapping_schema_code(final SubLObject code_mapping_schema, final SubLObject code) {
         final SubLObject code_mapping_gafs = kb_mapping_utilities.pred_u_v_holds_gafs_in_any_mt($$codeMapping, code_mapping_schema, code, ONE_INTEGER, TWO_INTEGER, $TRUE);
         SubLObject v_answer = NIL;
@@ -3330,6 +6142,28 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             gaf = cdolist_list_var.first();
         } 
         return list_utilities.fast_delete_duplicates(v_answer, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject cyc_terms_for_sksi_external_term_naut_alt(SubLObject naut) {
+        {
+            SubLObject cyc_terms = NIL;
+            SubLObject functor = cycl_utilities.nat_functor(naut);
+            if (NIL != subl_promotions.memberP(functor, $list_alt130, UNPROVIDED, UNPROVIDED)) {
+                {
+                    SubLObject schema = NIL;
+                    SubLObject code = NIL;
+                    if (functor == $$SchemaObjectFn) {
+                        schema = cycl_utilities.nat_arg1(naut, UNPROVIDED);
+                        code = cycl_utilities.nat_arg2(naut, UNPROVIDED);
+                    } else {
+                        schema = cycl_utilities.nat_arg2(naut, UNPROVIDED);
+                        code = cycl_utilities.nat_arg3(naut, UNPROVIDED);
+                    }
+                    cyc_terms = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.cyc_terms_corresponding_to_code_mapping_schema_code(schema, code);
+                }
+            }
+            return cyc_terms;
+        }
     }
 
     public static SubLObject cyc_terms_for_sksi_external_term_naut(final SubLObject naut) {
@@ -3350,11 +6184,66 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return cyc_terms;
     }
 
+    public static final SubLObject schema_isa_internal_alt(SubLObject code_mapping_schema, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        return kb_mapping_utilities.pred_values(code_mapping_schema, $$schemaIsa, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject schema_isa_internal(final SubLObject code_mapping_schema, SubLObject mt_info) {
         if (mt_info == UNPROVIDED) {
             mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
         }
         return kb_mapping_utilities.pred_values(code_mapping_schema, $$schemaIsa, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject schema_isa_alt(SubLObject code_mapping_schema, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.schema_isa_internal(code_mapping_schema, mt_info);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SCHEMA_ISA, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SCHEMA_ISA, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SCHEMA_ISA, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(code_mapping_schema, mt_info);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (code_mapping_schema == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (mt_info == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.schema_isa_internal(code_mapping_schema, mt_info)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(code_mapping_schema, mt_info));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject schema_isa(final SubLObject code_mapping_schema, SubLObject mt_info) {
@@ -3396,8 +6285,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject schema_object_field_alt(SubLObject object_defining_schema) {
+        return kb_mapping_utilities.fpred_value(object_defining_schema, $$objectField, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject schema_object_field(final SubLObject object_defining_schema) {
         return kb_mapping_utilities.fpred_value(object_defining_schema, $$objectField, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject schema_object_field_gaf_alt(SubLObject object_defining_schema, SubLObject object_field) {
+        if (object_field == UNPROVIDED) {
+            object_field = NIL;
+        }
+        return NIL != object_field ? ((SubLObject) (kb_mapping_utilities.fpred_u_v_holds_gaf($$objectField, object_defining_schema, object_field, ONE_INTEGER, TWO_INTEGER, $TRUE))) : kb_mapping_utilities.fpred_value_gaf(object_defining_schema, $$objectField, ONE_INTEGER, $TRUE);
     }
 
     public static SubLObject schema_object_field_gaf(final SubLObject object_defining_schema, SubLObject object_field) {
@@ -3407,20 +6307,74 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != object_field ? kb_mapping_utilities.fpred_u_v_holds_gaf($$objectField, object_defining_schema, object_field, ONE_INTEGER, TWO_INTEGER, $TRUE) : kb_mapping_utilities.fpred_value_gaf(object_defining_schema, $$objectField, ONE_INTEGER, $TRUE);
     }
 
+    public static final SubLObject schema_object_id_fn_expression_p_alt(SubLObject expression) {
+        return el_formula_with_operator_p(expression, $$SchemaObjectIDFn);
+    }
+
     public static SubLObject schema_object_id_fn_expression_p(final SubLObject expression) {
         return el_formula_with_operator_p(expression, $$SchemaObjectIDFn);
+    }
+
+    public static final SubLObject schema_object_fn_expression_p_alt(SubLObject expression) {
+        return el_formula_with_operator_p(expression, $$SchemaObjectFn);
     }
 
     public static SubLObject schema_object_fn_expression_p(final SubLObject expression) {
         return el_formula_with_operator_p(expression, $$SchemaObjectFn);
     }
 
+    public static final SubLObject source_schema_object_id_fn_expression_p_alt(SubLObject expression) {
+        return el_formula_with_operator_p(expression, $$SourceSchemaObjectIDFn);
+    }
+
     public static SubLObject source_schema_object_id_fn_expression_p(final SubLObject expression) {
         return el_formula_with_operator_p(expression, $$SourceSchemaObjectIDFn);
     }
 
+    public static final SubLObject source_schema_object_fn_expression_p_alt(SubLObject expression) {
+        return el_formula_with_operator_p(expression, $$SourceSchemaObjectFn);
+    }
+
     public static SubLObject source_schema_object_fn_expression_p(final SubLObject expression) {
         return el_formula_with_operator_p(expression, $$SourceSchemaObjectFn);
+    }
+
+    public static final SubLObject destructure_schema_object_fn_expression_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt138);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject ods = NIL;
+                    SubLObject sub_expression = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt138);
+                    ods = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt138);
+                    sub_expression = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject expression = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt138);
+                            expression = current.first();
+                            current = current.rest();
+                            {
+                                SubLObject body = current;
+                                return listS(CDESTRUCTURING_BIND, list(ods, sub_expression), list(FORMULA_ARGS, expression), append(body, NIL));
+                            }
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt138);
+                    }
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject destructure_schema_object_fn_expression(final SubLObject macroform, final SubLObject environment) {
@@ -3447,6 +6401,48 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return listS(CDESTRUCTURING_BIND, list(ods, sub_expression), list(FORMULA_ARGS, expression), append(body, NIL));
         }
         cdestructuring_bind_error(datum, $list146);
+        return NIL;
+    }
+
+    public static final SubLObject destructure_source_schema_object_fn_expression_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            destructuring_bind_must_consp(current, datum, $list_alt141);
+            {
+                SubLObject temp = current.rest();
+                current = current.first();
+                {
+                    SubLObject sks = NIL;
+                    SubLObject ods = NIL;
+                    SubLObject sub_expression = NIL;
+                    destructuring_bind_must_consp(current, datum, $list_alt141);
+                    sks = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt141);
+                    ods = current.first();
+                    current = current.rest();
+                    destructuring_bind_must_consp(current, datum, $list_alt141);
+                    sub_expression = current.first();
+                    current = current.rest();
+                    if (NIL == current) {
+                        current = temp;
+                        {
+                            SubLObject expression = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt141);
+                            expression = current.first();
+                            current = current.rest();
+                            {
+                                SubLObject body = current;
+                                return listS(CDESTRUCTURING_BIND, list(sks, ods, sub_expression), list(FORMULA_ARGS, expression), append(body, NIL));
+                            }
+                        }
+                    } else {
+                        cdestructuring_bind_error(datum, $list_alt141);
+                    }
+                }
+            }
+        }
         return NIL;
     }
 
@@ -3481,6 +6477,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject physical_field_for_indexical_alt(SubLObject indexical) {
+        if (NIL != forts.fort_p(indexical)) {
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical_fort(indexical);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_p(indexical)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_pfi_alias_fn_naut(indexical);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject physical_field_for_indexical(final SubLObject indexical) {
         if (NIL != forts.fort_p(indexical)) {
             return physical_field_for_indexical_fort(indexical);
@@ -3491,8 +6498,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject physical_field_for_indexical_fort_internal_alt(SubLObject indexical) {
+        return kb_mapping_utilities.fpred_value(indexical, $$indexicalForPhysicalField, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject physical_field_for_indexical_fort_internal(final SubLObject indexical) {
         return kb_mapping_utilities.fpred_value(indexical, $$indexicalForPhysicalField, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject physical_field_for_indexical_fort_alt(SubLObject indexical) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical_fort_internal(indexical);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_FOR_INDEXICAL_FORT, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_FOR_INDEXICAL_FORT, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_FOR_INDEXICAL_FORT, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, indexical, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical_fort_internal(indexical)));
+                        memoization_state.caching_state_put(caching_state, indexical, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_for_indexical_fort(final SubLObject indexical) {
@@ -3515,12 +6552,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_for_pfi_alias_fn_naut_alt(SubLObject indexical) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_pfi(indexical));
+    }
+
     public static SubLObject physical_field_for_pfi_alias_fn_naut(final SubLObject indexical) {
         return physical_field_for_indexical(pfi_alias_fn_naut_pfi(indexical));
     }
 
+    public static final SubLObject indexical_for_physical_field_internal_alt(SubLObject pf) {
+        return kb_mapping_utilities.fpred_value(pf, $$indexicalForPhysicalField, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject indexical_for_physical_field_internal(final SubLObject pf) {
         return kb_mapping_utilities.fpred_value(pf, $$indexicalForPhysicalField, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject indexical_for_physical_field_alt(SubLObject pf) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_physical_field_internal(pf);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, INDEXICAL_FOR_PHYSICAL_FIELD, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), INDEXICAL_FOR_PHYSICAL_FIELD, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, INDEXICAL_FOR_PHYSICAL_FIELD, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, pf, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_physical_field_internal(pf)));
+                        memoization_state.caching_state_put(caching_state, pf, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject indexical_for_physical_field(final SubLObject pf) {
@@ -3543,6 +6614,21 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_fields_to_indexicals_alt(SubLObject physical_fields) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = physical_fields;
+            SubLObject pf = NIL;
+            for (pf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pf = cdolist_list_var.first()) {
+                {
+                    SubLObject indexical = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_physical_field(pf);
+                    result = cons(indexical, result);
+                }
+            }
+            return nreverse(result);
+        }
+    }
+
     public static SubLObject physical_fields_to_indexicals(final SubLObject physical_fields) {
         SubLObject result = NIL;
         SubLObject cdolist_list_var = physical_fields;
@@ -3555,6 +6641,21 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             pf = cdolist_list_var.first();
         } 
         return nreverse(result);
+    }
+
+    public static final SubLObject indexicals_to_physical_fields_alt(SubLObject indexicals) {
+        {
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = indexicals;
+            SubLObject pf = NIL;
+            for (pf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pf = cdolist_list_var.first()) {
+                {
+                    SubLObject physical_field = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical(pf);
+                    result = cons(physical_field, result);
+                }
+            }
+            return nreverse(result);
+        }
     }
 
     public static SubLObject indexicals_to_physical_fields(final SubLObject indexicals) {
@@ -3571,8 +6672,31 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return nreverse(result);
     }
 
+    /**
+     * Whether PF is a physical field of PS which is never supposed
+     * to have a null value in any knowledge source associated
+     * with PS (via #$physicalSchemaSourceMap).
+     */
+    @LispMethod(comment = "Whether PF is a physical field of PS which is never supposed\r\nto have a null value in any knowledge source associated\r\nwith PS (via #$physicalSchemaSourceMap).\nWhether PF is a physical field of PS which is never supposed\nto have a null value in any knowledge source associated\nwith PS (via #$physicalSchemaSourceMap).")
+    public static final SubLObject not_null_physical_field_p_alt(SubLObject pf, SubLObject ps) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$nonNullFields, ps, pf, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
+    /**
+     * Whether PF is a physical field of PS which is never supposed
+     * to have a null value in any knowledge source associated
+     * with PS (via #$physicalSchemaSourceMap).
+     */
+    @LispMethod(comment = "Whether PF is a physical field of PS which is never supposed\r\nto have a null value in any knowledge source associated\r\nwith PS (via #$physicalSchemaSourceMap).\nWhether PF is a physical field of PS which is never supposed\nto have a null value in any knowledge source associated\nwith PS (via #$physicalSchemaSourceMap).")
     public static SubLObject not_null_physical_field_p(final SubLObject pf, final SubLObject ps) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_u_v_holds_gaf($$nonNullFields, ps, pf, ONE_INTEGER, TWO_INTEGER, $TRUE));
+    }
+
+    public static final SubLObject not_null_physical_fields_for_ps_internal_alt(SubLObject ps, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        return list_utilities.fast_delete_duplicates(kb_mapping_utilities.pred_values(ps, $$nonNullFields, ONE_INTEGER, TWO_INTEGER, $TRUE), symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
     public static SubLObject not_null_physical_fields_for_ps_internal(final SubLObject ps, SubLObject mt_info) {
@@ -3580,6 +6704,54 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
         }
         return list_utilities.fast_delete_duplicates(kb_mapping_utilities.pred_values(ps, $$nonNullFields, ONE_INTEGER, TWO_INTEGER, $TRUE), symbol_function(EQ), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject not_null_physical_fields_for_ps_alt(SubLObject ps, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.not_null_physical_fields_for_ps_internal(ps, mt_info);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, NOT_NULL_PHYSICAL_FIELDS_FOR_PS, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), NOT_NULL_PHYSICAL_FIELDS_FOR_PS, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, NOT_NULL_PHYSICAL_FIELDS_FOR_PS, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(ps, mt_info);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (ps == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (mt_info == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.not_null_physical_fields_for_ps_internal(ps, mt_info)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(ps, mt_info));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject not_null_physical_fields_for_ps(final SubLObject ps, SubLObject mt_info) {
@@ -3621,6 +6793,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject physical_field_default_value_internal_alt(SubLObject pf, SubLObject ps, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$defaultFieldValue, ps, pf, ONE_INTEGER, TWO_INTEGER, $TRUE);
+            if (NIL != assertions_high.gaf_assertionP(gaf)) {
+                {
+                    SubLObject value = assertions_high.gaf_arg3(gaf);
+                    if (value == $$ISNull) {
+                        return $NULL;
+                    } else {
+                        return value;
+                    }
+                }
+            }
+            return $sksi_default_field_value$.getGlobalValue();
+        }
+    }
+
     public static SubLObject physical_field_default_value_internal(final SubLObject pf, final SubLObject ps, SubLObject mt_info) {
         if (mt_info == UNPROVIDED) {
             mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
@@ -3634,6 +6826,57 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return $NULL;
         }
         return value;
+    }
+
+    public static final SubLObject physical_field_default_value_alt(SubLObject pf, SubLObject ps, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_default_value_internal(pf, ps, mt_info);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_DEFAULT_VALUE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_DEFAULT_VALUE, THREE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_DEFAULT_VALUE, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_3(pf, ps, mt_info);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (pf == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (ps == cached_args.first()) {
+                                            cached_args = cached_args.rest();
+                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && (mt_info == cached_args.first())) {
+                                                return memoization_state.caching_results(results2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_default_value_internal(pf, ps, mt_info)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pf, ps, mt_info));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_default_value(final SubLObject pf, final SubLObject ps, SubLObject mt_info) {
@@ -3678,12 +6921,31 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject null_default_physical_field_valueP_alt(SubLObject pf, SubLObject ps) {
+        return eq(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_default_value(pf, ps, UNPROVIDED), $NULL);
+    }
+
     public static SubLObject null_default_physical_field_valueP(final SubLObject pf, final SubLObject ps) {
         return eq(physical_field_default_value(pf, ps, UNPROVIDED), $NULL);
     }
 
+    public static final SubLObject physical_field_for_schema_and_name_alt(SubLObject ps, SubLObject pf_name) {
+        return narts_high.find_nart(list_to_elf(list($$PhysicalFieldFn, ps, pf_name)));
+    }
+
     public static SubLObject physical_field_for_schema_and_name(final SubLObject ps, final SubLObject pf_name) {
         return narts_high.find_nart(list_to_elf(list($$PhysicalFieldFn, ps, pf_name)));
+    }
+
+    public static final SubLObject physical_field_schema_internal_alt(SubLObject physical_field) {
+        if (NIL != forts.fort_p(physical_field)) {
+            return cycl_utilities.nat_arg1(physical_field, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(physical_field)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_schema(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_pf(physical_field));
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject physical_field_schema_internal(final SubLObject physical_field) {
@@ -3694,6 +6956,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return physical_field_schema(pf_alias_fn_naut_pf(physical_field));
         }
         return NIL;
+    }
+
+    public static final SubLObject physical_field_schema_alt(SubLObject physical_field) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_schema_internal(physical_field);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_SCHEMA, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_SCHEMA, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_SCHEMA, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_field, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_schema_internal(physical_field)));
+                        memoization_state.caching_state_put(caching_state, physical_field, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_schema(final SubLObject physical_field) {
@@ -3716,6 +7004,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_name_internal_alt(SubLObject physical_field) {
+        if (NIL != forts.fort_p(physical_field)) {
+            return cycl_utilities.nat_arg2(physical_field, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(physical_field)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_name(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_pf(physical_field));
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject physical_field_name_internal(final SubLObject physical_field) {
         if (NIL != forts.fort_p(physical_field)) {
             return cycl_utilities.nat_arg2(physical_field, UNPROVIDED);
@@ -3724,6 +7023,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return physical_field_name(pf_alias_fn_naut_pf(physical_field));
         }
         return NIL;
+    }
+
+    public static final SubLObject physical_field_name_alt(SubLObject physical_field) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_name_internal(physical_field);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_NAME, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_NAME, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_NAME, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_field, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_name_internal(physical_field)));
+                        memoization_state.caching_state_put(caching_state, physical_field, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_name(final SubLObject physical_field) {
@@ -3746,12 +7071,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_indexical_name_alt(SubLObject indexical) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_name(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical(indexical));
+    }
+
     public static SubLObject physical_field_indexical_name(final SubLObject indexical) {
         return physical_field_name(physical_field_for_indexical(indexical));
     }
 
+    public static final SubLObject physical_field_sk_source_internal_alt(SubLObject pf) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_sk_sources_memoized(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_schema(pf)).first();
+    }
+
     public static SubLObject physical_field_sk_source_internal(final SubLObject pf) {
         return physical_schema_sk_sources_memoized(physical_field_schema(pf)).first();
+    }
+
+    public static final SubLObject physical_field_sk_source_alt(SubLObject pf) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_sk_source_internal(pf);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_SK_SOURCE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_SK_SOURCE, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_SK_SOURCE, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, pf, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_sk_source_internal(pf)));
+                        memoization_state.caching_state_put(caching_state, pf, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_sk_source(final SubLObject pf) {
@@ -3774,12 +7133,49 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_sk_source_name_internal_alt(SubLObject pf) {
+        {
+            SubLObject table_name = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_name(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_sk_source(pf));
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(pf)) {
+                return sksi_csql_generation.make_table_alias_name(table_name, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_index(pf));
+            } else {
+                return table_name;
+            }
+        }
+    }
+
     public static SubLObject physical_field_sk_source_name_internal(final SubLObject pf) {
         final SubLObject table_name = sk_source_name(physical_field_sk_source(pf));
         if (NIL != pf_alias_fn_naut_p(pf)) {
             return sksi_csql_generation.make_table_alias_name(table_name, pf_alias_fn_naut_index(pf));
         }
         return table_name;
+    }
+
+    public static final SubLObject physical_field_sk_source_name_alt(SubLObject pf) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_sk_source_name_internal(pf);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_SK_SOURCE_NAME, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_SK_SOURCE_NAME, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_SK_SOURCE_NAME, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, pf, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_sk_source_name_internal(pf)));
+                        memoization_state.caching_state_put(caching_state, pf, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_sk_source_name(final SubLObject pf) {
@@ -3826,6 +7222,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_indexical_schema_alt(SubLObject indexical) {
+        if (NIL != forts.fort_p(indexical)) {
+            return cycl_utilities.nat_arg1(indexical, UNPROVIDED);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_p(indexical)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_schema(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_pfi(indexical));
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject physical_field_indexical_schema(final SubLObject indexical) {
         if (NIL != forts.fort_p(indexical)) {
             return cycl_utilities.nat_arg1(indexical, UNPROVIDED);
@@ -3836,8 +7243,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject physical_field_indexical_sk_source_internal_alt(SubLObject indexical) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_sk_sources_memoized(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_schema(indexical)).first();
+    }
+
     public static SubLObject physical_field_indexical_sk_source_internal(final SubLObject indexical) {
         return physical_schema_sk_sources_memoized(physical_field_indexical_schema(indexical)).first();
+    }
+
+    public static final SubLObject physical_field_indexical_sk_source_alt(SubLObject indexical) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_sk_source_internal(indexical);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_INDEXICAL_SK_SOURCE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_INDEXICAL_SK_SOURCE, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_INDEXICAL_SK_SOURCE, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, indexical, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_sk_source_internal(indexical)));
+                        memoization_state.caching_state_put(caching_state, indexical, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_indexical_sk_source(final SubLObject indexical) {
@@ -3860,8 +7297,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_indexical_sk_source_name_internal_alt(SubLObject indexical) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_name(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_sk_source(indexical));
+    }
+
     public static SubLObject physical_field_indexical_sk_source_name_internal(final SubLObject indexical) {
         return sk_source_name(physical_field_indexical_sk_source(indexical));
+    }
+
+    public static final SubLObject physical_field_indexical_sk_source_name_alt(SubLObject indexical) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_sk_source_name_internal(indexical);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_INDEXICAL_SK_SOURCE_NAME, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_INDEXICAL_SK_SOURCE_NAME, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_INDEXICAL_SK_SOURCE_NAME, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, indexical, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_sk_source_name_internal(indexical)));
+                        memoization_state.caching_state_put(caching_state, indexical, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_indexical_sk_source_name(final SubLObject indexical) {
@@ -3908,6 +7375,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_p_alt(SubLObject v_object) {
+        if (NIL != nart_handles.nart_p(v_object)) {
+            return eq($$PhysicalFieldFn, cycl_utilities.nat_function(v_object));
+        } else {
+            if (NIL != narts_high.naut_p(v_object)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(v_object);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject physical_field_p(final SubLObject v_object) {
         if (NIL != nart_handles.nart_p(v_object)) {
             return kb_utilities.kbeq($$PhysicalFieldFn, cycl_utilities.nat_function(v_object));
@@ -3918,8 +7396,28 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject virtual_physical_field_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_p(v_object)) && (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_virtualP(v_object)));
+    }
+
     public static SubLObject virtual_physical_field_p(final SubLObject v_object) {
         return makeBoolean((NIL != physical_field_p(v_object)) && (NIL != physical_field_virtualP(v_object)));
+    }
+
+    public static final SubLObject physical_field_virtualP_internal_alt(SubLObject physical_field) {
+        if ((NIL != nart_handles.nart_p(physical_field)) && ($$VirtualPhysicalFieldFn == cycl_utilities.nat_functor(physical_field))) {
+            return T;
+        } else {
+            if (NIL != forts.fort_p(physical_field)) {
+                return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(physical_field, $$virtualPhysicalFields, TWO_INTEGER, ONE_INTEGER, $TRUE));
+            } else {
+                if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(physical_field)) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_virtualP(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_pf(physical_field));
+                } else {
+                    return NIL;
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_virtualP_internal(final SubLObject physical_field) {
@@ -3933,6 +7431,32 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return physical_field_virtualP(pf_alias_fn_naut_pf(physical_field));
         }
         return NIL;
+    }
+
+    public static final SubLObject physical_field_virtualP_alt(SubLObject physical_field) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_virtualP_internal(physical_field);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym157$PHYSICAL_FIELD_VIRTUAL_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym157$PHYSICAL_FIELD_VIRTUAL_, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym157$PHYSICAL_FIELD_VIRTUAL_, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, physical_field, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_virtualP_internal(physical_field)));
+                        memoization_state.caching_state_put(caching_state, physical_field, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_virtualP(final SubLObject physical_field) {
@@ -3955,6 +7479,13 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject pf_alias_fn_naut_p_alt(SubLObject v_object) {
+        if (NIL != narts_high.naut_p(v_object)) {
+            return eq(cycl_utilities.formula_operator(v_object), $$PFAliasFn);
+        }
+        return NIL;
+    }
+
     public static SubLObject pf_alias_fn_naut_p(final SubLObject v_object) {
         if (NIL != narts_high.naut_p(v_object)) {
             return kb_utilities.kbeq(cycl_utilities.formula_operator(v_object), $$PFAliasFn);
@@ -3962,12 +7493,31 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pf_alias_fn_naut_pf_alt(SubLObject pf_alias_naut) {
+        return cycl_utilities.formula_arg2(pf_alias_naut, UNPROVIDED);
+    }
+
     public static SubLObject pf_alias_fn_naut_pf(final SubLObject pf_alias_naut) {
         return cycl_utilities.formula_arg2(pf_alias_naut, UNPROVIDED);
     }
 
+    public static final SubLObject pf_alias_fn_naut_index_alt(SubLObject pf_alias_naut) {
+        return cycl_utilities.formula_arg1(pf_alias_naut, UNPROVIDED);
+    }
+
     public static SubLObject pf_alias_fn_naut_index(final SubLObject pf_alias_naut) {
         return cycl_utilities.formula_arg1(pf_alias_naut, UNPROVIDED);
+    }
+
+    public static final SubLObject pf_fort_for_pf_alt(SubLObject pf) {
+        if (NIL != forts.fort_p(pf)) {
+            return pf;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(pf)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_pf(pf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject pf_fort_for_pf(final SubLObject pf) {
@@ -3980,8 +7530,24 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pf_alias_naut_for_pf_and_alias_index_alt(SubLObject pf_fort, SubLObject alias_index) {
+        return make_binary_formula($$PFAliasFn, alias_index, pf_fort);
+    }
+
     public static SubLObject pf_alias_naut_for_pf_and_alias_index(final SubLObject pf_fort, final SubLObject alias_index) {
         return make_binary_formula($$PFAliasFn, alias_index, pf_fort);
+    }
+
+    public static final SubLObject physical_field_indexical_p_alt(SubLObject v_object) {
+        if (NIL != nart_handles.nart_p(v_object)) {
+            return eq($$ThePhysicalFieldValueFn, cycl_utilities.nat_function(v_object));
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_p(v_object)) {
+                return T;
+            } else {
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject physical_field_indexical_p(final SubLObject v_object) {
@@ -3994,13 +7560,31 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject virtual_physical_field_indexical_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_p(v_object)) && (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_virtualP(v_object)));
+    }
+
     public static SubLObject virtual_physical_field_indexical_p(final SubLObject v_object) {
         return makeBoolean((NIL != physical_field_indexical_p(v_object)) && (NIL != physical_field_indexical_virtualP(v_object)));
+    }
+
+    public static final SubLObject physical_field_indexical_virtualP_alt(SubLObject physical_field_indexical) {
+        {
+            SubLObject physical_field = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_for_indexical(physical_field_indexical);
+            return makeBoolean((NIL == physical_field) || (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_virtualP(physical_field)));
+        }
     }
 
     public static SubLObject physical_field_indexical_virtualP(final SubLObject physical_field_indexical) {
         final SubLObject physical_field = physical_field_for_indexical(physical_field_indexical);
         return makeBoolean((NIL == physical_field) || (NIL != physical_field_virtualP(physical_field)));
+    }
+
+    public static final SubLObject pfi_alias_fn_naut_p_alt(SubLObject v_object) {
+        if (NIL != possibly_naut_p(v_object)) {
+            return eq(cycl_utilities.formula_operator(v_object), $$PFIAliasFn);
+        }
+        return NIL;
     }
 
     public static SubLObject pfi_alias_fn_naut_p(final SubLObject v_object) {
@@ -4010,16 +7594,39 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pfi_alias_fn_naut_pfi_alt(SubLObject pfi_alias_naut) {
+        return cycl_utilities.formula_arg2(pfi_alias_naut, UNPROVIDED);
+    }
+
     public static SubLObject pfi_alias_fn_naut_pfi(final SubLObject pfi_alias_naut) {
         return cycl_utilities.formula_arg2(pfi_alias_naut, UNPROVIDED);
+    }
+
+    public static final SubLObject pfi_alias_fn_naut_index_alt(SubLObject pfi_alias_naut) {
+        return cycl_utilities.formula_arg1(pfi_alias_naut, UNPROVIDED);
     }
 
     public static SubLObject pfi_alias_fn_naut_index(final SubLObject pfi_alias_naut) {
         return cycl_utilities.formula_arg1(pfi_alias_naut, UNPROVIDED);
     }
 
+    public static final SubLObject pfi_alias_naut_for_pfi_and_alias_index_alt(SubLObject pfi_fort, SubLObject alias_index) {
+        return make_binary_formula($$PFIAliasFn, alias_index, pfi_fort);
+    }
+
     public static SubLObject pfi_alias_naut_for_pfi_and_alias_index(final SubLObject pfi_fort, final SubLObject alias_index) {
         return make_binary_formula($$PFIAliasFn, alias_index, pfi_fort);
+    }
+
+    public static final SubLObject pfi_fort_for_pfi_alt(SubLObject pfi) {
+        if (NIL != forts.fort_p(pfi)) {
+            return pfi;
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_p(pfi)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_pfi(pfi);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject pfi_fort_for_pfi(final SubLObject pfi) {
@@ -4032,6 +7639,13 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject pfi_index_for_pfi_alt(SubLObject pfi, SubLObject v_default) {
+        if (v_default == UNPROVIDED) {
+            v_default = NIL;
+        }
+        return NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_p(pfi) ? ((SubLObject) (com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_fn_naut_index(pfi))) : v_default;
+    }
+
     public static SubLObject pfi_index_for_pfi(final SubLObject pfi, SubLObject v_default) {
         if (v_default == UNPROVIDED) {
             v_default = NIL;
@@ -4039,9 +7653,42 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != pfi_alias_fn_naut_p(pfi) ? pfi_alias_fn_naut_index(pfi) : v_default;
     }
 
+    public static final SubLObject physical_schema_for_sks_name_internal_alt(SubLObject name) {
+        {
+            SubLObject ks = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_by_sks_name(name);
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_physical_schemata(ks).first();
+        }
+    }
+
     public static SubLObject physical_schema_for_sks_name_internal(final SubLObject name) {
         final SubLObject ks = sk_source_by_sks_name(name, UNPROVIDED);
         return sk_source_physical_schemata(ks).first();
+    }
+
+    public static final SubLObject physical_schema_for_sks_name_alt(SubLObject name) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_for_sks_name_internal(name);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_SCHEMA_FOR_SKS_NAME, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_SCHEMA_FOR_SKS_NAME, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_SCHEMA_FOR_SKS_NAME, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, name, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_for_sks_name_internal(name)));
+                        memoization_state.caching_state_put(caching_state, name, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject physical_schema_for_sks_name(final SubLObject name) {
@@ -4064,6 +7711,29 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject physical_field_indexical_for_sks_and_field_names_internal_alt(SubLObject table_name, SubLObject field_name, SubLObject from_expression) {
+        {
+            SubLObject physical_schema = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_for_sks_name(table_name);
+            SubLObject alias_index = NIL;
+            SubLObject pfi_el = NIL;
+            SubLObject pfi_fort = NIL;
+            if ((NIL == physical_schema) && (NIL != from_expression)) {
+                {
+                    SubLObject physical_schema_name = second(find(table_name, from_expression, symbol_function(EQUAL), symbol_function(THIRD), UNPROVIDED, UNPROVIDED));
+                    physical_schema = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_schema_for_sks_name(physical_schema_name);
+                    alias_index = string_utilities.string_to_integer(string_utilities.pre_remove(table_name, physical_schema_name, UNPROVIDED));
+                }
+            }
+            pfi_el = make_binary_formula($$ThePhysicalFieldValueFn, physical_schema, field_name);
+            pfi_fort = narts_high.find_nart(pfi_el);
+            if (NIL != alias_index) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pfi_alias_naut_for_pfi_and_alias_index(pfi_fort, alias_index);
+            } else {
+                return pfi_fort;
+            }
+        }
+    }
+
     public static SubLObject physical_field_indexical_for_sks_and_field_names_internal(final SubLObject table_name, final SubLObject field_name, final SubLObject from_expression) {
         SubLObject physical_schema = physical_schema_for_sks_name(table_name);
         SubLObject alias_index = NIL;
@@ -4080,6 +7750,54 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return pfi_alias_naut_for_pfi_and_alias_index(pfi_fort, alias_index);
         }
         return pfi_fort;
+    }
+
+    public static final SubLObject physical_field_indexical_for_sks_and_field_names_alt(SubLObject table_name, SubLObject field_name, SubLObject from_expression) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_for_sks_and_field_names_internal(table_name, field_name, from_expression);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, PHYSICAL_FIELD_INDEXICAL_FOR_SKS_AND_FIELD_NAMES, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), PHYSICAL_FIELD_INDEXICAL_FOR_SKS_AND_FIELD_NAMES, THREE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, PHYSICAL_FIELD_INDEXICAL_FOR_SKS_AND_FIELD_NAMES, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_3(table_name, field_name, from_expression);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (table_name.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (field_name.equal(cached_args.first())) {
+                                            cached_args = cached_args.rest();
+                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && from_expression.equal(cached_args.first())) {
+                                                return memoization_state.caching_results(results2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_indexical_for_sks_and_field_names_internal(table_name, field_name, from_expression)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(table_name, field_name, from_expression));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_indexical_for_sks_and_field_names(final SubLObject table_name, final SubLObject field_name, final SubLObject from_expression) {
@@ -4121,12 +7839,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject indexicals_for_physical_fields_alt(SubLObject pfs) {
+        return Mapping.mapcar(INDEXICAL_FOR_PHYSICAL_FIELD, pfs);
+    }
+
     public static SubLObject indexicals_for_physical_fields(final SubLObject pfs) {
         return Mapping.mapcar(INDEXICAL_FOR_PHYSICAL_FIELD, pfs);
     }
 
+    public static final SubLObject integer_sequence_generator_for_physical_field_internal_alt(SubLObject pf) {
+        return kb_mapping_utilities.fpred_value(pf, $const167$integerSequenceGeneratorIncrement, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject integer_sequence_generator_for_physical_field_internal(final SubLObject pf) {
         return kb_mapping_utilities.fpred_value(pf, $const177$integerSequenceGeneratorIncrement, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject integer_sequence_generator_for_physical_field_alt(SubLObject pf) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.integer_sequence_generator_for_physical_field_internal(pf);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, INTEGER_SEQUENCE_GENERATOR_FOR_PHYSICAL_FIELD, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), INTEGER_SEQUENCE_GENERATOR_FOR_PHYSICAL_FIELD, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, INTEGER_SEQUENCE_GENERATOR_FOR_PHYSICAL_FIELD, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, pf, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.integer_sequence_generator_for_physical_field_internal(pf)));
+                        memoization_state.caching_state_put(caching_state, pf, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject integer_sequence_generator_for_physical_field(final SubLObject pf) {
@@ -4149,8 +7901,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject integer_sequence_generator_name_internal_alt(SubLObject seq) {
+        return kb_mapping_utilities.fpred_value(seq, $$integerSequenceGeneratorName, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject integer_sequence_generator_name_internal(final SubLObject seq) {
         return kb_mapping_utilities.fpred_value(seq, $$integerSequenceGeneratorName, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject integer_sequence_generator_name_alt(SubLObject seq) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.integer_sequence_generator_name_internal(seq);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, INTEGER_SEQUENCE_GENERATOR_NAME, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), INTEGER_SEQUENCE_GENERATOR_NAME, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, INTEGER_SEQUENCE_GENERATOR_NAME, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, seq, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.integer_sequence_generator_name_internal(seq)));
+                        memoization_state.caching_state_put(caching_state, seq, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject integer_sequence_generator_name(final SubLObject seq) {
@@ -4173,13 +7955,69 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject integer_sequence_generator_name_for_physical_field_alt(SubLObject pf) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.integer_sequence_generator_name(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.integer_sequence_generator_for_physical_field(pf));
+    }
+
     public static SubLObject integer_sequence_generator_name_for_physical_field(final SubLObject pf) {
         return integer_sequence_generator_name(integer_sequence_generator_for_physical_field(pf));
+    }
+
+    public static final SubLObject physical_field_value_is_auto_incrementedP_internal_alt(SubLObject pf, SubLObject ps) {
+        {
+            SubLObject default_value = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_default_value(pf, ps, UNPROVIDED);
+            return el_formula_with_operator_p(default_value, $$TheNextSequenceValueFn);
+        }
     }
 
     public static SubLObject physical_field_value_is_auto_incrementedP_internal(final SubLObject pf, final SubLObject ps) {
         final SubLObject default_value = physical_field_default_value(pf, ps, UNPROVIDED);
         return el_formula_with_operator_p(default_value, $$TheNextSequenceValueFn);
+    }
+
+    public static final SubLObject physical_field_value_is_auto_incrementedP_alt(SubLObject pf, SubLObject ps) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_value_is_auto_incrementedP_internal(pf, ps);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym170$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym170$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym170$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(pf, ps);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (pf == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (ps == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_value_is_auto_incrementedP_internal(pf, ps)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(pf, ps));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject physical_field_value_is_auto_incrementedP(final SubLObject pf, final SubLObject ps) {
@@ -4218,6 +8056,17 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject logical_field_for_indexical_alt(SubLObject indexical) {
+        if (NIL != forts.fort_p(indexical)) {
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_for_indexical_fort(indexical);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_p(indexical)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_for_lfi_alias_fn_naut(indexical);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject logical_field_for_indexical(final SubLObject indexical) {
         SubLObject result = NIL;
         if (NIL != forts.fort_p(indexical)) {
@@ -4230,8 +8079,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != result ? result : Errors.error($str182$logical_field_indexical_without_c, indexical);
     }
 
+    public static final SubLObject logical_field_for_indexical_fort_internal_alt(SubLObject indexical) {
+        return kb_mapping_utilities.fpred_value(indexical, $$indexicalForLogicalField, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_field_for_indexical_fort_internal(final SubLObject indexical) {
         return kb_mapping_utilities.fpred_value(indexical, $$indexicalForLogicalField, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject logical_field_for_indexical_fort_alt(SubLObject indexical) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_for_indexical_fort_internal(indexical);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_FIELD_FOR_INDEXICAL_FORT, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_FIELD_FOR_INDEXICAL_FORT, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_FIELD_FOR_INDEXICAL_FORT, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, indexical, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_for_indexical_fort_internal(indexical)));
+                        memoization_state.caching_state_put(caching_state, indexical, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_field_for_indexical_fort(final SubLObject indexical) {
@@ -4254,8 +8133,23 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_field_for_lfi_alias_fn_naut_alt(SubLObject indexical) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_for_indexical(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_fn_naut_lfi(indexical));
+    }
+
     public static SubLObject logical_field_for_lfi_alias_fn_naut(final SubLObject indexical) {
         return logical_field_for_indexical(lfi_alias_fn_naut_lfi(indexical));
+    }
+
+    public static final SubLObject lfi_for_lf_alt(SubLObject lf) {
+        if (NIL != forts.fort_p(lf)) {
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_logical_field(lf);
+        } else {
+            if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_p(lf)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_alias_naut_for_lfi_and_alias_index(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_logical_field(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_lf(lf)), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_index(lf));
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject lfi_for_lf(final SubLObject lf) {
@@ -4268,8 +8162,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject indexical_for_logical_field_internal_alt(SubLObject lf) {
+        return kb_mapping_utilities.fpred_value(lf, $$indexicalForLogicalField, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject indexical_for_logical_field_internal(final SubLObject lf) {
         return kb_mapping_utilities.fpred_value(lf, $$indexicalForLogicalField, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject indexical_for_logical_field_alt(SubLObject lf) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_logical_field_internal(lf);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, INDEXICAL_FOR_LOGICAL_FIELD, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), INDEXICAL_FOR_LOGICAL_FIELD, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, INDEXICAL_FOR_LOGICAL_FIELD, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, lf, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexical_for_logical_field_internal(lf)));
+                        memoization_state.caching_state_put(caching_state, lf, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject indexical_for_logical_field(final SubLObject lf) {
@@ -4292,24 +8216,70 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject logical_fields_for_indexicals_alt(SubLObject indexicals) {
+        return Mapping.mapcar(LOGICAL_FIELD_FOR_INDEXICAL, indexicals);
+    }
+
     public static SubLObject logical_fields_for_indexicals(final SubLObject indexicals) {
         return Mapping.mapcar(LOGICAL_FIELD_FOR_INDEXICAL, indexicals);
+    }
+
+    public static final SubLObject indexicals_for_logical_fields_alt(SubLObject lfs) {
+        return Mapping.mapcar(INDEXICAL_FOR_LOGICAL_FIELD, lfs);
     }
 
     public static SubLObject indexicals_for_logical_fields(final SubLObject lfs) {
         return Mapping.mapcar(INDEXICAL_FOR_LOGICAL_FIELD, lfs);
     }
 
+    public static final SubLObject logical_field_schema_alt(SubLObject logical_field) {
+        return cycl_utilities.nat_arg1(logical_field, UNPROVIDED);
+    }
+
     public static SubLObject logical_field_schema(final SubLObject logical_field) {
         return cycl_utilities.nat_arg1(logical_field, UNPROVIDED);
+    }
+
+    public static final SubLObject logical_field_indexical_schema_alt(SubLObject logical_field_indexical) {
+        return cycl_utilities.nat_arg1(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lfi_fort_for_lfi(logical_field_indexical), UNPROVIDED);
     }
 
     public static SubLObject logical_field_indexical_schema(final SubLObject logical_field_indexical) {
         return cycl_utilities.nat_arg1(lfi_fort_for_lfi(logical_field_indexical), UNPROVIDED);
     }
 
+    public static final SubLObject logical_field_indexical_sk_source_internal_alt(SubLObject indexical) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_sk_sources_memoized(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_schema(indexical)).first();
+    }
+
     public static SubLObject logical_field_indexical_sk_source_internal(final SubLObject indexical) {
         return logical_schema_sk_sources_memoized(logical_field_indexical_schema(indexical)).first();
+    }
+
+    public static final SubLObject logical_field_indexical_sk_source_alt(SubLObject indexical) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_sk_source_internal(indexical);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, LOGICAL_FIELD_INDEXICAL_SK_SOURCE, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), LOGICAL_FIELD_INDEXICAL_SK_SOURCE, ONE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, LOGICAL_FIELD_INDEXICAL_SK_SOURCE, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, indexical, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_field_indexical_sk_source_internal(indexical)));
+                        memoization_state.caching_state_put(caching_state, indexical, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject logical_field_indexical_sk_source(final SubLObject indexical) {
@@ -4330,6 +8300,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, indexical, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject logical_field_joinable_fields_alt(SubLObject logical_field, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject fields = NIL;
+                {
+                    SubLObject _prev_bind_0 = gt_vars.$suspend_gt_type_checkingP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = gt_vars.$gt_use_sksiP$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                    try {
+                        gt_vars.$suspend_gt_type_checkingP$.bind(T, thread);
+                        gt_vars.$gt_use_sksiP$.bind(NIL, thread);
+                        pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_EQ, thread);
+                        fields = gt_methods.gt_all_accessible($$joinable, logical_field, mt);
+                    } finally {
+                        pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_2, thread);
+                        gt_vars.$gt_use_sksiP$.rebind(_prev_bind_1, thread);
+                        gt_vars.$suspend_gt_type_checkingP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return fields;
+            }
+        }
     }
 
     public static SubLObject logical_field_joinable_fields(final SubLObject logical_field, SubLObject mt) {
@@ -4354,6 +8352,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return fields;
     }
 
+    public static final SubLObject logical_fields_joinableP_internal_alt(SubLObject lf1, SubLObject lf2, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject joinableP = NIL;
+                {
+                    SubLObject _prev_bind_0 = gt_vars.$suspend_gt_type_checkingP$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = gt_vars.$gt_use_sksiP$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = pred_relevance_macros.$relevant_pred_function$.currentBinding(thread);
+                    try {
+                        gt_vars.$suspend_gt_type_checkingP$.bind(T, thread);
+                        gt_vars.$gt_use_sksiP$.bind(NIL, thread);
+                        pred_relevance_macros.$relevant_pred_function$.bind(RELEVANT_PRED_IS_EQ, thread);
+                        joinableP = gt_methods.gt_booleanP($$joinable, lf1, lf2, mt);
+                    } finally {
+                        pred_relevance_macros.$relevant_pred_function$.rebind(_prev_bind_2, thread);
+                        gt_vars.$gt_use_sksiP$.rebind(_prev_bind_1, thread);
+                        gt_vars.$suspend_gt_type_checkingP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return joinableP;
+            }
+        }
+    }
+
     public static SubLObject logical_fields_joinableP_internal(final SubLObject lf1, final SubLObject lf2, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = mt_relevance_macros.$mt$.getDynamicValue();
@@ -4374,6 +8400,57 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             gt_vars.$suspend_gt_type_checkingP$.rebind(_prev_bind_0, thread);
         }
         return joinableP;
+    }
+
+    public static final SubLObject logical_fields_joinableP_alt(SubLObject lf1, SubLObject lf2, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = mt_relevance_macros.$mt$.getDynamicValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_fields_joinableP_internal(lf1, lf2, mt);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, $sym179$LOGICAL_FIELDS_JOINABLE_, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), $sym179$LOGICAL_FIELDS_JOINABLE_, THREE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, $sym179$LOGICAL_FIELDS_JOINABLE_, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_3(lf1, lf2, mt);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (lf1.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (lf2.equal(cached_args.first())) {
+                                            cached_args = cached_args.rest();
+                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && mt.equal(cached_args.first())) {
+                                                return memoization_state.caching_results(results2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_fields_joinableP_internal(lf1, lf2, mt)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(lf1, lf2, mt));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject logical_fields_joinableP(final SubLObject lf1, final SubLObject lf2, SubLObject mt) {
@@ -4418,14 +8495,43 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject extract_logical_fields_alt(SubLObject expression, SubLObject all_logical_fields) {
+        {
+            SubLObject all_logical_field_indexicals = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.indexicals_for_logical_fields(all_logical_fields);
+            SubLObject relevant_logical_field_indexicals = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.extract_logical_field_indexicals(expression, all_logical_field_indexicals);
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_fields_for_indexicals(relevant_logical_field_indexicals);
+        }
+    }
+
     public static SubLObject extract_logical_fields(final SubLObject expression, final SubLObject all_logical_fields) {
         final SubLObject all_logical_field_indexicals = indexicals_for_logical_fields(all_logical_fields);
         final SubLObject relevant_logical_field_indexicals = extract_logical_field_indexicals(expression, all_logical_field_indexicals);
         return logical_fields_for_indexicals(relevant_logical_field_indexicals);
     }
 
+    public static final SubLObject extract_logical_field_indexicals_alt(SubLObject expression, SubLObject all_logical_field_indexicals) {
+        return cycl_utilities.remove_if_not_in_expression(all_logical_field_indexicals, expression, T, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject extract_logical_field_indexicals(final SubLObject expression, final SubLObject all_logical_field_indexicals) {
         return cycl_utilities.remove_if_not_in_expression(all_logical_field_indexicals, expression, T, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_determine_relevant_logical_fields_alt(SubLObject physical_fields, SubLObject physical_schema, SubLObject logical_schema) {
+        {
+            SubLObject all_logical_fields = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.logical_schema_fields(logical_schema);
+            SubLObject result = NIL;
+            SubLObject cdolist_list_var = physical_fields;
+            SubLObject pf = NIL;
+            for (pf = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pf = cdolist_list_var.first()) {
+                {
+                    SubLObject logical_fields = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_determine_relevant_logical_fields_for_physical_field(pf, physical_schema, all_logical_fields, logical_schema);
+                    result = nconc(result, logical_fields);
+                }
+            }
+            result = list_utilities.fast_delete_duplicates(result, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return result;
+        }
     }
 
     public static SubLObject sksi_determine_relevant_logical_fields(final SubLObject physical_fields, final SubLObject physical_schema, final SubLObject logical_schema) {
@@ -4458,12 +8564,36 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return logical_fields;
     }
 
+    public static final SubLObject sksi_determine_logical_field_indexicals_relevant_to_physical_field_alt(SubLObject physical_field, SubLObject physical_schema, SubLObject logical_schema) {
+        return list_utilities.fast_delete_duplicates(append(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1(physical_field, physical_schema, logical_schema), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2(physical_field, physical_schema, logical_schema)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject sksi_determine_logical_field_indexicals_relevant_to_physical_field(final SubLObject physical_field, final SubLObject physical_schema, final SubLObject logical_schema) {
         return list_utilities.fast_delete_duplicates(append(sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1(physical_field, physical_schema, logical_schema), sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2(physical_field, physical_schema, logical_schema)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1_alt(SubLObject physical_field, SubLObject physical_schema, SubLObject logical_schema) {
+        return Mapping.mapcar(INDEXICAL_FOR_LOGICAL_FIELD, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_all_mapped_logical_fields_for_physical_field(physical_field));
+    }
+
     public static SubLObject sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1(final SubLObject physical_field, final SubLObject physical_schema, final SubLObject logical_schema) {
         return Mapping.mapcar(INDEXICAL_FOR_LOGICAL_FIELD, sksi_get_all_mapped_logical_fields_for_physical_field(physical_field));
+    }
+
+    public static final SubLObject sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2_alt(SubLObject physical_field, SubLObject physical_schema, SubLObject logical_schema) {
+        {
+            SubLObject field_encodings = sksi_field_translation_utilities.relevant_field_encodings(physical_field, physical_schema, logical_schema);
+            SubLObject logical_field_indexicals = NIL;
+            SubLObject cdolist_list_var = field_encodings;
+            SubLObject field_encoding = NIL;
+            for (field_encoding = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , field_encoding = cdolist_list_var.first()) {
+                {
+                    SubLObject lfis = sksi_field_translation_utilities.encoding_logical_field_indexicals(field_encoding);
+                    logical_field_indexicals = nconc(logical_field_indexicals, lfis);
+                }
+            }
+            return list_utilities.fast_delete_duplicates(logical_field_indexicals, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        }
     }
 
     public static SubLObject sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2(final SubLObject physical_field, final SubLObject physical_schema, final SubLObject logical_schema) {
@@ -4481,8 +8611,19 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return list_utilities.fast_delete_duplicates(logical_field_indexicals, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
     }
 
+    public static final SubLObject logical_field_isa_alt(SubLObject logical_field) {
+        return kb_mapping_utilities.pred_values(logical_field, $$fieldIsa, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_field_isa(final SubLObject logical_field) {
         return kb_mapping_utilities.pred_values(logical_field, $$fieldIsa, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject logical_field_type_list_alt(SubLObject ls) {
+        {
+            SubLObject el_list = kb_mapping_utilities.fpred_value(ls, $$logicalSchemaFieldTypeList, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            return NIL != el_list ? ((SubLObject) (el_list_items(el_list))) : NIL;
+        }
     }
 
     public static SubLObject logical_field_type_list(final SubLObject ls) {
@@ -4490,8 +8631,34 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != el_list ? el_list_items(el_list) : NIL;
     }
 
+    public static final SubLObject logical_field_mappings_alt(SubLObject lf) {
+        return kb_mapping_utilities.pred_values(lf, $$logicalFieldMapping, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject logical_field_mappings(final SubLObject lf) {
         return kb_mapping_utilities.pred_values(lf, $$logicalFieldMapping, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sksi_get_mapped_physical_fields_for_logical_field_int_internal_alt(SubLObject lf, SubLObject pred, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_p(lf)) {
+            {
+                SubLObject lf_fort = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_lf(lf);
+                SubLObject index = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_fn_naut_index(lf);
+                SubLObject pf_fort_list = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int_2(lf_fort, pred);
+                SubLObject v_answer = NIL;
+                SubLObject cdolist_list_var = pf_fort_list;
+                SubLObject pf_fort = NIL;
+                for (pf_fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pf_fort = cdolist_list_var.first()) {
+                    v_answer = cons(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_naut_for_pf_and_alias_index(pf_fort, index), v_answer);
+                }
+                return nreverse(v_answer);
+            }
+        } else {
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int_2(lf, pred);
+        }
     }
 
     public static SubLObject sksi_get_mapped_physical_fields_for_logical_field_int_internal(final SubLObject lf, final SubLObject pred, SubLObject mt_info) {
@@ -4514,6 +8681,57 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return nreverse(v_answer);
         }
         return sksi_get_mapped_physical_fields_for_logical_field_int_2(lf, pred);
+    }
+
+    public static final SubLObject sksi_get_mapped_physical_fields_for_logical_field_int_alt(SubLObject lf, SubLObject pred, SubLObject mt_info) {
+        if (mt_info == UNPROVIDED) {
+            mt_info = mt_relevance_macros.mt_info(UNPROVIDED);
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int_internal(lf, pred, mt_info);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SKSI_GET_MAPPED_PHYSICAL_FIELDS_FOR_LOGICAL_FIELD_INT, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SKSI_GET_MAPPED_PHYSICAL_FIELDS_FOR_LOGICAL_FIELD_INT, THREE_INTEGER, NIL, EQUAL, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SKSI_GET_MAPPED_PHYSICAL_FIELDS_FOR_LOGICAL_FIELD_INT, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_3(lf, pred, mt_info);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (lf.equal(cached_args.first())) {
+                                        cached_args = cached_args.rest();
+                                        if (pred.equal(cached_args.first())) {
+                                            cached_args = cached_args.rest();
+                                            if (((NIL != cached_args) && (NIL == cached_args.rest())) && mt_info.equal(cached_args.first())) {
+                                                return memoization_state.caching_results(results2);
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int_internal(lf, pred, mt_info)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(lf, pred, mt_info));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject sksi_get_mapped_physical_fields_for_logical_field_int(final SubLObject lf, final SubLObject pred, SubLObject mt_info) {
@@ -4558,20 +8776,55 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject sksi_get_mapped_physical_fields_for_logical_field_int_2_alt(SubLObject lf, SubLObject pred) {
+        return kb_mapping_utilities.pred_values(lf, pred, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject sksi_get_mapped_physical_fields_for_logical_field_int_2(final SubLObject lf, final SubLObject pred) {
         return kb_mapping_utilities.pred_values(lf, pred, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sksi_get_mapped_physical_fields_for_logical_field_alt(SubLObject logical_field) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int(logical_field, $$logicalPhysicalFieldMap, UNPROVIDED);
     }
 
     public static SubLObject sksi_get_mapped_physical_fields_for_logical_field(final SubLObject logical_field) {
         return sksi_get_mapped_physical_fields_for_logical_field_int(logical_field, $$logicalPhysicalFieldMap, UNPROVIDED);
     }
 
+    public static final SubLObject sksi_get_decoding_mapped_physical_fields_for_logical_field_alt(SubLObject logical_field) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int(logical_field, $const186$logicalPhysicalFieldMap_DecodeClo, UNPROVIDED);
+    }
+
     public static SubLObject sksi_get_decoding_mapped_physical_fields_for_logical_field(final SubLObject logical_field) {
         return sksi_get_mapped_physical_fields_for_logical_field_int(logical_field, $const196$logicalPhysicalFieldMap_DecodeClo, UNPROVIDED);
     }
 
+    public static final SubLObject sksi_get_encoding_mapped_physical_fields_for_logical_field_alt(SubLObject logical_field) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_physical_fields_for_logical_field_int(logical_field, $const187$logicalPhysicalFieldMap_EncodeClo, UNPROVIDED);
+    }
+
     public static SubLObject sksi_get_encoding_mapped_physical_fields_for_logical_field(final SubLObject logical_field) {
         return sksi_get_mapped_physical_fields_for_logical_field_int(logical_field, $const197$logicalPhysicalFieldMap_EncodeClo, UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_get_mapped_logical_fields_for_physical_field_int_alt(SubLObject pf, SubLObject pred) {
+        if (NIL != com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_p(pf)) {
+            {
+                SubLObject pf_fort = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_pf(pf);
+                SubLObject index = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_alias_fn_naut_index(pf);
+                SubLObject lf_fort_list = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_logical_fields_for_physical_field_int_2(pf_fort, pred);
+                SubLObject v_answer = NIL;
+                SubLObject cdolist_list_var = lf_fort_list;
+                SubLObject lf_fort = NIL;
+                for (lf_fort = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , lf_fort = cdolist_list_var.first()) {
+                    v_answer = cons(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.lf_alias_naut_for_lf_and_alias_index(lf_fort, index), v_answer);
+                }
+                return nreverse(v_answer);
+            }
+        } else {
+            return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_logical_fields_for_physical_field_int_2(pf, pred);
+        }
     }
 
     public static SubLObject sksi_get_mapped_logical_fields_for_physical_field_int(final SubLObject pf, final SubLObject pred) {
@@ -4593,24 +8846,52 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return sksi_get_mapped_logical_fields_for_physical_field_int_2(pf, pred);
     }
 
+    public static final SubLObject sksi_get_mapped_logical_fields_for_physical_field_int_2_alt(SubLObject pf, SubLObject pred) {
+        return kb_mapping_utilities.pred_values(pf, pred, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject sksi_get_mapped_logical_fields_for_physical_field_int_2(final SubLObject pf, final SubLObject pred) {
         return kb_mapping_utilities.pred_values(pf, pred, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject sksi_get_mapped_logical_fields_for_physical_field_alt(SubLObject physical_field) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_logical_fields_for_physical_field_int(physical_field, $$logicalPhysicalFieldMap);
     }
 
     public static SubLObject sksi_get_mapped_logical_fields_for_physical_field(final SubLObject physical_field) {
         return sksi_get_mapped_logical_fields_for_physical_field_int(physical_field, $$logicalPhysicalFieldMap);
     }
 
+    public static final SubLObject sksi_get_decoding_mapped_logical_fields_for_physical_field_alt(SubLObject physical_field) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_logical_fields_for_physical_field_int(physical_field, $const186$logicalPhysicalFieldMap_DecodeClo);
+    }
+
     public static SubLObject sksi_get_decoding_mapped_logical_fields_for_physical_field(final SubLObject physical_field) {
         return sksi_get_mapped_logical_fields_for_physical_field_int(physical_field, $const196$logicalPhysicalFieldMap_DecodeClo);
+    }
+
+    public static final SubLObject sksi_get_encoding_mapped_logical_fields_for_physical_field_alt(SubLObject physical_field) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_logical_fields_for_physical_field_int(physical_field, $const187$logicalPhysicalFieldMap_EncodeClo);
     }
 
     public static SubLObject sksi_get_encoding_mapped_logical_fields_for_physical_field(final SubLObject physical_field) {
         return sksi_get_mapped_logical_fields_for_physical_field_int(physical_field, $const197$logicalPhysicalFieldMap_EncodeClo);
     }
 
+    public static final SubLObject sksi_get_all_mapped_logical_fields_for_physical_field_alt(SubLObject physical_field) {
+        return list_utilities.fast_delete_duplicates(append(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_mapped_logical_fields_for_physical_field(physical_field), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_decoding_mapped_logical_fields_for_physical_field(physical_field), com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_get_encoding_mapped_logical_fields_for_physical_field(physical_field)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject sksi_get_all_mapped_logical_fields_for_physical_field(final SubLObject physical_field) {
         return list_utilities.fast_delete_duplicates(append(sksi_get_mapped_logical_fields_for_physical_field(physical_field), sksi_get_decoding_mapped_logical_fields_for_physical_field(physical_field), sksi_get_encoding_mapped_logical_fields_for_physical_field(physical_field)), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject physical_field_data_type_name_alt(SubLObject pf, SubLObject dbms) {
+        {
+            SubLObject pf_type = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_data_type(pf);
+            SubLObject type_name = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.data_type_name(pf_type, dbms);
+            return type_name;
+        }
     }
 
     public static SubLObject physical_field_data_type_name(final SubLObject pf, final SubLObject dbms) {
@@ -4619,12 +8900,30 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return type_name;
     }
 
+    public static final SubLObject physical_field_data_type_alt(SubLObject pf) {
+        return kb_mapping_utilities.fpred_value(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.pf_fort_for_pf(pf), $$fieldDataType, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject physical_field_data_type(final SubLObject pf) {
         return kb_mapping_utilities.fpred_value(pf_fort_for_pf(pf), $$fieldDataType, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject boolean_physical_field_p_alt(SubLObject pf) {
+        return eq(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.physical_field_data_type(pf), $$SQLBoolean);
+    }
+
     public static SubLObject boolean_physical_field_p(final SubLObject pf) {
         return kb_utilities.kbeq(physical_field_data_type(pf), $$SQLBoolean);
+    }
+
+    public static final SubLObject data_type_name_alt(SubLObject type, SubLObject dbms) {
+        {
+            SubLObject gaf = kb_mapping_utilities.pred_u_v_holds_gafs($$programDataTypeNameString, dbms, type, ONE_INTEGER, TWO_INTEGER, $TRUE).first();
+            if (NIL != assertions_high.gaf_assertionP(gaf)) {
+                return assertions_high.gaf_arg3(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject data_type_name(final SubLObject type, final SubLObject dbms) {
@@ -4633,6 +8932,25 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return assertions_high.gaf_arg3(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject data_type_by_name_alt(SubLObject name, SubLObject dbms) {
+        {
+            SubLObject name_gafs = kb_mapping_utilities.pred_value_gafs(dbms, $$programDataTypeNameString, ONE_INTEGER, $TRUE);
+            SubLObject v_answer = NIL;
+            if (NIL == v_answer) {
+                {
+                    SubLObject csome_list_var = name_gafs;
+                    SubLObject gaf = NIL;
+                    for (gaf = csome_list_var.first(); !((NIL != v_answer) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , gaf = csome_list_var.first()) {
+                        if (assertions_high.gaf_arg3(gaf).equal(name)) {
+                            v_answer = assertions_high.gaf_arg1(gaf);
+                        }
+                    }
+                }
+            }
+            return v_answer;
+        }
     }
 
     public static SubLObject data_type_by_name(final SubLObject name, final SubLObject dbms) {
@@ -4653,20 +8971,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return v_answer;
     }
 
+    public static final SubLObject physical_schema_indexes_alt(SubLObject ps) {
+        return kb_mapping_utilities.pred_values(ps, $$schemaFieldsIndex, ONE_INTEGER, FOUR_INTEGER, $TRUE);
+    }
+
     public static SubLObject physical_schema_indexes(final SubLObject ps) {
         return kb_mapping_utilities.pred_values(ps, $$schemaFieldsIndex, ONE_INTEGER, FOUR_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject index_physical_fields_alt(SubLObject index) {
+        return kb_mapping_utilities.fpred_value(index, $$schemaFieldsIndex, FOUR_INTEGER, TWO_INTEGER, $TRUE);
     }
 
     public static SubLObject index_physical_fields(final SubLObject index) {
         return kb_mapping_utilities.fpred_value(index, $$schemaFieldsIndex, FOUR_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject index_type_alt(SubLObject index) {
+        return kb_mapping_utilities.fpred_value(index, $$indexType, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject index_type(final SubLObject index) {
         return kb_mapping_utilities.fpred_value(index, $$indexType, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
+    public static final SubLObject index_name_alt(SubLObject index) {
+        return kb_mapping_utilities.fpred_value(index, $$indexName, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject index_name(final SubLObject index) {
         return kb_mapping_utilities.fpred_value(index, $$indexName, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject index_type_namestring_alt(SubLObject type, SubLObject dbms) {
+        {
+            SubLObject gaf = kb_mapping_utilities.pred_u_v_holds_gafs($$programIndexTypeNameString, dbms, type, ONE_INTEGER, TWO_INTEGER, $TRUE).first();
+            if (NIL != assertions_high.gaf_assertionP(gaf)) {
+                return assertions_high.gaf_arg3(gaf);
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject index_type_namestring(final SubLObject type, final SubLObject dbms) {
@@ -4677,8 +9021,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cycl_operator_to_csql_operator_internal_alt(SubLObject operator) {
+        return kb_mapping_utilities.fpred_value(operator, $$cyclOperatorToCSQLOperator, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
     public static SubLObject cycl_operator_to_csql_operator_internal(final SubLObject operator) {
         return kb_mapping_utilities.fpred_value(operator, $$cyclOperatorToCSQLOperator, ONE_INTEGER, TWO_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject cycl_operator_to_csql_operator_alt(SubLObject operator) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.cycl_operator_to_csql_operator_internal(operator);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CYCL_OPERATOR_TO_CSQL_OPERATOR, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CYCL_OPERATOR_TO_CSQL_OPERATOR, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CYCL_OPERATOR_TO_CSQL_OPERATOR, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, operator, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.cycl_operator_to_csql_operator_internal(operator)));
+                        memoization_state.caching_state_put(caching_state, operator, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject cycl_operator_to_csql_operator(final SubLObject operator) {
@@ -4701,8 +9075,38 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject csql_operator_to_cycl_operator_internal_alt(SubLObject operator) {
+        return kb_mapping_utilities.fpred_value(operator, $$cyclOperatorToCSQLOperator, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject csql_operator_to_cycl_operator_internal(final SubLObject operator) {
         return kb_mapping_utilities.fpred_value(operator, $$cyclOperatorToCSQLOperator, TWO_INTEGER, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject csql_operator_to_cycl_operator_alt(SubLObject operator) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_cycl_operator_internal(operator);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CSQL_OPERATOR_TO_CYCL_OPERATOR, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CSQL_OPERATOR_TO_CYCL_OPERATOR, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CSQL_OPERATOR_TO_CYCL_OPERATOR, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, operator, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_cycl_operator_internal(operator)));
+                        memoization_state.caching_state_put(caching_state, operator, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject csql_operator_to_cycl_operator(final SubLObject operator) {
@@ -4725,12 +9129,67 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject csql_operator_to_sql_operator_internal_alt(SubLObject operator, SubLObject sql_flavor) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$csqlOperatorToSQLOperator, operator, sql_flavor, ONE_INTEGER, THREE_INTEGER, $TRUE);
+            if (NIL != gaf) {
+                return assertions_high.gaf_arg2(gaf);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject csql_operator_to_sql_operator_internal(final SubLObject operator, final SubLObject sql_flavor) {
         final SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$csqlOperatorToSQLOperator, operator, sql_flavor, ONE_INTEGER, THREE_INTEGER, $TRUE);
         if (NIL != gaf) {
             return assertions_high.gaf_arg2(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject csql_operator_to_sql_operator_alt(SubLObject operator, SubLObject sql_flavor) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_internal(operator, sql_flavor);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CSQL_OPERATOR_TO_SQL_OPERATOR, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CSQL_OPERATOR_TO_SQL_OPERATOR, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CSQL_OPERATOR_TO_SQL_OPERATOR, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(operator, sql_flavor);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (operator == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (sql_flavor == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_internal(operator, sql_flavor)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(operator, sql_flavor));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject csql_operator_to_sql_operator(final SubLObject operator, final SubLObject sql_flavor) {
@@ -4769,12 +9228,67 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject csql_operator_to_sql_operator_syntax_internal_alt(SubLObject operator, SubLObject sql_flavor) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$csqlOperatorToSQLOperator, operator, sql_flavor, ONE_INTEGER, THREE_INTEGER, $TRUE);
+            if (NIL != gaf) {
+                return assertions_high.gaf_arg4(gaf);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject csql_operator_to_sql_operator_syntax_internal(final SubLObject operator, final SubLObject sql_flavor) {
         final SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$csqlOperatorToSQLOperator, operator, sql_flavor, ONE_INTEGER, THREE_INTEGER, $TRUE);
         if (NIL != gaf) {
             return assertions_high.gaf_arg4(gaf);
         }
         return NIL;
+    }
+
+    public static final SubLObject csql_operator_to_sql_operator_syntax_alt(SubLObject operator, SubLObject sql_flavor) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax_internal(operator, sql_flavor);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CSQL_OPERATOR_TO_SQL_OPERATOR_SYNTAX, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CSQL_OPERATOR_TO_SQL_OPERATOR_SYNTAX, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CSQL_OPERATOR_TO_SQL_OPERATOR_SYNTAX, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(operator, sql_flavor);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (operator == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (sql_flavor == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax_internal(operator, sql_flavor)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(operator, sql_flavor));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject csql_operator_to_sql_operator_syntax(final SubLObject operator, final SubLObject sql_flavor) {
@@ -4813,29 +9327,101 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    public static final SubLObject csql_operator_to_sql_prefix_operator_syntaxP_alt(SubLObject operator, SubLObject sql_flavor) {
+        return eq($$SQLOperatorSyntax_Prefix, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax(operator, sql_flavor));
+    }
+
     public static SubLObject csql_operator_to_sql_prefix_operator_syntaxP(final SubLObject operator, final SubLObject sql_flavor) {
         return kb_utilities.kbeq($$SQLOperatorSyntax_Prefix, csql_operator_to_sql_operator_syntax(operator, sql_flavor));
+    }
+
+    public static final SubLObject csql_operator_to_sql_infix_operator_syntaxP_alt(SubLObject operator, SubLObject sql_flavor) {
+        return eq($$SQLOperatorSyntax_Infix, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax(operator, sql_flavor));
     }
 
     public static SubLObject csql_operator_to_sql_infix_operator_syntaxP(final SubLObject operator, final SubLObject sql_flavor) {
         return kb_utilities.kbeq($$SQLOperatorSyntax_Infix, csql_operator_to_sql_operator_syntax(operator, sql_flavor));
     }
 
+    public static final SubLObject csql_operator_to_sql_postfix_operator_syntaxP_alt(SubLObject operator, SubLObject sql_flavor) {
+        return eq($$SQLOperatorSyntax_Postfix, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax(operator, sql_flavor));
+    }
+
     public static SubLObject csql_operator_to_sql_postfix_operator_syntaxP(final SubLObject operator, final SubLObject sql_flavor) {
         return kb_utilities.kbeq($$SQLOperatorSyntax_Postfix, csql_operator_to_sql_operator_syntax(operator, sql_flavor));
+    }
+
+    public static final SubLObject csql_operator_to_sql_inverse_infix_operator_syntaxP_alt(SubLObject operator, SubLObject sql_flavor) {
+        return eq($$SQLOperatorSyntax_InverseInfix, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax(operator, sql_flavor));
     }
 
     public static SubLObject csql_operator_to_sql_inverse_infix_operator_syntaxP(final SubLObject operator, final SubLObject sql_flavor) {
         return kb_utilities.kbeq($$SQLOperatorSyntax_InverseInfix, csql_operator_to_sql_operator_syntax(operator, sql_flavor));
     }
 
+    public static final SubLObject csql_operator_to_sql_function_syntaxP_alt(SubLObject operator, SubLObject sql_flavor) {
+        return eq($$SQLFunctionSyntax, com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_operator_to_sql_operator_syntax(operator, sql_flavor));
+    }
+
     public static SubLObject csql_operator_to_sql_function_syntaxP(final SubLObject operator, final SubLObject sql_flavor) {
         return kb_utilities.kbeq($$SQLFunctionSyntax, csql_operator_to_sql_operator_syntax(operator, sql_flavor));
+    }
+
+    public static final SubLObject csql_to_sql_translation_format_gaf_internal_alt(SubLObject operator, SubLObject sql_flavor) {
+        {
+            SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$csqlToSQLTranslationFormat, operator, sql_flavor, ONE_INTEGER, TWO_INTEGER, $TRUE);
+            return gaf;
+        }
     }
 
     public static SubLObject csql_to_sql_translation_format_gaf_internal(final SubLObject operator, final SubLObject sql_flavor) {
         final SubLObject gaf = kb_mapping_utilities.fpred_u_v_holds_gaf($$csqlToSQLTranslationFormat, operator, sql_flavor, ONE_INTEGER, TWO_INTEGER, $TRUE);
         return gaf;
+    }
+
+    public static final SubLObject csql_to_sql_translation_format_gaf_alt(SubLObject operator, SubLObject sql_flavor) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_to_sql_translation_format_gaf_internal(operator, sql_flavor);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, CSQL_TO_SQL_TRANSLATION_FORMAT_GAF, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), CSQL_TO_SQL_TRANSLATION_FORMAT_GAF, TWO_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, CSQL_TO_SQL_TRANSLATION_FORMAT_GAF, caching_state);
+                }
+                {
+                    SubLObject sxhash = memoization_state.sxhash_calc_2(operator, sql_flavor);
+                    SubLObject collisions = memoization_state.caching_state_lookup(caching_state, sxhash, UNPROVIDED);
+                    if (collisions != $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        {
+                            SubLObject cdolist_list_var = collisions;
+                            SubLObject collision = NIL;
+                            for (collision = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , collision = cdolist_list_var.first()) {
+                                {
+                                    SubLObject cached_args = collision.first();
+                                    SubLObject results2 = second(collision);
+                                    if (operator == cached_args.first()) {
+                                        cached_args = cached_args.rest();
+                                        if (((NIL != cached_args) && (NIL == cached_args.rest())) && (sql_flavor == cached_args.first())) {
+                                            return memoization_state.caching_results(results2);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    {
+                        SubLObject results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.csql_to_sql_translation_format_gaf_internal(operator, sql_flavor)));
+                        memoization_state.caching_state_enter_multi_key_n(caching_state, sxhash, collisions, results, list(operator, sql_flavor));
+                        return memoization_state.caching_results(results);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject csql_to_sql_translation_format_gaf(final SubLObject operator, final SubLObject sql_flavor) {
@@ -4874,18 +9460,76 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    /**
+     * Is MT a #$SKSIMappingMicrotheory?
+     */
+    @LispMethod(comment = "Is MT a #$SKSIMappingMicrotheory?")
+    public static final SubLObject sksi_mapping_mt_p_alt(SubLObject mt) {
+        return isa.isa_in_any_mtP(mt, $$SKSIMappingMicrotheory);
+    }
+
+    /**
+     * Is MT a #$SKSIMappingMicrotheory?
+     */
+    @LispMethod(comment = "Is MT a #$SKSIMappingMicrotheory?")
     public static SubLObject sksi_mapping_mt_p(final SubLObject mt) {
         return isa.isa_in_any_mtP(mt, $$SKSIMappingMicrotheory);
+    }
+
+    public static final SubLObject get_genl_content_mts_for_sks_alt(SubLObject sks) {
+        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.get_genl_content_mts_for_mt(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_content_mt(sks));
     }
 
     public static SubLObject get_genl_content_mts_for_sks(final SubLObject sks) {
         return get_genl_content_mts_for_mt(sk_source_content_mt(sks));
     }
 
+    /**
+     * This returns the list of content mts which are genlMts of mt.
+     */
+    @LispMethod(comment = "This returns the list of content mts which are genlMts of mt.")
+    public static final SubLObject get_genl_content_mts_for_mt_alt(SubLObject mt) {
+        return genl_mts.all_genl_mts_if(mt, SKSI_CONTENT_MT_P, UNPROVIDED, UNPROVIDED);
+    }
+
+    /**
+     * This returns the list of content mts which are genlMts of mt.
+     */
+    @LispMethod(comment = "This returns the list of content mts which are genlMts of mt.")
     public static SubLObject get_genl_content_mts_for_mt(final SubLObject mt) {
         return genl_mts.all_genl_mts_if(mt, SKSI_CONTENT_MT_P, UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     * Is mt a #$SKSIContentMicrotheory?
+     */
+    @LispMethod(comment = "Is mt a #$SKSIContentMicrotheory?")
+    public static final SubLObject sksi_content_mt_p_alt(SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_answer = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        v_answer = fort_types_interface.isa_sksi_content_microtheoryP(mt, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    /**
+     * Is mt a #$SKSIContentMicrotheory?
+     */
+    @LispMethod(comment = "Is mt a #$SKSIContentMicrotheory?")
     public static SubLObject sksi_content_mt_p(final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject v_answer = NIL;
@@ -4902,6 +9546,16 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return v_answer;
     }
 
+    public static final SubLObject clear_sksi_content_mts_alt() {
+        {
+            SubLObject cs = $sksi_content_mts_caching_state$.getGlobalValue();
+            if (NIL != cs) {
+                memoization_state.caching_state_clear(cs);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_sksi_content_mts() {
         final SubLObject cs = $sksi_content_mts_caching_state$.getGlobalValue();
         if (NIL != cs) {
@@ -4910,12 +9564,46 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject remove_sksi_content_mts_alt() {
+        return memoization_state.caching_state_remove_function_results_with_args($sksi_content_mts_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject remove_sksi_content_mts() {
         return memoization_state.caching_state_remove_function_results_with_args($sksi_content_mts_caching_state$.getGlobalValue(), list(EMPTY_SUBL_OBJECT_ARRAY), UNPROVIDED, UNPROVIDED);
     }
 
+    /**
+     * returns all SKSI content mts
+     */
+    @LispMethod(comment = "returns all SKSI content mts")
+    public static final SubLObject sksi_content_mts_internal_alt() {
+        return isa.all_fort_instances_in_all_mts($$SKSIContentMicrotheory);
+    }
+
+    /**
+     * returns all SKSI content mts
+     */
+    @LispMethod(comment = "returns all SKSI content mts")
     public static SubLObject sksi_content_mts_internal() {
         return isa.all_fort_instances_in_all_mts($$SKSIContentMicrotheory);
+    }
+
+    public static final SubLObject sksi_content_mts_alt() {
+        {
+            SubLObject caching_state = $sksi_content_mts_caching_state$.getGlobalValue();
+            if (NIL == caching_state) {
+                caching_state = memoization_state.create_global_caching_state_for_name(SKSI_CONTENT_MTS, $sksi_content_mts_caching_state$, NIL, EQ, ZERO_INTEGER, ZERO_INTEGER);
+                memoization_state.register_hl_store_cache_clear_callback(CLEAR_SKSI_CONTENT_MTS);
+            }
+            {
+                SubLObject results = memoization_state.caching_state_get_zero_arg_results(caching_state, UNPROVIDED);
+                if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                    results = arg2(resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_content_mts_internal()));
+                    memoization_state.caching_state_set_zero_arg_results(caching_state, results, UNPROVIDED);
+                }
+                return memoization_state.caching_results(results);
+            }
+        }
     }
 
     public static SubLObject sksi_content_mts() {
@@ -4932,8 +9620,36 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return memoization_state.caching_results(results);
     }
 
+    public static final SubLObject content_mt_nart_sk_source_alt(SubLObject mt_nart) {
+        return NIL != nart_handles.nart_p(mt_nart) ? ((SubLObject) (cycl_utilities.nat_arg1(mt_nart, UNPROVIDED))) : NIL;
+    }
+
     public static SubLObject content_mt_nart_sk_source(final SubLObject mt_nart) {
         return NIL != nart_handles.nart_p(mt_nart) ? cycl_utilities.nat_arg1(mt_nart, UNPROVIDED) : NIL;
+    }
+
+    public static final SubLObject content_mt_sk_source_in_any_mt_alt(SubLObject content_mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject sk_source = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.content_mt_nart_sk_source(content_mt);
+                if (NIL == sk_source) {
+                    {
+                        SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                        SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                        try {
+                            mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                            sk_source = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.content_mt_sk_source(content_mt, UNPROVIDED);
+                        } finally {
+                            mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return sk_source;
+            }
+        }
     }
 
     public static SubLObject content_mt_sk_source_in_any_mt(final SubLObject content_mt) {
@@ -4954,6 +9670,16 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return sk_source;
     }
 
+    public static final SubLObject content_mt_to_mapping_mt_alt(SubLObject content_mt) {
+        {
+            SubLObject sk_source = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.content_mt_sk_source_in_any_mt(content_mt);
+            if (NIL != forts.fort_p(sk_source)) {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sk_source_mapping_mt(sk_source);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject content_mt_to_mapping_mt(final SubLObject content_mt) {
         final SubLObject sk_source = content_mt_sk_source_in_any_mt(content_mt);
         if (NIL != forts.fort_p(sk_source)) {
@@ -4962,16 +9688,54 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject complete_knowledge_sources_alt() {
+        return kb_mapping_utilities.pred_refs_in_any_mt($$sksRepresentationComplete, ONE_INTEGER, $TRUE);
+    }
+
     public static SubLObject complete_knowledge_sources() {
         return kb_mapping_utilities.pred_refs_in_any_mt($$sksRepresentationComplete, ONE_INTEGER, $TRUE);
+    }
+
+    public static final SubLObject knowledge_source_representation_completeP_alt(SubLObject sks) {
+        return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(sks, $$sksRepresentationComplete, ONE_INTEGER, ONE_INTEGER, $TRUE));
     }
 
     public static SubLObject knowledge_source_representation_completeP(final SubLObject sks) {
         return list_utilities.sublisp_boolean(kb_mapping_utilities.fpred_value(sks, $$sksRepresentationComplete, ONE_INTEGER, ONE_INTEGER, $TRUE));
     }
 
+    public static final SubLObject sksi_supported_database_server_program_p_internal_alt(SubLObject prog) {
+        return isa.isaP(prog, $const216$SKSISupportedDatabaseServerProgra, UNPROVIDED, UNPROVIDED);
+    }
+
     public static SubLObject sksi_supported_database_server_program_p_internal(final SubLObject prog) {
         return isa.isaP(prog, $const226$SKSISupportedDatabaseServerProgra, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_supported_database_server_program_p_alt(SubLObject prog) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_memoization_state = memoization_state.$memoization_state$.getDynamicValue(thread);
+                SubLObject caching_state = NIL;
+                if (NIL == v_memoization_state) {
+                    return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_supported_database_server_program_p_internal(prog);
+                }
+                caching_state = memoization_state.memoization_state_lookup(v_memoization_state, SKSI_SUPPORTED_DATABASE_SERVER_PROGRAM_P, UNPROVIDED);
+                if (NIL == caching_state) {
+                    caching_state = memoization_state.create_caching_state(memoization_state.memoization_state_lock(v_memoization_state), SKSI_SUPPORTED_DATABASE_SERVER_PROGRAM_P, ONE_INTEGER, NIL, EQ, UNPROVIDED);
+                    memoization_state.memoization_state_put(v_memoization_state, SKSI_SUPPORTED_DATABASE_SERVER_PROGRAM_P, caching_state);
+                }
+                {
+                    SubLObject results = memoization_state.caching_state_lookup(caching_state, prog, $kw3$_MEMOIZED_ITEM_NOT_FOUND_);
+                    if (results == $kw3$_MEMOIZED_ITEM_NOT_FOUND_) {
+                        results = arg2(thread.resetMultipleValues(), multiple_value_list(com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_supported_database_server_program_p_internal(prog)));
+                        memoization_state.caching_state_put(caching_state, prog, results, UNPROVIDED);
+                    }
+                    return memoization_state.caching_results(results);
+                }
+            }
+        }
     }
 
     public static SubLObject sksi_supported_database_server_program_p(final SubLObject prog) {
@@ -4992,6 +9756,10 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             memoization_state.caching_state_put(caching_state, prog, results, UNPROVIDED);
         }
         return memoization_state.caching_results(results);
+    }
+
+    public static final SubLObject default_sks_for_database_server_program_alt(SubLObject prog) {
+        return kb_mapping_utilities.fpred_value_in_any_mt(prog, $const217$defaultSKSForDatabaseServerProgra, ONE_INTEGER, TWO_INTEGER, $TRUE);
     }
 
     public static SubLObject default_sks_for_database_server_program(final SubLObject prog) {
@@ -5125,9 +9893,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return tables.first();
     }
 
+    public static final SubLObject sksi_create_alt(SubLObject name) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(name, $sym218$NON_EMPTY_STRING_);
+            thread.resetMultipleValues();
+            {
+                SubLObject constant = ke.ke_create_now(name, UNPROVIDED);
+                SubLObject error_result = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL != error_result) {
+                    Errors.error($str_alt219$_A___A, error_result.first(), second(error_result));
+                }
+                return constant;
+            }
+        }
+    }
+
     public static SubLObject sksi_create(final SubLObject name) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != string_utilities.non_empty_stringP(name) : "string_utilities.non_empty_stringP(name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(name) " + name;
+        assert NIL != string_utilities.non_empty_stringP(name) : "! string_utilities.non_empty_stringP(name) " + ("string_utilities.non_empty_stringP(name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(name) ") + name;
         thread.resetMultipleValues();
         final SubLObject constant = ke.ke_create_now(name, UNPROVIDED);
         final SubLObject error_result = thread.secondMultipleValue();
@@ -5138,12 +9923,28 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return constant;
     }
 
+    public static final SubLObject sksi_find_alt(SubLObject name) {
+        return fi.fi_find_int(name);
+    }
+
     public static SubLObject sksi_find(final SubLObject name) {
         return fi.fi_find_int(name);
     }
 
+    public static final SubLObject sksi_find_or_create_alt(SubLObject name) {
+        SubLTrampolineFile.checkType(name, $sym218$NON_EMPTY_STRING_);
+        {
+            SubLObject result = NIL;
+            result = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_find(name);
+            if (NIL == result) {
+                result = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_create(name);
+            }
+            return result;
+        }
+    }
+
     public static SubLObject sksi_find_or_create(final SubLObject name) {
-        assert NIL != string_utilities.non_empty_stringP(name) : "string_utilities.non_empty_stringP(name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(name) " + name;
+        assert NIL != string_utilities.non_empty_stringP(name) : "! string_utilities.non_empty_stringP(name) " + ("string_utilities.non_empty_stringP(name) " + "CommonSymbols.NIL != string_utilities.non_empty_stringP(name) ") + name;
         SubLObject result = NIL;
         result = sksi_find(name);
         if (NIL == result) {
@@ -5152,9 +9953,47 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return result;
     }
 
-    public static SubLObject sksi_kill(final SubLObject fort) {
-        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
+    public static final SubLObject sksi_kill_alt(SubLObject fort) {
+        SubLTrampolineFile.checkType(fort, FORT_P);
         return ke.ke_kill_now(fort);
+    }
+
+    public static SubLObject sksi_kill(final SubLObject fort) {
+        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
+        return ke.ke_kill_now(fort);
+    }
+
+    public static final SubLObject sksi_assert(SubLObject sentence, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(mt, HLMT_P);
+            thread.resetMultipleValues();
+            {
+                SubLObject successP = ke.ke_assert_now(sentence, mt, UNPROVIDED, UNPROVIDED);
+                SubLObject error = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL == successP) {
+                    {
+                        SubLObject datum = error;
+                        SubLObject current = datum;
+                        SubLObject error_type = NIL;
+                        SubLObject error_string = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt222);
+                        error_type = current.first();
+                        current = current.rest();
+                        destructuring_bind_must_consp(current, datum, $list_alt222);
+                        error_string = current.first();
+                        current = current.rest();
+                        if (NIL == current) {
+                            sksi_debugging.sksi_error(cconcatenate(string_utilities.str(error_type), new SubLObject[]{ $str_alt223$_, error_string }));
+                        } else {
+                            cdestructuring_bind_error(datum, $list_alt222);
+                        }
+                    }
+                }
+                return successP;
+            }
+        }
     }
 
     public static SubLObject sksi_assert(final SubLObject sentence, final SubLObject mt, SubLObject strength, SubLObject direction) {
@@ -5165,7 +10004,7 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             direction = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != hlmt.hlmt_p(mt) : "hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) " + mt;
+        assert NIL != hlmt.hlmt_p(mt) : "! hlmt.hlmt_p(mt) " + ("hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) ") + mt;
         thread.resetMultipleValues();
         final SubLObject successP = ke.ke_assert_now(sentence, mt, strength, direction);
         final SubLObject error = thread.secondMultipleValue();
@@ -5190,18 +10029,43 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return successP;
     }
 
-    public static SubLObject sksi_unassert(final SubLObject sentence, final SubLObject mt) {
-        assert NIL != hlmt.hlmt_p(mt) : "hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) " + mt;
+    public static final SubLObject sksi_unassert_alt(SubLObject sentence, SubLObject mt) {
+        SubLTrampolineFile.checkType(mt, HLMT_P);
         return ke.ke_unassert_now(sentence, mt);
     }
 
-    public static SubLObject sksi_unassert_assertion(final SubLObject assertion) {
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+    public static SubLObject sksi_unassert(final SubLObject sentence, final SubLObject mt) {
+        assert NIL != hlmt.hlmt_p(mt) : "! hlmt.hlmt_p(mt) " + ("hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) ") + mt;
+        return ke.ke_unassert_now(sentence, mt);
+    }
+
+    public static final SubLObject sksi_unassert_assertion_alt(SubLObject assertion) {
+        SubLTrampolineFile.checkType(assertion, ASSERTION_P);
         return ke.ke_unassert_assertion_now(assertion);
+    }
+
+    public static SubLObject sksi_unassert_assertion(final SubLObject assertion) {
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
+        return ke.ke_unassert_assertion_now(assertion);
+    }
+
+    public static final SubLObject sksi_find_nart_alt(SubLObject nart_formula) {
+        return narts_high.find_nart(nart_formula);
     }
 
     public static SubLObject sksi_find_nart(final SubLObject nart_formula) {
         return narts_high.find_nart(nart_formula);
+    }
+
+    public static final SubLObject sksi_assert_if_new_alt(SubLObject sentence, SubLObject mt) {
+        {
+            SubLObject assertions = fi.sentence_assertions(sentence, mt);
+            if (NIL != assertions) {
+                return T;
+            } else {
+                return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_assert(sentence, mt);
+            }
+        }
     }
 
     public static SubLObject sksi_assert_if_new(final SubLObject sentence, final SubLObject mt) {
@@ -5210,6 +10074,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return T;
         }
         return sksi_assert(sentence, mt, UNPROVIDED, UNPROVIDED);
+    }
+
+    public static final SubLObject sksi_edit_assertion_alt(SubLObject old_assertion, SubLObject new_formula) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject mt = assertions_high.assertion_mt(old_assertion);
+                thread.resetMultipleValues();
+                {
+                    SubLObject result = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_assert(new_formula, mt);
+                    SubLObject error = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL != error) {
+                        return values(NIL, error);
+                    } else {
+                        return com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_unassert_assertion(old_assertion);
+                    }
+                }
+            }
+        }
     }
 
     public static SubLObject sksi_edit_assertion(final SubLObject old_assertion, final SubLObject new_formula) {
@@ -5225,8 +10109,26 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return sksi_unassert_assertion(old_assertion);
     }
 
+    public static final SubLObject sksi_repropagate_assertion_alt(SubLObject assertion) {
+        return ke.ke_repropagate_assertion(assertion);
+    }
+
     public static SubLObject sksi_repropagate_assertion(final SubLObject assertion) {
         return ke.ke_repropagate_assertion(assertion);
+    }
+
+    public static final SubLObject sksi_constant_get_kb_subset_cols_alt(SubLObject v_term) {
+        {
+            SubLObject cyc_kb_subset_collections = NIL;
+            SubLObject cdolist_list_var = isa.asserted_quoted_isa(v_term, $$BookkeepingMt);
+            SubLObject c = NIL;
+            for (c = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , c = cdolist_list_var.first()) {
+                if (NIL != isa.isa_in_any_mtP(c, $$CycKBSubsetCollection)) {
+                    cyc_kb_subset_collections = cons(c, cyc_kb_subset_collections);
+                }
+            }
+            return cyc_kb_subset_collections;
+        }
     }
 
     public static SubLObject sksi_constant_get_kb_subset_cols(final SubLObject v_term) {
@@ -5242,6 +10144,23 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             c = cdolist_list_var.first();
         } 
         return cyc_kb_subset_collections;
+    }
+
+    public static final SubLObject sksi_constant_assert_inherited_kb_subset_isas_alt(SubLObject v_term, SubLObject inherit_from_term) {
+        {
+            SubLObject inherited_isa_cols = com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_constant_get_kb_subset_cols(inherit_from_term);
+            if (NIL == inherited_isa_cols) {
+                Errors.warn($str_alt227$No___CycKBSubsetCollections_found, inherit_from_term, v_term);
+            }
+            {
+                SubLObject cdolist_list_var = inherited_isa_cols;
+                SubLObject col = NIL;
+                for (col = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , col = cdolist_list_var.first()) {
+                    com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.sksi_assert_if_new(list($$quotedIsa, v_term, col), $$BookkeepingMt);
+                }
+            }
+        }
+        return NIL;
     }
 
     public static SubLObject sksi_constant_assert_inherited_kb_subset_isas(final SubLObject v_term, final SubLObject inherit_from_term) {
@@ -5265,379 +10184,1153 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL != result ? result : $UNREFORMULATABLE;
     }
 
-    public static SubLObject declare_sksi_kb_accessors_file() {
-        declareFunction(me, "content_mt_sk_source_gaf", "CONTENT-MT-SK-SOURCE-GAF", 1, 0, false);
-        declareFunction(me, "content_mt_sk_source_internal", "CONTENT-MT-SK-SOURCE-INTERNAL", 1, 1, false);
-        declareFunction(me, "content_mt_sk_source", "CONTENT-MT-SK-SOURCE", 1, 1, false);
-        declareFunction(me, "content_mt_spindle_member_p", "CONTENT-MT-SPINDLE-MEMBER-P", 1, 0, false);
-        declareFunction(me, "sk_source_p", "SK-SOURCE-P", 1, 0, false);
-        declareFunction(me, "sk_source_in_any_mt_p_internal", "SK-SOURCE-IN-ANY-MT-P-INTERNAL", 1, 0, false);
-        declareFunction(me, "sk_source_in_any_mt_p", "SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
-        declareFunction(me, "modifiable_sk_source_p", "MODIFIABLE-SK-SOURCE-P", 1, 0, false);
-        declareFunction(me, "modifiable_sk_source_in_any_mt_p", "MODIFIABLE-SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
-        declareFunction(me, "code_mapping_knowledge_sourceP", "CODE-MAPPING-KNOWLEDGE-SOURCE?", 1, 0, false);
-        declareFunction(me, "get_sk_source_property_from_kb_internal", "GET-SK-SOURCE-PROPERTY-FROM-KB-INTERNAL", 2, 5, false);
-        declareFunction(me, "get_sk_source_property_from_kb", "GET-SK-SOURCE-PROPERTY-FROM-KB", 2, 5, false);
-        declareFunction(me, "get_sk_source_property_from_kb_int", "GET-SK-SOURCE-PROPERTY-FROM-KB-INT", 5, 0, false);
-        declareFunction(me, "sk_source_content_mt_gaf", "SK-SOURCE-CONTENT-MT-GAF", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt_internal", "SK-SOURCE-CONTENT-MT-INTERNAL", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt", "SK-SOURCE-CONTENT-MT", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt_in_any_mt", "SK-SOURCE-CONTENT-MT-IN-ANY-MT", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt_head_gaf", "SK-SOURCE-CONTENT-MT-HEAD-GAF", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt_head_internal", "SK-SOURCE-CONTENT-MT-HEAD-INTERNAL", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt_head", "SK-SOURCE-CONTENT-MT-HEAD", 1, 0, false);
-        declareFunction(me, "sk_source_content_mt_head_in_any_mt", "SK-SOURCE-CONTENT-MT-HEAD-IN-ANY-MT", 1, 0, false);
-        declareFunction(me, "sk_source_mapping_mt_internal", "SK-SOURCE-MAPPING-MT-INTERNAL", 1, 0, false);
-        declareFunction(me, "sk_source_mapping_mt", "SK-SOURCE-MAPPING-MT", 1, 0, false);
-        declareFunction(me, "sk_source_logical_schema_description_mt", "SK-SOURCE-LOGICAL-SCHEMA-DESCRIPTION-MT", 1, 0, false);
-        declareFunction(me, "logical_schema_description_mt_sk_source_in_any_mt", "LOGICAL-SCHEMA-DESCRIPTION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
-        declareFunction(me, "sk_source_source_description_mt", "SK-SOURCE-SOURCE-DESCRIPTION-MT", 1, 0, false);
-        declareFunction(me, "sk_source_schema_translation_mt", "SK-SOURCE-SCHEMA-TRANSLATION-MT", 1, 0, false);
-        declareFunction(me, "schema_translation_mt_sk_source_in_any_mt", "SCHEMA-TRANSLATION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
-        declareFunction(me, "sk_source_ks_type", "SK-SOURCE-KS-TYPE", 1, 0, false);
-        declareFunction(me, "sk_source_row_count", "SK-SOURCE-ROW-COUNT", 1, 0, false);
-        declareFunction(me, "sk_source_name", "SK-SOURCE-NAME", 1, 0, false);
-        declareFunction(me, "sk_source_name_from_mapping_mt", "SK-SOURCE-NAME-FROM-MAPPING-MT", 1, 0, false);
-        declareFunction(me, "sk_source_namespace_internal", "SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
-        declareFunction(me, "sk_source_namespace", "SK-SOURCE-NAMESPACE", 1, 0, false);
-        declareFunction(me, "sk_source_asserted_namespace_gaf", "SK-SOURCE-ASSERTED-NAMESPACE-GAF", 1, 0, false);
-        declareFunction(me, "sk_source_by_sks_name_internal", "SK-SOURCE-BY-SKS-NAME-INTERNAL", 1, 1, false);
-        declareFunction(me, "sk_source_by_sks_name", "SK-SOURCE-BY-SKS-NAME", 1, 1, false);
-        declareFunction(me, "sk_source_physical_schema_gafs", "SK-SOURCE-PHYSICAL-SCHEMA-GAFS", 1, 0, false);
-        declareFunction(me, "sk_source_physical_schemata", "SK-SOURCE-PHYSICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "sk_source_complex_physical_schemata", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "sk_source_complex_physical_schemata_int", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA-INT", 1, 0, false);
-        declareFunction(me, "sk_source_logical_schemata", "SK-SOURCE-LOGICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "sk_source_complex_logical_schemata", "SK-SOURCE-COMPLEX-LOGICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "sk_source_physical_logical_schema_pairs", "SK-SOURCE-PHYSICAL-LOGICAL-SCHEMA-PAIRS", 1, 0, false);
-        declareFunction(me, "sk_source_immediate_spec_sk_sources", "SK-SOURCE-IMMEDIATE-SPEC-SK-SOURCES", 1, 1, false);
-        declareFunction(me, "meaning_sentence_predicate_for_sk_sourceP", "MEANING-SENTENCE-PREDICATE-FOR-SK-SOURCE?", 2, 0, false);
-        declareFunction(me, "logical_schema_for_meaning_sentence_predicate", "LOGICAL-SCHEMA-FOR-MEANING-SENTENCE-PREDICATE", 1, 1, false);
-        declareFunction(me, "sk_source_complex_required_fields", "SK-SOURCE-COMPLEX-REQUIRED-FIELDS", 1, 0, false);
-        declareFunction(me, "sk_source_required_fields", "SK-SOURCE-REQUIRED-FIELDS", 1, 0, false);
-        declareFunction(me, "sk_source_sql_flavor", "SK-SOURCE-SQL-FLAVOR", 1, 0, false);
-        declareFunction(me, "get_sks_single_literal_lookup_direction_from_kb_internal", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
-        declareFunction(me, "get_sks_single_literal_lookup_direction_from_kb", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
-        declareFunction(me, "get_sks_multi_literal_lookup_direction_from_kb_internal", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
-        declareFunction(me, "get_sks_multi_literal_lookup_direction_from_kb", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
-        declareFunction(me, "get_sks_storage_direction_from_kb_internal", "GET-SKS-STORAGE-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
-        declareFunction(me, "get_sks_storage_direction_from_kb", "GET-SKS-STORAGE-DIRECTION-FROM-KB", 1, 0, false);
-        declareFunction(me, "get_sks_module_direction_from_kb", "GET-SKS-MODULE-DIRECTION-FROM-KB", 3, 0, false);
-        declareFunction(me, "sk_source_sub_ks_direct", "SK-SOURCE-SUB-KS-DIRECT", 1, 0, false);
-        declareMacro(me, "do_sk_source_sub_ks_direct", "DO-SK-SOURCE-SUB-KS-DIRECT");
-        declareFunction(me, "sk_source_proper_sub_ks_closure", "SK-SOURCE-PROPER-SUB-KS-CLOSURE", 1, 0, false);
-        declareFunction(me, "sk_source_proper_sub_ks_closure_in_mapping_mt", "SK-SOURCE-PROPER-SUB-KS-CLOSURE-IN-MAPPING-MT", 1, 0, false);
-        declareFunction(me, "sk_source_sub_ks_closure", "SK-SOURCE-SUB-KS-CLOSURE", 1, 0, false);
-        declareFunction(me, "sk_source_sub_ks_min", "SK-SOURCE-SUB-KS-MIN", 1, 0, false);
-        declareFunction(me, "sk_source_sub_ksP", "SK-SOURCE-SUB-KS?", 2, 0, false);
-        declareFunction(me, "sk_source_sub_ks_in_any_mtP", "SK-SOURCE-SUB-KS-IN-ANY-MT?", 2, 0, false);
-        declareFunction(me, "sk_source_proper_sub_ksP", "SK-SOURCE-PROPER-SUB-KS?", 2, 0, false);
-        declareFunction(me, "sk_source_super_ks_direct", "SK-SOURCE-SUPER-KS-DIRECT", 1, 0, false);
-        declareFunction(me, "sk_source_proper_super_ks_closure", "SK-SOURCE-PROPER-SUPER-KS-CLOSURE", 1, 0, false);
-        declareFunction(me, "sk_source_super_ks_closure", "SK-SOURCE-SUPER-KS-CLOSURE", 1, 0, false);
-        declareFunction(me, "sk_source_super_ks_max", "SK-SOURCE-SUPER-KS-MAX", 1, 0, false);
-        declareFunction(me, "sk_source_super_ksP", "SK-SOURCE-SUPER-KS?", 2, 0, false);
-        declareFunction(me, "sk_source_proper_super_ksP_internal", "SK-SOURCE-PROPER-SUPER-KS?-INTERNAL", 2, 0, false);
-        declareFunction(me, "sk_source_proper_super_ksP", "SK-SOURCE-PROPER-SUPER-KS?", 2, 0, false);
-        declareFunction(me, "common_super_ksP", "COMMON-SUPER-KS?", 2, 0, false);
-        declareFunction(me, "super_ks_closure_intersection", "SUPER-KS-CLOSURE-INTERSECTION", 2, 0, false);
-        declareFunction(me, "immediate_genl_ks_internal", "IMMEDIATE-GENL-KS-INTERNAL", 1, 0, false);
-        declareFunction(me, "immediate_genl_ks", "IMMEDIATE-GENL-KS", 1, 0, false);
-        declareFunction(me, "max_genl_ks", "MAX-GENL-KS", 1, 0, false);
-        declareFunction(me, "nearest_common_super_ks", "NEAREST-COMMON-SUPER-KS", 1, 0, false);
-        declareFunction(me, "nearest_common_super_ks_for_ls_list", "NEAREST-COMMON-SUPER-KS-FOR-LS-LIST", 1, 0, false);
-        declareFunction(me, "schema_representation_completeP", "SCHEMA-REPRESENTATION-COMPLETE?", 1, 0, false);
-        declareFunction(me, "isa_physical_schemaP_internal", "ISA-PHYSICAL-SCHEMA?-INTERNAL", 1, 0, false);
-        declareFunction(me, "isa_physical_schemaP", "ISA-PHYSICAL-SCHEMA?", 1, 0, false);
-        declareFunction(me, "physical_schema_sk_sources", "PHYSICAL-SCHEMA-SK-SOURCES", 1, 0, false);
-        declareFunction(me, "physical_schema_sk_sources_memoized_internal", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_sk_sources_memoized", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
-        declareFunction(me, "physical_schema_fields_internal", "PHYSICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_fields", "PHYSICAL-SCHEMA-FIELDS", 1, 0, false);
-        declareFunction(me, "physical_schema_primary_key_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_primary_key", "PHYSICAL-SCHEMA-PRIMARY-KEY", 1, 0, false);
-        declareFunction(me, "physical_schema_primary_key_compensate_for_table_column_representation_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_primary_key_compensate_for_table_column_representation", "PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION", 1, 0, false);
-        declareFunction(me, "physical_schema_primary_key_p", "PHYSICAL-SCHEMA-PRIMARY-KEY-P", 2, 0, false);
-        declareFunction(me, "physical_schema_forbidden_comparison_operators", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATORS", 1, 0, false);
-        declareFunction(me, "physical_schema_forbidden_comparison_operator_p", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATOR-P", 2, 0, false);
-        declareFunction(me, "physical_schema_foreign_keys", "PHYSICAL-SCHEMA-FOREIGN-KEYS", 1, 0, false);
-        declareFunction(me, "physical_schema_foreign_keys_restrict", "PHYSICAL-SCHEMA-FOREIGN-KEYS-RESTRICT", 1, 0, false);
-        declareFunction(me, "physical_schema_foreign_keys_cascade", "PHYSICAL-SCHEMA-FOREIGN-KEYS-CASCADE", 1, 0, false);
-        declareFunction(me, "physical_schema_foreign_keys_set_null", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-NULL", 1, 0, false);
-        declareFunction(me, "physical_schema_foreign_keys_set_default", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-DEFAULT", 1, 0, false);
-        declareFunction(me, "physical_schema_foreign_keys_int", "PHYSICAL-SCHEMA-FOREIGN-KEYS-INT", 2, 0, false);
-        declareFunction(me, "physical_schema_unique_fields_tuples", "PHYSICAL-SCHEMA-UNIQUE-FIELDS-TUPLES", 1, 0, false);
-        declareFunction(me, "physical_schema_required_fields", "PHYSICAL-SCHEMA-REQUIRED-FIELDS", 1, 0, false);
-        declareFunction(me, "physical_schemata_required_fields", "PHYSICAL-SCHEMATA-REQUIRED-FIELDS", 1, 0, false);
-        declareFunction(me, "physical_schema_required_field_names", "PHYSICAL-SCHEMA-REQUIRED-FIELD-NAMES", 1, 0, false);
-        declareFunction(me, "physical_schema_indexed_fields", "PHYSICAL-SCHEMA-INDEXED-FIELDS", 1, 0, false);
-        declareFunction(me, "sksi_determine_singly_indexed_schema_indexed_field", "SKSI-DETERMINE-SINGLY-INDEXED-SCHEMA-INDEXED-FIELD", 1, 0, false);
-        declareFunction(me, "physical_field_indexedP", "PHYSICAL-FIELD-INDEXED?", 2, 0, false);
-        declareFunction(me, "physical_schema_enumerableP_internal", "PHYSICAL-SCHEMA-ENUMERABLE?-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_enumerableP", "PHYSICAL-SCHEMA-ENUMERABLE?", 1, 0, false);
-        declareFunction(me, "enumerable_schema_gaf", "ENUMERABLE-SCHEMA-GAF", 1, 0, false);
-        declareFunction(me, "physical_schema_result_set_cardinality_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_result_set_cardinality_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
-        declareFunction(me, "physical_schemata_result_set_cardinality_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
-        declareFunction(me, "physical_schema_result_set_cardinality_wXconstraints_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
-        declareFunction(me, "physical_schemata_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
-        declareFunction(me, "result_set_cardinality_gaf_unbound_fields_set", "RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
-        declareFunction(me, "result_set_cardinality_gaf_bound_fields_set", "RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
-        declareFunction(me, "result_set_cardinality_gaf_constraints", "RESULT-SET-CARDINALITY-GAF-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "result_set_cardinality_gaf_cost_expression", "RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
-        declareFunction(me, "physical_schema_logical_schema_gafs", "PHYSICAL-SCHEMA-LOGICAL-SCHEMA-GAFS", 1, 0, false);
-        declareFunction(me, "physical_schema_logical_schemata", "PHYSICAL-SCHEMA-LOGICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "physical_schema_example_tuple", "PHYSICAL-SCHEMA-EXAMPLE-TUPLE", 1, 0, false);
-        declareFunction(me, "physical_schema_field_encodings", "PHYSICAL-SCHEMA-FIELD-ENCODINGS", 1, 0, false);
-        declareFunction(me, "physical_schema_ordered_field_list_internal", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_ordered_field_list", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST", 1, 0, false);
-        declareFunction(me, "physical_schema_field_name_list", "PHYSICAL-SCHEMA-FIELD-NAME-LIST", 1, 0, false);
-        declareFunction(me, "logical_schemata_physical_schemata", "LOGICAL-SCHEMATA-PHYSICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "logical_schema_physical_schemata", "LOGICAL-SCHEMA-PHYSICAL-SCHEMATA", 1, 0, false);
-        declareFunction(me, "logical_schema_fields_internal", "LOGICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_schema_fields", "LOGICAL-SCHEMA-FIELDS", 1, 0, false);
-        declareFunction(me, "logical_schema_field_indexicals_internal", "LOGICAL-SCHEMA-FIELD-INDEXICALS-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_schema_field_indexicals", "LOGICAL-SCHEMA-FIELD-INDEXICALS", 1, 0, false);
-        declareFunction(me, "logical_schema_example_sentences", "LOGICAL-SCHEMA-EXAMPLE-SENTENCES", 1, 0, false);
-        declareFunction(me, "logical_schema_keys", "LOGICAL-SCHEMA-KEYS", 1, 0, false);
-        declareFunction(me, "logical_schema_result_set_cardinality_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_schema_result_set_cardinality_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
-        declareFunction(me, "logical_schemata_result_set_cardinality_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
-        declareFunction(me, "logical_schema_result_set_cardinality_wrt_value_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_schema_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
-        declareFunction(me, "logical_schemata_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_wrt_value_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_wrt_value_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-BOUND-FIELDS-SET", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_wrt_value_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-COST-EXPRESSION", 1, 0, false);
-        declareFunction(me, "logical_result_set_cardinality_wrt_value_gaf_value", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-VALUE", 1, 0, false);
-        declareFunction(me, "logical_schema_field_decodings", "LOGICAL-SCHEMA-FIELD-DECODINGS", 1, 0, false);
-        declareFunction(me, "logical_schema_source_gafs", "LOGICAL-SCHEMA-SOURCE-GAFS", 1, 1, false);
-        declareFunction(me, "logical_schema_sources", "LOGICAL-SCHEMA-SOURCES", 1, 0, false);
-        declareFunction(me, "logical_schema_sk_sources_memoized_internal", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_schema_sk_sources_memoized", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
-        declareFunction(me, "logical_schemata_sources", "LOGICAL-SCHEMATA-SOURCES", 1, 0, false);
-        declareFunction(me, "logical_schema_sourceP", "LOGICAL-SCHEMA-SOURCE?", 2, 0, false);
-        declareFunction(me, "logical_schema_complete_extent_knownP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN?", 1, 0, false);
-        declareFunction(me, "logical_schema_complete_extent_known_for_predicateP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN-FOR-PREDICATE?", 2, 1, false);
-        declareFunction(me, "logical_schema_content_sentences", "LOGICAL-SCHEMA-CONTENT-SENTENCES", 1, 0, false);
-        declareFunction(me, "logical_field_p", "LOGICAL-FIELD-P", 1, 0, false);
-        declareFunction(me, "logical_field_p_memoized_internal", "LOGICAL-FIELD-P-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_field_p_memoized", "LOGICAL-FIELD-P-MEMOIZED", 1, 0, false);
-        declareFunction(me, "lf_alias_fn_naut_p", "LF-ALIAS-FN-NAUT-P", 1, 0, false);
-        declareFunction(me, "lf_alias_fn_naut_lf", "LF-ALIAS-FN-NAUT-LF", 1, 0, false);
-        declareFunction(me, "lf_alias_fn_naut_index", "LF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
-        declareFunction(me, "lf_fort_for_lf", "LF-FORT-FOR-LF", 1, 0, false);
-        declareFunction(me, "lf_alias_naut_for_lf_and_alias_index", "LF-ALIAS-NAUT-FOR-LF-AND-ALIAS-INDEX", 2, 0, false);
-        declareFunction(me, "logical_field_indexical_p", "LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
-        new sksi_kb_accessors.$logical_field_indexical_p$UnaryFunction();
-        declareFunction(me, "logical_field_indexical_p_memoized_internal", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_field_indexical_p_memoized", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED", 1, 0, false);
-        declareFunction(me, "logical_field_indexical_fort_p", "LOGICAL-FIELD-INDEXICAL-FORT-P", 1, 0, false);
-        declareFunction(me, "lfi_alias_fn_naut_p", "LFI-ALIAS-FN-NAUT-P", 1, 0, false);
-        declareFunction(me, "lfi_alias_fn_naut_lfi", "LFI-ALIAS-FN-NAUT-LFI", 1, 0, false);
-        declareFunction(me, "lfi_alias_fn_naut_index", "LFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
-        declareFunction(me, "lfi_alias_naut_for_lfi_and_alias_index", "LFI-ALIAS-NAUT-FOR-LFI-AND-ALIAS-INDEX", 2, 0, false);
-        declareFunction(me, "lfi_fort_for_lfi", "LFI-FORT-FOR-LFI", 1, 0, false);
-        declareFunction(me, "lfi_index_for_lfi", "LFI-INDEX-FOR-LFI", 1, 1, false);
-        declareFunction(me, "pfi_for_lfi", "PFI-FOR-LFI", 2, 0, false);
-        declareFunction(me, "lfi_for_pfi", "LFI-FOR-PFI", 2, 0, false);
-        declareFunction(me, "pf_for_lfi", "PF-FOR-LFI", 2, 0, false);
-        declareFunction(me, "logical_field_indexical_for_schemaP", "LOGICAL-FIELD-INDEXICAL-FOR-SCHEMA?", 2, 0, false);
-        declareFunction(me, "logical_field_indexical_fort_for_schema_internal", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA-INTERNAL", 2, 0, false);
-        declareFunction(me, "logical_field_indexical_fort_for_schema", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA", 2, 0, false);
-        declareFunction(me, "logical_field_for_schemaP", "LOGICAL-FIELD-FOR-SCHEMA?", 2, 0, false);
-        declareFunction(me, "virtual_logical_field_indexical_p", "VIRTUAL-LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
-        declareFunction(me, "logical_field_indexical_virtualP", "LOGICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
-        declareFunction(me, "isa_logical_schemaP_internal", "ISA-LOGICAL-SCHEMA?-INTERNAL", 1, 0, false);
-        declareFunction(me, "isa_logical_schemaP", "ISA-LOGICAL-SCHEMA?", 1, 0, false);
-        declareFunction(me, "isa_reified_mappingP", "ISA-REIFIED-MAPPING?", 1, 0, false);
-        declareFunction(me, "is_fort_a_reified_mappingP_internal", "IS-FORT-A-REIFIED-MAPPING?-INTERNAL", 1, 0, false);
-        declareFunction(me, "is_fort_a_reified_mappingP", "IS-FORT-A-REIFIED-MAPPING?", 1, 0, false);
-        declareFunction(me, "cycl_terms_mapped_to_by_code_mapping_schema_internal", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA-INTERNAL", 1, 0, false);
-        declareFunction(me, "cycl_terms_mapped_to_by_code_mapping_schema", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA", 1, 0, false);
-        declareFunction(me, "cyc_terms_corresponding_to_code_mapping_schema_code", "CYC-TERMS-CORRESPONDING-TO-CODE-MAPPING-SCHEMA-CODE", 2, 0, false);
-        declareFunction(me, "cyc_terms_for_sksi_external_term_naut", "CYC-TERMS-FOR-SKSI-EXTERNAL-TERM-NAUT", 1, 0, false);
-        declareFunction(me, "schema_isa_internal", "SCHEMA-ISA-INTERNAL", 1, 1, false);
-        declareFunction(me, "schema_isa", "SCHEMA-ISA", 1, 1, false);
-        declareFunction(me, "schema_object_field", "SCHEMA-OBJECT-FIELD", 1, 0, false);
-        declareFunction(me, "schema_object_field_gaf", "SCHEMA-OBJECT-FIELD-GAF", 1, 1, false);
-        declareFunction(me, "schema_object_id_fn_expression_p", "SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
-        declareFunction(me, "schema_object_fn_expression_p", "SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
-        declareFunction(me, "source_schema_object_id_fn_expression_p", "SOURCE-SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
-        declareFunction(me, "source_schema_object_fn_expression_p", "SOURCE-SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
-        declareMacro(me, "destructure_schema_object_fn_expression", "DESTRUCTURE-SCHEMA-OBJECT-FN-EXPRESSION");
-        declareMacro(me, "destructure_source_schema_object_fn_expression", "DESTRUCTURE-SOURCE-SCHEMA-OBJECT-FN-EXPRESSION");
-        declareFunction(me, "physical_field_for_indexical", "PHYSICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
-        declareFunction(me, "physical_field_for_indexical_fort_internal", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_for_indexical_fort", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
-        declareFunction(me, "physical_field_for_pfi_alias_fn_naut", "PHYSICAL-FIELD-FOR-PFI-ALIAS-FN-NAUT", 1, 0, false);
-        declareFunction(me, "indexical_for_physical_field_internal", "INDEXICAL-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
-        declareFunction(me, "indexical_for_physical_field", "INDEXICAL-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "physical_fields_to_indexicals", "PHYSICAL-FIELDS-TO-INDEXICALS", 1, 0, false);
-        declareFunction(me, "indexicals_to_physical_fields", "INDEXICALS-TO-PHYSICAL-FIELDS", 1, 0, false);
-        declareFunction(me, "not_null_physical_field_p", "NOT-NULL-PHYSICAL-FIELD-P", 2, 0, false);
-        declareFunction(me, "not_null_physical_fields_for_ps_internal", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS-INTERNAL", 1, 1, false);
-        declareFunction(me, "not_null_physical_fields_for_ps", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS", 1, 1, false);
-        declareFunction(me, "physical_field_default_value_internal", "PHYSICAL-FIELD-DEFAULT-VALUE-INTERNAL", 2, 1, false);
-        declareFunction(me, "physical_field_default_value", "PHYSICAL-FIELD-DEFAULT-VALUE", 2, 1, false);
-        declareFunction(me, "null_default_physical_field_valueP", "NULL-DEFAULT-PHYSICAL-FIELD-VALUE?", 2, 0, false);
-        declareFunction(me, "physical_field_for_schema_and_name", "PHYSICAL-FIELD-FOR-SCHEMA-AND-NAME", 2, 0, false);
-        declareFunction(me, "physical_field_schema_internal", "PHYSICAL-FIELD-SCHEMA-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_schema", "PHYSICAL-FIELD-SCHEMA", 1, 0, false);
-        declareFunction(me, "physical_field_name_internal", "PHYSICAL-FIELD-NAME-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_name", "PHYSICAL-FIELD-NAME", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_name", "PHYSICAL-FIELD-INDEXICAL-NAME", 1, 0, false);
-        declareFunction(me, "physical_field_sk_source_internal", "PHYSICAL-FIELD-SK-SOURCE-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_sk_source", "PHYSICAL-FIELD-SK-SOURCE", 1, 0, false);
-        declareFunction(me, "physical_field_sk_source_name_internal", "PHYSICAL-FIELD-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_sk_source_name", "PHYSICAL-FIELD-SK-SOURCE-NAME", 1, 0, false);
-        declareFunction(me, "physical_field_sk_source_namespace_internal", "PHYSICAL-FIELD-SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_sk_source_namespace", "PHYSICAL-FIELD-SK-SOURCE-NAMESPACE", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_schema", "PHYSICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_sk_source_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_sk_source", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_sk_source_name_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_sk_source_name", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_sk_source_namespace_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_sk_source_namespace", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAMESPACE", 1, 0, false);
-        declareFunction(me, "physical_field_p", "PHYSICAL-FIELD-P", 1, 0, false);
-        declareFunction(me, "virtual_physical_field_p", "VIRTUAL-PHYSICAL-FIELD-P", 1, 0, false);
-        declareFunction(me, "physical_field_virtualP_internal", "PHYSICAL-FIELD-VIRTUAL?-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_field_virtualP", "PHYSICAL-FIELD-VIRTUAL?", 1, 0, false);
-        declareFunction(me, "pf_alias_fn_naut_p", "PF-ALIAS-FN-NAUT-P", 1, 0, false);
-        declareFunction(me, "pf_alias_fn_naut_pf", "PF-ALIAS-FN-NAUT-PF", 1, 0, false);
-        declareFunction(me, "pf_alias_fn_naut_index", "PF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
-        declareFunction(me, "pf_fort_for_pf", "PF-FORT-FOR-PF", 1, 0, false);
-        declareFunction(me, "pf_alias_naut_for_pf_and_alias_index", "PF-ALIAS-NAUT-FOR-PF-AND-ALIAS-INDEX", 2, 0, false);
-        declareFunction(me, "physical_field_indexical_p", "PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
-        new sksi_kb_accessors.$physical_field_indexical_p$UnaryFunction();
-        declareFunction(me, "virtual_physical_field_indexical_p", "VIRTUAL-PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_virtualP", "PHYSICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
-        declareFunction(me, "pfi_alias_fn_naut_p", "PFI-ALIAS-FN-NAUT-P", 1, 0, false);
-        declareFunction(me, "pfi_alias_fn_naut_pfi", "PFI-ALIAS-FN-NAUT-PFI", 1, 0, false);
-        declareFunction(me, "pfi_alias_fn_naut_index", "PFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
-        declareFunction(me, "pfi_alias_naut_for_pfi_and_alias_index", "PFI-ALIAS-NAUT-FOR-PFI-AND-ALIAS-INDEX", 2, 0, false);
-        declareFunction(me, "pfi_fort_for_pfi", "PFI-FORT-FOR-PFI", 1, 0, false);
-        declareFunction(me, "pfi_index_for_pfi", "PFI-INDEX-FOR-PFI", 1, 1, false);
-        declareFunction(me, "physical_schema_for_sks_name_internal", "PHYSICAL-SCHEMA-FOR-SKS-NAME-INTERNAL", 1, 0, false);
-        declareFunction(me, "physical_schema_for_sks_name", "PHYSICAL-SCHEMA-FOR-SKS-NAME", 1, 0, false);
-        declareFunction(me, "physical_field_indexical_for_sks_and_field_names_internal", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES-INTERNAL", 3, 0, false);
-        declareFunction(me, "physical_field_indexical_for_sks_and_field_names", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES", 3, 0, false);
-        declareFunction(me, "indexicals_for_physical_fields", "INDEXICALS-FOR-PHYSICAL-FIELDS", 1, 0, false);
-        declareFunction(me, "integer_sequence_generator_for_physical_field_internal", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
-        declareFunction(me, "integer_sequence_generator_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "integer_sequence_generator_name_internal", "INTEGER-SEQUENCE-GENERATOR-NAME-INTERNAL", 1, 0, false);
-        declareFunction(me, "integer_sequence_generator_name", "INTEGER-SEQUENCE-GENERATOR-NAME", 1, 0, false);
-        declareFunction(me, "integer_sequence_generator_name_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-NAME-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "physical_field_value_is_auto_incrementedP_internal", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?-INTERNAL", 2, 0, false);
-        declareFunction(me, "physical_field_value_is_auto_incrementedP", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?", 2, 0, false);
-        declareFunction(me, "logical_field_for_indexical", "LOGICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
-        declareFunction(me, "logical_field_for_indexical_fort_internal", "LOGICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_field_for_indexical_fort", "LOGICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
-        declareFunction(me, "logical_field_for_lfi_alias_fn_naut", "LOGICAL-FIELD-FOR-LFI-ALIAS-FN-NAUT", 1, 0, false);
-        declareFunction(me, "lfi_for_lf", "LFI-FOR-LF", 1, 0, false);
-        declareFunction(me, "indexical_for_logical_field_internal", "INDEXICAL-FOR-LOGICAL-FIELD-INTERNAL", 1, 0, false);
-        declareFunction(me, "indexical_for_logical_field", "INDEXICAL-FOR-LOGICAL-FIELD", 1, 0, false);
-        declareFunction(me, "logical_fields_for_indexicals", "LOGICAL-FIELDS-FOR-INDEXICALS", 1, 0, false);
-        declareFunction(me, "indexicals_for_logical_fields", "INDEXICALS-FOR-LOGICAL-FIELDS", 1, 0, false);
-        declareFunction(me, "logical_field_schema", "LOGICAL-FIELD-SCHEMA", 1, 0, false);
-        declareFunction(me, "logical_field_indexical_schema", "LOGICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
-        declareFunction(me, "logical_field_indexical_sk_source_internal", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
-        declareFunction(me, "logical_field_indexical_sk_source", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
-        declareFunction(me, "logical_field_joinable_fields", "LOGICAL-FIELD-JOINABLE-FIELDS", 1, 1, false);
-        declareFunction(me, "logical_fields_joinableP_internal", "LOGICAL-FIELDS-JOINABLE?-INTERNAL", 2, 1, false);
-        declareFunction(me, "logical_fields_joinableP", "LOGICAL-FIELDS-JOINABLE?", 2, 1, false);
-        declareFunction(me, "extract_logical_fields", "EXTRACT-LOGICAL-FIELDS", 2, 0, false);
-        declareFunction(me, "extract_logical_field_indexicals", "EXTRACT-LOGICAL-FIELD-INDEXICALS", 2, 0, false);
-        declareFunction(me, "sksi_determine_relevant_logical_fields", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS", 3, 0, false);
-        declareFunction(me, "sksi_determine_relevant_logical_fields_for_physical_field_via_decoding", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-VIA-DECODING", 4, 0, false);
-        declareFunction(me, "sksi_determine_logical_field_indexicals_relevant_to_physical_field", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD", 3, 0, false);
-        declareFunction(me, "sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT1", 3, 0, false);
-        declareFunction(me, "sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT2", 3, 0, false);
-        declareFunction(me, "logical_field_isa", "LOGICAL-FIELD-ISA", 1, 0, false);
-        declareFunction(me, "logical_field_type_list", "LOGICAL-FIELD-TYPE-LIST", 1, 0, false);
-        declareFunction(me, "logical_field_mappings", "LOGICAL-FIELD-MAPPINGS", 1, 0, false);
-        declareFunction(me, "sksi_get_mapped_physical_fields_for_logical_field_int_internal", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-INTERNAL", 2, 1, false);
-        declareFunction(me, "sksi_get_mapped_physical_fields_for_logical_field_int", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT", 2, 1, false);
-        declareFunction(me, "sksi_get_mapped_physical_fields_for_logical_field_int_2", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-2", 2, 0, false);
-        declareFunction(me, "sksi_get_mapped_physical_fields_for_logical_field", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sksi_get_decoding_mapped_physical_fields_for_logical_field", "SKSI-GET-DECODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sksi_get_encoding_mapped_physical_fields_for_logical_field", "SKSI-GET-ENCODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sksi_get_mapped_logical_fields_for_physical_field_int", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT", 2, 0, false);
-        declareFunction(me, "sksi_get_mapped_logical_fields_for_physical_field_int_2", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT-2", 2, 0, false);
-        declareFunction(me, "sksi_get_mapped_logical_fields_for_physical_field", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sksi_get_decoding_mapped_logical_fields_for_physical_field", "SKSI-GET-DECODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sksi_get_encoding_mapped_logical_fields_for_physical_field", "SKSI-GET-ENCODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "sksi_get_all_mapped_logical_fields_for_physical_field", "SKSI-GET-ALL-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
-        declareFunction(me, "physical_field_data_type_name", "PHYSICAL-FIELD-DATA-TYPE-NAME", 2, 0, false);
-        declareFunction(me, "physical_field_data_type", "PHYSICAL-FIELD-DATA-TYPE", 1, 0, false);
-        declareFunction(me, "boolean_physical_field_p", "BOOLEAN-PHYSICAL-FIELD-P", 1, 0, false);
-        declareFunction(me, "data_type_name", "DATA-TYPE-NAME", 2, 0, false);
-        declareFunction(me, "data_type_by_name", "DATA-TYPE-BY-NAME", 2, 0, false);
-        declareFunction(me, "physical_schema_indexes", "PHYSICAL-SCHEMA-INDEXES", 1, 0, false);
-        declareFunction(me, "index_physical_fields", "INDEX-PHYSICAL-FIELDS", 1, 0, false);
-        declareFunction(me, "index_type", "INDEX-TYPE", 1, 0, false);
-        declareFunction(me, "index_name", "INDEX-NAME", 1, 0, false);
-        declareFunction(me, "index_type_namestring", "INDEX-TYPE-NAMESTRING", 2, 0, false);
-        declareFunction(me, "cycl_operator_to_csql_operator_internal", "CYCL-OPERATOR-TO-CSQL-OPERATOR-INTERNAL", 1, 0, false);
-        declareFunction(me, "cycl_operator_to_csql_operator", "CYCL-OPERATOR-TO-CSQL-OPERATOR", 1, 0, false);
-        declareFunction(me, "csql_operator_to_cycl_operator_internal", "CSQL-OPERATOR-TO-CYCL-OPERATOR-INTERNAL", 1, 0, false);
-        declareFunction(me, "csql_operator_to_cycl_operator", "CSQL-OPERATOR-TO-CYCL-OPERATOR", 1, 0, false);
-        declareFunction(me, "csql_operator_to_sql_operator_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-INTERNAL", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_operator", "CSQL-OPERATOR-TO-SQL-OPERATOR", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_operator_syntax_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX-INTERNAL", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_operator_syntax", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_prefix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-PREFIX-OPERATOR-SYNTAX?", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_postfix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-POSTFIX-OPERATOR-SYNTAX?", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_inverse_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INVERSE-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
-        declareFunction(me, "csql_operator_to_sql_function_syntaxP", "CSQL-OPERATOR-TO-SQL-FUNCTION-SYNTAX?", 2, 0, false);
-        declareFunction(me, "csql_to_sql_translation_format_gaf_internal", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF-INTERNAL", 2, 0, false);
-        declareFunction(me, "csql_to_sql_translation_format_gaf", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF", 2, 0, false);
-        declareFunction(me, "sksi_mapping_mt_p", "SKSI-MAPPING-MT-P", 1, 0, false);
-        declareFunction(me, "get_genl_content_mts_for_sks", "GET-GENL-CONTENT-MTS-FOR-SKS", 1, 0, false);
-        declareFunction(me, "get_genl_content_mts_for_mt", "GET-GENL-CONTENT-MTS-FOR-MT", 1, 0, false);
-        declareFunction(me, "sksi_content_mt_p", "SKSI-CONTENT-MT-P", 1, 0, false);
-        declareFunction(me, "clear_sksi_content_mts", "CLEAR-SKSI-CONTENT-MTS", 0, 0, false);
-        new sksi_kb_accessors.$clear_sksi_content_mts$ZeroArityFunction();
-        declareFunction(me, "remove_sksi_content_mts", "REMOVE-SKSI-CONTENT-MTS", 0, 0, false);
-        declareFunction(me, "sksi_content_mts_internal", "SKSI-CONTENT-MTS-INTERNAL", 0, 0, false);
-        declareFunction(me, "sksi_content_mts", "SKSI-CONTENT-MTS", 0, 0, false);
-        declareFunction(me, "content_mt_nart_sk_source", "CONTENT-MT-NART-SK-SOURCE", 1, 0, false);
-        declareFunction(me, "content_mt_sk_source_in_any_mt", "CONTENT-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
-        declareFunction(me, "content_mt_to_mapping_mt", "CONTENT-MT-TO-MAPPING-MT", 1, 0, false);
-        declareFunction(me, "complete_knowledge_sources", "COMPLETE-KNOWLEDGE-SOURCES", 0, 0, false);
-        declareFunction(me, "knowledge_source_representation_completeP", "KNOWLEDGE-SOURCE-REPRESENTATION-COMPLETE?", 1, 0, false);
-        declareFunction(me, "sksi_supported_database_server_program_p_internal", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P-INTERNAL", 1, 0, false);
-        declareFunction(me, "sksi_supported_database_server_program_p", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P", 1, 0, false);
-        declareFunction(me, "default_sks_for_database_server_program", "DEFAULT-SKS-FOR-DATABASE-SERVER-PROGRAM", 1, 0, false);
-        declareFunction(me, "table_primary_key_column_indices", "TABLE-PRIMARY-KEY-COLUMN-INDICES", 2, 0, false);
-        declareFunction(me, "table_primary_key_column_names", "TABLE-PRIMARY-KEY-COLUMN-NAMES", 2, 0, false);
-        declareFunction(me, "table_primary_key_column_thingies", "TABLE-PRIMARY-KEY-COLUMN-THINGIES", 3, 0, false);
-        declareFunction(me, "table_primary_key_columns", "TABLE-PRIMARY-KEY-COLUMNS", 2, 0, false);
-        declareFunction(me, "table_in_db_named", "TABLE-IN-DB-NAMED", 2, 0, false);
-        declareFunction(me, "db_table_name", "DB-TABLE-NAME", 2, 0, false);
-        declareFunction(me, "sksi_create", "SKSI-CREATE", 1, 0, false);
-        declareFunction(me, "sksi_find", "SKSI-FIND", 1, 0, false);
-        declareFunction(me, "sksi_find_or_create", "SKSI-FIND-OR-CREATE", 1, 0, false);
-        declareFunction(me, "sksi_kill", "SKSI-KILL", 1, 0, false);
-        declareFunction(me, "sksi_assert", "SKSI-ASSERT", 2, 2, false);
-        declareFunction(me, "sksi_unassert", "SKSI-UNASSERT", 2, 0, false);
-        declareFunction(me, "sksi_unassert_assertion", "SKSI-UNASSERT-ASSERTION", 1, 0, false);
-        declareFunction(me, "sksi_find_nart", "SKSI-FIND-NART", 1, 0, false);
-        declareFunction(me, "sksi_assert_if_new", "SKSI-ASSERT-IF-NEW", 2, 0, false);
-        declareFunction(me, "sksi_edit_assertion", "SKSI-EDIT-ASSERTION", 2, 0, false);
-        declareFunction(me, "sksi_repropagate_assertion", "SKSI-REPROPAGATE-ASSERTION", 1, 0, false);
-        declareFunction(me, "sksi_constant_get_kb_subset_cols", "SKSI-CONSTANT-GET-KB-SUBSET-COLS", 1, 0, false);
-        declareFunction(me, "sksi_constant_assert_inherited_kb_subset_isas", "SKSI-CONSTANT-ASSERT-INHERITED-KB-SUBSET-ISAS", 2, 0, false);
-        declareFunction(me, "sksi_temporal_field_null_maps_to", "SKSI-TEMPORAL-FIELD-NULL-MAPS-TO", 1, 0, false);
+    public static final SubLObject declare_sksi_kb_accessors_file_alt() {
+        declareFunction("content_mt_sk_source_gaf", "CONTENT-MT-SK-SOURCE-GAF", 1, 0, false);
+        declareFunction("content_mt_sk_source_internal", "CONTENT-MT-SK-SOURCE-INTERNAL", 1, 1, false);
+        declareFunction("content_mt_sk_source", "CONTENT-MT-SK-SOURCE", 1, 1, false);
+        declareFunction("content_mt_spindle_member_p", "CONTENT-MT-SPINDLE-MEMBER-P", 1, 0, false);
+        declareFunction("sk_source_p", "SK-SOURCE-P", 1, 0, false);
+        declareFunction("sk_source_in_any_mt_p_internal", "SK-SOURCE-IN-ANY-MT-P-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_in_any_mt_p", "SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
+        declareFunction("modifiable_sk_source_p", "MODIFIABLE-SK-SOURCE-P", 1, 0, false);
+        declareFunction("modifiable_sk_source_in_any_mt_p", "MODIFIABLE-SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
+        declareFunction("code_mapping_knowledge_sourceP", "CODE-MAPPING-KNOWLEDGE-SOURCE?", 1, 0, false);
+        declareFunction("get_sk_source_property_from_kb_internal", "GET-SK-SOURCE-PROPERTY-FROM-KB-INTERNAL", 2, 5, false);
+        declareFunction("get_sk_source_property_from_kb", "GET-SK-SOURCE-PROPERTY-FROM-KB", 2, 5, false);
+        declareFunction("get_sk_source_property_from_kb_int", "GET-SK-SOURCE-PROPERTY-FROM-KB-INT", 5, 0, false);
+        declareFunction("sk_source_content_mt_gaf", "SK-SOURCE-CONTENT-MT-GAF", 1, 0, false);
+        declareFunction("sk_source_content_mt_internal", "SK-SOURCE-CONTENT-MT-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_content_mt", "SK-SOURCE-CONTENT-MT", 1, 0, false);
+        declareFunction("sk_source_content_mt_in_any_mt", "SK-SOURCE-CONTENT-MT-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_content_mt_head_gaf", "SK-SOURCE-CONTENT-MT-HEAD-GAF", 1, 0, false);
+        declareFunction("sk_source_content_mt_head_internal", "SK-SOURCE-CONTENT-MT-HEAD-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_content_mt_head", "SK-SOURCE-CONTENT-MT-HEAD", 1, 0, false);
+        declareFunction("sk_source_content_mt_head_in_any_mt", "SK-SOURCE-CONTENT-MT-HEAD-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_mapping_mt_internal", "SK-SOURCE-MAPPING-MT-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_mapping_mt", "SK-SOURCE-MAPPING-MT", 1, 0, false);
+        declareFunction("sk_source_logical_schema_description_mt", "SK-SOURCE-LOGICAL-SCHEMA-DESCRIPTION-MT", 1, 0, false);
+        declareFunction("logical_schema_description_mt_sk_source_in_any_mt", "LOGICAL-SCHEMA-DESCRIPTION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_source_description_mt", "SK-SOURCE-SOURCE-DESCRIPTION-MT", 1, 0, false);
+        declareFunction("sk_source_schema_translation_mt", "SK-SOURCE-SCHEMA-TRANSLATION-MT", 1, 0, false);
+        declareFunction("schema_translation_mt_sk_source_in_any_mt", "SCHEMA-TRANSLATION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_ks_type", "SK-SOURCE-KS-TYPE", 1, 0, false);
+        declareFunction("sk_source_row_count", "SK-SOURCE-ROW-COUNT", 1, 0, false);
+        declareFunction("sk_source_name", "SK-SOURCE-NAME", 1, 0, false);
+        declareFunction("sk_source_by_sks_name_internal", "SK-SOURCE-BY-SKS-NAME-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_by_sks_name", "SK-SOURCE-BY-SKS-NAME", 1, 0, false);
+        declareFunction("sk_source_physical_schema_gafs", "SK-SOURCE-PHYSICAL-SCHEMA-GAFS", 1, 0, false);
+        declareFunction("sk_source_physical_schemata", "SK-SOURCE-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_complex_physical_schemata", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_complex_physical_schemata_int", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA-INT", 1, 0, false);
+        declareFunction("sk_source_logical_schemata", "SK-SOURCE-LOGICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_complex_logical_schemata", "SK-SOURCE-COMPLEX-LOGICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_physical_logical_schema_pairs", "SK-SOURCE-PHYSICAL-LOGICAL-SCHEMA-PAIRS", 1, 0, false);
+        declareFunction("sk_source_immediate_spec_sk_sources", "SK-SOURCE-IMMEDIATE-SPEC-SK-SOURCES", 1, 1, false);
+        declareFunction("meaning_sentence_predicate_for_sk_sourceP", "MEANING-SENTENCE-PREDICATE-FOR-SK-SOURCE?", 2, 0, false);
+        declareFunction("logical_schema_for_meaning_sentence_predicate", "LOGICAL-SCHEMA-FOR-MEANING-SENTENCE-PREDICATE", 1, 1, false);
+        declareFunction("sk_source_complex_required_fields", "SK-SOURCE-COMPLEX-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("sk_source_required_fields", "SK-SOURCE-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("get_sks_single_literal_lookup_direction_from_kb_internal", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+        declareFunction("get_sks_single_literal_lookup_direction_from_kb", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
+        declareFunction("get_sks_multi_literal_lookup_direction_from_kb_internal", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+        declareFunction("get_sks_multi_literal_lookup_direction_from_kb", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
+        declareFunction("get_sks_storage_direction_from_kb_internal", "GET-SKS-STORAGE-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+        declareFunction("get_sks_storage_direction_from_kb", "GET-SKS-STORAGE-DIRECTION-FROM-KB", 1, 0, false);
+        declareFunction("get_sks_module_direction_from_kb", "GET-SKS-MODULE-DIRECTION-FROM-KB", 3, 0, false);
+        declareFunction("sk_source_sub_ks_direct", "SK-SOURCE-SUB-KS-DIRECT", 1, 0, false);
+        declareMacro("do_sk_source_sub_ks_direct", "DO-SK-SOURCE-SUB-KS-DIRECT");
+        declareFunction("sk_source_proper_sub_ks_closure", "SK-SOURCE-PROPER-SUB-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_proper_sub_ks_closure_in_mapping_mt", "SK-SOURCE-PROPER-SUB-KS-CLOSURE-IN-MAPPING-MT", 1, 0, false);
+        declareFunction("sk_source_sub_ks_closure", "SK-SOURCE-SUB-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_sub_ks_min", "SK-SOURCE-SUB-KS-MIN", 1, 0, false);
+        declareFunction("sk_source_sub_ksP", "SK-SOURCE-SUB-KS?", 2, 0, false);
+        declareFunction("sk_source_sub_ks_in_any_mtP", "SK-SOURCE-SUB-KS-IN-ANY-MT?", 2, 0, false);
+        declareFunction("sk_source_proper_sub_ksP", "SK-SOURCE-PROPER-SUB-KS?", 2, 0, false);
+        declareFunction("sk_source_super_ks_direct", "SK-SOURCE-SUPER-KS-DIRECT", 1, 0, false);
+        declareFunction("sk_source_proper_super_ks_closure", "SK-SOURCE-PROPER-SUPER-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_super_ks_closure", "SK-SOURCE-SUPER-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_super_ks_max", "SK-SOURCE-SUPER-KS-MAX", 1, 0, false);
+        declareFunction("sk_source_super_ksP", "SK-SOURCE-SUPER-KS?", 2, 0, false);
+        declareFunction("sk_source_proper_super_ksP_internal", "SK-SOURCE-PROPER-SUPER-KS?-INTERNAL", 2, 0, false);
+        declareFunction("sk_source_proper_super_ksP", "SK-SOURCE-PROPER-SUPER-KS?", 2, 0, false);
+        declareFunction("common_super_ksP", "COMMON-SUPER-KS?", 2, 0, false);
+        declareFunction("super_ks_closure_intersection", "SUPER-KS-CLOSURE-INTERSECTION", 2, 0, false);
+        declareFunction("immediate_genl_ks_internal", "IMMEDIATE-GENL-KS-INTERNAL", 1, 0, false);
+        declareFunction("immediate_genl_ks", "IMMEDIATE-GENL-KS", 1, 0, false);
+        declareFunction("max_genl_ks", "MAX-GENL-KS", 1, 0, false);
+        declareFunction("nearest_common_super_ks", "NEAREST-COMMON-SUPER-KS", 1, 0, false);
+        declareFunction("nearest_common_super_ks_for_ls_list", "NEAREST-COMMON-SUPER-KS-FOR-LS-LIST", 1, 0, false);
+        declareFunction("schema_representation_completeP", "SCHEMA-REPRESENTATION-COMPLETE?", 1, 0, false);
+        declareFunction("isa_physical_schemaP_internal", "ISA-PHYSICAL-SCHEMA?-INTERNAL", 1, 0, false);
+        declareFunction("isa_physical_schemaP", "ISA-PHYSICAL-SCHEMA?", 1, 0, false);
+        declareFunction("physical_schema_sk_sources", "PHYSICAL-SCHEMA-SK-SOURCES", 1, 0, false);
+        declareFunction("physical_schema_sk_sources_memoized_internal", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_sk_sources_memoized", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
+        declareFunction("physical_schema_fields_internal", "PHYSICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_fields", "PHYSICAL-SCHEMA-FIELDS", 1, 0, false);
+        declareFunction("physical_schema_primary_key_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_primary_key", "PHYSICAL-SCHEMA-PRIMARY-KEY", 1, 0, false);
+        declareFunction("physical_schema_primary_key_p", "PHYSICAL-SCHEMA-PRIMARY-KEY-P", 2, 0, false);
+        declareFunction("physical_schema_forbidden_comparison_operators", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATORS", 1, 0, false);
+        declareFunction("physical_schema_forbidden_comparison_operator_p", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATOR-P", 2, 0, false);
+        declareFunction("physical_schema_foreign_keys", "PHYSICAL-SCHEMA-FOREIGN-KEYS", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_restrict", "PHYSICAL-SCHEMA-FOREIGN-KEYS-RESTRICT", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_cascade", "PHYSICAL-SCHEMA-FOREIGN-KEYS-CASCADE", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_set_null", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-NULL", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_set_default", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-DEFAULT", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_int", "PHYSICAL-SCHEMA-FOREIGN-KEYS-INT", 2, 0, false);
+        declareFunction("physical_schema_unique_fields_tuples", "PHYSICAL-SCHEMA-UNIQUE-FIELDS-TUPLES", 1, 0, false);
+        declareFunction("physical_schema_required_fields", "PHYSICAL-SCHEMA-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("physical_schemata_required_fields", "PHYSICAL-SCHEMATA-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("physical_schema_required_field_names", "PHYSICAL-SCHEMA-REQUIRED-FIELD-NAMES", 1, 0, false);
+        declareFunction("physical_schema_indexed_fields", "PHYSICAL-SCHEMA-INDEXED-FIELDS", 1, 0, false);
+        declareFunction("sksi_determine_singly_indexed_schema_indexed_field", "SKSI-DETERMINE-SINGLY-INDEXED-SCHEMA-INDEXED-FIELD", 1, 0, false);
+        declareFunction("physical_field_indexedP", "PHYSICAL-FIELD-INDEXED?", 2, 0, false);
+        declareFunction("physical_schema_enumerableP_internal", "PHYSICAL-SCHEMA-ENUMERABLE?-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_enumerableP", "PHYSICAL-SCHEMA-ENUMERABLE?", 1, 0, false);
+        declareFunction("enumerable_schema_gaf", "ENUMERABLE-SCHEMA-GAF", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("physical_schemata_result_set_cardinality_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_wXconstraints_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
+        declareFunction("physical_schemata_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_unbound_fields_set", "RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_bound_fields_set", "RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_constraints", "RESULT-SET-CARDINALITY-GAF-CONSTRAINTS", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_cost_expression", "RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
+        declareFunction("physical_schema_logical_schema_gafs", "PHYSICAL-SCHEMA-LOGICAL-SCHEMA-GAFS", 1, 0, false);
+        declareFunction("physical_schema_logical_schemata", "PHYSICAL-SCHEMA-LOGICAL-SCHEMATA", 1, 0, false);
+        declareFunction("physical_schema_example_tuple", "PHYSICAL-SCHEMA-EXAMPLE-TUPLE", 1, 0, false);
+        declareFunction("physical_schema_field_encodings", "PHYSICAL-SCHEMA-FIELD-ENCODINGS", 1, 0, false);
+        declareFunction("physical_schema_ordered_field_list_internal", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_ordered_field_list", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST", 1, 0, false);
+        declareFunction("physical_schema_field_name_list", "PHYSICAL-SCHEMA-FIELD-NAME-LIST", 1, 0, false);
+        declareFunction("logical_schemata_physical_schemata", "LOGICAL-SCHEMATA-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("logical_schema_physical_schemata", "LOGICAL-SCHEMA-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("logical_schema_fields_internal", "LOGICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_fields", "LOGICAL-SCHEMA-FIELDS", 1, 0, false);
+        declareFunction("logical_schema_field_indexicals_internal", "LOGICAL-SCHEMA-FIELD-INDEXICALS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_field_indexicals", "LOGICAL-SCHEMA-FIELD-INDEXICALS", 1, 0, false);
+        declareFunction("logical_schema_example_sentences", "LOGICAL-SCHEMA-EXAMPLE-SENTENCES", 1, 0, false);
+        declareFunction("logical_schema_keys", "LOGICAL-SCHEMA-KEYS", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("logical_schemata_result_set_cardinality_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_wrt_value_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
+        declareFunction("logical_schemata_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-BOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-COST-EXPRESSION", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_value", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-VALUE", 1, 0, false);
+        declareFunction("logical_schema_field_decodings", "LOGICAL-SCHEMA-FIELD-DECODINGS", 1, 0, false);
+        declareFunction("logical_schema_source_gafs", "LOGICAL-SCHEMA-SOURCE-GAFS", 1, 1, false);
+        declareFunction("logical_schema_sources", "LOGICAL-SCHEMA-SOURCES", 1, 0, false);
+        declareFunction("logical_schema_sk_sources_memoized_internal", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_sk_sources_memoized", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
+        declareFunction("logical_schemata_sources", "LOGICAL-SCHEMATA-SOURCES", 1, 0, false);
+        declareFunction("logical_schema_sourceP", "LOGICAL-SCHEMA-SOURCE?", 2, 0, false);
+        declareFunction("logical_schema_complete_extent_knownP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN?", 1, 0, false);
+        declareFunction("logical_schema_complete_extent_known_for_predicateP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN-FOR-PREDICATE?", 2, 1, false);
+        declareFunction("logical_schema_content_sentences", "LOGICAL-SCHEMA-CONTENT-SENTENCES", 1, 0, false);
+        declareFunction("logical_field_p", "LOGICAL-FIELD-P", 1, 0, false);
+        declareFunction("logical_field_p_memoized_internal", "LOGICAL-FIELD-P-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_p_memoized", "LOGICAL-FIELD-P-MEMOIZED", 1, 0, false);
+        declareFunction("lf_alias_fn_naut_p", "LF-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("lf_alias_fn_naut_lf", "LF-ALIAS-FN-NAUT-LF", 1, 0, false);
+        declareFunction("lf_alias_fn_naut_index", "LF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("lf_fort_for_lf", "LF-FORT-FOR-LF", 1, 0, false);
+        declareFunction("lf_alias_naut_for_lf_and_alias_index", "LF-ALIAS-NAUT-FOR-LF-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("logical_field_indexical_p", "LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.$logical_field_indexical_p$UnaryFunction();
+        declareFunction("logical_field_indexical_p_memoized_internal", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_indexical_p_memoized", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED", 1, 0, false);
+        declareFunction("logical_field_indexical_fort_p", "LOGICAL-FIELD-INDEXICAL-FORT-P", 1, 0, false);
+        declareFunction("lfi_alias_fn_naut_p", "LFI-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("lfi_alias_fn_naut_lfi", "LFI-ALIAS-FN-NAUT-LFI", 1, 0, false);
+        declareFunction("lfi_alias_fn_naut_index", "LFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("lfi_alias_naut_for_lfi_and_alias_index", "LFI-ALIAS-NAUT-FOR-LFI-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("lfi_fort_for_lfi", "LFI-FORT-FOR-LFI", 1, 0, false);
+        declareFunction("lfi_index_for_lfi", "LFI-INDEX-FOR-LFI", 1, 1, false);
+        declareFunction("pfi_for_lfi", "PFI-FOR-LFI", 2, 0, false);
+        declareFunction("lfi_for_pfi", "LFI-FOR-PFI", 2, 0, false);
+        declareFunction("pf_for_lfi", "PF-FOR-LFI", 2, 0, false);
+        declareFunction("logical_field_indexical_for_schemaP", "LOGICAL-FIELD-INDEXICAL-FOR-SCHEMA?", 2, 0, false);
+        declareFunction("logical_field_indexical_fort_for_schema_internal", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA-INTERNAL", 2, 0, false);
+        declareFunction("logical_field_indexical_fort_for_schema", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA", 2, 0, false);
+        declareFunction("logical_field_for_schemaP", "LOGICAL-FIELD-FOR-SCHEMA?", 2, 0, false);
+        declareFunction("virtual_logical_field_indexical_p", "VIRTUAL-LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        declareFunction("logical_field_indexical_virtualP", "LOGICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
+        declareFunction("isa_logical_schemaP_internal", "ISA-LOGICAL-SCHEMA?-INTERNAL", 1, 0, false);
+        declareFunction("isa_logical_schemaP", "ISA-LOGICAL-SCHEMA?", 1, 0, false);
+        declareFunction("isa_reified_mappingP", "ISA-REIFIED-MAPPING?", 1, 0, false);
+        declareFunction("is_fort_a_reified_mappingP_internal", "IS-FORT-A-REIFIED-MAPPING?-INTERNAL", 1, 0, false);
+        declareFunction("is_fort_a_reified_mappingP", "IS-FORT-A-REIFIED-MAPPING?", 1, 0, false);
+        declareFunction("cycl_terms_mapped_to_by_code_mapping_schema_internal", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA-INTERNAL", 1, 0, false);
+        declareFunction("cycl_terms_mapped_to_by_code_mapping_schema", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA", 1, 0, false);
+        declareFunction("cyc_terms_corresponding_to_code_mapping_schema_code", "CYC-TERMS-CORRESPONDING-TO-CODE-MAPPING-SCHEMA-CODE", 2, 0, false);
+        declareFunction("cyc_terms_for_sksi_external_term_naut", "CYC-TERMS-FOR-SKSI-EXTERNAL-TERM-NAUT", 1, 0, false);
+        declareFunction("schema_isa_internal", "SCHEMA-ISA-INTERNAL", 1, 1, false);
+        declareFunction("schema_isa", "SCHEMA-ISA", 1, 1, false);
+        declareFunction("schema_object_field", "SCHEMA-OBJECT-FIELD", 1, 0, false);
+        declareFunction("schema_object_field_gaf", "SCHEMA-OBJECT-FIELD-GAF", 1, 1, false);
+        declareFunction("schema_object_id_fn_expression_p", "SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
+        declareFunction("schema_object_fn_expression_p", "SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
+        declareFunction("source_schema_object_id_fn_expression_p", "SOURCE-SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
+        declareFunction("source_schema_object_fn_expression_p", "SOURCE-SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
+        declareMacro("destructure_schema_object_fn_expression", "DESTRUCTURE-SCHEMA-OBJECT-FN-EXPRESSION");
+        declareMacro("destructure_source_schema_object_fn_expression", "DESTRUCTURE-SOURCE-SCHEMA-OBJECT-FN-EXPRESSION");
+        declareFunction("physical_field_for_indexical", "PHYSICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
+        declareFunction("physical_field_for_indexical_fort_internal", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_for_indexical_fort", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
+        declareFunction("physical_field_for_pfi_alias_fn_naut", "PHYSICAL-FIELD-FOR-PFI-ALIAS-FN-NAUT", 1, 0, false);
+        declareFunction("indexical_for_physical_field_internal", "INDEXICAL-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
+        declareFunction("indexical_for_physical_field", "INDEXICAL-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("physical_fields_to_indexicals", "PHYSICAL-FIELDS-TO-INDEXICALS", 1, 0, false);
+        declareFunction("indexicals_to_physical_fields", "INDEXICALS-TO-PHYSICAL-FIELDS", 1, 0, false);
+        declareFunction("not_null_physical_field_p", "NOT-NULL-PHYSICAL-FIELD-P", 2, 0, false);
+        declareFunction("not_null_physical_fields_for_ps_internal", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS-INTERNAL", 1, 1, false);
+        declareFunction("not_null_physical_fields_for_ps", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS", 1, 1, false);
+        declareFunction("physical_field_default_value_internal", "PHYSICAL-FIELD-DEFAULT-VALUE-INTERNAL", 2, 1, false);
+        declareFunction("physical_field_default_value", "PHYSICAL-FIELD-DEFAULT-VALUE", 2, 1, false);
+        declareFunction("null_default_physical_field_valueP", "NULL-DEFAULT-PHYSICAL-FIELD-VALUE?", 2, 0, false);
+        declareFunction("physical_field_for_schema_and_name", "PHYSICAL-FIELD-FOR-SCHEMA-AND-NAME", 2, 0, false);
+        declareFunction("physical_field_schema_internal", "PHYSICAL-FIELD-SCHEMA-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_schema", "PHYSICAL-FIELD-SCHEMA", 1, 0, false);
+        declareFunction("physical_field_name_internal", "PHYSICAL-FIELD-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_name", "PHYSICAL-FIELD-NAME", 1, 0, false);
+        declareFunction("physical_field_indexical_name", "PHYSICAL-FIELD-INDEXICAL-NAME", 1, 0, false);
+        declareFunction("physical_field_sk_source_internal", "PHYSICAL-FIELD-SK-SOURCE-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_sk_source", "PHYSICAL-FIELD-SK-SOURCE", 1, 0, false);
+        declareFunction("physical_field_sk_source_name_internal", "PHYSICAL-FIELD-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_sk_source_name", "PHYSICAL-FIELD-SK-SOURCE-NAME", 1, 0, false);
+        declareFunction("physical_field_indexical_schema", "PHYSICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_name_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_name", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME", 1, 0, false);
+        declareFunction("physical_field_p", "PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction("virtual_physical_field_p", "VIRTUAL-PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction("physical_field_virtualP_internal", "PHYSICAL-FIELD-VIRTUAL?-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_virtualP", "PHYSICAL-FIELD-VIRTUAL?", 1, 0, false);
+        declareFunction("pf_alias_fn_naut_p", "PF-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("pf_alias_fn_naut_pf", "PF-ALIAS-FN-NAUT-PF", 1, 0, false);
+        declareFunction("pf_alias_fn_naut_index", "PF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("pf_fort_for_pf", "PF-FORT-FOR-PF", 1, 0, false);
+        declareFunction("pf_alias_naut_for_pf_and_alias_index", "PF-ALIAS-NAUT-FOR-PF-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("physical_field_indexical_p", "PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        new com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.$physical_field_indexical_p$UnaryFunction();
+        declareFunction("virtual_physical_field_indexical_p", "VIRTUAL-PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        declareFunction("physical_field_indexical_virtualP", "PHYSICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
+        declareFunction("pfi_alias_fn_naut_p", "PFI-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("pfi_alias_fn_naut_pfi", "PFI-ALIAS-FN-NAUT-PFI", 1, 0, false);
+        declareFunction("pfi_alias_fn_naut_index", "PFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("pfi_alias_naut_for_pfi_and_alias_index", "PFI-ALIAS-NAUT-FOR-PFI-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("pfi_fort_for_pfi", "PFI-FORT-FOR-PFI", 1, 0, false);
+        declareFunction("pfi_index_for_pfi", "PFI-INDEX-FOR-PFI", 1, 1, false);
+        declareFunction("physical_schema_for_sks_name_internal", "PHYSICAL-SCHEMA-FOR-SKS-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_for_sks_name", "PHYSICAL-SCHEMA-FOR-SKS-NAME", 1, 0, false);
+        declareFunction("physical_field_indexical_for_sks_and_field_names_internal", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES-INTERNAL", 3, 0, false);
+        declareFunction("physical_field_indexical_for_sks_and_field_names", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES", 3, 0, false);
+        declareFunction("indexicals_for_physical_fields", "INDEXICALS-FOR-PHYSICAL-FIELDS", 1, 0, false);
+        declareFunction("integer_sequence_generator_for_physical_field_internal", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
+        declareFunction("integer_sequence_generator_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("integer_sequence_generator_name_internal", "INTEGER-SEQUENCE-GENERATOR-NAME-INTERNAL", 1, 0, false);
+        declareFunction("integer_sequence_generator_name", "INTEGER-SEQUENCE-GENERATOR-NAME", 1, 0, false);
+        declareFunction("integer_sequence_generator_name_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-NAME-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("physical_field_value_is_auto_incrementedP_internal", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?-INTERNAL", 2, 0, false);
+        declareFunction("physical_field_value_is_auto_incrementedP", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?", 2, 0, false);
+        declareFunction("logical_field_for_indexical", "LOGICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
+        declareFunction("logical_field_for_indexical_fort_internal", "LOGICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_for_indexical_fort", "LOGICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
+        declareFunction("logical_field_for_lfi_alias_fn_naut", "LOGICAL-FIELD-FOR-LFI-ALIAS-FN-NAUT", 1, 0, false);
+        declareFunction("lfi_for_lf", "LFI-FOR-LF", 1, 0, false);
+        declareFunction("indexical_for_logical_field_internal", "INDEXICAL-FOR-LOGICAL-FIELD-INTERNAL", 1, 0, false);
+        declareFunction("indexical_for_logical_field", "INDEXICAL-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("logical_fields_for_indexicals", "LOGICAL-FIELDS-FOR-INDEXICALS", 1, 0, false);
+        declareFunction("indexicals_for_logical_fields", "INDEXICALS-FOR-LOGICAL-FIELDS", 1, 0, false);
+        declareFunction("logical_field_schema", "LOGICAL-FIELD-SCHEMA", 1, 0, false);
+        declareFunction("logical_field_indexical_schema", "LOGICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
+        declareFunction("logical_field_indexical_sk_source_internal", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_indexical_sk_source", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
+        declareFunction("logical_field_joinable_fields", "LOGICAL-FIELD-JOINABLE-FIELDS", 1, 1, false);
+        declareFunction("logical_fields_joinableP_internal", "LOGICAL-FIELDS-JOINABLE?-INTERNAL", 2, 1, false);
+        declareFunction("logical_fields_joinableP", "LOGICAL-FIELDS-JOINABLE?", 2, 1, false);
+        declareFunction("extract_logical_fields", "EXTRACT-LOGICAL-FIELDS", 2, 0, false);
+        declareFunction("extract_logical_field_indexicals", "EXTRACT-LOGICAL-FIELD-INDEXICALS", 2, 0, false);
+        declareFunction("sksi_determine_relevant_logical_fields", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS", 3, 0, false);
+        declareFunction("sksi_determine_relevant_logical_fields_for_physical_field_internal", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INTERNAL", 4, 0, false);
+        declareFunction("sksi_determine_relevant_logical_fields_for_physical_field", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 4, 0, false);
+        declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD", 3, 0, false);
+        declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT1", 3, 0, false);
+        declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT2", 3, 0, false);
+        declareFunction("logical_field_isa", "LOGICAL-FIELD-ISA", 1, 0, false);
+        declareFunction("logical_field_type_list", "LOGICAL-FIELD-TYPE-LIST", 1, 0, false);
+        declareFunction("logical_field_mappings", "LOGICAL-FIELD-MAPPINGS", 1, 0, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int_internal", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-INTERNAL", 2, 1, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT", 2, 1, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int_2", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-2", 2, 0, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_decoding_mapped_physical_fields_for_logical_field", "SKSI-GET-DECODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_encoding_mapped_physical_fields_for_logical_field", "SKSI-GET-ENCODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_mapped_logical_fields_for_physical_field_int", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT", 2, 0, false);
+        declareFunction("sksi_get_mapped_logical_fields_for_physical_field_int_2", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT-2", 2, 0, false);
+        declareFunction("sksi_get_mapped_logical_fields_for_physical_field", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_decoding_mapped_logical_fields_for_physical_field", "SKSI-GET-DECODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_encoding_mapped_logical_fields_for_physical_field", "SKSI-GET-ENCODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_all_mapped_logical_fields_for_physical_field", "SKSI-GET-ALL-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("physical_field_data_type_name", "PHYSICAL-FIELD-DATA-TYPE-NAME", 2, 0, false);
+        declareFunction("physical_field_data_type", "PHYSICAL-FIELD-DATA-TYPE", 1, 0, false);
+        declareFunction("boolean_physical_field_p", "BOOLEAN-PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction("data_type_name", "DATA-TYPE-NAME", 2, 0, false);
+        declareFunction("data_type_by_name", "DATA-TYPE-BY-NAME", 2, 0, false);
+        declareFunction("physical_schema_indexes", "PHYSICAL-SCHEMA-INDEXES", 1, 0, false);
+        declareFunction("index_physical_fields", "INDEX-PHYSICAL-FIELDS", 1, 0, false);
+        declareFunction("index_type", "INDEX-TYPE", 1, 0, false);
+        declareFunction("index_name", "INDEX-NAME", 1, 0, false);
+        declareFunction("index_type_namestring", "INDEX-TYPE-NAMESTRING", 2, 0, false);
+        declareFunction("cycl_operator_to_csql_operator_internal", "CYCL-OPERATOR-TO-CSQL-OPERATOR-INTERNAL", 1, 0, false);
+        declareFunction("cycl_operator_to_csql_operator", "CYCL-OPERATOR-TO-CSQL-OPERATOR", 1, 0, false);
+        declareFunction("csql_operator_to_cycl_operator_internal", "CSQL-OPERATOR-TO-CYCL-OPERATOR-INTERNAL", 1, 0, false);
+        declareFunction("csql_operator_to_cycl_operator", "CSQL-OPERATOR-TO-CYCL-OPERATOR", 1, 0, false);
+        declareFunction("csql_operator_to_sql_operator_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-INTERNAL", 2, 0, false);
+        declareFunction("csql_operator_to_sql_operator", "CSQL-OPERATOR-TO-SQL-OPERATOR", 2, 0, false);
+        declareFunction("csql_operator_to_sql_operator_syntax_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX-INTERNAL", 2, 0, false);
+        declareFunction("csql_operator_to_sql_operator_syntax", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX", 2, 0, false);
+        declareFunction("csql_operator_to_sql_prefix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-PREFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_postfix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-POSTFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_inverse_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INVERSE-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_function_syntaxP", "CSQL-OPERATOR-TO-SQL-FUNCTION-SYNTAX?", 2, 0, false);
+        declareFunction("csql_to_sql_translation_format_gaf_internal", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF-INTERNAL", 2, 0, false);
+        declareFunction("csql_to_sql_translation_format_gaf", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF", 2, 0, false);
+        declareFunction("sksi_mapping_mt_p", "SKSI-MAPPING-MT-P", 1, 0, false);
+        declareFunction("get_genl_content_mts_for_sks", "GET-GENL-CONTENT-MTS-FOR-SKS", 1, 0, false);
+        declareFunction("get_genl_content_mts_for_mt", "GET-GENL-CONTENT-MTS-FOR-MT", 1, 0, false);
+        declareFunction("sksi_content_mt_p", "SKSI-CONTENT-MT-P", 1, 0, false);
+        declareFunction("clear_sksi_content_mts", "CLEAR-SKSI-CONTENT-MTS", 0, 0, false);
+        new com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors.$clear_sksi_content_mts$ZeroArityFunction();
+        declareFunction("remove_sksi_content_mts", "REMOVE-SKSI-CONTENT-MTS", 0, 0, false);
+        declareFunction("sksi_content_mts_internal", "SKSI-CONTENT-MTS-INTERNAL", 0, 0, false);
+        declareFunction("sksi_content_mts", "SKSI-CONTENT-MTS", 0, 0, false);
+        declareFunction("content_mt_nart_sk_source", "CONTENT-MT-NART-SK-SOURCE", 1, 0, false);
+        declareFunction("content_mt_sk_source_in_any_mt", "CONTENT-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+        declareFunction("content_mt_to_mapping_mt", "CONTENT-MT-TO-MAPPING-MT", 1, 0, false);
+        declareFunction("complete_knowledge_sources", "COMPLETE-KNOWLEDGE-SOURCES", 0, 0, false);
+        declareFunction("knowledge_source_representation_completeP", "KNOWLEDGE-SOURCE-REPRESENTATION-COMPLETE?", 1, 0, false);
+        declareFunction("sksi_supported_database_server_program_p_internal", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P-INTERNAL", 1, 0, false);
+        declareFunction("sksi_supported_database_server_program_p", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P", 1, 0, false);
+        declareFunction("default_sks_for_database_server_program", "DEFAULT-SKS-FOR-DATABASE-SERVER-PROGRAM", 1, 0, false);
+        declareFunction("sksi_create", "SKSI-CREATE", 1, 0, false);
+        declareFunction("sksi_find", "SKSI-FIND", 1, 0, false);
+        declareFunction("sksi_find_or_create", "SKSI-FIND-OR-CREATE", 1, 0, false);
+        declareFunction("sksi_kill", "SKSI-KILL", 1, 0, false);
+        declareFunction("sksi_assert", "SKSI-ASSERT", 2, 0, false);
+        declareFunction("sksi_unassert", "SKSI-UNASSERT", 2, 0, false);
+        declareFunction("sksi_unassert_assertion", "SKSI-UNASSERT-ASSERTION", 1, 0, false);
+        declareFunction("sksi_find_nart", "SKSI-FIND-NART", 1, 0, false);
+        declareFunction("sksi_assert_if_new", "SKSI-ASSERT-IF-NEW", 2, 0, false);
+        declareFunction("sksi_edit_assertion", "SKSI-EDIT-ASSERTION", 2, 0, false);
+        declareFunction("sksi_repropagate_assertion", "SKSI-REPROPAGATE-ASSERTION", 1, 0, false);
+        declareFunction("sksi_constant_get_kb_subset_cols", "SKSI-CONSTANT-GET-KB-SUBSET-COLS", 1, 0, false);
+        declareFunction("sksi_constant_assert_inherited_kb_subset_isas", "SKSI-CONSTANT-ASSERT-INHERITED-KB-SUBSET-ISAS", 2, 0, false);
         return NIL;
     }
+
+    public static SubLObject declare_sksi_kb_accessors_file() {
+        if (SubLFiles.USE_V1) {
+            declareFunction("content_mt_sk_source_gaf", "CONTENT-MT-SK-SOURCE-GAF", 1, 0, false);
+            declareFunction("content_mt_sk_source_internal", "CONTENT-MT-SK-SOURCE-INTERNAL", 1, 1, false);
+            declareFunction("content_mt_sk_source", "CONTENT-MT-SK-SOURCE", 1, 1, false);
+            declareFunction("content_mt_spindle_member_p", "CONTENT-MT-SPINDLE-MEMBER-P", 1, 0, false);
+            declareFunction("sk_source_p", "SK-SOURCE-P", 1, 0, false);
+            declareFunction("sk_source_in_any_mt_p_internal", "SK-SOURCE-IN-ANY-MT-P-INTERNAL", 1, 0, false);
+            declareFunction("sk_source_in_any_mt_p", "SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
+            declareFunction("modifiable_sk_source_p", "MODIFIABLE-SK-SOURCE-P", 1, 0, false);
+            declareFunction("modifiable_sk_source_in_any_mt_p", "MODIFIABLE-SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
+            declareFunction("code_mapping_knowledge_sourceP", "CODE-MAPPING-KNOWLEDGE-SOURCE?", 1, 0, false);
+            declareFunction("get_sk_source_property_from_kb_internal", "GET-SK-SOURCE-PROPERTY-FROM-KB-INTERNAL", 2, 5, false);
+            declareFunction("get_sk_source_property_from_kb", "GET-SK-SOURCE-PROPERTY-FROM-KB", 2, 5, false);
+            declareFunction("get_sk_source_property_from_kb_int", "GET-SK-SOURCE-PROPERTY-FROM-KB-INT", 5, 0, false);
+            declareFunction("sk_source_content_mt_gaf", "SK-SOURCE-CONTENT-MT-GAF", 1, 0, false);
+            declareFunction("sk_source_content_mt_internal", "SK-SOURCE-CONTENT-MT-INTERNAL", 1, 0, false);
+            declareFunction("sk_source_content_mt", "SK-SOURCE-CONTENT-MT", 1, 0, false);
+            declareFunction("sk_source_content_mt_in_any_mt", "SK-SOURCE-CONTENT-MT-IN-ANY-MT", 1, 0, false);
+            declareFunction("sk_source_content_mt_head_gaf", "SK-SOURCE-CONTENT-MT-HEAD-GAF", 1, 0, false);
+            declareFunction("sk_source_content_mt_head_internal", "SK-SOURCE-CONTENT-MT-HEAD-INTERNAL", 1, 0, false);
+            declareFunction("sk_source_content_mt_head", "SK-SOURCE-CONTENT-MT-HEAD", 1, 0, false);
+            declareFunction("sk_source_content_mt_head_in_any_mt", "SK-SOURCE-CONTENT-MT-HEAD-IN-ANY-MT", 1, 0, false);
+            declareFunction("sk_source_mapping_mt_internal", "SK-SOURCE-MAPPING-MT-INTERNAL", 1, 0, false);
+            declareFunction("sk_source_mapping_mt", "SK-SOURCE-MAPPING-MT", 1, 0, false);
+            declareFunction("sk_source_logical_schema_description_mt", "SK-SOURCE-LOGICAL-SCHEMA-DESCRIPTION-MT", 1, 0, false);
+            declareFunction("logical_schema_description_mt_sk_source_in_any_mt", "LOGICAL-SCHEMA-DESCRIPTION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+            declareFunction("sk_source_source_description_mt", "SK-SOURCE-SOURCE-DESCRIPTION-MT", 1, 0, false);
+            declareFunction("sk_source_schema_translation_mt", "SK-SOURCE-SCHEMA-TRANSLATION-MT", 1, 0, false);
+            declareFunction("schema_translation_mt_sk_source_in_any_mt", "SCHEMA-TRANSLATION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+            declareFunction("sk_source_ks_type", "SK-SOURCE-KS-TYPE", 1, 0, false);
+            declareFunction("sk_source_row_count", "SK-SOURCE-ROW-COUNT", 1, 0, false);
+            declareFunction("sk_source_name", "SK-SOURCE-NAME", 1, 0, false);
+            declareFunction("sk_source_name_from_mapping_mt", "SK-SOURCE-NAME-FROM-MAPPING-MT", 1, 0, false);
+            declareFunction("sk_source_namespace_internal", "SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
+            declareFunction("sk_source_namespace", "SK-SOURCE-NAMESPACE", 1, 0, false);
+            declareFunction("sk_source_asserted_namespace_gaf", "SK-SOURCE-ASSERTED-NAMESPACE-GAF", 1, 0, false);
+            declareFunction("sk_source_by_sks_name_internal", "SK-SOURCE-BY-SKS-NAME-INTERNAL", 1, 1, false);
+            declareFunction("sk_source_by_sks_name", "SK-SOURCE-BY-SKS-NAME", 1, 1, false);
+            declareFunction("sk_source_physical_schema_gafs", "SK-SOURCE-PHYSICAL-SCHEMA-GAFS", 1, 0, false);
+            declareFunction("sk_source_physical_schemata", "SK-SOURCE-PHYSICAL-SCHEMATA", 1, 0, false);
+            declareFunction("sk_source_complex_physical_schemata", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA", 1, 0, false);
+            declareFunction("sk_source_complex_physical_schemata_int", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA-INT", 1, 0, false);
+            declareFunction("sk_source_logical_schemata", "SK-SOURCE-LOGICAL-SCHEMATA", 1, 0, false);
+            declareFunction("sk_source_complex_logical_schemata", "SK-SOURCE-COMPLEX-LOGICAL-SCHEMATA", 1, 0, false);
+            declareFunction("sk_source_physical_logical_schema_pairs", "SK-SOURCE-PHYSICAL-LOGICAL-SCHEMA-PAIRS", 1, 0, false);
+            declareFunction("sk_source_immediate_spec_sk_sources", "SK-SOURCE-IMMEDIATE-SPEC-SK-SOURCES", 1, 1, false);
+            declareFunction("meaning_sentence_predicate_for_sk_sourceP", "MEANING-SENTENCE-PREDICATE-FOR-SK-SOURCE?", 2, 0, false);
+            declareFunction("logical_schema_for_meaning_sentence_predicate", "LOGICAL-SCHEMA-FOR-MEANING-SENTENCE-PREDICATE", 1, 1, false);
+            declareFunction("sk_source_complex_required_fields", "SK-SOURCE-COMPLEX-REQUIRED-FIELDS", 1, 0, false);
+            declareFunction("sk_source_required_fields", "SK-SOURCE-REQUIRED-FIELDS", 1, 0, false);
+            declareFunction("sk_source_sql_flavor", "SK-SOURCE-SQL-FLAVOR", 1, 0, false);
+            declareFunction("get_sks_single_literal_lookup_direction_from_kb_internal", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+            declareFunction("get_sks_single_literal_lookup_direction_from_kb", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
+            declareFunction("get_sks_multi_literal_lookup_direction_from_kb_internal", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+            declareFunction("get_sks_multi_literal_lookup_direction_from_kb", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
+            declareFunction("get_sks_storage_direction_from_kb_internal", "GET-SKS-STORAGE-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+            declareFunction("get_sks_storage_direction_from_kb", "GET-SKS-STORAGE-DIRECTION-FROM-KB", 1, 0, false);
+            declareFunction("get_sks_module_direction_from_kb", "GET-SKS-MODULE-DIRECTION-FROM-KB", 3, 0, false);
+            declareFunction("sk_source_sub_ks_direct", "SK-SOURCE-SUB-KS-DIRECT", 1, 0, false);
+            declareMacro("do_sk_source_sub_ks_direct", "DO-SK-SOURCE-SUB-KS-DIRECT");
+            declareFunction("sk_source_proper_sub_ks_closure", "SK-SOURCE-PROPER-SUB-KS-CLOSURE", 1, 0, false);
+            declareFunction("sk_source_proper_sub_ks_closure_in_mapping_mt", "SK-SOURCE-PROPER-SUB-KS-CLOSURE-IN-MAPPING-MT", 1, 0, false);
+            declareFunction("sk_source_sub_ks_closure", "SK-SOURCE-SUB-KS-CLOSURE", 1, 0, false);
+            declareFunction("sk_source_sub_ks_min", "SK-SOURCE-SUB-KS-MIN", 1, 0, false);
+            declareFunction("sk_source_sub_ksP", "SK-SOURCE-SUB-KS?", 2, 0, false);
+            declareFunction("sk_source_sub_ks_in_any_mtP", "SK-SOURCE-SUB-KS-IN-ANY-MT?", 2, 0, false);
+            declareFunction("sk_source_proper_sub_ksP", "SK-SOURCE-PROPER-SUB-KS?", 2, 0, false);
+            declareFunction("sk_source_super_ks_direct", "SK-SOURCE-SUPER-KS-DIRECT", 1, 0, false);
+            declareFunction("sk_source_proper_super_ks_closure", "SK-SOURCE-PROPER-SUPER-KS-CLOSURE", 1, 0, false);
+            declareFunction("sk_source_super_ks_closure", "SK-SOURCE-SUPER-KS-CLOSURE", 1, 0, false);
+            declareFunction("sk_source_super_ks_max", "SK-SOURCE-SUPER-KS-MAX", 1, 0, false);
+            declareFunction("sk_source_super_ksP", "SK-SOURCE-SUPER-KS?", 2, 0, false);
+            declareFunction("sk_source_proper_super_ksP_internal", "SK-SOURCE-PROPER-SUPER-KS?-INTERNAL", 2, 0, false);
+            declareFunction("sk_source_proper_super_ksP", "SK-SOURCE-PROPER-SUPER-KS?", 2, 0, false);
+            declareFunction("common_super_ksP", "COMMON-SUPER-KS?", 2, 0, false);
+            declareFunction("super_ks_closure_intersection", "SUPER-KS-CLOSURE-INTERSECTION", 2, 0, false);
+            declareFunction("immediate_genl_ks_internal", "IMMEDIATE-GENL-KS-INTERNAL", 1, 0, false);
+            declareFunction("immediate_genl_ks", "IMMEDIATE-GENL-KS", 1, 0, false);
+            declareFunction("max_genl_ks", "MAX-GENL-KS", 1, 0, false);
+            declareFunction("nearest_common_super_ks", "NEAREST-COMMON-SUPER-KS", 1, 0, false);
+            declareFunction("nearest_common_super_ks_for_ls_list", "NEAREST-COMMON-SUPER-KS-FOR-LS-LIST", 1, 0, false);
+            declareFunction("schema_representation_completeP", "SCHEMA-REPRESENTATION-COMPLETE?", 1, 0, false);
+            declareFunction("isa_physical_schemaP_internal", "ISA-PHYSICAL-SCHEMA?-INTERNAL", 1, 0, false);
+            declareFunction("isa_physical_schemaP", "ISA-PHYSICAL-SCHEMA?", 1, 0, false);
+            declareFunction("physical_schema_sk_sources", "PHYSICAL-SCHEMA-SK-SOURCES", 1, 0, false);
+            declareFunction("physical_schema_sk_sources_memoized_internal", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_sk_sources_memoized", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
+            declareFunction("physical_schema_fields_internal", "PHYSICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_fields", "PHYSICAL-SCHEMA-FIELDS", 1, 0, false);
+            declareFunction("physical_schema_primary_key_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_primary_key", "PHYSICAL-SCHEMA-PRIMARY-KEY", 1, 0, false);
+            declareFunction("physical_schema_primary_key_compensate_for_table_column_representation_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_primary_key_compensate_for_table_column_representation", "PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION", 1, 0, false);
+            declareFunction("physical_schema_primary_key_p", "PHYSICAL-SCHEMA-PRIMARY-KEY-P", 2, 0, false);
+            declareFunction("physical_schema_forbidden_comparison_operators", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATORS", 1, 0, false);
+            declareFunction("physical_schema_forbidden_comparison_operator_p", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATOR-P", 2, 0, false);
+            declareFunction("physical_schema_foreign_keys", "PHYSICAL-SCHEMA-FOREIGN-KEYS", 1, 0, false);
+            declareFunction("physical_schema_foreign_keys_restrict", "PHYSICAL-SCHEMA-FOREIGN-KEYS-RESTRICT", 1, 0, false);
+            declareFunction("physical_schema_foreign_keys_cascade", "PHYSICAL-SCHEMA-FOREIGN-KEYS-CASCADE", 1, 0, false);
+            declareFunction("physical_schema_foreign_keys_set_null", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-NULL", 1, 0, false);
+            declareFunction("physical_schema_foreign_keys_set_default", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-DEFAULT", 1, 0, false);
+            declareFunction("physical_schema_foreign_keys_int", "PHYSICAL-SCHEMA-FOREIGN-KEYS-INT", 2, 0, false);
+            declareFunction("physical_schema_unique_fields_tuples", "PHYSICAL-SCHEMA-UNIQUE-FIELDS-TUPLES", 1, 0, false);
+            declareFunction("physical_schema_required_fields", "PHYSICAL-SCHEMA-REQUIRED-FIELDS", 1, 0, false);
+            declareFunction("physical_schemata_required_fields", "PHYSICAL-SCHEMATA-REQUIRED-FIELDS", 1, 0, false);
+            declareFunction("physical_schema_required_field_names", "PHYSICAL-SCHEMA-REQUIRED-FIELD-NAMES", 1, 0, false);
+            declareFunction("physical_schema_indexed_fields", "PHYSICAL-SCHEMA-INDEXED-FIELDS", 1, 0, false);
+            declareFunction("sksi_determine_singly_indexed_schema_indexed_field", "SKSI-DETERMINE-SINGLY-INDEXED-SCHEMA-INDEXED-FIELD", 1, 0, false);
+            declareFunction("physical_field_indexedP", "PHYSICAL-FIELD-INDEXED?", 2, 0, false);
+            declareFunction("physical_schema_enumerableP_internal", "PHYSICAL-SCHEMA-ENUMERABLE?-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_enumerableP", "PHYSICAL-SCHEMA-ENUMERABLE?", 1, 0, false);
+            declareFunction("enumerable_schema_gaf", "ENUMERABLE-SCHEMA-GAF", 1, 0, false);
+            declareFunction("physical_schema_result_set_cardinality_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_result_set_cardinality_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+            declareFunction("physical_schemata_result_set_cardinality_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+            declareFunction("physical_schema_result_set_cardinality_wXconstraints_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
+            declareFunction("physical_schemata_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
+            declareFunction("result_set_cardinality_gaf_unbound_fields_set", "RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+            declareFunction("result_set_cardinality_gaf_bound_fields_set", "RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
+            declareFunction("result_set_cardinality_gaf_constraints", "RESULT-SET-CARDINALITY-GAF-CONSTRAINTS", 1, 0, false);
+            declareFunction("result_set_cardinality_gaf_cost_expression", "RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
+            declareFunction("physical_schema_logical_schema_gafs", "PHYSICAL-SCHEMA-LOGICAL-SCHEMA-GAFS", 1, 0, false);
+            declareFunction("physical_schema_logical_schemata", "PHYSICAL-SCHEMA-LOGICAL-SCHEMATA", 1, 0, false);
+            declareFunction("physical_schema_example_tuple", "PHYSICAL-SCHEMA-EXAMPLE-TUPLE", 1, 0, false);
+            declareFunction("physical_schema_field_encodings", "PHYSICAL-SCHEMA-FIELD-ENCODINGS", 1, 0, false);
+            declareFunction("physical_schema_ordered_field_list_internal", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_ordered_field_list", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST", 1, 0, false);
+            declareFunction("physical_schema_field_name_list", "PHYSICAL-SCHEMA-FIELD-NAME-LIST", 1, 0, false);
+            declareFunction("logical_schemata_physical_schemata", "LOGICAL-SCHEMATA-PHYSICAL-SCHEMATA", 1, 0, false);
+            declareFunction("logical_schema_physical_schemata", "LOGICAL-SCHEMA-PHYSICAL-SCHEMATA", 1, 0, false);
+            declareFunction("logical_schema_fields_internal", "LOGICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
+            declareFunction("logical_schema_fields", "LOGICAL-SCHEMA-FIELDS", 1, 0, false);
+            declareFunction("logical_schema_field_indexicals_internal", "LOGICAL-SCHEMA-FIELD-INDEXICALS-INTERNAL", 1, 0, false);
+            declareFunction("logical_schema_field_indexicals", "LOGICAL-SCHEMA-FIELD-INDEXICALS", 1, 0, false);
+            declareFunction("logical_schema_example_sentences", "LOGICAL-SCHEMA-EXAMPLE-SENTENCES", 1, 0, false);
+            declareFunction("logical_schema_keys", "LOGICAL-SCHEMA-KEYS", 1, 0, false);
+            declareFunction("logical_schema_result_set_cardinality_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
+            declareFunction("logical_schema_result_set_cardinality_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+            declareFunction("logical_schemata_result_set_cardinality_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
+            declareFunction("logical_schema_result_set_cardinality_wrt_value_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS-INTERNAL", 1, 0, false);
+            declareFunction("logical_schema_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
+            declareFunction("logical_schemata_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_wrt_value_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_wrt_value_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-BOUND-FIELDS-SET", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_wrt_value_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-COST-EXPRESSION", 1, 0, false);
+            declareFunction("logical_result_set_cardinality_wrt_value_gaf_value", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-VALUE", 1, 0, false);
+            declareFunction("logical_schema_field_decodings", "LOGICAL-SCHEMA-FIELD-DECODINGS", 1, 0, false);
+            declareFunction("logical_schema_source_gafs", "LOGICAL-SCHEMA-SOURCE-GAFS", 1, 1, false);
+            declareFunction("logical_schema_sources", "LOGICAL-SCHEMA-SOURCES", 1, 0, false);
+            declareFunction("logical_schema_sk_sources_memoized_internal", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
+            declareFunction("logical_schema_sk_sources_memoized", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
+            declareFunction("logical_schemata_sources", "LOGICAL-SCHEMATA-SOURCES", 1, 0, false);
+            declareFunction("logical_schema_sourceP", "LOGICAL-SCHEMA-SOURCE?", 2, 0, false);
+            declareFunction("logical_schema_complete_extent_knownP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN?", 1, 0, false);
+            declareFunction("logical_schema_complete_extent_known_for_predicateP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN-FOR-PREDICATE?", 2, 1, false);
+            declareFunction("logical_schema_content_sentences", "LOGICAL-SCHEMA-CONTENT-SENTENCES", 1, 0, false);
+            declareFunction("logical_field_p", "LOGICAL-FIELD-P", 1, 0, false);
+            declareFunction("logical_field_p_memoized_internal", "LOGICAL-FIELD-P-MEMOIZED-INTERNAL", 1, 0, false);
+            declareFunction("logical_field_p_memoized", "LOGICAL-FIELD-P-MEMOIZED", 1, 0, false);
+            declareFunction("lf_alias_fn_naut_p", "LF-ALIAS-FN-NAUT-P", 1, 0, false);
+            declareFunction("lf_alias_fn_naut_lf", "LF-ALIAS-FN-NAUT-LF", 1, 0, false);
+            declareFunction("lf_alias_fn_naut_index", "LF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+            declareFunction("lf_fort_for_lf", "LF-FORT-FOR-LF", 1, 0, false);
+            declareFunction("lf_alias_naut_for_lf_and_alias_index", "LF-ALIAS-NAUT-FOR-LF-AND-ALIAS-INDEX", 2, 0, false);
+            declareFunction("logical_field_indexical_p", "LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
+            new sksi_kb_accessors.$logical_field_indexical_p$UnaryFunction();
+            declareFunction("logical_field_indexical_p_memoized_internal", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED-INTERNAL", 1, 0, false);
+            declareFunction("logical_field_indexical_p_memoized", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED", 1, 0, false);
+            declareFunction("logical_field_indexical_fort_p", "LOGICAL-FIELD-INDEXICAL-FORT-P", 1, 0, false);
+            declareFunction("lfi_alias_fn_naut_p", "LFI-ALIAS-FN-NAUT-P", 1, 0, false);
+            declareFunction("lfi_alias_fn_naut_lfi", "LFI-ALIAS-FN-NAUT-LFI", 1, 0, false);
+            declareFunction("lfi_alias_fn_naut_index", "LFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+            declareFunction("lfi_alias_naut_for_lfi_and_alias_index", "LFI-ALIAS-NAUT-FOR-LFI-AND-ALIAS-INDEX", 2, 0, false);
+            declareFunction("lfi_fort_for_lfi", "LFI-FORT-FOR-LFI", 1, 0, false);
+            declareFunction("lfi_index_for_lfi", "LFI-INDEX-FOR-LFI", 1, 1, false);
+            declareFunction("pfi_for_lfi", "PFI-FOR-LFI", 2, 0, false);
+            declareFunction("lfi_for_pfi", "LFI-FOR-PFI", 2, 0, false);
+            declareFunction("pf_for_lfi", "PF-FOR-LFI", 2, 0, false);
+            declareFunction("logical_field_indexical_for_schemaP", "LOGICAL-FIELD-INDEXICAL-FOR-SCHEMA?", 2, 0, false);
+            declareFunction("logical_field_indexical_fort_for_schema_internal", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA-INTERNAL", 2, 0, false);
+            declareFunction("logical_field_indexical_fort_for_schema", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA", 2, 0, false);
+            declareFunction("logical_field_for_schemaP", "LOGICAL-FIELD-FOR-SCHEMA?", 2, 0, false);
+            declareFunction("virtual_logical_field_indexical_p", "VIRTUAL-LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
+            declareFunction("logical_field_indexical_virtualP", "LOGICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
+            declareFunction("isa_logical_schemaP_internal", "ISA-LOGICAL-SCHEMA?-INTERNAL", 1, 0, false);
+            declareFunction("isa_logical_schemaP", "ISA-LOGICAL-SCHEMA?", 1, 0, false);
+            declareFunction("isa_reified_mappingP", "ISA-REIFIED-MAPPING?", 1, 0, false);
+            declareFunction("is_fort_a_reified_mappingP_internal", "IS-FORT-A-REIFIED-MAPPING?-INTERNAL", 1, 0, false);
+            declareFunction("is_fort_a_reified_mappingP", "IS-FORT-A-REIFIED-MAPPING?", 1, 0, false);
+            declareFunction("cycl_terms_mapped_to_by_code_mapping_schema_internal", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA-INTERNAL", 1, 0, false);
+            declareFunction("cycl_terms_mapped_to_by_code_mapping_schema", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA", 1, 0, false);
+            declareFunction("cyc_terms_corresponding_to_code_mapping_schema_code", "CYC-TERMS-CORRESPONDING-TO-CODE-MAPPING-SCHEMA-CODE", 2, 0, false);
+            declareFunction("cyc_terms_for_sksi_external_term_naut", "CYC-TERMS-FOR-SKSI-EXTERNAL-TERM-NAUT", 1, 0, false);
+            declareFunction("schema_isa_internal", "SCHEMA-ISA-INTERNAL", 1, 1, false);
+            declareFunction("schema_isa", "SCHEMA-ISA", 1, 1, false);
+            declareFunction("schema_object_field", "SCHEMA-OBJECT-FIELD", 1, 0, false);
+            declareFunction("schema_object_field_gaf", "SCHEMA-OBJECT-FIELD-GAF", 1, 1, false);
+            declareFunction("schema_object_id_fn_expression_p", "SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
+            declareFunction("schema_object_fn_expression_p", "SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
+            declareFunction("source_schema_object_id_fn_expression_p", "SOURCE-SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
+            declareFunction("source_schema_object_fn_expression_p", "SOURCE-SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
+            declareMacro("destructure_schema_object_fn_expression", "DESTRUCTURE-SCHEMA-OBJECT-FN-EXPRESSION");
+            declareMacro("destructure_source_schema_object_fn_expression", "DESTRUCTURE-SOURCE-SCHEMA-OBJECT-FN-EXPRESSION");
+            declareFunction("physical_field_for_indexical", "PHYSICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
+            declareFunction("physical_field_for_indexical_fort_internal", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_for_indexical_fort", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
+            declareFunction("physical_field_for_pfi_alias_fn_naut", "PHYSICAL-FIELD-FOR-PFI-ALIAS-FN-NAUT", 1, 0, false);
+            declareFunction("indexical_for_physical_field_internal", "INDEXICAL-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
+            declareFunction("indexical_for_physical_field", "INDEXICAL-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("physical_fields_to_indexicals", "PHYSICAL-FIELDS-TO-INDEXICALS", 1, 0, false);
+            declareFunction("indexicals_to_physical_fields", "INDEXICALS-TO-PHYSICAL-FIELDS", 1, 0, false);
+            declareFunction("not_null_physical_field_p", "NOT-NULL-PHYSICAL-FIELD-P", 2, 0, false);
+            declareFunction("not_null_physical_fields_for_ps_internal", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS-INTERNAL", 1, 1, false);
+            declareFunction("not_null_physical_fields_for_ps", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS", 1, 1, false);
+            declareFunction("physical_field_default_value_internal", "PHYSICAL-FIELD-DEFAULT-VALUE-INTERNAL", 2, 1, false);
+            declareFunction("physical_field_default_value", "PHYSICAL-FIELD-DEFAULT-VALUE", 2, 1, false);
+            declareFunction("null_default_physical_field_valueP", "NULL-DEFAULT-PHYSICAL-FIELD-VALUE?", 2, 0, false);
+            declareFunction("physical_field_for_schema_and_name", "PHYSICAL-FIELD-FOR-SCHEMA-AND-NAME", 2, 0, false);
+            declareFunction("physical_field_schema_internal", "PHYSICAL-FIELD-SCHEMA-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_schema", "PHYSICAL-FIELD-SCHEMA", 1, 0, false);
+            declareFunction("physical_field_name_internal", "PHYSICAL-FIELD-NAME-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_name", "PHYSICAL-FIELD-NAME", 1, 0, false);
+            declareFunction("physical_field_indexical_name", "PHYSICAL-FIELD-INDEXICAL-NAME", 1, 0, false);
+            declareFunction("physical_field_sk_source_internal", "PHYSICAL-FIELD-SK-SOURCE-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_sk_source", "PHYSICAL-FIELD-SK-SOURCE", 1, 0, false);
+            declareFunction("physical_field_sk_source_name_internal", "PHYSICAL-FIELD-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_sk_source_name", "PHYSICAL-FIELD-SK-SOURCE-NAME", 1, 0, false);
+            declareFunction("physical_field_sk_source_namespace_internal", "PHYSICAL-FIELD-SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_sk_source_namespace", "PHYSICAL-FIELD-SK-SOURCE-NAMESPACE", 1, 0, false);
+            declareFunction("physical_field_indexical_schema", "PHYSICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
+            declareFunction("physical_field_indexical_sk_source_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_indexical_sk_source", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
+            declareFunction("physical_field_indexical_sk_source_name_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_indexical_sk_source_name", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME", 1, 0, false);
+            declareFunction("physical_field_indexical_sk_source_namespace_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_indexical_sk_source_namespace", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAMESPACE", 1, 0, false);
+            declareFunction("physical_field_p", "PHYSICAL-FIELD-P", 1, 0, false);
+            declareFunction("virtual_physical_field_p", "VIRTUAL-PHYSICAL-FIELD-P", 1, 0, false);
+            declareFunction("physical_field_virtualP_internal", "PHYSICAL-FIELD-VIRTUAL?-INTERNAL", 1, 0, false);
+            declareFunction("physical_field_virtualP", "PHYSICAL-FIELD-VIRTUAL?", 1, 0, false);
+            declareFunction("pf_alias_fn_naut_p", "PF-ALIAS-FN-NAUT-P", 1, 0, false);
+            declareFunction("pf_alias_fn_naut_pf", "PF-ALIAS-FN-NAUT-PF", 1, 0, false);
+            declareFunction("pf_alias_fn_naut_index", "PF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+            declareFunction("pf_fort_for_pf", "PF-FORT-FOR-PF", 1, 0, false);
+            declareFunction("pf_alias_naut_for_pf_and_alias_index", "PF-ALIAS-NAUT-FOR-PF-AND-ALIAS-INDEX", 2, 0, false);
+            declareFunction("physical_field_indexical_p", "PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
+            new sksi_kb_accessors.$physical_field_indexical_p$UnaryFunction();
+            declareFunction("virtual_physical_field_indexical_p", "VIRTUAL-PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
+            declareFunction("physical_field_indexical_virtualP", "PHYSICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
+            declareFunction("pfi_alias_fn_naut_p", "PFI-ALIAS-FN-NAUT-P", 1, 0, false);
+            declareFunction("pfi_alias_fn_naut_pfi", "PFI-ALIAS-FN-NAUT-PFI", 1, 0, false);
+            declareFunction("pfi_alias_fn_naut_index", "PFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+            declareFunction("pfi_alias_naut_for_pfi_and_alias_index", "PFI-ALIAS-NAUT-FOR-PFI-AND-ALIAS-INDEX", 2, 0, false);
+            declareFunction("pfi_fort_for_pfi", "PFI-FORT-FOR-PFI", 1, 0, false);
+            declareFunction("pfi_index_for_pfi", "PFI-INDEX-FOR-PFI", 1, 1, false);
+            declareFunction("physical_schema_for_sks_name_internal", "PHYSICAL-SCHEMA-FOR-SKS-NAME-INTERNAL", 1, 0, false);
+            declareFunction("physical_schema_for_sks_name", "PHYSICAL-SCHEMA-FOR-SKS-NAME", 1, 0, false);
+            declareFunction("physical_field_indexical_for_sks_and_field_names_internal", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES-INTERNAL", 3, 0, false);
+            declareFunction("physical_field_indexical_for_sks_and_field_names", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES", 3, 0, false);
+            declareFunction("indexicals_for_physical_fields", "INDEXICALS-FOR-PHYSICAL-FIELDS", 1, 0, false);
+            declareFunction("integer_sequence_generator_for_physical_field_internal", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
+            declareFunction("integer_sequence_generator_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("integer_sequence_generator_name_internal", "INTEGER-SEQUENCE-GENERATOR-NAME-INTERNAL", 1, 0, false);
+            declareFunction("integer_sequence_generator_name", "INTEGER-SEQUENCE-GENERATOR-NAME", 1, 0, false);
+            declareFunction("integer_sequence_generator_name_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-NAME-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("physical_field_value_is_auto_incrementedP_internal", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?-INTERNAL", 2, 0, false);
+            declareFunction("physical_field_value_is_auto_incrementedP", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?", 2, 0, false);
+            declareFunction("logical_field_for_indexical", "LOGICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
+            declareFunction("logical_field_for_indexical_fort_internal", "LOGICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
+            declareFunction("logical_field_for_indexical_fort", "LOGICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
+            declareFunction("logical_field_for_lfi_alias_fn_naut", "LOGICAL-FIELD-FOR-LFI-ALIAS-FN-NAUT", 1, 0, false);
+            declareFunction("lfi_for_lf", "LFI-FOR-LF", 1, 0, false);
+            declareFunction("indexical_for_logical_field_internal", "INDEXICAL-FOR-LOGICAL-FIELD-INTERNAL", 1, 0, false);
+            declareFunction("indexical_for_logical_field", "INDEXICAL-FOR-LOGICAL-FIELD", 1, 0, false);
+            declareFunction("logical_fields_for_indexicals", "LOGICAL-FIELDS-FOR-INDEXICALS", 1, 0, false);
+            declareFunction("indexicals_for_logical_fields", "INDEXICALS-FOR-LOGICAL-FIELDS", 1, 0, false);
+            declareFunction("logical_field_schema", "LOGICAL-FIELD-SCHEMA", 1, 0, false);
+            declareFunction("logical_field_indexical_schema", "LOGICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
+            declareFunction("logical_field_indexical_sk_source_internal", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
+            declareFunction("logical_field_indexical_sk_source", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
+            declareFunction("logical_field_joinable_fields", "LOGICAL-FIELD-JOINABLE-FIELDS", 1, 1, false);
+            declareFunction("logical_fields_joinableP_internal", "LOGICAL-FIELDS-JOINABLE?-INTERNAL", 2, 1, false);
+            declareFunction("logical_fields_joinableP", "LOGICAL-FIELDS-JOINABLE?", 2, 1, false);
+            declareFunction("extract_logical_fields", "EXTRACT-LOGICAL-FIELDS", 2, 0, false);
+            declareFunction("extract_logical_field_indexicals", "EXTRACT-LOGICAL-FIELD-INDEXICALS", 2, 0, false);
+            declareFunction("sksi_determine_relevant_logical_fields", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS", 3, 0, false);
+            declareFunction("sksi_determine_relevant_logical_fields_for_physical_field_via_decoding", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-VIA-DECODING", 4, 0, false);
+            declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD", 3, 0, false);
+            declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT1", 3, 0, false);
+            declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT2", 3, 0, false);
+            declareFunction("logical_field_isa", "LOGICAL-FIELD-ISA", 1, 0, false);
+            declareFunction("logical_field_type_list", "LOGICAL-FIELD-TYPE-LIST", 1, 0, false);
+            declareFunction("logical_field_mappings", "LOGICAL-FIELD-MAPPINGS", 1, 0, false);
+            declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int_internal", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-INTERNAL", 2, 1, false);
+            declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT", 2, 1, false);
+            declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int_2", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-2", 2, 0, false);
+            declareFunction("sksi_get_mapped_physical_fields_for_logical_field", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+            declareFunction("sksi_get_decoding_mapped_physical_fields_for_logical_field", "SKSI-GET-DECODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+            declareFunction("sksi_get_encoding_mapped_physical_fields_for_logical_field", "SKSI-GET-ENCODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+            declareFunction("sksi_get_mapped_logical_fields_for_physical_field_int", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT", 2, 0, false);
+            declareFunction("sksi_get_mapped_logical_fields_for_physical_field_int_2", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT-2", 2, 0, false);
+            declareFunction("sksi_get_mapped_logical_fields_for_physical_field", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("sksi_get_decoding_mapped_logical_fields_for_physical_field", "SKSI-GET-DECODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("sksi_get_encoding_mapped_logical_fields_for_physical_field", "SKSI-GET-ENCODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("sksi_get_all_mapped_logical_fields_for_physical_field", "SKSI-GET-ALL-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+            declareFunction("physical_field_data_type_name", "PHYSICAL-FIELD-DATA-TYPE-NAME", 2, 0, false);
+            declareFunction("physical_field_data_type", "PHYSICAL-FIELD-DATA-TYPE", 1, 0, false);
+            declareFunction("boolean_physical_field_p", "BOOLEAN-PHYSICAL-FIELD-P", 1, 0, false);
+            declareFunction("data_type_name", "DATA-TYPE-NAME", 2, 0, false);
+            declareFunction("data_type_by_name", "DATA-TYPE-BY-NAME", 2, 0, false);
+            declareFunction("physical_schema_indexes", "PHYSICAL-SCHEMA-INDEXES", 1, 0, false);
+            declareFunction("index_physical_fields", "INDEX-PHYSICAL-FIELDS", 1, 0, false);
+            declareFunction("index_type", "INDEX-TYPE", 1, 0, false);
+            declareFunction("index_name", "INDEX-NAME", 1, 0, false);
+            declareFunction("index_type_namestring", "INDEX-TYPE-NAMESTRING", 2, 0, false);
+            declareFunction("cycl_operator_to_csql_operator_internal", "CYCL-OPERATOR-TO-CSQL-OPERATOR-INTERNAL", 1, 0, false);
+            declareFunction("cycl_operator_to_csql_operator", "CYCL-OPERATOR-TO-CSQL-OPERATOR", 1, 0, false);
+            declareFunction("csql_operator_to_cycl_operator_internal", "CSQL-OPERATOR-TO-CYCL-OPERATOR-INTERNAL", 1, 0, false);
+            declareFunction("csql_operator_to_cycl_operator", "CSQL-OPERATOR-TO-CYCL-OPERATOR", 1, 0, false);
+            declareFunction("csql_operator_to_sql_operator_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-INTERNAL", 2, 0, false);
+            declareFunction("csql_operator_to_sql_operator", "CSQL-OPERATOR-TO-SQL-OPERATOR", 2, 0, false);
+            declareFunction("csql_operator_to_sql_operator_syntax_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX-INTERNAL", 2, 0, false);
+            declareFunction("csql_operator_to_sql_operator_syntax", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX", 2, 0, false);
+            declareFunction("csql_operator_to_sql_prefix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-PREFIX-OPERATOR-SYNTAX?", 2, 0, false);
+            declareFunction("csql_operator_to_sql_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
+            declareFunction("csql_operator_to_sql_postfix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-POSTFIX-OPERATOR-SYNTAX?", 2, 0, false);
+            declareFunction("csql_operator_to_sql_inverse_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INVERSE-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
+            declareFunction("csql_operator_to_sql_function_syntaxP", "CSQL-OPERATOR-TO-SQL-FUNCTION-SYNTAX?", 2, 0, false);
+            declareFunction("csql_to_sql_translation_format_gaf_internal", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF-INTERNAL", 2, 0, false);
+            declareFunction("csql_to_sql_translation_format_gaf", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF", 2, 0, false);
+            declareFunction("sksi_mapping_mt_p", "SKSI-MAPPING-MT-P", 1, 0, false);
+            declareFunction("get_genl_content_mts_for_sks", "GET-GENL-CONTENT-MTS-FOR-SKS", 1, 0, false);
+            declareFunction("get_genl_content_mts_for_mt", "GET-GENL-CONTENT-MTS-FOR-MT", 1, 0, false);
+            declareFunction("sksi_content_mt_p", "SKSI-CONTENT-MT-P", 1, 0, false);
+            declareFunction("clear_sksi_content_mts", "CLEAR-SKSI-CONTENT-MTS", 0, 0, false);
+            new sksi_kb_accessors.$clear_sksi_content_mts$ZeroArityFunction();
+            declareFunction("remove_sksi_content_mts", "REMOVE-SKSI-CONTENT-MTS", 0, 0, false);
+            declareFunction("sksi_content_mts_internal", "SKSI-CONTENT-MTS-INTERNAL", 0, 0, false);
+            declareFunction("sksi_content_mts", "SKSI-CONTENT-MTS", 0, 0, false);
+            declareFunction("content_mt_nart_sk_source", "CONTENT-MT-NART-SK-SOURCE", 1, 0, false);
+            declareFunction("content_mt_sk_source_in_any_mt", "CONTENT-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+            declareFunction("content_mt_to_mapping_mt", "CONTENT-MT-TO-MAPPING-MT", 1, 0, false);
+            declareFunction("complete_knowledge_sources", "COMPLETE-KNOWLEDGE-SOURCES", 0, 0, false);
+            declareFunction("knowledge_source_representation_completeP", "KNOWLEDGE-SOURCE-REPRESENTATION-COMPLETE?", 1, 0, false);
+            declareFunction("sksi_supported_database_server_program_p_internal", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P-INTERNAL", 1, 0, false);
+            declareFunction("sksi_supported_database_server_program_p", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P", 1, 0, false);
+            declareFunction("default_sks_for_database_server_program", "DEFAULT-SKS-FOR-DATABASE-SERVER-PROGRAM", 1, 0, false);
+            declareFunction("table_primary_key_column_indices", "TABLE-PRIMARY-KEY-COLUMN-INDICES", 2, 0, false);
+            declareFunction("table_primary_key_column_names", "TABLE-PRIMARY-KEY-COLUMN-NAMES", 2, 0, false);
+            declareFunction("table_primary_key_column_thingies", "TABLE-PRIMARY-KEY-COLUMN-THINGIES", 3, 0, false);
+            declareFunction("table_primary_key_columns", "TABLE-PRIMARY-KEY-COLUMNS", 2, 0, false);
+            declareFunction("table_in_db_named", "TABLE-IN-DB-NAMED", 2, 0, false);
+            declareFunction("db_table_name", "DB-TABLE-NAME", 2, 0, false);
+            declareFunction("sksi_create", "SKSI-CREATE", 1, 0, false);
+            declareFunction("sksi_find", "SKSI-FIND", 1, 0, false);
+            declareFunction("sksi_find_or_create", "SKSI-FIND-OR-CREATE", 1, 0, false);
+            declareFunction("sksi_kill", "SKSI-KILL", 1, 0, false);
+            declareFunction("sksi_assert", "SKSI-ASSERT", 2, 2, false);
+            declareFunction("sksi_unassert", "SKSI-UNASSERT", 2, 0, false);
+            declareFunction("sksi_unassert_assertion", "SKSI-UNASSERT-ASSERTION", 1, 0, false);
+            declareFunction("sksi_find_nart", "SKSI-FIND-NART", 1, 0, false);
+            declareFunction("sksi_assert_if_new", "SKSI-ASSERT-IF-NEW", 2, 0, false);
+            declareFunction("sksi_edit_assertion", "SKSI-EDIT-ASSERTION", 2, 0, false);
+            declareFunction("sksi_repropagate_assertion", "SKSI-REPROPAGATE-ASSERTION", 1, 0, false);
+            declareFunction("sksi_constant_get_kb_subset_cols", "SKSI-CONSTANT-GET-KB-SUBSET-COLS", 1, 0, false);
+            declareFunction("sksi_constant_assert_inherited_kb_subset_isas", "SKSI-CONSTANT-ASSERT-INHERITED-KB-SUBSET-ISAS", 2, 0, false);
+            declareFunction("sksi_temporal_field_null_maps_to", "SKSI-TEMPORAL-FIELD-NULL-MAPS-TO", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("sk_source_by_sks_name_internal", "SK-SOURCE-BY-SKS-NAME-INTERNAL", 1, 0, false);
+            declareFunction("sk_source_by_sks_name", "SK-SOURCE-BY-SKS-NAME", 1, 0, false);
+            declareFunction("sksi_determine_relevant_logical_fields_for_physical_field_internal", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INTERNAL", 4, 0, false);
+            declareFunction("sksi_determine_relevant_logical_fields_for_physical_field", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 4, 0, false);
+            declareFunction("sksi_assert", "SKSI-ASSERT", 2, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_sksi_kb_accessors_file_Previous() {
+        declareFunction("content_mt_sk_source_gaf", "CONTENT-MT-SK-SOURCE-GAF", 1, 0, false);
+        declareFunction("content_mt_sk_source_internal", "CONTENT-MT-SK-SOURCE-INTERNAL", 1, 1, false);
+        declareFunction("content_mt_sk_source", "CONTENT-MT-SK-SOURCE", 1, 1, false);
+        declareFunction("content_mt_spindle_member_p", "CONTENT-MT-SPINDLE-MEMBER-P", 1, 0, false);
+        declareFunction("sk_source_p", "SK-SOURCE-P", 1, 0, false);
+        declareFunction("sk_source_in_any_mt_p_internal", "SK-SOURCE-IN-ANY-MT-P-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_in_any_mt_p", "SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
+        declareFunction("modifiable_sk_source_p", "MODIFIABLE-SK-SOURCE-P", 1, 0, false);
+        declareFunction("modifiable_sk_source_in_any_mt_p", "MODIFIABLE-SK-SOURCE-IN-ANY-MT-P", 1, 0, false);
+        declareFunction("code_mapping_knowledge_sourceP", "CODE-MAPPING-KNOWLEDGE-SOURCE?", 1, 0, false);
+        declareFunction("get_sk_source_property_from_kb_internal", "GET-SK-SOURCE-PROPERTY-FROM-KB-INTERNAL", 2, 5, false);
+        declareFunction("get_sk_source_property_from_kb", "GET-SK-SOURCE-PROPERTY-FROM-KB", 2, 5, false);
+        declareFunction("get_sk_source_property_from_kb_int", "GET-SK-SOURCE-PROPERTY-FROM-KB-INT", 5, 0, false);
+        declareFunction("sk_source_content_mt_gaf", "SK-SOURCE-CONTENT-MT-GAF", 1, 0, false);
+        declareFunction("sk_source_content_mt_internal", "SK-SOURCE-CONTENT-MT-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_content_mt", "SK-SOURCE-CONTENT-MT", 1, 0, false);
+        declareFunction("sk_source_content_mt_in_any_mt", "SK-SOURCE-CONTENT-MT-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_content_mt_head_gaf", "SK-SOURCE-CONTENT-MT-HEAD-GAF", 1, 0, false);
+        declareFunction("sk_source_content_mt_head_internal", "SK-SOURCE-CONTENT-MT-HEAD-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_content_mt_head", "SK-SOURCE-CONTENT-MT-HEAD", 1, 0, false);
+        declareFunction("sk_source_content_mt_head_in_any_mt", "SK-SOURCE-CONTENT-MT-HEAD-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_mapping_mt_internal", "SK-SOURCE-MAPPING-MT-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_mapping_mt", "SK-SOURCE-MAPPING-MT", 1, 0, false);
+        declareFunction("sk_source_logical_schema_description_mt", "SK-SOURCE-LOGICAL-SCHEMA-DESCRIPTION-MT", 1, 0, false);
+        declareFunction("logical_schema_description_mt_sk_source_in_any_mt", "LOGICAL-SCHEMA-DESCRIPTION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_source_description_mt", "SK-SOURCE-SOURCE-DESCRIPTION-MT", 1, 0, false);
+        declareFunction("sk_source_schema_translation_mt", "SK-SOURCE-SCHEMA-TRANSLATION-MT", 1, 0, false);
+        declareFunction("schema_translation_mt_sk_source_in_any_mt", "SCHEMA-TRANSLATION-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+        declareFunction("sk_source_ks_type", "SK-SOURCE-KS-TYPE", 1, 0, false);
+        declareFunction("sk_source_row_count", "SK-SOURCE-ROW-COUNT", 1, 0, false);
+        declareFunction("sk_source_name", "SK-SOURCE-NAME", 1, 0, false);
+        declareFunction("sk_source_name_from_mapping_mt", "SK-SOURCE-NAME-FROM-MAPPING-MT", 1, 0, false);
+        declareFunction("sk_source_namespace_internal", "SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
+        declareFunction("sk_source_namespace", "SK-SOURCE-NAMESPACE", 1, 0, false);
+        declareFunction("sk_source_asserted_namespace_gaf", "SK-SOURCE-ASSERTED-NAMESPACE-GAF", 1, 0, false);
+        declareFunction("sk_source_by_sks_name_internal", "SK-SOURCE-BY-SKS-NAME-INTERNAL", 1, 1, false);
+        declareFunction("sk_source_by_sks_name", "SK-SOURCE-BY-SKS-NAME", 1, 1, false);
+        declareFunction("sk_source_physical_schema_gafs", "SK-SOURCE-PHYSICAL-SCHEMA-GAFS", 1, 0, false);
+        declareFunction("sk_source_physical_schemata", "SK-SOURCE-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_complex_physical_schemata", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_complex_physical_schemata_int", "SK-SOURCE-COMPLEX-PHYSICAL-SCHEMATA-INT", 1, 0, false);
+        declareFunction("sk_source_logical_schemata", "SK-SOURCE-LOGICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_complex_logical_schemata", "SK-SOURCE-COMPLEX-LOGICAL-SCHEMATA", 1, 0, false);
+        declareFunction("sk_source_physical_logical_schema_pairs", "SK-SOURCE-PHYSICAL-LOGICAL-SCHEMA-PAIRS", 1, 0, false);
+        declareFunction("sk_source_immediate_spec_sk_sources", "SK-SOURCE-IMMEDIATE-SPEC-SK-SOURCES", 1, 1, false);
+        declareFunction("meaning_sentence_predicate_for_sk_sourceP", "MEANING-SENTENCE-PREDICATE-FOR-SK-SOURCE?", 2, 0, false);
+        declareFunction("logical_schema_for_meaning_sentence_predicate", "LOGICAL-SCHEMA-FOR-MEANING-SENTENCE-PREDICATE", 1, 1, false);
+        declareFunction("sk_source_complex_required_fields", "SK-SOURCE-COMPLEX-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("sk_source_required_fields", "SK-SOURCE-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("sk_source_sql_flavor", "SK-SOURCE-SQL-FLAVOR", 1, 0, false);
+        declareFunction("get_sks_single_literal_lookup_direction_from_kb_internal", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+        declareFunction("get_sks_single_literal_lookup_direction_from_kb", "GET-SKS-SINGLE-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
+        declareFunction("get_sks_multi_literal_lookup_direction_from_kb_internal", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+        declareFunction("get_sks_multi_literal_lookup_direction_from_kb", "GET-SKS-MULTI-LITERAL-LOOKUP-DIRECTION-FROM-KB", 1, 0, false);
+        declareFunction("get_sks_storage_direction_from_kb_internal", "GET-SKS-STORAGE-DIRECTION-FROM-KB-INTERNAL", 1, 0, false);
+        declareFunction("get_sks_storage_direction_from_kb", "GET-SKS-STORAGE-DIRECTION-FROM-KB", 1, 0, false);
+        declareFunction("get_sks_module_direction_from_kb", "GET-SKS-MODULE-DIRECTION-FROM-KB", 3, 0, false);
+        declareFunction("sk_source_sub_ks_direct", "SK-SOURCE-SUB-KS-DIRECT", 1, 0, false);
+        declareMacro("do_sk_source_sub_ks_direct", "DO-SK-SOURCE-SUB-KS-DIRECT");
+        declareFunction("sk_source_proper_sub_ks_closure", "SK-SOURCE-PROPER-SUB-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_proper_sub_ks_closure_in_mapping_mt", "SK-SOURCE-PROPER-SUB-KS-CLOSURE-IN-MAPPING-MT", 1, 0, false);
+        declareFunction("sk_source_sub_ks_closure", "SK-SOURCE-SUB-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_sub_ks_min", "SK-SOURCE-SUB-KS-MIN", 1, 0, false);
+        declareFunction("sk_source_sub_ksP", "SK-SOURCE-SUB-KS?", 2, 0, false);
+        declareFunction("sk_source_sub_ks_in_any_mtP", "SK-SOURCE-SUB-KS-IN-ANY-MT?", 2, 0, false);
+        declareFunction("sk_source_proper_sub_ksP", "SK-SOURCE-PROPER-SUB-KS?", 2, 0, false);
+        declareFunction("sk_source_super_ks_direct", "SK-SOURCE-SUPER-KS-DIRECT", 1, 0, false);
+        declareFunction("sk_source_proper_super_ks_closure", "SK-SOURCE-PROPER-SUPER-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_super_ks_closure", "SK-SOURCE-SUPER-KS-CLOSURE", 1, 0, false);
+        declareFunction("sk_source_super_ks_max", "SK-SOURCE-SUPER-KS-MAX", 1, 0, false);
+        declareFunction("sk_source_super_ksP", "SK-SOURCE-SUPER-KS?", 2, 0, false);
+        declareFunction("sk_source_proper_super_ksP_internal", "SK-SOURCE-PROPER-SUPER-KS?-INTERNAL", 2, 0, false);
+        declareFunction("sk_source_proper_super_ksP", "SK-SOURCE-PROPER-SUPER-KS?", 2, 0, false);
+        declareFunction("common_super_ksP", "COMMON-SUPER-KS?", 2, 0, false);
+        declareFunction("super_ks_closure_intersection", "SUPER-KS-CLOSURE-INTERSECTION", 2, 0, false);
+        declareFunction("immediate_genl_ks_internal", "IMMEDIATE-GENL-KS-INTERNAL", 1, 0, false);
+        declareFunction("immediate_genl_ks", "IMMEDIATE-GENL-KS", 1, 0, false);
+        declareFunction("max_genl_ks", "MAX-GENL-KS", 1, 0, false);
+        declareFunction("nearest_common_super_ks", "NEAREST-COMMON-SUPER-KS", 1, 0, false);
+        declareFunction("nearest_common_super_ks_for_ls_list", "NEAREST-COMMON-SUPER-KS-FOR-LS-LIST", 1, 0, false);
+        declareFunction("schema_representation_completeP", "SCHEMA-REPRESENTATION-COMPLETE?", 1, 0, false);
+        declareFunction("isa_physical_schemaP_internal", "ISA-PHYSICAL-SCHEMA?-INTERNAL", 1, 0, false);
+        declareFunction("isa_physical_schemaP", "ISA-PHYSICAL-SCHEMA?", 1, 0, false);
+        declareFunction("physical_schema_sk_sources", "PHYSICAL-SCHEMA-SK-SOURCES", 1, 0, false);
+        declareFunction("physical_schema_sk_sources_memoized_internal", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_sk_sources_memoized", "PHYSICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
+        declareFunction("physical_schema_fields_internal", "PHYSICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_fields", "PHYSICAL-SCHEMA-FIELDS", 1, 0, false);
+        declareFunction("physical_schema_primary_key_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_primary_key", "PHYSICAL-SCHEMA-PRIMARY-KEY", 1, 0, false);
+        declareFunction("physical_schema_primary_key_compensate_for_table_column_representation_internal", "PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_primary_key_compensate_for_table_column_representation", "PHYSICAL-SCHEMA-PRIMARY-KEY-COMPENSATE-FOR-TABLE-COLUMN-REPRESENTATION", 1, 0, false);
+        declareFunction("physical_schema_primary_key_p", "PHYSICAL-SCHEMA-PRIMARY-KEY-P", 2, 0, false);
+        declareFunction("physical_schema_forbidden_comparison_operators", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATORS", 1, 0, false);
+        declareFunction("physical_schema_forbidden_comparison_operator_p", "PHYSICAL-SCHEMA-FORBIDDEN-COMPARISON-OPERATOR-P", 2, 0, false);
+        declareFunction("physical_schema_foreign_keys", "PHYSICAL-SCHEMA-FOREIGN-KEYS", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_restrict", "PHYSICAL-SCHEMA-FOREIGN-KEYS-RESTRICT", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_cascade", "PHYSICAL-SCHEMA-FOREIGN-KEYS-CASCADE", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_set_null", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-NULL", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_set_default", "PHYSICAL-SCHEMA-FOREIGN-KEYS-SET-DEFAULT", 1, 0, false);
+        declareFunction("physical_schema_foreign_keys_int", "PHYSICAL-SCHEMA-FOREIGN-KEYS-INT", 2, 0, false);
+        declareFunction("physical_schema_unique_fields_tuples", "PHYSICAL-SCHEMA-UNIQUE-FIELDS-TUPLES", 1, 0, false);
+        declareFunction("physical_schema_required_fields", "PHYSICAL-SCHEMA-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("physical_schemata_required_fields", "PHYSICAL-SCHEMATA-REQUIRED-FIELDS", 1, 0, false);
+        declareFunction("physical_schema_required_field_names", "PHYSICAL-SCHEMA-REQUIRED-FIELD-NAMES", 1, 0, false);
+        declareFunction("physical_schema_indexed_fields", "PHYSICAL-SCHEMA-INDEXED-FIELDS", 1, 0, false);
+        declareFunction("sksi_determine_singly_indexed_schema_indexed_field", "SKSI-DETERMINE-SINGLY-INDEXED-SCHEMA-INDEXED-FIELD", 1, 0, false);
+        declareFunction("physical_field_indexedP", "PHYSICAL-FIELD-INDEXED?", 2, 0, false);
+        declareFunction("physical_schema_enumerableP_internal", "PHYSICAL-SCHEMA-ENUMERABLE?-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_enumerableP", "PHYSICAL-SCHEMA-ENUMERABLE?", 1, 0, false);
+        declareFunction("enumerable_schema_gaf", "ENUMERABLE-SCHEMA-GAF", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("physical_schemata_result_set_cardinality_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_wXconstraints_gafs_internal", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
+        declareFunction("physical_schemata_result_set_cardinality_wXconstraints_gafs", "PHYSICAL-SCHEMATA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_unbound_fields_set", "RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_bound_fields_set", "RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_constraints", "RESULT-SET-CARDINALITY-GAF-CONSTRAINTS", 1, 0, false);
+        declareFunction("result_set_cardinality_gaf_cost_expression", "RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
+        declareFunction("physical_schema_logical_schema_gafs", "PHYSICAL-SCHEMA-LOGICAL-SCHEMA-GAFS", 1, 0, false);
+        declareFunction("physical_schema_logical_schemata", "PHYSICAL-SCHEMA-LOGICAL-SCHEMATA", 1, 0, false);
+        declareFunction("physical_schema_example_tuple", "PHYSICAL-SCHEMA-EXAMPLE-TUPLE", 1, 0, false);
+        declareFunction("physical_schema_field_encodings", "PHYSICAL-SCHEMA-FIELD-ENCODINGS", 1, 0, false);
+        declareFunction("physical_schema_ordered_field_list_internal", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_ordered_field_list", "PHYSICAL-SCHEMA-ORDERED-FIELD-LIST", 1, 0, false);
+        declareFunction("physical_schema_field_name_list", "PHYSICAL-SCHEMA-FIELD-NAME-LIST", 1, 0, false);
+        declareFunction("logical_schemata_physical_schemata", "LOGICAL-SCHEMATA-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("logical_schema_physical_schemata", "LOGICAL-SCHEMA-PHYSICAL-SCHEMATA", 1, 0, false);
+        declareFunction("logical_schema_fields_internal", "LOGICAL-SCHEMA-FIELDS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_fields", "LOGICAL-SCHEMA-FIELDS", 1, 0, false);
+        declareFunction("logical_schema_field_indexicals_internal", "LOGICAL-SCHEMA-FIELD-INDEXICALS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_field_indexicals", "LOGICAL-SCHEMA-FIELD-INDEXICALS", 1, 0, false);
+        declareFunction("logical_schema_example_sentences", "LOGICAL-SCHEMA-EXAMPLE-SENTENCES", 1, 0, false);
+        declareFunction("logical_schema_keys", "LOGICAL-SCHEMA-KEYS", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("logical_schemata_result_set_cardinality_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-GAFS", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-GAF-BOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-GAF-COST-EXPRESSION", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_wrt_value_gafs_internal", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
+        declareFunction("logical_schemata_result_set_cardinality_wrt_value_gafs", "LOGICAL-SCHEMATA-RESULT-SET-CARDINALITY-WRT-VALUE-GAFS", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_unbound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-UNBOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_bound_fields_set", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-BOUND-FIELDS-SET", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_cost_expression", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-COST-EXPRESSION", 1, 0, false);
+        declareFunction("logical_result_set_cardinality_wrt_value_gaf_value", "LOGICAL-RESULT-SET-CARDINALITY-WRT-VALUE-GAF-VALUE", 1, 0, false);
+        declareFunction("logical_schema_field_decodings", "LOGICAL-SCHEMA-FIELD-DECODINGS", 1, 0, false);
+        declareFunction("logical_schema_source_gafs", "LOGICAL-SCHEMA-SOURCE-GAFS", 1, 1, false);
+        declareFunction("logical_schema_sources", "LOGICAL-SCHEMA-SOURCES", 1, 0, false);
+        declareFunction("logical_schema_sk_sources_memoized_internal", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("logical_schema_sk_sources_memoized", "LOGICAL-SCHEMA-SK-SOURCES-MEMOIZED", 1, 0, false);
+        declareFunction("logical_schemata_sources", "LOGICAL-SCHEMATA-SOURCES", 1, 0, false);
+        declareFunction("logical_schema_sourceP", "LOGICAL-SCHEMA-SOURCE?", 2, 0, false);
+        declareFunction("logical_schema_complete_extent_knownP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN?", 1, 0, false);
+        declareFunction("logical_schema_complete_extent_known_for_predicateP", "LOGICAL-SCHEMA-COMPLETE-EXTENT-KNOWN-FOR-PREDICATE?", 2, 1, false);
+        declareFunction("logical_schema_content_sentences", "LOGICAL-SCHEMA-CONTENT-SENTENCES", 1, 0, false);
+        declareFunction("logical_field_p", "LOGICAL-FIELD-P", 1, 0, false);
+        declareFunction("logical_field_p_memoized_internal", "LOGICAL-FIELD-P-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_p_memoized", "LOGICAL-FIELD-P-MEMOIZED", 1, 0, false);
+        declareFunction("lf_alias_fn_naut_p", "LF-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("lf_alias_fn_naut_lf", "LF-ALIAS-FN-NAUT-LF", 1, 0, false);
+        declareFunction("lf_alias_fn_naut_index", "LF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("lf_fort_for_lf", "LF-FORT-FOR-LF", 1, 0, false);
+        declareFunction("lf_alias_naut_for_lf_and_alias_index", "LF-ALIAS-NAUT-FOR-LF-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("logical_field_indexical_p", "LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        new sksi_kb_accessors.$logical_field_indexical_p$UnaryFunction();
+        declareFunction("logical_field_indexical_p_memoized_internal", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_indexical_p_memoized", "LOGICAL-FIELD-INDEXICAL-P-MEMOIZED", 1, 0, false);
+        declareFunction("logical_field_indexical_fort_p", "LOGICAL-FIELD-INDEXICAL-FORT-P", 1, 0, false);
+        declareFunction("lfi_alias_fn_naut_p", "LFI-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("lfi_alias_fn_naut_lfi", "LFI-ALIAS-FN-NAUT-LFI", 1, 0, false);
+        declareFunction("lfi_alias_fn_naut_index", "LFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("lfi_alias_naut_for_lfi_and_alias_index", "LFI-ALIAS-NAUT-FOR-LFI-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("lfi_fort_for_lfi", "LFI-FORT-FOR-LFI", 1, 0, false);
+        declareFunction("lfi_index_for_lfi", "LFI-INDEX-FOR-LFI", 1, 1, false);
+        declareFunction("pfi_for_lfi", "PFI-FOR-LFI", 2, 0, false);
+        declareFunction("lfi_for_pfi", "LFI-FOR-PFI", 2, 0, false);
+        declareFunction("pf_for_lfi", "PF-FOR-LFI", 2, 0, false);
+        declareFunction("logical_field_indexical_for_schemaP", "LOGICAL-FIELD-INDEXICAL-FOR-SCHEMA?", 2, 0, false);
+        declareFunction("logical_field_indexical_fort_for_schema_internal", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA-INTERNAL", 2, 0, false);
+        declareFunction("logical_field_indexical_fort_for_schema", "LOGICAL-FIELD-INDEXICAL-FORT-FOR-SCHEMA", 2, 0, false);
+        declareFunction("logical_field_for_schemaP", "LOGICAL-FIELD-FOR-SCHEMA?", 2, 0, false);
+        declareFunction("virtual_logical_field_indexical_p", "VIRTUAL-LOGICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        declareFunction("logical_field_indexical_virtualP", "LOGICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
+        declareFunction("isa_logical_schemaP_internal", "ISA-LOGICAL-SCHEMA?-INTERNAL", 1, 0, false);
+        declareFunction("isa_logical_schemaP", "ISA-LOGICAL-SCHEMA?", 1, 0, false);
+        declareFunction("isa_reified_mappingP", "ISA-REIFIED-MAPPING?", 1, 0, false);
+        declareFunction("is_fort_a_reified_mappingP_internal", "IS-FORT-A-REIFIED-MAPPING?-INTERNAL", 1, 0, false);
+        declareFunction("is_fort_a_reified_mappingP", "IS-FORT-A-REIFIED-MAPPING?", 1, 0, false);
+        declareFunction("cycl_terms_mapped_to_by_code_mapping_schema_internal", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA-INTERNAL", 1, 0, false);
+        declareFunction("cycl_terms_mapped_to_by_code_mapping_schema", "CYCL-TERMS-MAPPED-TO-BY-CODE-MAPPING-SCHEMA", 1, 0, false);
+        declareFunction("cyc_terms_corresponding_to_code_mapping_schema_code", "CYC-TERMS-CORRESPONDING-TO-CODE-MAPPING-SCHEMA-CODE", 2, 0, false);
+        declareFunction("cyc_terms_for_sksi_external_term_naut", "CYC-TERMS-FOR-SKSI-EXTERNAL-TERM-NAUT", 1, 0, false);
+        declareFunction("schema_isa_internal", "SCHEMA-ISA-INTERNAL", 1, 1, false);
+        declareFunction("schema_isa", "SCHEMA-ISA", 1, 1, false);
+        declareFunction("schema_object_field", "SCHEMA-OBJECT-FIELD", 1, 0, false);
+        declareFunction("schema_object_field_gaf", "SCHEMA-OBJECT-FIELD-GAF", 1, 1, false);
+        declareFunction("schema_object_id_fn_expression_p", "SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
+        declareFunction("schema_object_fn_expression_p", "SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
+        declareFunction("source_schema_object_id_fn_expression_p", "SOURCE-SCHEMA-OBJECT-ID-FN-EXPRESSION-P", 1, 0, false);
+        declareFunction("source_schema_object_fn_expression_p", "SOURCE-SCHEMA-OBJECT-FN-EXPRESSION-P", 1, 0, false);
+        declareMacro("destructure_schema_object_fn_expression", "DESTRUCTURE-SCHEMA-OBJECT-FN-EXPRESSION");
+        declareMacro("destructure_source_schema_object_fn_expression", "DESTRUCTURE-SOURCE-SCHEMA-OBJECT-FN-EXPRESSION");
+        declareFunction("physical_field_for_indexical", "PHYSICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
+        declareFunction("physical_field_for_indexical_fort_internal", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_for_indexical_fort", "PHYSICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
+        declareFunction("physical_field_for_pfi_alias_fn_naut", "PHYSICAL-FIELD-FOR-PFI-ALIAS-FN-NAUT", 1, 0, false);
+        declareFunction("indexical_for_physical_field_internal", "INDEXICAL-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
+        declareFunction("indexical_for_physical_field", "INDEXICAL-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("physical_fields_to_indexicals", "PHYSICAL-FIELDS-TO-INDEXICALS", 1, 0, false);
+        declareFunction("indexicals_to_physical_fields", "INDEXICALS-TO-PHYSICAL-FIELDS", 1, 0, false);
+        declareFunction("not_null_physical_field_p", "NOT-NULL-PHYSICAL-FIELD-P", 2, 0, false);
+        declareFunction("not_null_physical_fields_for_ps_internal", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS-INTERNAL", 1, 1, false);
+        declareFunction("not_null_physical_fields_for_ps", "NOT-NULL-PHYSICAL-FIELDS-FOR-PS", 1, 1, false);
+        declareFunction("physical_field_default_value_internal", "PHYSICAL-FIELD-DEFAULT-VALUE-INTERNAL", 2, 1, false);
+        declareFunction("physical_field_default_value", "PHYSICAL-FIELD-DEFAULT-VALUE", 2, 1, false);
+        declareFunction("null_default_physical_field_valueP", "NULL-DEFAULT-PHYSICAL-FIELD-VALUE?", 2, 0, false);
+        declareFunction("physical_field_for_schema_and_name", "PHYSICAL-FIELD-FOR-SCHEMA-AND-NAME", 2, 0, false);
+        declareFunction("physical_field_schema_internal", "PHYSICAL-FIELD-SCHEMA-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_schema", "PHYSICAL-FIELD-SCHEMA", 1, 0, false);
+        declareFunction("physical_field_name_internal", "PHYSICAL-FIELD-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_name", "PHYSICAL-FIELD-NAME", 1, 0, false);
+        declareFunction("physical_field_indexical_name", "PHYSICAL-FIELD-INDEXICAL-NAME", 1, 0, false);
+        declareFunction("physical_field_sk_source_internal", "PHYSICAL-FIELD-SK-SOURCE-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_sk_source", "PHYSICAL-FIELD-SK-SOURCE", 1, 0, false);
+        declareFunction("physical_field_sk_source_name_internal", "PHYSICAL-FIELD-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_sk_source_name", "PHYSICAL-FIELD-SK-SOURCE-NAME", 1, 0, false);
+        declareFunction("physical_field_sk_source_namespace_internal", "PHYSICAL-FIELD-SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_sk_source_namespace", "PHYSICAL-FIELD-SK-SOURCE-NAMESPACE", 1, 0, false);
+        declareFunction("physical_field_indexical_schema", "PHYSICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_name_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_name", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAME", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_namespace_internal", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAMESPACE-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_indexical_sk_source_namespace", "PHYSICAL-FIELD-INDEXICAL-SK-SOURCE-NAMESPACE", 1, 0, false);
+        declareFunction("physical_field_p", "PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction("virtual_physical_field_p", "VIRTUAL-PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction("physical_field_virtualP_internal", "PHYSICAL-FIELD-VIRTUAL?-INTERNAL", 1, 0, false);
+        declareFunction("physical_field_virtualP", "PHYSICAL-FIELD-VIRTUAL?", 1, 0, false);
+        declareFunction("pf_alias_fn_naut_p", "PF-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("pf_alias_fn_naut_pf", "PF-ALIAS-FN-NAUT-PF", 1, 0, false);
+        declareFunction("pf_alias_fn_naut_index", "PF-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("pf_fort_for_pf", "PF-FORT-FOR-PF", 1, 0, false);
+        declareFunction("pf_alias_naut_for_pf_and_alias_index", "PF-ALIAS-NAUT-FOR-PF-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("physical_field_indexical_p", "PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        new sksi_kb_accessors.$physical_field_indexical_p$UnaryFunction();
+        declareFunction("virtual_physical_field_indexical_p", "VIRTUAL-PHYSICAL-FIELD-INDEXICAL-P", 1, 0, false);
+        declareFunction("physical_field_indexical_virtualP", "PHYSICAL-FIELD-INDEXICAL-VIRTUAL?", 1, 0, false);
+        declareFunction("pfi_alias_fn_naut_p", "PFI-ALIAS-FN-NAUT-P", 1, 0, false);
+        declareFunction("pfi_alias_fn_naut_pfi", "PFI-ALIAS-FN-NAUT-PFI", 1, 0, false);
+        declareFunction("pfi_alias_fn_naut_index", "PFI-ALIAS-FN-NAUT-INDEX", 1, 0, false);
+        declareFunction("pfi_alias_naut_for_pfi_and_alias_index", "PFI-ALIAS-NAUT-FOR-PFI-AND-ALIAS-INDEX", 2, 0, false);
+        declareFunction("pfi_fort_for_pfi", "PFI-FORT-FOR-PFI", 1, 0, false);
+        declareFunction("pfi_index_for_pfi", "PFI-INDEX-FOR-PFI", 1, 1, false);
+        declareFunction("physical_schema_for_sks_name_internal", "PHYSICAL-SCHEMA-FOR-SKS-NAME-INTERNAL", 1, 0, false);
+        declareFunction("physical_schema_for_sks_name", "PHYSICAL-SCHEMA-FOR-SKS-NAME", 1, 0, false);
+        declareFunction("physical_field_indexical_for_sks_and_field_names_internal", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES-INTERNAL", 3, 0, false);
+        declareFunction("physical_field_indexical_for_sks_and_field_names", "PHYSICAL-FIELD-INDEXICAL-FOR-SKS-AND-FIELD-NAMES", 3, 0, false);
+        declareFunction("indexicals_for_physical_fields", "INDEXICALS-FOR-PHYSICAL-FIELDS", 1, 0, false);
+        declareFunction("integer_sequence_generator_for_physical_field_internal", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD-INTERNAL", 1, 0, false);
+        declareFunction("integer_sequence_generator_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("integer_sequence_generator_name_internal", "INTEGER-SEQUENCE-GENERATOR-NAME-INTERNAL", 1, 0, false);
+        declareFunction("integer_sequence_generator_name", "INTEGER-SEQUENCE-GENERATOR-NAME", 1, 0, false);
+        declareFunction("integer_sequence_generator_name_for_physical_field", "INTEGER-SEQUENCE-GENERATOR-NAME-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("physical_field_value_is_auto_incrementedP_internal", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?-INTERNAL", 2, 0, false);
+        declareFunction("physical_field_value_is_auto_incrementedP", "PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?", 2, 0, false);
+        declareFunction("logical_field_for_indexical", "LOGICAL-FIELD-FOR-INDEXICAL", 1, 0, false);
+        declareFunction("logical_field_for_indexical_fort_internal", "LOGICAL-FIELD-FOR-INDEXICAL-FORT-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_for_indexical_fort", "LOGICAL-FIELD-FOR-INDEXICAL-FORT", 1, 0, false);
+        declareFunction("logical_field_for_lfi_alias_fn_naut", "LOGICAL-FIELD-FOR-LFI-ALIAS-FN-NAUT", 1, 0, false);
+        declareFunction("lfi_for_lf", "LFI-FOR-LF", 1, 0, false);
+        declareFunction("indexical_for_logical_field_internal", "INDEXICAL-FOR-LOGICAL-FIELD-INTERNAL", 1, 0, false);
+        declareFunction("indexical_for_logical_field", "INDEXICAL-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("logical_fields_for_indexicals", "LOGICAL-FIELDS-FOR-INDEXICALS", 1, 0, false);
+        declareFunction("indexicals_for_logical_fields", "INDEXICALS-FOR-LOGICAL-FIELDS", 1, 0, false);
+        declareFunction("logical_field_schema", "LOGICAL-FIELD-SCHEMA", 1, 0, false);
+        declareFunction("logical_field_indexical_schema", "LOGICAL-FIELD-INDEXICAL-SCHEMA", 1, 0, false);
+        declareFunction("logical_field_indexical_sk_source_internal", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE-INTERNAL", 1, 0, false);
+        declareFunction("logical_field_indexical_sk_source", "LOGICAL-FIELD-INDEXICAL-SK-SOURCE", 1, 0, false);
+        declareFunction("logical_field_joinable_fields", "LOGICAL-FIELD-JOINABLE-FIELDS", 1, 1, false);
+        declareFunction("logical_fields_joinableP_internal", "LOGICAL-FIELDS-JOINABLE?-INTERNAL", 2, 1, false);
+        declareFunction("logical_fields_joinableP", "LOGICAL-FIELDS-JOINABLE?", 2, 1, false);
+        declareFunction("extract_logical_fields", "EXTRACT-LOGICAL-FIELDS", 2, 0, false);
+        declareFunction("extract_logical_field_indexicals", "EXTRACT-LOGICAL-FIELD-INDEXICALS", 2, 0, false);
+        declareFunction("sksi_determine_relevant_logical_fields", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS", 3, 0, false);
+        declareFunction("sksi_determine_relevant_logical_fields_for_physical_field_via_decoding", "SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-VIA-DECODING", 4, 0, false);
+        declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD", 3, 0, false);
+        declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field_int1", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT1", 3, 0, false);
+        declareFunction("sksi_determine_logical_field_indexicals_relevant_to_physical_field_int2", "SKSI-DETERMINE-LOGICAL-FIELD-INDEXICALS-RELEVANT-TO-PHYSICAL-FIELD-INT2", 3, 0, false);
+        declareFunction("logical_field_isa", "LOGICAL-FIELD-ISA", 1, 0, false);
+        declareFunction("logical_field_type_list", "LOGICAL-FIELD-TYPE-LIST", 1, 0, false);
+        declareFunction("logical_field_mappings", "LOGICAL-FIELD-MAPPINGS", 1, 0, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int_internal", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-INTERNAL", 2, 1, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT", 2, 1, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field_int_2", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD-INT-2", 2, 0, false);
+        declareFunction("sksi_get_mapped_physical_fields_for_logical_field", "SKSI-GET-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_decoding_mapped_physical_fields_for_logical_field", "SKSI-GET-DECODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_encoding_mapped_physical_fields_for_logical_field", "SKSI-GET-ENCODING-MAPPED-PHYSICAL-FIELDS-FOR-LOGICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_mapped_logical_fields_for_physical_field_int", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT", 2, 0, false);
+        declareFunction("sksi_get_mapped_logical_fields_for_physical_field_int_2", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD-INT-2", 2, 0, false);
+        declareFunction("sksi_get_mapped_logical_fields_for_physical_field", "SKSI-GET-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_decoding_mapped_logical_fields_for_physical_field", "SKSI-GET-DECODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_encoding_mapped_logical_fields_for_physical_field", "SKSI-GET-ENCODING-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("sksi_get_all_mapped_logical_fields_for_physical_field", "SKSI-GET-ALL-MAPPED-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD", 1, 0, false);
+        declareFunction("physical_field_data_type_name", "PHYSICAL-FIELD-DATA-TYPE-NAME", 2, 0, false);
+        declareFunction("physical_field_data_type", "PHYSICAL-FIELD-DATA-TYPE", 1, 0, false);
+        declareFunction("boolean_physical_field_p", "BOOLEAN-PHYSICAL-FIELD-P", 1, 0, false);
+        declareFunction("data_type_name", "DATA-TYPE-NAME", 2, 0, false);
+        declareFunction("data_type_by_name", "DATA-TYPE-BY-NAME", 2, 0, false);
+        declareFunction("physical_schema_indexes", "PHYSICAL-SCHEMA-INDEXES", 1, 0, false);
+        declareFunction("index_physical_fields", "INDEX-PHYSICAL-FIELDS", 1, 0, false);
+        declareFunction("index_type", "INDEX-TYPE", 1, 0, false);
+        declareFunction("index_name", "INDEX-NAME", 1, 0, false);
+        declareFunction("index_type_namestring", "INDEX-TYPE-NAMESTRING", 2, 0, false);
+        declareFunction("cycl_operator_to_csql_operator_internal", "CYCL-OPERATOR-TO-CSQL-OPERATOR-INTERNAL", 1, 0, false);
+        declareFunction("cycl_operator_to_csql_operator", "CYCL-OPERATOR-TO-CSQL-OPERATOR", 1, 0, false);
+        declareFunction("csql_operator_to_cycl_operator_internal", "CSQL-OPERATOR-TO-CYCL-OPERATOR-INTERNAL", 1, 0, false);
+        declareFunction("csql_operator_to_cycl_operator", "CSQL-OPERATOR-TO-CYCL-OPERATOR", 1, 0, false);
+        declareFunction("csql_operator_to_sql_operator_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-INTERNAL", 2, 0, false);
+        declareFunction("csql_operator_to_sql_operator", "CSQL-OPERATOR-TO-SQL-OPERATOR", 2, 0, false);
+        declareFunction("csql_operator_to_sql_operator_syntax_internal", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX-INTERNAL", 2, 0, false);
+        declareFunction("csql_operator_to_sql_operator_syntax", "CSQL-OPERATOR-TO-SQL-OPERATOR-SYNTAX", 2, 0, false);
+        declareFunction("csql_operator_to_sql_prefix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-PREFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_postfix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-POSTFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_inverse_infix_operator_syntaxP", "CSQL-OPERATOR-TO-SQL-INVERSE-INFIX-OPERATOR-SYNTAX?", 2, 0, false);
+        declareFunction("csql_operator_to_sql_function_syntaxP", "CSQL-OPERATOR-TO-SQL-FUNCTION-SYNTAX?", 2, 0, false);
+        declareFunction("csql_to_sql_translation_format_gaf_internal", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF-INTERNAL", 2, 0, false);
+        declareFunction("csql_to_sql_translation_format_gaf", "CSQL-TO-SQL-TRANSLATION-FORMAT-GAF", 2, 0, false);
+        declareFunction("sksi_mapping_mt_p", "SKSI-MAPPING-MT-P", 1, 0, false);
+        declareFunction("get_genl_content_mts_for_sks", "GET-GENL-CONTENT-MTS-FOR-SKS", 1, 0, false);
+        declareFunction("get_genl_content_mts_for_mt", "GET-GENL-CONTENT-MTS-FOR-MT", 1, 0, false);
+        declareFunction("sksi_content_mt_p", "SKSI-CONTENT-MT-P", 1, 0, false);
+        declareFunction("clear_sksi_content_mts", "CLEAR-SKSI-CONTENT-MTS", 0, 0, false);
+        new sksi_kb_accessors.$clear_sksi_content_mts$ZeroArityFunction();
+        declareFunction("remove_sksi_content_mts", "REMOVE-SKSI-CONTENT-MTS", 0, 0, false);
+        declareFunction("sksi_content_mts_internal", "SKSI-CONTENT-MTS-INTERNAL", 0, 0, false);
+        declareFunction("sksi_content_mts", "SKSI-CONTENT-MTS", 0, 0, false);
+        declareFunction("content_mt_nart_sk_source", "CONTENT-MT-NART-SK-SOURCE", 1, 0, false);
+        declareFunction("content_mt_sk_source_in_any_mt", "CONTENT-MT-SK-SOURCE-IN-ANY-MT", 1, 0, false);
+        declareFunction("content_mt_to_mapping_mt", "CONTENT-MT-TO-MAPPING-MT", 1, 0, false);
+        declareFunction("complete_knowledge_sources", "COMPLETE-KNOWLEDGE-SOURCES", 0, 0, false);
+        declareFunction("knowledge_source_representation_completeP", "KNOWLEDGE-SOURCE-REPRESENTATION-COMPLETE?", 1, 0, false);
+        declareFunction("sksi_supported_database_server_program_p_internal", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P-INTERNAL", 1, 0, false);
+        declareFunction("sksi_supported_database_server_program_p", "SKSI-SUPPORTED-DATABASE-SERVER-PROGRAM-P", 1, 0, false);
+        declareFunction("default_sks_for_database_server_program", "DEFAULT-SKS-FOR-DATABASE-SERVER-PROGRAM", 1, 0, false);
+        declareFunction("table_primary_key_column_indices", "TABLE-PRIMARY-KEY-COLUMN-INDICES", 2, 0, false);
+        declareFunction("table_primary_key_column_names", "TABLE-PRIMARY-KEY-COLUMN-NAMES", 2, 0, false);
+        declareFunction("table_primary_key_column_thingies", "TABLE-PRIMARY-KEY-COLUMN-THINGIES", 3, 0, false);
+        declareFunction("table_primary_key_columns", "TABLE-PRIMARY-KEY-COLUMNS", 2, 0, false);
+        declareFunction("table_in_db_named", "TABLE-IN-DB-NAMED", 2, 0, false);
+        declareFunction("db_table_name", "DB-TABLE-NAME", 2, 0, false);
+        declareFunction("sksi_create", "SKSI-CREATE", 1, 0, false);
+        declareFunction("sksi_find", "SKSI-FIND", 1, 0, false);
+        declareFunction("sksi_find_or_create", "SKSI-FIND-OR-CREATE", 1, 0, false);
+        declareFunction("sksi_kill", "SKSI-KILL", 1, 0, false);
+        declareFunction("sksi_assert", "SKSI-ASSERT", 2, 2, false);
+        declareFunction("sksi_unassert", "SKSI-UNASSERT", 2, 0, false);
+        declareFunction("sksi_unassert_assertion", "SKSI-UNASSERT-ASSERTION", 1, 0, false);
+        declareFunction("sksi_find_nart", "SKSI-FIND-NART", 1, 0, false);
+        declareFunction("sksi_assert_if_new", "SKSI-ASSERT-IF-NEW", 2, 0, false);
+        declareFunction("sksi_edit_assertion", "SKSI-EDIT-ASSERTION", 2, 0, false);
+        declareFunction("sksi_repropagate_assertion", "SKSI-REPROPAGATE-ASSERTION", 1, 0, false);
+        declareFunction("sksi_constant_get_kb_subset_cols", "SKSI-CONSTANT-GET-KB-SUBSET-COLS", 1, 0, false);
+        declareFunction("sksi_constant_assert_inherited_kb_subset_isas", "SKSI-CONSTANT-ASSERT-INHERITED-KB-SUBSET-ISAS", 2, 0, false);
+        declareFunction("sksi_temporal_field_null_maps_to", "SKSI-TEMPORAL-FIELD-NULL-MAPS-TO", 1, 0, false);
+        return NIL;
+    }
+
+    public static final SubLSymbol $kw3$_MEMOIZED_ITEM_NOT_FOUND_ = makeKeyword("&MEMOIZED-ITEM-NOT-FOUND&");
+
+    static private final SubLList $list_alt39 = list(list(makeSymbol("SUB-KS"), makeSymbol("SK-SOURCE"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt40 = list($DONE);
+
+    static private final SubLSymbol $sym43$GAF = makeUninternedSymbol("GAF");
+
+    static private final SubLSymbol $sym53$SK_SOURCE_PROPER_SUPER_KS_ = makeSymbol("SK-SOURCE-PROPER-SUPER-KS?");
+
+    static private final SubLSymbol $sym56$SINGLETON_ = makeSymbol("SINGLETON?");
+
+    static private final SubLSymbol $sym58$ISA_PHYSICAL_SCHEMA_ = makeSymbol("ISA-PHYSICAL-SCHEMA?");
+
+    public static final SubLObject $const66$suppressConvertingComparisonLiter = reader_make_constant_shell("suppressConvertingComparisonLiteralsToSQL");
+
+    static private final SubLSymbol $sym76$PHYSICAL_SCHEMA_ENUMERABLE_ = makeSymbol("PHYSICAL-SCHEMA-ENUMERABLE?");
+
+    static private final SubLSymbol $sym80$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS = makeSymbol("PHYSICAL-SCHEMA-RESULT-SET-CARDINALITY-W/CONSTRAINTS-GAFS");
+
+    public static final SubLObject $const81$resultSetCardinalityWithConstrain = reader_make_constant_shell("resultSetCardinalityWithConstraints");
+
+    static private final SubLString $str_alt97$_A_is_not_a__A = makeString("~A is not a ~A");
+
+    static private final SubLString $str_alt102$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
+
+    static private final SubLString $str_alt104$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
+
+    static private final SubLString $str_alt105$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
+
+    public static final SubLObject $const111$logicalResultSetCardinalityWRTVal = reader_make_constant_shell("logicalResultSetCardinalityWRTValue");
+
+    static private final SubLSymbol $sym125$ISA_LOGICAL_SCHEMA_ = makeSymbol("ISA-LOGICAL-SCHEMA?");
 
     public static SubLObject init_sksi_kb_accessors_file() {
         deflexical("*SKSI-DEFAULT-FIELD-VALUE*", $NULL);
@@ -5646,7 +11339,156 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLSymbol $sym127$IS_FORT_A_REIFIED_MAPPING_ = makeSymbol("IS-FORT-A-REIFIED-MAPPING?");
+
+    public static final SubLObject setup_sksi_kb_accessors_file_alt() {
+        memoization_state.note_memoized_function(CONTENT_MT_SK_SOURCE);
+        memoization_state.note_memoized_function(SK_SOURCE_IN_ANY_MT_P);
+        memoization_state.note_memoized_function(GET_SK_SOURCE_PROPERTY_FROM_KB);
+        memoization_state.note_memoized_function(SK_SOURCE_CONTENT_MT);
+        memoization_state.note_memoized_function(SK_SOURCE_CONTENT_MT_HEAD);
+        memoization_state.note_memoized_function(SK_SOURCE_MAPPING_MT);
+        memoization_state.note_memoized_function(SK_SOURCE_BY_SKS_NAME);
+        memoization_state.note_memoized_function(GET_SKS_SINGLE_LITERAL_LOOKUP_DIRECTION_FROM_KB);
+        memoization_state.note_memoized_function(GET_SKS_MULTI_LITERAL_LOOKUP_DIRECTION_FROM_KB);
+        memoization_state.note_memoized_function(GET_SKS_STORAGE_DIRECTION_FROM_KB);
+        memoization_state.note_memoized_function($sym53$SK_SOURCE_PROPER_SUPER_KS_);
+        memoization_state.note_memoized_function(IMMEDIATE_GENL_KS);
+        memoization_state.note_memoized_function($sym58$ISA_PHYSICAL_SCHEMA_);
+        memoization_state.note_memoized_function(PHYSICAL_SCHEMA_SK_SOURCES_MEMOIZED);
+        memoization_state.note_memoized_function(PHYSICAL_SCHEMA_FIELDS);
+        memoization_state.note_memoized_function(PHYSICAL_SCHEMA_PRIMARY_KEY);
+        memoization_state.note_memoized_function($sym76$PHYSICAL_SCHEMA_ENUMERABLE_);
+        memoization_state.note_memoized_function(PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS);
+        memoization_state.note_memoized_function($sym80$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS);
+        memoization_state.note_memoized_function(PHYSICAL_SCHEMA_ORDERED_FIELD_LIST);
+        memoization_state.note_memoized_function(LOGICAL_SCHEMA_FIELDS);
+        memoization_state.note_memoized_function(LOGICAL_SCHEMA_FIELD_INDEXICALS);
+        memoization_state.note_memoized_function(LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS);
+        memoization_state.note_memoized_function(LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_WRT_VALUE_GAFS);
+        memoization_state.note_memoized_function(LOGICAL_SCHEMA_SK_SOURCES_MEMOIZED);
+        memoization_state.note_memoized_function(LOGICAL_FIELD_P_MEMOIZED);
+        memoization_state.note_memoized_function(LOGICAL_FIELD_INDEXICAL_P_MEMOIZED);
+        memoization_state.note_memoized_function(LOGICAL_FIELD_INDEXICAL_FORT_FOR_SCHEMA);
+        memoization_state.note_memoized_function($sym125$ISA_LOGICAL_SCHEMA_);
+        memoization_state.note_memoized_function($sym127$IS_FORT_A_REIFIED_MAPPING_);
+        memoization_state.note_memoized_function(CYCL_TERMS_MAPPED_TO_BY_CODE_MAPPING_SCHEMA);
+        memoization_state.note_memoized_function(SCHEMA_ISA);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_FOR_INDEXICAL_FORT);
+        memoization_state.note_memoized_function(INDEXICAL_FOR_PHYSICAL_FIELD);
+        memoization_state.note_memoized_function(NOT_NULL_PHYSICAL_FIELDS_FOR_PS);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_DEFAULT_VALUE);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_SCHEMA);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_NAME);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_SK_SOURCE);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_SK_SOURCE_NAME);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_SK_SOURCE);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_SK_SOURCE_NAME);
+        memoization_state.note_memoized_function($sym157$PHYSICAL_FIELD_VIRTUAL_);
+        memoization_state.note_memoized_function(PHYSICAL_SCHEMA_FOR_SKS_NAME);
+        memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_FOR_SKS_AND_FIELD_NAMES);
+        memoization_state.note_memoized_function(INTEGER_SEQUENCE_GENERATOR_FOR_PHYSICAL_FIELD);
+        memoization_state.note_memoized_function(INTEGER_SEQUENCE_GENERATOR_NAME);
+        memoization_state.note_memoized_function($sym170$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_);
+        memoization_state.note_memoized_function(LOGICAL_FIELD_FOR_INDEXICAL_FORT);
+        memoization_state.note_memoized_function(INDEXICAL_FOR_LOGICAL_FIELD);
+        memoization_state.note_memoized_function(LOGICAL_FIELD_INDEXICAL_SK_SOURCE);
+        memoization_state.note_memoized_function($sym179$LOGICAL_FIELDS_JOINABLE_);
+        memoization_state.note_memoized_function(SKSI_DETERMINE_RELEVANT_LOGICAL_FIELDS_FOR_PHYSICAL_FIELD);
+        memoization_state.note_memoized_function(SKSI_GET_MAPPED_PHYSICAL_FIELDS_FOR_LOGICAL_FIELD_INT);
+        memoization_state.note_memoized_function(CYCL_OPERATOR_TO_CSQL_OPERATOR);
+        memoization_state.note_memoized_function(CSQL_OPERATOR_TO_CYCL_OPERATOR);
+        memoization_state.note_memoized_function(CSQL_OPERATOR_TO_SQL_OPERATOR);
+        memoization_state.note_memoized_function(CSQL_OPERATOR_TO_SQL_OPERATOR_SYNTAX);
+        memoization_state.note_memoized_function(CSQL_TO_SQL_TRANSLATION_FORMAT_GAF);
+        memoization_state.note_globally_cached_function(SKSI_CONTENT_MTS);
+        memoization_state.note_memoized_function(SKSI_SUPPORTED_DATABASE_SERVER_PROGRAM_P);
+        return NIL;
+    }
+
     public static SubLObject setup_sksi_kb_accessors_file() {
+        if (SubLFiles.USE_V1) {
+            memoization_state.note_memoized_function(CONTENT_MT_SK_SOURCE);
+            memoization_state.note_memoized_function(SK_SOURCE_IN_ANY_MT_P);
+            memoization_state.note_memoized_function(GET_SK_SOURCE_PROPERTY_FROM_KB);
+            memoization_state.note_memoized_function(SK_SOURCE_CONTENT_MT);
+            memoization_state.note_memoized_function(SK_SOURCE_CONTENT_MT_HEAD);
+            memoization_state.note_memoized_function(SK_SOURCE_MAPPING_MT);
+            memoization_state.note_memoized_function(SK_SOURCE_NAMESPACE);
+            memoization_state.note_memoized_function(SK_SOURCE_BY_SKS_NAME);
+            memoization_state.note_memoized_function(GET_SKS_SINGLE_LITERAL_LOOKUP_DIRECTION_FROM_KB);
+            memoization_state.note_memoized_function(GET_SKS_MULTI_LITERAL_LOOKUP_DIRECTION_FROM_KB);
+            memoization_state.note_memoized_function(GET_SKS_STORAGE_DIRECTION_FROM_KB);
+            memoization_state.note_memoized_function($sym59$SK_SOURCE_PROPER_SUPER_KS_);
+            memoization_state.note_memoized_function(IMMEDIATE_GENL_KS);
+            memoization_state.note_memoized_function($sym64$ISA_PHYSICAL_SCHEMA_);
+            memoization_state.note_memoized_function(PHYSICAL_SCHEMA_SK_SOURCES_MEMOIZED);
+            memoization_state.note_memoized_function(PHYSICAL_SCHEMA_FIELDS);
+            memoization_state.note_memoized_function(PHYSICAL_SCHEMA_PRIMARY_KEY);
+            memoization_state.note_memoized_function($sym72$PHYSICAL_SCHEMA_PRIMARY_KEY_COMPENSATE_FOR_TABLE_COLUMN_REPRESENT);
+            memoization_state.note_memoized_function($sym83$PHYSICAL_SCHEMA_ENUMERABLE_);
+            memoization_state.note_memoized_function(PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS);
+            memoization_state.note_memoized_function($sym87$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS);
+            memoization_state.note_memoized_function(PHYSICAL_SCHEMA_ORDERED_FIELD_LIST);
+            memoization_state.note_memoized_function(LOGICAL_SCHEMA_FIELDS);
+            memoization_state.note_memoized_function(LOGICAL_SCHEMA_FIELD_INDEXICALS);
+            memoization_state.note_memoized_function(LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_GAFS);
+            memoization_state.note_memoized_function(LOGICAL_SCHEMA_RESULT_SET_CARDINALITY_WRT_VALUE_GAFS);
+            memoization_state.note_memoized_function(LOGICAL_SCHEMA_SK_SOURCES_MEMOIZED);
+            memoization_state.note_memoized_function(LOGICAL_FIELD_P_MEMOIZED);
+            memoization_state.note_memoized_function(LOGICAL_FIELD_INDEXICAL_P_MEMOIZED);
+            memoization_state.note_memoized_function(LOGICAL_FIELD_INDEXICAL_FORT_FOR_SCHEMA);
+            memoization_state.note_memoized_function($sym133$ISA_LOGICAL_SCHEMA_);
+            memoization_state.note_memoized_function($sym135$IS_FORT_A_REIFIED_MAPPING_);
+            memoization_state.note_memoized_function(CYCL_TERMS_MAPPED_TO_BY_CODE_MAPPING_SCHEMA);
+            memoization_state.note_memoized_function(SCHEMA_ISA);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_FOR_INDEXICAL_FORT);
+            memoization_state.note_memoized_function(INDEXICAL_FOR_PHYSICAL_FIELD);
+            memoization_state.note_memoized_function(NOT_NULL_PHYSICAL_FIELDS_FOR_PS);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_DEFAULT_VALUE);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_SCHEMA);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_NAME);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_SK_SOURCE);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_SK_SOURCE_NAME);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_SK_SOURCE_NAMESPACE);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_SK_SOURCE);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_SK_SOURCE_NAME);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_SK_SOURCE_NAMESPACE);
+            memoization_state.note_memoized_function($sym167$PHYSICAL_FIELD_VIRTUAL_);
+            memoization_state.note_memoized_function(PHYSICAL_SCHEMA_FOR_SKS_NAME);
+            memoization_state.note_memoized_function(PHYSICAL_FIELD_INDEXICAL_FOR_SKS_AND_FIELD_NAMES);
+            memoization_state.note_memoized_function(INTEGER_SEQUENCE_GENERATOR_FOR_PHYSICAL_FIELD);
+            memoization_state.note_memoized_function(INTEGER_SEQUENCE_GENERATOR_NAME);
+            memoization_state.note_memoized_function($sym180$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_);
+            memoization_state.note_memoized_function(LOGICAL_FIELD_FOR_INDEXICAL_FORT);
+            memoization_state.note_memoized_function(INDEXICAL_FOR_LOGICAL_FIELD);
+            memoization_state.note_memoized_function(LOGICAL_FIELD_INDEXICAL_SK_SOURCE);
+            memoization_state.note_memoized_function($sym190$LOGICAL_FIELDS_JOINABLE_);
+            memoization_state.note_memoized_function(SKSI_GET_MAPPED_PHYSICAL_FIELDS_FOR_LOGICAL_FIELD_INT);
+            memoization_state.note_memoized_function(CYCL_OPERATOR_TO_CSQL_OPERATOR);
+            memoization_state.note_memoized_function(CSQL_OPERATOR_TO_CYCL_OPERATOR);
+            memoization_state.note_memoized_function(CSQL_OPERATOR_TO_SQL_OPERATOR);
+            memoization_state.note_memoized_function(CSQL_OPERATOR_TO_SQL_OPERATOR_SYNTAX);
+            memoization_state.note_memoized_function(CSQL_TO_SQL_TRANSLATION_FORMAT_GAF);
+            memoization_state.note_globally_cached_function(SKSI_CONTENT_MTS);
+            memoization_state.note_memoized_function(SKSI_SUPPORTED_DATABASE_SERVER_PROGRAM_P);
+        }
+        if (SubLFiles.USE_V2) {
+            memoization_state.note_memoized_function($sym53$SK_SOURCE_PROPER_SUPER_KS_);
+            memoization_state.note_memoized_function($sym58$ISA_PHYSICAL_SCHEMA_);
+            memoization_state.note_memoized_function($sym76$PHYSICAL_SCHEMA_ENUMERABLE_);
+            memoization_state.note_memoized_function($sym80$PHYSICAL_SCHEMA_RESULT_SET_CARDINALITY_W_CONSTRAINTS_GAFS);
+            memoization_state.note_memoized_function($sym125$ISA_LOGICAL_SCHEMA_);
+            memoization_state.note_memoized_function($sym127$IS_FORT_A_REIFIED_MAPPING_);
+            memoization_state.note_memoized_function($sym157$PHYSICAL_FIELD_VIRTUAL_);
+            memoization_state.note_memoized_function($sym170$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_);
+            memoization_state.note_memoized_function($sym179$LOGICAL_FIELDS_JOINABLE_);
+            memoization_state.note_memoized_function(SKSI_DETERMINE_RELEVANT_LOGICAL_FIELDS_FOR_PHYSICAL_FIELD);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_sksi_kb_accessors_file_Previous() {
         memoization_state.note_memoized_function(CONTENT_MT_SK_SOURCE);
         memoization_state.note_memoized_function(SK_SOURCE_IN_ANY_MT_P);
         memoization_state.note_memoized_function(GET_SK_SOURCE_PROPERTY_FROM_KB);
@@ -5714,6 +11556,18 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt130 = list(reader_make_constant_shell("SchemaObjectFn"), reader_make_constant_shell("SourceSchemaObjectFn"));
+
+    static private final SubLList $list_alt138 = list(list(makeSymbol("ODS"), makeSymbol("SUB-EXPRESSION")), makeSymbol("EXPRESSION"), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLList $list_alt141 = list(list(makeSymbol("SKS"), makeSymbol("ODS"), makeSymbol("SUB-EXPRESSION")), makeSymbol("EXPRESSION"), makeSymbol("&BODY"), makeSymbol("BODY"));
+
+    static private final SubLSymbol $sym157$PHYSICAL_FIELD_VIRTUAL_ = makeSymbol("PHYSICAL-FIELD-VIRTUAL?");
+
+    public static final SubLObject $const167$integerSequenceGeneratorIncrement = reader_make_constant_shell("integerSequenceGeneratorIncrementsField");
+
+    static private final SubLSymbol $sym170$PHYSICAL_FIELD_VALUE_IS_AUTO_INCREMENTED_ = makeSymbol("PHYSICAL-FIELD-VALUE-IS-AUTO-INCREMENTED?");
+
     @Override
     public void declareFunctions() {
         declare_sksi_kb_accessors_file();
@@ -5730,273 +11584,11 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
+
+    static private final SubLSymbol $sym179$LOGICAL_FIELDS_JOINABLE_ = makeSymbol("LOGICAL-FIELDS-JOINABLE?");
+
+    private static final SubLSymbol SKSI_DETERMINE_RELEVANT_LOGICAL_FIELDS_FOR_PHYSICAL_FIELD = makeSymbol("SKSI-DETERMINE-RELEVANT-LOGICAL-FIELDS-FOR-PHYSICAL-FIELD");
 
     public static final class $logical_field_indexical_p$UnaryFunction extends UnaryFunction {
         public $logical_field_indexical_p$UnaryFunction() {
@@ -6020,6 +11612,10 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject $const186$logicalPhysicalFieldMap_DecodeClo = reader_make_constant_shell("logicalPhysicalFieldMap-DecodeClosed");
+
+    public static final SubLObject $const187$logicalPhysicalFieldMap_EncodeClo = reader_make_constant_shell("logicalPhysicalFieldMap-EncodeClosed");
+
     public static final class $clear_sksi_content_mts$ZeroArityFunction extends ZeroArityFunction {
         public $clear_sksi_content_mts$ZeroArityFunction() {
             super(extractFunctionNamed("CLEAR-SKSI-CONTENT-MTS"));
@@ -6030,6 +11626,20 @@ public final class sksi_kb_accessors extends SubLTranslatedFile {
             return clear_sksi_content_mts();
         }
     }
+
+    public static final SubLObject $const216$SKSISupportedDatabaseServerProgra = reader_make_constant_shell("SKSISupportedDatabaseServerProgram");
+
+    public static final SubLObject $const217$defaultSKSForDatabaseServerProgra = reader_make_constant_shell("defaultSKSForDatabaseServerProgram");
+
+    static private final SubLSymbol $sym218$NON_EMPTY_STRING_ = makeSymbol("NON-EMPTY-STRING?");
+
+    static private final SubLString $str_alt219$_A___A = makeString("~A: ~A");
+
+    static private final SubLList $list_alt222 = list(makeSymbol("ERROR-TYPE"), makeSymbol("ERROR-STRING"));
+
+    static private final SubLString $str_alt223$_ = makeString(" ");
+
+    static private final SubLString $str_alt227$No___CycKBSubsetCollections_found = makeString("No #$CycKBSubsetCollections found to inherit from ~A to ~A~%");
 }
 
 /**

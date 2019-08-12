@@ -210,8 +210,7 @@ the nart indexing bug fixed. */
   }
 
   public static final SubLObject setup_collection_intersection_file() {
-    // CVS_ID("Id: collection-intersection.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_kb_function($sym0$CYC_COLLECTION_INTERSECTION_AFTER_ADDING);
+        utilities_macros.register_kb_function($sym0$CYC_COLLECTION_INTERSECTION_AFTER_ADDING);
     utilities_macros.register_kb_function($sym1$CYC_COLLECTION_INTERSECTION_2_AFTER_ADDING);
     utilities_macros.note_funcall_helper_function($sym25$FULLY_BOUND_COLLECTION_INTERSECTION_NAT_P);
     utilities_macros.note_funcall_helper_function($sym26$COLLECTION_INTERSECTION_NART_P);

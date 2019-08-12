@@ -257,8 +257,7 @@ NIL means unlimited time. */
   }
 
   public static final SubLObject setup_kb_control_vars_file() {
-    // CVS_ID("Id: kb-control-vars.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_BACKCHAIN_FORBIDDEN_UNLESS_ARG_CHOSEN_);
+        subl_macro_promotions.declare_defglobal($sym0$_BACKCHAIN_FORBIDDEN_UNLESS_ARG_CHOSEN_);
     subl_macro_promotions.declare_defglobal($sym3$_REFORMULATOR_KB_LOADED__);
     {
       SubLObject item_var = $sym3$_REFORMULATOR_KB_LOADED__;

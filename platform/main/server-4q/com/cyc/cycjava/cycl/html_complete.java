@@ -1,10 +1,50 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.html_complete;
-import com.cyc.cycjava.cycl.html_utilities;
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.cycl_utilities.*;
+import static com.cyc.cycjava.cycl.dictionary.*;
+import static com.cyc.cycjava.cycl.dictionary_utilities.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.genls.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.kb_utilities.*;
+import static com.cyc.cycjava.cycl.memoization_state.*;
+import static com.cyc.cycjava.cycl.pph_main.*;
+import static com.cyc.cycjava.cycl.set_utilities.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.xml_vars.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Environment;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -20,157 +60,291 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.html_complete.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      HTML-COMPLETE
+ * source file: /cyc/top/cycl/html-complete.lisp
+ * created:     2019/07/03 17:38:04
+ */
+public final class html_complete extends SubLTranslatedFile implements V12 {
+    public static final SubLObject html_autocomplete_scripts() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject javascript_src = cyc_file_dependencies.javascript_file_path($YAHOO_DOM_EVENT);
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup(html_macros.$html_script_head$.getGlobalValue());
+                html_markup(html_macros.$html_script_src$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(javascript_src);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_script_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt20$text_javascript);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            }
+            {
+                SubLObject javascript_src = cyc_file_dependencies.javascript_file_path($ANIMATION);
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup(html_macros.$html_script_head$.getGlobalValue());
+                html_markup(html_macros.$html_script_src$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(javascript_src);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_script_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt20$text_javascript);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            }
+            {
+                SubLObject javascript_src = cyc_file_dependencies.javascript_file_path($CONNECTION);
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup(html_macros.$html_script_head$.getGlobalValue());
+                html_markup(html_macros.$html_script_src$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(javascript_src);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_script_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt20$text_javascript);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            }
+            {
+                SubLObject javascript_src = cyc_file_dependencies.javascript_file_path($AUTOCOMPLETE);
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup(html_macros.$html_script_head$.getGlobalValue());
+                html_markup(html_macros.$html_script_src$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(javascript_src);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_script_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt20$text_javascript);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
+    }
 
-public final class html_complete extends SubLTranslatedFile {
+    public static final SubLObject html_autocomplete_css() {
+        {
+            SubLObject css_href = cyc_file_dependencies.css_file_path($SAM_AUTOCOMPLETE);
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_link_head$.getGlobalValue());
+            if (true) {
+                html_markup(html_macros.$html_link_rel$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($$$stylesheet);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            if (NIL != css_href) {
+                html_markup(html_macros.$html_link_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(css_href);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            if (true) {
+                html_markup(html_macros.$html_link_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt75$text_css);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            html_char(CHAR_greater, UNPROVIDED);
+        }
+        {
+            SubLObject css_href = cyc_file_dependencies.css_file_path($CB_CYC);
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_link_head$.getGlobalValue());
+            if (true) {
+                html_markup(html_macros.$html_link_rel$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($$$stylesheet);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            if (NIL != css_href) {
+                html_markup(html_macros.$html_link_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(css_href);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            if (true) {
+                html_markup(html_macros.$html_link_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt75$text_css);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            html_char(CHAR_greater, UNPROVIDED);
+        }
+        return NIL;
+    }
+
+    static private final SubLString $str_alt19$ = makeString("");
+
     public static final SubLFile me = new html_complete();
 
-    public static final String myName = "com.cyc.cycjava.cycl.html_complete";
+ public static final String myName = "com.cyc.cycjava.cycl.html_complete";
 
-    public static final String myFingerPrint = "f202f7e30f10925923ab306fac88cc9184a5f4f2aeac700c734a03736e0210f4";
 
     // defparameter
+    // Definitions
+    /**
+     * Do we allow JavaScript-based constant completion in HTML typein forms.
+     */
+    @LispMethod(comment = "Do we allow JavaScript-based constant completion in HTML typein forms.\ndefparameter")
     public static final SubLSymbol $cb_enable_constant_completion$ = makeSymbol("*CB-ENABLE-CONSTANT-COMPLETION*");
 
     // defparameter
+    /**
+     * If HTML constant completion is enabled, do we use pop-up windows?
+     */
+    @LispMethod(comment = "If HTML constant completion is enabled, do we use pop-up windows?\ndefparameter")
     public static final SubLSymbol $cb_pop_up_constant_completion$ = makeSymbol("*CB-POP-UP-CONSTANT-COMPLETION*");
 
     // defparameter
+    /**
+     * The name of a frame to send completions when not using pop-up windows.
+     */
+    @LispMethod(comment = "The name of a frame to send completions when not using pop-up windows.\ndefparameter")
     public static final SubLSymbol $cb_constant_completion_target$ = makeSymbol("*CB-CONSTANT-COMPLETION-TARGET*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_complete_button_script$ = makeSymbol("*HTML-COMPLETE-BUTTON-SCRIPT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_cyclify_button_script$ = makeSymbol("*HTML-CYCLIFY-BUTTON-SCRIPT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_complete_script_parameters$ = makeSymbol("*HTML-COMPLETE-SCRIPT-PARAMETERS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_intial_focus_script$ = makeSymbol("*HTML-INTIAL-FOCUS-SCRIPT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_opener_message_on_load_script$ = makeSymbol("*HTML-OPENER-MESSAGE-ON-LOAD-SCRIPT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_handle_complete_script_parameters$ = makeSymbol("*HTML-HANDLE-COMPLETE-SCRIPT-PARAMETERS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_handle_complete_script$ = makeSymbol("*HTML-HANDLE-COMPLETE-SCRIPT*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $html_immediate_complete_extend_script$ = makeSymbol("*HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $html_immediate_complete_choose_script$ = makeSymbol("*HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_complete_insert_choice_script$ = makeSymbol("*HTML-COMPLETE-INSERT-CHOICE-SCRIPT*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $js_autocomplete_setup$ = makeSymbol("*JS-AUTOCOMPLETE-SETUP*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $autocomplete_default_limit$ = makeSymbol("*AUTOCOMPLETE-DEFAULT-LIMIT*");
 
-
-
-
-
-
-
-
-
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $completion_properties$ = makeSymbol("*COMPLETION-PROPERTIES*");
 
-
-
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $autocomplete_isa_cache_lock$ = makeSymbol("*AUTOCOMPLETE-ISA-CACHE-LOCK*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $autocomplete_genls_cache_lock$ = makeSymbol("*AUTOCOMPLETE-GENLS-CACHE-LOCK*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $autocomplete_isa_cache$ = makeSymbol("*AUTOCOMPLETE-ISA-CACHE*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $autocomplete_genls_cache$ = makeSymbol("*AUTOCOMPLETE-GENLS-CACHE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_handle_cyclify_script_parameters$ = makeSymbol("*HTML-HANDLE-CYCLIFY-SCRIPT-PARAMETERS*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_handle_cyclify_script$ = makeSymbol("*HTML-HANDLE-CYCLIFY-SCRIPT*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_immediate_perform_cyclify_script_prefix$ = makeSymbol("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-PREFIX*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $html_immediate_perform_cyclify_script_postfix$ = makeSymbol("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-POSTFIX*");
 
     // Internal Constants
-    public static final SubLString $$$completions = makeString("completions");
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLString $$$completions = makeString("completions");
 
-    public static final SubLString $str1$onClick__constant_complete___A___ = makeString("onClick=\"constant_complete(\'~A\', ~A, \'~A\', ~A, ~A);\"");
+    static private final SubLString $str1$onClick__constant_complete___A___ = makeString("onClick=\"constant_complete(\'~A\', ~A, \'~A\', ~A, ~A);\"");
 
-    public static final SubLString $$$Complete = makeString("Complete");
+    static private final SubLString $$$Complete = makeString("Complete");
 
     private static final SubLString $str3$ = makeString("");
-
-
-
-    private static final SubLObject $$Thing = reader_make_constant_shell(makeString("Thing"));
 
 
 
@@ -180,11 +354,11 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLString $str9$constant_complete__ = makeString("constant_complete('");
 
-    public static final SubLString $str10$___ = makeString("', ");
+    static private final SubLString $str10$___ = makeString("', ");
 
     private static final SubLString $str11$___ = makeString(", '");
 
-    public static final SubLString $str12$__ = makeString(", ");
+    static private final SubLString $str12$__ = makeString(", ");
 
     private static final SubLString $str13$__ = makeString(");");
 
@@ -195,8 +369,6 @@ public final class html_complete extends SubLTranslatedFile {
     private static final SubLString $str16$javascript_void____ = makeString("javascript:void('')");
 
     private static final SubLString $str17$_var_cgi_program_____A___var_comp = makeString("\nvar cgi_program = \'~A\';\nvar completion_frame_name = \'~A\';\n");
-
-
 
     private static final SubLString $str19$_if__window_focus__window_focus__ = makeString("\nif (window.focus) window.focus();");
 
@@ -230,27 +402,15 @@ public final class html_complete extends SubLTranslatedFile {
 
 
 
-
-
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
     private static final SubLInteger $int$50 = makeInteger(50);
 
-
-
     private static final SubLSymbol $sym39$STRING_ = makeSymbol("STRING<");
-
-
-
-
 
     private static final SubLSymbol COMPLETION_STRING = makeSymbol("COMPLETION-STRING");
 
     private static final SubLString $str43$__DOCTYPE_html_PUBLIC_____W3C__DT = makeString("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">");
 
     private static final SubLString $str44$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
-
-
 
     private static final SubLString $str46$Exact_match_plus_one_longer_compl = makeString("Exact match plus one longer completion.");
 
@@ -262,8 +422,6 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLString $str50$Extension__ = makeString("Extension: ");
 
-
-
     private static final SubLString $str52$_Suggestions_ = makeString(" Suggestions:");
 
     private static final SubLString $str53$_Completions_ = makeString(" Completions:");
@@ -274,7 +432,7 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLString $str56$Sole_completion__already_complete = makeString("Sole completion (already completed).");
 
-    public static final SubLString $str57$Sole_completion_ = makeString("Sole completion.");
+    static private final SubLString $str57$Sole_completion_ = makeString("Sole completion.");
 
     private static final SubLString $str58$Already_completed_ = makeString("Already completed.");
 
@@ -310,8 +468,6 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLString $str74$_filter_ = makeString("&filter=");
 
-
-
     private static final SubLString $str76$text_javascript = makeString("text/javascript");
 
     private static final SubLSymbol XML_TERM_SEARCH = makeSymbol("XML-TERM-SEARCH");
@@ -322,7 +478,7 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLString $str80$return_attrs = makeString("return-attrs");
 
-    private static final SubLList $list81 = list(makeKeyword("CYCL"), makeKeyword("NL"), makeKeyword("HL-ID"));
+    private static final SubLList $list81 = list($CYCL, makeKeyword("NL"), makeKeyword("HL-ID"));
 
     private static final SubLString $$$timeout = makeString("timeout");
 
@@ -330,11 +486,7 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLList $list84 = list(makeSymbol("ISA-FILTER"), makeSymbol("GENLS-FILTER"), makeSymbol("ISA-RESTRICTIONS"), makeSymbol("GENLS-RESTRICTIONS"));
 
-
-
     private static final SubLSymbol $sym86$_EXIT = makeSymbol("%EXIT");
-
-
 
     private static final SubLSymbol XML_COMPLETE = makeSymbol("XML-COMPLETE");
 
@@ -344,41 +496,23 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLString $$$preferHistory = makeString("preferHistory");
 
-
-
     private static final SubLSymbol $kw93$CASE_SENSITIVE_ = makeKeyword("CASE-SENSITIVE?");
 
-
-
-    private static final SubLList $list95 = list(makeKeyword("CYCL"), makeKeyword("NL"));
-
-
-
-
-
-
+    private static final SubLList $list95 = list($CYCL, makeKeyword("NL"));
 
     private static final SubLString $$$mt = makeString("mt");
 
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
 
 
-
-
-
-
-
-
-    private static final SubLObject $$BaseKB = reader_make_constant_shell(makeString("BaseKB"));
 
     private static final SubLSymbol $TERM_TO_REPLACE = makeKeyword("TERM-TO-REPLACE");
 
-    private static final SubLObject $$UniversalVocabularyMt = reader_make_constant_shell(makeString("UniversalVocabularyMt"));
+
 
     private static final SubLSymbol GET_ISA_RESTRICTIONS_FROM_SENTENCE = makeSymbol("GET-ISA-RESTRICTIONS-FROM-SENTENCE");
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
+
 
     private static final SubLSymbol $get_isa_restrictions_from_sentence_caching_state$ = makeSymbol("*GET-ISA-RESTRICTIONS-FROM-SENTENCE-CACHING-STATE*");
 
@@ -388,7 +522,7 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLSymbol GET_GENLS_RESTRICTIONS_FROM_SENTENCE = makeSymbol("GET-GENLS-RESTRICTIONS-FROM-SENTENCE");
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
 
     private static final SubLSymbol $get_genls_restrictions_from_sentence_caching_state$ = makeSymbol("*GET-GENLS-RESTRICTIONS-FROM-SENTENCE-CACHING-STATE*");
 
@@ -402,21 +536,15 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLSymbol GET_ARG_CONSTRAINTS_FOR_VAR = makeSymbol("GET-ARG-CONSTRAINTS-FOR-VAR");
 
-
-
-
-
     private static final SubLSymbol $get_arg_constraints_for_var_caching_state$ = makeSymbol("*GET-ARG-CONSTRAINTS-FOR-VAR-CACHING-STATE*");
 
     private static final SubLSymbol CLEAR_GET_ARG_CONSTRAINTS_FOR_VAR = makeSymbol("CLEAR-GET-ARG-CONSTRAINTS-FOR-VAR");
 
-    private static final SubLObject $$CollectionIntersectionFn = reader_make_constant_shell(makeString("CollectionIntersectionFn"));
 
-    private static final SubLObject $$TheSet = reader_make_constant_shell(makeString("TheSet"));
+
+
 
     private static final SubLString $$$constrainingSentence = makeString("constrainingSentence");
-
-
 
     private static final SubLSymbol $sym129$NON_CYCL_SYMBOL_ = makeSymbol("NON-CYCL-SYMBOL?");
 
@@ -432,17 +560,9 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLSymbol COMPLETION_DENOTS_OF_STRING = makeSymbol("COMPLETION-DENOTS-OF-STRING");
 
-
-
-
-
     private static final SubLSymbol COMPLETION_LEXICON = makeSymbol("COMPLETION-LEXICON");
 
     private static final SubLList $list139 = list(makeKeyword("ABBREVS"), makeKeyword("ACRONYMS"));
-
-
-
-
 
     private static final SubLSymbol $sym142$NUM_INDEX_ = makeSymbol("NUM-INDEX>");
 
@@ -454,25 +574,15 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLList $list146 = cons(makeSymbol("CONSTANT"), makeSymbol("COMPLETION-STRINGS"));
 
-
-
     private static final SubLString $$$cycl = makeString("cycl");
-
-
 
     private static final SubLString $$$nl = makeString("nl");
 
-
-
     private static final SubLString $$$disambigString = makeString("disambigString");
-
-
 
     private static final SubLString $$$hlId = makeString("hlId");
 
     private static final SubLString $$$Term = makeString("Term");
-
-
 
     private static final SubLSymbol TERM_PASSES_ARG_RESTRICTIONS = makeSymbol("TERM-PASSES-ARG-RESTRICTIONS");
 
@@ -492,19 +602,15 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_AUTOCOMPLETE_ISA_CACHE = makeSymbol("CLEAR-AUTOCOMPLETE-ISA-CACHE");
 
-    private static final SubLObject $$Collection = reader_make_constant_shell(makeString("Collection"));
 
-    private static final SubLObject $$PhysiologicalCondition = reader_make_constant_shell(makeString("PhysiologicalCondition"));
+
+
 
     private static final SubLSymbol FI_EVAL = makeSymbol("FI-EVAL");
-
-
 
     private static final SubLSymbol PRECACHE_ISA_CONSTRAINT_GUTS = makeSymbol("PRECACHE-ISA-CONSTRAINT-GUTS");
 
     private static final SubLSymbol PRECACHE_GENLS_CONSTRAINT_GUTS = makeSymbol("PRECACHE-GENLS-CONSTRAINT-GUTS");
-
-
 
     private static final SubLString $str173$_var_form_number____A__var_elemen = makeString("\nvar form_number = ~A;\nvar element_number = ~A;\nvar close_window = ~A;\n\n");
 
@@ -530,19 +636,7 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLSymbol XML_COMPLETE_RESULT_COUNT_MIN = makeSymbol("XML-COMPLETE-RESULT-COUNT-MIN");
 
-
-
     private static final SubLSymbol $sym186$_ = makeSymbol(">");
-
-
-
-
-
-
-
-
-
-
 
     private static final SubLList $list192 = list(list(list(list(list(makeString("constrainingSentence"), makeString("(argIsa COPY_OF_cblSendMessageNamed  2  :term-to-replace)")), list(makeString("caseSensitive"), makeString("nil")), list(makeString("prefix"), makeString("Progra")))), TWENTY_INTEGER), list(list(list(list(makeString("constrainingSentence"), makeString("(genlPreds COPY_OF_cblSendMessageNamed :term-to-replace)")), list(makeString("caseSensitive"), makeString("nil")), list(makeString("prefix"), makeString("Progra")))), TWENTY_INTEGER), list(list(list(list(makeString("constrainingSentence"), makeString("(isa :term-to-replace GeographicalRegion)")), list(makeString("caseSensitive"), makeString("t")), list(makeString("prefix"), makeString("Canad")))), ONE_INTEGER));
 
@@ -554,7 +648,60 @@ public final class html_complete extends SubLTranslatedFile {
 
     private static final SubLSymbol XML_COMPLETE_INT_RESULT_COUNT_MIN = makeSymbol("XML-COMPLETE-INT-RESULT-COUNT-MIN");
 
-    private static final SubLList $list197 = list(list(list(makeString("Canad"), list(new SubLObject[]{ makeKeyword("RETURN-ATTRS"), list(makeKeyword("CYCL"), makeKeyword("NL"), makeKeyword("HL-ID"), makeKeyword("DISAMBIG-STRING")), makeKeyword("ISA-FILTER"), reader_make_constant_shell(makeString("GeographicalRegion")), makeKeyword("LIMIT"), TWENTY_INTEGER, makeKeyword("TIMEOUT"), TWENTY_INTEGER, makeKeyword("CASE-SENSITIVE?"), NIL, makeKeyword("COMPLETE-ON-CONSTANTS?"), NIL })), ONE_INTEGER));
+    private static final SubLList $list197 = list(list(list(makeString("Canad"), list(new SubLObject[]{ makeKeyword("RETURN-ATTRS"), list($CYCL, makeKeyword("NL"), makeKeyword("HL-ID"), makeKeyword("DISAMBIG-STRING")), makeKeyword("ISA-FILTER"), reader_make_constant_shell("GeographicalRegion"), makeKeyword("LIMIT"), TWENTY_INTEGER, makeKeyword("TIMEOUT"), TWENTY_INTEGER, makeKeyword("CASE-SENSITIVE?"), NIL, makeKeyword("COMPLETE-ON-CONSTANTS?"), NIL })), ONE_INTEGER));
+
+    /**
+     * Provide a constant-completion button for an input form called NAME.
+     * If provided, FILTER-TYPE is a collection which each completion must be an instance of.
+     * If AUTO-SUBMIT, the resulting form is auto-submitted after completing.
+     * STANDARD-CHOICES, if present, is a list of choices to give for empty completions.
+     */
+    @LispMethod(comment = "Provide a constant-completion button for an input form called NAME.\r\nIf provided, FILTER-TYPE is a collection which each completion must be an instance of.\r\nIf AUTO-SUBMIT, the resulting form is auto-submitted after completing.\r\nSTANDARD-CHOICES, if present, is a list of choices to give for empty completions.\nProvide a constant-completion button for an input form called NAME.\nIf provided, FILTER-TYPE is a collection which each completion must be an instance of.\nIf AUTO-SUBMIT, the resulting form is auto-submitted after completing.\nSTANDARD-CHOICES, if present, is a list of choices to give for empty completions.")
+    public static final SubLObject html_complete_button(SubLObject name, SubLObject value, SubLObject filter_type, SubLObject auto_submit, SubLObject include_lexical_stringsP, SubLObject standard_choices) {
+        if (value == UNPROVIDED) {
+            value = $$$Complete;
+        }
+        if (filter_type == UNPROVIDED) {
+            filter_type = NIL;
+        }
+        if (auto_submit == UNPROVIDED) {
+            auto_submit = NIL;
+        }
+        if (include_lexical_stringsP == UNPROVIDED) {
+            include_lexical_stringsP = NIL;
+        }
+        if (standard_choices == UNPROVIDED) {
+            standard_choices = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(name, STRINGP);
+            if (NIL == filter_type) {
+                filter_type = $$Thing;
+            }
+            SubLTrampolineFile.checkType(filter_type, FORT_P);
+            if (NIL != $cb_enable_constant_completion$.getDynamicValue(thread)) {
+                {
+                    SubLObject choices_id = cb_glob_id(standard_choices);
+                    html_markup(html_macros.$html_input_head$.getGlobalValue());
+                    html_markup(html_macros.$html_input_type$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(html_macros.$html_input_button$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    if (NIL != value) {
+                        html_markup(html_macros.$html_input_value$.getGlobalValue());
+                        html_char(CHAR_quotation, UNPROVIDED);
+                        html_princ(value);
+                        html_char(CHAR_quotation, UNPROVIDED);
+                    }
+                    html_indent(ONE_INTEGER);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_complete_button_script$.getGlobalValue(), new SubLObject[]{ name, NIL != auto_submit ? ((SubLObject) ($$$true)) : $$$false, cb_fort_identifier(filter_type), choices_id, NIL != include_lexical_stringsP ? ((SubLObject) ($$$true)) : $$$false });
+                    html_char(CHAR_greater, UNPROVIDED);
+                }
+            }
+            return NIL;
+        }
+    }
 
     public static SubLObject html_complete_button(final SubLObject name, SubLObject value, SubLObject filter_type, SubLObject auto_submit, SubLObject include_lexical_stringsP, SubLObject standard_choices, SubLObject v_class) {
         if (value == UNPROVIDED) {
@@ -576,11 +723,11 @@ public final class html_complete extends SubLTranslatedFile {
             v_class = $str3$;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(name) : "Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) " + name;
+        assert NIL != stringp(name) : "! stringp(name) " + ("Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) ") + name;
         if (NIL == filter_type) {
             filter_type = $$Thing;
         }
-        assert NIL != forts.fort_p(filter_type) : "forts.fort_p(filter_type) " + "CommonSymbols.NIL != forts.fort_p(filter_type) " + filter_type;
+        assert NIL != forts.fort_p(filter_type) : "! forts.fort_p(filter_type) " + ("forts.fort_p(filter_type) " + "CommonSymbols.NIL != forts.fort_p(filter_type) ") + filter_type;
         if (NIL != $cb_enable_constant_completion$.getDynamicValue(thread)) {
             final SubLObject choices_id = cb_glob_id(standard_choices);
             html_markup(html_macros.$html_input_head$.getGlobalValue());
@@ -610,6 +757,60 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject html_complete_link_alt(SubLObject name, SubLObject linktext, SubLObject filter_type, SubLObject auto_submit, SubLObject include_lexical_stringsP, SubLObject standard_choices) {
+        if (linktext == UNPROVIDED) {
+            linktext = $$$Complete;
+        }
+        if (filter_type == UNPROVIDED) {
+            filter_type = NIL;
+        }
+        if (auto_submit == UNPROVIDED) {
+            auto_submit = NIL;
+        }
+        if (include_lexical_stringsP == UNPROVIDED) {
+            include_lexical_stringsP = NIL;
+        }
+        if (standard_choices == UNPROVIDED) {
+            standard_choices = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(name, STRINGP);
+            if (NIL == filter_type) {
+                filter_type = $$Thing;
+            }
+            SubLTrampolineFile.checkType(filter_type, FORT_P);
+            if (NIL != $cb_enable_constant_completion$.getDynamicValue(thread)) {
+                {
+                    SubLObject choices_id = cb_glob_id(standard_choices);
+                    SubLObject onclick = cconcatenate($str_alt8$constant_complete__, new SubLObject[]{ format_nil.format_nil_a_no_copy(name), $str_alt9$___, format_nil.format_nil_a_no_copy(NIL != auto_submit ? ((SubLObject) ($$$true)) : $$$false), $str_alt10$___, format_nil.format_nil_a_no_copy(cb_fort_identifier(filter_type)), $str_alt9$___, format_nil.format_nil_a_no_copy(choices_id), $str_alt11$__, format_nil.format_nil_a_no_copy(NIL != include_lexical_stringsP ? ((SubLObject) ($$$true)) : $$$false), $str_alt12$__ });
+                    SubLObject url = com.cyc.cycjava.cycl.html_complete.javascript_void_url();
+                    html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                    html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(url);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(html_macros.$html_event_attribute_onclick$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(onclick);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_char(CHAR_greater, UNPROVIDED);
+                    {
+                        SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                        try {
+                            html_macros.$html_safe_print$.bind(T, thread);
+                            html_princ(linktext);
+                        } finally {
+                            html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject html_complete_link(final SubLObject name, SubLObject linktext, SubLObject filter_type, SubLObject auto_submit, SubLObject include_lexical_stringsP, SubLObject standard_choices) {
         if (linktext == UNPROVIDED) {
             linktext = $$$Complete;
@@ -627,11 +828,11 @@ public final class html_complete extends SubLTranslatedFile {
             standard_choices = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(name) : "Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) " + name;
+        assert NIL != stringp(name) : "! stringp(name) " + ("Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) ") + name;
         if (NIL == filter_type) {
             filter_type = $$Thing;
         }
-        assert NIL != forts.fort_p(filter_type) : "forts.fort_p(filter_type) " + "CommonSymbols.NIL != forts.fort_p(filter_type) " + filter_type;
+        assert NIL != forts.fort_p(filter_type) : "! forts.fort_p(filter_type) " + ("forts.fort_p(filter_type) " + "CommonSymbols.NIL != forts.fort_p(filter_type) ") + filter_type;
         if (NIL != $cb_enable_constant_completion$.getDynamicValue(thread)) {
             final SubLObject choices_id = cb_glob_id(standard_choices);
             final SubLObject onclick = cconcatenate($str9$constant_complete__, new SubLObject[]{ format_nil.format_nil_a_no_copy(name), $str10$___, format_nil.format_nil_a_no_copy(NIL != auto_submit ? $$$true : $$$false), $str11$___, format_nil.format_nil_a_no_copy(cb_fort_identifier(filter_type)), $str10$___, format_nil.format_nil_a_no_copy(choices_id), $str12$__, format_nil.format_nil_a_no_copy(NIL != include_lexical_stringsP ? $$$true : $$$false), $str13$__ });
@@ -658,6 +859,37 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Provide a 'cyclify' button for an input form called NAME.
+     */
+    @LispMethod(comment = "Provide a \'cyclify\' button for an input form called NAME.")
+    public static final SubLObject html_cyclify_button(SubLObject name, SubLObject value) {
+        if (value == UNPROVIDED) {
+            value = $$$Cyclify;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(name, STRINGP);
+            if (NIL != $cb_enable_constant_completion$.getDynamicValue(thread)) {
+                html_markup(html_macros.$html_input_head$.getGlobalValue());
+                html_markup(html_macros.$html_input_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_input_button$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (NIL != value) {
+                    html_markup(html_macros.$html_input_value$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_princ(value);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_indent(ONE_INTEGER);
+                format(html_macros.$html_stream$.getDynamicValue(thread), $html_cyclify_button_script$.getGlobalValue(), name);
+                html_char(CHAR_greater, UNPROVIDED);
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject html_cyclify_button(final SubLObject name, SubLObject value, SubLObject v_class) {
         if (value == UNPROVIDED) {
             value = $$$Cyclify;
@@ -666,7 +898,7 @@ public final class html_complete extends SubLTranslatedFile {
             v_class = $str3$;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(name) : "Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) " + name;
+        assert NIL != stringp(name) : "! stringp(name) " + ("Types.stringp(name) " + "CommonSymbols.NIL != Types.stringp(name) ") + name;
         if (NIL != $cb_enable_constant_completion$.getDynamicValue(thread)) {
             html_markup(html_macros.$html_input_head$.getGlobalValue());
             html_markup(html_macros.$html_input_type$.getGlobalValue());
@@ -695,8 +927,61 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject javascript_void_url_alt() {
+        return $str_alt15$javascript_void____;
+    }
+
     public static SubLObject javascript_void_url() {
         return $str16$javascript_void____;
+    }
+
+    public static final SubLObject html_complete_script_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_complete_script_parameters$.getGlobalValue(), system_parameters.$cyc_cgi_program$.getDynamicValue(thread), NIL == $cb_pop_up_constant_completion$.getDynamicValue(thread) ? ((SubLObject) ($cb_constant_completion_target$.getDynamicValue(thread))) : $str_alt19$);
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            {
+                SubLObject javascript_src = cyc_file_dependencies.javascript_file_path($CONSTANT_COMPLETION);
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup(html_macros.$html_script_head$.getGlobalValue());
+                html_markup(html_macros.$html_script_src$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(javascript_src);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_script_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt20$text_javascript);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject html_complete_script() {
@@ -721,6 +1006,31 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject html_initial_focus_script_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_intial_focus_script$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
+    }
+
     public static SubLObject html_initial_focus_script() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_source_readability_terpri(UNPROVIDED);
@@ -742,6 +1052,31 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject html_opener_message_on_load_alt(SubLObject message) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_opener_message_on_load_script$.getGlobalValue(), message);
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
+    }
+
     public static SubLObject html_opener_message_on_load(final SubLObject message) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_source_readability_terpri(UNPROVIDED);
@@ -761,6 +1096,33 @@ public final class html_complete extends SubLTranslatedFile {
         }
         html_markup(html_macros.$html_script_tail$.getGlobalValue());
         return NIL;
+    }
+
+    public static final SubLObject html_handle_complete_script_alt(SubLObject form, SubLObject input, SubLObject prefix) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_handle_complete_script_parameters$.getGlobalValue(), new SubLObject[]{ form, input, prefix, NIL != $cb_pop_up_constant_completion$.getDynamicValue(thread) ? ((SubLObject) ($$$true)) : $$$false });
+                    html_terpri(UNPROVIDED);
+                    html_markup($html_handle_complete_script$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
     }
 
     public static SubLObject html_handle_complete_script(final SubLObject form, final SubLObject input, final SubLObject prefix) {
@@ -786,6 +1148,31 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject html_immediate_complete_extend_script_alt(SubLObject string) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_immediate_complete_extend_script$.getDynamicValue(thread), string);
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
+    }
+
     public static SubLObject html_immediate_complete_extend_script(final SubLObject string) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_source_readability_terpri(UNPROVIDED);
@@ -807,6 +1194,31 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject html_immediate_complete_choose_script_alt(SubLObject string, SubLObject submit) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_immediate_complete_choose_script$.getDynamicValue(thread), string, submit);
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
+    }
+
     public static SubLObject html_immediate_complete_choose_script(final SubLObject string, final SubLObject submit) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_source_readability_terpri(UNPROVIDED);
@@ -825,6 +1237,40 @@ public final class html_complete extends SubLTranslatedFile {
             html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
         }
         html_markup(html_macros.$html_script_tail$.getGlobalValue());
+        return NIL;
+    }
+
+    public static final SubLObject cb_complete_alt(SubLObject args) {
+        {
+            SubLObject form = html_extract_input($$$form, args);
+            SubLObject input = html_extract_input($$$input, args);
+            SubLObject prefix = html_extract_input($$$prefix, args);
+            SubLObject submit = html_extract_input($$$submit, args);
+            SubLObject filter = html_extract_input($$$filter, args);
+            SubLObject choices = html_extract_input($$$choices, args);
+            SubLObject case_sensitiveP = makeBoolean(NIL == html_extract_input($str_alt33$case_insensitive, args));
+            SubLObject include_lexical_stringsP = equal($$$true, html_extract_input($$$lexical, args));
+            SubLObject completions = NIL;
+            if (NIL != filter) {
+                filter = cb_guess_fort(filter, UNPROVIDED);
+            }
+            if (filter == $$Thing) {
+                filter = NIL;
+            }
+            if (NIL != choices) {
+                choices = cb_glob_lookup_by_string(choices);
+            }
+            completions = com.cyc.cycjava.cycl.html_complete.cb_completions(prefix, filter, choices, include_lexical_stringsP, case_sensitiveP, UNPROVIDED);
+            if (NIL != completions) {
+                if (NIL != list_utilities.singletonP(completions)) {
+                    com.cyc.cycjava.cycl.html_complete.cb_complete_one(form, input, prefix, completions.first(), submit, filter);
+                } else {
+                    com.cyc.cycjava.cycl.html_complete.cb_complete_choose(form, input, prefix, choices, completions, submit, filter);
+                }
+            } else {
+                com.cyc.cycjava.cycl.html_complete.cb_complete_none(prefix, filter);
+            }
+        }
         return NIL;
     }
 
@@ -858,6 +1304,80 @@ public final class html_complete extends SubLTranslatedFile {
             cb_complete_none(prefix, filter);
         }
         return NIL;
+    }
+
+    public static final SubLObject cb_completions_alt(SubLObject string, SubLObject filter, SubLObject choices, SubLObject include_lexical_stringsP, SubLObject case_sensitiveP, SubLObject constant_completionsP) {
+        if (include_lexical_stringsP == UNPROVIDED) {
+            include_lexical_stringsP = NIL;
+        }
+        if (case_sensitiveP == UNPROVIDED) {
+            case_sensitiveP = T;
+        }
+        if (constant_completionsP == UNPROVIDED) {
+            constant_completionsP = T;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject completions = NIL;
+                if (NIL != string_utilities.empty_string_p(string)) {
+                    {
+                        SubLObject suggestions = NIL;
+                        {
+                            SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                            try {
+                                mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                if (NIL == filter) {
+                                    suggestions = cb_tools.cb_constant_history_items();
+                                } else {
+                                    if (cardinality_estimates.instance_cardinality(filter).numLE($int$50)) {
+                                        suggestions = list_utilities.delete_if_not(symbol_function(CONSTANT_P), isa.all_fort_instances(filter, UNPROVIDED, UNPROVIDED), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                    } else {
+                                        suggestions = isa.all_instances_among_fast(filter, cb_tools.cb_constant_history_items(), UNPROVIDED);
+                                    }
+                                }
+                            } finally {
+                                mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                        completions = nunion(copy_list(choices), suggestions, symbol_function(EQ), UNPROVIDED);
+                    }
+                } else {
+                    if (NIL != constant_completionsP) {
+                        completions = constant_completion_high.constant_complete(string, case_sensitiveP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        if (NIL != filter) {
+                            {
+                                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                try {
+                                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                                    completions = isa.all_instances_among_fast(filter, completions, UNPROVIDED);
+                                } finally {
+                                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                }
+                completions = Sort.sort(completions, symbol_function($sym40$STRING_), symbol_function(CONSTANT_NAME));
+                if (NIL != choices) {
+                    completions = list_utilities.stable_sort_via_position(completions, choices, symbol_function(EQ), UNPROVIDED);
+                }
+                if ((NIL != string_utilities.non_empty_stringP(string)) && (NIL != include_lexical_stringsP)) {
+                    {
+                        SubLObject nl_trie_completions = ((NIL != fort_types_interface.collectionP(filter)) && ($$Thing != filter)) ? ((SubLObject) (nl_trie_completion.nl_trie_completions_with_denot_filter_collection(string, filter, UNPROVIDED, UNPROVIDED))) : nl_trie_completion.nl_trie_completions(string, UNPROVIDED);
+                        nl_trie_completions = Sort.sort(nl_trie_completions, symbol_function(STRING_LESSP), UNPROVIDED);
+                        completions = append(completions, nl_trie_completions);
+                    }
+                }
+                return completions;
+            }
+        }
     }
 
     public static SubLObject cb_completions(final SubLObject string, final SubLObject filter, final SubLObject choices, SubLObject include_lexical_stringsP, SubLObject case_sensitiveP, SubLObject constant_completionsP) {
@@ -920,6 +1440,148 @@ public final class html_complete extends SubLTranslatedFile {
             completions = append(completions, nl_trie_completions);
         }
         return completions;
+    }
+
+    public static final SubLObject cb_complete_choose_alt(SubLObject form, SubLObject input, SubLObject prefix, SubLObject choices, SubLObject completions, SubLObject submit, SubLObject filter) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject total = length(completions);
+                SubLObject common_extention = string_utilities.strings_common_prefix(completions, symbol_function(COMPLETION_STRING), length(prefix));
+                SubLObject extended_prefix = cconcatenate(prefix, common_extention);
+                SubLObject exact_matchP = find(extended_prefix, completions, symbol_function(EQUAL), symbol_function(COMPLETION_STRING), UNPROVIDED, UNPROVIDED);
+                SubLObject extensionP = numG(length(common_extention), ZERO_INTEGER);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                com.cyc.cycjava.cycl.html_complete.cb_complete_title(prefix);
+                com.cyc.cycjava.cycl.html_complete.html_handle_complete_script(form, input, prefix);
+                if (NIL != extensionP) {
+                    com.cyc.cycjava.cycl.html_complete.html_immediate_complete_extend_script(extended_prefix);
+                }
+                com.cyc.cycjava.cycl.html_complete.html_initial_focus_script();
+                com.cyc.cycjava.cycl.html_complete.html_opener_message_on_load(NIL != exact_matchP ? ((SubLObject) (total.numE(TWO_INTEGER) ? ((SubLObject) ($str_alt44$Exact_match_plus_one_longer_compl)) : format(NIL, $str_alt45$Exact_match_plus__S_longer_comple, subtract(total, ONE_INTEGER)))) : format(NIL, $str_alt46$_S_possible__A_, total, NIL != string_utilities.empty_string_p(prefix) ? ((SubLObject) ($$$suggestions)) : $$$completions));
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                if (!((NIL != $cb_pop_up_constant_completion$.getDynamicValue(thread)) && (NIL != extensionP))) {
+                    {
+                        SubLObject _prev_bind_0 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                        try {
+                            html_macros.$html_inside_bodyP$.bind(T, thread);
+                            html_markup(html_macros.$html_body_head$.getGlobalValue());
+                            html_char(CHAR_greater, UNPROVIDED);
+                            {
+                                SubLObject _prev_bind_0_1 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    html_markup(html_macros.$html_form_head$.getGlobalValue());
+                                    html_markup(html_macros.$html_form_action$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_char(CHAR_greater, UNPROVIDED);
+                                    {
+                                        SubLObject _prev_bind_0_2 = html_macros.$html_safe_print$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                                        try {
+                                            html_macros.$html_safe_print$.bind(T, thread);
+                                            html_macros.$within_html_form$.bind(T, thread);
+                                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                                            com.cyc.cycjava.cycl.html_complete.cb_complete_preamble(prefix, filter);
+                                            html_newline(UNPROVIDED);
+                                            if (NIL != extensionP) {
+                                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                html_princ($str_alt48$Extension__);
+                                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                html_prin1(common_extention);
+                                                html_newline(UNPROVIDED);
+                                            }
+                                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                            {
+                                                SubLObject color_val = $RED;
+                                                html_markup(html_macros.$html_font_head$.getGlobalValue());
+                                                if (NIL != color_val) {
+                                                    html_markup(html_macros.$html_font_color$.getGlobalValue());
+                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                    html_markup(html_color(color_val));
+                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                }
+                                                html_char(CHAR_greater, UNPROVIDED);
+                                                {
+                                                    SubLObject _prev_bind_0_3 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                    try {
+                                                        html_macros.$html_safe_print$.bind(T, thread);
+                                                        html_princ(total);
+                                                        if (NIL != string_utilities.empty_string_p(prefix)) {
+                                                            html_princ($str_alt50$_Suggestions_);
+                                                        } else {
+                                                            html_princ($str_alt51$_Completions_);
+                                                        }
+                                                    } finally {
+                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_3, thread);
+                                                    }
+                                                }
+                                                html_markup(html_macros.$html_font_tail$.getGlobalValue());
+                                            }
+                                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                            {
+                                                SubLObject constant_count = count_if(CONSTANT_P, completions, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                SubLObject string_count = count_if(STRINGP, completions, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                SubLObject seen_constantsP = NIL;
+                                                SubLObject seen_stringsP = NIL;
+                                                SubLObject previous_completion = NIL;
+                                                SubLObject cdolist_list_var = completions;
+                                                SubLObject completion = NIL;
+                                                for (completion = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , completion = cdolist_list_var.first()) {
+                                                    if ((NIL != constant_p(completion)) && (NIL == seen_constantsP)) {
+                                                        html_hr(UNPROVIDED, UNPROVIDED);
+                                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                        format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt52$Constants___A__, constant_count);
+                                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                        seen_constantsP = T;
+                                                    } else {
+                                                        if (completion.isString() && (NIL == seen_stringsP)) {
+                                                            html_hr(UNPROVIDED, UNPROVIDED);
+                                                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                            format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt53$Lexical_Strings___A__, string_count);
+                                                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                            seen_stringsP = T;
+                                                        }
+                                                    }
+                                                    html_newline(UNPROVIDED);
+                                                    if ((((NIL != constant_p(previous_completion)) && (NIL != constant_p(completion))) && (NIL != subl_promotions.memberP(previous_completion, choices, symbol_function(EQ), UNPROVIDED))) && (NIL == subl_promotions.memberP(completion, choices, symbol_function(EQ), UNPROVIDED))) {
+                                                        html_hr(UNPROVIDED, UNPROVIDED);
+                                                    }
+                                                    com.cyc.cycjava.cycl.html_complete.html_complete_insert_choice(completion, submit);
+                                                    previous_completion = completion;
+                                                }
+                                            }
+                                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                                        } finally {
+                                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
+                                            html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
+                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_2, thread);
+                                        }
+                                    }
+                                    html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                                    html_source_readability_terpri(UNPROVIDED);
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_1, thread);
+                                }
+                            }
+                            html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                            html_source_readability_terpri(UNPROVIDED);
+                        } finally {
+                            html_macros.$html_inside_bodyP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_complete_choose(final SubLObject form, final SubLObject input, final SubLObject prefix, final SubLObject choices, final SubLObject completions, final SubLObject submit, final SubLObject filter) {
@@ -1063,6 +1725,18 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject completion_string_alt(SubLObject completion) {
+        if (NIL != constant_p(completion)) {
+            return constants_high.constant_name(completion);
+        } else {
+            if (completion.isString()) {
+                return completion;
+            } else {
+                return princ_to_string(completion);
+            }
+        }
+    }
+
     public static SubLObject completion_string(final SubLObject completion) {
         if (NIL != constant_p(completion)) {
             return constants_high.constant_name(completion);
@@ -1071,6 +1745,86 @@ public final class html_complete extends SubLTranslatedFile {
             return completion;
         }
         return princ_to_string(completion);
+    }
+
+    public static final SubLObject cb_complete_one_alt(SubLObject form, SubLObject input, SubLObject prefix, SubLObject completion, SubLObject submit, SubLObject filter) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject name = com.cyc.cycjava.cycl.html_complete.completion_string(completion);
+                SubLObject completeP = equal(prefix, name);
+                html_markup(html_macros.$html_html_head$.getGlobalValue());
+                html_markup(html_macros.$html_head_head$.getGlobalValue());
+                html_macros.html_head_content_type();
+                com.cyc.cycjava.cycl.html_complete.cb_complete_title(prefix);
+                com.cyc.cycjava.cycl.html_complete.html_handle_complete_script(form, input, prefix);
+                com.cyc.cycjava.cycl.html_complete.html_immediate_complete_choose_script(name, submit);
+                com.cyc.cycjava.cycl.html_complete.html_opener_message_on_load(NIL != completeP ? ((SubLObject) ($str_alt54$Sole_completion__already_complete)) : $str_alt55$Sole_completion_);
+                html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+                if (NIL == $cb_pop_up_constant_completion$.getDynamicValue(thread)) {
+                    {
+                        SubLObject _prev_bind_0 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                        try {
+                            html_macros.$html_inside_bodyP$.bind(T, thread);
+                            html_markup(html_macros.$html_body_head$.getGlobalValue());
+                            html_char(CHAR_greater, UNPROVIDED);
+                            {
+                                SubLObject _prev_bind_0_4 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    html_markup(html_macros.$html_form_head$.getGlobalValue());
+                                    html_markup(html_macros.$html_form_action$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_char(CHAR_greater, UNPROVIDED);
+                                    {
+                                        SubLObject _prev_bind_0_5 = html_macros.$html_safe_print$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                                        try {
+                                            html_macros.$html_safe_print$.bind(T, thread);
+                                            html_macros.$within_html_form$.bind(T, thread);
+                                            html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                                            com.cyc.cycjava.cycl.html_complete.cb_complete_preamble(prefix, filter);
+                                            html_newline(UNPROVIDED);
+                                            if (NIL != completeP) {
+                                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                html_princ($str_alt56$Already_completed_);
+                                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                            } else {
+                                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                html_princ($str_alt57$Sole_completion_);
+                                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                html_newline(UNPROVIDED);
+                                                html_princ(name);
+                                            }
+                                            html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                                        } finally {
+                                            html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
+                                            html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
+                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_5, thread);
+                                        }
+                                    }
+                                    html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                                    html_source_readability_terpri(UNPROVIDED);
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_4, thread);
+                                }
+                            }
+                            html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                            html_source_readability_terpri(UNPROVIDED);
+                        } finally {
+                            html_macros.$html_inside_bodyP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                html_markup(html_macros.$html_html_tail$.getGlobalValue());
+                html_source_readability_terpri(UNPROVIDED);
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_complete_one(final SubLObject form, final SubLObject input, final SubLObject prefix, final SubLObject completion, final SubLObject submit, final SubLObject filter) {
@@ -1155,6 +1909,80 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cb_complete_none_alt(SubLObject prefix, SubLObject filter) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_markup(html_macros.$html_html_head$.getGlobalValue());
+            html_markup(html_macros.$html_head_head$.getGlobalValue());
+            html_macros.html_head_content_type();
+            com.cyc.cycjava.cycl.html_complete.cb_complete_title(prefix);
+            if (NIL == string_utilities.empty_string_p(prefix)) {
+                com.cyc.cycjava.cycl.html_complete.html_opener_message_on_load($str_alt58$No_completions_);
+            } else {
+                com.cyc.cycjava.cycl.html_complete.html_opener_message_on_load($str_alt59$No_suggestions_);
+            }
+            html_markup(html_macros.$html_head_tail$.getGlobalValue());
+            html_source_readability_terpri(UNPROVIDED);
+            if (NIL == $cb_pop_up_constant_completion$.getDynamicValue(thread)) {
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                    try {
+                        html_macros.$html_inside_bodyP$.bind(T, thread);
+                        html_markup(html_macros.$html_body_head$.getGlobalValue());
+                        html_char(CHAR_greater, UNPROVIDED);
+                        {
+                            SubLObject _prev_bind_0_6 = html_macros.$html_safe_print$.currentBinding(thread);
+                            try {
+                                html_macros.$html_safe_print$.bind(T, thread);
+                                html_markup(html_macros.$html_form_head$.getGlobalValue());
+                                html_markup(html_macros.$html_form_action$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_7 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
+                                    SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_macros.$within_html_form$.bind(T, thread);
+                                        html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                                        com.cyc.cycjava.cycl.html_complete.cb_complete_preamble(prefix, filter);
+                                        html_newline(UNPROVIDED);
+                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                        if (NIL == string_utilities.empty_string_p(prefix)) {
+                                            html_princ($$$No_completions);
+                                        } else {
+                                            html_princ($$$No_suggestions);
+                                        }
+                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                        html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                                    } finally {
+                                        html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
+                                        html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_7, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                            } finally {
+                                html_macros.$html_safe_print$.rebind(_prev_bind_0_6, thread);
+                            }
+                        }
+                        html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_inside_bodyP$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            html_markup(html_macros.$html_html_tail$.getGlobalValue());
+            html_source_readability_terpri(UNPROVIDED);
+            return NIL;
+        }
+    }
+
     public static SubLObject cb_complete_none(final SubLObject prefix, final SubLObject filter) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_markup($str43$__DOCTYPE_html_PUBLIC_____W3C__DT);
@@ -1233,6 +2061,18 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cb_complete_title_alt(SubLObject prefix) {
+        html_source_readability_terpri(UNPROVIDED);
+        html_markup(html_macros.$html_title_head$.getGlobalValue());
+        if (NIL != string_utilities.empty_string_p(prefix)) {
+            html_princ($$$Suggestions);
+        } else {
+            html_princ($$$Completions);
+        }
+        html_markup(html_macros.$html_title_tail$.getGlobalValue());
+        return NIL;
+    }
+
     public static SubLObject cb_complete_title(final SubLObject prefix) {
         html_source_readability_terpri(UNPROVIDED);
         html_markup(html_macros.$html_title_head$.getGlobalValue());
@@ -1242,6 +2082,38 @@ public final class html_complete extends SubLTranslatedFile {
             html_princ($$$Completions);
         }
         html_markup(html_macros.$html_title_tail$.getGlobalValue());
+        return NIL;
+    }
+
+    public static final SubLObject cb_complete_preamble_alt(SubLObject prefix, SubLObject filter) {
+        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+        if (NIL != string_utilities.empty_string_p(prefix)) {
+            html_princ($$$Suggestions);
+        } else {
+            html_princ($$$Completions);
+        }
+        html_indent(TWO_INTEGER);
+        html_script_utilities.html_dismiss_button(UNPROVIDED);
+        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+        html_newline(UNPROVIDED);
+        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+        html_princ($str_alt64$Machine__);
+        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+        html_princ(Environment.get_machine_name(UNPROVIDED));
+        if (NIL == string_utilities.empty_string_p(prefix)) {
+            html_newline(UNPROVIDED);
+            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+            html_princ($str_alt65$Prefix__);
+            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+            html_princ(prefix);
+        }
+        if (NIL != filter) {
+            html_newline(UNPROVIDED);
+            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+            html_princ($str_alt66$Filter__);
+            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+            html_princ(filter);
+        }
         return NIL;
     }
 
@@ -1277,6 +2149,37 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject html_complete_insert_choice_alt(SubLObject choice, SubLObject submit) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (!choice.isString()) {
+                SubLTrampolineFile.checkType(choice, CONSTANT_P);
+            }
+            {
+                SubLObject name = com.cyc.cycjava.cycl.html_complete.completion_string(choice);
+                html_markup(html_macros.$html_no_break_head$.getGlobalValue());
+                html_markup(html_macros.$html_input_head$.getGlobalValue());
+                html_markup(html_macros.$html_input_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(html_macros.$html_input_radio$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (true) {
+                    html_markup(html_macros.$html_input_name$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup($$$complete);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_indent(ONE_INTEGER);
+                format(html_macros.$html_stream$.getDynamicValue(thread), $html_complete_insert_choice_script$.getGlobalValue(), name, submit);
+                html_char(CHAR_greater, UNPROVIDED);
+                html_indent(UNPROVIDED);
+                html_princ(com.cyc.cycjava.cycl.html_complete.completion_string(choice));
+                html_markup(html_macros.$html_no_break_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject html_complete_insert_choice(final SubLObject choice, final SubLObject submit) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (((!choice.isString()) && (!SubLTrampolineFile.assertionsDisabledInClass)) && (NIL == constant_p(choice))) {
@@ -1303,6 +2206,39 @@ public final class html_complete extends SubLTranslatedFile {
         html_princ(completion_string(choice));
         html_markup(html_macros.$html_no_break_tail$.getGlobalValue());
         return NIL;
+    }
+
+    public static final SubLObject html_print_js_autocomplete_setup_int_alt(SubLObject input_elt_name, SubLObject container_elt_name, SubLObject max_results, SubLObject min_query_length, SubLObject embedded_in_toolbar_frameP, SubLObject filter_term) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == filter_term) {
+                filter_term = $$Thing;
+            }
+            {
+                SubLObject toolbar_value = (NIL != embedded_in_toolbar_frameP) ? ((SubLObject) ($$$true)) : $$$false;
+                SubLObject filter_term_id = cb_term_identifier(filter_term);
+                SubLObject filter_param = cconcatenate($str_alt72$_filter_, web_utilities.html_url_encode(filter_term_id, UNPROVIDED));
+                html_source_readability_terpri(UNPROVIDED);
+                html_markup(html_macros.$html_script_head$.getGlobalValue());
+                html_markup(html_macros.$html_script_type$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup($str_alt20$text_javascript);
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        format(html_macros.$html_stream$.getDynamicValue(thread), $js_autocomplete_setup$.getDynamicValue(thread), new SubLObject[]{ filter_param, input_elt_name, container_elt_name, min_query_length, max_results, toolbar_value });
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject html_print_js_autocomplete_setup_int(final SubLObject input_elt_name, final SubLObject container_elt_name, final SubLObject max_results, final SubLObject min_query_length, final SubLObject embedded_in_toolbar_frameP, SubLObject filter_term) {
@@ -1381,6 +2317,33 @@ public final class html_complete extends SubLTranslatedFile {
             return NIL;
         } finally {
             xml_vars.$xml_stream$.rebind(_prev_bind_0, thread);
+        }
+    }
+
+    public static final SubLObject xml_complete_alt(SubLObject args) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject prefix = html_extract_input($$$prefix, args);
+                SubLObject case_sensitiveP = NIL;
+                SubLObject return_attrs_provided = (NIL != html_extract_input($str_alt79$return_attrs, args)) ? ((SubLObject) (read_from_string_ignoring_errors(html_extract_input($str_alt79$return_attrs, args), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) : NIL;
+                SubLObject return_attrs = (NIL != return_attrs_provided) ? ((SubLObject) (return_attrs_provided)) : $list_alt80;
+                SubLObject filter_provided = cb_guess_fort(html_extract_input($$$filter, args), UNPROVIDED);
+                SubLObject filter = (NIL != filter_provided) ? ((SubLObject) (filter_provided)) : $$Thing;
+                SubLObject timeout = (NIL != html_extract_input($$$timeout, args)) ? ((SubLObject) (read_from_string_ignoring_errors(html_extract_input($$$timeout, args), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) : NIL;
+                SubLObject limit_provided = (NIL != html_extract_input($$$count, args)) ? ((SubLObject) (read_from_string_ignoring_errors(html_extract_input($$$count, args), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED))) : NIL;
+                SubLObject limit = (NIL != limit_provided) ? ((SubLObject) (limit_provided)) : $autocomplete_default_limit$.getDynamicValue(thread);
+                {
+                    SubLObject _prev_bind_0 = $xml_stream$.currentBinding(thread);
+                    try {
+                        $xml_stream$.bind(html_macros.$html_stream$.getDynamicValue(thread), thread);
+                        com.cyc.cycjava.cycl.html_complete.xml_complete_int(prefix, return_attrs, filter, NIL, limit, timeout, case_sensitiveP, T, UNPROVIDED);
+                    } finally {
+                        $xml_stream$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
         }
     }
 
@@ -1739,7 +2702,7 @@ public final class html_complete extends SubLTranslatedFile {
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != completion_properties_p(v_properties) : "html_complete.completion_properties_p(v_properties) " + "CommonSymbols.NIL != html_complete.completion_properties_p(v_properties) " + v_properties;
+        assert NIL != completion_properties_p(v_properties) : "! html_complete.completion_properties_p(v_properties) " + ("html_complete.completion_properties_p(v_properties) " + "CommonSymbols.NIL != html_complete.completion_properties_p(v_properties) ") + v_properties;
         thread.resetMultipleValues();
         final SubLObject completion_dictionary = get_xml_completion_data(prefix, v_properties);
         final SubLObject preferred_terms = thread.secondMultipleValue();
@@ -1747,12 +2710,227 @@ public final class html_complete extends SubLTranslatedFile {
         return term_result_set_as_list(completion_dictionary, getf(v_properties, $RETURN_ATTRS, UNPROVIDED), $DEFAULT, preferred_terms);
     }
 
+    public static final SubLObject xml_complete_int(SubLObject prefix, SubLObject return_attrs, SubLObject isa_filter, SubLObject genls_filter, SubLObject limit, SubLObject timeout, SubLObject case_sensitiveP, SubLObject complete_on_constantsP, SubLObject lexicon) {
+        if (lexicon == UNPROVIDED) {
+            lexicon = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != timeout) {
+                SubLTrampolineFile.checkType(timeout, NUMBERP);
+            }
+            {
+                SubLObject completions = com.cyc.cycjava.cycl.html_complete.cb_completions(prefix, isa_filter, NIL, T, case_sensitiveP, complete_on_constantsP);
+                SubLObject completion_dict = new_dictionary(EQUAL, UNPROVIDED);
+                SubLObject term_list = NIL;
+                SubLObject current_count = ZERO_INTEGER;
+                SubLObject timed_outP = NIL;
+                SubLObject doneP = NIL;
+                SubLObject state = possibly_new_memoization_state();
+                SubLObject local_state = state;
+                {
+                    SubLObject _prev_bind_0 = $memoization_state$.currentBinding(thread);
+                    try {
+                        $memoization_state$.bind(local_state, thread);
+                        {
+                            SubLObject original_memoization_process = NIL;
+                            if ((NIL != local_state) && (NIL == memoization_state_lock(local_state))) {
+                                original_memoization_process = memoization_state_get_current_process_internal(local_state);
+                                {
+                                    SubLObject current_proc = current_process();
+                                    if (NIL == original_memoization_process) {
+                                        memoization_state_set_current_process_internal(local_state, current_proc);
+                                    } else {
+                                        if (original_memoization_process != current_proc) {
+                                            Errors.error($str_alt84$Invalid_attempt_to_reuse_memoizat);
+                                        }
+                                    }
+                                }
+                            }
+                            try {
+                                {
+                                    SubLObject already_resourcing_p = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.getDynamicValue(thread);
+                                    {
+                                        SubLObject _prev_bind_0_8 = sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.currentBinding(thread);
+                                        SubLObject _prev_bind_1 = sbhl_marking_vars.$resourced_sbhl_marking_spaces$.currentBinding(thread);
+                                        SubLObject _prev_bind_2 = sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.currentBinding(thread);
+                                        try {
+                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.bind(sbhl_marking_vars.determine_resource_limit(already_resourcing_p, SIX_INTEGER), thread);
+                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.bind(sbhl_marking_vars.possibly_new_marking_resource(already_resourcing_p), thread);
+                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.bind(T, thread);
+                                            if (NIL == lexicon) {
+                                                lexicon = denots_of_string_lexicon.lexicon_for_denots_of_string(NIL, $DENOT, T, NIL, lexicon_vars.$lexicon_lookup_mt$.getDynamicValue(thread), UNPROVIDED);
+                                            }
+                                            {
+                                                SubLObject tag = with_timeout_make_tag();
+                                                try {
+                                                    {
+                                                        SubLObject _prev_bind_0_9 = $within_with_timeout$.currentBinding(thread);
+                                                        try {
+                                                            $within_with_timeout$.bind(T, thread);
+                                                            {
+                                                                SubLObject timer = NIL;
+                                                                try {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_10 = $with_timeout_nesting_depth$.currentBinding(thread);
+                                                                        try {
+                                                                            $with_timeout_nesting_depth$.bind(add(ONE_INTEGER, $with_timeout_nesting_depth$.getDynamicValue(thread)), thread);
+                                                                            timer = with_timeout_start_timer(timeout, tag);
+                                                                            if (NIL == doneP) {
+                                                                                {
+                                                                                    SubLObject csome_list_var = completions;
+                                                                                    SubLObject completion = NIL;
+                                                                                    for (completion = csome_list_var.first(); !((NIL != doneP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , completion = csome_list_var.first()) {
+                                                                                        if (NIL != constant_p(completion)) {
+                                                                                            dictionary_pushnew(completion_dict, completion, constants_high.constant_name(completion), EQUAL, UNPROVIDED);
+                                                                                        }
+                                                                                        if (NIL == constant_p(completion)) {
+                                                                                            {
+                                                                                                SubLObject cdolist_list_var = lexicon_accessors.denots_of_string(completion, NIL, $DENOT, T, NIL, lexicon_vars.$lexicon_lookup_mt$.getDynamicValue(thread), $NEVER, NIL, lexicon);
+                                                                                                SubLObject v_term = NIL;
+                                                                                                for (v_term = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_term = cdolist_list_var.first()) {
+                                                                                                    if (NIL != com.cyc.cycjava.cycl.html_complete.term_passes_arg_filters(v_term, isa_filter, genls_filter, $$InferencePSC)) {
+                                                                                                        current_count = add(current_count, ONE_INTEGER);
+                                                                                                        term_list = cons(v_term, term_list);
+                                                                                                        dictionary_pushnew(completion_dict, v_term, completion, EQUAL, UNPROVIDED);
+                                                                                                    }
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                        if (current_count.numG(limit)) {
+                                                                                            doneP = T;
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } finally {
+                                                                            $with_timeout_nesting_depth$.rebind(_prev_bind_0_10, thread);
+                                                                        }
+                                                                    }
+                                                                } finally {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_11 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                        try {
+                                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                            with_timeout_stop_timer(timer);
+                                                                        } finally {
+                                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_11, thread);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            $within_with_timeout$.rebind(_prev_bind_0_9, thread);
+                                                        }
+                                                    }
+                                                } catch (Throwable ccatch_env_var) {
+                                                    timed_outP = Errors.handleThrowable(ccatch_env_var, tag);
+                                                }
+                                            }
+                                            {
+                                                SubLObject term_alist = dictionary_to_alist(completion_dict);
+                                                SubLObject sorted_term_alist = Sort.sort(term_alist, $sym88$NUM_INDEX_, FIRST);
+                                                {
+                                                    SubLObject _prev_bind_0_12 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                    SubLObject _prev_bind_1_13 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                    try {
+                                                        xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                        xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                        xml_utilities.xml_start_tag_internal($$$ResultSet, NIL, NIL);
+                                                        {
+                                                            SubLObject cdolist_list_var = sorted_term_alist;
+                                                            SubLObject cons = NIL;
+                                                            for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
+                                                                {
+                                                                    SubLObject datum = cons;
+                                                                    SubLObject current = datum;
+                                                                    SubLObject constant = NIL;
+                                                                    SubLObject completion_strings = NIL;
+                                                                    destructuring_bind_must_consp(current, datum, $list_alt91);
+                                                                    constant = current.first();
+                                                                    current = current.rest();
+                                                                    completion_strings = current;
+                                                                    {
+                                                                        SubLObject attrs = NIL;
+                                                                        if (NIL != subl_promotions.memberP($CYCL, return_attrs, UNPROVIDED, UNPROVIDED)) {
+                                                                            attrs = cons($$$cycl, cons(format_nil.format_nil_s(hl_to_el(constant)), attrs));
+                                                                        }
+                                                                        if (NIL != subl_promotions.memberP($NL, return_attrs, UNPROVIDED, UNPROVIDED)) {
+                                                                            attrs = cons($$$nl, cons(completion_strings.first(), attrs));
+                                                                        }
+                                                                        if (NIL != subl_promotions.memberP($DISAMBIG_STRING, return_attrs, UNPROVIDED, UNPROVIDED)) {
+                                                                            {
+                                                                                SubLObject disambig_terms = pph_disambiguation.clarification_terms_wrt(constant, term_list, ONE_INTEGER, UNPROVIDED);
+                                                                                if (NIL != disambig_terms) {
+                                                                                    attrs = cons($$$disambigString, cons(generate_phrase(disambig_terms.first(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED), attrs));
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        if (NIL != subl_promotions.memberP($HL_ID, return_attrs, UNPROVIDED, UNPROVIDED)) {
+                                                                            attrs = cons($$$hlId, cons(compact_hl_external_id_string(constant), attrs));
+                                                                        }
+                                                                        {
+                                                                            SubLObject _prev_bind_0_14 = xml_utilities.$xml_indentation_level$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1_15 = xml_utilities.$cycml_indent_level$.currentBinding(thread);
+                                                                            try {
+                                                                                xml_utilities.$xml_indentation_level$.bind(add(xml_utilities.$xml_indentation_amount$.getDynamicValue(thread), xml_utilities.$xml_indentation_level$.getDynamicValue(thread)), thread);
+                                                                                xml_utilities.$cycml_indent_level$.bind(xml_utilities.$xml_indentation_level$.getDynamicValue(thread), thread);
+                                                                                xml_utilities.xml_start_tag_internal($$$Term, attrs, NIL);
+                                                                            } finally {
+                                                                                xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_15, thread);
+                                                                                xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_14, thread);
+                                                                            }
+                                                                        }
+                                                                        xml_utilities.xml_terpri();
+                                                                        xml_utilities.xml_end_tag_internal($$$Term);
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    } finally {
+                                                        xml_utilities.$cycml_indent_level$.rebind(_prev_bind_1_13, thread);
+                                                        xml_utilities.$xml_indentation_level$.rebind(_prev_bind_0_12, thread);
+                                                    }
+                                                }
+                                                xml_utilities.xml_terpri();
+                                                xml_utilities.xml_end_tag_internal($$$ResultSet);
+                                            }
+                                        } finally {
+                                            sbhl_marking_vars.$resourcing_sbhl_marking_spaces_p$.rebind(_prev_bind_2, thread);
+                                            sbhl_marking_vars.$resourced_sbhl_marking_spaces$.rebind(_prev_bind_1, thread);
+                                            sbhl_marking_vars.$resourced_sbhl_marking_space_limit$.rebind(_prev_bind_0_8, thread);
+                                        }
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_16 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                            memoization_state_set_current_process_internal(local_state, NIL);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_16, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        $memoization_state$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject xml_complete_int(final SubLObject prefix, SubLObject v_properties) {
         if (v_properties == UNPROVIDED) {
             v_properties = NIL;
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != completion_properties_p(v_properties) : "html_complete.completion_properties_p(v_properties) " + "CommonSymbols.NIL != html_complete.completion_properties_p(v_properties) " + v_properties;
+        assert NIL != completion_properties_p(v_properties) : "! html_complete.completion_properties_p(v_properties) " + ("html_complete.completion_properties_p(v_properties) " + "CommonSymbols.NIL != html_complete.completion_properties_p(v_properties) ") + v_properties;
         thread.resetMultipleValues();
         final SubLObject completion_dictionary = get_xml_completion_data(prefix, v_properties);
         final SubLObject preferred_terms = thread.secondMultipleValue();
@@ -2292,6 +3470,77 @@ public final class html_complete extends SubLTranslatedFile {
         return memoization_state.caching_results(results3);
     }
 
+    static private final SubLString $str_alt1$onClick__constant_complete___A___ = makeString("onClick=\"constant_complete(\'~A\', ~A, \'~A\', ~A, ~A);\"");
+
+    static private final SubLString $str_alt8$constant_complete__ = makeString("constant_complete('");
+
+    static private final SubLString $str_alt9$___ = makeString("', ");
+
+    static private final SubLString $str_alt10$___ = makeString(", '");
+
+    static private final SubLString $str_alt11$__ = makeString(", ");
+
+    /**
+     *
+     *
+     * @param TERM
+    cycl-denotational-term-p;
+     * 		
+     * @param ISA-FILTER
+     * 		cycl-denotational-term-p; the collection that TERM should be an instance of
+     * @param GENLS-FILTER
+     * 		cycl-denotational-term-p; the collection that TERM should be an spec of
+     * @param MT
+    hlmt-p
+     * 		
+     * @return booleanp; is term an instance of ISA-FILTER (if provided) and a spec of
+    GENLS-FILTER (if provided)?
+     */
+    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p;\r\n\t\t\r\n@param ISA-FILTER\r\n\t\tcycl-denotational-term-p; the collection that TERM should be an instance of\r\n@param GENLS-FILTER\r\n\t\tcycl-denotational-term-p; the collection that TERM should be an spec of\r\n@param MT\nhlmt-p\r\n\t\t\r\n@return booleanp; is term an instance of ISA-FILTER (if provided) and a spec of\r\nGENLS-FILTER (if provided)?")
+    public static final SubLObject term_passes_arg_filters_alt(SubLObject v_term, SubLObject isa_filter, SubLObject genls_filter, SubLObject mt) {
+        {
+            SubLObject isa_filter_terms = com.cyc.cycjava.cycl.html_complete.get_constraints_from_filter(isa_filter);
+            SubLObject genls_filter_terms = com.cyc.cycjava.cycl.html_complete.get_constraints_from_filter(genls_filter);
+            SubLObject failP = NIL;
+            if (NIL == failP) {
+                {
+                    SubLObject csome_list_var = isa_filter_terms;
+                    SubLObject isa_constraint = NIL;
+                    for (isa_constraint = csome_list_var.first(); !((NIL != failP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , isa_constraint = csome_list_var.first()) {
+                        failP = makeBoolean(NIL == com.cyc.cycjava.cycl.html_complete.autocomplete_instance_ofP(v_term, isa_constraint, mt));
+                    }
+                }
+            }
+            if (NIL == failP) {
+                {
+                    SubLObject csome_list_var = genls_filter_terms;
+                    SubLObject genls_constraint = NIL;
+                    for (genls_constraint = csome_list_var.first(); !((NIL != failP) || (NIL == csome_list_var)); csome_list_var = csome_list_var.rest() , genls_constraint = csome_list_var.first()) {
+                        failP = makeBoolean(NIL == com.cyc.cycjava.cycl.html_complete.autocomplete_spec_ofP(v_term, genls_constraint, mt));
+                    }
+                }
+            }
+            return makeBoolean(NIL == failP);
+        }
+    }
+
+    /**
+     *
+     *
+     * @param TERM
+    cycl-denotational-term-p;
+     * 		
+     * @param ISA-FILTER
+     * 		cycl-denotational-term-p; the collection that TERM should be an instance of
+     * @param GENLS-FILTER
+     * 		cycl-denotational-term-p; the collection that TERM should be an spec of
+     * @param MT
+    hlmt-p
+     * 		
+     * @return booleanp; is term an instance of ISA-FILTER (if provided) and a spec of
+    GENLS-FILTER (if provided)?
+     */
+    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p;\r\n\t\t\r\n@param ISA-FILTER\r\n\t\tcycl-denotational-term-p; the collection that TERM should be an instance of\r\n@param GENLS-FILTER\r\n\t\tcycl-denotational-term-p; the collection that TERM should be an spec of\r\n@param MT\nhlmt-p\r\n\t\t\r\n@return booleanp; is term an instance of ISA-FILTER (if provided) and a spec of\r\nGENLS-FILTER (if provided)?")
     public static SubLObject term_passes_arg_filters(final SubLObject v_term, final SubLObject isa_filter, final SubLObject genls_filter, SubLObject mt) {
         if (mt == $DEFAULT) {
             mt = $$InferencePSC;
@@ -2307,6 +3556,20 @@ public final class html_complete extends SubLTranslatedFile {
         return makeBoolean((NIL == failP) && (NIL != term_passes_genls_filter(v_term, genls_filter, mt)));
     }
 
+    static private final SubLString $str_alt12$__ = makeString(");");
+
+    static private final SubLString $str_alt13$onClick__cyclify___A____ = makeString("onClick=\"cyclify(\'~A\');\"");
+
+    static private final SubLString $str_alt15$javascript_void____ = makeString("javascript:void('')");
+
+    static private final SubLString $str_alt16$_var_cgi_program_____A___var_comp = makeString("\nvar cgi_program = \'~A\';\nvar completion_frame_name = \'~A\';\n");
+
+    static private final SubLString $str_alt18$constant_completion_js = makeString("constant-completion.js");
+
+    static private final SubLString $str_alt20$text_javascript = makeString("text/javascript");
+
+    static private final SubLString $str_alt21$_if__window_focus__window_focus__ = makeString("\nif (window.focus) window.focus();");
+
     public static SubLObject term_passes_genls_filter(final SubLObject v_term, final SubLObject genls_filter, final SubLObject mt) {
         final SubLObject genls_filter_terms = get_constraints_from_filter(genls_filter);
         SubLObject failP = NIL;
@@ -2319,11 +3582,85 @@ public final class html_complete extends SubLTranslatedFile {
         return makeBoolean(NIL == failP);
     }
 
+    static private final SubLString $str_alt22$_if__window_opener__window_opener = makeString("\nif (window.opener) window.opener.status = \'~A\';\n");
+
+    static private final SubLString $str_alt23$_var_form_number____A__var_elemen = makeString("\nvar form_number = ~A;\nvar element_number = ~A;\nvar prefix = \'~A\';\nvar close_window = ~A;\n");
+
+    static private final SubLString $str_alt24$_var_old_length____1___function_c = makeString("\nvar old_length = -1;\n\nfunction complete_error(message) {\n  document.open();\n  document.writeln(\'Error \' + message);\n  document.writeln(\'Completion links only apply to the page which originally generated them.<p>\');\n  document.writeln(\'That page is no longer available.\');\n  document.close();\n  return false;\n}\n\nfunction complete_insert(full_string, submit, chosen) {\n  // defensive programming to prevent script errors\n  if (!window.opener) \n    return complete_error(1);\n  if (!window.opener.document) \n    return complete_error(2);\n  if (!window.opener.document.forms) \n    return complete_error(3);\n  if (!window.opener.document.forms.length) \n    return complete_error(4);\n  if (window.opener.document.forms.length < form_number) \n    return complete_error(5);\n  \n  if (window.opener.focus && chosen) window.opener.focus();\n\n  var form = window.opener.document.forms[form_number];\n\n  if (!form.elements) \n    return complete_error(6);\n  if (!form.elements.length) \n    return complete_error(7);\n  if (form.elements.length < element_number) \n    return complete_error(8);\n\n  var element = form.elements[element_number];\n\n  // @todo remove this\n  //if (!element.value) \n  //  return complete_error(9);\n\n  var old_value = element.value;\n  if (old_length < 0) old_length = old_value.length;\n\n  // now actually do the completion\n  var prefix_length = prefix.length;\n  var full_length = full_string.length;\n  var completion = full_string.substring(prefix_length, full_length);\n  var preamble = old_value.substring(0, (old_length - prefix_length));\n  element.value = preamble + full_string;\n  // if (element.focus) element.focus();\n\n  // submit the form if we are supposed to\n  if (submit)\n    form.submit();\n\n  // close the window if we are supposed to\n  if (close_window)\n    self.close();\n\n  return false;\n}\n\nfunction complete_extend(full_string) {\n  return complete_insert(full_string, false, false);\n}\n\nfunction complete_choose(full_string, submit) {\n  return complete_insert(full_string, submit, true);\n}");
+
+    /**
+     *
+     *
+     * @param FILTER
+    cycl-denotational-term-p
+     * 		
+     * @return listp; a list of the terms that filter contains
+     */
+    @LispMethod(comment = "@param FILTER\ncycl-denotational-term-p\r\n\t\t\r\n@return listp; a list of the terms that filter contains")
+    public static final SubLObject get_constraints_from_filter_alt(SubLObject filter) {
+        if (formula_arg0(filter).equal($$CollectionIntersectionFn)) {
+            return formula_args(formula_arg1(filter, UNPROVIDED), UNPROVIDED);
+        }
+        return NIL != filter ? ((SubLObject) (list(filter))) : NIL;
+    }
+
+    /**
+     *
+     *
+     * @param FILTER
+    cycl-denotational-term-p
+     * 		
+     * @return listp; a list of the terms that filter contains
+     */
+    @LispMethod(comment = "@param FILTER\ncycl-denotational-term-p\r\n\t\t\r\n@return listp; a list of the terms that filter contains")
     public static SubLObject get_constraints_from_filter(final SubLObject filter) {
         if (cycl_utilities.formula_arg0(filter).equal($$CollectionIntersectionFn)) {
             return cycl_utilities.formula_args(cycl_utilities.formula_arg1(filter, UNPROVIDED), UNPROVIDED);
         }
         return NIL != filter ? list(filter) : NIL;
+    }
+
+    public static final SubLObject clear_autocomplete_isa_cache_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject keys = NIL;
+                SubLObject lock = $autocomplete_isa_cache_lock$.getGlobalValue();
+                SubLObject release = NIL;
+                try {
+                    release = seize_lock(lock);
+                    keys = cache.cache_keys($autocomplete_isa_cache$.getDynamicValue(thread));
+                    cache.cache_clear($autocomplete_isa_cache$.getDynamicValue(thread));
+                } finally {
+                    if (NIL != release) {
+                        release_lock(lock);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = keys;
+                    SubLObject key = NIL;
+                    for (key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , key = cdolist_list_var.first()) {
+                        {
+                            SubLObject datum = key;
+                            SubLObject current = datum;
+                            SubLObject constraint = NIL;
+                            SubLObject mt = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt105);
+                            constraint = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt105);
+                            mt = current.first();
+                            current = current.rest();
+                            if (NIL == current) {
+                            } else {
+                                cdestructuring_bind_error(datum, $list_alt105);
+                            }
+                        }
+                    }
+                }
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject clear_autocomplete_isa_cache() {
@@ -2362,6 +3699,51 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt25$_complete_extend___A____ = makeString("\ncomplete_extend(\'~A\');\n");
+
+    public static final SubLObject clear_autocomplete_genls_cache_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject keys = NIL;
+                SubLObject lock = $autocomplete_genls_cache_lock$.getGlobalValue();
+                SubLObject release = NIL;
+                try {
+                    release = seize_lock(lock);
+                    keys = cache.cache_keys($autocomplete_genls_cache$.getDynamicValue(thread));
+                    cache.cache_clear($autocomplete_genls_cache$.getDynamicValue(thread));
+                } finally {
+                    if (NIL != release) {
+                        release_lock(lock);
+                    }
+                }
+                {
+                    SubLObject cdolist_list_var = keys;
+                    SubLObject key = NIL;
+                    for (key = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , key = cdolist_list_var.first()) {
+                        {
+                            SubLObject datum = key;
+                            SubLObject current = datum;
+                            SubLObject constraint = NIL;
+                            SubLObject mt = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt105);
+                            constraint = current.first();
+                            current = current.rest();
+                            destructuring_bind_must_consp(current, datum, $list_alt105);
+                            mt = current.first();
+                            current = current.rest();
+                            if (NIL == current) {
+                            } else {
+                                cdestructuring_bind_error(datum, $list_alt105);
+                            }
+                        }
+                    }
+                }
+                return NIL;
+            }
+        }
+    }
+
     public static SubLObject clear_autocomplete_genls_cache() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject keys = NIL;
@@ -2398,6 +3780,65 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt26$_complete_choose___A____A___ = makeString("\ncomplete_choose(\'~A\', ~A);\n");
+
+    static private final SubLString $str_alt33$case_insensitive = makeString("case-insensitive");
+
+    static private final SubLSymbol $sym40$STRING_ = makeSymbol("STRING<");
+
+    static private final SubLString $str_alt44$Exact_match_plus_one_longer_compl = makeString("Exact match plus one longer completion.");
+
+    static private final SubLString $str_alt45$Exact_match_plus__S_longer_comple = makeString("Exact match plus ~S longer completions.");
+
+    /**
+     *
+     *
+     * @unknown booleanp; is TERM an instance of ISA-CONSTRAINT in MT?
+     * @unknown booleanp; can the value of return0 be believed?
+     */
+    @LispMethod(comment = "@unknown booleanp; is TERM an instance of ISA-CONSTRAINT in MT?\r\n@unknown booleanp; can the value of return0 be believed?")
+    public static final SubLObject instance_of_precachedP_alt(SubLObject v_term, SubLObject isa_constraint, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != narts_high.naut_p(v_term)) {
+                return values(NIL, NIL);
+            }
+            {
+                SubLObject instance_ofP = NIL;
+                SubLObject instance_set = NIL;
+                SubLObject cached = NIL;
+                SubLObject lock = $autocomplete_isa_cache_lock$.getGlobalValue();
+                SubLObject release = NIL;
+                try {
+                    release = seize_lock(lock);
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject instance_set_17 = cache.cache_get($autocomplete_isa_cache$.getDynamicValue(thread), list(isa_constraint, mt));
+                        SubLObject cached_18 = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        instance_set = instance_set_17;
+                        cached = cached_18;
+                    }
+                } finally {
+                    if (NIL != release) {
+                        release_lock(lock);
+                    }
+                }
+                if (NIL != cached) {
+                    instance_ofP = set.set_memberP(v_term, instance_set);
+                }
+                return values(instance_ofP, cached);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown booleanp; is TERM an instance of ISA-CONSTRAINT in MT?
+     * @unknown booleanp; can the value of return0 be believed?
+     */
+    @LispMethod(comment = "@unknown booleanp; is TERM an instance of ISA-CONSTRAINT in MT?\r\n@unknown booleanp; can the value of return0 be believed?")
     public static SubLObject instance_of_precachedP(final SubLObject v_term, final SubLObject isa_constraint, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != narts_high.naut_p(v_term)) {
@@ -2426,6 +3867,77 @@ public final class html_complete extends SubLTranslatedFile {
         return values(instance_ofP, cached);
     }
 
+    static private final SubLString $str_alt46$_S_possible__A_ = makeString("~S possible ~A.");
+
+    static private final SubLString $str_alt48$Extension__ = makeString("Extension: ");
+
+    static private final SubLString $str_alt50$_Suggestions_ = makeString(" Suggestions:");
+
+    static private final SubLString $str_alt51$_Completions_ = makeString(" Completions:");
+
+    static private final SubLString $str_alt52$Constants___A__ = makeString("Constants (~A):");
+
+    static private final SubLString $str_alt53$Lexical_Strings___A__ = makeString("Lexical Strings (~A):");
+
+    static private final SubLString $str_alt54$Sole_completion__already_complete = makeString("Sole completion (already completed).");
+
+    static private final SubLString $str_alt55$Sole_completion_ = makeString("Sole completion.");
+
+    static private final SubLString $str_alt56$Already_completed_ = makeString("Already completed.");
+
+    static private final SubLString $str_alt57$Sole_completion_ = makeString("Sole completion:");
+
+    static private final SubLString $str_alt58$No_completions_ = makeString("No completions.");
+
+    /**
+     *
+     *
+     * @unknown booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?
+     * @unknown booleanp; can the value of return0 be believed?
+     */
+    @LispMethod(comment = "@unknown booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?\r\n@unknown booleanp; can the value of return0 be believed?")
+    public static final SubLObject spec_of_precachedP_alt(SubLObject v_term, SubLObject genls_constraint, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != narts_high.naut_p(v_term)) {
+                return values(NIL, NIL);
+            }
+            {
+                SubLObject spec_ofP = NIL;
+                SubLObject spec_set = NIL;
+                SubLObject cached = NIL;
+                SubLObject lock = $autocomplete_genls_cache_lock$.getGlobalValue();
+                SubLObject release = NIL;
+                try {
+                    release = seize_lock(lock);
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject spec_set_19 = cache.cache_get($autocomplete_genls_cache$.getDynamicValue(thread), list(genls_constraint, mt));
+                        SubLObject cached_20 = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        spec_set = spec_set_19;
+                        cached = cached_20;
+                    }
+                } finally {
+                    if (NIL != release) {
+                        release_lock(lock);
+                    }
+                }
+                if (NIL != cached) {
+                    spec_ofP = set.set_memberP(v_term, spec_set);
+                }
+                return values(spec_ofP, cached);
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?
+     * @unknown booleanp; can the value of return0 be believed?
+     */
+    @LispMethod(comment = "@unknown booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?\r\n@unknown booleanp; can the value of return0 be believed?")
     public static SubLObject spec_of_precachedP(final SubLObject v_term, final SubLObject genls_constraint, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (NIL != narts_high.naut_p(v_term)) {
@@ -2454,6 +3966,85 @@ public final class html_complete extends SubLTranslatedFile {
         return values(spec_ofP, cached);
     }
 
+    static private final SubLString $str_alt59$No_suggestions_ = makeString("No suggestions.");
+
+    static private final SubLString $str_alt64$Machine__ = makeString("Machine: ");
+
+    static private final SubLString $str_alt65$Prefix__ = makeString("Prefix: ");
+
+    static private final SubLString $str_alt66$Filter__ = makeString("Filter: ");
+
+    static private final SubLString $str_alt67$onClick__complete_choose___A____A = makeString("onClick=\"complete_choose(\'~A\', ~A);\"");
+
+    static private final SubLString $str_alt69$var_constantCompleteDataSource___ = makeString("var constantCompleteDataSource = new YAHOO.widget.DS_XHR(\'./cg\', [\'Term\', \'cycl\', \'nl\']);\n constantCompleteDataSource.scriptQueryParam = \'xml-complete~A&prefix\';  \n constantCompleteDataSource.responseType = YAHOO.widget.DS_XHR.TYPE_XML;\n var constantComplete = new YAHOO.widget.AutoComplete(\'~A\', \'~A\', constantCompleteDataSource);\n constantComplete.allowBrowserAutocomplete = false;  \n constantComplete.autoHighlight = false;\n constantComplete.minQueryLength = ~A;\n constantComplete.animSpeed = 0.1;\n// constantComplete.delimChar = \' \'; //this would be good if we were working in just CycL (no lexical completions)\n constantComplete.maxResultsDisplayed=~A;\n constantComplete.queryDelay=0.3;\n constantComplete.embeddedInToolbar=~A;\n\n if (constantComplete.embeddedInToolbar) {\n   constantComplete.itemSelectEvent.subscribe(function (sType, aArgs) { document.getElementById(\'inputBox\').form.submit();}); \n}\n \n constantComplete.formatResult = function(oResultItem, sQuery) {\n   var thisConst = oResultItem[0];\n   var string = oResultItem[1];\n   var sMarkup = string + \' <span class=\"autoCompCycL\">\' + thisConst + \'</span>\'; \n   return (sMarkup);\n };\n if (constantComplete.embeddedInToolbar) {\n   constantComplete.containerExpandEvent.subscribe(function() {\n    if (!this.expandedRows) {\n      this.expandedRows=parent.document.body.rows;\n      var rows = parent.document.body.rows;\n      rows = rows.replace(/.*,.*,/, YAHOO.util.Dom.getDocumentHeight() + \',*,\');\n      parent.document.body.rows=rows;\n    }\n   });\n   constantComplete.containerCollapseEvent.subscribe(function() {\n    if (this.expandedRows) { parent.document.body.rows=this.expandedRows; }\n    this.expandedRows = null;\n   });\n }\n");
+
+    /**
+     *
+     *
+     * @param TERM
+    cycl-denotational-term-p
+     * 		
+     * @unknown ISA-CONSTRAINT nil or cycl-denotational-term-p
+     * @param MT
+    hlmt-p
+     * 		
+     * @return booleanp; is TERM and instance of ISA-CONSTRAINT in MT?
+    This function will attempt to use pre-cached versions of #$isa, and will add a task to the
+    agenda if there is no pre-cached version available, so that hopefully it will be pre-cached
+    the next time it is needed.
+     */
+    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p\r\n\t\t\r\n@unknown ISA-CONSTRAINT nil or cycl-denotational-term-p\r\n@param MT\nhlmt-p\r\n\t\t\r\n@return booleanp; is TERM and instance of ISA-CONSTRAINT in MT?\r\nThis function will attempt to use pre-cached versions of #$isa, and will add a task to the\r\nagenda if there is no pre-cached version available, so that hopefully it will be pre-cached\r\nthe next time it is needed.")
+    public static final SubLObject autocomplete_instance_ofP_alt(SubLObject v_term, SubLObject isa_constraint, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject passes_constraint = com.cyc.cycjava.cycl.html_complete.instance_of_precachedP(v_term, isa_constraint, mt);
+                SubLObject cachedP = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL != cachedP) {
+                    return passes_constraint;
+                } else {
+                    if (NIL != narts_high.naut_p(v_term)) {
+                        return isa.isaP(v_term, isa_constraint, mt, UNPROVIDED);
+                    } else {
+                        if (isa_constraint == $$Thing) {
+                            return T;
+                        } else {
+                            if (isa_constraint == $$Collection) {
+                                return fort_types_interface.fort_has_typeP(v_term, isa_constraint, mt);
+                            } else {
+                                if (NIL == cardinality_estimates.generality_estimateL(isa_constraint, $$PhysiologicalCondition)) {
+                                    com.cyc.cycjava.cycl.html_complete.precache_isa_constraint(isa_constraint, mt);
+                                    return isa.isaP(v_term, isa_constraint, mt, UNPROVIDED);
+                                } else {
+                                    com.cyc.cycjava.cycl.html_complete.precache_isa_constraint_guts(isa_constraint, mt);
+                                    return com.cyc.cycjava.cycl.html_complete.instance_of_precachedP(v_term, isa_constraint, mt);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param TERM
+    cycl-denotational-term-p
+     * 		
+     * @unknown ISA-CONSTRAINT nil or cycl-denotational-term-p
+     * @param MT
+    hlmt-p
+     * 		
+     * @return booleanp; is TERM and instance of ISA-CONSTRAINT in MT?
+    This function will attempt to use pre-cached versions of #$isa, and will add a task to the
+    agenda if there is no pre-cached version available, so that hopefully it will be pre-cached
+    the next time it is needed.
+     */
+    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p\r\n\t\t\r\n@unknown ISA-CONSTRAINT nil or cycl-denotational-term-p\r\n@param MT\nhlmt-p\r\n\t\t\r\n@return booleanp; is TERM and instance of ISA-CONSTRAINT in MT?\r\nThis function will attempt to use pre-cached versions of #$isa, and will add a task to the\r\nagenda if there is no pre-cached version available, so that hopefully it will be pre-cached\r\nthe next time it is needed.")
     public static SubLObject autocomplete_instance_ofP(final SubLObject v_term, final SubLObject isa_constraint, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2480,6 +4071,69 @@ public final class html_complete extends SubLTranslatedFile {
         return instance_of_precachedP(v_term, isa_constraint, mt);
     }
 
+    /**
+     *
+     *
+     * @param TERM
+    cycl-denotational-term-p
+     * 		
+     * @unknown GENLS-CONSTRAINT nil or cycl-denotational-term-p
+     * @param MT
+    hlmt-p
+     * 		
+     * @return booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?
+    This function will attempt to use pre-cached versions of #$genls, and will add a task to the
+    agenda if there is no pre-cached version available, so that hopefully it will be pre-cached
+    the next time it is needed.
+     */
+    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p\r\n\t\t\r\n@unknown GENLS-CONSTRAINT nil or cycl-denotational-term-p\r\n@param MT\nhlmt-p\r\n\t\t\r\n@return booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?\r\nThis function will attempt to use pre-cached versions of #$genls, and will add a task to the\r\nagenda if there is no pre-cached version available, so that hopefully it will be pre-cached\r\nthe next time it is needed.")
+    public static final SubLObject autocomplete_spec_ofP_alt(SubLObject v_term, SubLObject genls_constraint, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject passes_constraint = com.cyc.cycjava.cycl.html_complete.spec_of_precachedP(v_term, genls_constraint, mt);
+                SubLObject cachedP = thread.secondMultipleValue();
+                thread.resetMultipleValues();
+                if (NIL != cachedP) {
+                    return passes_constraint;
+                } else {
+                    if (NIL != narts_high.naut_p(v_term)) {
+                        return genlsP(v_term, genls_constraint, mt, UNPROVIDED);
+                    } else {
+                        if (genls_constraint == $$Thing) {
+                            return fort_types_interface.fort_has_typeP(v_term, $$Collection, mt);
+                        } else {
+                            if (NIL == cardinality_estimates.generality_estimateL(genls_constraint, $$PhysiologicalCondition)) {
+                                com.cyc.cycjava.cycl.html_complete.precache_genls_constraint(genls_constraint, mt);
+                                return genlsP(v_term, genls_constraint, mt, UNPROVIDED);
+                            } else {
+                                com.cyc.cycjava.cycl.html_complete.precache_genls_constraint_guts(genls_constraint, mt);
+                                return com.cyc.cycjava.cycl.html_complete.spec_of_precachedP(v_term, genls_constraint, mt);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     *
+     *
+     * @param TERM
+    cycl-denotational-term-p
+     * 		
+     * @unknown GENLS-CONSTRAINT nil or cycl-denotational-term-p
+     * @param MT
+    hlmt-p
+     * 		
+     * @return booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?
+    This function will attempt to use pre-cached versions of #$genls, and will add a task to the
+    agenda if there is no pre-cached version available, so that hopefully it will be pre-cached
+    the next time it is needed.
+     */
+    @LispMethod(comment = "@param TERM\ncycl-denotational-term-p\r\n\t\t\r\n@unknown GENLS-CONSTRAINT nil or cycl-denotational-term-p\r\n@param MT\nhlmt-p\r\n\t\t\r\n@return booleanp; is TERM a spec of GENLS-CONSTRAINT in MT?\r\nThis function will attempt to use pre-cached versions of #$genls, and will add a task to the\r\nagenda if there is no pre-cached version available, so that hopefully it will be pre-cached\r\nthe next time it is needed.")
     public static SubLObject autocomplete_spec_ofP(final SubLObject v_term, final SubLObject genls_constraint, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         thread.resetMultipleValues();
@@ -2503,12 +4157,78 @@ public final class html_complete extends SubLTranslatedFile {
         return spec_of_precachedP(v_term, genls_constraint, mt);
     }
 
+    private static final SubLSymbol HTML_PRINT_JS_AUTOCOMPLETE_SETUP_2 = makeSymbol("HTML-PRINT-JS-AUTOCOMPLETE-SETUP-2");
+
+    static private final SubLString $str_alt72$_filter_ = makeString("&filter=");
+
+    private static final SubLSymbol $SAM_AUTOCOMPLETE = makeKeyword("SAM-AUTOCOMPLETE");
+
+    static private final SubLString $$$stylesheet = makeString("stylesheet");
+
+    static private final SubLString $str_alt75$text_css = makeString("text/css");
+
+    static private final SubLString $str_alt78$text_xml = makeString("text/xml");
+
+    static private final SubLString $str_alt79$return_attrs = makeString("return-attrs");
+
+    static private final SubLList $list_alt80 = list($CYCL, makeKeyword("NL"));
+
+    public static final SubLObject precache_isa_constraint_alt(SubLObject constraint, SubLObject mt) {
+        return operation_queues.auxiliary_queue_enqueue(list(FI_EVAL, list(QUOTE, list(PRECACHE_ISA_CONSTRAINT_GUTS, constraint, mt))));
+    }
+
     public static SubLObject precache_isa_constraint(final SubLObject constraint, final SubLObject mt) {
         return operation_queues.auxiliary_queue_enqueue(list(FI_EVAL, list(QUOTE, list(PRECACHE_ISA_CONSTRAINT_GUTS, constraint, mt))));
     }
 
+    static private final SubLString $str_alt84$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+
+    public static final SubLObject precache_genls_constraint_alt(SubLObject constraint, SubLObject mt) {
+        return fi.fi_local_eval(list(PRECACHE_GENLS_CONSTRAINT_GUTS, constraint, mt));
+    }
+
     public static SubLObject precache_genls_constraint(final SubLObject constraint, final SubLObject mt) {
         return fi.fi_local_eval(list(PRECACHE_GENLS_CONSTRAINT_GUTS, constraint, mt));
+    }
+
+    static private final SubLSymbol $sym88$NUM_INDEX_ = makeSymbol("NUM-INDEX>");
+
+    public static final SubLObject precache_isa_constraint_guts_alt(SubLObject constraint, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject doneP = NIL;
+                SubLObject key = list(constraint, mt);
+                SubLObject lock = $autocomplete_isa_cache_lock$.getGlobalValue();
+                SubLObject release = NIL;
+                try {
+                    release = seize_lock(lock);
+                    if (NIL != cache.cache_get($autocomplete_isa_cache$.getDynamicValue(thread), key)) {
+                        doneP = T;
+                    }
+                } finally {
+                    if (NIL != release) {
+                        release_lock(lock);
+                    }
+                }
+                if (NIL == doneP) {
+                    {
+                        SubLObject instance_set = construct_set_from_list(isa.all_instances(constraint, mt, UNPROVIDED), EQUAL, UNPROVIDED);
+                        SubLObject lock_21 = $autocomplete_isa_cache_lock$.getGlobalValue();
+                        SubLObject release_22 = NIL;
+                        try {
+                            release_22 = seize_lock(lock_21);
+                            cache.cache_set($autocomplete_isa_cache$.getDynamicValue(thread), key, instance_set);
+                        } finally {
+                            if (NIL != release_22) {
+                                release_lock(lock_21);
+                            }
+                        }
+                    }
+                }
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject precache_isa_constraint_guts(final SubLObject constraint, final SubLObject mt) {
@@ -2539,6 +4259,55 @@ public final class html_complete extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    static private final SubLList $list_alt91 = cons(makeSymbol("CONSTANT"), makeSymbol("COMPLETION-STRINGS"));
+
+    static private final SubLList $list_alt105 = list(makeSymbol("CONSTRAINT"), makeSymbol("MT"));
+
+    public static final SubLObject precache_genls_constraint_guts_alt(SubLObject constraint, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject doneP = NIL;
+                SubLObject key = list(constraint, mt);
+                SubLObject my_id = random.random($int$1000);
+                SubLObject lock = $autocomplete_genls_cache_lock$.getGlobalValue();
+                SubLObject release = NIL;
+                try {
+                    release = seize_lock(lock);
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject value = cache.cache_get($autocomplete_genls_cache$.getDynamicValue(thread), key);
+                        SubLObject presentP = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        if (NIL != presentP) {
+                            doneP = T;
+                        }
+                    }
+                } finally {
+                    if (NIL != release) {
+                        release_lock(lock);
+                    }
+                }
+                if (NIL == doneP) {
+                    {
+                        SubLObject spec_set = construct_set_from_list(all_specs(constraint, mt, UNPROVIDED), EQUAL, UNPROVIDED);
+                        SubLObject lock_23 = $autocomplete_genls_cache_lock$.getGlobalValue();
+                        SubLObject release_24 = NIL;
+                        try {
+                            release_24 = seize_lock(lock_23);
+                            cache.cache_set($autocomplete_genls_cache$.getDynamicValue(thread), key, spec_set);
+                        } finally {
+                            if (NIL != release_24) {
+                                release_lock(lock_23);
+                            }
+                        }
+                    }
+                }
+                return NIL;
+            }
+        }
     }
 
     public static SubLObject precache_genls_constraint_guts(final SubLObject constraint, final SubLObject mt) {
@@ -2576,6 +4345,55 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLString $str_alt116$autocomplete_min_js = makeString("autocomplete-min.js");
+
+    private static final SubLSymbol $ANIMATION = makeKeyword("ANIMATION");
+
+    static private final SubLString $str_alt118$animation_min_js = makeString("animation-min.js");
+
+    private static final SubLSymbol $YAHOO_DOM_EVENT = makeKeyword("YAHOO-DOM-EVENT");
+
+    static private final SubLString $str_alt120$yahoo_dom_event_js = makeString("yahoo-dom-event.js");
+
+    static private final SubLString $str_alt122$yahoo_js = makeString("yahoo.js");
+
+    private static final SubLSymbol $DOM = makeKeyword("DOM");
+
+    static private final SubLString $str_alt124$dom_js = makeString("dom.js");
+
+    static private final SubLString $str_alt126$event_js = makeString("event.js");
+
+    private static final SubLSymbol $FONTS_MIN = makeKeyword("FONTS-MIN");
+
+    static private final SubLString $str_alt128$fonts_min_css = makeString("fonts-min.css");
+
+    static private final SubLString $str_alt129$cb_cyc_css = makeString("cb-cyc.css");
+
+    public static final SubLObject genlsPX_alt(SubLObject spec, SubLObject genl, SubLObject mt, SubLObject tv) {
+        if (mt == UNPROVIDED) {
+            mt = NIL;
+        }
+        if (tv == UNPROVIDED) {
+            tv = NIL;
+        }
+        if ((NIL != function_terms.nat_formula_p(genl)) && formula_operator(genl).equal($$CollectionIntersectionFn)) {
+            {
+                SubLObject v_genls = formula_args(formula_arg1(genl, UNPROVIDED), UNPROVIDED);
+                SubLObject cdolist_list_var = v_genls;
+                SubLObject sub_genl = NIL;
+                for (sub_genl = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , sub_genl = cdolist_list_var.first()) {
+                    if (NIL == com.cyc.cycjava.cycl.html_complete.genlsPX(spec, sub_genl, mt, tv)) {
+                        return NIL;
+                    }
+                }
+                if (NIL != v_genls) {
+                    return T;
+                }
+            }
+        }
+        return genlsP(spec, genl, mt, tv);
+    }
+
     public static SubLObject genlsPX(final SubLObject spec, final SubLObject genl, SubLObject mt, SubLObject tv) {
         if (mt == UNPROVIDED) {
             mt = NIL;
@@ -2602,8 +4420,45 @@ public final class html_complete extends SubLTranslatedFile {
         return genls.genlsP(spec, genl, mt, tv);
     }
 
+    static private final SubLString $str_alt130$sam_autocomplete_css = makeString("sam-autocomplete.css");
+
+    static private final SubLString $str_alt132$_var_form_number____A__var_elemen = makeString("\nvar form_number = ~A;\nvar element_number = ~A;\nvar close_window = ~A;\n\n");
+
+    static private final SubLString $str_alt133$_function_cyclify_error_message__ = makeString("\nfunction cyclify_error(message) {\n  document.open();\n  document.writeln(\'Unable to cyclify the input field.<p>\');\n  document.writeln(\'Error: \' + message);\n  document.close();\n  return false;\n}\n\nfunction handle_cyclify(new_string) {\n  // defensive programming to prevent script errors\n  if (!window.opener) \n    return cyclify_error(1);\n  if (!window.opener.document) \n    return cyclify_error(2);\n  if (!window.opener.document.forms) \n    return cyclify_error(3);\n  if (!window.opener.document.forms.length) \n    return cyclify_error(4);\n  if (window.opener.document.forms.length < form_number) \n    return cyclify_error(5);\n  \n  if (window.opener.focus) window.opener.focus();\n\n  var form = window.opener.document.forms[form_number];\n\n  if (!form.elements) \n    return cyclify_error(6);\n  if (!form.elements.length) \n    return cyclify_error(7);\n  if (form.elements.length < element_number) \n    return cyclify_error(8);\n\n  var element = form.elements[element_number];\n\n  if (!element.value) \n    return cyclify_error(9);\n\n  element.value = new_string;\n\n  // close the window if we are supposed to\n  if (close_window)\n    self.close();\n\n  return false;\n}\n\n");
+
+    public static final SubLObject num_indexG_alt(SubLObject a, SubLObject b) {
+        return numG(kb_indexing.num_index(a), kb_indexing.num_index(b));
+    }
+
     public static SubLObject num_indexG(final SubLObject a, final SubLObject b) {
         return numG(kb_indexing.num_index(a), kb_indexing.num_index(b));
+    }
+
+    public static final SubLObject html_handle_cyclify_script_alt(SubLObject form, SubLObject input) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    format(html_macros.$html_stream$.getDynamicValue(thread), $html_handle_cyclify_script_parameters$.getGlobalValue(), new SubLObject[]{ form, input, NIL != $cb_pop_up_constant_completion$.getDynamicValue(thread) ? ((SubLObject) ($$$true)) : $$$false });
+                    html_terpri(UNPROVIDED);
+                    html_markup($html_handle_cyclify_script$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
     }
 
     public static SubLObject html_handle_cyclify_script(final SubLObject form, final SubLObject input) {
@@ -2627,6 +4482,51 @@ public final class html_complete extends SubLTranslatedFile {
         }
         html_markup(html_macros.$html_script_tail$.getGlobalValue());
         return NIL;
+    }
+
+    static private final SubLString $str_alt134$_handle_cyclify_unescape__ = makeString("\nhandle_cyclify(unescape(\'");
+
+    static private final SubLString $str_alt135$_____ = makeString("\'));\n");
+
+    static private final SubLString $str_alt137$All_valid____references_have_been = makeString("All valid #$ references have been added.");
+
+    static private final SubLString $str_alt138$Invalid_references__ = makeString("Invalid references :");
+
+    static private final SubLString $str_alt139$Added_references__ = makeString("Added references :");
+
+    public static final SubLObject html_immediate_perform_cyclify_script_alt(SubLObject string) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_source_readability_terpri(UNPROVIDED);
+            html_markup(html_macros.$html_script_head$.getGlobalValue());
+            html_markup(html_macros.$html_script_language$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_markup(html_macros.$html_script_javascript$.getGlobalValue());
+            html_char(CHAR_quotation, UNPROVIDED);
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    html_princ($html_immediate_perform_cyclify_script_prefix$.getGlobalValue());
+                    {
+                        SubLObject _prev_bind_0_25 = $html_url_princ_escape_spaces$.currentBinding(thread);
+                        try {
+                            $html_url_princ_escape_spaces$.bind(NIL, thread);
+                            html_url_princ(string);
+                        } finally {
+                            $html_url_princ_escape_spaces$.rebind(_prev_bind_0_25, thread);
+                        }
+                    }
+                    html_princ($html_immediate_perform_cyclify_script_postfix$.getGlobalValue());
+                    html_source_readability_terpri(UNPROVIDED);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_script_tail$.getGlobalValue());
+            return NIL;
+        }
     }
 
     public static SubLObject html_immediate_perform_cyclify_script(final SubLObject string) {
@@ -2656,6 +4556,151 @@ public final class html_complete extends SubLTranslatedFile {
         }
         html_markup(html_macros.$html_script_tail$.getGlobalValue());
         return NIL;
+    }
+
+    public static final SubLObject cb_cyclify_alt(SubLObject args) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject form = html_extract_input($$$form, args);
+                SubLObject input = html_extract_input($$$input, args);
+                SubLObject string = html_extract_input($$$string, args);
+                thread.resetMultipleValues();
+                {
+                    SubLObject new_string = string_utilities.cyclify_string(string);
+                    SubLObject added_references = thread.secondMultipleValue();
+                    thread.resetMultipleValues();
+                    thread.resetMultipleValues();
+                    {
+                        SubLObject valid_references = string_utilities.constant_names_in_string(new_string, UNPROVIDED);
+                        SubLObject invalid_references = thread.secondMultipleValue();
+                        thread.resetMultipleValues();
+                        html_markup(html_macros.$html_html_head$.getGlobalValue());
+                        html_markup(html_macros.$html_head_head$.getGlobalValue());
+                        html_macros.html_head_content_type();
+                        html_source_readability_terpri(UNPROVIDED);
+                        html_markup(html_macros.$html_title_head$.getGlobalValue());
+                        html_princ($$$Cyclify);
+                        html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                        com.cyc.cycjava.cycl.html_complete.html_handle_cyclify_script(form, input);
+                        com.cyc.cycjava.cycl.html_complete.html_immediate_perform_cyclify_script(new_string);
+                        com.cyc.cycjava.cycl.html_complete.html_opener_message_on_load($str_alt137$All_valid____references_have_been);
+                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        {
+                            SubLObject _prev_bind_0 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                            try {
+                                html_macros.$html_inside_bodyP$.bind(T, thread);
+                                html_markup(html_macros.$html_body_head$.getGlobalValue());
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_26 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        html_markup(html_macros.$html_form_head$.getGlobalValue());
+                                        html_markup(html_macros.$html_form_action$.getGlobalValue());
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_markup(system_parameters.$cyc_cgi_program$.getDynamicValue(thread));
+                                        html_char(CHAR_quotation, UNPROVIDED);
+                                        html_char(CHAR_greater, UNPROVIDED);
+                                        {
+                                            SubLObject _prev_bind_0_27 = html_macros.$html_safe_print$.currentBinding(thread);
+                                            SubLObject _prev_bind_1 = html_macros.$within_html_form$.currentBinding(thread);
+                                            SubLObject _prev_bind_2 = html_macros.$html_form_field_uniquifier_code$.currentBinding(thread);
+                                            try {
+                                                html_macros.$html_safe_print$.bind(T, thread);
+                                                html_macros.$within_html_form$.bind(T, thread);
+                                                html_macros.$html_form_field_uniquifier_code$.bind(html_macros.next_html_form_field_uniquifier_code(), thread);
+                                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                html_princ($$$Cyclify);
+                                                html_indent(TWO_INTEGER);
+                                                html_script_utilities.html_dismiss_button(UNPROVIDED);
+                                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                html_newline(UNPROVIDED);
+                                                html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                html_princ($str_alt64$Machine__);
+                                                html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                html_princ(Environment.get_machine_name(UNPROVIDED));
+                                                if (NIL != invalid_references) {
+                                                    html_newline(UNPROVIDED);
+                                                    html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                    {
+                                                        SubLObject color_val = $RED;
+                                                        html_markup(html_macros.$html_font_head$.getGlobalValue());
+                                                        if (NIL != color_val) {
+                                                            html_markup(html_macros.$html_font_color$.getGlobalValue());
+                                                            html_char(CHAR_quotation, UNPROVIDED);
+                                                            html_markup(html_color(color_val));
+                                                            html_char(CHAR_quotation, UNPROVIDED);
+                                                        }
+                                                        html_char(CHAR_greater, UNPROVIDED);
+                                                        {
+                                                            SubLObject _prev_bind_0_28 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                            try {
+                                                                html_macros.$html_safe_print$.bind(T, thread);
+                                                                html_princ($str_alt138$Invalid_references__);
+                                                            } finally {
+                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_28, thread);
+                                                            }
+                                                        }
+                                                        html_markup(html_macros.$html_font_tail$.getGlobalValue());
+                                                    }
+                                                    html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                    {
+                                                        SubLObject cdolist_list_var = invalid_references;
+                                                        SubLObject invalid_reference = NIL;
+                                                        for (invalid_reference = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , invalid_reference = cdolist_list_var.first()) {
+                                                            html_newline(UNPROVIDED);
+                                                            html_indent(TWO_INTEGER);
+                                                            html_princ(invalid_reference);
+                                                        }
+                                                    }
+                                                }
+                                                html_newline(UNPROVIDED);
+                                                if (NIL != added_references) {
+                                                    html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                    html_princ($str_alt139$Added_references__);
+                                                    html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                    {
+                                                        SubLObject cdolist_list_var = added_references;
+                                                        SubLObject added_reference = NIL;
+                                                        for (added_reference = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , added_reference = cdolist_list_var.first()) {
+                                                            html_newline(UNPROVIDED);
+                                                            html_indent(TWO_INTEGER);
+                                                            html_princ(added_reference);
+                                                        }
+                                                    }
+                                                } else {
+                                                    html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                    html_princ($$$No_references_added);
+                                                    html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                }
+                                                html_macros.embed_form_field_code(html_macros.$html_form_field_uniquifier_code$.getDynamicValue(thread));
+                                            } finally {
+                                                html_macros.$html_form_field_uniquifier_code$.rebind(_prev_bind_2, thread);
+                                                html_macros.$within_html_form$.rebind(_prev_bind_1, thread);
+                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_27, thread);
+                                            }
+                                        }
+                                        html_markup(html_macros.$html_form_tail$.getGlobalValue());
+                                        html_source_readability_terpri(UNPROVIDED);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_26, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                            } finally {
+                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_cyclify(final SubLObject args) {
@@ -2869,98 +4914,321 @@ public final class html_complete extends SubLTranslatedFile {
         return result_count;
     }
 
+    public static final SubLObject declare_html_complete_file_alt() {
+        declareFunction("html_complete_button", "HTML-COMPLETE-BUTTON", 1, 5, false);
+        declareFunction("html_complete_link", "HTML-COMPLETE-LINK", 1, 5, false);
+        declareFunction("html_cyclify_button", "HTML-CYCLIFY-BUTTON", 1, 1, false);
+        declareFunction("javascript_void_url", "JAVASCRIPT-VOID-URL", 0, 0, false);
+        declareFunction("html_complete_script", "HTML-COMPLETE-SCRIPT", 0, 0, false);
+        declareFunction("html_initial_focus_script", "HTML-INITIAL-FOCUS-SCRIPT", 0, 0, false);
+        declareFunction("html_opener_message_on_load", "HTML-OPENER-MESSAGE-ON-LOAD", 1, 0, false);
+        declareFunction("html_handle_complete_script", "HTML-HANDLE-COMPLETE-SCRIPT", 3, 0, false);
+        declareFunction("html_immediate_complete_extend_script", "HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT", 1, 0, false);
+        declareFunction("html_immediate_complete_choose_script", "HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT", 2, 0, false);
+        declareFunction("cb_complete", "CB-COMPLETE", 1, 0, false);
+        declareFunction("cb_completions", "CB-COMPLETIONS", 3, 3, false);
+        declareFunction("cb_complete_choose", "CB-COMPLETE-CHOOSE", 7, 0, false);
+        declareFunction("completion_string", "COMPLETION-STRING", 1, 0, false);
+        declareFunction("cb_complete_one", "CB-COMPLETE-ONE", 6, 0, false);
+        declareFunction("cb_complete_none", "CB-COMPLETE-NONE", 2, 0, false);
+        declareFunction("cb_complete_title", "CB-COMPLETE-TITLE", 1, 0, false);
+        declareFunction("cb_complete_preamble", "CB-COMPLETE-PREAMBLE", 2, 0, false);
+        declareFunction("html_complete_insert_choice", "HTML-COMPLETE-INSERT-CHOICE", 2, 0, false);
+        declareFunction("html_print_js_autocomplete_setup_int", "HTML-PRINT-JS-AUTOCOMPLETE-SETUP-INT", 6, 0, false);
+        declareFunction("html_autocomplete_css", "HTML-AUTOCOMPLETE-CSS", 0, 0, false);
+        declareFunction("xml_complete", "XML-COMPLETE", 1, 0, false);
+        declareFunction("xml_complete_int", "XML-COMPLETE-INT", 8, 1, false);
+        declareFunction("term_passes_arg_filters", "TERM-PASSES-ARG-FILTERS", 4, 0, false);
+        declareFunction("get_constraints_from_filter", "GET-CONSTRAINTS-FROM-FILTER", 1, 0, false);
+        declareFunction("clear_autocomplete_isa_cache", "CLEAR-AUTOCOMPLETE-ISA-CACHE", 0, 0, false);
+        declareFunction("clear_autocomplete_genls_cache", "CLEAR-AUTOCOMPLETE-GENLS-CACHE", 0, 0, false);
+        declareFunction("instance_of_precachedP", "INSTANCE-OF-PRECACHED?", 3, 0, false);
+        declareFunction("spec_of_precachedP", "SPEC-OF-PRECACHED?", 3, 0, false);
+        declareFunction("autocomplete_instance_ofP", "AUTOCOMPLETE-INSTANCE-OF?", 3, 0, false);
+        declareFunction("autocomplete_spec_ofP", "AUTOCOMPLETE-SPEC-OF?", 3, 0, false);
+        declareFunction("precache_isa_constraint", "PRECACHE-ISA-CONSTRAINT", 2, 0, false);
+        declareFunction("precache_genls_constraint", "PRECACHE-GENLS-CONSTRAINT", 2, 0, false);
+        declareFunction("precache_isa_constraint_guts", "PRECACHE-ISA-CONSTRAINT-GUTS", 2, 0, false);
+        declareFunction("precache_genls_constraint_guts", "PRECACHE-GENLS-CONSTRAINT-GUTS", 2, 0, false);
+        declareFunction("genlsPX", "GENLS?+", 2, 2, false);
+        declareFunction("num_indexG", "NUM-INDEX>", 2, 0, false);
+        declareFunction("html_autocomplete_scripts", "HTML-AUTOCOMPLETE-SCRIPTS", 0, 0, false);
+        declareFunction("html_handle_cyclify_script", "HTML-HANDLE-CYCLIFY-SCRIPT", 2, 0, false);
+        declareFunction("html_immediate_perform_cyclify_script", "HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT", 1, 0, false);
+        declareFunction("cb_cyclify", "CB-CYCLIFY", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_html_complete_file() {
-        declareFunction(me, "html_complete_button", "HTML-COMPLETE-BUTTON", 1, 6, false);
-        declareFunction(me, "html_complete_link", "HTML-COMPLETE-LINK", 1, 5, false);
-        declareFunction(me, "html_cyclify_button", "HTML-CYCLIFY-BUTTON", 1, 2, false);
-        declareFunction(me, "javascript_void_url", "JAVASCRIPT-VOID-URL", 0, 0, false);
-        declareFunction(me, "html_complete_script", "HTML-COMPLETE-SCRIPT", 0, 0, false);
-        declareFunction(me, "html_initial_focus_script", "HTML-INITIAL-FOCUS-SCRIPT", 0, 0, false);
-        declareFunction(me, "html_opener_message_on_load", "HTML-OPENER-MESSAGE-ON-LOAD", 1, 0, false);
-        declareFunction(me, "html_handle_complete_script", "HTML-HANDLE-COMPLETE-SCRIPT", 3, 0, false);
-        declareFunction(me, "html_immediate_complete_extend_script", "HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT", 1, 0, false);
-        declareFunction(me, "html_immediate_complete_choose_script", "HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT", 2, 0, false);
-        declareFunction(me, "cb_complete", "CB-COMPLETE", 1, 0, false);
-        declareFunction(me, "cb_completions", "CB-COMPLETIONS", 3, 3, false);
-        declareFunction(me, "cb_complete_choose", "CB-COMPLETE-CHOOSE", 7, 0, false);
-        declareFunction(me, "completion_string", "COMPLETION-STRING", 1, 0, false);
-        declareFunction(me, "cb_complete_one", "CB-COMPLETE-ONE", 6, 0, false);
-        declareFunction(me, "cb_complete_none", "CB-COMPLETE-NONE", 2, 0, false);
-        declareFunction(me, "cb_complete_title", "CB-COMPLETE-TITLE", 1, 0, false);
-        declareFunction(me, "cb_complete_preamble", "CB-COMPLETE-PREAMBLE", 2, 0, false);
-        declareFunction(me, "html_complete_insert_choice", "HTML-COMPLETE-INSERT-CHOICE", 2, 0, false);
-        declareFunction(me, "html_print_js_autocomplete_setup_int", "HTML-PRINT-JS-AUTOCOMPLETE-SETUP-INT", 6, 0, false);
-        declareFunction(me, "xml_term_search", "XML-TERM-SEARCH", 1, 0, false);
-        declareFunction(me, "xml_complete", "XML-COMPLETE", 1, 0, false);
-        declareFunction(me, "get_constraint_filters_from_html_args", "GET-CONSTRAINT-FILTERS-FROM-HTML-ARGS", 1, 0, false);
-        declareFunction(me, "clear_get_isa_restrictions_from_sentence", "CLEAR-GET-ISA-RESTRICTIONS-FROM-SENTENCE", 0, 0, false);
-        declareFunction(me, "remove_get_isa_restrictions_from_sentence", "REMOVE-GET-ISA-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
-        declareFunction(me, "get_isa_restrictions_from_sentence_internal", "GET-ISA-RESTRICTIONS-FROM-SENTENCE-INTERNAL", 2, 0, false);
-        declareFunction(me, "get_isa_restrictions_from_sentence", "GET-ISA-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
-        declareFunction(me, "clear_get_genls_restrictions_from_sentence", "CLEAR-GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 0, 0, false);
-        declareFunction(me, "remove_get_genls_restrictions_from_sentence", "REMOVE-GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
-        declareFunction(me, "get_genls_restrictions_from_sentence_internal", "GET-GENLS-RESTRICTIONS-FROM-SENTENCE-INTERNAL", 2, 0, false);
-        declareFunction(me, "get_genls_restrictions_from_sentence", "GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
-        declareFunction(me, "clear_get_arg_constraints_for_arg", "CLEAR-GET-ARG-CONSTRAINTS-FOR-ARG", 0, 0, false);
-        declareFunction(me, "remove_get_arg_constraints_for_arg", "REMOVE-GET-ARG-CONSTRAINTS-FOR-ARG", 3, 0, false);
-        declareFunction(me, "get_arg_constraints_for_arg_internal", "GET-ARG-CONSTRAINTS-FOR-ARG-INTERNAL", 3, 0, false);
-        declareFunction(me, "get_arg_constraints_for_arg", "GET-ARG-CONSTRAINTS-FOR-ARG", 3, 0, false);
-        declareFunction(me, "clear_get_arg_constraints_for_var", "CLEAR-GET-ARG-CONSTRAINTS-FOR-VAR", 0, 0, false);
-        declareFunction(me, "remove_get_arg_constraints_for_var", "REMOVE-GET-ARG-CONSTRAINTS-FOR-VAR", 3, 0, false);
-        declareFunction(me, "get_arg_constraints_for_var_internal", "GET-ARG-CONSTRAINTS-FOR-VAR-INTERNAL", 3, 0, false);
-        declareFunction(me, "get_arg_constraints_for_var", "GET-ARG-CONSTRAINTS-FOR-VAR", 3, 0, false);
-        declareFunction(me, "get_genls_filter_from_arg_constraints", "GET-GENLS-FILTER-FROM-ARG-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "get_isa_filter_from_arg_constraints", "GET-ISA-FILTER-FROM-ARG-CONSTRAINTS", 1, 0, false);
-        declareFunction(me, "get_constraining_sentence_from_html_args", "GET-CONSTRAINING-SENTENCE-FROM-HTML-ARGS", 1, 0, false);
-        declareFunction(me, "clean_up_non_constant_symbols", "CLEAN-UP-NON-CONSTANT-SYMBOLS", 1, 0, false);
-        declareFunction(me, "non_cycl_symbolP", "NON-CYCL-SYMBOL?", 1, 0, false);
-        declareFunction(me, "convert_to_keyword", "CONVERT-TO-KEYWORD", 1, 0, false);
-        declareFunction(me, "completion_properties_p", "COMPLETION-PROPERTIES-P", 1, 0, false);
-        declareFunction(me, "native_complete_int", "NATIVE-COMPLETE-INT", 1, 1, false);
-        declareFunction(me, "xml_complete_int", "XML-COMPLETE-INT", 1, 1, false);
-        declareFunction(me, "get_xml_completion_data", "GET-XML-COMPLETION-DATA", 1, 1, false);
-        declareFunction(me, "add_completion_to_dict", "ADD-COMPLETION-TO-DICT", 4, 0, false);
-        declareFunction(me, "completion_denots_of_string_internal", "COMPLETION-DENOTS-OF-STRING-INTERNAL", 1, 2, false);
-        declareFunction(me, "completion_denots_of_string", "COMPLETION-DENOTS-OF-STRING", 1, 2, false);
-        declareFunction(me, "completion_lexicon_internal", "COMPLETION-LEXICON-INTERNAL", 1, 0, false);
-        declareFunction(me, "completion_lexicon", "COMPLETION-LEXICON", 1, 0, false);
-        declareFunction(me, "display_string_for_completion", "DISPLAY-STRING-FOR-COMPLETION", 3, 0, false);
-        declareFunction(me, "select_display_string_for_completion_term", "SELECT-DISPLAY-STRING-FOR-COMPLETION-TERM", 2, 0, false);
-        declareFunction(me, "preferred_paraphrase_for_completion_term", "PREFERRED-PARAPHRASE-FOR-COMPLETION-TERM", 1, 0, false);
-        declareFunction(me, "stream_xml_term_result_set", "STREAM-XML-TERM-RESULT-SET", 1, 3, false);
-        declareFunction(me, "term_result_set_as_list", "TERM-RESULT-SET-AS-LIST", 1, 3, false);
-        declareFunction(me, "sort_preferred_completions_to_front", "SORT-PREFERRED-COMPLETIONS-TO-FRONT", 2, 0, false);
-        declareFunction(me, "clear_term_passes_arg_restrictions", "CLEAR-TERM-PASSES-ARG-RESTRICTIONS", 0, 0, false);
-        declareFunction(me, "remove_term_passes_arg_restrictions", "REMOVE-TERM-PASSES-ARG-RESTRICTIONS", 4, 0, false);
-        declareFunction(me, "term_passes_arg_restrictions_internal", "TERM-PASSES-ARG-RESTRICTIONS-INTERNAL", 4, 0, false);
-        declareFunction(me, "term_passes_arg_restrictions", "TERM-PASSES-ARG-RESTRICTIONS", 4, 0, false);
-        declareFunction(me, "term_passes_arg_filters", "TERM-PASSES-ARG-FILTERS", 4, 0, false);
-        declareFunction(me, "term_passes_genls_filter", "TERM-PASSES-GENLS-FILTER", 3, 0, false);
-        declareFunction(me, "get_constraints_from_filter", "GET-CONSTRAINTS-FROM-FILTER", 1, 0, false);
-        declareFunction(me, "clear_autocomplete_isa_cache", "CLEAR-AUTOCOMPLETE-ISA-CACHE", 0, 0, false);
-        declareFunction(me, "clear_autocomplete_genls_cache", "CLEAR-AUTOCOMPLETE-GENLS-CACHE", 0, 0, false);
-        declareFunction(me, "instance_of_precachedP", "INSTANCE-OF-PRECACHED?", 3, 0, false);
-        declareFunction(me, "spec_of_precachedP", "SPEC-OF-PRECACHED?", 3, 0, false);
-        declareFunction(me, "autocomplete_instance_ofP", "AUTOCOMPLETE-INSTANCE-OF?", 3, 0, false);
-        declareFunction(me, "autocomplete_spec_ofP", "AUTOCOMPLETE-SPEC-OF?", 3, 0, false);
-        declareFunction(me, "precache_isa_constraint", "PRECACHE-ISA-CONSTRAINT", 2, 0, false);
-        declareFunction(me, "precache_genls_constraint", "PRECACHE-GENLS-CONSTRAINT", 2, 0, false);
-        declareFunction(me, "precache_isa_constraint_guts", "PRECACHE-ISA-CONSTRAINT-GUTS", 2, 0, false);
-        declareFunction(me, "precache_genls_constraint_guts", "PRECACHE-GENLS-CONSTRAINT-GUTS", 2, 0, false);
-        declareFunction(me, "genlsPX", "GENLS?+", 2, 2, false);
-        declareFunction(me, "num_indexG", "NUM-INDEX>", 2, 0, false);
-        declareFunction(me, "html_handle_cyclify_script", "HTML-HANDLE-CYCLIFY-SCRIPT", 2, 0, false);
-        declareFunction(me, "html_immediate_perform_cyclify_script", "HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT", 1, 0, false);
-        declareFunction(me, "cb_cyclify", "CB-CYCLIFY", 1, 0, false);
-        declareFunction(me, "xml_complete_result_count_min", "XML-COMPLETE-RESULT-COUNT-MIN", 1, 0, false);
-        declareFunction(me, "xml_complete_result_count_max", "XML-COMPLETE-RESULT-COUNT-MAX", 1, 0, false);
-        declareFunction(me, "xml_complete_result_count", "XML-COMPLETE-RESULT-COUNT", 1, 0, false);
-        declareFunction(me, "xml_complete_int_result_count_min", "XML-COMPLETE-INT-RESULT-COUNT-MIN", 2, 0, false);
-        declareFunction(me, "xml_complete_int_result_count", "XML-COMPLETE-INT-RESULT-COUNT", 2, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("html_complete_button", "HTML-COMPLETE-BUTTON", 1, 6, false);
+            declareFunction("html_complete_link", "HTML-COMPLETE-LINK", 1, 5, false);
+            declareFunction("html_cyclify_button", "HTML-CYCLIFY-BUTTON", 1, 2, false);
+            declareFunction("javascript_void_url", "JAVASCRIPT-VOID-URL", 0, 0, false);
+            declareFunction("html_complete_script", "HTML-COMPLETE-SCRIPT", 0, 0, false);
+            declareFunction("html_initial_focus_script", "HTML-INITIAL-FOCUS-SCRIPT", 0, 0, false);
+            declareFunction("html_opener_message_on_load", "HTML-OPENER-MESSAGE-ON-LOAD", 1, 0, false);
+            declareFunction("html_handle_complete_script", "HTML-HANDLE-COMPLETE-SCRIPT", 3, 0, false);
+            declareFunction("html_immediate_complete_extend_script", "HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT", 1, 0, false);
+            declareFunction("html_immediate_complete_choose_script", "HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT", 2, 0, false);
+            declareFunction("cb_complete", "CB-COMPLETE", 1, 0, false);
+            declareFunction("cb_completions", "CB-COMPLETIONS", 3, 3, false);
+            declareFunction("cb_complete_choose", "CB-COMPLETE-CHOOSE", 7, 0, false);
+            declareFunction("completion_string", "COMPLETION-STRING", 1, 0, false);
+            declareFunction("cb_complete_one", "CB-COMPLETE-ONE", 6, 0, false);
+            declareFunction("cb_complete_none", "CB-COMPLETE-NONE", 2, 0, false);
+            declareFunction("cb_complete_title", "CB-COMPLETE-TITLE", 1, 0, false);
+            declareFunction("cb_complete_preamble", "CB-COMPLETE-PREAMBLE", 2, 0, false);
+            declareFunction("html_complete_insert_choice", "HTML-COMPLETE-INSERT-CHOICE", 2, 0, false);
+            declareFunction("html_print_js_autocomplete_setup_int", "HTML-PRINT-JS-AUTOCOMPLETE-SETUP-INT", 6, 0, false);
+            declareFunction("xml_term_search", "XML-TERM-SEARCH", 1, 0, false);
+            declareFunction("xml_complete", "XML-COMPLETE", 1, 0, false);
+            declareFunction("get_constraint_filters_from_html_args", "GET-CONSTRAINT-FILTERS-FROM-HTML-ARGS", 1, 0, false);
+            declareFunction("clear_get_isa_restrictions_from_sentence", "CLEAR-GET-ISA-RESTRICTIONS-FROM-SENTENCE", 0, 0, false);
+            declareFunction("remove_get_isa_restrictions_from_sentence", "REMOVE-GET-ISA-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+            declareFunction("get_isa_restrictions_from_sentence_internal", "GET-ISA-RESTRICTIONS-FROM-SENTENCE-INTERNAL", 2, 0, false);
+            declareFunction("get_isa_restrictions_from_sentence", "GET-ISA-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+            declareFunction("clear_get_genls_restrictions_from_sentence", "CLEAR-GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 0, 0, false);
+            declareFunction("remove_get_genls_restrictions_from_sentence", "REMOVE-GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+            declareFunction("get_genls_restrictions_from_sentence_internal", "GET-GENLS-RESTRICTIONS-FROM-SENTENCE-INTERNAL", 2, 0, false);
+            declareFunction("get_genls_restrictions_from_sentence", "GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+            declareFunction("clear_get_arg_constraints_for_arg", "CLEAR-GET-ARG-CONSTRAINTS-FOR-ARG", 0, 0, false);
+            declareFunction("remove_get_arg_constraints_for_arg", "REMOVE-GET-ARG-CONSTRAINTS-FOR-ARG", 3, 0, false);
+            declareFunction("get_arg_constraints_for_arg_internal", "GET-ARG-CONSTRAINTS-FOR-ARG-INTERNAL", 3, 0, false);
+            declareFunction("get_arg_constraints_for_arg", "GET-ARG-CONSTRAINTS-FOR-ARG", 3, 0, false);
+            declareFunction("clear_get_arg_constraints_for_var", "CLEAR-GET-ARG-CONSTRAINTS-FOR-VAR", 0, 0, false);
+            declareFunction("remove_get_arg_constraints_for_var", "REMOVE-GET-ARG-CONSTRAINTS-FOR-VAR", 3, 0, false);
+            declareFunction("get_arg_constraints_for_var_internal", "GET-ARG-CONSTRAINTS-FOR-VAR-INTERNAL", 3, 0, false);
+            declareFunction("get_arg_constraints_for_var", "GET-ARG-CONSTRAINTS-FOR-VAR", 3, 0, false);
+            declareFunction("get_genls_filter_from_arg_constraints", "GET-GENLS-FILTER-FROM-ARG-CONSTRAINTS", 1, 0, false);
+            declareFunction("get_isa_filter_from_arg_constraints", "GET-ISA-FILTER-FROM-ARG-CONSTRAINTS", 1, 0, false);
+            declareFunction("get_constraining_sentence_from_html_args", "GET-CONSTRAINING-SENTENCE-FROM-HTML-ARGS", 1, 0, false);
+            declareFunction("clean_up_non_constant_symbols", "CLEAN-UP-NON-CONSTANT-SYMBOLS", 1, 0, false);
+            declareFunction("non_cycl_symbolP", "NON-CYCL-SYMBOL?", 1, 0, false);
+            declareFunction("convert_to_keyword", "CONVERT-TO-KEYWORD", 1, 0, false);
+            declareFunction("completion_properties_p", "COMPLETION-PROPERTIES-P", 1, 0, false);
+            declareFunction("native_complete_int", "NATIVE-COMPLETE-INT", 1, 1, false);
+            declareFunction("xml_complete_int", "XML-COMPLETE-INT", 1, 1, false);
+            declareFunction("get_xml_completion_data", "GET-XML-COMPLETION-DATA", 1, 1, false);
+            declareFunction("add_completion_to_dict", "ADD-COMPLETION-TO-DICT", 4, 0, false);
+            declareFunction("completion_denots_of_string_internal", "COMPLETION-DENOTS-OF-STRING-INTERNAL", 1, 2, false);
+            declareFunction("completion_denots_of_string", "COMPLETION-DENOTS-OF-STRING", 1, 2, false);
+            declareFunction("completion_lexicon_internal", "COMPLETION-LEXICON-INTERNAL", 1, 0, false);
+            declareFunction("completion_lexicon", "COMPLETION-LEXICON", 1, 0, false);
+            declareFunction("display_string_for_completion", "DISPLAY-STRING-FOR-COMPLETION", 3, 0, false);
+            declareFunction("select_display_string_for_completion_term", "SELECT-DISPLAY-STRING-FOR-COMPLETION-TERM", 2, 0, false);
+            declareFunction("preferred_paraphrase_for_completion_term", "PREFERRED-PARAPHRASE-FOR-COMPLETION-TERM", 1, 0, false);
+            declareFunction("stream_xml_term_result_set", "STREAM-XML-TERM-RESULT-SET", 1, 3, false);
+            declareFunction("term_result_set_as_list", "TERM-RESULT-SET-AS-LIST", 1, 3, false);
+            declareFunction("sort_preferred_completions_to_front", "SORT-PREFERRED-COMPLETIONS-TO-FRONT", 2, 0, false);
+            declareFunction("clear_term_passes_arg_restrictions", "CLEAR-TERM-PASSES-ARG-RESTRICTIONS", 0, 0, false);
+            declareFunction("remove_term_passes_arg_restrictions", "REMOVE-TERM-PASSES-ARG-RESTRICTIONS", 4, 0, false);
+            declareFunction("term_passes_arg_restrictions_internal", "TERM-PASSES-ARG-RESTRICTIONS-INTERNAL", 4, 0, false);
+            declareFunction("term_passes_arg_restrictions", "TERM-PASSES-ARG-RESTRICTIONS", 4, 0, false);
+            declareFunction("term_passes_arg_filters", "TERM-PASSES-ARG-FILTERS", 4, 0, false);
+            declareFunction("term_passes_genls_filter", "TERM-PASSES-GENLS-FILTER", 3, 0, false);
+            declareFunction("get_constraints_from_filter", "GET-CONSTRAINTS-FROM-FILTER", 1, 0, false);
+            declareFunction("clear_autocomplete_isa_cache", "CLEAR-AUTOCOMPLETE-ISA-CACHE", 0, 0, false);
+            declareFunction("clear_autocomplete_genls_cache", "CLEAR-AUTOCOMPLETE-GENLS-CACHE", 0, 0, false);
+            declareFunction("instance_of_precachedP", "INSTANCE-OF-PRECACHED?", 3, 0, false);
+            declareFunction("spec_of_precachedP", "SPEC-OF-PRECACHED?", 3, 0, false);
+            declareFunction("autocomplete_instance_ofP", "AUTOCOMPLETE-INSTANCE-OF?", 3, 0, false);
+            declareFunction("autocomplete_spec_ofP", "AUTOCOMPLETE-SPEC-OF?", 3, 0, false);
+            declareFunction("precache_isa_constraint", "PRECACHE-ISA-CONSTRAINT", 2, 0, false);
+            declareFunction("precache_genls_constraint", "PRECACHE-GENLS-CONSTRAINT", 2, 0, false);
+            declareFunction("precache_isa_constraint_guts", "PRECACHE-ISA-CONSTRAINT-GUTS", 2, 0, false);
+            declareFunction("precache_genls_constraint_guts", "PRECACHE-GENLS-CONSTRAINT-GUTS", 2, 0, false);
+            declareFunction("genlsPX", "GENLS?+", 2, 2, false);
+            declareFunction("num_indexG", "NUM-INDEX>", 2, 0, false);
+            declareFunction("html_handle_cyclify_script", "HTML-HANDLE-CYCLIFY-SCRIPT", 2, 0, false);
+            declareFunction("html_immediate_perform_cyclify_script", "HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT", 1, 0, false);
+            declareFunction("cb_cyclify", "CB-CYCLIFY", 1, 0, false);
+            declareFunction("xml_complete_result_count_min", "XML-COMPLETE-RESULT-COUNT-MIN", 1, 0, false);
+            declareFunction("xml_complete_result_count_max", "XML-COMPLETE-RESULT-COUNT-MAX", 1, 0, false);
+            declareFunction("xml_complete_result_count", "XML-COMPLETE-RESULT-COUNT", 1, 0, false);
+            declareFunction("xml_complete_int_result_count_min", "XML-COMPLETE-INT-RESULT-COUNT-MIN", 2, 0, false);
+            declareFunction("xml_complete_int_result_count", "XML-COMPLETE-INT-RESULT-COUNT", 2, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("html_complete_button", "HTML-COMPLETE-BUTTON", 1, 5, false);
+            declareFunction("html_cyclify_button", "HTML-CYCLIFY-BUTTON", 1, 1, false);
+            declareFunction("html_autocomplete_css", "HTML-AUTOCOMPLETE-CSS", 0, 0, false);
+            declareFunction("xml_complete_int", "XML-COMPLETE-INT", 8, 1, false);
+            declareFunction("html_autocomplete_scripts", "HTML-AUTOCOMPLETE-SCRIPTS", 0, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_html_complete_file_Previous() {
+        declareFunction("html_complete_button", "HTML-COMPLETE-BUTTON", 1, 6, false);
+        declareFunction("html_complete_link", "HTML-COMPLETE-LINK", 1, 5, false);
+        declareFunction("html_cyclify_button", "HTML-CYCLIFY-BUTTON", 1, 2, false);
+        declareFunction("javascript_void_url", "JAVASCRIPT-VOID-URL", 0, 0, false);
+        declareFunction("html_complete_script", "HTML-COMPLETE-SCRIPT", 0, 0, false);
+        declareFunction("html_initial_focus_script", "HTML-INITIAL-FOCUS-SCRIPT", 0, 0, false);
+        declareFunction("html_opener_message_on_load", "HTML-OPENER-MESSAGE-ON-LOAD", 1, 0, false);
+        declareFunction("html_handle_complete_script", "HTML-HANDLE-COMPLETE-SCRIPT", 3, 0, false);
+        declareFunction("html_immediate_complete_extend_script", "HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT", 1, 0, false);
+        declareFunction("html_immediate_complete_choose_script", "HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT", 2, 0, false);
+        declareFunction("cb_complete", "CB-COMPLETE", 1, 0, false);
+        declareFunction("cb_completions", "CB-COMPLETIONS", 3, 3, false);
+        declareFunction("cb_complete_choose", "CB-COMPLETE-CHOOSE", 7, 0, false);
+        declareFunction("completion_string", "COMPLETION-STRING", 1, 0, false);
+        declareFunction("cb_complete_one", "CB-COMPLETE-ONE", 6, 0, false);
+        declareFunction("cb_complete_none", "CB-COMPLETE-NONE", 2, 0, false);
+        declareFunction("cb_complete_title", "CB-COMPLETE-TITLE", 1, 0, false);
+        declareFunction("cb_complete_preamble", "CB-COMPLETE-PREAMBLE", 2, 0, false);
+        declareFunction("html_complete_insert_choice", "HTML-COMPLETE-INSERT-CHOICE", 2, 0, false);
+        declareFunction("html_print_js_autocomplete_setup_int", "HTML-PRINT-JS-AUTOCOMPLETE-SETUP-INT", 6, 0, false);
+        declareFunction("xml_term_search", "XML-TERM-SEARCH", 1, 0, false);
+        declareFunction("xml_complete", "XML-COMPLETE", 1, 0, false);
+        declareFunction("get_constraint_filters_from_html_args", "GET-CONSTRAINT-FILTERS-FROM-HTML-ARGS", 1, 0, false);
+        declareFunction("clear_get_isa_restrictions_from_sentence", "CLEAR-GET-ISA-RESTRICTIONS-FROM-SENTENCE", 0, 0, false);
+        declareFunction("remove_get_isa_restrictions_from_sentence", "REMOVE-GET-ISA-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+        declareFunction("get_isa_restrictions_from_sentence_internal", "GET-ISA-RESTRICTIONS-FROM-SENTENCE-INTERNAL", 2, 0, false);
+        declareFunction("get_isa_restrictions_from_sentence", "GET-ISA-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+        declareFunction("clear_get_genls_restrictions_from_sentence", "CLEAR-GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 0, 0, false);
+        declareFunction("remove_get_genls_restrictions_from_sentence", "REMOVE-GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+        declareFunction("get_genls_restrictions_from_sentence_internal", "GET-GENLS-RESTRICTIONS-FROM-SENTENCE-INTERNAL", 2, 0, false);
+        declareFunction("get_genls_restrictions_from_sentence", "GET-GENLS-RESTRICTIONS-FROM-SENTENCE", 1, 1, false);
+        declareFunction("clear_get_arg_constraints_for_arg", "CLEAR-GET-ARG-CONSTRAINTS-FOR-ARG", 0, 0, false);
+        declareFunction("remove_get_arg_constraints_for_arg", "REMOVE-GET-ARG-CONSTRAINTS-FOR-ARG", 3, 0, false);
+        declareFunction("get_arg_constraints_for_arg_internal", "GET-ARG-CONSTRAINTS-FOR-ARG-INTERNAL", 3, 0, false);
+        declareFunction("get_arg_constraints_for_arg", "GET-ARG-CONSTRAINTS-FOR-ARG", 3, 0, false);
+        declareFunction("clear_get_arg_constraints_for_var", "CLEAR-GET-ARG-CONSTRAINTS-FOR-VAR", 0, 0, false);
+        declareFunction("remove_get_arg_constraints_for_var", "REMOVE-GET-ARG-CONSTRAINTS-FOR-VAR", 3, 0, false);
+        declareFunction("get_arg_constraints_for_var_internal", "GET-ARG-CONSTRAINTS-FOR-VAR-INTERNAL", 3, 0, false);
+        declareFunction("get_arg_constraints_for_var", "GET-ARG-CONSTRAINTS-FOR-VAR", 3, 0, false);
+        declareFunction("get_genls_filter_from_arg_constraints", "GET-GENLS-FILTER-FROM-ARG-CONSTRAINTS", 1, 0, false);
+        declareFunction("get_isa_filter_from_arg_constraints", "GET-ISA-FILTER-FROM-ARG-CONSTRAINTS", 1, 0, false);
+        declareFunction("get_constraining_sentence_from_html_args", "GET-CONSTRAINING-SENTENCE-FROM-HTML-ARGS", 1, 0, false);
+        declareFunction("clean_up_non_constant_symbols", "CLEAN-UP-NON-CONSTANT-SYMBOLS", 1, 0, false);
+        declareFunction("non_cycl_symbolP", "NON-CYCL-SYMBOL?", 1, 0, false);
+        declareFunction("convert_to_keyword", "CONVERT-TO-KEYWORD", 1, 0, false);
+        declareFunction("completion_properties_p", "COMPLETION-PROPERTIES-P", 1, 0, false);
+        declareFunction("native_complete_int", "NATIVE-COMPLETE-INT", 1, 1, false);
+        declareFunction("xml_complete_int", "XML-COMPLETE-INT", 1, 1, false);
+        declareFunction("get_xml_completion_data", "GET-XML-COMPLETION-DATA", 1, 1, false);
+        declareFunction("add_completion_to_dict", "ADD-COMPLETION-TO-DICT", 4, 0, false);
+        declareFunction("completion_denots_of_string_internal", "COMPLETION-DENOTS-OF-STRING-INTERNAL", 1, 2, false);
+        declareFunction("completion_denots_of_string", "COMPLETION-DENOTS-OF-STRING", 1, 2, false);
+        declareFunction("completion_lexicon_internal", "COMPLETION-LEXICON-INTERNAL", 1, 0, false);
+        declareFunction("completion_lexicon", "COMPLETION-LEXICON", 1, 0, false);
+        declareFunction("display_string_for_completion", "DISPLAY-STRING-FOR-COMPLETION", 3, 0, false);
+        declareFunction("select_display_string_for_completion_term", "SELECT-DISPLAY-STRING-FOR-COMPLETION-TERM", 2, 0, false);
+        declareFunction("preferred_paraphrase_for_completion_term", "PREFERRED-PARAPHRASE-FOR-COMPLETION-TERM", 1, 0, false);
+        declareFunction("stream_xml_term_result_set", "STREAM-XML-TERM-RESULT-SET", 1, 3, false);
+        declareFunction("term_result_set_as_list", "TERM-RESULT-SET-AS-LIST", 1, 3, false);
+        declareFunction("sort_preferred_completions_to_front", "SORT-PREFERRED-COMPLETIONS-TO-FRONT", 2, 0, false);
+        declareFunction("clear_term_passes_arg_restrictions", "CLEAR-TERM-PASSES-ARG-RESTRICTIONS", 0, 0, false);
+        declareFunction("remove_term_passes_arg_restrictions", "REMOVE-TERM-PASSES-ARG-RESTRICTIONS", 4, 0, false);
+        declareFunction("term_passes_arg_restrictions_internal", "TERM-PASSES-ARG-RESTRICTIONS-INTERNAL", 4, 0, false);
+        declareFunction("term_passes_arg_restrictions", "TERM-PASSES-ARG-RESTRICTIONS", 4, 0, false);
+        declareFunction("term_passes_arg_filters", "TERM-PASSES-ARG-FILTERS", 4, 0, false);
+        declareFunction("term_passes_genls_filter", "TERM-PASSES-GENLS-FILTER", 3, 0, false);
+        declareFunction("get_constraints_from_filter", "GET-CONSTRAINTS-FROM-FILTER", 1, 0, false);
+        declareFunction("clear_autocomplete_isa_cache", "CLEAR-AUTOCOMPLETE-ISA-CACHE", 0, 0, false);
+        declareFunction("clear_autocomplete_genls_cache", "CLEAR-AUTOCOMPLETE-GENLS-CACHE", 0, 0, false);
+        declareFunction("instance_of_precachedP", "INSTANCE-OF-PRECACHED?", 3, 0, false);
+        declareFunction("spec_of_precachedP", "SPEC-OF-PRECACHED?", 3, 0, false);
+        declareFunction("autocomplete_instance_ofP", "AUTOCOMPLETE-INSTANCE-OF?", 3, 0, false);
+        declareFunction("autocomplete_spec_ofP", "AUTOCOMPLETE-SPEC-OF?", 3, 0, false);
+        declareFunction("precache_isa_constraint", "PRECACHE-ISA-CONSTRAINT", 2, 0, false);
+        declareFunction("precache_genls_constraint", "PRECACHE-GENLS-CONSTRAINT", 2, 0, false);
+        declareFunction("precache_isa_constraint_guts", "PRECACHE-ISA-CONSTRAINT-GUTS", 2, 0, false);
+        declareFunction("precache_genls_constraint_guts", "PRECACHE-GENLS-CONSTRAINT-GUTS", 2, 0, false);
+        declareFunction("genlsPX", "GENLS?+", 2, 2, false);
+        declareFunction("num_indexG", "NUM-INDEX>", 2, 0, false);
+        declareFunction("html_handle_cyclify_script", "HTML-HANDLE-CYCLIFY-SCRIPT", 2, 0, false);
+        declareFunction("html_immediate_perform_cyclify_script", "HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT", 1, 0, false);
+        declareFunction("cb_cyclify", "CB-CYCLIFY", 1, 0, false);
+        declareFunction("xml_complete_result_count_min", "XML-COMPLETE-RESULT-COUNT-MIN", 1, 0, false);
+        declareFunction("xml_complete_result_count_max", "XML-COMPLETE-RESULT-COUNT-MAX", 1, 0, false);
+        declareFunction("xml_complete_result_count", "XML-COMPLETE-RESULT-COUNT", 1, 0, false);
+        declareFunction("xml_complete_int_result_count_min", "XML-COMPLETE-INT-RESULT-COUNT-MIN", 2, 0, false);
+        declareFunction("xml_complete_int_result_count", "XML-COMPLETE-INT-RESULT-COUNT", 2, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_html_complete_file_alt() {
+        defparameter("*CB-ENABLE-CONSTANT-COMPLETION*", T);
+        defparameter("*CB-POP-UP-CONSTANT-COMPLETION*", NIL);
+        defparameter("*CB-CONSTANT-COMPLETION-TARGET*", $$$completions);
+        deflexical("*HTML-COMPLETE-BUTTON-SCRIPT*", $str_alt1$onClick__constant_complete___A___);
+        deflexical("*HTML-CYCLIFY-BUTTON-SCRIPT*", $str_alt13$onClick__cyclify___A____);
+        deflexical("*HTML-COMPLETE-SCRIPT-PARAMETERS*", $str_alt16$_var_cgi_program_____A___var_comp);
+        deflexical("*HTML-INTIAL-FOCUS-SCRIPT*", $str_alt21$_if__window_focus__window_focus__);
+        deflexical("*HTML-OPENER-MESSAGE-ON-LOAD-SCRIPT*", $str_alt22$_if__window_opener__window_opener);
+        deflexical("*HTML-HANDLE-COMPLETE-SCRIPT-PARAMETERS*", $str_alt23$_var_form_number____A__var_elemen);
+        deflexical("*HTML-HANDLE-COMPLETE-SCRIPT*", $str_alt24$_var_old_length____1___function_c);
+        defparameter("*HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT*", $str_alt25$_complete_extend___A____);
+        defparameter("*HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT*", $str_alt26$_complete_choose___A____A___);
+        deflexical("*HTML-COMPLETE-INSERT-CHOICE-SCRIPT*", $str_alt67$onClick__complete_choose___A____A);
+        defparameter("*JS-AUTOCOMPLETE-SETUP*", $str_alt69$var_constantCompleteDataSource___);
+        defparameter("*AUTOCOMPLETE-DEFAULT-LIMIT*", $int$50);
+        deflexical("*AUTOCOMPLETE-ISA-CACHE-LOCK*", make_lock($$$Autocomplete_isa_cache_lock));
+        deflexical("*AUTOCOMPLETE-GENLS-CACHE-LOCK*", make_lock($$$Autocomplete_genls_cache_lock));
+        defparameter("*AUTOCOMPLETE-ISA-CACHE*", cache.new_cache($int$128, EQUAL));
+        defparameter("*AUTOCOMPLETE-GENLS-CACHE*", cache.new_cache($int$128, EQUAL));
+        deflexical("*HTML-HANDLE-CYCLIFY-SCRIPT-PARAMETERS*", $str_alt132$_var_form_number____A__var_elemen);
+        deflexical("*HTML-HANDLE-CYCLIFY-SCRIPT*", $str_alt133$_function_cyclify_error_message__);
+        deflexical("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-PREFIX*", $str_alt134$_handle_cyclify_unescape__);
+        deflexical("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-POSTFIX*", $str_alt135$_____);
         return NIL;
     }
 
     public static SubLObject init_html_complete_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*CB-ENABLE-CONSTANT-COMPLETION*", T);
+            defparameter("*CB-POP-UP-CONSTANT-COMPLETION*", NIL);
+            defparameter("*CB-CONSTANT-COMPLETION-TARGET*", $$$completions);
+            deflexical("*HTML-COMPLETE-BUTTON-SCRIPT*", $str1$onClick__constant_complete___A___);
+            deflexical("*HTML-CYCLIFY-BUTTON-SCRIPT*", $str14$onClick__cyclify___A____);
+            deflexical("*HTML-COMPLETE-SCRIPT-PARAMETERS*", $str17$_var_cgi_program_____A___var_comp);
+            deflexical("*HTML-INTIAL-FOCUS-SCRIPT*", $str19$_if__window_focus__window_focus__);
+            deflexical("*HTML-OPENER-MESSAGE-ON-LOAD-SCRIPT*", $str20$_if__window_opener__window_opener);
+            deflexical("*HTML-HANDLE-COMPLETE-SCRIPT-PARAMETERS*", $str21$_var_form_number____A__var_elemen);
+            deflexical("*HTML-HANDLE-COMPLETE-SCRIPT*", $str22$_var_old_length____1___function_c);
+            defparameter("*HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT*", $str23$_complete_extend___A____);
+            defparameter("*HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT*", $str24$_complete_choose___A____A___);
+            deflexical("*HTML-COMPLETE-INSERT-CHOICE-SCRIPT*", $str69$onClick__complete_choose___A____A);
+            defparameter("*JS-AUTOCOMPLETE-SETUP*", $str71$var_constantCompleteDataSource___);
+            defparameter("*AUTOCOMPLETE-DEFAULT-LIMIT*", $int$50);
+            deflexical("*GET-ISA-RESTRICTIONS-FROM-SENTENCE-CACHING-STATE*", NIL);
+            deflexical("*GET-GENLS-RESTRICTIONS-FROM-SENTENCE-CACHING-STATE*", NIL);
+            deflexical("*GET-ARG-CONSTRAINTS-FOR-ARG-CACHING-STATE*", NIL);
+            deflexical("*GET-ARG-CONSTRAINTS-FOR-VAR-CACHING-STATE*", NIL);
+            defparameter("*COMPLETION-PROPERTIES*", $list131);
+            deflexical("*TERM-PASSES-ARG-RESTRICTIONS-CACHING-STATE*", NIL);
+            deflexical("*AUTOCOMPLETE-ISA-CACHE-LOCK*", make_lock($$$Autocomplete_isa_cache_lock));
+            deflexical("*AUTOCOMPLETE-GENLS-CACHE-LOCK*", make_lock($$$Autocomplete_genls_cache_lock));
+            defparameter("*AUTOCOMPLETE-ISA-CACHE*", cache.new_cache($int$128, EQUAL));
+            defparameter("*AUTOCOMPLETE-GENLS-CACHE*", cache.new_cache($int$128, EQUAL));
+            deflexical("*HTML-HANDLE-CYCLIFY-SCRIPT-PARAMETERS*", $str173$_var_form_number____A__var_elemen);
+            deflexical("*HTML-HANDLE-CYCLIFY-SCRIPT*", $str174$_function_cyclify_error_message__);
+            deflexical("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-PREFIX*", $str175$_handle_cyclify_unescape__);
+            deflexical("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-POSTFIX*", $str176$_____);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*HTML-CYCLIFY-BUTTON-SCRIPT*", $str_alt13$onClick__cyclify___A____);
+            deflexical("*HTML-COMPLETE-SCRIPT-PARAMETERS*", $str_alt16$_var_cgi_program_____A___var_comp);
+            deflexical("*HTML-INTIAL-FOCUS-SCRIPT*", $str_alt21$_if__window_focus__window_focus__);
+            deflexical("*HTML-OPENER-MESSAGE-ON-LOAD-SCRIPT*", $str_alt22$_if__window_opener__window_opener);
+            deflexical("*HTML-HANDLE-COMPLETE-SCRIPT-PARAMETERS*", $str_alt23$_var_form_number____A__var_elemen);
+            deflexical("*HTML-HANDLE-COMPLETE-SCRIPT*", $str_alt24$_var_old_length____1___function_c);
+            defparameter("*HTML-IMMEDIATE-COMPLETE-EXTEND-SCRIPT*", $str_alt25$_complete_extend___A____);
+            defparameter("*HTML-IMMEDIATE-COMPLETE-CHOOSE-SCRIPT*", $str_alt26$_complete_choose___A____A___);
+            deflexical("*HTML-COMPLETE-INSERT-CHOICE-SCRIPT*", $str_alt67$onClick__complete_choose___A____A);
+            defparameter("*JS-AUTOCOMPLETE-SETUP*", $str_alt69$var_constantCompleteDataSource___);
+            deflexical("*HTML-HANDLE-CYCLIFY-SCRIPT-PARAMETERS*", $str_alt132$_var_form_number____A__var_elemen);
+            deflexical("*HTML-HANDLE-CYCLIFY-SCRIPT*", $str_alt133$_function_cyclify_error_message__);
+            deflexical("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-PREFIX*", $str_alt134$_handle_cyclify_unescape__);
+            deflexical("*HTML-IMMEDIATE-PERFORM-CYCLIFY-SCRIPT-POSTFIX*", $str_alt135$_____);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_html_complete_file_Previous() {
         defparameter("*CB-ENABLE-CONSTANT-COMPLETION*", T);
         defparameter("*CB-POP-UP-CONSTANT-COMPLETION*", NIL);
         defparameter("*CB-CONSTANT-COMPLETION-TARGET*", $$$completions);
@@ -2993,7 +5261,71 @@ public final class html_complete extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_html_complete_file_alt() {
+        sethash($CONSTANT_COMPLETION, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt18$constant_completion_js, NIL));
+        html_macros.note_html_handler_function(CB_COMPLETE);
+        register_macro_helper(HTML_PRINT_JS_AUTOCOMPLETE_SETUP_INT, HTML_PRINT_JS_AUTOCOMPLETE_SETUP_2);
+        register_external_symbol(XML_COMPLETE);
+        html_macros.note_handler_mime_type(XML_COMPLETE, $str_alt78$text_xml);
+        html_macros.note_html_handler_function(XML_COMPLETE);
+        register_genls_dependent_cache_clear_callback(CLEAR_AUTOCOMPLETE_GENLS_CACHE);
+        register_isa_dependent_cache_clear_callback(CLEAR_AUTOCOMPLETE_ISA_CACHE);
+        sethash($AUTOCOMPLETE, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt116$autocomplete_min_js, NIL));
+        sethash($ANIMATION, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt118$animation_min_js, NIL));
+        sethash($YAHOO_DOM_EVENT, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt120$yahoo_dom_event_js, NIL));
+        sethash($YAHOO, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt122$yahoo_js, NIL));
+        sethash($DOM, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt124$dom_js, NIL));
+        sethash($EVENT, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt126$event_js, NIL));
+        sethash($FONTS_MIN, cyc_file_dependencies.$css_definitions$.getGlobalValue(), list($str_alt128$fonts_min_css, NIL));
+        sethash($CB_CYC, cyc_file_dependencies.$css_definitions$.getGlobalValue(), list($str_alt129$cb_cyc_css, NIL));
+        sethash($SAM_AUTOCOMPLETE, cyc_file_dependencies.$css_definitions$.getGlobalValue(), list($str_alt130$sam_autocomplete_css, NIL));
+        html_macros.note_html_handler_function(CB_CYCLIFY);
+        return NIL;
+    }
+
     public static SubLObject setup_html_complete_file() {
+        if (SubLFiles.USE_V1) {
+            html_macros.note_cgi_handler_function(CB_COMPLETE, $HTML_HANDLER);
+            register_macro_helper(HTML_PRINT_JS_AUTOCOMPLETE_SETUP_INT, HTML_PRINT_JS_AUTOCOMPLETE_SETUP);
+            register_external_symbol(XML_TERM_SEARCH);
+            html_macros.note_cgi_handler_function(XML_TERM_SEARCH, $XML_HANDLER);
+            register_external_symbol(XML_COMPLETE);
+            html_macros.note_cgi_handler_function(XML_COMPLETE, $XML_HANDLER);
+            memoization_state.note_globally_cached_function(GET_ISA_RESTRICTIONS_FROM_SENTENCE);
+            memoization_state.note_globally_cached_function(GET_GENLS_RESTRICTIONS_FROM_SENTENCE);
+            memoization_state.note_globally_cached_function(GET_ARG_CONSTRAINTS_FOR_ARG);
+            memoization_state.note_globally_cached_function(GET_ARG_CONSTRAINTS_FOR_VAR);
+            memoization_state.note_memoized_function(COMPLETION_DENOTS_OF_STRING);
+            memoization_state.note_memoized_function(COMPLETION_LEXICON);
+            memoization_state.note_globally_cached_function(TERM_PASSES_ARG_RESTRICTIONS);
+            memoization_state.register_genls_dependent_cache_clear_callback(CLEAR_AUTOCOMPLETE_GENLS_CACHE);
+            memoization_state.register_isa_dependent_cache_clear_callback(CLEAR_AUTOCOMPLETE_ISA_CACHE);
+            html_macros.note_cgi_handler_function(CB_CYCLIFY, $HTML_HANDLER);
+            define_test_case_table_int(XML_COMPLETE_RESULT_COUNT_MIN, list(new SubLObject[]{ $TEST, symbol_function($sym186$_), $OWNER, NIL, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list192);
+            define_test_case_table_int(XML_COMPLETE_RESULT_COUNT_MAX, list(new SubLObject[]{ $TEST, symbol_function($sym194$__), $OWNER, NIL, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list195);
+            define_test_case_table_int(XML_COMPLETE_INT_RESULT_COUNT_MIN, list(new SubLObject[]{ $TEST, symbol_function($sym186$_), $OWNER, NIL, $CLASSES, NIL, $KB, $FULL, $WORKING_, T }), $list197);
+        }
+        if (SubLFiles.USE_V2) {
+            sethash($CONSTANT_COMPLETION, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt18$constant_completion_js, NIL));
+            html_macros.note_html_handler_function(CB_COMPLETE);
+            register_macro_helper(HTML_PRINT_JS_AUTOCOMPLETE_SETUP_INT, HTML_PRINT_JS_AUTOCOMPLETE_SETUP_2);
+            html_macros.note_handler_mime_type(XML_COMPLETE, $str_alt78$text_xml);
+            html_macros.note_html_handler_function(XML_COMPLETE);
+            sethash($AUTOCOMPLETE, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt116$autocomplete_min_js, NIL));
+            sethash($ANIMATION, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt118$animation_min_js, NIL));
+            sethash($YAHOO_DOM_EVENT, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt120$yahoo_dom_event_js, NIL));
+            sethash($YAHOO, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt122$yahoo_js, NIL));
+            sethash($DOM, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt124$dom_js, NIL));
+            sethash($EVENT, cyc_file_dependencies.$javascript_definitions$.getGlobalValue(), list($str_alt126$event_js, NIL));
+            sethash($FONTS_MIN, cyc_file_dependencies.$css_definitions$.getGlobalValue(), list($str_alt128$fonts_min_css, NIL));
+            sethash($CB_CYC, cyc_file_dependencies.$css_definitions$.getGlobalValue(), list($str_alt129$cb_cyc_css, NIL));
+            sethash($SAM_AUTOCOMPLETE, cyc_file_dependencies.$css_definitions$.getGlobalValue(), list($str_alt130$sam_autocomplete_css, NIL));
+            html_macros.note_html_handler_function(CB_CYCLIFY);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_html_complete_file_Previous() {
         html_macros.note_cgi_handler_function(CB_COMPLETE, $HTML_HANDLER);
         register_macro_helper(HTML_PRINT_JS_AUTOCOMPLETE_SETUP_INT, HTML_PRINT_JS_AUTOCOMPLETE_SETUP);
         register_external_symbol(XML_TERM_SEARCH);
@@ -3032,234 +5364,6 @@ public final class html_complete extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

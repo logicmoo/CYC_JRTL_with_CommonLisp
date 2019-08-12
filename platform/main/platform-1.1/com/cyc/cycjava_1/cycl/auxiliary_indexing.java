@@ -366,8 +366,7 @@ public  final class auxiliary_indexing extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_auxiliary_indexing_file() {
-    // CVS_ID("Id: auxiliary-indexing.lisp 126640 2008-12-04 13:39:36Z builder ");
-    declare_auxiliary_index($kw4$UNBOUND_RULE_INDEX, $str5$Unbound_Rule_Index);
+        declare_auxiliary_index($kw4$UNBOUND_RULE_INDEX, $str5$Unbound_Rule_Index);
     kb_indexing_declarations.declare_index($kw6$UNBOUND_RULE_INDEX_POS, $list7);
     kb_indexing_declarations.declare_index($kw8$UNBOUND_RULE_INDEX_NEG, $list9);
     return NIL;

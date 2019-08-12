@@ -154,8 +154,7 @@ public  final class assertion_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_assertion_manager_file() {
-    // CVS_ID("Id: assertion-manager.lisp 128689 2009-09-02 19:44:42Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_ARETE_ASSERTIONS_TOUCHED_);
+        subl_macro_promotions.declare_defglobal($sym0$_ARETE_ASSERTIONS_TOUCHED_);
     subl_macro_promotions.declare_defglobal($sym1$_ASSERTION_CONTENT_MANAGER_);
     return NIL;
   }

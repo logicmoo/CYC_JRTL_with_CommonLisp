@@ -63,8 +63,7 @@ Can be one of  :all :arg-type :minimal :none */
   }
 
   public static final SubLObject setup_backward_results_file() {
-    // CVS_ID("Id: backward-results.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

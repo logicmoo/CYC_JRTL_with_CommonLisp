@@ -854,8 +854,7 @@ public  final class cache extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cache_file() {
-    // CVS_ID("Id: cache.lisp 127819 2009-05-14 15:46:16Z aldag ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cache$.getGlobalValue(), Symbols.symbol_function($sym7$CACHE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_cache$.getGlobalValue(), Symbols.symbol_function($sym7$CACHE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$CACHE_CAPACITY, $sym9$_CSETF_CACHE_CAPACITY);
     Structures.def_csetf($sym10$CACHE_MAP, $sym11$_CSETF_CACHE_MAP);
     Structures.def_csetf($sym12$CACHE_HEAD_ENTRY, $sym13$_CSETF_CACHE_HEAD_ENTRY);

@@ -1196,8 +1196,7 @@ public  final class sdc extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sdc_file() {
-    // CVS_ID("Id: sdc.lisp 126640 2008-12-04 13:39:36Z builder ");
-    memoization_state.note_globally_cached_function($sym19$CACHED_SBHL_SD_RELEVANT_C2_GENL_ISA_CANDIDATE_);
+        memoization_state.note_globally_cached_function($sym19$CACHED_SBHL_SD_RELEVANT_C2_GENL_ISA_CANDIDATE_);
     memoization_state.note_globally_cached_function($sym25$CACHED_ALL_ISA_SDCT);
     memoization_state.note_globally_cached_function($sym30$CACHED_SDC_EXCEPTIONS);
     return NIL;

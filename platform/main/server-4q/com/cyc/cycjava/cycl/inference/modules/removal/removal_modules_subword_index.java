@@ -1,50 +1,10 @@
 package com.cyc.cycjava.cycl.inference.modules.removal;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.clause_utilities;
-import com.cyc.cycjava.cycl.clauses;
-import com.cyc.cycjava.cycl.cycl_string;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.dictionary_utilities;
-import com.cyc.cycjava.cycl.genl_predicates;
-import com.cyc.cycjava.cycl.inference.harness.inference_modules;
-import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
-import com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subword_index;
-import com.cyc.cycjava.cycl.lexicon_subword_index;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.mt_vars;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.unification_utilities;
-import com.cyc.cycjava.cycl.variables;
-import com.cyc.cycjava.cycl.virtual_indexing;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subword_index.*;
 import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
@@ -56,19 +16,28 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.inference.harness.inference_modules;
+import com.cyc.cycjava.cycl.inference.harness.inference_worker_removal;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class removal_modules_subword_index extends SubLTranslatedFile {
+public final class removal_modules_subword_index extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new removal_modules_subword_index();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.modules.removal.removal_modules_subword_index";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.modules.removal.removal_modules_subword_index";
 
-    public static final String myFingerPrint = "ed3659f9cf0d48d0c3c8b5d0528a4339e1758f82f4b56e830c7314d90cf6fb61";
 
     private static final SubLSymbol $REMOVAL_CONJUNCTIVE_SUBWORD_INDEX = makeKeyword("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX");
 
-    private static final SubLList $list1 = list(new SubLObject[]{ makeKeyword("APPLICABILITY"), makeSymbol("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-APPLICABILITY"), makeKeyword("COST"), makeSymbol("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-COST"), makeKeyword("COMPLETENESS"), makeKeyword("INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$and (PRED ?X ?Y) (SUBSTRING-PRED SUBSTRING ?Y)) using the subword index. Cf. #$indexSubWordsForArg."), makeKeyword("EXAMPLE"), makeString("(#$and (#$comment ?TERM ?COMMENT) (#$substring ?COMMENT \"more obtuse\"))") });
+    private static final SubLList $list1 = list(new SubLObject[]{ makeKeyword("APPLICABILITY"), makeSymbol("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-APPLICABILITY"), $COST, makeSymbol("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-COST"), makeKeyword("COMPLETENESS"), makeKeyword("INCOMPLETE"), makeKeyword("EXPAND"), makeSymbol("REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-EXPAND"), makeKeyword("DOCUMENTATION"), makeString("(#$and (PRED ?X ?Y) (SUBSTRING-PRED SUBSTRING ?Y)) using the subword index. Cf. #$indexSubWordsForArg."), makeKeyword("EXAMPLE"), makeString("(#$and (#$comment ?TERM ?COMMENT) (#$substring ?COMMENT \"more obtuse\"))") });
 
     private static final SubLList $list2 = list(makeSymbol("MT"), makeSymbol("ASENT"));
 
@@ -348,11 +317,11 @@ public final class removal_modules_subword_index extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_removal_modules_subword_index_file() {
-        declareFunction(me, "removal_conjunctive_subword_index_applicability", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-APPLICABILITY", 1, 0, false);
-        declareFunction(me, "removal_conjunctive_subword_index_cost", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-COST", 1, 0, false);
-        declareFunction(me, "removal_conjunctive_subword_index_expand", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-EXPAND", 1, 0, false);
-        declareFunction(me, "removal_substring_matchesP", "REMOVAL-SUBSTRING-MATCHES?", 3, 0, false);
-        declareFunction(me, "removal_conjunctive_subword_index_destructure", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-DESTRUCTURE", 1, 0, false);
+        declareFunction("removal_conjunctive_subword_index_applicability", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-APPLICABILITY", 1, 0, false);
+        declareFunction("removal_conjunctive_subword_index_cost", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-COST", 1, 0, false);
+        declareFunction("removal_conjunctive_subword_index_expand", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-EXPAND", 1, 0, false);
+        declareFunction("removal_substring_matchesP", "REMOVAL-SUBSTRING-MATCHES?", 3, 0, false);
+        declareFunction("removal_conjunctive_subword_index_destructure", "REMOVAL-CONJUNCTIVE-SUBWORD-INDEX-DESTRUCTURE", 1, 0, false);
         return NIL;
     }
 

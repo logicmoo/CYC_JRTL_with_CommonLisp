@@ -1,7 +1,27 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.json;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Strings;
@@ -18,54 +38,12 @@ import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.json.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_backslash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_colon;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_comma;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbrace;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_lbracket;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbrace;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_rbracket;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_tab;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class json extends SubLTranslatedFile {
+public final class json extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new json();
 
-    public static final String myName = "com.cyc.cycjava.cycl.json";
+    public static final String myName = "com.cyc.cycjava_2.cycl.json";
 
-    public static final String myFingerPrint = "08726f33956b366397d3b4162803038c1ce65e46d1feaa300172d130b20e83f7";
 
 
 
@@ -790,43 +768,43 @@ public final class json extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_json_file() {
-        declareMacro(me, "with_json_output_to_stream", "WITH-JSON-OUTPUT-TO-STREAM");
-        declareMacro(me, "with_json_output_to_string", "WITH-JSON-OUTPUT-TO-STRING");
-        declareFunction(me, "json_special_charP", "JSON-SPECIAL-CHAR?", 1, 0, false);
-        declareFunction(me, "json_char_escaped_version", "JSON-CHAR-ESCAPED-VERSION", 1, 0, false);
-        declareFunction(me, "json_serialize", "JSON-SERIALIZE", 1, 0, false);
-        declareFunction(me, "json_write_wXescaped_special_chars", "JSON-WRITE-W/ESCAPED-SPECIAL-CHARS", 1, 0, false);
-        declareFunction(me, "json_serialize_atom", "JSON-SERIALIZE-ATOM", 1, 1, false);
-        declareMacro(me, "json_serializing_sequence", "JSON-SERIALIZING-SEQUENCE");
-        declareMacro(me, "json_indent", "JSON-INDENT");
-        declareMacro(me, "json_serialize_sequence_item", "JSON-SERIALIZE-SEQUENCE-ITEM");
-        declareMacro(me, "json_serializing_object", "JSON-SERIALIZING-OBJECT");
-        declareMacro(me, "json_serialize_object_field", "JSON-SERIALIZE-OBJECT-FIELD");
-        declareFunction(me, "json_serialize_atom_sequence", "JSON-SERIALIZE-ATOM-SEQUENCE", 1, 1, false);
-        declareFunction(me, "json_princ", "JSON-PRINC", 1, 0, false);
-        declareFunction(me, "json_print", "JSON-PRINT", 1, 0, false);
-        declareFunction(me, "json_newline", "JSON-NEWLINE", 0, 0, false);
-        declareFunction(me, "json_do_indent", "JSON-DO-INDENT", 0, 0, false);
-        declareFunction(me, "json_lookup_path", "JSON-LOOKUP-PATH", 2, 0, false);
-        declareFunction(me, "print_json_to_string", "PRINT-JSON-TO-STRING", 1, 1, false);
-        declareFunction(me, "print_json", "PRINT-JSON", 1, 2, false);
-        declareFunction(me, "plist_with_keyword_keys_p", "PLIST-WITH-KEYWORD-KEYS-P", 1, 0, false);
-        declareFunction(me, "parse_json_from_string", "PARSE-JSON-FROM-STRING", 1, 0, false);
-        declareFunction(me, "parse_json_from_file", "PARSE-JSON-FROM-FILE", 1, 0, false);
-        declareFunction(me, "parse_json_from_stream", "PARSE-JSON-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "parse_json_value_from_stream", "PARSE-JSON-VALUE-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "parse_json_object_from_stream", "PARSE-JSON-OBJECT-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "parse_json_keyXvalue_from_stream", "PARSE-JSON-KEY/VALUE-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "parse_json_string_from_stream", "PARSE-JSON-STRING-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "parse_json_primitive_from_stream", "PARSE-JSON-PRIMITIVE-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "parse_json_array_from_stream", "PARSE-JSON-ARRAY-FROM-STREAM", 1, 0, false);
-        declareFunction(me, "json_read_whitespace", "JSON-READ-WHITESPACE", 1, 1, false);
-        declareFunction(me, "json_read_until_char", "JSON-READ-UNTIL-CHAR", 2, 0, false);
-        declareFunction(me, "json_read_until_one_of", "JSON-READ-UNTIL-ONE-OF", 2, 0, false);
-        declareFunction(me, "json_read_until_char_unless", "JSON-READ-UNTIL-CHAR-UNLESS", 3, 0, false);
-        declareFunction(me, "json_read_until_eof", "JSON-READ-UNTIL-EOF", 1, 0, false);
-        declareFunction(me, "json_round_trip", "JSON-ROUND-TRIP", 1, 0, false);
-        declareFunction(me, "json_round_trip_from_list", "JSON-ROUND-TRIP-FROM-LIST", 1, 0, false);
+        declareMacro("with_json_output_to_stream", "WITH-JSON-OUTPUT-TO-STREAM");
+        declareMacro("with_json_output_to_string", "WITH-JSON-OUTPUT-TO-STRING");
+        declareFunction("json_special_charP", "JSON-SPECIAL-CHAR?", 1, 0, false);
+        declareFunction("json_char_escaped_version", "JSON-CHAR-ESCAPED-VERSION", 1, 0, false);
+        declareFunction("json_serialize", "JSON-SERIALIZE", 1, 0, false);
+        declareFunction("json_write_wXescaped_special_chars", "JSON-WRITE-W/ESCAPED-SPECIAL-CHARS", 1, 0, false);
+        declareFunction("json_serialize_atom", "JSON-SERIALIZE-ATOM", 1, 1, false);
+        declareMacro("json_serializing_sequence", "JSON-SERIALIZING-SEQUENCE");
+        declareMacro("json_indent", "JSON-INDENT");
+        declareMacro("json_serialize_sequence_item", "JSON-SERIALIZE-SEQUENCE-ITEM");
+        declareMacro("json_serializing_object", "JSON-SERIALIZING-OBJECT");
+        declareMacro("json_serialize_object_field", "JSON-SERIALIZE-OBJECT-FIELD");
+        declareFunction("json_serialize_atom_sequence", "JSON-SERIALIZE-ATOM-SEQUENCE", 1, 1, false);
+        declareFunction("json_princ", "JSON-PRINC", 1, 0, false);
+        declareFunction("json_print", "JSON-PRINT", 1, 0, false);
+        declareFunction("json_newline", "JSON-NEWLINE", 0, 0, false);
+        declareFunction("json_do_indent", "JSON-DO-INDENT", 0, 0, false);
+        declareFunction("json_lookup_path", "JSON-LOOKUP-PATH", 2, 0, false);
+        declareFunction("print_json_to_string", "PRINT-JSON-TO-STRING", 1, 1, false);
+        declareFunction("print_json", "PRINT-JSON", 1, 2, false);
+        declareFunction("plist_with_keyword_keys_p", "PLIST-WITH-KEYWORD-KEYS-P", 1, 0, false);
+        declareFunction("parse_json_from_string", "PARSE-JSON-FROM-STRING", 1, 0, false);
+        declareFunction("parse_json_from_file", "PARSE-JSON-FROM-FILE", 1, 0, false);
+        declareFunction("parse_json_from_stream", "PARSE-JSON-FROM-STREAM", 1, 0, false);
+        declareFunction("parse_json_value_from_stream", "PARSE-JSON-VALUE-FROM-STREAM", 1, 0, false);
+        declareFunction("parse_json_object_from_stream", "PARSE-JSON-OBJECT-FROM-STREAM", 1, 0, false);
+        declareFunction("parse_json_keyXvalue_from_stream", "PARSE-JSON-KEY/VALUE-FROM-STREAM", 1, 0, false);
+        declareFunction("parse_json_string_from_stream", "PARSE-JSON-STRING-FROM-STREAM", 1, 0, false);
+        declareFunction("parse_json_primitive_from_stream", "PARSE-JSON-PRIMITIVE-FROM-STREAM", 1, 0, false);
+        declareFunction("parse_json_array_from_stream", "PARSE-JSON-ARRAY-FROM-STREAM", 1, 0, false);
+        declareFunction("json_read_whitespace", "JSON-READ-WHITESPACE", 1, 1, false);
+        declareFunction("json_read_until_char", "JSON-READ-UNTIL-CHAR", 2, 0, false);
+        declareFunction("json_read_until_one_of", "JSON-READ-UNTIL-ONE-OF", 2, 0, false);
+        declareFunction("json_read_until_char_unless", "JSON-READ-UNTIL-CHAR-UNLESS", 3, 0, false);
+        declareFunction("json_read_until_eof", "JSON-READ-UNTIL-EOF", 1, 0, false);
+        declareFunction("json_round_trip", "JSON-ROUND-TRIP", 1, 0, false);
+        declareFunction("json_round_trip_from_list", "JSON-ROUND-TRIP-FROM-LIST", 1, 0, false);
         return NIL;
     }
 

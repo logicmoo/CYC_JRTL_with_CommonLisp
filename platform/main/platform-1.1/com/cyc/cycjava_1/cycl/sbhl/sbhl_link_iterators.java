@@ -345,8 +345,7 @@ public  final class sbhl_link_iterators extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_link_iterators_file() {
-    // CVS_ID("Id: sbhl-link-iterators.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_link_node_search_state_iterator_state$.getGlobalValue(), Symbols.symbol_function($sym7$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_PRINT_FUNCTION_TRAMPOL));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sbhl_link_node_search_state_iterator_state$.getGlobalValue(), Symbols.symbol_function($sym7$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_PRINT_FUNCTION_TRAMPOL));
     Structures.def_csetf($sym8$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_SBHL_LINK_NODE_SEARCH_, $sym9$_CSETF_SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_SBHL_LINK_NODE_);
     Structures.def_csetf($sym10$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_REMAINING_MODULES, $sym11$_CSETF_SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_REMAINING_MODUL);
     Structures.def_csetf($sym12$SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_MODULE_NODE_SEARCH_STA, $sym13$_CSETF_SBHL_LINK_NODE_SEARCH_STATE_ITERATOR_STATE_MODULE_NODE_SEA);

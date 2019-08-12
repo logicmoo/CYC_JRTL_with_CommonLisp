@@ -280,8 +280,7 @@ public  final class pred_relevance_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_pred_relevance_macros_file() {
-    // CVS_ID("Id: pred-relevance-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym36$POSSIBLY_WITH_JUST_PREDICATE_DETERMINE_FUNCTION, $sym38$POSSIBLY_WITH_JUST_PREDICATE);
+        access_macros.register_macro_helper($sym36$POSSIBLY_WITH_JUST_PREDICATE_DETERMINE_FUNCTION, $sym38$POSSIBLY_WITH_JUST_PREDICATE);
     access_macros.register_macro_helper($sym37$POSSIBLY_WITH_JUST_PREDICATE_DETERMINE_PREDICATE, $sym38$POSSIBLY_WITH_JUST_PREDICATE);
     access_macros.register_macro_helper($sym41$DETERMINE_INFERENCE_GENL_OR_SPEC_PRED_RELEVANCE, $sym45$WITH_INFERENCE_GENL_OR_SPEC_PRED_RELEVANCE);
     access_macros.register_macro_helper($sym44$DETERMINE_INFERENCE_GENL_OR_SPEC_INVERSE_RELEVANCE, $sym47$WITH_INFERENCE_GENL_OR_SPEC_INVERSE_RELEVANCE);

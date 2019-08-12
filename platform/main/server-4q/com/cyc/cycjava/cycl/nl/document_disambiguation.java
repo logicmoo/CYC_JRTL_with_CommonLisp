@@ -1,9 +1,26 @@
 package com.cyc.cycjava.cycl.nl;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.document;
 import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.nl.document_disambiguation;
 import com.cyc.cycjava.cycl.nl_api_datastructures;
 import com.cyc.cycjava.cycl.string_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -15,44 +32,17 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.nl.document_disambiguation.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Vectors.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class document_disambiguation extends SubLTranslatedFile {
+public final class document_disambiguation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new document_disambiguation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.nl.document_disambiguation";
+    public static final String myName = "com.cyc.cycjava_2.cycl.nl.document_disambiguation";
 
-    public static final String myFingerPrint = "e9d26c22fb9ea0d829f5fd52fdb8716d9ceb5fda179213fcf9499293a1750358";
 
     // defconstant
     public static final SubLSymbol $dtp_simple_disambiguator$ = makeSymbol("*DTP-SIMPLE-DISAMBIGUATOR*");
@@ -120,16 +110,16 @@ public final class document_disambiguation extends SubLTranslatedFile {
     }
 
     public static SubLObject simple_disambiguator_p(final SubLObject v_object) {
-        return v_object.getClass() == document_disambiguation.$simple_disambiguator_native.class ? T : NIL;
+        return v_object.getClass() == $simple_disambiguator_native.class ? T : NIL;
     }
 
     public static SubLObject sdis_min_strength(final SubLObject v_object) {
-        assert NIL != simple_disambiguator_p(v_object) : "document_disambiguation.simple_disambiguator_p(v_object) " + "CommonSymbols.NIL != document_disambiguation.simple_disambiguator_p(v_object) " + v_object;
+        assert NIL != simple_disambiguator_p(v_object) : "document_disambiguation.simple_disambiguator_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject _csetf_sdis_min_strength(final SubLObject v_object, final SubLObject value) {
-        assert NIL != simple_disambiguator_p(v_object) : "document_disambiguation.simple_disambiguator_p(v_object) " + "CommonSymbols.NIL != document_disambiguation.simple_disambiguator_p(v_object) " + v_object;
+        assert NIL != simple_disambiguator_p(v_object) : "document_disambiguation.simple_disambiguator_p error :" + v_object;
         return v_object.setField2(value);
     }
 
@@ -137,7 +127,7 @@ public final class document_disambiguation extends SubLTranslatedFile {
         if (arglist == UNPROVIDED) {
             arglist = NIL;
         }
-        final SubLObject v_new = new document_disambiguation.$simple_disambiguator_native();
+        final SubLObject v_new = new $simple_disambiguator_native();
         SubLObject next;
         SubLObject current_arg;
         SubLObject current_value;
@@ -275,20 +265,20 @@ public final class document_disambiguation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_document_disambiguation_file() {
-        declareFunction(me, "simple_disambiguator_print_function_trampoline", "SIMPLE-DISAMBIGUATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "simple_disambiguator_p", "SIMPLE-DISAMBIGUATOR-P", 1, 0, false);
+        declareFunction("simple_disambiguator_print_function_trampoline", "SIMPLE-DISAMBIGUATOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("simple_disambiguator_p", "SIMPLE-DISAMBIGUATOR-P", 1, 0, false);
         new document_disambiguation.$simple_disambiguator_p$UnaryFunction();
-        declareFunction(me, "sdis_min_strength", "SDIS-MIN-STRENGTH", 1, 0, false);
-        declareFunction(me, "_csetf_sdis_min_strength", "_CSETF-SDIS-MIN-STRENGTH", 2, 0, false);
-        declareFunction(me, "make_simple_disambiguator", "MAKE-SIMPLE-DISAMBIGUATOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_simple_disambiguator", "VISIT-DEFSTRUCT-SIMPLE-DISAMBIGUATOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_simple_disambiguator_method", "VISIT-DEFSTRUCT-OBJECT-SIMPLE-DISAMBIGUATOR-METHOD", 2, 0, false);
-        declareFunction(me, "new_simple_disambiguator", "NEW-SIMPLE-DISAMBIGUATOR", 1, 0, false);
-        declareFunction(me, "sdis_print", "SDIS-PRINT", 3, 0, false);
-        declareFunction(me, "document_disambiguate", "DOCUMENT-DISAMBIGUATE", 2, 1, false);
-        declareFunction(me, "document_disambiguate_simple_disambiguator_method", "DOCUMENT-DISAMBIGUATE-SIMPLE-DISAMBIGUATOR-METHOD", 2, 1, false);
-        declareFunction(me, "interps_meeting_threshold", "INTERPS-MEETING-THRESHOLD", 2, 0, false);
-        declareFunction(me, "get_invalid_strengths_for_threshold", "GET-INVALID-STRENGTHS-FOR-THRESHOLD", 1, 0, false);
+        declareFunction("sdis_min_strength", "SDIS-MIN-STRENGTH", 1, 0, false);
+        declareFunction("_csetf_sdis_min_strength", "_CSETF-SDIS-MIN-STRENGTH", 2, 0, false);
+        declareFunction("make_simple_disambiguator", "MAKE-SIMPLE-DISAMBIGUATOR", 0, 1, false);
+        declareFunction("visit_defstruct_simple_disambiguator", "VISIT-DEFSTRUCT-SIMPLE-DISAMBIGUATOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_simple_disambiguator_method", "VISIT-DEFSTRUCT-OBJECT-SIMPLE-DISAMBIGUATOR-METHOD", 2, 0, false);
+        declareFunction("new_simple_disambiguator", "NEW-SIMPLE-DISAMBIGUATOR", 1, 0, false);
+        declareFunction("sdis_print", "SDIS-PRINT", 3, 0, false);
+        declareFunction("document_disambiguate", "DOCUMENT-DISAMBIGUATE", 2, 1, false);
+        declareFunction("document_disambiguate_simple_disambiguator_method", "DOCUMENT-DISAMBIGUATE-SIMPLE-DISAMBIGUATOR-METHOD", 2, 1, false);
+        declareFunction("interps_meeting_threshold", "INTERPS-MEETING-THRESHOLD", 2, 0, false);
+        declareFunction("get_invalid_strengths_for_threshold", "GET-INVALID-STRENGTHS-FOR-THRESHOLD", 1, 0, false);
         return NIL;
     }
 
@@ -361,7 +351,7 @@ public final class document_disambiguation extends SubLTranslatedFile {
 
         private static final SubLStructDeclNative structDecl;
 
-        public $simple_disambiguator_native() {
+        private $simple_disambiguator_native() {
             this.$min_strength = Lisp.NIL;
         }
 
@@ -381,7 +371,7 @@ public final class document_disambiguation extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(document_disambiguation.$simple_disambiguator_native.class, SIMPLE_DISAMBIGUATOR, SIMPLE_DISAMBIGUATOR_P, $list2, $list3, new String[]{ "$min_strength" }, $list4, $list5, SDIS_PRINT);
+            structDecl = makeStructDeclNative($simple_disambiguator_native.class, SIMPLE_DISAMBIGUATOR, SIMPLE_DISAMBIGUATOR_P, $list2, $list3, new String[]{ "$min_strength" }, $list4, $list5, SDIS_PRINT);
         }
     }
 

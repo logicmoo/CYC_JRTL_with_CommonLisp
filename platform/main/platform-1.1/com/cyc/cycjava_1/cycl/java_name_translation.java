@@ -543,8 +543,7 @@ public  final class java_name_translation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_java_name_translation_file() {
-    // CVS_ID("Id: java-name-translation.lisp 128917 2009-10-07 03:01:33Z rck ");
-    initialize_java_backend_function_boolean_hash();
+        initialize_java_backend_function_boolean_hash();
     initialize_java_backend_function_to_method_hash();
     memoization_state.note_memoized_function($sym24$JAVA_BACKEND_COMPUTED_FUNCTION_NAME);
     initialize_java_backend_function_tables();

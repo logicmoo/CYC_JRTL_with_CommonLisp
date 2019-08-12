@@ -237,8 +237,7 @@ public  final class simple_lru_cache_strategy extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_simple_lru_cache_strategy_file() {
-    // CVS_ID("Id: simple-lru-cache-strategy.lisp 126880 2009-01-22 21:59:16Z tbrussea ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_simple_lru_cache_strategy$.getGlobalValue(), Symbols.symbol_function($sym7$SIMPLE_LRU_CACHE_STRATEGY_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_simple_lru_cache_strategy$.getGlobalValue(), Symbols.symbol_function($sym7$SIMPLE_LRU_CACHE_STRATEGY_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$SLRU_CACHESTRAT_CAPACITY, $sym9$_CSETF_SLRU_CACHESTRAT_CAPACITY);
     Structures.def_csetf($sym10$SLRU_CACHESTRAT_INDEX, $sym11$_CSETF_SLRU_CACHESTRAT_INDEX);
     Structures.def_csetf($sym12$SLRU_CACHESTRAT_PAYLOAD, $sym13$_CSETF_SLRU_CACHESTRAT_PAYLOAD);

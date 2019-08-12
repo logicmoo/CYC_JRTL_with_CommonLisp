@@ -285,8 +285,7 @@ public  final class deductions_interface extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_deductions_interface_file() {
-    // CVS_ID("Id: deductions-interface.lisp 126640 2008-12-04 13:39:36Z builder ");
-    utilities_macros.register_cyc_api_function($sym3$KB_CREATE_DEDUCTION, $list5, $str6$Create_a_new_deduction_consisting, $list7, $list8);
+        utilities_macros.register_cyc_api_function($sym3$KB_CREATE_DEDUCTION, $list5, $str6$Create_a_new_deduction_consisting, $list7, $list8);
     utilities_macros.register_cyc_api_function($sym11$KB_REMOVE_DEDUCTION, $list13, $str14$Remove_DEDUCTION_from_the_KB__and, $list15, $list16);
     utilities_macros.register_cyc_api_function($sym17$KB_LOOKUP_DEDUCTION, $list5, $str18$Return_the_deduction_with_ASSERTI, $list7, $list19);
     utilities_macros.register_cyc_api_function($sym20$KB_DEDUCTION_ASSERTION, $list13, $str21$Return_the_assertion_for_DEDUCTIO, $list15, $list22);

@@ -1,9 +1,34 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.indexing_utilities;
-import com.cyc.cycjava.cycl.subl_macro_promotions;
-import com.cyc.cycjava.cycl.utilities_macros;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
+import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.armedbear.lisp.Lisp;
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLSpecialOperatorDeclarations;
@@ -16,102 +41,146 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLStructNative;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.visitation;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
-import org.armedbear.lisp.Lisp;
-
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.indexing_utilities.*;
-import static com.cyc.cycjava.cycl.kb_indexing_datastructures.*;
-import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.SIX_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Structures.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_object_method_table$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.$print_readably$;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 
-public final class indexing_utilities extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      INDEXING-UTILITIES
+ * source file: /cyc/top/cycl/indexing-utilities.lisp
+ * created:     2019/07/03 17:37:25
+ */
+public final class indexing_utilities extends SubLTranslatedFile implements V12 {
+    public static final SubLObject visit_final_index_sets_int(SubLObject index, SubLObject visit_fn) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == simple_index_p(index)) {
+                if (NIL != final_index_p(index)) {
+                    funcall(visit_fn, index);
+                } else {
+                    {
+                        SubLObject index_1 = index;
+                        if (NIL != do_intermediate_index_valid_index_p(index_1)) {
+                            {
+                                SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(intermediate_index_dictionary(index_1)));
+                                while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                    thread.resetMultipleValues();
+                                    {
+                                        SubLObject key = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                        SubLObject sub_index = thread.secondMultipleValue();
+                                        thread.resetMultipleValues();
+                                        com.cyc.cycjava.cycl.indexing_utilities.visit_final_index_sets_int(sub_index, visit_fn);
+                                        iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                    }
+                                } 
+                                dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                            }
+                        }
+                    }
+                }
+            }
+            return index;
+        }
+    }
+
+    // Definitions
+    /**
+     * Invoke VISIT-FN on every final index set of term.
+     *
+     * @unknown rewrite with path as hierarchical visitor
+     */
+    @LispMethod(comment = "Invoke VISIT-FN on every final index set of term.\r\n\r\n@unknown rewrite with path as hierarchical visitor")
+    public static final SubLObject visit_final_index_sets(SubLObject v_term, SubLObject visit_fn) {
+        SubLTrampolineFile.checkType(v_term, INDEXED_TERM_P);
+        return com.cyc.cycjava.cycl.indexing_utilities.visit_final_index_sets_int(term_index(v_term), visit_fn);
+    }
+
+    public static final SubLObject final_index_metrics_compilation_fn(SubLObject v_set) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject map = $curr_visited_index_metrics$.getDynamicValue(thread);
+                map_utilities.map_increment(map, set.set_size(v_set), UNPROVIDED);
+            }
+            return v_set;
+        }
+    }
+
+    /**
+     * Compile final index metrics about the term, and record them in map.
+     * If map is not provided, allocate a new DICTIONARY-P with EQL.
+     *
+     * @return map
+     */
+    @LispMethod(comment = "Compile final index metrics about the term, and record them in map.\r\nIf map is not provided, allocate a new DICTIONARY-P with EQL.\r\n\r\n@return map\nCompile final index metrics about the term, and record them in map.\nIf map is not provided, allocate a new DICTIONARY-P with EQL.")
+    public static final SubLObject compile_final_index_metrics(SubLObject v_term, SubLObject map) {
+        if (map == UNPROVIDED) {
+            map = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == map_utilities.map_p(map)) {
+                map = dictionary.new_dictionary(EQL, UNPROVIDED);
+            }
+            {
+                SubLObject _prev_bind_0 = $curr_visited_index_metrics$.currentBinding(thread);
+                try {
+                    $curr_visited_index_metrics$.bind(map, thread);
+                    com.cyc.cycjava.cycl.indexing_utilities.visit_final_index_sets(v_term, FINAL_INDEX_METRICS_COMPILATION_FN);
+                } finally {
+                    $curr_visited_index_metrics$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return map;
+        }
+    }
+
+    /**
+     * Helper method for the summation of index set information.
+     */
+    // defparameter
+    @LispMethod(comment = "Helper method for the summation of index set information.\ndefparameter")
+    private static final SubLSymbol $curr_visited_index_metrics$ = makeSymbol("*CURR-VISITED-INDEX-METRICS*");
+
     public static final SubLFile me = new indexing_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.indexing_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.indexing_utilities";
 
-    public static final String myFingerPrint = "d815a6d669d071fa9ee02018d7bd6118ae714a61ac31542196d5fff34e6d8cb2";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $term_being_removed$ = makeSymbol("*TERM-BEING-REMOVED*");
 
     // defconstant
+    @LispMethod(comment = "defconstant")
     public static final SubLSymbol $dtp_complex_index_visitor$ = makeSymbol("*DTP-COMPLEX-INDEX-VISITOR*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $swap_out_intermediate_index_levelsP$ = makeSymbol("*SWAP-OUT-INTERMEDIATE-INDEX-LEVELS?*");
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     private static final SubLSymbol $precache_term_set$ = makeSymbol("*PRECACHE-TERM-SET*");
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
-
-
-    private static final SubLList $list3 = list(reader_make_constant_shell(makeString("forwardNonTriggerLiteral")), reader_make_constant_shell(makeString("forwardTriggerLiteral")));
-
-
-
-
-
-
-
-
-
-
+    private static final SubLList $list3 = list(reader_make_constant_shell("forwardNonTriggerLiteral"), reader_make_constant_shell("forwardTriggerLiteral"));
 
     private static final SubLSymbol $sym9$_EXIT = makeSymbol("%EXIT");
 
     private static final SubLSymbol $sym10$GAF_REMOVE_BEFORE_ = makeSymbol("GAF-REMOVE-BEFORE?");
 
-    private static final SubLObject $$termOfUnit = reader_make_constant_shell(makeString("termOfUnit"));
 
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
 
-    private static final SubLObject $$genls = reader_make_constant_shell(makeString("genls"));
+
+
+
 
     private static final SubLSymbol COMPLEX_INDEX_VISITOR = makeSymbol("COMPLEX-INDEX-VISITOR");
 
@@ -141,6 +210,8 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol COMPINX_VISIT_NOTE_FINAL_INDEX_FN = makeSymbol("COMPINX-VISIT-NOTE-FINAL-INDEX-FN");
 
+    private static final SubLSymbol FINAL_INDEX_METRICS_COMPILATION_FN = makeSymbol("FINAL-INDEX-METRICS-COMPILATION-FN");
+
     private static final SubLSymbol _CSETF_COMPINX_VISIT_NOTE_FINAL_INDEX_FN = makeSymbol("_CSETF-COMPINX-VISIT-NOTE-FINAL-INDEX-FN");
 
     private static final SubLSymbol COMPINX_VISIT_BEGIN_VISIT_FN = makeSymbol("COMPINX-VISIT-BEGIN-VISIT-FN");
@@ -165,17 +236,9 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol $END_VISIT_FN = makeKeyword("END-VISIT-FN");
 
-
-
     private static final SubLString $str41$Invalid_slot__S_for_construction_ = makeString("Invalid slot ~S for construction function");
 
-
-
     private static final SubLSymbol MAKE_COMPLEX_INDEX_VISITOR = makeSymbol("MAKE-COMPLEX-INDEX-VISITOR");
-
-
-
-
 
     private static final SubLSymbol VISIT_DEFSTRUCT_OBJECT_COMPLEX_INDEX_VISITOR_METHOD = makeSymbol("VISIT-DEFSTRUCT-OBJECT-COMPLEX-INDEX-VISITOR-METHOD");
 
@@ -191,15 +254,9 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str52$__Param__ = makeString(") Param: ");
 
-
-
     private static final SubLList $list54 = list(makeSymbol("I-KEY"), makeSymbol("I-INDEX"));
 
     private static final SubLString $str55$Illegal_state_exception__Index_co = makeString("Illegal state exception: Index contains object ~A under ~A, which is neither a FINAL nor an INTERMEDIATE index.");
-
-
-
-
 
     private static final SubLSymbol DUMP_SWAPPABLE_KB_INDEX_VISITOR_BEGIN_VISIT = makeSymbol("DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-VISIT");
 
@@ -213,33 +270,13 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str63$The_swappable_KB_index_visitor_is = makeString("The swappable KB index visitor is not properly setup; initial context ~S is bogus.");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLString $str71$The_swappable_KB_index_visitor_di = makeString("The swappable KB index visitor did not complete properly; final context ~S is bogus.");
 
     private static final SubLString $str72$Invalid_state_transition__the_ind = makeString("Invalid state transition--the index dump style is neither changed nor entire???");
 
-
-
     private static final SubLString $str74$Failed_to_sanity_check_key__A_s_s = makeString("Failed to sanity check key ~A's sub-index ~A against recreated ~A.~%");
 
     private static final SubLString $str75$Conversion_error__newly_created_m = makeString("Conversion error--newly created maps should not be backed already.");
-
-
-
-
 
     private static final SubLString $str78$Invalid_state_transition__index_d = makeString("Invalid state transition--index dump style is neither changed nor entire???");
 
@@ -273,12 +310,6 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str93$Precaching_unrepresented_term_ind = makeString("Precaching unrepresented term indexes");
 
-
-
-
-
-
-
     private static final SubLSymbol $UNREPRESENTED_TERM_COUNT = makeKeyword("UNREPRESENTED-TERM-COUNT");
 
     public static SubLObject rule_with_some_pragmatic_somewhereP(final SubLObject rule) {
@@ -288,8 +319,8 @@ public final class indexing_utilities extends SubLTranslatedFile {
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
         try {
             mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-            result = rule_with_some_pragmaticP(rule, UNPROVIDED);
+            mt_relevance_macros.$mt$.bind(indexing_utilities.$$EverythingPSC, thread);
+            result = indexing_utilities.rule_with_some_pragmaticP(rule, UNPROVIDED);
         } finally {
             mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
@@ -330,7 +361,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                                     final SubLObject valid_$3 = makeBoolean(!token_var_$2.eql(pragma));
                                     if (NIL != valid_$3) {
                                         final SubLObject pragma_pred = cycl_utilities.atomic_sentence_predicate(clauses.neg_lits(assertions_high.assertion_cnf(pragma)).first());
-                                        if (NIL == list_utilities.member_kbeqP(pragma_pred, $list3)) {
+                                        if (NIL == list_utilities.member_kbeqP(pragma_pred, indexing_utilities.$list3)) {
                                             pragmas_foundP = T;
                                         }
                                     }
@@ -456,7 +487,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     public static SubLObject dependent_narts(final SubLObject fort) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(fort) : "forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) " + fort;
+        assert NIL != forts.fort_p(fort) : "! forts.fort_p(fort) " + ("forts.fort_p(fort) " + "CommonSymbols.NIL != forts.fort_p(fort) ") + fort;
         SubLObject v_answer = NIL;
         final SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt_vars.$tou_mt$.getGlobalValue());
         final SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
@@ -543,7 +574,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                     while (NIL == done_var2) {
                         final SubLObject assertion2 = iteration.iteration_next_without_values_macro_helper(final_index_iterator2, token_var2);
                         final SubLObject valid2 = makeBoolean(!token_var2.eql(assertion2));
-                        if (((NIL != valid2) && (NIL != kb_mapping_macros.do_other_index_assertion_match_p(assertion2))) && (NIL != term_of_unit_assertion_mentioning_fortP(assertion2, fort))) {
+                        if (((NIL != valid2) && (NIL != kb_mapping_macros.do_other_index_assertion_match_p(assertion2))) && (NIL != indexing_utilities.term_of_unit_assertion_mentioning_fortP(assertion2, fort))) {
                             v_answer = cons(assertions_high.gaf_arg1(assertion2), v_answer);
                         }
                         done_var2 = makeBoolean(NIL == valid2);
@@ -593,7 +624,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                         result = cons(item_var, result);
                     }
                 }
-                SubLObject cdolist_list_var_$15 = nested_non_atomic_terms(lit, depth);
+                SubLObject cdolist_list_var_$15 = indexing_utilities.nested_non_atomic_terms(lit, depth);
                 SubLObject nested_object = NIL;
                 nested_object = cdolist_list_var_$15.first();
                 while (NIL != cdolist_list_var_$15) {
@@ -617,7 +648,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                         result = cons(item_var, result);
                     }
                 }
-                SubLObject cdolist_list_var_$16 = nested_non_atomic_terms(lit, depth);
+                SubLObject cdolist_list_var_$16 = indexing_utilities.nested_non_atomic_terms(lit, depth);
                 SubLObject nested_object = NIL;
                 nested_object = cdolist_list_var_$16.first();
                 while (NIL != cdolist_list_var_$16) {
@@ -641,7 +672,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                 SubLObject arg = NIL;
                 arg = cdolist_list_var2.first();
                 while (NIL != cdolist_list_var2) {
-                    SubLObject cdolist_list_var_$17 = nested_non_atomic_terms(arg, add(depth, ONE_INTEGER));
+                    SubLObject cdolist_list_var_$17 = indexing_utilities.nested_non_atomic_terms(arg, add(depth, ONE_INTEGER));
                     SubLObject nested_object2 = NIL;
                     nested_object2 = cdolist_list_var_$17.first();
                     while (NIL != cdolist_list_var_$17) {
@@ -665,7 +696,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                     SubLObject nart_arg = NIL;
                     nart_arg = cdolist_list_var2.first();
                     while (NIL != cdolist_list_var2) {
-                        SubLObject cdolist_list_var_$18 = nested_non_atomic_terms(nart_arg, add(depth, ONE_INTEGER));
+                        SubLObject cdolist_list_var_$18 = indexing_utilities.nested_non_atomic_terms(nart_arg, add(depth, ONE_INTEGER));
                         SubLObject nested_object2 = NIL;
                         nested_object2 = cdolist_list_var_$18.first();
                         while (NIL != cdolist_list_var_$18) {
@@ -689,7 +720,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                         SubLObject arg = NIL;
                         arg = cdolist_list_var2.first();
                         while (NIL != cdolist_list_var2) {
-                            SubLObject cdolist_list_var_$19 = nested_non_atomic_terms(arg, add(depth, ONE_INTEGER));
+                            SubLObject cdolist_list_var_$19 = indexing_utilities.nested_non_atomic_terms(arg, add(depth, ONE_INTEGER));
                             SubLObject nested_object2 = NIL;
                             nested_object2 = cdolist_list_var_$19.first();
                             while (NIL != cdolist_list_var_$19) {
@@ -712,41 +743,41 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     public static SubLObject sort_gafs_for_removal(final SubLObject gafs, final SubLObject v_term) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        final SubLObject _prev_bind_0 = $term_being_removed$.currentBinding(thread);
+        final SubLObject _prev_bind_0 = indexing_utilities.$term_being_removed$.currentBinding(thread);
         try {
-            $term_being_removed$.bind(v_term, thread);
-            return Sort.sort(gafs, $sym10$GAF_REMOVE_BEFORE_, UNPROVIDED);
+            indexing_utilities.$term_being_removed$.bind(v_term, thread);
+            return Sort.sort(gafs, indexing_utilities.$sym10$GAF_REMOVE_BEFORE_, UNPROVIDED);
         } finally {
-            $term_being_removed$.rebind(_prev_bind_0, thread);
+            indexing_utilities.$term_being_removed$.rebind(_prev_bind_0, thread);
         }
     }
 
     public static SubLObject gaf_remove_beforeP(final SubLObject gaf1, final SubLObject gaf2) {
-        return numL(gaf_removal_order(gaf1), gaf_removal_order(gaf2));
+        return numL(indexing_utilities.gaf_removal_order(gaf1), indexing_utilities.gaf_removal_order(gaf2));
     }
 
     public static SubLObject gaf_removal_order(final SubLObject gaf) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject arg1 = assertions_high.gaf_arg1(gaf);
-        if (NIL == kb_utilities.kbeq(arg1, $term_being_removed$.getDynamicValue(thread))) {
+        if (NIL == kb_utilities.kbeq(arg1, indexing_utilities.$term_being_removed$.getDynamicValue(thread))) {
             return ONE_INTEGER;
         }
         final SubLObject pcase_var;
         final SubLObject pred = pcase_var = assertions_high.gaf_predicate(gaf);
-        if (pcase_var.eql($$termOfUnit)) {
+        if (pcase_var.eql(indexing_utilities.$$termOfUnit)) {
             return FIVE_INTEGER;
         }
-        if (pcase_var.eql($$isa)) {
+        if (pcase_var.eql(indexing_utilities.$$isa)) {
             return FOUR_INTEGER;
         }
-        if (pcase_var.eql($$genls)) {
+        if (pcase_var.eql(indexing_utilities.$$genls)) {
             return THREE_INTEGER;
         }
         return TWO_INTEGER;
     }
 
     public static SubLObject complex_index_visitor_print_function_trampoline(final SubLObject v_object, final SubLObject stream) {
-        print_complex_index_visitor(v_object, stream, ZERO_INTEGER);
+        indexing_utilities.print_complex_index_visitor(v_object, stream, ZERO_INTEGER);
         return NIL;
     }
 
@@ -755,62 +786,62 @@ public final class indexing_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject compinx_visit_begin_subindex_fn(final SubLObject v_object) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.getField2();
     }
 
     public static SubLObject compinx_visit_end_subindex_fn(final SubLObject v_object) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.getField3();
     }
 
     public static SubLObject compinx_visit_note_final_index_fn(final SubLObject v_object) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.getField4();
     }
 
     public static SubLObject compinx_visit_begin_visit_fn(final SubLObject v_object) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.getField5();
     }
 
     public static SubLObject compinx_visit_end_visit_fn(final SubLObject v_object) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.getField6();
     }
 
     public static SubLObject compinx_visit_param(final SubLObject v_object) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.getField7();
     }
 
     public static SubLObject _csetf_compinx_visit_begin_subindex_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.setField2(value);
     }
 
     public static SubLObject _csetf_compinx_visit_end_subindex_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.setField3(value);
     }
 
     public static SubLObject _csetf_compinx_visit_note_final_index_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.setField4(value);
     }
 
     public static SubLObject _csetf_compinx_visit_begin_visit_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.setField5(value);
     }
 
     public static SubLObject _csetf_compinx_visit_end_visit_fn(final SubLObject v_object, final SubLObject value) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.setField6(value);
     }
 
     public static SubLObject _csetf_compinx_visit_param(final SubLObject v_object, final SubLObject value) {
-        assert NIL != complex_index_visitor_p(v_object) : "indexing_utilities.complex_index_visitor_p(v_object) " + "CommonSymbols.NIL != indexing_utilities.complex_index_visitor_p(v_object) " + v_object;
+        assert NIL != indexing_utilities.complex_index_visitor_p(v_object) : "! indexing_utilities.complex_index_visitor_p(v_object) " + "indexing_utilities.complex_index_visitor_p error :" + v_object;
         return v_object.setField7(value);
     }
 
@@ -827,25 +858,25 @@ public final class indexing_utilities extends SubLTranslatedFile {
             current_arg = next.first();
             current_value = cadr(next);
             pcase_var = current_arg;
-            if (pcase_var.eql($BEGIN_SUBINDEX_FN)) {
-                _csetf_compinx_visit_begin_subindex_fn(v_new, current_value);
+            if (pcase_var.eql(indexing_utilities.$BEGIN_SUBINDEX_FN)) {
+                indexing_utilities._csetf_compinx_visit_begin_subindex_fn(v_new, current_value);
             } else
-                if (pcase_var.eql($END_SUBINDEX_FN)) {
-                    _csetf_compinx_visit_end_subindex_fn(v_new, current_value);
+                if (pcase_var.eql(indexing_utilities.$END_SUBINDEX_FN)) {
+                    indexing_utilities._csetf_compinx_visit_end_subindex_fn(v_new, current_value);
                 } else
-                    if (pcase_var.eql($NOTE_FINAL_INDEX_FN)) {
-                        _csetf_compinx_visit_note_final_index_fn(v_new, current_value);
+                    if (pcase_var.eql(indexing_utilities.$NOTE_FINAL_INDEX_FN)) {
+                        indexing_utilities._csetf_compinx_visit_note_final_index_fn(v_new, current_value);
                     } else
-                        if (pcase_var.eql($BEGIN_VISIT_FN)) {
-                            _csetf_compinx_visit_begin_visit_fn(v_new, current_value);
+                        if (pcase_var.eql(indexing_utilities.$BEGIN_VISIT_FN)) {
+                            indexing_utilities._csetf_compinx_visit_begin_visit_fn(v_new, current_value);
                         } else
-                            if (pcase_var.eql($END_VISIT_FN)) {
-                                _csetf_compinx_visit_end_visit_fn(v_new, current_value);
+                            if (pcase_var.eql(indexing_utilities.$END_VISIT_FN)) {
+                                indexing_utilities._csetf_compinx_visit_end_visit_fn(v_new, current_value);
                             } else
                                 if (pcase_var.eql($PARAM)) {
-                                    _csetf_compinx_visit_param(v_new, current_value);
+                                    indexing_utilities._csetf_compinx_visit_param(v_new, current_value);
                                 } else {
-                                    Errors.error($str41$Invalid_slot__S_for_construction_, current_arg);
+                                    Errors.error(indexing_utilities.$str41$Invalid_slot__S_for_construction_, current_arg);
                                 }
 
 
@@ -857,19 +888,19 @@ public final class indexing_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject visit_defstruct_complex_index_visitor(final SubLObject obj, final SubLObject visitor_fn) {
-        funcall(visitor_fn, obj, $BEGIN, MAKE_COMPLEX_INDEX_VISITOR, SIX_INTEGER);
-        funcall(visitor_fn, obj, $SLOT, $BEGIN_SUBINDEX_FN, compinx_visit_begin_subindex_fn(obj));
-        funcall(visitor_fn, obj, $SLOT, $END_SUBINDEX_FN, compinx_visit_end_subindex_fn(obj));
-        funcall(visitor_fn, obj, $SLOT, $NOTE_FINAL_INDEX_FN, compinx_visit_note_final_index_fn(obj));
-        funcall(visitor_fn, obj, $SLOT, $BEGIN_VISIT_FN, compinx_visit_begin_visit_fn(obj));
-        funcall(visitor_fn, obj, $SLOT, $END_VISIT_FN, compinx_visit_end_visit_fn(obj));
-        funcall(visitor_fn, obj, $SLOT, $PARAM, compinx_visit_param(obj));
-        funcall(visitor_fn, obj, $END, MAKE_COMPLEX_INDEX_VISITOR, SIX_INTEGER);
+        funcall(visitor_fn, obj, $BEGIN, indexing_utilities.MAKE_COMPLEX_INDEX_VISITOR, SIX_INTEGER);
+        funcall(visitor_fn, obj, $SLOT, indexing_utilities.$BEGIN_SUBINDEX_FN, indexing_utilities.compinx_visit_begin_subindex_fn(obj));
+        funcall(visitor_fn, obj, $SLOT, indexing_utilities.$END_SUBINDEX_FN, indexing_utilities.compinx_visit_end_subindex_fn(obj));
+        funcall(visitor_fn, obj, $SLOT, indexing_utilities.$NOTE_FINAL_INDEX_FN, indexing_utilities.compinx_visit_note_final_index_fn(obj));
+        funcall(visitor_fn, obj, $SLOT, indexing_utilities.$BEGIN_VISIT_FN, indexing_utilities.compinx_visit_begin_visit_fn(obj));
+        funcall(visitor_fn, obj, $SLOT, indexing_utilities.$END_VISIT_FN, indexing_utilities.compinx_visit_end_visit_fn(obj));
+        funcall(visitor_fn, obj, $SLOT, $PARAM, indexing_utilities.compinx_visit_param(obj));
+        funcall(visitor_fn, obj, $END, indexing_utilities.MAKE_COMPLEX_INDEX_VISITOR, SIX_INTEGER);
         return obj;
     }
 
     public static SubLObject visit_defstruct_object_complex_index_visitor_method(final SubLObject obj, final SubLObject visitor_fn) {
-        return visit_defstruct_complex_index_visitor(obj, visitor_fn);
+        return indexing_utilities.visit_defstruct_complex_index_visitor(obj, visitor_fn);
     }
 
     public static SubLObject print_complex_index_visitor(final SubLObject v_object, final SubLObject stream, final SubLObject depth) {
@@ -878,18 +909,18 @@ public final class indexing_utilities extends SubLTranslatedFile {
             print_not_readable(v_object, stream);
         } else {
             print_macros.print_unreadable_object_preamble(stream, v_object, T, T);
-            write_string($str47$__CompInxVisit__, stream, UNPROVIDED, UNPROVIDED);
-            princ(compinx_visit_begin_visit_fn(v_object), stream);
-            write_string($str48$__SubIndex__, stream, UNPROVIDED, UNPROVIDED);
-            princ(compinx_visit_begin_subindex_fn(v_object), stream);
-            write_string($str49$_FinalIndex__, stream, UNPROVIDED, UNPROVIDED);
-            princ(compinx_visit_note_final_index_fn(v_object), stream);
-            write_string($$$_, stream, UNPROVIDED, UNPROVIDED);
-            princ(compinx_visit_end_subindex_fn(v_object), stream);
-            write_string($str51$__, stream, UNPROVIDED, UNPROVIDED);
-            princ(compinx_visit_end_visit_fn(v_object), stream);
-            write_string($str52$__Param__, stream, UNPROVIDED, UNPROVIDED);
-            princ(compinx_visit_param(v_object), stream);
+            write_string(indexing_utilities.$str47$__CompInxVisit__, stream, UNPROVIDED, UNPROVIDED);
+            princ(indexing_utilities.compinx_visit_begin_visit_fn(v_object), stream);
+            write_string(indexing_utilities.$str48$__SubIndex__, stream, UNPROVIDED, UNPROVIDED);
+            princ(indexing_utilities.compinx_visit_begin_subindex_fn(v_object), stream);
+            write_string(indexing_utilities.$str49$_FinalIndex__, stream, UNPROVIDED, UNPROVIDED);
+            princ(indexing_utilities.compinx_visit_note_final_index_fn(v_object), stream);
+            write_string(indexing_utilities.$$$_, stream, UNPROVIDED, UNPROVIDED);
+            princ(indexing_utilities.compinx_visit_end_subindex_fn(v_object), stream);
+            write_string(indexing_utilities.$str51$__, stream, UNPROVIDED, UNPROVIDED);
+            princ(indexing_utilities.compinx_visit_end_visit_fn(v_object), stream);
+            write_string(indexing_utilities.$str52$__Param__, stream, UNPROVIDED, UNPROVIDED);
+            princ(indexing_utilities.compinx_visit_param(v_object), stream);
             print_macros.print_unreadable_object_postamble(stream, v_object, T, T);
         }
         return v_object;
@@ -899,56 +930,56 @@ public final class indexing_utilities extends SubLTranslatedFile {
         if (param == UNPROVIDED) {
             param = NIL;
         }
-        final SubLObject compinx_visit = make_complex_index_visitor(UNPROVIDED);
-        _csetf_compinx_visit_begin_visit_fn(compinx_visit, begin_visit_fn);
-        _csetf_compinx_visit_begin_subindex_fn(compinx_visit, begin_subindex_fn);
-        _csetf_compinx_visit_note_final_index_fn(compinx_visit, note_final_index_fn);
-        _csetf_compinx_visit_end_subindex_fn(compinx_visit, end_subindex_fn);
-        _csetf_compinx_visit_end_visit_fn(compinx_visit, end_visit_fn);
-        _csetf_compinx_visit_param(compinx_visit, param);
+        final SubLObject compinx_visit = indexing_utilities.make_complex_index_visitor(UNPROVIDED);
+        indexing_utilities._csetf_compinx_visit_begin_visit_fn(compinx_visit, begin_visit_fn);
+        indexing_utilities._csetf_compinx_visit_begin_subindex_fn(compinx_visit, begin_subindex_fn);
+        indexing_utilities._csetf_compinx_visit_note_final_index_fn(compinx_visit, note_final_index_fn);
+        indexing_utilities._csetf_compinx_visit_end_subindex_fn(compinx_visit, end_subindex_fn);
+        indexing_utilities._csetf_compinx_visit_end_visit_fn(compinx_visit, end_visit_fn);
+        indexing_utilities._csetf_compinx_visit_param(compinx_visit, param);
         return compinx_visit;
     }
 
     public static SubLObject complex_index_visitor_begin_visit(final SubLObject compinx_visitor, final SubLObject complex_index) {
-        return funcall(compinx_visit_begin_visit_fn(compinx_visitor), compinx_visitor, complex_index);
+        return funcall(indexing_utilities.compinx_visit_begin_visit_fn(compinx_visitor), compinx_visitor, complex_index);
     }
 
     public static SubLObject complex_index_visitor_end_visit(final SubLObject compinx_visitor, final SubLObject complex_index) {
-        return funcall(compinx_visit_end_visit_fn(compinx_visitor), compinx_visitor, complex_index);
+        return funcall(indexing_utilities.compinx_visit_end_visit_fn(compinx_visitor), compinx_visitor, complex_index);
     }
 
     public static SubLObject show_complex_index_visitor_final_index(final SubLObject compinx_visitor, final SubLObject final_key, final SubLObject final_index) {
-        return funcall(compinx_visit_note_final_index_fn(compinx_visitor), compinx_visitor, final_key, final_index);
+        return funcall(indexing_utilities.compinx_visit_note_final_index_fn(compinx_visitor), compinx_visitor, final_key, final_index);
     }
 
     public static SubLObject show_complex_index_visitor_subindex_begin(final SubLObject compinx_visitor, final SubLObject sub_key, final SubLObject sub_index) {
-        return funcall(compinx_visit_begin_subindex_fn(compinx_visitor), compinx_visitor, sub_key, sub_index);
+        return funcall(indexing_utilities.compinx_visit_begin_subindex_fn(compinx_visitor), compinx_visitor, sub_key, sub_index);
     }
 
     public static SubLObject show_complex_index_visitor_subindex_end(final SubLObject compinx_visitor, final SubLObject sub_key, final SubLObject sub_index) {
-        return funcall(compinx_visit_end_subindex_fn(compinx_visitor), compinx_visitor, sub_key, sub_index);
+        return funcall(indexing_utilities.compinx_visit_end_subindex_fn(compinx_visitor), compinx_visitor, sub_key, sub_index);
     }
 
     public static SubLObject set_complex_index_visitor_parameter(final SubLObject compinx_visitor, final SubLObject new_param) {
-        final SubLObject old_param = get_complex_index_visitor_parameter(compinx_visitor);
-        _csetf_compinx_visit_param(compinx_visitor, new_param);
+        final SubLObject old_param = indexing_utilities.get_complex_index_visitor_parameter(compinx_visitor);
+        indexing_utilities._csetf_compinx_visit_param(compinx_visitor, new_param);
         return old_param;
     }
 
     public static SubLObject get_complex_index_visitor_parameter(final SubLObject compinx_visitor) {
-        return compinx_visit_param(compinx_visitor);
+        return indexing_utilities.compinx_visit_param(compinx_visitor);
     }
 
     public static SubLObject visit_complex_index(final SubLObject complex_index, final SubLObject compinx_visitor) {
-        complex_index_visitor_begin_visit(compinx_visitor, complex_index);
-        visit_complex_subindex(compinx_visitor, $INDEX_ROOT, complex_index);
-        complex_index_visitor_end_visit(compinx_visitor, complex_index);
+        indexing_utilities.complex_index_visitor_begin_visit(compinx_visitor, complex_index);
+        indexing_utilities.visit_complex_subindex(compinx_visitor, $INDEX_ROOT, complex_index);
+        indexing_utilities.complex_index_visitor_end_visit(compinx_visitor, complex_index);
         return compinx_visitor;
     }
 
     public static SubLObject visit_complex_subindex(final SubLObject compinx_visitor, final SubLObject sub_key, final SubLObject sub_index) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        show_complex_index_visitor_subindex_begin(compinx_visitor, sub_key, sub_index);
+        indexing_utilities.show_complex_index_visitor_subindex_begin(compinx_visitor, sub_key, sub_index);
         if (NIL != do_intermediate_index_valid_index_p(sub_index)) {
             final SubLObject iterator = map_utilities.new_map_iterator(intermediate_index_map(sub_index));
             SubLObject valid;
@@ -962,36 +993,36 @@ public final class indexing_utilities extends SubLTranslatedFile {
                     final SubLObject datum = current = var;
                     SubLObject i_key = NIL;
                     SubLObject i_index = NIL;
-                    destructuring_bind_must_consp(current, datum, $list54);
+                    destructuring_bind_must_consp(current, datum, indexing_utilities.$list54);
                     i_key = current.first();
                     current = current.rest();
-                    destructuring_bind_must_consp(current, datum, $list54);
+                    destructuring_bind_must_consp(current, datum, indexing_utilities.$list54);
                     i_index = current.first();
                     current = current.rest();
                     if (NIL == current) {
                         if (NIL != final_index_p(i_index)) {
-                            show_complex_index_visitor_final_index(compinx_visitor, i_key, i_index);
+                            indexing_utilities.show_complex_index_visitor_final_index(compinx_visitor, i_key, i_index);
                         } else
                             if (NIL != intermediate_index_p(i_index)) {
-                                visit_complex_subindex(compinx_visitor, i_key, i_index);
+                                indexing_utilities.visit_complex_subindex(compinx_visitor, i_key, i_index);
                             } else {
-                                Errors.error($str55$Illegal_state_exception__Index_co, i_index, i_key);
+                                Errors.error(indexing_utilities.$str55$Illegal_state_exception__Index_co, i_index, i_key);
                             }
 
                     } else {
-                        cdestructuring_bind_error(datum, $list54);
+                        cdestructuring_bind_error(datum, indexing_utilities.$list54);
                     }
                 }
             }
         }
-        show_complex_index_visitor_subindex_end(compinx_visitor, sub_key, sub_index);
+        indexing_utilities.show_complex_index_visitor_subindex_end(compinx_visitor, sub_key, sub_index);
         return compinx_visitor;
     }
 
     public static SubLObject visit_changed_complex_index(final SubLObject complex_index, final SubLObject compinx_visitor) {
-        complex_index_visitor_begin_visit(compinx_visitor, complex_index);
-        visit_changed_complex_subindex(compinx_visitor, $INDEX_ROOT, complex_index);
-        complex_index_visitor_end_visit(compinx_visitor, complex_index);
+        indexing_utilities.complex_index_visitor_begin_visit(compinx_visitor, complex_index);
+        indexing_utilities.visit_changed_complex_subindex(compinx_visitor, $INDEX_ROOT, complex_index);
+        indexing_utilities.complex_index_visitor_end_visit(compinx_visitor, complex_index);
         return compinx_visitor;
     }
 
@@ -1013,16 +1044,16 @@ public final class indexing_utilities extends SubLTranslatedFile {
             while (NIL != csome_list_var) {
                 final SubLObject i_index = intermediate_index_lookup(sub_index, i_key);
                 if (changed_keys.isZero()) {
-                    show_complex_index_visitor_subindex_begin(compinx_visitor, sub_key, unchanged_sub_index);
+                    indexing_utilities.show_complex_index_visitor_subindex_begin(compinx_visitor, sub_key, unchanged_sub_index);
                 }
                 changed_keys = add(changed_keys, ONE_INTEGER);
                 if (NIL != final_index_p(i_index)) {
-                    show_complex_index_visitor_final_index(compinx_visitor, i_key, i_index);
+                    indexing_utilities.show_complex_index_visitor_final_index(compinx_visitor, i_key, i_index);
                 } else
                     if (NIL != intermediate_index_p(i_index)) {
-                        visit_changed_complex_subindex(compinx_visitor, i_key, i_index);
+                        indexing_utilities.visit_changed_complex_subindex(compinx_visitor, i_key, i_index);
                     } else {
-                        Errors.error($str55$Illegal_state_exception__Index_co, i_index, i_key);
+                        Errors.error(indexing_utilities.$str55$Illegal_state_exception__Index_co, i_index, i_key);
                     }
 
                 csome_list_var = csome_list_var.rest();
@@ -1030,37 +1061,37 @@ public final class indexing_utilities extends SubLTranslatedFile {
             } 
         }
         if (changed_keys.isZero()) {
-            show_complex_index_visitor_subindex_begin(compinx_visitor, sub_key, unchanged_sub_index);
+            indexing_utilities.show_complex_index_visitor_subindex_begin(compinx_visitor, sub_key, unchanged_sub_index);
         }
-        show_complex_index_visitor_subindex_end(compinx_visitor, sub_key, sub_index);
+        indexing_utilities.show_complex_index_visitor_subindex_end(compinx_visitor, sub_key, sub_index);
         return compinx_visitor;
     }
 
     public static SubLObject dump_entire_swappable_complex_index(final SubLObject complex_index, final SubLObject fvector, final SubLObject indexical) {
-        final SubLObject v_context = dump_swappable_kb_index_new_context(fvector, indexical, $ENTIRE);
-        final SubLObject visitor = new_swappable_kb_index_dump_visitor(v_context);
-        visit_complex_index(complex_index, visitor);
-        return dump_swappable_kb_index_get_final_result(v_context);
+        final SubLObject v_context = indexing_utilities.dump_swappable_kb_index_new_context(fvector, indexical, $ENTIRE);
+        final SubLObject visitor = indexing_utilities.new_swappable_kb_index_dump_visitor(v_context);
+        indexing_utilities.visit_complex_index(complex_index, visitor);
+        return indexing_utilities.dump_swappable_kb_index_get_final_result(v_context);
     }
 
     public static SubLObject dump_changed_swappable_complex_index(final SubLObject complex_index, final SubLObject fvector, final SubLObject indexical) {
-        final SubLObject v_context = dump_swappable_kb_index_new_context(fvector, indexical, $CHANGED);
-        final SubLObject visitor = new_swappable_kb_index_dump_visitor(v_context);
-        visit_changed_complex_index(complex_index, visitor);
-        return dump_swappable_kb_index_get_final_result(v_context);
+        final SubLObject v_context = indexing_utilities.dump_swappable_kb_index_new_context(fvector, indexical, $CHANGED);
+        final SubLObject visitor = indexing_utilities.new_swappable_kb_index_dump_visitor(v_context);
+        indexing_utilities.visit_changed_complex_index(complex_index, visitor);
+        return indexing_utilities.dump_swappable_kb_index_get_final_result(v_context);
     }
 
     public static SubLObject new_swappable_kb_index_dump_visitor(final SubLObject v_context) {
-        return new_complex_index_visitor(DUMP_SWAPPABLE_KB_INDEX_VISITOR_BEGIN_VISIT, DUMP_SWAPPABLE_KB_INDEX_VISITOR_BEGIN_SUBINDEX, DUMP_SWAPPABLE_KB_INDEX_VISITOR_NOTE_FINAL_INDEX, DUMP_SWAPPABLE_KB_INDEX_VISITOR_END_SUBINDEX, DUMP_SWAPPABLE_KB_INDEX_VISITOR_END_VISIT, v_context);
+        return indexing_utilities.new_complex_index_visitor(indexing_utilities.DUMP_SWAPPABLE_KB_INDEX_VISITOR_BEGIN_VISIT, indexing_utilities.DUMP_SWAPPABLE_KB_INDEX_VISITOR_BEGIN_SUBINDEX, indexing_utilities.DUMP_SWAPPABLE_KB_INDEX_VISITOR_NOTE_FINAL_INDEX, indexing_utilities.DUMP_SWAPPABLE_KB_INDEX_VISITOR_END_SUBINDEX, indexing_utilities.DUMP_SWAPPABLE_KB_INDEX_VISITOR_END_VISIT, v_context);
     }
 
     public static SubLObject dump_swappable_kb_index_visitor_begin_visit(final SubLObject visitor, final SubLObject complex_index) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == dump_swappable_kb_index_valid_initial_context(v_context))) {
-            Errors.error($str63$The_swappable_KB_index_visitor_is, v_context);
+        if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == indexing_utilities.dump_swappable_kb_index_valid_initial_context(v_context))) {
+            Errors.error(indexing_utilities.$str63$The_swappable_KB_index_visitor_is, v_context);
         }
-        dump_swappable_kb_index_push_current_index(v_context, clone_intermediate_index(complex_index));
+        indexing_utilities.dump_swappable_kb_index_push_current_index(v_context, clone_intermediate_index(complex_index));
         return visitor;
     }
 
@@ -1069,7 +1100,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject dump_swappable_kb_index_valid_initial_context(final SubLObject v_context) {
-        return makeBoolean(((((((NIL != list_utilities.property_list_p(v_context)) && (NIL != file_vector.file_vector_p(getf(v_context, $FILE_VECTOR, UNPROVIDED)))) && (NIL != stacks.stack_empty_p(getf(v_context, $INDEX_STACK, UNPROVIDED)))) && ($NONE == getf(v_context, $NEW_INDEX, UNPROVIDED))) && (NIL != file_vector_utilities.file_vector_indexical_p(getf(v_context, $FVECTOR_INDEXICAL, UNPROVIDED)))) && ((NIL != dumping_swappable_changed_kb_indexP(v_context)) || (NIL != dumping_swappable_entire_kb_indexP(v_context)))) && (NIL != stacks.stack_empty_p(getf(v_context, $KEY_STACK, UNPROVIDED))));
+        return makeBoolean(((((((NIL != list_utilities.property_list_p(v_context)) && (NIL != file_vector.file_vector_p(getf(v_context, $FILE_VECTOR, UNPROVIDED)))) && (NIL != stacks.stack_empty_p(getf(v_context, $INDEX_STACK, UNPROVIDED)))) && ($NONE == getf(v_context, $NEW_INDEX, UNPROVIDED))) && (NIL != file_vector_utilities.file_vector_indexical_p(getf(v_context, $FVECTOR_INDEXICAL, UNPROVIDED)))) && ((NIL != indexing_utilities.dumping_swappable_changed_kb_indexP(v_context)) || (NIL != indexing_utilities.dumping_swappable_entire_kb_indexP(v_context)))) && (NIL != stacks.stack_empty_p(getf(v_context, $KEY_STACK, UNPROVIDED))));
     }
 
     public static SubLObject dumping_swappable_changed_kb_indexP(final SubLObject v_context) {
@@ -1083,10 +1114,10 @@ public final class indexing_utilities extends SubLTranslatedFile {
     public static SubLObject dump_swappable_kb_index_visitor_end_visit(final SubLObject visitor, final SubLObject complex_index) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == dump_swappable_kb_index_valid_final_context(v_context))) {
-            Errors.error($str71$The_swappable_KB_index_visitor_di, v_context);
+        if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL == indexing_utilities.dump_swappable_kb_index_valid_final_context(v_context))) {
+            Errors.error(indexing_utilities.$str71$The_swappable_KB_index_visitor_di, v_context);
         }
-        dump_swappable_kb_index_set_final_result(v_context);
+        indexing_utilities.dump_swappable_kb_index_set_final_result(v_context);
         return visitor;
     }
 
@@ -1096,14 +1127,14 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     public static SubLObject dump_swappable_kb_index_visitor_begin_subindex(final SubLObject visitor, final SubLObject sub_key, final SubLObject sub_index) {
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        dump_swappable_kb_index_push_current_key(v_context, sub_key);
-        if (NIL != dumping_swappable_entire_kb_indexP(v_context)) {
-            dump_swappable_kb_index_push_current_index(v_context, clone_intermediate_index(sub_index));
+        indexing_utilities.dump_swappable_kb_index_push_current_key(v_context, sub_key);
+        if (NIL != indexing_utilities.dumping_swappable_entire_kb_indexP(v_context)) {
+            indexing_utilities.dump_swappable_kb_index_push_current_index(v_context, clone_intermediate_index(sub_index));
         } else
-            if (NIL != dumping_swappable_changed_kb_indexP(v_context)) {
-                dump_swappable_kb_index_push_current_index(v_context, sub_index);
+            if (NIL != indexing_utilities.dumping_swappable_changed_kb_indexP(v_context)) {
+                indexing_utilities.dump_swappable_kb_index_push_current_index(v_context, sub_index);
             } else {
-                Errors.error($str72$Invalid_state_transition__the_ind);
+                Errors.error(indexing_utilities.$str72$Invalid_state_transition__the_ind);
             }
 
         return visitor;
@@ -1111,15 +1142,15 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
     public static SubLObject dump_swappable_kb_index_visitor_note_final_index(final SubLObject visitor, final SubLObject final_key, SubLObject final_index) {
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        final SubLObject curr_index = dump_swappable_kb_index_get_current_index(v_context);
+        final SubLObject curr_index = indexing_utilities.dump_swappable_kb_index_get_current_index(v_context);
         if (NIL == final_topn_index_p(final_index)) {
             if (NIL != final_sharded_index_p(final_index)) {
-                final SubLObject sharded_index = dump_swappable_kb_index_possibly_reshard_final_sharded_index(visitor, final_index);
-                final_index = dump_swappable_kb_index_serialize_sharded_index(visitor, sharded_index);
+                final SubLObject sharded_index = indexing_utilities.dump_swappable_kb_index_possibly_reshard_final_sharded_index(visitor, final_index);
+                final_index = indexing_utilities.dump_swappable_kb_index_serialize_sharded_index(visitor, sharded_index);
             } else
                 if ((NIL != final_unified_index_p(final_index)) && (NIL != final_unified_index_is_shardableP(final_index))) {
                     final SubLObject sharded_index = convert_final_simple_index_to_sharded_index(final_index);
-                    final_index = dump_swappable_kb_index_serialize_sharded_index(visitor, sharded_index);
+                    final_index = indexing_utilities.dump_swappable_kb_index_serialize_sharded_index(visitor, sharded_index);
                 }
 
         }
@@ -1130,10 +1161,10 @@ public final class indexing_utilities extends SubLTranslatedFile {
     public static SubLObject dump_swappable_kb_index_visitor_end_subindex(final SubLObject visitor, final SubLObject sub_key, final SubLObject sub_index) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        final SubLObject curr_index = dump_swappable_kb_index_pop_current_index(v_context);
-        final SubLObject fvector = dump_swappable_kb_index_get_file_vector(v_context);
-        final SubLObject indexical = dump_swappable_kb_index_get_file_vector_indexical(v_context);
-        dump_swappable_kb_index_pop_current_key(v_context, sub_key);
+        final SubLObject curr_index = indexing_utilities.dump_swappable_kb_index_pop_current_index(v_context);
+        final SubLObject fvector = indexing_utilities.dump_swappable_kb_index_get_file_vector(v_context);
+        final SubLObject indexical = indexing_utilities.dump_swappable_kb_index_get_file_vector_indexical(v_context);
+        indexing_utilities.dump_swappable_kb_index_pop_current_key(v_context, sub_key);
         SubLObject msg = NIL;
         try {
             thread.throwStack.push($catch_error_message_target$.getGlobalValue());
@@ -1141,7 +1172,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
             try {
                 Errors.$error_handler$.bind(CATCH_ERROR_MESSAGE_HANDLER, thread);
                 try {
-                    sanity_check_constructed_index_equivalence(sub_index, curr_index);
+                    indexing_utilities.sanity_check_constructed_index_equivalence(sub_index, curr_index);
                 } catch (final Throwable catch_var) {
                     Errors.handleThrowable(catch_var, NIL);
                 }
@@ -1154,53 +1185,53 @@ public final class indexing_utilities extends SubLTranslatedFile {
             thread.throwStack.pop();
         }
         if (msg.isString()) {
-            Errors.error($str74$Failed_to_sanity_check_key__A_s_s, sub_key, sub_index, curr_index);
+            Errors.error(indexing_utilities.$str74$Failed_to_sanity_check_key__A_s_s, sub_key, sub_index, curr_index);
         }
-        if (NIL != $swap_out_intermediate_index_levelsP$.getDynamicValue(thread)) {
+        if (NIL != indexing_utilities.$swap_out_intermediate_index_levelsP$.getDynamicValue(thread)) {
             final SubLObject curr_map = intermediate_index_map(curr_index);
             if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (NIL != file_vector_utilities.backed_map_p(curr_map))) {
-                Errors.error($str75$Conversion_error__newly_created_m);
+                Errors.error(indexing_utilities.$str75$Conversion_error__newly_created_m);
             }
-            if (NIL != dumping_swappable_changed_kb_indexP(v_context)) {
+            if (NIL != indexing_utilities.dumping_swappable_changed_kb_indexP(v_context)) {
                 file_vector_utilities.upgrade_map_to_file_vector_backed_map(curr_map, fvector, $SWAPPED_OUT);
             } else
-                if (NIL != dumping_swappable_entire_kb_indexP(v_context)) {
+                if (NIL != indexing_utilities.dumping_swappable_entire_kb_indexP(v_context)) {
                     file_vector_utilities.convert_map_to_file_vector_backed_map(curr_map, fvector, $SWAPPED_OUT, $COMPACT);
                 } else {
-                    Errors.error($str78$Invalid_state_transition__index_d);
+                    Errors.error(indexing_utilities.$str78$Invalid_state_transition__index_d);
                 }
 
             final SubLObject backed_map = file_vector_utilities.new_indexical_backed_map(curr_map, indexical);
             intermediate_index_replace_map(curr_index, backed_map);
         }
-        final SubLObject parent_index = dump_swappable_kb_index_get_current_index(v_context);
+        final SubLObject parent_index = indexing_utilities.dump_swappable_kb_index_get_current_index(v_context);
         intermediate_index_set(parent_index, sub_key, curr_index);
         return visitor;
     }
 
     public static SubLObject dump_swappable_kb_index_serialize_sharded_index(final SubLObject visitor, final SubLObject sharded_index) {
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        final SubLObject fvector = dump_swappable_kb_index_get_file_vector(v_context);
-        final SubLObject indexical = dump_swappable_kb_index_get_file_vector_indexical(v_context);
-        if (NIL != dumping_swappable_entire_kb_indexP(v_context)) {
+        final SubLObject fvector = indexing_utilities.dump_swappable_kb_index_get_file_vector(v_context);
+        final SubLObject indexical = indexing_utilities.dump_swappable_kb_index_get_file_vector_indexical(v_context);
+        if (NIL != indexing_utilities.dumping_swappable_entire_kb_indexP(v_context)) {
             return final_sharded_index_to_fvector_backed_sharded_index(sharded_index, fvector, indexical);
         }
-        if (NIL != dumping_swappable_changed_kb_indexP(v_context)) {
+        if (NIL != indexing_utilities.dumping_swappable_changed_kb_indexP(v_context)) {
             return update_fvector_backed_final_sharded_index(sharded_index, fvector, indexical);
         }
-        Errors.error($str78$Invalid_state_transition__index_d);
+        Errors.error(indexing_utilities.$str78$Invalid_state_transition__index_d);
         return sharded_index;
     }
 
     public static SubLObject dump_swappable_kb_index_possibly_reshard_final_sharded_index(final SubLObject visitor, final SubLObject final_index) {
         final SubLObject v_context = hierarchical_visitor.get_hierarchical_visitor_parameter(visitor);
-        if (NIL != dumping_swappable_entire_kb_indexP(v_context)) {
+        if (NIL != indexing_utilities.dumping_swappable_entire_kb_indexP(v_context)) {
             return reshard_final_sharded_index(final_index);
         }
-        if (NIL != dumping_swappable_changed_kb_indexP(v_context)) {
+        if (NIL != indexing_utilities.dumping_swappable_changed_kb_indexP(v_context)) {
             return reorganize_modified_final_sharded_index(final_index);
         }
-        Errors.error($str78$Invalid_state_transition__index_d);
+        Errors.error(indexing_utilities.$str78$Invalid_state_transition__index_d);
         return final_index;
     }
 
@@ -1216,7 +1247,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
             SubLObject stream = NIL;
             try {
                 stream = make_private_string_output_stream();
-                write_string($str79$Dumpable_index_construction_faile, stream, UNPROVIDED, UNPROVIDED);
+                write_string(indexing_utilities.$str79$Dumpable_index_construction_faile, stream, UNPROVIDED, UNPROVIDED);
                 SubLObject set_contents_var = set.do_set_internal(in_sub);
                 SubLObject basis_object;
                 SubLObject state;
@@ -1224,7 +1255,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                 for (basis_object = set_contents.do_set_contents_basis_object(set_contents_var), state = NIL, state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
                     sub_key = set_contents.do_set_contents_next(basis_object, state);
                     if (NIL != set_contents.do_set_contents_element_validP(state, sub_key)) {
-                        format(stream, $str80$____Key__A_was_not_copied_over_to, sub_key);
+                        format(stream, indexing_utilities.$str80$____Key__A_was_not_copied_over_to, sub_key);
                     }
                 }
                 set_contents_var = set.do_set_internal(in_curr);
@@ -1232,7 +1263,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                 for (basis_object = set_contents.do_set_contents_basis_object(set_contents_var), state = NIL, state = set_contents.do_set_contents_initial_state(basis_object, set_contents_var); NIL == set_contents.do_set_contents_doneP(basis_object, state); state = set_contents.do_set_contents_update_state(state)) {
                     curr_key = set_contents.do_set_contents_next(basis_object, state);
                     if (NIL != set_contents.do_set_contents_element_validP(state, curr_key)) {
-                        format(stream, $str81$_A__Key__A_is_in_write_out_map_bu, curr_key);
+                        format(stream, indexing_utilities.$str81$_A__Key__A_is_in_write_out_map_bu, curr_key);
                     }
                 }
                 msg = get_output_stream_string(stream);
@@ -1287,7 +1318,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
         final SubLObject key_stack = getf(v_context, $KEY_STACK, UNPROVIDED);
         final SubLObject curr_top = stacks.stack_peek(key_stack);
         if ((NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) && (!sub_key.eql(curr_top))) {
-            Errors.error($str82$Path_mis_alignment__trying_to_pop, sub_key, curr_top);
+            Errors.error(indexing_utilities.$str82$Path_mis_alignment__trying_to_pop, sub_key, curr_top);
         }
         stacks.stack_pop(key_stack);
         return v_context;
@@ -1307,13 +1338,13 @@ public final class indexing_utilities extends SubLTranslatedFile {
         final SubLObject index_stack = getf(v_context, $INDEX_STACK, UNPROVIDED);
         final SubLObject top_index = stacks.stack_peek(index_stack);
         putf(v_context, $NEW_INDEX, intermediate_index_lookup(top_index, $INDEX_ROOT));
-        return dump_swappable_kb_index_get_final_result(v_context);
+        return indexing_utilities.dump_swappable_kb_index_get_final_result(v_context);
     }
 
     public static SubLObject note_precache_term(final SubLObject v_object) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if ((NIL != forts.fort_p(v_object)) || (NIL != indexed_unrepresented_term_p(v_object))) {
-            return set.set_add(v_object, $precache_term_set$.getDynamicValue(thread));
+            return set.set_add(v_object, indexing_utilities.$precache_term_set$.getDynamicValue(thread));
         }
         return NIL;
     }
@@ -1325,8 +1356,8 @@ public final class indexing_utilities extends SubLTranslatedFile {
         final SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
         try {
             mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
-            mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
-            final SubLObject message_var = $$$Gathering_assertions;
+            mt_relevance_macros.$mt$.bind(indexing_utilities.$$EverythingPSC, thread);
+            final SubLObject message_var = indexing_utilities.$$$Gathering_assertions;
             final SubLObject start_time = noting_elapsed_time_preamble(message_var);
             assertions = kb_mapping.gather_predicate_extent_index(predicate, UNPROVIDED, UNPROVIDED);
             assertions = assertion_utilities.sort_assertions(assertions);
@@ -1336,9 +1367,9 @@ public final class indexing_utilities extends SubLTranslatedFile {
             mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
         }
         final SubLObject term_set = set.new_set(symbol_function(EQUAL), number_utilities.f_2X(length(assertions)));
-        final SubLObject _prev_bind_3 = $precache_term_set$.currentBinding(thread);
+        final SubLObject _prev_bind_3 = indexing_utilities.$precache_term_set$.currentBinding(thread);
         try {
-            $precache_term_set$.bind(term_set, thread);
+            indexing_utilities.$precache_term_set$.bind(term_set, thread);
             final SubLObject list_var = assertions;
             final SubLObject _prev_bind_0_$22 = $progress_note$.currentBinding(thread);
             final SubLObject _prev_bind_4 = $progress_start_time$.currentBinding(thread);
@@ -1349,7 +1380,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
             final SubLObject _prev_bind_9 = $within_noting_percent_progress$.currentBinding(thread);
             final SubLObject _prev_bind_10 = $percent_progress_start_time$.currentBinding(thread);
             try {
-                $progress_note$.bind($str85$Precaching_assertions_and_gatheri, thread);
+                $progress_note$.bind(indexing_utilities.$str85$Precaching_assertions_and_gatheri, thread);
                 $progress_start_time$.bind(get_universal_time(), thread);
                 $progress_total$.bind(length(list_var), thread);
                 $progress_sofar$.bind(ZERO_INTEGER, thread);
@@ -1363,7 +1394,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                     SubLObject ass = NIL;
                     ass = csome_list_var.first();
                     while (NIL != csome_list_var) {
-                        cycl_utilities.assertion_map(symbol_function(NOTE_PRECACHE_TERM), ass, UNPROVIDED, UNPROVIDED);
+                        cycl_utilities.assertion_map(symbol_function(indexing_utilities.NOTE_PRECACHE_TERM), ass, UNPROVIDED, UNPROVIDED);
                         $progress_sofar$.setDynamicValue(add($progress_sofar$.getDynamicValue(thread), ONE_INTEGER), thread);
                         note_percent_progress($progress_sofar$.getDynamicValue(thread), $progress_total$.getDynamicValue(thread));
                         csome_list_var = csome_list_var.rest();
@@ -1391,7 +1422,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
                 $progress_note$.rebind(_prev_bind_0_$22, thread);
             }
         } finally {
-            $precache_term_set$.rebind(_prev_bind_3, thread);
+            indexing_utilities.$precache_term_set$.rebind(_prev_bind_3, thread);
         }
         SubLObject constants = NIL;
         SubLObject narts = NIL;
@@ -1416,9 +1447,9 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
             }
         }
-        constants = Sort.sort(constants, symbol_function($sym87$_), symbol_function(CONSTANT_INTERNAL_ID));
-        narts = Sort.sort(narts, symbol_function($sym87$_), symbol_function(NART_ID));
-        v_unrepresented_terms = Sort.sort(v_unrepresented_terms, symbol_function($sym87$_), symbol_function(UNREPRESENTED_TERM_SUID));
+        constants = Sort.sort(constants, symbol_function(indexing_utilities.$sym87$_), symbol_function(indexing_utilities.CONSTANT_INTERNAL_ID));
+        narts = Sort.sort(narts, symbol_function(indexing_utilities.$sym87$_), symbol_function(indexing_utilities.NART_ID));
+        v_unrepresented_terms = Sort.sort(v_unrepresented_terms, symbol_function(indexing_utilities.$sym87$_), symbol_function(indexing_utilities.UNREPRESENTED_TERM_SUID));
         if (NIL != constants) {
             final SubLObject list_var2 = constants;
             final SubLObject _prev_bind_11 = $progress_note$.currentBinding(thread);
@@ -1430,7 +1461,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
             final SubLObject _prev_bind_17 = $within_noting_percent_progress$.currentBinding(thread);
             final SubLObject _prev_bind_18 = $percent_progress_start_time$.currentBinding(thread);
             try {
-                $progress_note$.bind($$$Precaching_constant_indexes, thread);
+                $progress_note$.bind(indexing_utilities.$$$Precaching_constant_indexes, thread);
                 $progress_start_time$.bind(get_universal_time(), thread);
                 $progress_total$.bind(length(list_var2), thread);
                 $progress_sofar$.bind(ZERO_INTEGER, thread);
@@ -1483,7 +1514,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
             final SubLObject _prev_bind_17 = $within_noting_percent_progress$.currentBinding(thread);
             final SubLObject _prev_bind_18 = $percent_progress_start_time$.currentBinding(thread);
             try {
-                $progress_note$.bind($str92$Precaching_NART_indexes_and_formu, thread);
+                $progress_note$.bind(indexing_utilities.$str92$Precaching_NART_indexes_and_formu, thread);
                 $progress_start_time$.bind(get_universal_time(), thread);
                 $progress_total$.bind(length(list_var2), thread);
                 $progress_sofar$.bind(ZERO_INTEGER, thread);
@@ -1537,7 +1568,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
             final SubLObject _prev_bind_17 = $within_noting_percent_progress$.currentBinding(thread);
             final SubLObject _prev_bind_18 = $percent_progress_start_time$.currentBinding(thread);
             try {
-                $progress_note$.bind($str93$Precaching_unrepresented_term_ind, thread);
+                $progress_note$.bind(indexing_utilities.$str93$Precaching_unrepresented_term_ind, thread);
                 $progress_start_time$.bind(get_universal_time(), thread);
                 $progress_total$.bind(length(list_var2), thread);
                 $progress_sofar$.bind(ZERO_INTEGER, thread);
@@ -1579,224 +1610,228 @@ public final class indexing_utilities extends SubLTranslatedFile {
                 $progress_note$.rebind(_prev_bind_11, thread);
             }
         }
-        return list($ASSERTION_COUNT, length(assertions), $CONSTANT_COUNT, length(constants), $NART_COUNT, length(narts), $UNREPRESENTED_TERM_COUNT, length(v_unrepresented_terms));
+        return list($ASSERTION_COUNT, length(assertions), $CONSTANT_COUNT, length(constants), $NART_COUNT, length(narts), indexing_utilities.$UNREPRESENTED_TERM_COUNT, length(v_unrepresented_terms));
+    }
+
+    public static final SubLObject declare_indexing_utilities_file_alt() {
+        declareFunction("visit_final_index_sets", "VISIT-FINAL-INDEX-SETS", 2, 0, false);
+        declareFunction("visit_final_index_sets_int", "VISIT-FINAL-INDEX-SETS-INT", 2, 0, false);
+        declareFunction("compile_final_index_metrics", "COMPILE-FINAL-INDEX-METRICS", 1, 1, false);
+        declareFunction("final_index_metrics_compilation_fn", "FINAL-INDEX-METRICS-COMPILATION-FN", 1, 0, false);
+        return NIL;
     }
 
     public static SubLObject declare_indexing_utilities_file() {
-        declareFunction(me, "rule_with_some_pragmatic_somewhereP", "RULE-WITH-SOME-PRAGMATIC-SOMEWHERE?", 1, 0, false);
-        declareFunction(me, "rule_with_some_pragmaticP", "RULE-WITH-SOME-PRAGMATIC?", 1, 1, false);
-        declareFunction(me, "rule_with_some_asserted_more_specifically_pragmaticP", "RULE-WITH-SOME-ASSERTED-MORE-SPECIFICALLY-PRAGMATIC?", 1, 1, false);
-        declareFunction(me, "find_all_assertions_genl_mts", "FIND-ALL-ASSERTIONS-GENL-MTS", 2, 0, false);
-        declareFunction(me, "dependent_narts", "DEPENDENT-NARTS", 1, 0, false);
-        declareFunction(me, "term_of_unit_assertion_mentioning_fortP", "TERM-OF-UNIT-ASSERTION-MENTIONING-FORT?", 2, 0, false);
-        declareFunction(me, "nested_non_atomic_terms", "NESTED-NON-ATOMIC-TERMS", 1, 1, false);
-        declareFunction(me, "sort_gafs_for_removal", "SORT-GAFS-FOR-REMOVAL", 2, 0, false);
-        declareFunction(me, "gaf_remove_beforeP", "GAF-REMOVE-BEFORE?", 2, 0, false);
-        declareFunction(me, "gaf_removal_order", "GAF-REMOVAL-ORDER", 1, 0, false);
-        declareFunction(me, "complex_index_visitor_print_function_trampoline", "COMPLEX-INDEX-VISITOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
-        declareFunction(me, "complex_index_visitor_p", "COMPLEX-INDEX-VISITOR-P", 1, 0, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("rule_with_some_pragmatic_somewhereP", "RULE-WITH-SOME-PRAGMATIC-SOMEWHERE?", 1, 0, false);
+            declareFunction("rule_with_some_pragmaticP", "RULE-WITH-SOME-PRAGMATIC?", 1, 1, false);
+            declareFunction("rule_with_some_asserted_more_specifically_pragmaticP", "RULE-WITH-SOME-ASSERTED-MORE-SPECIFICALLY-PRAGMATIC?", 1, 1, false);
+            declareFunction("find_all_assertions_genl_mts", "FIND-ALL-ASSERTIONS-GENL-MTS", 2, 0, false);
+            declareFunction("dependent_narts", "DEPENDENT-NARTS", 1, 0, false);
+            declareFunction("term_of_unit_assertion_mentioning_fortP", "TERM-OF-UNIT-ASSERTION-MENTIONING-FORT?", 2, 0, false);
+            declareFunction("nested_non_atomic_terms", "NESTED-NON-ATOMIC-TERMS", 1, 1, false);
+            declareFunction("sort_gafs_for_removal", "SORT-GAFS-FOR-REMOVAL", 2, 0, false);
+            declareFunction("gaf_remove_beforeP", "GAF-REMOVE-BEFORE?", 2, 0, false);
+            declareFunction("gaf_removal_order", "GAF-REMOVAL-ORDER", 1, 0, false);
+            declareFunction("complex_index_visitor_print_function_trampoline", "COMPLEX-INDEX-VISITOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+            declareFunction("complex_index_visitor_p", "COMPLEX-INDEX-VISITOR-P", 1, 0, false);
+            new indexing_utilities.$complex_index_visitor_p$UnaryFunction();
+            declareFunction("compinx_visit_begin_subindex_fn", "COMPINX-VISIT-BEGIN-SUBINDEX-FN", 1, 0, false);
+            declareFunction("compinx_visit_end_subindex_fn", "COMPINX-VISIT-END-SUBINDEX-FN", 1, 0, false);
+            declareFunction("compinx_visit_note_final_index_fn", "COMPINX-VISIT-NOTE-FINAL-INDEX-FN", 1, 0, false);
+            declareFunction("compinx_visit_begin_visit_fn", "COMPINX-VISIT-BEGIN-VISIT-FN", 1, 0, false);
+            declareFunction("compinx_visit_end_visit_fn", "COMPINX-VISIT-END-VISIT-FN", 1, 0, false);
+            declareFunction("compinx_visit_param", "COMPINX-VISIT-PARAM", 1, 0, false);
+            declareFunction("_csetf_compinx_visit_begin_subindex_fn", "_CSETF-COMPINX-VISIT-BEGIN-SUBINDEX-FN", 2, 0, false);
+            declareFunction("_csetf_compinx_visit_end_subindex_fn", "_CSETF-COMPINX-VISIT-END-SUBINDEX-FN", 2, 0, false);
+            declareFunction("_csetf_compinx_visit_note_final_index_fn", "_CSETF-COMPINX-VISIT-NOTE-FINAL-INDEX-FN", 2, 0, false);
+            declareFunction("_csetf_compinx_visit_begin_visit_fn", "_CSETF-COMPINX-VISIT-BEGIN-VISIT-FN", 2, 0, false);
+            declareFunction("_csetf_compinx_visit_end_visit_fn", "_CSETF-COMPINX-VISIT-END-VISIT-FN", 2, 0, false);
+            declareFunction("_csetf_compinx_visit_param", "_CSETF-COMPINX-VISIT-PARAM", 2, 0, false);
+            declareFunction("make_complex_index_visitor", "MAKE-COMPLEX-INDEX-VISITOR", 0, 1, false);
+            declareFunction("visit_defstruct_complex_index_visitor", "VISIT-DEFSTRUCT-COMPLEX-INDEX-VISITOR", 2, 0, false);
+            declareFunction("visit_defstruct_object_complex_index_visitor_method", "VISIT-DEFSTRUCT-OBJECT-COMPLEX-INDEX-VISITOR-METHOD", 2, 0, false);
+            declareFunction("print_complex_index_visitor", "PRINT-COMPLEX-INDEX-VISITOR", 3, 0, false);
+            declareFunction("new_complex_index_visitor", "NEW-COMPLEX-INDEX-VISITOR", 5, 1, false);
+            declareFunction("complex_index_visitor_begin_visit", "COMPLEX-INDEX-VISITOR-BEGIN-VISIT", 2, 0, false);
+            declareFunction("complex_index_visitor_end_visit", "COMPLEX-INDEX-VISITOR-END-VISIT", 2, 0, false);
+            declareFunction("show_complex_index_visitor_final_index", "SHOW-COMPLEX-INDEX-VISITOR-FINAL-INDEX", 3, 0, false);
+            declareFunction("show_complex_index_visitor_subindex_begin", "SHOW-COMPLEX-INDEX-VISITOR-SUBINDEX-BEGIN", 3, 0, false);
+            declareFunction("show_complex_index_visitor_subindex_end", "SHOW-COMPLEX-INDEX-VISITOR-SUBINDEX-END", 3, 0, false);
+            declareFunction("set_complex_index_visitor_parameter", "SET-COMPLEX-INDEX-VISITOR-PARAMETER", 2, 0, false);
+            declareFunction("get_complex_index_visitor_parameter", "GET-COMPLEX-INDEX-VISITOR-PARAMETER", 1, 0, false);
+            declareFunction("visit_complex_index", "VISIT-COMPLEX-INDEX", 2, 0, false);
+            declareFunction("visit_complex_subindex", "VISIT-COMPLEX-SUBINDEX", 3, 0, false);
+            declareFunction("visit_changed_complex_index", "VISIT-CHANGED-COMPLEX-INDEX", 2, 0, false);
+            declareFunction("visit_changed_complex_subindex", "VISIT-CHANGED-COMPLEX-SUBINDEX", 3, 0, false);
+            declareFunction("dump_entire_swappable_complex_index", "DUMP-ENTIRE-SWAPPABLE-COMPLEX-INDEX", 3, 0, false);
+            declareFunction("dump_changed_swappable_complex_index", "DUMP-CHANGED-SWAPPABLE-COMPLEX-INDEX", 3, 0, false);
+            declareFunction("new_swappable_kb_index_dump_visitor", "NEW-SWAPPABLE-KB-INDEX-DUMP-VISITOR", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_visitor_begin_visit", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-VISIT", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_new_context", "DUMP-SWAPPABLE-KB-INDEX-NEW-CONTEXT", 3, 0, false);
+            declareFunction("dump_swappable_kb_index_valid_initial_context", "DUMP-SWAPPABLE-KB-INDEX-VALID-INITIAL-CONTEXT", 1, 0, false);
+            declareFunction("dumping_swappable_changed_kb_indexP", "DUMPING-SWAPPABLE-CHANGED-KB-INDEX?", 1, 0, false);
+            declareFunction("dumping_swappable_entire_kb_indexP", "DUMPING-SWAPPABLE-ENTIRE-KB-INDEX?", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_visitor_end_visit", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-END-VISIT", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_valid_final_context", "DUMP-SWAPPABLE-KB-INDEX-VALID-FINAL-CONTEXT", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_visitor_begin_subindex", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-SUBINDEX", 3, 0, false);
+            declareFunction("dump_swappable_kb_index_visitor_note_final_index", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-NOTE-FINAL-INDEX", 3, 0, false);
+            declareFunction("dump_swappable_kb_index_visitor_end_subindex", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-END-SUBINDEX", 3, 0, false);
+            declareFunction("dump_swappable_kb_index_serialize_sharded_index", "DUMP-SWAPPABLE-KB-INDEX-SERIALIZE-SHARDED-INDEX", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_possibly_reshard_final_sharded_index", "DUMP-SWAPPABLE-KB-INDEX-POSSIBLY-RESHARD-FINAL-SHARDED-INDEX", 2, 0, false);
+            declareFunction("sanity_check_constructed_index_equivalence", "SANITY-CHECK-CONSTRUCTED-INDEX-EQUIVALENCE", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_get_file_vector", "DUMP-SWAPPABLE-KB-INDEX-GET-FILE-VECTOR", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_get_file_vector_indexical", "DUMP-SWAPPABLE-KB-INDEX-GET-FILE-VECTOR-INDEXICAL", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_pop_current_index", "DUMP-SWAPPABLE-KB-INDEX-POP-CURRENT-INDEX", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_push_current_index", "DUMP-SWAPPABLE-KB-INDEX-PUSH-CURRENT-INDEX", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_get_current_index", "DUMP-SWAPPABLE-KB-INDEX-GET-CURRENT-INDEX", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_push_current_key", "DUMP-SWAPPABLE-KB-INDEX-PUSH-CURRENT-KEY", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_pop_current_key", "DUMP-SWAPPABLE-KB-INDEX-POP-CURRENT-KEY", 2, 0, false);
+            declareFunction("dump_swappable_kb_index_get_current_key_path", "DUMP-SWAPPABLE-KB-INDEX-GET-CURRENT-KEY-PATH", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_get_final_result", "DUMP-SWAPPABLE-KB-INDEX-GET-FINAL-RESULT", 1, 0, false);
+            declareFunction("dump_swappable_kb_index_set_final_result", "DUMP-SWAPPABLE-KB-INDEX-SET-FINAL-RESULT", 1, 0, false);
+            declareFunction("note_precache_term", "NOTE-PRECACHE-TERM", 1, 0, false);
+            declareFunction("precache_predicate_extent", "PRECACHE-PREDICATE-EXTENT", 1, 0, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("visit_final_index_sets", "VISIT-FINAL-INDEX-SETS", 2, 0, false);
+            declareFunction("visit_final_index_sets_int", "VISIT-FINAL-INDEX-SETS-INT", 2, 0, false);
+            declareFunction("compile_final_index_metrics", "COMPILE-FINAL-INDEX-METRICS", 1, 1, false);
+            declareFunction("final_index_metrics_compilation_fn", "FINAL-INDEX-METRICS-COMPILATION-FN", 1, 0, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_indexing_utilities_file_Previous() {
+        declareFunction("rule_with_some_pragmatic_somewhereP", "RULE-WITH-SOME-PRAGMATIC-SOMEWHERE?", 1, 0, false);
+        declareFunction("rule_with_some_pragmaticP", "RULE-WITH-SOME-PRAGMATIC?", 1, 1, false);
+        declareFunction("rule_with_some_asserted_more_specifically_pragmaticP", "RULE-WITH-SOME-ASSERTED-MORE-SPECIFICALLY-PRAGMATIC?", 1, 1, false);
+        declareFunction("find_all_assertions_genl_mts", "FIND-ALL-ASSERTIONS-GENL-MTS", 2, 0, false);
+        declareFunction("dependent_narts", "DEPENDENT-NARTS", 1, 0, false);
+        declareFunction("term_of_unit_assertion_mentioning_fortP", "TERM-OF-UNIT-ASSERTION-MENTIONING-FORT?", 2, 0, false);
+        declareFunction("nested_non_atomic_terms", "NESTED-NON-ATOMIC-TERMS", 1, 1, false);
+        declareFunction("sort_gafs_for_removal", "SORT-GAFS-FOR-REMOVAL", 2, 0, false);
+        declareFunction("gaf_remove_beforeP", "GAF-REMOVE-BEFORE?", 2, 0, false);
+        declareFunction("gaf_removal_order", "GAF-REMOVAL-ORDER", 1, 0, false);
+        declareFunction("complex_index_visitor_print_function_trampoline", "COMPLEX-INDEX-VISITOR-PRINT-FUNCTION-TRAMPOLINE", 2, 0, false);
+        declareFunction("complex_index_visitor_p", "COMPLEX-INDEX-VISITOR-P", 1, 0, false);
         new indexing_utilities.$complex_index_visitor_p$UnaryFunction();
-        declareFunction(me, "compinx_visit_begin_subindex_fn", "COMPINX-VISIT-BEGIN-SUBINDEX-FN", 1, 0, false);
-        declareFunction(me, "compinx_visit_end_subindex_fn", "COMPINX-VISIT-END-SUBINDEX-FN", 1, 0, false);
-        declareFunction(me, "compinx_visit_note_final_index_fn", "COMPINX-VISIT-NOTE-FINAL-INDEX-FN", 1, 0, false);
-        declareFunction(me, "compinx_visit_begin_visit_fn", "COMPINX-VISIT-BEGIN-VISIT-FN", 1, 0, false);
-        declareFunction(me, "compinx_visit_end_visit_fn", "COMPINX-VISIT-END-VISIT-FN", 1, 0, false);
-        declareFunction(me, "compinx_visit_param", "COMPINX-VISIT-PARAM", 1, 0, false);
-        declareFunction(me, "_csetf_compinx_visit_begin_subindex_fn", "_CSETF-COMPINX-VISIT-BEGIN-SUBINDEX-FN", 2, 0, false);
-        declareFunction(me, "_csetf_compinx_visit_end_subindex_fn", "_CSETF-COMPINX-VISIT-END-SUBINDEX-FN", 2, 0, false);
-        declareFunction(me, "_csetf_compinx_visit_note_final_index_fn", "_CSETF-COMPINX-VISIT-NOTE-FINAL-INDEX-FN", 2, 0, false);
-        declareFunction(me, "_csetf_compinx_visit_begin_visit_fn", "_CSETF-COMPINX-VISIT-BEGIN-VISIT-FN", 2, 0, false);
-        declareFunction(me, "_csetf_compinx_visit_end_visit_fn", "_CSETF-COMPINX-VISIT-END-VISIT-FN", 2, 0, false);
-        declareFunction(me, "_csetf_compinx_visit_param", "_CSETF-COMPINX-VISIT-PARAM", 2, 0, false);
-        declareFunction(me, "make_complex_index_visitor", "MAKE-COMPLEX-INDEX-VISITOR", 0, 1, false);
-        declareFunction(me, "visit_defstruct_complex_index_visitor", "VISIT-DEFSTRUCT-COMPLEX-INDEX-VISITOR", 2, 0, false);
-        declareFunction(me, "visit_defstruct_object_complex_index_visitor_method", "VISIT-DEFSTRUCT-OBJECT-COMPLEX-INDEX-VISITOR-METHOD", 2, 0, false);
-        declareFunction(me, "print_complex_index_visitor", "PRINT-COMPLEX-INDEX-VISITOR", 3, 0, false);
-        declareFunction(me, "new_complex_index_visitor", "NEW-COMPLEX-INDEX-VISITOR", 5, 1, false);
-        declareFunction(me, "complex_index_visitor_begin_visit", "COMPLEX-INDEX-VISITOR-BEGIN-VISIT", 2, 0, false);
-        declareFunction(me, "complex_index_visitor_end_visit", "COMPLEX-INDEX-VISITOR-END-VISIT", 2, 0, false);
-        declareFunction(me, "show_complex_index_visitor_final_index", "SHOW-COMPLEX-INDEX-VISITOR-FINAL-INDEX", 3, 0, false);
-        declareFunction(me, "show_complex_index_visitor_subindex_begin", "SHOW-COMPLEX-INDEX-VISITOR-SUBINDEX-BEGIN", 3, 0, false);
-        declareFunction(me, "show_complex_index_visitor_subindex_end", "SHOW-COMPLEX-INDEX-VISITOR-SUBINDEX-END", 3, 0, false);
-        declareFunction(me, "set_complex_index_visitor_parameter", "SET-COMPLEX-INDEX-VISITOR-PARAMETER", 2, 0, false);
-        declareFunction(me, "get_complex_index_visitor_parameter", "GET-COMPLEX-INDEX-VISITOR-PARAMETER", 1, 0, false);
-        declareFunction(me, "visit_complex_index", "VISIT-COMPLEX-INDEX", 2, 0, false);
-        declareFunction(me, "visit_complex_subindex", "VISIT-COMPLEX-SUBINDEX", 3, 0, false);
-        declareFunction(me, "visit_changed_complex_index", "VISIT-CHANGED-COMPLEX-INDEX", 2, 0, false);
-        declareFunction(me, "visit_changed_complex_subindex", "VISIT-CHANGED-COMPLEX-SUBINDEX", 3, 0, false);
-        declareFunction(me, "dump_entire_swappable_complex_index", "DUMP-ENTIRE-SWAPPABLE-COMPLEX-INDEX", 3, 0, false);
-        declareFunction(me, "dump_changed_swappable_complex_index", "DUMP-CHANGED-SWAPPABLE-COMPLEX-INDEX", 3, 0, false);
-        declareFunction(me, "new_swappable_kb_index_dump_visitor", "NEW-SWAPPABLE-KB-INDEX-DUMP-VISITOR", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_visitor_begin_visit", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-VISIT", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_new_context", "DUMP-SWAPPABLE-KB-INDEX-NEW-CONTEXT", 3, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_valid_initial_context", "DUMP-SWAPPABLE-KB-INDEX-VALID-INITIAL-CONTEXT", 1, 0, false);
-        declareFunction(me, "dumping_swappable_changed_kb_indexP", "DUMPING-SWAPPABLE-CHANGED-KB-INDEX?", 1, 0, false);
-        declareFunction(me, "dumping_swappable_entire_kb_indexP", "DUMPING-SWAPPABLE-ENTIRE-KB-INDEX?", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_visitor_end_visit", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-END-VISIT", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_valid_final_context", "DUMP-SWAPPABLE-KB-INDEX-VALID-FINAL-CONTEXT", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_visitor_begin_subindex", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-SUBINDEX", 3, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_visitor_note_final_index", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-NOTE-FINAL-INDEX", 3, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_visitor_end_subindex", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-END-SUBINDEX", 3, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_serialize_sharded_index", "DUMP-SWAPPABLE-KB-INDEX-SERIALIZE-SHARDED-INDEX", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_possibly_reshard_final_sharded_index", "DUMP-SWAPPABLE-KB-INDEX-POSSIBLY-RESHARD-FINAL-SHARDED-INDEX", 2, 0, false);
-        declareFunction(me, "sanity_check_constructed_index_equivalence", "SANITY-CHECK-CONSTRUCTED-INDEX-EQUIVALENCE", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_get_file_vector", "DUMP-SWAPPABLE-KB-INDEX-GET-FILE-VECTOR", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_get_file_vector_indexical", "DUMP-SWAPPABLE-KB-INDEX-GET-FILE-VECTOR-INDEXICAL", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_pop_current_index", "DUMP-SWAPPABLE-KB-INDEX-POP-CURRENT-INDEX", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_push_current_index", "DUMP-SWAPPABLE-KB-INDEX-PUSH-CURRENT-INDEX", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_get_current_index", "DUMP-SWAPPABLE-KB-INDEX-GET-CURRENT-INDEX", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_push_current_key", "DUMP-SWAPPABLE-KB-INDEX-PUSH-CURRENT-KEY", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_pop_current_key", "DUMP-SWAPPABLE-KB-INDEX-POP-CURRENT-KEY", 2, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_get_current_key_path", "DUMP-SWAPPABLE-KB-INDEX-GET-CURRENT-KEY-PATH", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_get_final_result", "DUMP-SWAPPABLE-KB-INDEX-GET-FINAL-RESULT", 1, 0, false);
-        declareFunction(me, "dump_swappable_kb_index_set_final_result", "DUMP-SWAPPABLE-KB-INDEX-SET-FINAL-RESULT", 1, 0, false);
-        declareFunction(me, "note_precache_term", "NOTE-PRECACHE-TERM", 1, 0, false);
-        declareFunction(me, "precache_predicate_extent", "PRECACHE-PREDICATE-EXTENT", 1, 0, false);
+        declareFunction("compinx_visit_begin_subindex_fn", "COMPINX-VISIT-BEGIN-SUBINDEX-FN", 1, 0, false);
+        declareFunction("compinx_visit_end_subindex_fn", "COMPINX-VISIT-END-SUBINDEX-FN", 1, 0, false);
+        declareFunction("compinx_visit_note_final_index_fn", "COMPINX-VISIT-NOTE-FINAL-INDEX-FN", 1, 0, false);
+        declareFunction("compinx_visit_begin_visit_fn", "COMPINX-VISIT-BEGIN-VISIT-FN", 1, 0, false);
+        declareFunction("compinx_visit_end_visit_fn", "COMPINX-VISIT-END-VISIT-FN", 1, 0, false);
+        declareFunction("compinx_visit_param", "COMPINX-VISIT-PARAM", 1, 0, false);
+        declareFunction("_csetf_compinx_visit_begin_subindex_fn", "_CSETF-COMPINX-VISIT-BEGIN-SUBINDEX-FN", 2, 0, false);
+        declareFunction("_csetf_compinx_visit_end_subindex_fn", "_CSETF-COMPINX-VISIT-END-SUBINDEX-FN", 2, 0, false);
+        declareFunction("_csetf_compinx_visit_note_final_index_fn", "_CSETF-COMPINX-VISIT-NOTE-FINAL-INDEX-FN", 2, 0, false);
+        declareFunction("_csetf_compinx_visit_begin_visit_fn", "_CSETF-COMPINX-VISIT-BEGIN-VISIT-FN", 2, 0, false);
+        declareFunction("_csetf_compinx_visit_end_visit_fn", "_CSETF-COMPINX-VISIT-END-VISIT-FN", 2, 0, false);
+        declareFunction("_csetf_compinx_visit_param", "_CSETF-COMPINX-VISIT-PARAM", 2, 0, false);
+        declareFunction("make_complex_index_visitor", "MAKE-COMPLEX-INDEX-VISITOR", 0, 1, false);
+        declareFunction("visit_defstruct_complex_index_visitor", "VISIT-DEFSTRUCT-COMPLEX-INDEX-VISITOR", 2, 0, false);
+        declareFunction("visit_defstruct_object_complex_index_visitor_method", "VISIT-DEFSTRUCT-OBJECT-COMPLEX-INDEX-VISITOR-METHOD", 2, 0, false);
+        declareFunction("print_complex_index_visitor", "PRINT-COMPLEX-INDEX-VISITOR", 3, 0, false);
+        declareFunction("new_complex_index_visitor", "NEW-COMPLEX-INDEX-VISITOR", 5, 1, false);
+        declareFunction("complex_index_visitor_begin_visit", "COMPLEX-INDEX-VISITOR-BEGIN-VISIT", 2, 0, false);
+        declareFunction("complex_index_visitor_end_visit", "COMPLEX-INDEX-VISITOR-END-VISIT", 2, 0, false);
+        declareFunction("show_complex_index_visitor_final_index", "SHOW-COMPLEX-INDEX-VISITOR-FINAL-INDEX", 3, 0, false);
+        declareFunction("show_complex_index_visitor_subindex_begin", "SHOW-COMPLEX-INDEX-VISITOR-SUBINDEX-BEGIN", 3, 0, false);
+        declareFunction("show_complex_index_visitor_subindex_end", "SHOW-COMPLEX-INDEX-VISITOR-SUBINDEX-END", 3, 0, false);
+        declareFunction("set_complex_index_visitor_parameter", "SET-COMPLEX-INDEX-VISITOR-PARAMETER", 2, 0, false);
+        declareFunction("get_complex_index_visitor_parameter", "GET-COMPLEX-INDEX-VISITOR-PARAMETER", 1, 0, false);
+        declareFunction("visit_complex_index", "VISIT-COMPLEX-INDEX", 2, 0, false);
+        declareFunction("visit_complex_subindex", "VISIT-COMPLEX-SUBINDEX", 3, 0, false);
+        declareFunction("visit_changed_complex_index", "VISIT-CHANGED-COMPLEX-INDEX", 2, 0, false);
+        declareFunction("visit_changed_complex_subindex", "VISIT-CHANGED-COMPLEX-SUBINDEX", 3, 0, false);
+        declareFunction("dump_entire_swappable_complex_index", "DUMP-ENTIRE-SWAPPABLE-COMPLEX-INDEX", 3, 0, false);
+        declareFunction("dump_changed_swappable_complex_index", "DUMP-CHANGED-SWAPPABLE-COMPLEX-INDEX", 3, 0, false);
+        declareFunction("new_swappable_kb_index_dump_visitor", "NEW-SWAPPABLE-KB-INDEX-DUMP-VISITOR", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_visitor_begin_visit", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-VISIT", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_new_context", "DUMP-SWAPPABLE-KB-INDEX-NEW-CONTEXT", 3, 0, false);
+        declareFunction("dump_swappable_kb_index_valid_initial_context", "DUMP-SWAPPABLE-KB-INDEX-VALID-INITIAL-CONTEXT", 1, 0, false);
+        declareFunction("dumping_swappable_changed_kb_indexP", "DUMPING-SWAPPABLE-CHANGED-KB-INDEX?", 1, 0, false);
+        declareFunction("dumping_swappable_entire_kb_indexP", "DUMPING-SWAPPABLE-ENTIRE-KB-INDEX?", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_visitor_end_visit", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-END-VISIT", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_valid_final_context", "DUMP-SWAPPABLE-KB-INDEX-VALID-FINAL-CONTEXT", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_visitor_begin_subindex", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-BEGIN-SUBINDEX", 3, 0, false);
+        declareFunction("dump_swappable_kb_index_visitor_note_final_index", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-NOTE-FINAL-INDEX", 3, 0, false);
+        declareFunction("dump_swappable_kb_index_visitor_end_subindex", "DUMP-SWAPPABLE-KB-INDEX-VISITOR-END-SUBINDEX", 3, 0, false);
+        declareFunction("dump_swappable_kb_index_serialize_sharded_index", "DUMP-SWAPPABLE-KB-INDEX-SERIALIZE-SHARDED-INDEX", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_possibly_reshard_final_sharded_index", "DUMP-SWAPPABLE-KB-INDEX-POSSIBLY-RESHARD-FINAL-SHARDED-INDEX", 2, 0, false);
+        declareFunction("sanity_check_constructed_index_equivalence", "SANITY-CHECK-CONSTRUCTED-INDEX-EQUIVALENCE", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_get_file_vector", "DUMP-SWAPPABLE-KB-INDEX-GET-FILE-VECTOR", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_get_file_vector_indexical", "DUMP-SWAPPABLE-KB-INDEX-GET-FILE-VECTOR-INDEXICAL", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_pop_current_index", "DUMP-SWAPPABLE-KB-INDEX-POP-CURRENT-INDEX", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_push_current_index", "DUMP-SWAPPABLE-KB-INDEX-PUSH-CURRENT-INDEX", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_get_current_index", "DUMP-SWAPPABLE-KB-INDEX-GET-CURRENT-INDEX", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_push_current_key", "DUMP-SWAPPABLE-KB-INDEX-PUSH-CURRENT-KEY", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_pop_current_key", "DUMP-SWAPPABLE-KB-INDEX-POP-CURRENT-KEY", 2, 0, false);
+        declareFunction("dump_swappable_kb_index_get_current_key_path", "DUMP-SWAPPABLE-KB-INDEX-GET-CURRENT-KEY-PATH", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_get_final_result", "DUMP-SWAPPABLE-KB-INDEX-GET-FINAL-RESULT", 1, 0, false);
+        declareFunction("dump_swappable_kb_index_set_final_result", "DUMP-SWAPPABLE-KB-INDEX-SET-FINAL-RESULT", 1, 0, false);
+        declareFunction("note_precache_term", "NOTE-PRECACHE-TERM", 1, 0, false);
+        declareFunction("precache_predicate_extent", "PRECACHE-PREDICATE-EXTENT", 1, 0, false);
+        return NIL;
+    }
+
+    public static final SubLObject init_indexing_utilities_file_alt() {
+        defparameter("*CURR-VISITED-INDEX-METRICS*", NIL);
         return NIL;
     }
 
     public static SubLObject init_indexing_utilities_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*TERM-BEING-REMOVED*", $UNINITIALIZED);
+            defconstant("*DTP-COMPLEX-INDEX-VISITOR*", indexing_utilities.COMPLEX_INDEX_VISITOR);
+            defparameter("*SWAP-OUT-INTERMEDIATE-INDEX-LEVELS?*", T);
+            defparameter("*PRECACHE-TERM-SET*", $UNINITIALIZED);
+        }
+        if (SubLFiles.USE_V2) {
+            defparameter("*CURR-VISITED-INDEX-METRICS*", NIL);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_indexing_utilities_file_Previous() {
         defparameter("*TERM-BEING-REMOVED*", $UNINITIALIZED);
-        defconstant("*DTP-COMPLEX-INDEX-VISITOR*", COMPLEX_INDEX_VISITOR);
+        defconstant("*DTP-COMPLEX-INDEX-VISITOR*", indexing_utilities.COMPLEX_INDEX_VISITOR);
         defparameter("*SWAP-OUT-INTERMEDIATE-INDEX-LEVELS?*", T);
         defparameter("*PRECACHE-TERM-SET*", $UNINITIALIZED);
         return NIL;
     }
 
     public static SubLObject setup_indexing_utilities_file() {
-        register_method($print_object_method_table$.getGlobalValue(), $dtp_complex_index_visitor$.getGlobalValue(), symbol_function(COMPLEX_INDEX_VISITOR_PRINT_FUNCTION_TRAMPOLINE));
-        SubLSpecialOperatorDeclarations.proclaim($list22);
-        def_csetf(COMPINX_VISIT_BEGIN_SUBINDEX_FN, _CSETF_COMPINX_VISIT_BEGIN_SUBINDEX_FN);
-        def_csetf(COMPINX_VISIT_END_SUBINDEX_FN, _CSETF_COMPINX_VISIT_END_SUBINDEX_FN);
-        def_csetf(COMPINX_VISIT_NOTE_FINAL_INDEX_FN, _CSETF_COMPINX_VISIT_NOTE_FINAL_INDEX_FN);
-        def_csetf(COMPINX_VISIT_BEGIN_VISIT_FN, _CSETF_COMPINX_VISIT_BEGIN_VISIT_FN);
-        def_csetf(COMPINX_VISIT_END_VISIT_FN, _CSETF_COMPINX_VISIT_END_VISIT_FN);
-        def_csetf(COMPINX_VISIT_PARAM, _CSETF_COMPINX_VISIT_PARAM);
-        identity(COMPLEX_INDEX_VISITOR);
-        register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), $dtp_complex_index_visitor$.getGlobalValue(), symbol_function(VISIT_DEFSTRUCT_OBJECT_COMPLEX_INDEX_VISITOR_METHOD));
-        note_funcall_helper_function(NOTE_PRECACHE_TERM);
+        register_method($print_object_method_table$.getGlobalValue(), indexing_utilities.$dtp_complex_index_visitor$.getGlobalValue(), symbol_function(indexing_utilities.COMPLEX_INDEX_VISITOR_PRINT_FUNCTION_TRAMPOLINE));
+        SubLSpecialOperatorDeclarations.proclaim(indexing_utilities.$list22);
+        def_csetf(indexing_utilities.COMPINX_VISIT_BEGIN_SUBINDEX_FN, indexing_utilities._CSETF_COMPINX_VISIT_BEGIN_SUBINDEX_FN);
+        def_csetf(indexing_utilities.COMPINX_VISIT_END_SUBINDEX_FN, indexing_utilities._CSETF_COMPINX_VISIT_END_SUBINDEX_FN);
+        def_csetf(indexing_utilities.COMPINX_VISIT_NOTE_FINAL_INDEX_FN, indexing_utilities._CSETF_COMPINX_VISIT_NOTE_FINAL_INDEX_FN);
+        def_csetf(indexing_utilities.COMPINX_VISIT_BEGIN_VISIT_FN, indexing_utilities._CSETF_COMPINX_VISIT_BEGIN_VISIT_FN);
+        def_csetf(indexing_utilities.COMPINX_VISIT_END_VISIT_FN, indexing_utilities._CSETF_COMPINX_VISIT_END_VISIT_FN);
+        def_csetf(indexing_utilities.COMPINX_VISIT_PARAM, indexing_utilities._CSETF_COMPINX_VISIT_PARAM);
+        identity(indexing_utilities.COMPLEX_INDEX_VISITOR);
+        register_method(visitation.$visit_defstruct_object_method_table$.getGlobalValue(), indexing_utilities.$dtp_complex_index_visitor$.getGlobalValue(), symbol_function(indexing_utilities.VISIT_DEFSTRUCT_OBJECT_COMPLEX_INDEX_VISITOR_METHOD));
+        note_funcall_helper_function(indexing_utilities.NOTE_PRECACHE_TERM);
         return NIL;
     }
 
     @Override
     public void declareFunctions() {
-        declare_indexing_utilities_file();
+        indexing_utilities.declare_indexing_utilities_file();
     }
 
     @Override
     public void initializeVariables() {
-        init_indexing_utilities_file();
+        indexing_utilities.init_indexing_utilities_file();
     }
 
     @Override
     public void runTopLevelForms() {
-        setup_indexing_utilities_file();
+        indexing_utilities.setup_indexing_utilities_file();
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 
     public static final class $complex_index_visitor_native extends SubLStructNative {
@@ -1889,7 +1924,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
         }
 
         static {
-            structDecl = makeStructDeclNative(indexing_utilities.$complex_index_visitor_native.class, COMPLEX_INDEX_VISITOR, COMPLEX_INDEX_VISITOR_P, $list16, $list17, new String[]{ "$begin_subindex_fn", "$end_subindex_fn", "$note_final_index_fn", "$begin_visit_fn", "$end_visit_fn", "$param" }, $list18, $list19, PRINT_COMPLEX_INDEX_VISITOR);
+            structDecl = makeStructDeclNative(indexing_utilities.$complex_index_visitor_native.class, indexing_utilities.COMPLEX_INDEX_VISITOR, indexing_utilities.COMPLEX_INDEX_VISITOR_P, indexing_utilities.$list16, indexing_utilities.$list17, new String[]{ "$begin_subindex_fn", "$end_subindex_fn", "$note_final_index_fn", "$begin_visit_fn", "$end_visit_fn", "$param" }, indexing_utilities.$list18, indexing_utilities.$list19, indexing_utilities.PRINT_COMPLEX_INDEX_VISITOR);
         }
     }
 
@@ -1900,7 +1935,7 @@ public final class indexing_utilities extends SubLTranslatedFile {
 
         @Override
         public SubLObject processItem(final SubLObject arg1) {
-            return complex_index_visitor_p(arg1);
+            return indexing_utilities.complex_index_visitor_p(arg1);
         }
     }
 }

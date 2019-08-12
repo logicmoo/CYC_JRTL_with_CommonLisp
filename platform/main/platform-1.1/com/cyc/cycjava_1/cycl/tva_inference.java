@@ -266,8 +266,7 @@ public  final class tva_inference extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_tva_inference_file() {
-    // CVS_ID("Id: tva-inference.lisp 126745 2009-01-06 22:42:50Z baxter ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tva_inference$.getGlobalValue(), Symbols.symbol_function($sym7$TVA_INFERENCE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tva_inference$.getGlobalValue(), Symbols.symbol_function($sym7$TVA_INFERENCE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$TVA_INF_PROBLEM, $sym9$_CSETF_TVA_INF_PROBLEM);
     Structures.def_csetf($sym10$TVA_INF_ASENT_PRED, $sym11$_CSETF_TVA_INF_ASENT_PRED);
     Structures.def_csetf($sym12$TVA_INF_ASENT_ARGS, $sym13$_CSETF_TVA_INF_ASENT_ARGS);

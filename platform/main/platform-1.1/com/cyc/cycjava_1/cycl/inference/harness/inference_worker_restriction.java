@@ -435,8 +435,7 @@ This function bubbles up RESTRICTED-PROOF to the unrestricted-problem via RESTRI
   }
 
   public static final SubLObject setup_inference_worker_restriction_file() {
-    // CVS_ID("Id: inference-worker-restriction.lisp 128830 2009-09-23 21:54:25Z jantos ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_restriction_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$RESTRICTION_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_restriction_link_data$.getGlobalValue(), Symbols.symbol_function($sym7$RESTRICTION_LINK_DATA_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$RESTR_LINK_DATA_BINDINGS, $sym9$_CSETF_RESTR_LINK_DATA_BINDINGS);
     Structures.def_csetf($sym10$RESTR_LINK_DATA_HL_MODULE, $sym11$_CSETF_RESTR_LINK_DATA_HL_MODULE);
     Equality.identity($sym0$RESTRICTION_LINK_DATA);

@@ -110,8 +110,7 @@ public  final class inference_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_inference_macros_file() {
-    // CVS_ID("Id: inference-macros.lisp 128378 2009-07-22 17:22:05Z jantos ");
-    access_macros.register_macro_helper($sym28$DO_PROBLEM_LINK_OPEN_MATCH_, $sym29$DO_PROBLEM_LINK_SUPPORTING_MAPPED_PROBLEMS);
+        access_macros.register_macro_helper($sym28$DO_PROBLEM_LINK_OPEN_MATCH_, $sym29$DO_PROBLEM_LINK_SUPPORTING_MAPPED_PROBLEMS);
     return NIL;
   }
 

@@ -129,9 +129,10 @@
 ;;; If so, then this parameter should be set to the name of the host
 ;;; that runs the transcript server; the port is specified with
 ;;; *MASTER-TRANSCRIPT-SERVER-PORT*.
-(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.logicmoo.org")
 ;; Opencyc
 (csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.cyc.com")
+(csetq *MASTER-TRANSCRIPT-LOCK-HOST* "transcript-server.logicmoo.org")
+
 
 ;;; Possible Values: an integer
 ;;; This parameter is only used if *USE-TRANSCRIPT-SERVER* is T.
@@ -268,6 +269,7 @@
 ;;; to a string which is the user ID for the initial administrator.
 ;;; It must be the same user ID the external authentication
 ;;; system uses.
+;; (csetq *TM-BOOTSTRAP-ADMINISTRATOR-LOGIN* NIL)
 (csetq *TM-BOOTSTRAP-ADMINISTRATOR-LOGIN* NIL)
 
 ;;; Possible Values: a string or undefined
@@ -284,6 +286,7 @@
 ;;; Should be the URL for the homepage link on the
 ;;; welcome page of the interface.
 (csetq *CLIENT-HOME-PAGE* "http://www.cyc.com/")
+(csetq *CLIENT-HOME-PAGE* "http://www.logicmoo.org/")
 
 ;;; Possible Values: a string
 ;;; It should be the pathname of an image file, expressed as
@@ -295,6 +298,7 @@
 ;;; Should be the URL for the thesaurus homepage
 ;;; link found on almost every thesaurus page.
 (csetq *CLIENT-THES-HOME-PAGE* "http://www.cyc.com/")
+(csetq *CLIENT-THES-HOME-PAGE* "http://www.logicmoo.org/")
 
 ;;; Possible Values: a string or undefined
 ;;; It should be the pathname of an image file, expressed as

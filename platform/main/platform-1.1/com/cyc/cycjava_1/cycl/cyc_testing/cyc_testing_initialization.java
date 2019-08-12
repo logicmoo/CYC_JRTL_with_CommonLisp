@@ -71,8 +71,7 @@ public  final class cyc_testing_initialization extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_cyc_testing_initialization_file() {
-    // CVS_ID("Id: cyc-testing-initialization.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Initializers

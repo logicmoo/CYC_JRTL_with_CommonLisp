@@ -437,8 +437,7 @@ link between them. */
   }
 
   public static final SubLObject setup_cardinality_estimates_file() {
-    // CVS_ID("Id: cardinality-estimates.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym7$_LOCAL_INSTANCE_CARDINALITY_);
+        subl_macro_promotions.declare_defglobal($sym7$_LOCAL_INSTANCE_CARDINALITY_);
     subl_macro_promotions.declare_defglobal($sym8$_LOCAL_QUOTED_INSTANCE_CARDINALITY_);
     subl_macro_promotions.declare_defglobal($sym9$_LOCAL_SPEC_CARDINALITY_);
     subl_macro_promotions.declare_defglobal($sym10$_TOTAL_INSTANCE_CARDINALITY_);

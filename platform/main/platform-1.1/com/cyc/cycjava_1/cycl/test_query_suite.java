@@ -118,8 +118,7 @@ public  final class test_query_suite extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_test_query_suite_file() {
-    // CVS_ID("Id: test-query-suite.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_test_query_suite$.getGlobalValue(), Symbols.symbol_function($sym7$TEST_QUERY_SUITE_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_test_query_suite$.getGlobalValue(), Symbols.symbol_function($sym7$TEST_QUERY_SUITE_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$TEST_STE_CYCL_ID, $sym9$_CSETF_TEST_STE_CYCL_ID);
     Structures.def_csetf($sym10$TEST_STE_COMMENT, $sym11$_CSETF_TEST_STE_COMMENT);
     Structures.def_csetf($sym12$TEST_STE_MT, $sym13$_CSETF_TEST_STE_MT);

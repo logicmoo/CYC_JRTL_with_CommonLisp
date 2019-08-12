@@ -1,24 +1,7 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.system_administration_utilities;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.system_administration_utilities.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
@@ -28,15 +11,22 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Mapping;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class system_administration_utilities extends SubLTranslatedFile {
+public final class system_administration_utilities extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new system_administration_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.system_administration_utilities";
+    public static final String myName = "com.cyc.cycjava_2.cycl.system_administration_utilities";
 
-    public static final String myFingerPrint = "ebd281d28d7edf39d1af7206105af26665534f073f7ef77eb8fc66c25c716a04";
 
 
 
@@ -155,14 +145,14 @@ public final class system_administration_utilities extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_system_administration_utilities_file() {
-        declareFunction(me, "processes_with_substring", "PROCESSES-WITH-SUBSTRING", 1, 0, false);
-        declareFunction(me, "kill_processes_with_substring", "KILL-PROCESSES-WITH-SUBSTRING", 1, 0, false);
-        declareFunction(me, "jstack_trace", "JSTACK-TRACE", 0, 1, false);
-        declareFunction(me, "print_jstack_trace", "PRINT-JSTACK-TRACE", 0, 2, false);
-        declareFunction(me, "clear_get_process_id_in_jrtl", "CLEAR-GET-PROCESS-ID-IN-JRTL", 0, 0, false);
-        declareFunction(me, "remove_get_process_id_in_jrtl", "REMOVE-GET-PROCESS-ID-IN-JRTL", 0, 0, false);
-        declareFunction(me, "get_process_id_in_jrtl_internal", "GET-PROCESS-ID-IN-JRTL-INTERNAL", 0, 0, false);
-        declareFunction(me, "get_process_id_in_jrtl", "GET-PROCESS-ID-IN-JRTL", 0, 0, false);
+        declareFunction("processes_with_substring", "PROCESSES-WITH-SUBSTRING", 1, 0, false);
+        declareFunction("kill_processes_with_substring", "KILL-PROCESSES-WITH-SUBSTRING", 1, 0, false);
+        declareFunction("jstack_trace", "JSTACK-TRACE", 0, 1, false);
+        declareFunction("print_jstack_trace", "PRINT-JSTACK-TRACE", 0, 2, false);
+        declareFunction("clear_get_process_id_in_jrtl", "CLEAR-GET-PROCESS-ID-IN-JRTL", 0, 0, false);
+        declareFunction("remove_get_process_id_in_jrtl", "REMOVE-GET-PROCESS-ID-IN-JRTL", 0, 0, false);
+        declareFunction("get_process_id_in_jrtl_internal", "GET-PROCESS-ID-IN-JRTL-INTERNAL", 0, 0, false);
+        declareFunction("get_process_id_in_jrtl", "GET-PROCESS-ID-IN-JRTL", 0, 0, false);
         return NIL;
     }
 

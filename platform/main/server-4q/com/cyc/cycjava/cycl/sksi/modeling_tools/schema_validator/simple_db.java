@@ -1,51 +1,30 @@
 package com.cyc.cycjava.cycl.sksi.modeling_tools.schema_validator;
 
 
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertion_utilities;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.deck;
-import com.cyc.cycjava.cycl.deductions_high;
-import com.cyc.cycjava.cycl.dictionary;
-import com.cyc.cycjava.cycl.dictionary_contents;
-import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.fort_types_interface;
-import com.cyc.cycjava.cycl.function_terms;
-import com.cyc.cycjava.cycl.isa;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_indexing;
-import com.cyc.cycjava.cycl.kb_mapping;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.kb_mapping_utilities;
-import com.cyc.cycjava.cycl.kb_utilities;
-import com.cyc.cycjava.cycl.ke;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.memoization_state;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.narts_high;
-import com.cyc.cycjava.cycl.obsolete;
-import com.cyc.cycjava.cycl.queues;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
-import com.cyc.cycjava.cycl.set;
-import com.cyc.cycjava.cycl.set_contents;
-import com.cyc.cycjava.cycl.set_utilities;
-import com.cyc.cycjava.cycl.sksi.modeling_tools.schema_validator.simple_db;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.cycjava.cycl.sbhl.*;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_kb_accessors;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_meaning_sentence_utilities;
 import com.cyc.cycjava.cycl.sksi.sksi_infrastructure.sksi_sks_accessors;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.cycjava.cycl.uncanonicalizer;
-import com.cyc.cycjava.cycl.virtual_indexing;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -56,65 +35,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$use_transcriptP$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.sksi.modeling_tools.schema_validator.simple_db.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_index$;
-import static com.cyc.cycjava.cycl.utilities_macros.$last_percent_progress_prediction$;
-import static com.cyc.cycjava.cycl.utilities_macros.$percent_progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_note$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_sofar$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_total$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
-import static com.cyc.cycjava.cycl.utilities_macros.$within_noting_percent_progress$;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class simple_db extends SubLTranslatedFile {
+public final class simple_db extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new simple_db();
 
-    public static final String myName = "com.cyc.cycjava.cycl.sksi.modeling_tools.schema_validator.simple_db";
+    public static final String myName = "com.cyc.cycjava_2.cycl.sksi.modeling_tools.schema_validator.simple_db";
 
-    public static final String myFingerPrint = "e696903350934ff662518a0cd11a32d734b25bde6e9890451b866066b7459cbb";
 
 
 
@@ -1663,35 +1589,35 @@ public final class simple_db extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_simple_db_file() {
-        declareFunction(me, "simple_sksi_dbP", "SIMPLE-SKSI-DB?", 1, 0, false);
-        declareFunction(me, "clear_simple_sksi_terms", "CLEAR-SIMPLE-SKSI-TERMS", 0, 0, false);
-        declareFunction(me, "remove_simple_sksi_terms", "REMOVE-SIMPLE-SKSI-TERMS", 0, 0, false);
-        declareFunction(me, "simple_sksi_terms_internal", "SIMPLE-SKSI-TERMS-INTERNAL", 0, 0, false);
-        declareFunction(me, "simple_sksi_terms", "SIMPLE-SKSI-TERMS", 0, 0, false);
-        declareFunction(me, "simple_sksi_termP", "SIMPLE-SKSI-TERM?", 1, 0, false);
-        declareFunction(me, "simple_sksi_assertions_for_term", "SIMPLE-SKSI-ASSERTIONS-FOR-TERM", 1, 0, false);
-        declareFunction(me, "clear_simple_sksi_assertions_for_sks", "CLEAR-SIMPLE-SKSI-ASSERTIONS-FOR-SKS", 0, 0, false);
-        declareFunction(me, "remove_simple_sksi_assertions_for_sks", "REMOVE-SIMPLE-SKSI-ASSERTIONS-FOR-SKS", 1, 0, false);
-        declareFunction(me, "simple_sksi_assertions_for_sks_internal", "SIMPLE-SKSI-ASSERTIONS-FOR-SKS-INTERNAL", 1, 0, false);
-        declareFunction(me, "simple_sksi_assertions_for_sks", "SIMPLE-SKSI-ASSERTIONS-FOR-SKS", 1, 0, false);
-        declareFunction(me, "simple_sksi_assertionP", "SIMPLE-SKSI-ASSERTION?", 1, 0, false);
-        declareFunction(me, "repropagate_knowledge_source", "REPROPAGATE-KNOWLEDGE-SOURCE", 1, 1, false);
-        declareFunction(me, "repropagate_simple_db", "REPROPAGATE-SIMPLE-DB", 1, 0, false);
-        declareFunction(me, "ensure_simple_db_valid", "ENSURE-SIMPLE-DB-VALID", 1, 2, false);
-        declareFunction(me, "validate_simple_db", "VALIDATE-SIMPLE-DB", 1, 2, false);
-        declareFunction(me, "validate_simple_table", "VALIDATE-SIMPLE-TABLE", 3, 0, false);
-        declareFunction(me, "ensure_all_fields_are_listed", "ENSURE-ALL-FIELDS-ARE-LISTED", 2, 0, false);
-        declareFunction(me, "ensure_temporal_or_atemporal_table", "ENSURE-TEMPORAL-OR-ATEMPORAL-TABLE", 2, 0, false);
-        declareFunction(me, "validate_simple_physical_schema", "VALIDATE-SIMPLE-PHYSICAL-SCHEMA", 3, 0, false);
-        declareFunction(me, "validate_simple_logical_schema", "VALIDATE-SIMPLE-LOGICAL-SCHEMA", 3, 0, false);
-        declareFunction(me, "validate_simple_logical_field_indexical", "VALIDATE-SIMPLE-LOGICAL-FIELD-INDEXICAL", 3, 0, false);
-        declareFunction(me, "ensure_field_decoding_has_code_mappings", "ENSURE-FIELD-DECODING-HAS-CODE-MAPPINGS", 1, 0, false);
-        declareFunction(me, "cmls_fn_nart_p", "CMLS-FN-NART-P", 1, 0, false);
-        declareFunction(me, "note_simple_db_validation_problem", "NOTE-SIMPLE-DB-VALIDATION-PROBLEM", 1, 0, false);
-        declareFunction(me, "ensure_preds_have_deduced_values", "ENSURE-PREDS-HAVE-DEDUCED-VALUES", 3, 1, false);
-        declareFunction(me, "ensure_preds_have_values", "ENSURE-PREDS-HAVE-VALUES", 5, 0, false);
-        declareFunction(me, "ensure_pred_has_value", "ENSURE-PRED-HAS-VALUE", 5, 0, false);
-        declareFunction(me, "convert_simple_sksi_db_to_complex", "CONVERT-SIMPLE-SKSI-DB-TO-COMPLEX", 1, 1, false);
+        declareFunction("simple_sksi_dbP", "SIMPLE-SKSI-DB?", 1, 0, false);
+        declareFunction("clear_simple_sksi_terms", "CLEAR-SIMPLE-SKSI-TERMS", 0, 0, false);
+        declareFunction("remove_simple_sksi_terms", "REMOVE-SIMPLE-SKSI-TERMS", 0, 0, false);
+        declareFunction("simple_sksi_terms_internal", "SIMPLE-SKSI-TERMS-INTERNAL", 0, 0, false);
+        declareFunction("simple_sksi_terms", "SIMPLE-SKSI-TERMS", 0, 0, false);
+        declareFunction("simple_sksi_termP", "SIMPLE-SKSI-TERM?", 1, 0, false);
+        declareFunction("simple_sksi_assertions_for_term", "SIMPLE-SKSI-ASSERTIONS-FOR-TERM", 1, 0, false);
+        declareFunction("clear_simple_sksi_assertions_for_sks", "CLEAR-SIMPLE-SKSI-ASSERTIONS-FOR-SKS", 0, 0, false);
+        declareFunction("remove_simple_sksi_assertions_for_sks", "REMOVE-SIMPLE-SKSI-ASSERTIONS-FOR-SKS", 1, 0, false);
+        declareFunction("simple_sksi_assertions_for_sks_internal", "SIMPLE-SKSI-ASSERTIONS-FOR-SKS-INTERNAL", 1, 0, false);
+        declareFunction("simple_sksi_assertions_for_sks", "SIMPLE-SKSI-ASSERTIONS-FOR-SKS", 1, 0, false);
+        declareFunction("simple_sksi_assertionP", "SIMPLE-SKSI-ASSERTION?", 1, 0, false);
+        declareFunction("repropagate_knowledge_source", "REPROPAGATE-KNOWLEDGE-SOURCE", 1, 1, false);
+        declareFunction("repropagate_simple_db", "REPROPAGATE-SIMPLE-DB", 1, 0, false);
+        declareFunction("ensure_simple_db_valid", "ENSURE-SIMPLE-DB-VALID", 1, 2, false);
+        declareFunction("validate_simple_db", "VALIDATE-SIMPLE-DB", 1, 2, false);
+        declareFunction("validate_simple_table", "VALIDATE-SIMPLE-TABLE", 3, 0, false);
+        declareFunction("ensure_all_fields_are_listed", "ENSURE-ALL-FIELDS-ARE-LISTED", 2, 0, false);
+        declareFunction("ensure_temporal_or_atemporal_table", "ENSURE-TEMPORAL-OR-ATEMPORAL-TABLE", 2, 0, false);
+        declareFunction("validate_simple_physical_schema", "VALIDATE-SIMPLE-PHYSICAL-SCHEMA", 3, 0, false);
+        declareFunction("validate_simple_logical_schema", "VALIDATE-SIMPLE-LOGICAL-SCHEMA", 3, 0, false);
+        declareFunction("validate_simple_logical_field_indexical", "VALIDATE-SIMPLE-LOGICAL-FIELD-INDEXICAL", 3, 0, false);
+        declareFunction("ensure_field_decoding_has_code_mappings", "ENSURE-FIELD-DECODING-HAS-CODE-MAPPINGS", 1, 0, false);
+        declareFunction("cmls_fn_nart_p", "CMLS-FN-NART-P", 1, 0, false);
+        declareFunction("note_simple_db_validation_problem", "NOTE-SIMPLE-DB-VALIDATION-PROBLEM", 1, 0, false);
+        declareFunction("ensure_preds_have_deduced_values", "ENSURE-PREDS-HAVE-DEDUCED-VALUES", 3, 1, false);
+        declareFunction("ensure_preds_have_values", "ENSURE-PREDS-HAVE-VALUES", 5, 0, false);
+        declareFunction("ensure_pred_has_value", "ENSURE-PRED-HAS-VALUE", 5, 0, false);
+        declareFunction("convert_simple_sksi_db_to_complex", "CONVERT-SIMPLE-SKSI-DB-TO-COMPLEX", 1, 1, false);
         return NIL;
     }
 

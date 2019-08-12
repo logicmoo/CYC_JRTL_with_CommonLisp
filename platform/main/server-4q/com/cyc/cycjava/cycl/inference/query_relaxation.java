@@ -1,13 +1,27 @@
 package com.cyc.cycjava.cycl.inference;
 
 
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.el_utilities.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import com.cyc.cycjava.cycl.V10;
 import com.cyc.cycjava.cycl.collection_defns;
 import com.cyc.cycjava.cycl.cycl_utilities;
-import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.inference.query_relaxation;
 import com.cyc.cycjava.cycl.isa;
 import com.cyc.cycjava.cycl.kb_mapping_utilities;
 import com.cyc.cycjava.cycl.list_utilities;
+import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -18,42 +32,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$mapping_target$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.query_relaxation.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIFTEEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class query_relaxation extends SubLTranslatedFile {
+public final class query_relaxation extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new query_relaxation();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.query_relaxation";
+    public static final String myName = "com.cyc.cycjava_2.cycl.inference.query_relaxation";
 
-    public static final String myFingerPrint = "3454002a1533d4b1e43feb1114e5592ed507d2e81dc2414b70685efa9951171a";
 
     private static final SubLObject $const0$QueryRelaxationStrategy_RemoveLit = reader_make_constant_shell(makeString("QueryRelaxationStrategy-RemoveLiteralViaSpecifiedOrder"));
 
@@ -313,16 +297,16 @@ public final class query_relaxation extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_query_relaxation_file() {
-        declareFunction(me, "new_cyc_query_with_relaxation", "NEW-CYC-QUERY-WITH-RELAXATION", 1, 3, false);
-        declareFunction(me, "relaxtion_strategy_termination_condition_satisfiedP", "RELAXTION-STRATEGY-TERMINATION-CONDITION-SATISFIED?", 2, 0, false);
-        declareFunction(me, "relax_query_sentence", "RELAX-QUERY-SENTENCE", 2, 0, false);
-        declareFunction(me, "relax_query_sentence_by_removing_literals", "RELAX-QUERY-SENTENCE-BY-REMOVING-LITERALS", 2, 0, false);
-        declareFunction(me, "relax_query_sentence_by_changing_value", "RELAX-QUERY-SENTENCE-BY-CHANGING-VALUE", 2, 0, false);
-        declareFunction(me, "gather_value_change_list_specs_for_strategy", "GATHER-VALUE-CHANGE-LIST-SPECS-FOR-STRATEGY", 1, 0, false);
-        declareFunction(me, "relax_query_sentence_apply_value_change_spec", "RELAX-QUERY-SENTENCE-APPLY-VALUE-CHANGE-SPEC", 4, 0, false);
-        declareFunction(me, "cycl_remove_predicate_literals_from_sentence", "CYCL-REMOVE-PREDICATE-LITERALS-FROM-SENTENCE", 2, 0, false);
-        declareFunction(me, "conjunction_with_target_literal_p", "CONJUNCTION-WITH-TARGET-LITERAL-P", 1, 1, false);
-        declareFunction(me, "conjunction_without_target_literal", "CONJUNCTION-WITHOUT-TARGET-LITERAL", 1, 1, false);
+        declareFunction("new_cyc_query_with_relaxation", "NEW-CYC-QUERY-WITH-RELAXATION", 1, 3, false);
+        declareFunction("relaxtion_strategy_termination_condition_satisfiedP", "RELAXTION-STRATEGY-TERMINATION-CONDITION-SATISFIED?", 2, 0, false);
+        declareFunction("relax_query_sentence", "RELAX-QUERY-SENTENCE", 2, 0, false);
+        declareFunction("relax_query_sentence_by_removing_literals", "RELAX-QUERY-SENTENCE-BY-REMOVING-LITERALS", 2, 0, false);
+        declareFunction("relax_query_sentence_by_changing_value", "RELAX-QUERY-SENTENCE-BY-CHANGING-VALUE", 2, 0, false);
+        declareFunction("gather_value_change_list_specs_for_strategy", "GATHER-VALUE-CHANGE-LIST-SPECS-FOR-STRATEGY", 1, 0, false);
+        declareFunction("relax_query_sentence_apply_value_change_spec", "RELAX-QUERY-SENTENCE-APPLY-VALUE-CHANGE-SPEC", 4, 0, false);
+        declareFunction("cycl_remove_predicate_literals_from_sentence", "CYCL-REMOVE-PREDICATE-LITERALS-FROM-SENTENCE", 2, 0, false);
+        declareFunction("conjunction_with_target_literal_p", "CONJUNCTION-WITH-TARGET-LITERAL-P", 1, 1, false);
+        declareFunction("conjunction_without_target_literal", "CONJUNCTION-WITHOUT-TARGET-LITERAL", 1, 1, false);
         return NIL;
     }
 

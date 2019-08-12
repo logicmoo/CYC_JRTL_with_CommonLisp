@@ -191,8 +191,7 @@ public  final class tva_strategy extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_tva_strategy_file() {
-    // CVS_ID("Id: tva-strategy.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tva_strategy$.getGlobalValue(), Symbols.symbol_function($sym7$TVA_STRATEGY_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_tva_strategy$.getGlobalValue(), Symbols.symbol_function($sym7$TVA_STRATEGY_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym8$TVA_STRAT_INVERSE_MODE_P, $sym9$_CSETF_TVA_STRAT_INVERSE_MODE_P);
     Structures.def_csetf($sym10$TVA_STRAT_ARGNUMS_UNIFIED, $sym11$_CSETF_TVA_STRAT_ARGNUMS_UNIFIED);
     Structures.def_csetf($sym12$TVA_STRAT_ARGNUMS_REMAINING, $sym13$_CSETF_TVA_STRAT_ARGNUMS_REMAINING);

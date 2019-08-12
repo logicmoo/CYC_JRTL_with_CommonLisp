@@ -426,8 +426,7 @@ public  final class inference_heuristic_balanced_tactician extends SubLTranslate
   }
 
   public static final SubLObject setup_inference_heuristic_balanced_tactician_file() {
-    // CVS_ID("Id: inference-heuristic-balanced-tactician.lisp 128006 2009-06-16 15:51:35Z pace ");
-    inference_tactician.inference_strategy_type($kw0$HEURISTIC_BALANCED, $list1);
+        inference_tactician.inference_strategy_type($kw0$HEURISTIC_BALANCED, $list1);
     utilities_macros.note_funcall_helper_function($sym2$HEURISTIC_BALANCED_STRATEGY_INITIALIZE);
     utilities_macros.note_funcall_helper_function($sym3$HEURISTIC_BALANCED_STRATEGY_NO_STRATEGEMS_ACTIVE_WRT_REMOVAL_);
     utilities_macros.note_funcall_helper_function($sym4$HEURISTIC_BALANCED_STRATEGY_PEEK_STRATEGEM_WRT_REMOVAL);

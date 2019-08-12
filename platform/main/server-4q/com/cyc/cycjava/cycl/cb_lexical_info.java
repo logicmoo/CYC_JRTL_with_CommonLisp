@@ -1,20 +1,40 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cb_lexical_info;
-import com.cyc.cycjava.cycl.cb_parameters;
-import com.cyc.cycjava.cycl.control_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_graphs;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_methods;
-import com.cyc.cycjava.cycl.sbhl.sbhl_link_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_links;
-import com.cyc.cycjava.cycl.sbhl.sbhl_macros;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_marking_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_utilities;
-import com.cyc.cycjava.cycl.sbhl.sbhl_module_vars;
-import com.cyc.cycjava.cycl.sbhl.sbhl_paranoia;
-import com.cyc.cycjava.cycl.sbhl.sbhl_search_vars;
+import static com.cyc.cycjava.cycl.cb_parameters.*;
+import static com.cyc.cycjava.cycl.cb_utilities.*;
+import static com.cyc.cycjava.cycl.constant_handles.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.html_utilities.*;
+import static com.cyc.cycjava.cycl.pph_main.*;
+import static com.cyc.cycjava.cycl.pph_methods_lexicon.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.sbhl.*;
 import com.cyc.cycjava.cycl.wordnet_import.cb_wordnet_utilities;
 import com.cyc.cycjava.cycl.wordnet_import.wordnet_import;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
@@ -30,112 +50,173 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cb_lexical_info.*;
-import static com.cyc.cycjava.cycl.cb_parameters.*;
-import static com.cyc.cycjava.cycl.cb_utilities.*;
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.html_utilities.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_greater;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_hash;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_quotation;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Characters.CHAR_space;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUALP;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FIVE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.FOUR_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.MINUS_ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Equality.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      CB-LEXICAL-INFO
+ * source file: /cyc/top/cycl/cb-lexical-info.lisp
+ * created:     2019/07/03 17:38:16
+ */
+public final class cb_lexical_info extends SubLTranslatedFile implements V12 {
+    public static final SubLObject cb_lexicon_bugzilla_summary_for_term(SubLObject v_term) {
+        if (NIL != forts.fort_p(v_term)) {
+            return com.cyc.cycjava.cycl.cb_lexical_info.cb_lexicon_bugzilla_summary_for_fort(v_term);
+        } else {
+            if (NIL != assertion_handles.assertion_p(v_term)) {
+                return com.cyc.cycjava.cycl.cb_lexical_info.cb_lexicon_bugzilla_summary_for_as(v_term);
+            } else {
+                return format(NIL, $str_alt89$Lexification_problem___S, v_term);
+            }
+        }
+    }
 
-public final class cb_lexical_info extends SubLTranslatedFile {
+    public static final SubLObject cb_lexicon_bugzilla_summary_for_fort(SubLObject fort) {
+        return format(NIL, $str_alt90$Unlexified_term___S, fort);
+    }
+
+    public static final SubLObject cb_lexicon_bugzilla_summary_for_as(SubLObject as) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject formula = assertions_high.assertion_formula(as);
+                SubLObject summary = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject leading_strings = lexicon_utilities.parse_lexical_semantic_formula(formula, UNPROVIDED);
+                    SubLObject head = thread.secondMultipleValue();
+                    SubLObject following_strings = thread.thirdMultipleValue();
+                    SubLObject pos = thread.fourthMultipleValue();
+                    SubLObject denot = thread.fifthMultipleValue();
+                    SubLObject pred = thread.sixthMultipleValue();
+                    thread.resetMultipleValues();
+                    if (NIL != lexicon_vars.name_string_predP(pred)) {
+                        head = cycl_utilities.formula_arg2(formula, UNPROVIDED);
+                        denot = cycl_utilities.formula_arg1(formula, UNPROVIDED);
+                    }
+                    {
+                        SubLObject stream = NIL;
+                        try {
+                            stream = make_private_string_output_stream();
+                            princ($$$Bad_lexical_assertion, stream);
+                            if (NIL != head) {
+                                princ($str_alt92$__, stream);
+                                if (NIL != leading_strings) {
+                                    format(stream, $str_alt93$_S_, leading_strings);
+                                }
+                                if (NIL != head) {
+                                    format(stream, $str_alt93$_S_, head);
+                                }
+                                if (NIL != following_strings) {
+                                    format(stream, $str_alt93$_S_, following_strings);
+                                }
+                                if (NIL != denot) {
+                                    format(stream, $str_alt94$_____S, denot);
+                                }
+                                princ($str_alt95$_, stream);
+                            }
+                            summary = get_output_stream_string(stream);
+                        } finally {
+                            {
+                                SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                try {
+                                    $is_thread_performing_cleanupP$.bind(T, thread);
+                                    close(stream, UNPROVIDED);
+                                } finally {
+                                    $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                }
+                return summary;
+            }
+        }
+    }
+
+    public static final SubLObject cb_lexicon_bugzilla_component_for_term(SubLObject v_term) {
+        if (NIL != forts.fort_p(v_term)) {
+            return $$$Unlexified_Term;
+        } else {
+            if (NIL != lexicon_utilities.semtrans_arg_of_pred_cached(cycl_utilities.formula_arg0(assertions_high.assertion_formula(v_term)))) {
+                return $$$Bad_SemTrans;
+            } else {
+                return $$$Bad_Lexification;
+            }
+        }
+    }
+
+    public static final SubLObject cb_lexicon_bugzilla_comment_for_term(SubLObject v_term) {
+        if (NIL != assertion_handles.assertion_p(v_term)) {
+            return format(NIL, $str_alt96$I_found_the_following_assertion_p, v_term);
+        } else {
+            if ((NIL != forts.fort_p(v_term)) && (NIL != lexification_utilities.unlexifiedP(v_term, UNPROVIDED))) {
+                return format(NIL, $str_alt97$There_doesn_t_seem_to_be_any_lexi, v_term);
+            } else {
+                return format(NIL, $str_alt98$I_was_unhappy_with_the_lexificati, v_term);
+            }
+        }
+    }
+
+    /**
+     * Print a Bugzilla link for the lexical termsertion TERM.
+     */
+    @LispMethod(comment = "Print a Bugzilla link for the lexical termsertion TERM.")
+    public static final SubLObject cb_bugzilla_lexicon_link(SubLObject v_term) {
+        {
+            SubLObject lexicon_product = $$$NL;
+            SubLObject component = com.cyc.cycjava.cycl.cb_lexical_info.cb_lexicon_bugzilla_component_for_term(v_term);
+            SubLObject summary = com.cyc.cycjava.cycl.cb_lexical_info.cb_lexicon_bugzilla_summary_for_term(v_term);
+            SubLObject comment = com.cyc.cycjava.cycl.cb_lexical_info.cb_lexicon_bugzilla_comment_for_term(v_term);
+            return bugzilla.cb_bugzilla_link(lexicon_product, component, summary, comment, UNPROVIDED);
+        }
+    }
+
+    static private final SubLString $str_alt22$ = makeString("");
+
     public static final SubLFile me = new cb_lexical_info();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cb_lexical_info";
+ public static final String myName = "com.cyc.cycjava.cycl.cb_lexical_info";
 
-    public static final String myFingerPrint = "596f0d82210a7e378c6d0ff82c689151436651b7088b9847f486a3d7c25f9b12";
 
-    // defvar
-    // Definitions
-    // Whether the lexical info display should be verbose
-    public static final SubLSymbol $verbose_lexical_infoP$ = makeSymbol("*VERBOSE-LEXICAL-INFO?*");
+
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $lexical_strength_to_next_string$ = makeSymbol("*LEXICAL-STRENGTH-TO-NEXT-STRING*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $lexical_strength_to_next_title$ = makeSymbol("*LEXICAL-STRENGTH-TO-NEXT-TITLE*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $lexical_strength_img$ = makeSymbol("*LEXICAL-STRENGTH-IMG*");
 
-
-
-
-
-
-
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cb_show_nl_trie_prefix_newline_before_list$ = makeSymbol("*CB-SHOW-NL-TRIE-PREFIX-NEWLINE-BEFORE-LIST*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cb_show_nl_trie_prefix_newline_after_list$ = makeSymbol("*CB-SHOW-NL-TRIE-PREFIX-NEWLINE-AFTER-LIST*");
 
-
-
-
-
     // Internal Constants
-    public static final SubLSymbol $sym0$_VERBOSE_LEXICAL_INFO__ = makeSymbol("*VERBOSE-LEXICAL-INFO?*");
+    @LispMethod(comment = "Internal Constants")
+    public static final SubLSymbol $verbose_lexical_infoP$ = makeSymbol("*VERBOSE-LEXICAL-INFO?*");
 
-    public static final SubLList $list1 = list(makeSymbol("FORT-SPEC"));
+    static private final SubLList $list1 = list(makeSymbol("FORT-SPEC"));
 
-    public static final SubLString $str2$Could_not_determine_a_term_from__ = makeString("Could not determine a term from ~a");
+    static private final SubLString $str2$Could_not_determine_a_term_from__ = makeString("Could not determine a term from ~a");
 
-    public static final SubLSymbol CB_C_LEXICAL = makeSymbol("CB-C-LEXICAL");
-
-
+    private static final SubLSymbol CB_C_LEXICAL = makeSymbol("CB-C-LEXICAL");
 
     private static final SubLString $$$Lexical_Info = makeString("Lexical Info");
-
-
 
     private static final SubLString $str7$cb_c_lexical__A = makeString("cb-c-lexical&~A");
 
     private static final SubLString $str8$___a__ = makeString(" (~a+)");
 
     private static final SubLString $str9$___a_ = makeString(" (~a)");
-
-
 
     private static final SubLSymbol CB_LINK_LEXICAL = makeSymbol("CB-LINK-LEXICAL");
 
@@ -146,8 +227,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     private static final SubLString $str14$cb_c_verbose_lexical__A = makeString("cb-c-verbose-lexical&~A");
 
     private static final SubLString $str15$_Verbose_Lexical_Info_ = makeString("[Verbose Lexical Info]");
-
-
 
     private static final SubLSymbol CB_LINK_VERBOSE_LEXICAL = makeSymbol("CB-LINK-VERBOSE-LEXICAL");
 
@@ -173,10 +252,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str28$_meta_http_equiv__X_UA_Compatible = makeString("<meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\" >");
 
-
-
-
-
     private static final SubLString $str31$yui_skin_sam = makeString("yui-skin-sam");
 
     private static final SubLString $$$reloadFrameButton = makeString("reloadFrameButton");
@@ -199,8 +274,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str41$To_add_more_lexical_assertions__ = makeString("To add more lexical assertions: ");
 
-
-
     private static final SubLString $str43$To_clear_lexical_caches_for_this_ = makeString("To clear lexical caches for this term: ");
 
     private static final SubLSymbol $CLEAR_LEXICAL_CACHES = makeKeyword("CLEAR-LEXICAL-CACHES");
@@ -219,8 +292,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str51$_Function_Documentation_ = makeString("[Function Documentation]");
 
-
-
     private static final SubLString $str53$show_generation_function_document = makeString("show-generation-function-documentation");
 
     private static final SubLSymbol CB_LINK_GEN_FUNCTION_DOCUMENTATION = makeSymbol("CB-LINK-GEN-FUNCTION-DOCUMENTATION");
@@ -233,29 +304,13 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str58$__lang_mentioned_in_code_rang_ = makeString(" &lang;mentioned in code&rang;");
 
-
-
-
-
     private static final SubLInteger $int$80 = makeInteger(80);
 
     private static final SubLString $str62$_ = makeString(":");
 
-    private static final SubLList $list63 = list(reader_make_constant_shell(makeString("comment")), reader_make_constant_shell(makeString("expansion")), reader_make_constant_shell(makeString("cyclistNotes")), reader_make_constant_shell(makeString("exampleAssertions")), reader_make_constant_shell(makeString("exampleSentences")), reader_make_constant_shell(makeString("exampleNATs")));
-
-
+    private static final SubLList $list63 = list(reader_make_constant_shell("comment"), reader_make_constant_shell("expansion"), reader_make_constant_shell("cyclistNotes"), reader_make_constant_shell("exampleAssertions"), reader_make_constant_shell("exampleSentences"), reader_make_constant_shell("exampleNATs"));
 
     private static final SubLSymbol SHOW_GENERATION_FUNCTION_DOCUMENTATION = makeSymbol("SHOW-GENERATION-FUNCTION-DOCUMENTATION");
-
-    private static final SubLObject $$NLGenerationFunction = reader_make_constant_shell(makeString("NLGenerationFunction"));
-
-    private static final SubLObject $$isa = reader_make_constant_shell(makeString("isa"));
-
-
-
-
-
-
 
 
 
@@ -263,13 +318,7 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str73$_A_is_not_a__A = makeString("~A is not a ~A");
 
-
-
-
-
     private static final SubLString $$$continue_anyway = makeString("continue anyway");
-
-
 
     private static final SubLString $str78$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
 
@@ -283,11 +332,7 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym83$TERM__ = makeSymbol("TERM-<");
 
-
-
     private static final SubLSymbol $sym85$SPEC_ = makeSymbol("SPEC?");
-
-
 
     private static final SubLString $$$Table_of_Contents = makeString("Table of Contents");
 
@@ -299,13 +344,11 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym91$GENLS_ = makeSymbol("GENLS?");
 
+    private static final SubLList $list93 = list(cons(reader_make_constant_shell("PrimaryLexicalMapping"), makeString("default")), cons(makeKeyword("DEFAULT"), makeString("context")), cons(reader_make_constant_shell("ContextuallyDependentLexicalMapping"), makeString("vanishing")), cons(reader_make_constant_shell("VanishinglyRareLexicalMapping"), makeString("primary")));
 
+    private static final SubLList $list94 = list(cons(reader_make_constant_shell("PrimaryLexicalMapping"), makeString("Primary lexical mapping.  Click to weaken to default strength.")), cons(makeKeyword("DEFAULT"), makeString("Default strength mapping. Click to make this a contextually dependent mapping.")), cons(reader_make_constant_shell("ContextuallyDependentLexicalMapping"), makeString("Contextually dependent lexical mapping. Click to make this a vanishingly rare mapping.")), cons(reader_make_constant_shell("VanishinglyRareLexicalMapping"), makeString("Vanishingly rare lexical mapping. Click to make this a primary mapping.")));
 
-    private static final SubLList $list93 = list(cons(reader_make_constant_shell(makeString("PrimaryLexicalMapping")), makeString("default")), cons(makeKeyword("DEFAULT"), makeString("context")), cons(reader_make_constant_shell(makeString("ContextuallyDependentLexicalMapping")), makeString("vanishing")), cons(reader_make_constant_shell(makeString("VanishinglyRareLexicalMapping")), makeString("primary")));
-
-    private static final SubLList $list94 = list(cons(reader_make_constant_shell(makeString("PrimaryLexicalMapping")), makeString("Primary lexical mapping.  Click to weaken to default strength.")), cons(makeKeyword("DEFAULT"), makeString("Default strength mapping. Click to make this a contextually dependent mapping.")), cons(reader_make_constant_shell(makeString("ContextuallyDependentLexicalMapping")), makeString("Contextually dependent lexical mapping. Click to make this a vanishingly rare mapping.")), cons(reader_make_constant_shell(makeString("VanishinglyRareLexicalMapping")), makeString("Vanishingly rare lexical mapping. Click to make this a primary mapping.")));
-
-    private static final SubLList $list95 = list(cons(reader_make_constant_shell(makeString("PrimaryLexicalMapping")), makeKeyword("HTML-PRIMARY-LEXICAL-IMG")), cons(makeKeyword("DEFAULT"), makeKeyword("HTML-NOT-CONTEXTUAL-LEXICAL-IMG")), cons(reader_make_constant_shell(makeString("ContextuallyDependentLexicalMapping")), makeKeyword("HTML-CONTEXTUAL-LEXICAL-IMG")), cons(reader_make_constant_shell(makeString("VanishinglyRareLexicalMapping")), makeKeyword("HTML-VANISHING-LEXICAL-IMG")));
+    private static final SubLList $list95 = list(cons(reader_make_constant_shell("PrimaryLexicalMapping"), makeKeyword("HTML-PRIMARY-LEXICAL-IMG")), cons(makeKeyword("DEFAULT"), makeKeyword("HTML-NOT-CONTEXTUAL-LEXICAL-IMG")), cons(reader_make_constant_shell("ContextuallyDependentLexicalMapping"), makeKeyword("HTML-CONTEXTUAL-LEXICAL-IMG")), cons(reader_make_constant_shell("VanishinglyRareLexicalMapping"), makeKeyword("HTML-VANISHING-LEXICAL-IMG")));
 
     private static final SubLString $str96$javascript_setStrength__ = makeString("javascript:setStrength('");
 
@@ -314,8 +357,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     private static final SubLString $str98$___this__ = makeString("', this);");
 
     private static final SubLString $str99$padding_right__5px = makeString("padding-right: 5px");
-
-
 
     private static final SubLString $$$remove = makeString("remove");
 
@@ -333,19 +374,15 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
 
 
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
-    private static final SubLObject $$strengthOfLexicalMapping = reader_make_constant_shell(makeString("strengthOfLexicalMapping"));
 
 
+    private static final SubLObject $const112$ContextuallyDependentLexicalMappi = reader_make_constant_shell("ContextuallyDependentLexicalMapping");
 
-    private static final SubLObject $const112$ContextuallyDependentLexicalMappi = reader_make_constant_shell(makeString("ContextuallyDependentLexicalMapping"));
 
-    private static final SubLObject $$PrimaryLexicalMapping = reader_make_constant_shell(makeString("PrimaryLexicalMapping"));
 
-    private static final SubLObject $$VanishinglyRareLexicalMapping = reader_make_constant_shell(makeString("VanishinglyRareLexicalMapping"));
 
-    private static final SubLObject $$genStringAssertion = reader_make_constant_shell(makeString("genStringAssertion"));
+
+
 
     private static final SubLString $str116$genstring_gray_20x20_png = makeString("genstring-gray-20x20.png");
 
@@ -391,10 +428,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
 
-
-
-
-
     private static final SubLString $str140$generated_phrases_ = makeString("generated phrases:");
 
     private static final SubLString $str141$_n_a = makeString(" n/a");
@@ -404,8 +437,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     private static final SubLString $$$Lexical_Info_for_ = makeString("Lexical Info for ");
 
     private static final SubLString $str144$WordNet_Synset_ = makeString("WordNet Synset:");
-
-    private static final SubLObject $$InferencePSC = reader_make_constant_shell(makeString("InferencePSC"));
 
 
 
@@ -425,8 +456,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str154$_ = makeString("'");
 
-
-
     private static final SubLString $str156$___A_ = makeString(" (~A)");
 
     private static final SubLString $$$unknown_agreement = makeString("unknown agreement");
@@ -436,8 +465,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     private static final SubLString $str159$This_paraphrase_is_cached_ = makeString("This paraphrase is cached.");
 
     private static final SubLString $$$Default_generation_template = makeString("Default generation template");
-
-
 
     private static final SubLString $str162$Other_generation_templates_ = makeString("Other generation templates:");
 
@@ -457,8 +484,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     public static final SubLSymbol $cb_show_nl_trie_filter_prefix$ = makeSymbol("*CB-SHOW-NL-TRIE-FILTER-PREFIX*");
 
-
-
     public static final SubLSymbol $cb_nl_trie_keylist_cutoff$ = makeSymbol("*CB-NL-TRIE-KEYLIST-CUTOFF*");
 
     private static final SubLString $str173$_e0eeee = makeString("#e0eeee");
@@ -471,13 +496,9 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLSymbol $SAM_AUTOCOMPLETE_CSS = makeKeyword("SAM-AUTOCOMPLETE-CSS");
 
-
-
     private static final SubLString $$$Refresh_Frames = makeString("Refresh Frames");
 
     private static final SubLString $str180$No_NL_trie_loaded_ = makeString("No NL trie loaded.");
-
-
 
     private static final SubLString $str182$Sub_Entry_Clusters = makeString("Sub-Entry Clusters");
 
@@ -488,10 +509,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     private static final SubLString $str185$_Use_the_prefix_short_cuts_to_nav = makeString(" Use the prefix short cuts to navigate to a sub-entry group.");
 
     private static final SubLString $$$Prefix_Shortcuts = makeString("Prefix Shortcuts");
-
-
-
-
 
     private static final SubLString $str189$Entries_starting_with___A_ = makeString("Entries starting with '~A'");
 
@@ -517,8 +534,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str200$__ = makeString("] ");
 
-
-
     private static final SubLSymbol $CB_SHOW_NL_TRIE_SET_PREFIX = makeKeyword("CB-SHOW-NL-TRIE-SET-PREFIX");
 
     private static final SubLString $str203$_ = makeString("]");
@@ -529,21 +544,17 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLString $str206$cb_show_nl_trie_set_prefix__A = makeString("cb-show-nl-trie-set-prefix&~A");
 
-
-
     private static final SubLSymbol CB_LINK_CB_SHOW_NL_TRIE_SET_PREFIX = makeSymbol("CB-LINK-CB-SHOW-NL-TRIE-SET-PREFIX");
 
     private static final SubLList $list209 = list(makeSymbol("&KEY"), makeSymbol("PATH"), makeSymbol("PREFIX"), makeSymbol("WIDTH"));
 
-    private static final SubLList $list210 = list(makeKeyword("PATH"), makeKeyword("PREFIX"), makeKeyword("WIDTH"));
+    private static final SubLList $list210 = list($PATH, makeKeyword("PREFIX"), makeKeyword("WIDTH"));
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
     private static final SubLSymbol CB_SHOW_NL_TRIE_SET_PREFIX = makeSymbol("CB-SHOW-NL-TRIE-SET-PREFIX");
 
     private static final SubLString $str213$Sub_Entries = makeString("Sub-Entries");
-
-
 
     private static final SubLSymbol $SHOW_NL_TRIE_SPECIFIC = makeKeyword("SHOW-NL-TRIE-SPECIFIC");
 
@@ -563,10 +574,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     private static final SubLInteger $int$50 = makeInteger(50);
 
-
-
-
-
     private static final SubLString $$$The_entry_specification = makeString("The entry specification");
 
     private static final SubLString $str227$returned_no_NL_trie_entries__Plea = makeString("returned no NL trie entries. Please try again");
@@ -582,8 +589,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     private static final SubLSymbol CB_SHOW_NL_TRIE_STARTING_AT_ENTRY = makeSymbol("CB-SHOW-NL-TRIE-STARTING-AT-ENTRY");
 
     private static final SubLString $str233$Dont_know_how_to_interpret__A_as_ = makeString("Dont know how to interpret ~A as cluster.");
-
-
 
     private static final SubLString $str235$_ = makeString("(");
 
@@ -611,6 +616,29 @@ public final class cb_lexical_info extends SubLTranslatedFile {
 
     public static final SubLSymbol $lexicon_webservice_port$ = makeSymbol("*LEXICON-WEBSERVICE-PORT*");
 
+    public static final SubLObject cb_c_lexical_alt(SubLObject args) {
+        {
+            SubLObject datum = args;
+            SubLObject current = datum;
+            SubLObject fort_spec = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            fort_spec = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject fort = cb_guess_fort(fort_spec, UNPROVIDED);
+                    if (NIL == forts.fort_p(fort)) {
+                        return cb_error($str_alt2$Could_not_determine_a_term_from__, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    }
+                    com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal(fort, UNPROVIDED, UNPROVIDED);
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list_alt1);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject cb_c_lexical(final SubLObject args) {
         SubLObject fort_spec = NIL;
         destructuring_bind_must_consp(args, args, $list1);
@@ -626,6 +654,51 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             cdestructuring_bind_error(args, $list1);
         }
         return NIL;
+    }
+
+    public static final SubLObject cb_link_lexical(SubLObject fort, SubLObject count, SubLObject linktext) {
+        if (count == UNPROVIDED) {
+            count = NIL;
+        }
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == linktext) {
+                linktext = $$$Lexical_Info;
+            }
+            {
+                SubLObject frame_name_var = cb_frame_name($CONTENT);
+                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                cyc_cgi_url_int();
+                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt6$cb_c_lexical__A, cb_fort_identifier(fort));
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (NIL != frame_name_var) {
+                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(frame_name_var);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_princ(linktext);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+            }
+            if (NIL != count) {
+                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt7$___a_, count);
+            }
+            return fort;
+        }
     }
 
     public static SubLObject cb_link_lexical(final SubLObject fort, SubLObject count, SubLObject linktext, SubLObject estimateP) {
@@ -674,6 +747,29 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return fort;
     }
 
+    public static final SubLObject cb_c_verbose_lexical_alt(SubLObject args) {
+        {
+            SubLObject datum = args;
+            SubLObject current = datum;
+            SubLObject fort_spec = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt1);
+            fort_spec = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject fort = cb_guess_fort(fort_spec, UNPROVIDED);
+                    if (NIL == forts.fort_p(fort)) {
+                        return cb_error($str_alt2$Could_not_determine_a_term_from__, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    }
+                    com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal(fort, T, UNPROVIDED);
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list_alt1);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject cb_c_verbose_lexical(final SubLObject args) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         SubLObject fort_spec = NIL;
@@ -696,6 +792,39 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             cdestructuring_bind_error(args, $list1);
         }
         return NIL;
+    }
+
+    public static final SubLObject cb_link_verbose_lexical_alt(SubLObject fort) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject frame_name_var = cb_frame_name($CONTENT);
+                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                cyc_cgi_url_int();
+                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt11$cb_c_verbose_lexical__A, cb_fort_identifier(fort));
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (NIL != frame_name_var) {
+                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(frame_name_var);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_princ($str_alt12$_Verbose_Lexical_Info_);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+            }
+            return fort;
+        }
     }
 
     public static SubLObject cb_link_verbose_lexical(final SubLObject fort) {
@@ -725,6 +854,40 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return fort;
     }
 
+    /**
+     * Formats lexical information for FORT in the current HTML form (as done in Cyc Browser)
+     *
+     * @return nil
+     * @unknown tom
+     */
+    @LispMethod(comment = "Formats lexical information for FORT in the current HTML form (as done in Cyc Browser)\r\n\r\n@return nil\r\n@unknown tom")
+    public static final SubLObject cb_print_lexical_information_alt(SubLObject fort, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal_print_header(fort, verboseP);
+        {
+            SubLObject lexical_assertions = com.cyc.cycjava.cycl.cb_lexical_info.cb_lexical_information(fort, verboseP);
+            if (NIL != lexical_assertions) {
+                lexical_assertions = com.cyc.cycjava.cycl.cb_lexical_info.cb_sort_lexical_information(lexical_assertions);
+                com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal_print_assertions(lexical_assertions, verboseP);
+            } else {
+                html_newline(UNPROVIDED);
+                html_indent(THREE_INTEGER);
+                html_princ($str_alt15$No_lexical_information_found_);
+                html_newline(TWO_INTEGER);
+            }
+        }
+        return NIL;
+    }
+
+    /**
+     * Formats lexical information for FORT in the current HTML form (as done in Cyc Browser)
+     *
+     * @return nil
+     * @unknown tom
+     */
+    @LispMethod(comment = "Formats lexical information for FORT in the current HTML form (as done in Cyc Browser)\r\n\r\n@return nil\r\n@unknown tom")
     public static SubLObject cb_print_lexical_information(final SubLObject fort, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -743,6 +906,13 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject cb_lexical_information(SubLObject fort, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        return NIL != lexicon_accessors.quick_lexical_wordP(fort, UNPROVIDED) ? ((SubLObject) (com.cyc.cycjava.cycl.cb_lexical_info.cb_lexical_information_for_word_unit(fort, verboseP))) : com.cyc.cycjava.cycl.cb_lexical_info.cb_lexical_information_default(fort, UNPROVIDED);
+    }
+
     public static SubLObject cb_lexical_information(final SubLObject fort, SubLObject verboseP, SubLObject index_limit) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -753,6 +923,37 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL != lexicon_accessors.quick_lexical_wordP(fort, UNPROVIDED) ? cb_lexical_information_for_word_unit(fort, verboseP) : cb_lexical_information_default(fort, NIL, index_limit);
     }
 
+    /**
+     *
+     *
+     * @return listp; lexical assertions or inferred sentences for WU
+     */
+    @LispMethod(comment = "@return listp; lexical assertions or inferred sentences for WU")
+    public static final SubLObject cb_lexical_information_for_word_unit_alt(SubLObject wu, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        {
+            SubLObject semtrans = NIL;
+            SubLObject cdolist_list_var = lexicon_accessors.pos_of_word(wu, UNPROVIDED);
+            SubLObject pos = NIL;
+            for (pos = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , pos = cdolist_list_var.first()) {
+                {
+                    SubLObject asserted_pos_semtrans = lexicon_accessors.semtrans_assertion_lookup(wu, pos, UNPROVIDED);
+                    SubLObject pos_semtrans = (NIL != asserted_pos_semtrans) ? ((SubLObject) (asserted_pos_semtrans)) : NIL != verboseP ? ((SubLObject) (lexicon_accessors.semtrans_sentence_infer(wu, pos))) : NIL;
+                    semtrans = nconc(semtrans, pos_semtrans);
+                }
+            }
+            return semtrans;
+        }
+    }
+
+    /**
+     *
+     *
+     * @return listp; lexical assertions or inferred sentences for WU
+     */
+    @LispMethod(comment = "@return listp; lexical assertions or inferred sentences for WU")
     public static SubLObject cb_lexical_information_for_word_unit(final SubLObject wu, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -769,6 +970,38 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             pos = cdolist_list_var.first();
         } 
         return semtrans;
+    }
+
+    /**
+     *
+     *
+     * @return listp; lexical assertions on FORT in relevant mts
+     * @unknown baxter
+     */
+    @LispMethod(comment = "@return listp; lexical assertions on FORT in relevant mts\r\n@unknown baxter")
+    public static final SubLObject cb_lexical_information_default(SubLObject fort, SubLObject filter_mtsP) {
+        if (filter_mtsP == UNPROVIDED) {
+            filter_mtsP = NIL;
+        }
+        {
+            SubLObject display_list = lexicon_utilities.all_lexifications_for_term(fort);
+            if ((NIL != filter_mtsP) && (NIL != cb_viewpoint.cb_use_mts_filter())) {
+                {
+                    SubLObject display_list_pruned = NIL;
+                    SubLObject filter_mts = (NIL != cb_mts_filter_use_genlmt()) ? ((SubLObject) (genl_mts.union_all_genl_mts(cb_viewpoint.cb_mts_filter(), UNPROVIDED, UNPROVIDED))) : cb_viewpoint.cb_mts_filter();
+                    SubLObject cdolist_list_var = display_list;
+                    SubLObject as = NIL;
+                    for (as = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , as = cdolist_list_var.first()) {
+                        if (NIL != find(assertions_high.assertion_mt(as), filter_mts, $sym16$HLMT_EQUAL_, UNPROVIDED, UNPROVIDED, UNPROVIDED)) {
+                            display_list_pruned = cons(as, display_list_pruned);
+                        }
+                    }
+                    return display_list_pruned;
+                }
+            } else {
+                return display_list;
+            }
+        }
     }
 
     public static SubLObject cb_lexical_information_default(final SubLObject fort, SubLObject filter_mtsP, SubLObject index_limit) {
@@ -801,6 +1034,25 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return values(display_list, incompleteP);
     }
 
+    public static final SubLObject cb_sort_lexical_information_alt(SubLObject lexical_info) {
+        {
+            SubLObject asserted = NIL;
+            SubLObject inferred = NIL;
+            SubLObject cdolist_list_var = lexical_info;
+            SubLObject item = NIL;
+            for (item = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , item = cdolist_list_var.first()) {
+                if (NIL != assertion_handles.assertion_p(item)) {
+                    asserted = cons(item, asserted);
+                } else {
+                    inferred = cons(item, inferred);
+                }
+            }
+            asserted = Sort.sort(asserted, symbol_function($sym17$STRING_), symbol_function(STR_ASSERTION_ARG0));
+            asserted = Sort.sort(asserted, symbol_function($sym17$STRING_), symbol_function(STR_ASSERTION_MT));
+            return append(asserted, inferred);
+        }
+    }
+
     public static SubLObject cb_sort_lexical_information(final SubLObject lexical_info) {
         SubLObject asserted = NIL;
         SubLObject inferred = NIL;
@@ -822,6 +1074,100 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return append(asserted, inferred);
     }
 
+    /**
+     *
+     *
+     * @unknown baxter
+    Calculate and display lexical assertions on FORT
+     */
+    @LispMethod(comment = "@unknown baxter\r\nCalculate and display lexical assertions on FORT")
+    public static final SubLObject cb_c_lexical_internal_alt(SubLObject fort, SubLObject verboseP, SubLObject clear_cachesP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        if (clear_cachesP == UNPROVIDED) {
+            clear_cachesP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != clear_cachesP) {
+                lexicon_utilities.clear_lexical_info_caches(fort);
+            }
+            {
+                SubLObject title = format(NIL, $str_alt20$_ALexical_info_for__S, NIL != verboseP ? ((SubLObject) ($str_alt21$Verbose_)) : $str_alt22$, fort);
+                SubLObject title_var = title;
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_id_space_id_generator$.currentBinding(thread);
+                    try {
+                        html_macros.$html_id_space_id_generator$.bind(NIL != integer_sequence_generator.integer_sequence_generator_p(html_macros.$html_id_space_id_generator$.getDynamicValue(thread)) ? ((SubLObject) (html_macros.$html_id_space_id_generator$.getDynamicValue(thread))) : integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+                        html_markup(html_macros.$html_html_head$.getGlobalValue());
+                        html_markup(html_macros.$html_head_head$.getGlobalValue());
+                        html_macros.html_head_content_type();
+                        cb_head_shortcut_icon();
+                        html_meta_robot_instructions($cb_permit_robots_to_indexP$.getDynamicValue(thread), $cb_permit_robots_to_followP$.getDynamicValue(thread));
+                        if (NIL != title_var) {
+                            html_source_readability_terpri(UNPROVIDED);
+                            html_markup(html_macros.$html_title_head$.getGlobalValue());
+                            html_princ(title_var);
+                            html_markup(html_macros.$html_title_tail$.getGlobalValue());
+                        }
+                        html_markup(html_macros.$html_head_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                        {
+                            SubLObject _prev_bind_0_1 = html_macros.$html_inside_bodyP$.currentBinding(thread);
+                            try {
+                                html_macros.$html_inside_bodyP$.bind(T, thread);
+                                html_markup(html_macros.$html_body_head$.getGlobalValue());
+                                if (NIL != html_macros.$html_default_bgcolor$.getDynamicValue(thread)) {
+                                    html_markup(html_macros.$html_body_bgcolor$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(html_color(html_macros.$html_default_bgcolor$.getDynamicValue(thread)));
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                if (true) {
+                                    html_markup(html_macros.$html_body_class$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup($str_alt23$yui_skin_sam);
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0_2 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                        com.cyc.cycjava.cycl.cb_lexical_info.cb_print_lexical_information(fort, verboseP);
+                                        html_newline(UNPROVIDED);
+                                        com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal_links(fort, verboseP);
+                                        html_source_readability_terpri(UNPROVIDED);
+                                        html_copyright_notice();
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_2, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_body_tail$.getGlobalValue());
+                                html_source_readability_terpri(UNPROVIDED);
+                            } finally {
+                                html_macros.$html_inside_bodyP$.rebind(_prev_bind_0_1, thread);
+                            }
+                        }
+                        html_markup(html_macros.$html_html_tail$.getGlobalValue());
+                        html_source_readability_terpri(UNPROVIDED);
+                    } finally {
+                        html_macros.$html_id_space_id_generator$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Calculate and display lexical assertions on FORT
+     */
+    @LispMethod(comment = "@unknown baxter\r\nCalculate and display lexical assertions on FORT")
     public static SubLObject cb_c_lexical_internal(final SubLObject fort, SubLObject verboseP, SubLObject clear_cachesP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -940,6 +1286,54 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Display additional lexical links for FORT
+     *
+     * @unknown This is currently shown at bottom of lexical info page
+     * @unknown tom
+     */
+    @LispMethod(comment = "Display additional lexical links for FORT\r\n\r\n@unknown This is currently shown at bottom of lexical info page\r\n@unknown tom")
+    public static final SubLObject cb_c_lexical_internal_links_alt(SubLObject fort, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        html_markup(html_macros.$html_heading_head$.getGlobalValue());
+        html_markup(FOUR_INTEGER);
+        html_char(CHAR_greater, UNPROVIDED);
+        html_princ($str_alt24$Additional_lexical_links_);
+        html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+        html_markup(FOUR_INTEGER);
+        html_char(CHAR_greater, UNPROVIDED);
+        if (NIL != kb_accessors.relationP(fort)) {
+            html_princ($str_alt25$To_see_documentation_on_NL_genera);
+            cb_link($GEN_FUNCTION_DOCUMENTATION, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            html_newline(UNPROVIDED);
+        }
+        if (NIL != lexification_utilities.unlexifiedP(fort, UNPROVIDED)) {
+            html_princ($str_alt27$This_term_is_not_sufficiently_lex);
+        } else {
+            html_princ($str_alt28$To_add_more_lexical_assertions__);
+        }
+        cb_link($LEXIFY_TERM, fort, NIL, T, UNPROVIDED, UNPROVIDED);
+        html_newline(UNPROVIDED);
+        html_princ($str_alt30$To_clear_lexical_caches_for_this_);
+        cb_link($CLEAR_LEXICAL_CACHES, fort, verboseP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+        html_newline(UNPROVIDED);
+        if (NIL == verboseP) {
+            html_princ($str_alt32$To_see_more__);
+            cb_link($VERBOSE_LEXICAL, fort, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            html_newline(UNPROVIDED);
+        }
+        return T;
+    }
+
+    /**
+     * Display additional lexical links for FORT
+     *
+     * @unknown This is currently shown at bottom of lexical info page
+     * @unknown tom
+     */
+    @LispMethod(comment = "Display additional lexical links for FORT\r\n\r\n@unknown This is currently shown at bottom of lexical info page\r\n@unknown tom")
     public static SubLObject cb_c_lexical_internal_links(final SubLObject fort, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -972,6 +1366,48 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             html_newline(UNPROVIDED);
         }
         return T;
+    }
+
+    public static final SubLObject cb_link_clear_lexical_caches_alt(SubLObject v_term, SubLObject verboseP, SubLObject linktext) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL == linktext) {
+                linktext = $str_alt33$_Clear_Lexical_Caches_;
+            }
+            {
+                SubLObject frame_name_var = cb_frame_name($CONTENT);
+                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                cyc_cgi_url_int();
+                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt34$clear_lexical_caches_for_term_wit, cb_fort_identifier(v_term), verboseP);
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (NIL != frame_name_var) {
+                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(frame_name_var);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_princ(linktext);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_link_clear_lexical_caches(final SubLObject v_term, SubLObject verboseP, SubLObject linktext) {
@@ -1010,6 +1446,34 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_lexical_caches_for_term_with_id_alt(SubLObject args) {
+        {
+            SubLObject datum = args;
+            SubLObject current = datum;
+            SubLObject fort_spec = NIL;
+            SubLObject verbose = NIL;
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            fort_spec = current.first();
+            current = current.rest();
+            destructuring_bind_must_consp(current, datum, $list_alt36);
+            verbose = current.first();
+            current = current.rest();
+            if (NIL == current) {
+                {
+                    SubLObject fort = cb_guess_fort(fort_spec, UNPROVIDED);
+                    SubLObject verboseP = read_from_string(verbose, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    if (NIL == forts.fort_p(fort)) {
+                        return cb_error($str_alt2$Could_not_determine_a_term_from__, fort_spec, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                    }
+                    com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal(fort, verboseP, T);
+                }
+            } else {
+                cdestructuring_bind_error(datum, $list_alt36);
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject clear_lexical_caches_for_term_with_id(final SubLObject args) {
         SubLObject fort_spec = NIL;
         SubLObject verbose = NIL;
@@ -1030,6 +1494,45 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             cdestructuring_bind_error(args, $list49);
         }
         return NIL;
+    }
+
+    public static final SubLObject cb_link_gen_function_documentation_alt(SubLObject linktext) {
+        if (linktext == UNPROVIDED) {
+            linktext = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (!linktext.isString()) {
+                linktext = $str_alt38$_Function_Documentation_;
+            }
+            {
+                SubLObject frame_name_var = cb_frame_name($MAIN);
+                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                cyc_cgi_url_int();
+                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt40$show_generation_function_document);
+                html_char(CHAR_quotation, UNPROVIDED);
+                if (NIL != frame_name_var) {
+                    html_markup(html_macros.$html_anchor_target$.getGlobalValue());
+                    html_char(CHAR_quotation, UNPROVIDED);
+                    html_markup(frame_name_var);
+                    html_char(CHAR_quotation, UNPROVIDED);
+                }
+                html_char(CHAR_greater, UNPROVIDED);
+                {
+                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                    try {
+                        html_macros.$html_safe_print$.bind(T, thread);
+                        html_princ(linktext);
+                    } finally {
+                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_link_gen_function_documentation(SubLObject linktext) {
@@ -1065,6 +1568,333 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Display documentation for instances of #$NLGenerationFunction.
+     *
+     * @unknown baxter
+     */
+    @LispMethod(comment = "Display documentation for instances of #$NLGenerationFunction.\r\n\r\n@unknown baxter")
+    public static final SubLObject show_generation_function_documentation_alt(SubLObject args) {
+        if (args == UNPROVIDED) {
+            args = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject table_entries = com.cyc.cycjava.cycl.cb_lexical_info.generation_function_alist();
+                html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                html_markup(ONE_INTEGER);
+                html_char(CHAR_greater, UNPROVIDED);
+                html_princ($str_alt42$NL_Generation_Function_Documentat);
+                html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                html_markup(ONE_INTEGER);
+                html_char(CHAR_greater, UNPROVIDED);
+                com.cyc.cycjava.cycl.cb_lexical_info.generation_function_toc(table_entries);
+                html_hr(UNPROVIDED, UNPROVIDED);
+                {
+                    SubLObject cdolist_list_var = table_entries;
+                    SubLObject cons = NIL;
+                    for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
+                        {
+                            SubLObject datum = cons;
+                            SubLObject current = datum;
+                            SubLObject phrase_type = NIL;
+                            SubLObject functions = NIL;
+                            destructuring_bind_must_consp(current, datum, $list_alt43);
+                            phrase_type = current.first();
+                            current = current.rest();
+                            functions = current;
+                            {
+                                SubLObject name = format(NIL, $str_alt44$_A, cb_string_for_fort(phrase_type));
+                                html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                                if (NIL != name) {
+                                    html_markup(html_macros.$html_anchor_name$.getGlobalValue());
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                    html_markup(name);
+                                    html_char(CHAR_quotation, UNPROVIDED);
+                                }
+                                html_char(CHAR_greater, UNPROVIDED);
+                                {
+                                    SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                                    try {
+                                        html_macros.$html_safe_print$.bind(T, thread);
+                                    } finally {
+                                        html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                                html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+                            }
+                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            cb_form(phrase_type, UNPROVIDED, UNPROVIDED);
+                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                            html_markup(TWO_INTEGER);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            html_markup(html_macros.$html_table_head$.getGlobalValue());
+                            if (true) {
+                                html_markup(html_macros.$html_table_border$.getGlobalValue());
+                                html_char(CHAR_quotation, UNPROVIDED);
+                                html_markup(ZERO_INTEGER);
+                                html_char(CHAR_quotation, UNPROVIDED);
+                            }
+                            html_char(CHAR_greater, UNPROVIDED);
+                            {
+                                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    {
+                                        SubLObject list_var = NIL;
+                                        SubLObject function = NIL;
+                                        SubLObject n = NIL;
+                                        for (list_var = functions, function = list_var.first(), n = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , function = list_var.first() , n = add(ONE_INTEGER, n)) {
+                                            html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                            html_char(CHAR_greater, UNPROVIDED);
+                                            {
+                                                SubLObject _prev_bind_0_3 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                try {
+                                                    html_macros.$html_safe_print$.bind(T, thread);
+                                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                    if (true) {
+                                                        html_markup(html_macros.$html_table_data_width$.getGlobalValue());
+                                                        html_char(CHAR_quotation, UNPROVIDED);
+                                                        html_markup(TEN_INTEGER);
+                                                        html_char(CHAR_quotation, UNPROVIDED);
+                                                    }
+                                                    html_char(CHAR_greater, UNPROVIDED);
+                                                    {
+                                                        SubLObject _prev_bind_0_4 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                        try {
+                                                            html_macros.$html_safe_print$.bind(T, thread);
+                                                        } finally {
+                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_4, thread);
+                                                        }
+                                                    }
+                                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                    if (true) {
+                                                        html_markup(html_macros.$html_table_data_colspan$.getGlobalValue());
+                                                        html_char(CHAR_quotation, UNPROVIDED);
+                                                        html_markup(TWO_INTEGER);
+                                                        html_char(CHAR_quotation, UNPROVIDED);
+                                                    }
+                                                    html_char(CHAR_greater, UNPROVIDED);
+                                                    {
+                                                        SubLObject _prev_bind_0_5 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                        try {
+                                                            html_macros.$html_safe_print$.bind(T, thread);
+                                                            html_markup(html_macros.$html_heading_head$.getGlobalValue());
+                                                            html_markup(THREE_INTEGER);
+                                                            html_char(CHAR_greater, UNPROVIDED);
+                                                            cb_form(function, UNPROVIDED, UNPROVIDED);
+                                                            if (NIL != constant_completion.constant_mentioned_in_codeP(function)) {
+                                                                html_markup($str_alt45$__lang_mentioned_in_code_rang_);
+                                                            }
+                                                            html_markup(html_macros.$html_heading_tail$.getGlobalValue());
+                                                            html_markup(THREE_INTEGER);
+                                                            html_char(CHAR_greater, UNPROVIDED);
+                                                        } finally {
+                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_5, thread);
+                                                        }
+                                                    }
+                                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                                } finally {
+                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_3, thread);
+                                                }
+                                            }
+                                            html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                            html_source_readability_terpri(UNPROVIDED);
+                                            {
+                                                SubLObject cdolist_list_var_6 = $list_alt50;
+                                                SubLObject doc_pred = NIL;
+                                                for (doc_pred = cdolist_list_var_6.first(); NIL != cdolist_list_var_6; cdolist_list_var_6 = cdolist_list_var_6.rest() , doc_pred = cdolist_list_var_6.first()) {
+                                                    {
+                                                        SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(cb_tools.cb_paraphrase_mt());
+                                                        {
+                                                            SubLObject _prev_bind_0_7 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                            SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                            SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                                            try {
+                                                                mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                                                mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                                                mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                                                {
+                                                                    SubLObject doc_assertions = kb_mapping.gather_gaf_arg_index(function, ONE_INTEGER, doc_pred, UNPROVIDED, UNPROVIDED);
+                                                                    if (NIL != doc_assertions) {
+                                                                        html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                                                        html_char(CHAR_greater, UNPROVIDED);
+                                                                        {
+                                                                            SubLObject _prev_bind_0_8 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                                            try {
+                                                                                html_macros.$html_safe_print$.bind(T, thread);
+                                                                                html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                                                if (true) {
+                                                                                    html_markup(html_macros.$html_table_data_width$.getGlobalValue());
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                    html_markup(TEN_INTEGER);
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                }
+                                                                                html_char(CHAR_greater, UNPROVIDED);
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_9 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                                                    try {
+                                                                                        html_macros.$html_safe_print$.bind(T, thread);
+                                                                                    } finally {
+                                                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_9, thread);
+                                                                                    }
+                                                                                }
+                                                                                html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                                                                html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                                                if (true) {
+                                                                                    html_markup(html_macros.$html_table_data_align$.getGlobalValue());
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                    html_markup(html_align($RIGHT));
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                }
+                                                                                if (true) {
+                                                                                    html_markup(html_macros.$html_table_data_valign$.getGlobalValue());
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                    html_markup(html_align($TOP));
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                }
+                                                                                if (true) {
+                                                                                    html_markup(html_macros.$html_table_data_width$.getGlobalValue());
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                    html_markup($int$80);
+                                                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                                                }
+                                                                                html_char(CHAR_greater, UNPROVIDED);
+                                                                                {
+                                                                                    SubLObject _prev_bind_0_10 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                                                    try {
+                                                                                        html_macros.$html_safe_print$.bind(T, thread);
+                                                                                        html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                                                                                        cb_form(doc_pred, UNPROVIDED, UNPROVIDED);
+                                                                                        html_princ($str_alt49$_);
+                                                                                        html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                                                                                    } finally {
+                                                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_10, thread);
+                                                                                    }
+                                                                                }
+                                                                                html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                                                                {
+                                                                                    SubLObject cdolist_list_var_11 = doc_assertions;
+                                                                                    SubLObject doc_as = NIL;
+                                                                                    for (doc_as = cdolist_list_var_11.first(); NIL != cdolist_list_var_11; cdolist_list_var_11 = cdolist_list_var_11.rest() , doc_as = cdolist_list_var_11.first()) {
+                                                                                        html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                                                        html_char(CHAR_greater, UNPROVIDED);
+                                                                                        {
+                                                                                            SubLObject _prev_bind_0_12 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                                                            try {
+                                                                                                html_macros.$html_safe_print$.bind(T, thread);
+                                                                                                cb_assertion_link_binary(doc_as, T);
+                                                                                                html_newline(UNPROVIDED);
+                                                                                            } finally {
+                                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_12, thread);
+                                                                                            }
+                                                                                        }
+                                                                                        html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_8, thread);
+                                                                            }
+                                                                        }
+                                                                        html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                                                        html_source_readability_terpri(UNPROVIDED);
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                                                mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                                                mt_relevance_macros.$mt$.rebind(_prev_bind_0_7, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                            html_char(CHAR_greater, UNPROVIDED);
+                                            {
+                                                SubLObject _prev_bind_0_13 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                try {
+                                                    html_macros.$html_safe_print$.bind(T, thread);
+                                                    html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                    if (true) {
+                                                        html_markup(html_macros.$html_table_data_colspan$.getGlobalValue());
+                                                        html_char(CHAR_quotation, UNPROVIDED);
+                                                        html_markup(THREE_INTEGER);
+                                                        html_char(CHAR_quotation, UNPROVIDED);
+                                                    }
+                                                    html_char(CHAR_greater, UNPROVIDED);
+                                                    {
+                                                        SubLObject _prev_bind_0_14 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                        try {
+                                                            html_macros.$html_safe_print$.bind(T, thread);
+                                                            html_hr(UNPROVIDED, UNPROVIDED);
+                                                        } finally {
+                                                            html_macros.$html_safe_print$.rebind(_prev_bind_0_14, thread);
+                                                        }
+                                                    }
+                                                    html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                                } finally {
+                                                    html_macros.$html_safe_print$.rebind(_prev_bind_0_13, thread);
+                                                }
+                                            }
+                                            html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                            html_source_readability_terpri(UNPROVIDED);
+                                        }
+                                        html_markup(html_macros.$html_table_row_head$.getGlobalValue());
+                                        html_char(CHAR_greater, UNPROVIDED);
+                                        {
+                                            SubLObject _prev_bind_0_15 = html_macros.$html_safe_print$.currentBinding(thread);
+                                            try {
+                                                html_macros.$html_safe_print$.bind(T, thread);
+                                                html_markup(html_macros.$html_table_data_head$.getGlobalValue());
+                                                if (true) {
+                                                    html_markup(html_macros.$html_table_data_colspan$.getGlobalValue());
+                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                    html_markup(THREE_INTEGER);
+                                                    html_char(CHAR_quotation, UNPROVIDED);
+                                                }
+                                                html_char(CHAR_greater, UNPROVIDED);
+                                                {
+                                                    SubLObject _prev_bind_0_16 = html_macros.$html_safe_print$.currentBinding(thread);
+                                                    try {
+                                                        html_macros.$html_safe_print$.bind(T, thread);
+                                                        html_hr(UNPROVIDED, UNPROVIDED);
+                                                    } finally {
+                                                        html_macros.$html_safe_print$.rebind(_prev_bind_0_16, thread);
+                                                    }
+                                                }
+                                                html_markup(html_macros.$html_table_data_tail$.getGlobalValue());
+                                            } finally {
+                                                html_macros.$html_safe_print$.rebind(_prev_bind_0_15, thread);
+                                            }
+                                        }
+                                        html_markup(html_macros.$html_table_row_tail$.getGlobalValue());
+                                        html_source_readability_terpri(UNPROVIDED);
+                                    }
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                            html_markup(html_macros.$html_table_tail$.getGlobalValue());
+                        }
+                    }
+                }
+            }
+            cb_back_button($SELF, UNPROVIDED);
+            return NIL;
+        }
+    }
+
+    /**
+     * Display documentation for instances of #$NLGenerationFunction.
+     *
+     * @unknown baxter
+     */
+    @LispMethod(comment = "Display documentation for instances of #$NLGenerationFunction.\r\n\r\n@unknown baxter")
     public static SubLObject show_generation_function_documentation(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -1324,6 +2154,508 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * PHRASE-TYPE -> FUNCTION+
+     */
+    @LispMethod(comment = "PHRASE-TYPE -> FUNCTION+")
+    public static final SubLObject generation_function_alist_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject table = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
+                SubLObject pph_mt = cb_tools.cb_paraphrase_mt();
+                SubLObject table_entries = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(pph_mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        {
+                            SubLObject node_var = $$NLGenerationFunction;
+                            {
+                                SubLObject _prev_bind_0_17 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                SubLObject _prev_bind_1_18 = sbhl_marking_vars.$sbhl_gather_space$.currentBinding(thread);
+                                try {
+                                    sbhl_module_vars.$sbhl_module$.bind(sbhl_module_vars.get_sbhl_module($$isa), thread);
+                                    sbhl_marking_vars.$sbhl_gather_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                    {
+                                        SubLObject node_var_19 = node_var;
+                                        SubLObject deck_type = (false) ? ((SubLObject) ($QUEUE)) : $STACK;
+                                        SubLObject recur_deck = deck.create_deck(deck_type);
+                                        {
+                                            SubLObject _prev_bind_0_20 = sbhl_marking_vars.$sbhl_space$.currentBinding(thread);
+                                            try {
+                                                sbhl_marking_vars.$sbhl_space$.bind(sbhl_marking_vars.get_sbhl_marking_space(), thread);
+                                                {
+                                                    SubLObject mt_var_21 = pph_mt;
+                                                    {
+                                                        SubLObject _prev_bind_0_22 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                                        SubLObject _prev_bind_1_23 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                                        SubLObject _prev_bind_2_24 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                                        try {
+                                                            mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var_21), thread);
+                                                            mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var_21), thread);
+                                                            mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var_21), thread);
+                                                            {
+                                                                SubLObject tv_var = NIL;
+                                                                {
+                                                                    SubLObject _prev_bind_0_25 = sbhl_search_vars.$sbhl_tv$.currentBinding(thread);
+                                                                    SubLObject _prev_bind_1_26 = sbhl_search_vars.$relevant_sbhl_tv_function$.currentBinding(thread);
+                                                                    try {
+                                                                        sbhl_search_vars.$sbhl_tv$.bind(NIL != tv_var ? ((SubLObject) (tv_var)) : sbhl_search_vars.get_sbhl_true_tv(), thread);
+                                                                        sbhl_search_vars.$relevant_sbhl_tv_function$.bind(NIL != tv_var ? ((SubLObject) (RELEVANT_SBHL_TV_IS_GENERAL_TV)) : sbhl_search_vars.$relevant_sbhl_tv_function$.getDynamicValue(thread), thread);
+                                                                        if (NIL != tv_var) {
+                                                                            if (NIL != sbhl_paranoia.sbhl_object_type_checking_p()) {
+                                                                                if (NIL == sbhl_search_vars.sbhl_true_tv_p(tv_var)) {
+                                                                                    {
+                                                                                        SubLObject pcase_var = sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread);
+                                                                                        if (pcase_var.eql($ERROR)) {
+                                                                                            sbhl_paranoia.sbhl_error(ONE_INTEGER, $str_alt60$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                        } else {
+                                                                                            if (pcase_var.eql($CERROR)) {
+                                                                                                sbhl_paranoia.sbhl_cerror(ONE_INTEGER, $$$continue_anyway, $str_alt60$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                            } else {
+                                                                                                if (pcase_var.eql($WARN)) {
+                                                                                                    Errors.warn($str_alt60$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                } else {
+                                                                                                    Errors.warn($str_alt65$_A_is_not_a_valid__sbhl_type_erro, sbhl_paranoia.$sbhl_type_error_action$.getDynamicValue(thread));
+                                                                                                    Errors.cerror($$$continue_anyway, $str_alt60$_A_is_not_a__A, tv_var, SBHL_TRUE_TV_P);
+                                                                                                }
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                        {
+                                                                            SubLObject _prev_bind_0_27 = sbhl_search_vars.$sbhl_search_module$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_1_28 = sbhl_search_vars.$sbhl_search_module_type$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_2_29 = sbhl_search_vars.$sbhl_add_node_to_result_test$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_3 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                            SubLObject _prev_bind_4 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                            try {
+                                                                                sbhl_search_vars.$sbhl_search_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                sbhl_search_vars.$sbhl_search_module_type$.bind(sbhl_module_utilities.get_sbhl_module_type(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                sbhl_search_vars.$sbhl_add_node_to_result_test$.bind(sbhl_module_utilities.get_sbhl_add_node_to_result_test(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                sbhl_module_vars.$sbhl_module$.bind(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)), thread);
+                                                                                if ((NIL != sbhl_paranoia.suspend_sbhl_type_checkingP()) || (NIL != sbhl_module_utilities.apply_sbhl_module_type_test(node_var, sbhl_module_vars.get_sbhl_module(UNPROVIDED)))) {
+                                                                                    {
+                                                                                        SubLObject _prev_bind_0_30 = sbhl_search_vars.$sbhl_search_direction$.currentBinding(thread);
+                                                                                        SubLObject _prev_bind_1_31 = sbhl_link_vars.$sbhl_link_direction$.currentBinding(thread);
+                                                                                        SubLObject _prev_bind_2_32 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                        try {
+                                                                                            sbhl_search_vars.$sbhl_search_direction$.bind(sbhl_search_vars.get_sbhl_backward_search_direction(), thread);
+                                                                                            sbhl_link_vars.$sbhl_link_direction$.bind(sbhl_module_utilities.sbhl_search_direction_to_link_direction(sbhl_search_vars.get_sbhl_backward_search_direction(), sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa))), thread);
+                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL, thread);
+                                                                                            sbhl_marking_utilities.sbhl_mark_node_marked(node_var_19, UNPROVIDED);
+                                                                                            while (NIL != node_var_19) {
+                                                                                                {
+                                                                                                    SubLObject tt_node_var = node_var_19;
+                                                                                                    SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_vars.get_sbhl_module($$isa));
+                                                                                                    SubLObject cdolist_list_var = accessible_modules;
+                                                                                                    SubLObject module_var = NIL;
+                                                                                                    for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                                        {
+                                                                                                            SubLObject _prev_bind_0_33 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                            SubLObject _prev_bind_1_34 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                            try {
+                                                                                                                sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                {
+                                                                                                                    SubLObject node = function_terms.naut_to_nart(tt_node_var);
+                                                                                                                    if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                        {
+                                                                                                                            SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                            if (NIL != d_link) {
+                                                                                                                                {
+                                                                                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                    if (NIL != mt_links) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                    SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_35 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject iteration_state_36 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_36)) {
+                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_36);
+                                                                                                                                                                            SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject _prev_bind_0_37 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                    try {
+                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                            SubLObject cdolist_list_var_38 = new_list;
+                                                                                                                                                                                            SubLObject function = NIL;
+                                                                                                                                                                                            for (function = cdolist_list_var_38.first(); NIL != cdolist_list_var_38; cdolist_list_var_38 = cdolist_list_var_38.rest() , function = cdolist_list_var_38.first()) {
+                                                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(function, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(function, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                                                    if (NIL != forts.fort_p(function)) {
+                                                                                                                                                                                                        {
+                                                                                                                                                                                                            SubLObject minimal_result_types = com.cyc.cycjava.cycl.cb_lexical_info.generation_function_result_isas(function, pph_mt);
+                                                                                                                                                                                                            SubLObject cdolist_list_var_39 = minimal_result_types;
+                                                                                                                                                                                                            SubLObject min_result_type = NIL;
+                                                                                                                                                                                                            for (min_result_type = cdolist_list_var_39.first(); NIL != cdolist_list_var_39; cdolist_list_var_39 = cdolist_list_var_39.rest() , min_result_type = cdolist_list_var_39.first()) {
+                                                                                                                                                                                                                dictionary_utilities.dictionary_push(table, min_result_type, function);
+                                                                                                                                                                                                            }
+                                                                                                                                                                                                        }
+                                                                                                                                                                                                    }
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    } finally {
+                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_37, thread);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                            iteration_state_36 = dictionary_contents.do_dictionary_contents_next(iteration_state_36);
+                                                                                                                                                                        }
+                                                                                                                                                                    } 
+                                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_36);
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_35, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                }
+                                                                                                                                            } 
+                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } else {
+                                                                                                                                sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt66$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                        if (NIL != sbhl_macros.do_sbhl_non_fort_linksP(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED))) {
+                                                                                                                            {
+                                                                                                                                SubLObject csome_list_var = sbhl_link_methods.non_fort_instance_table_lookup(node);
+                                                                                                                                SubLObject instance_tuple = NIL;
+                                                                                                                                for (instance_tuple = csome_list_var.first(); NIL != csome_list_var; csome_list_var = csome_list_var.rest() , instance_tuple = csome_list_var.first()) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject datum = instance_tuple;
+                                                                                                                                        SubLObject current = datum;
+                                                                                                                                        SubLObject link_node = NIL;
+                                                                                                                                        SubLObject mt = NIL;
+                                                                                                                                        SubLObject tv = NIL;
+                                                                                                                                        destructuring_bind_must_consp(current, datum, $list_alt67);
+                                                                                                                                        link_node = current.first();
+                                                                                                                                        current = current.rest();
+                                                                                                                                        destructuring_bind_must_consp(current, datum, $list_alt67);
+                                                                                                                                        mt = current.first();
+                                                                                                                                        current = current.rest();
+                                                                                                                                        destructuring_bind_must_consp(current, datum, $list_alt67);
+                                                                                                                                        tv = current.first();
+                                                                                                                                        current = current.rest();
+                                                                                                                                        if (NIL == current) {
+                                                                                                                                            if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                {
+                                                                                                                                                    SubLObject _prev_bind_0_40 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                    try {
+                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                        if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject _prev_bind_0_41 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                try {
+                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                    {
+                                                                                                                                                                        SubLObject link_nodes = list(link_node);
+                                                                                                                                                                        SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                        SubLObject cdolist_list_var_42 = new_list;
+                                                                                                                                                                        SubLObject function = NIL;
+                                                                                                                                                                        for (function = cdolist_list_var_42.first(); NIL != cdolist_list_var_42; cdolist_list_var_42 = cdolist_list_var_42.rest() , function = cdolist_list_var_42.first()) {
+                                                                                                                                                                            if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(function, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                                                sbhl_marking_utilities.sbhl_mark_node_marked(function, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                                                if (NIL != forts.fort_p(function)) {
+                                                                                                                                                                                    {
+                                                                                                                                                                                        SubLObject minimal_result_types = com.cyc.cycjava.cycl.cb_lexical_info.generation_function_result_isas(function, pph_mt);
+                                                                                                                                                                                        SubLObject cdolist_list_var_43 = minimal_result_types;
+                                                                                                                                                                                        SubLObject min_result_type = NIL;
+                                                                                                                                                                                        for (min_result_type = cdolist_list_var_43.first(); NIL != cdolist_list_var_43; cdolist_list_var_43 = cdolist_list_var_43.rest() , min_result_type = cdolist_list_var_43.first()) {
+                                                                                                                                                                                            dictionary_utilities.dictionary_push(table, min_result_type, function);
+                                                                                                                                                                                        }
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                        }
+                                                                                                                                                                    }
+                                                                                                                                                                } finally {
+                                                                                                                                                                    sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_41, thread);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    } finally {
+                                                                                                                                                        sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_40, thread);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } else {
+                                                                                                                                            cdestructuring_bind_error(datum, $list_alt67);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                            {
+                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_module_utilities.get_sbhl_module_backward_direction(sbhl_module_vars.get_sbhl_module($$isa)), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                SubLObject cdolist_list_var_44 = new_list;
+                                                                                                                                SubLObject generating_fn = NIL;
+                                                                                                                                for (generating_fn = cdolist_list_var_44.first(); NIL != cdolist_list_var_44; cdolist_list_var_44 = cdolist_list_var_44.rest() , generating_fn = cdolist_list_var_44.first()) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_45 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                            {
+                                                                                                                                                SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                SubLObject new_list_46 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                SubLObject cdolist_list_var_47 = new_list_46;
+                                                                                                                                                SubLObject function = NIL;
+                                                                                                                                                for (function = cdolist_list_var_47.first(); NIL != cdolist_list_var_47; cdolist_list_var_47 = cdolist_list_var_47.rest() , function = cdolist_list_var_47.first()) {
+                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(function, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread))) {
+                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(function, sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                                                                                                                                        if (NIL != forts.fort_p(function)) {
+                                                                                                                                                            {
+                                                                                                                                                                SubLObject minimal_result_types = com.cyc.cycjava.cycl.cb_lexical_info.generation_function_result_isas(function, pph_mt);
+                                                                                                                                                                SubLObject cdolist_list_var_48 = minimal_result_types;
+                                                                                                                                                                SubLObject min_result_type = NIL;
+                                                                                                                                                                for (min_result_type = cdolist_list_var_48.first(); NIL != cdolist_list_var_48; cdolist_list_var_48 = cdolist_list_var_48.rest() , min_result_type = cdolist_list_var_48.first()) {
+                                                                                                                                                                    dictionary_utilities.dictionary_push(table, min_result_type, function);
+                                                                                                                                                                }
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_45, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } finally {
+                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_34, thread);
+                                                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_33, thread);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                {
+                                                                                                    SubLObject accessible_modules = sbhl_macros.get_sbhl_accessible_modules(sbhl_module_utilities.get_sbhl_transfers_through_module(sbhl_module_vars.get_sbhl_module($$isa)));
+                                                                                                    SubLObject cdolist_list_var = accessible_modules;
+                                                                                                    SubLObject module_var = NIL;
+                                                                                                    for (module_var = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , module_var = cdolist_list_var.first()) {
+                                                                                                        {
+                                                                                                            SubLObject _prev_bind_0_49 = sbhl_module_vars.$sbhl_module$.currentBinding(thread);
+                                                                                                            SubLObject _prev_bind_1_50 = sbhl_search_vars.$genl_inverse_mode_p$.currentBinding(thread);
+                                                                                                            try {
+                                                                                                                sbhl_module_vars.$sbhl_module$.bind(module_var, thread);
+                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.bind(NIL != sbhl_search_vars.flip_genl_inverse_modeP(UNPROVIDED, UNPROVIDED) ? ((SubLObject) (makeBoolean(NIL == sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread)))) : sbhl_search_vars.$genl_inverse_mode_p$.getDynamicValue(thread), thread);
+                                                                                                                {
+                                                                                                                    SubLObject node = function_terms.naut_to_nart(node_var_19);
+                                                                                                                    if (NIL != sbhl_link_vars.sbhl_node_object_p(node)) {
+                                                                                                                        {
+                                                                                                                            SubLObject d_link = sbhl_graphs.get_sbhl_graph_link(node, sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                            if (NIL != d_link) {
+                                                                                                                                {
+                                                                                                                                    SubLObject mt_links = sbhl_links.get_sbhl_mt_links(d_link, sbhl_link_vars.get_sbhl_link_direction(), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                    if (NIL != mt_links) {
+                                                                                                                                        {
+                                                                                                                                            SubLObject iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(mt_links));
+                                                                                                                                            while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state)) {
+                                                                                                                                                thread.resetMultipleValues();
+                                                                                                                                                {
+                                                                                                                                                    SubLObject mt = dictionary_contents.do_dictionary_contents_key_value(iteration_state);
+                                                                                                                                                    SubLObject tv_links = thread.secondMultipleValue();
+                                                                                                                                                    thread.resetMultipleValues();
+                                                                                                                                                    if (NIL != mt_relevance_macros.relevant_mtP(mt)) {
+                                                                                                                                                        {
+                                                                                                                                                            SubLObject _prev_bind_0_51 = sbhl_link_vars.$sbhl_link_mt$.currentBinding(thread);
+                                                                                                                                                            try {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.bind(mt, thread);
+                                                                                                                                                                {
+                                                                                                                                                                    SubLObject iteration_state_52 = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(tv_links));
+                                                                                                                                                                    while (NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state_52)) {
+                                                                                                                                                                        thread.resetMultipleValues();
+                                                                                                                                                                        {
+                                                                                                                                                                            SubLObject tv = dictionary_contents.do_dictionary_contents_key_value(iteration_state_52);
+                                                                                                                                                                            SubLObject link_nodes = thread.secondMultipleValue();
+                                                                                                                                                                            thread.resetMultipleValues();
+                                                                                                                                                                            if (NIL != sbhl_search_vars.relevant_sbhl_tvP(tv)) {
+                                                                                                                                                                                {
+                                                                                                                                                                                    SubLObject _prev_bind_0_53 = sbhl_link_vars.$sbhl_link_tv$.currentBinding(thread);
+                                                                                                                                                                                    try {
+                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.bind(tv, thread);
+                                                                                                                                                                                        {
+                                                                                                                                                                                            SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                                                            SubLObject cdolist_list_var_54 = new_list;
+                                                                                                                                                                                            SubLObject node_vars_link_node = NIL;
+                                                                                                                                                                                            for (node_vars_link_node = cdolist_list_var_54.first(); NIL != cdolist_list_var_54; cdolist_list_var_54 = cdolist_list_var_54.rest() , node_vars_link_node = cdolist_list_var_54.first()) {
+                                                                                                                                                                                                if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                                                                    sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                                                                    deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                                                                }
+                                                                                                                                                                                            }
+                                                                                                                                                                                        }
+                                                                                                                                                                                    } finally {
+                                                                                                                                                                                        sbhl_link_vars.$sbhl_link_tv$.rebind(_prev_bind_0_53, thread);
+                                                                                                                                                                                    }
+                                                                                                                                                                                }
+                                                                                                                                                                            }
+                                                                                                                                                                            iteration_state_52 = dictionary_contents.do_dictionary_contents_next(iteration_state_52);
+                                                                                                                                                                        }
+                                                                                                                                                                    } 
+                                                                                                                                                                    dictionary_contents.do_dictionary_contents_finalize(iteration_state_52);
+                                                                                                                                                                }
+                                                                                                                                                            } finally {
+                                                                                                                                                                sbhl_link_vars.$sbhl_link_mt$.rebind(_prev_bind_0_51, thread);
+                                                                                                                                                            }
+                                                                                                                                                        }
+                                                                                                                                                    }
+                                                                                                                                                    iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state);
+                                                                                                                                                }
+                                                                                                                                            } 
+                                                                                                                                            dictionary_contents.do_dictionary_contents_finalize(iteration_state);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            } else {
+                                                                                                                                sbhl_paranoia.sbhl_error(FIVE_INTEGER, $str_alt66$attempting_to_bind_direction_link, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    } else {
+                                                                                                                        if (NIL != obsolete.cnat_p(node, UNPROVIDED)) {
+                                                                                                                            {
+                                                                                                                                SubLObject new_list = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED))))) : sbhl_module_utilities.get_sbhl_module_relevant_naut_link_generators(sbhl_link_vars.get_sbhl_link_direction(), sbhl_search_vars.$sbhl_tv$.getDynamicValue(thread), sbhl_module_vars.get_sbhl_module(UNPROVIDED));
+                                                                                                                                SubLObject cdolist_list_var_55 = new_list;
+                                                                                                                                SubLObject generating_fn = NIL;
+                                                                                                                                for (generating_fn = cdolist_list_var_55.first(); NIL != cdolist_list_var_55; cdolist_list_var_55 = cdolist_list_var_55.rest() , generating_fn = cdolist_list_var_55.first()) {
+                                                                                                                                    {
+                                                                                                                                        SubLObject _prev_bind_0_56 = sbhl_link_vars.$sbhl_link_generator$.currentBinding(thread);
+                                                                                                                                        try {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.bind(generating_fn, thread);
+                                                                                                                                            {
+                                                                                                                                                SubLObject link_nodes = funcall(generating_fn, node);
+                                                                                                                                                SubLObject new_list_57 = (NIL != sbhl_link_vars.sbhl_randomize_lists_p()) ? ((SubLObject) (list_utilities.randomize_list(link_nodes))) : link_nodes;
+                                                                                                                                                SubLObject cdolist_list_var_58 = new_list_57;
+                                                                                                                                                SubLObject node_vars_link_node = NIL;
+                                                                                                                                                for (node_vars_link_node = cdolist_list_var_58.first(); NIL != cdolist_list_var_58; cdolist_list_var_58 = cdolist_list_var_58.rest() , node_vars_link_node = cdolist_list_var_58.first()) {
+                                                                                                                                                    if (NIL == sbhl_marking_utilities.sbhl_search_path_termination_p(node_vars_link_node, UNPROVIDED)) {
+                                                                                                                                                        sbhl_marking_utilities.sbhl_mark_node_marked(node_vars_link_node, UNPROVIDED);
+                                                                                                                                                        deck.deck_push(node_vars_link_node, recur_deck);
+                                                                                                                                                    }
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        } finally {
+                                                                                                                                            sbhl_link_vars.$sbhl_link_generator$.rebind(_prev_bind_0_56, thread);
+                                                                                                                                        }
+                                                                                                                                    }
+                                                                                                                                }
+                                                                                                                            }
+                                                                                                                        }
+                                                                                                                    }
+                                                                                                                }
+                                                                                                            } finally {
+                                                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_1_50, thread);
+                                                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_49, thread);
+                                                                                                            }
+                                                                                                        }
+                                                                                                    }
+                                                                                                }
+                                                                                                node_var_19 = deck.deck_pop(recur_deck);
+                                                                                            } 
+                                                                                        } finally {
+                                                                                            sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_2_32, thread);
+                                                                                            sbhl_link_vars.$sbhl_link_direction$.rebind(_prev_bind_1_31, thread);
+                                                                                            sbhl_search_vars.$sbhl_search_direction$.rebind(_prev_bind_0_30, thread);
+                                                                                        }
+                                                                                    }
+                                                                                } else {
+                                                                                    sbhl_paranoia.sbhl_warn(TWO_INTEGER, $str_alt68$Node__a_does_not_pass_sbhl_type_t, node_var, sbhl_module_utilities.get_sbhl_type_test(sbhl_module_vars.get_sbhl_module(UNPROVIDED)), UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                }
+                                                                            } finally {
+                                                                                sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_4, thread);
+                                                                                sbhl_search_vars.$genl_inverse_mode_p$.rebind(_prev_bind_3, thread);
+                                                                                sbhl_search_vars.$sbhl_add_node_to_result_test$.rebind(_prev_bind_2_29, thread);
+                                                                                sbhl_search_vars.$sbhl_search_module_type$.rebind(_prev_bind_1_28, thread);
+                                                                                sbhl_search_vars.$sbhl_search_module$.rebind(_prev_bind_0_27, thread);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        sbhl_search_vars.$relevant_sbhl_tv_function$.rebind(_prev_bind_1_26, thread);
+                                                                        sbhl_search_vars.$sbhl_tv$.rebind(_prev_bind_0_25, thread);
+                                                                    }
+                                                                }
+                                                            }
+                                                        } finally {
+                                                            mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2_24, thread);
+                                                            mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1_23, thread);
+                                                            mt_relevance_macros.$mt$.rebind(_prev_bind_0_22, thread);
+                                                        }
+                                                    }
+                                                    sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_space$.getDynamicValue(thread));
+                                                }
+                                            } finally {
+                                                sbhl_marking_vars.$sbhl_space$.rebind(_prev_bind_0_20, thread);
+                                            }
+                                        }
+                                        sbhl_marking_vars.free_sbhl_marking_space(sbhl_marking_vars.$sbhl_gather_space$.getDynamicValue(thread));
+                                    }
+                                } finally {
+                                    sbhl_marking_vars.$sbhl_gather_space$.rebind(_prev_bind_1_18, thread);
+                                    sbhl_module_vars.$sbhl_module$.rebind(_prev_bind_0_17, thread);
+                                }
+                            }
+                            table_entries = Sort.sort(dictionary_utilities.dictionary_to_alist(table), $sym69$TERM__, symbol_function(CAR));
+                            table_entries = Sort.stable_sort(table_entries, $sym71$SPEC_, symbol_function(CAR));
+                            {
+                                SubLObject list_var = NIL;
+                                SubLObject item = NIL;
+                                SubLObject n = NIL;
+                                for (list_var = table_entries, item = list_var.first(), n = ZERO_INTEGER; NIL != list_var; list_var = list_var.rest() , item = list_var.first() , n = add(ONE_INTEGER, n)) {
+                                    set_nth(n, table_entries, cons(item.first(), Sort.sort(item.rest(), $sym17$STRING_, CONSTANT_NAME)));
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return table_entries;
+            }
+        }
+    }
+
+    /**
+     * PHRASE-TYPE -> FUNCTION+
+     */
+    @LispMethod(comment = "PHRASE-TYPE -> FUNCTION+")
     public static SubLObject generation_function_alist() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         final SubLObject table = dictionary.new_dictionary(UNPROVIDED, UNPROVIDED);
@@ -1893,6 +3225,54 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return table_entries;
     }
 
+    public static final SubLObject generation_function_toc_alt(SubLObject alist) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_princ_strong($$$Table_of_Contents);
+            html_newline(UNPROVIDED);
+            html_princ($str_alt74$Click_to_go_to_functions_denoting);
+            html_markup(html_macros.$html_blockquote_head$.getGlobalValue());
+            {
+                SubLObject cdolist_list_var = alist;
+                SubLObject cons = NIL;
+                for (cons = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , cons = cdolist_list_var.first()) {
+                    {
+                        SubLObject datum = cons;
+                        SubLObject current = datum;
+                        SubLObject phrase_type = NIL;
+                        SubLObject functions = NIL;
+                        destructuring_bind_must_consp(current, datum, $list_alt43);
+                        phrase_type = current.first();
+                        current = current.rest();
+                        functions = current;
+                        {
+                            SubLObject name = format(NIL, $str_alt75$__A, cb_string_for_fort(phrase_type));
+                            html_markup(html_macros.$html_anchor_head$.getGlobalValue());
+                            html_markup(html_macros.$html_anchor_href$.getGlobalValue());
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_markup(name);
+                            html_char(CHAR_quotation, UNPROVIDED);
+                            html_char(CHAR_greater, UNPROVIDED);
+                            {
+                                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                                try {
+                                    html_macros.$html_safe_print$.bind(T, thread);
+                                    html_princ(phrase_type);
+                                    html_newline(UNPROVIDED);
+                                } finally {
+                                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                            html_markup(html_macros.$html_anchor_tail$.getGlobalValue());
+                        }
+                    }
+                }
+            }
+            html_markup(html_macros.$html_blockquote_tail$.getGlobalValue());
+            return alist;
+        }
+    }
+
     public static SubLObject generation_function_toc(final SubLObject alist) {
         final SubLThread thread = SubLProcess.currentSubLThread();
         html_princ_strong($$$Table_of_Contents);
@@ -1933,6 +3313,40 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return alist;
     }
 
+    public static final SubLObject generation_function_result_isas_alt(SubLObject function, SubLObject mt) {
+        if (mt == UNPROVIDED) {
+            mt = cb_tools.cb_paraphrase_mt();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result_types = kb_accessors.result_isa(function, mt);
+                SubLObject ans = NIL;
+                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                    SubLObject _prev_bind_3 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                        pph_vars.$pph_language_mt$.bind(mt, thread);
+                        ans = list_utilities.remove_if_not($sym76$NL_PHRASE_TYPE_, result_types, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        ans = list_utilities.remove_subsumed_items(ans, $sym77$GENLS_, UNPROVIDED);
+                    } finally {
+                        pph_vars.$pph_language_mt$.rebind(_prev_bind_3, thread);
+                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                return ans;
+            }
+        }
+    }
+
     public static SubLObject generation_function_result_isas(final SubLObject function, SubLObject mt) {
         if (mt == UNPROVIDED) {
             mt = cb_tools.cb_paraphrase_mt();
@@ -1961,6 +3375,143 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return ans;
     }
 
+    /**
+     *
+     *
+     * @unknown baxter
+    Print the list AS-LIST of lexical assertions and/or inferred semtranses
+     */
+    @LispMethod(comment = "@unknown baxter\r\nPrint the list AS-LIST of lexical assertions and/or inferred semtranses")
+    public static final SubLObject cb_c_lexical_internal_print_assertions_alt(SubLObject as_list, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject currmt = NIL;
+                SubLObject new_mtP = NIL;
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                    try {
+                        pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                        {
+                            SubLObject reuseP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_59 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                    try {
+                                        pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                        {
+                                            SubLObject new_or_reused = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_60 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                    {
+                                                        SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_61 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                {
+                                                                    SubLObject original_memoization_process = NIL;
+                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                        {
+                                                                            SubLObject current_proc = current_process();
+                                                                            if (NIL == original_memoization_process) {
+                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                            } else {
+                                                                                if (original_memoization_process != current_proc) {
+                                                                                    Errors.error($str_alt78$Invalid_attempt_to_reuse_memoizat);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    try {
+                                                                        {
+                                                                            SubLObject cdolist_list_var = as_list;
+                                                                            SubLObject as = NIL;
+                                                                            for (as = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , as = cdolist_list_var.first()) {
+                                                                                if (NIL != assertion_handles.assertion_p(as)) {
+                                                                                    new_mtP = makeBoolean(NIL == hlmt.hlmt_equalP(assertions_high.assertion_mt(as), currmt));
+                                                                                    if (NIL != new_mtP) {
+                                                                                        currmt = assertions_high.assertion_mt(as);
+                                                                                    }
+                                                                                    com.cyc.cycjava.cycl.cb_lexical_info.cb_c_lexical_internal_print_assertion(as, verboseP, new_mtP);
+                                                                                } else {
+                                                                                    cb_form(as, NIL, T);
+                                                                                    html_newline(TWO_INTEGER);
+                                                                                    currmt = NIL;
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_62 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_62, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                memoization_state.$memoization_state$.rebind(_prev_bind_0_61, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_60, thread);
+                                                }
+                                            }
+                                            if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                            }
+                                        }
+                                    } finally {
+                                        pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_59, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_63 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuseP) {
+                                            pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_63, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return T;
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Print the list AS-LIST of lexical assertions and/or inferred semtranses
+     */
+    @LispMethod(comment = "@unknown baxter\r\nPrint the list AS-LIST of lexical assertions and/or inferred semtranses")
     public static SubLObject cb_c_lexical_internal_print_assertions(final SubLObject as_list, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -2260,6 +3811,55 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return list_utilities.sublisp_boolean(kb_mapping.gather_gaf_arg_index(v_assert, TWO_INTEGER, $$genStringAssertion, assertions_high.assertion_mt(v_assert), UNPROVIDED));
     }
 
+    public static final SubLObject cb_c_lexical_internal_print_assertion_alt(SubLObject assertion, SubLObject verboseP, SubLObject new_mtP) {
+        if (new_mtP == UNPROVIDED) {
+            new_mtP = T;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != new_mtP) {
+                html_newline(UNPROVIDED);
+                html_markup(html_macros.$html_bold_head$.getGlobalValue());
+                html_princ($str_alt80$Mt__);
+                cb_form(assertions_high.assertion_mt(assertion), UNPROVIDED, UNPROVIDED);
+                html_markup(html_macros.$html_bold_tail$.getGlobalValue());
+                html_newline(UNPROVIDED);
+            }
+            cb_show_assertion_readably(assertion, $cb_c_wrap_assertions$.getDynamicValue(thread), NIL);
+            html_indent(ONE_INTEGER);
+            com.cyc.cycjava.cycl.cb_lexical_info.cb_bugzilla_lexicon_link(assertion);
+            html_newline(UNPROVIDED);
+            if ((NIL != verboseP) && (NIL != assertion_utilities.nl_semantic_assertionP(assertion))) {
+                {
+                    SubLObject ignore_errors_tag = NIL;
+                    try {
+                        {
+                            SubLObject _prev_bind_0 = Errors.$error_handler$.currentBinding(thread);
+                            try {
+                                Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                                try {
+                                    {
+                                        SubLObject phrases = lexification_utilities.phrases_from_semantic_assertion(assertion, UNPROVIDED);
+                                        SubLObject phrase_info = (NIL != phrases) ? ((SubLObject) (string_utilities.quoted_join_strings(phrases, UNPROVIDED, UNPROVIDED))) : $str_alt83$n_a;
+                                        format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt84$generated_phrases___A, phrase_info);
+                                        html_newline(TWO_INTEGER);
+                                    }
+                                } catch (Throwable catch_var) {
+                                    Errors.handleThrowable(catch_var, NIL);
+                                }
+                            } finally {
+                                Errors.$error_handler$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    } catch (Throwable ccatch_env_var) {
+                        ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                    }
+                }
+            }
+            return assertion;
+        }
+    }
+
     public static SubLObject cb_c_lexical_internal_print_assertion(final SubLObject assertion, final SubLObject verboseP, SubLObject new_mtP) {
         if (new_mtP == UNPROVIDED) {
             new_mtP = T;
@@ -2330,6 +3930,86 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return assertion;
     }
 
+    /**
+     *
+     *
+     * @unknown baxter
+    Print out lexical info header
+     */
+    @LispMethod(comment = "@unknown baxter\r\nPrint out lexical info header")
+    public static final SubLObject cb_c_lexical_internal_print_header_alt(SubLObject fort, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+            html_markup(html_macros.$html_font_head$.getGlobalValue());
+            if (true) {
+                html_markup(html_macros.$html_font_size$.getGlobalValue());
+                html_char(CHAR_quotation, UNPROVIDED);
+                html_markup(FIVE_INTEGER);
+                html_char(CHAR_quotation, UNPROVIDED);
+            }
+            html_char(CHAR_greater, UNPROVIDED);
+            {
+                SubLObject _prev_bind_0 = html_macros.$html_safe_print$.currentBinding(thread);
+                try {
+                    html_macros.$html_safe_print$.bind(T, thread);
+                    if (NIL != verboseP) {
+                        html_princ($str_alt21$Verbose_);
+                    }
+                    html_princ($str_alt99$Lexical_Info_for_);
+                    cb_form(fort, UNPROVIDED, UNPROVIDED);
+                    html_princ($str_alt49$_);
+                } finally {
+                    html_macros.$html_safe_print$.rebind(_prev_bind_0, thread);
+                }
+            }
+            html_markup(html_macros.$html_font_tail$.getGlobalValue());
+            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+            html_newline(TWO_INTEGER);
+            {
+                SubLObject synsets = wordnet_import.wni_terms_synsets(fort);
+                if (NIL != synsets) {
+                    {
+                        SubLObject cdolist_list_var = synsets;
+                        SubLObject synset = NIL;
+                        for (synset = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , synset = cdolist_list_var.first()) {
+                            html_markup(html_macros.$html_strong_head$.getGlobalValue());
+                            html_princ($str_alt100$WordNet_Synset_);
+                            html_markup(html_macros.$html_strong_tail$.getGlobalValue());
+                            cb_wordnet_utilities.wni_html_synset_words_gloss_examples(synset, NIL, T);
+                        }
+                    }
+                }
+            }
+            com.cyc.cycjava.cycl.cb_lexical_info.cb_show_default_generated_phrase(fort, verboseP);
+            {
+                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                try {
+                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                    if ((NIL != fort_types_interface.predicateP(fort)) || (NIL != fort_types_interface.functionP(fort))) {
+                        com.cyc.cycjava.cycl.cb_lexical_info.cb_print_dummy_formula_paraphrase(fort, verboseP);
+                    }
+                } finally {
+                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return T;
+        }
+    }
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Print out lexical info header
+     */
+    @LispMethod(comment = "@unknown baxter\r\nPrint out lexical info header")
     public static SubLObject cb_c_lexical_internal_print_header(final SubLObject fort, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -2545,6 +4225,40 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         }
     }
 
+    public static final SubLObject cb_show_default_generated_phrase_alt(SubLObject v_term, SubLObject verboseP) {
+        if (verboseP == UNPROVIDED) {
+            verboseP = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            thread.resetMultipleValues();
+            {
+                SubLObject phrase = generate_phrase(v_term, $DEFAULT, NIL, cb_tools.cb_paraphrase_mt(), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                SubLObject pred = thread.secondMultipleValue();
+                SubLObject justifications = thread.thirdMultipleValue();
+                thread.resetMultipleValues();
+                {
+                    SubLObject from_cacheP = member(pph_phrase.pph_nl_generation_cache_justification(), justifications, symbol_function(EQUAL), UNPROVIDED);
+                    com.cyc.cycjava.cycl.cb_lexical_info.cb_print_paraphrase($$$Default_generated_phrase, phrase, pred, v_term, verboseP, from_cacheP, UNPROVIDED);
+                }
+                html_newline(UNPROVIDED);
+                if (NIL != verboseP) {
+                    {
+                        SubLObject all_phrases = all_phrases_for_term(v_term, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject other_phrases = remove(phrase, all_phrases, symbol_function(EQUALP), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                        SubLObject other_info = (NIL != other_phrases) ? ((SubLObject) (string_utilities.quoted_join_strings(other_phrases, UNPROVIDED, UNPROVIDED))) : $str_alt83$n_a;
+                        html_markup(html_macros.$html_bold_head$.getGlobalValue());
+                        html_princ($str_alt105$Other_generated_phrases__);
+                        html_markup(html_macros.$html_bold_tail$.getGlobalValue());
+                        html_princ(other_info);
+                        html_newline(TWO_INTEGER);
+                    }
+                }
+                return values(phrase, pred);
+            }
+        }
+    }
+
     public static SubLObject cb_show_default_generated_phrase(final SubLObject v_term, SubLObject verboseP) {
         if (verboseP == UNPROVIDED) {
             verboseP = NIL;
@@ -2590,6 +4304,55 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             return values(phrase, pred);
         } finally {
             pph_vars.$constant_link_function$.rebind(_prev_bind_0, thread);
+        }
+    }
+
+    public static final SubLObject cb_print_paraphrase(SubLObject string, SubLObject phrase, SubLObject pred, SubLObject fort, SubLObject verboseP, SubLObject from_cacheP, SubLObject supports) {
+        if (from_cacheP == UNPROVIDED) {
+            from_cacheP = NIL;
+        }
+        if (supports == UNPROVIDED) {
+            supports = NIL;
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            phrase = string_utilities.replace_substring(phrase, $str_alt106$_, $str_alt107$_);
+            html_markup(html_macros.$html_bold_head$.getGlobalValue());
+            format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt108$_A__, string);
+            html_markup(html_macros.$html_bold_tail$.getGlobalValue());
+            {
+                SubLObject long_stringP = list_utilities.lengthG(phrase, $int$32, UNPROVIDED);
+                if (NIL != long_stringP) {
+                    html_newline(UNPROVIDED);
+                    html_indent(THREE_INTEGER);
+                }
+                html_prin1(phrase);
+                if (NIL != long_stringP) {
+                    html_newline(UNPROVIDED);
+                    html_indent(THREE_INTEGER);
+                }
+                format(html_macros.$html_stream$.getDynamicValue(thread), $str_alt110$___A_, NIL != pred ? ((SubLObject) (pred)) : $$$unknown_agreement);
+            }
+            if ((NIL != verboseP) && (NIL != list_utilities.non_empty_list_p(supports))) {
+                html_newline(UNPROVIDED);
+                html_princ($str_alt112$Generated_based_on_);
+                {
+                    SubLObject cdolist_list_var = supports;
+                    SubLObject support = NIL;
+                    for (support = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , support = cdolist_list_var.first()) {
+                        cb_form(support, ONE_INTEGER, T);
+                        html_newline(UNPROVIDED);
+                    }
+                }
+            }
+            html_newline(UNPROVIDED);
+            if (NIL != from_cacheP) {
+                html_indent(THREE_INTEGER);
+                html_princ($str_alt113$This_paraphrase_is_cached_);
+                html_indent(UNPROVIDED);
+                cb_link($CLEAR_LEXICAL_CACHES, fort, verboseP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+            }
+            return NIL;
         }
     }
 
@@ -2644,6 +4407,144 @@ public final class cb_lexical_info extends SubLTranslatedFile {
             cb_link($CLEAR_LEXICAL_CACHES, fort, verboseP, UNPROVIDED, UNPROVIDED, UNPROVIDED);
         }
         return NIL;
+    }
+
+    public static final SubLObject cb_print_dummy_formula_paraphrase_alt(SubLObject fort, SubLObject verboseP) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject dummy_formula = pph_utilities.pph_dummy_formula(fort, T);
+                thread.resetMultipleValues();
+                {
+                    SubLObject _prev_bind_0 = pph_macros.$pph_problem_store_pointer$.currentBinding(thread);
+                    try {
+                        pph_macros.$pph_problem_store_pointer$.bind(pph_macros.find_or_create_pph_problem_store_pointer(), thread);
+                        {
+                            SubLObject reuseP = thread.secondMultipleValue();
+                            thread.resetMultipleValues();
+                            try {
+                                thread.resetMultipleValues();
+                                {
+                                    SubLObject _prev_bind_0_64 = pph_macros.$pph_memoization_state$.currentBinding(thread);
+                                    try {
+                                        pph_macros.$pph_memoization_state$.bind(pph_macros.find_or_create_pph_memoization_state(), thread);
+                                        {
+                                            SubLObject new_or_reused = thread.secondMultipleValue();
+                                            thread.resetMultipleValues();
+                                            {
+                                                SubLObject _prev_bind_0_65 = pph_macros.$pph_external_memoization_state$.currentBinding(thread);
+                                                try {
+                                                    pph_macros.$pph_external_memoization_state$.bind(pph_macros.find_or_create_pph_external_memoization_state(), thread);
+                                                    {
+                                                        SubLObject local_state = pph_macros.$pph_memoization_state$.getDynamicValue(thread);
+                                                        {
+                                                            SubLObject _prev_bind_0_66 = memoization_state.$memoization_state$.currentBinding(thread);
+                                                            try {
+                                                                memoization_state.$memoization_state$.bind(local_state, thread);
+                                                                {
+                                                                    SubLObject original_memoization_process = NIL;
+                                                                    if ((NIL != local_state) && (NIL == memoization_state.memoization_state_lock(local_state))) {
+                                                                        original_memoization_process = memoization_state.memoization_state_get_current_process_internal(local_state);
+                                                                        {
+                                                                            SubLObject current_proc = current_process();
+                                                                            if (NIL == original_memoization_process) {
+                                                                                memoization_state.memoization_state_set_current_process_internal(local_state, current_proc);
+                                                                            } else {
+                                                                                if (original_memoization_process != current_proc) {
+                                                                                    Errors.error($str_alt78$Invalid_attempt_to_reuse_memoizat);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    try {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_67 = pph_vars.$pph_language_mt$.currentBinding(thread);
+                                                                            try {
+                                                                                pph_vars.$pph_language_mt$.bind(cb_tools.cb_paraphrase_mt(), thread);
+                                                                                thread.resetMultipleValues();
+                                                                                {
+                                                                                    SubLObject dummy_paraphrase = generate_phrase(dummy_formula, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                    SubLObject pred = thread.secondMultipleValue();
+                                                                                    SubLObject justification = thread.thirdMultipleValue();
+                                                                                    thread.resetMultipleValues();
+                                                                                    com.cyc.cycjava.cycl.cb_lexical_info.cb_print_paraphrase($$$Default_generation_template, dummy_paraphrase, pred, fort, verboseP, NIL, list_utilities.remove_if_not(ASSERTION_P, justification, UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED));
+                                                                                    if (NIL != verboseP) {
+                                                                                        {
+                                                                                            SubLObject other_paraphrases = remove(dummy_paraphrase, all_phrases_for_formula(dummy_formula, UNPROVIDED, UNPROVIDED, UNPROVIDED), symbol_function(EQUAL), UNPROVIDED, UNPROVIDED, UNPROVIDED, UNPROVIDED);
+                                                                                            if (NIL != list_utilities.non_empty_list_p(other_paraphrases)) {
+                                                                                                html_markup(html_macros.$html_bold_head$.getGlobalValue());
+                                                                                                html_princ($str_alt116$Other_generation_templates_);
+                                                                                                html_markup(html_macros.$html_bold_tail$.getGlobalValue());
+                                                                                                {
+                                                                                                    SubLObject cdolist_list_var = other_paraphrases;
+                                                                                                    SubLObject other_paraphrase = NIL;
+                                                                                                    for (other_paraphrase = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , other_paraphrase = cdolist_list_var.first()) {
+                                                                                                        html_newline(UNPROVIDED);
+                                                                                                        html_indent(THREE_INTEGER);
+                                                                                                        html_princ(other_paraphrase);
+                                                                                                    }
+                                                                                                }
+                                                                                                html_newline(UNPROVIDED);
+                                                                                            }
+                                                                                        }
+                                                                                    }
+                                                                                }
+                                                                            } finally {
+                                                                                pph_vars.$pph_language_mt$.rebind(_prev_bind_0_67, thread);
+                                                                            }
+                                                                        }
+                                                                    } finally {
+                                                                        {
+                                                                            SubLObject _prev_bind_0_68 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                                            try {
+                                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                                if ((NIL != local_state) && (NIL == original_memoization_process)) {
+                                                                                    memoization_state.memoization_state_set_current_process_internal(local_state, NIL);
+                                                                                }
+                                                                            } finally {
+                                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_68, thread);
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                }
+                                                            } finally {
+                                                                memoization_state.$memoization_state$.rebind(_prev_bind_0_66, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                } finally {
+                                                    pph_macros.$pph_external_memoization_state$.rebind(_prev_bind_0_65, thread);
+                                                }
+                                            }
+                                            if ((new_or_reused == $NEW) && (NIL != memoization_state.memoization_state_p(pph_macros.$pph_memoization_state$.getDynamicValue(thread)))) {
+                                                memoization_state.clear_all_memoization(pph_macros.$pph_memoization_state$.getDynamicValue(thread));
+                                            }
+                                        }
+                                    } finally {
+                                        pph_macros.$pph_memoization_state$.rebind(_prev_bind_0_64, thread);
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0_69 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (NIL == reuseP) {
+                                            pph_macros.free_pph_problem_store_pointer(pph_macros.$pph_problem_store_pointer$.getDynamicValue(thread));
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0_69, thread);
+                                    }
+                                }
+                            }
+                        }
+                    } finally {
+                        pph_macros.$pph_problem_store_pointer$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject cb_print_dummy_formula_paraphrase(final SubLObject fort, final SubLObject verboseP) {
@@ -2755,10 +4656,88 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    static private final SubLList $list_alt1 = list(makeSymbol("FORT-SPEC"));
+
+    static private final SubLString $str_alt2$Could_not_determine_a_term_from__ = makeString("Could not determine a term from ~a");
+
+    static private final SubLString $str_alt6$cb_c_lexical__A = makeString("cb-c-lexical&~A");
+
+    static private final SubLString $str_alt7$___a_ = makeString(" (~a)");
+
+    static private final SubLString $str_alt11$cb_c_verbose_lexical__A = makeString("cb-c-verbose-lexical&~A");
+
+    static private final SubLString $str_alt12$_Verbose_Lexical_Info_ = makeString("[Verbose Lexical Info]");
+
+    static private final SubLString $str_alt15$No_lexical_information_found_ = makeString("No lexical information found.");
+
+    static private final SubLSymbol $sym16$HLMT_EQUAL_ = makeSymbol("HLMT-EQUAL?");
+
+    static private final SubLSymbol $sym17$STRING_ = makeSymbol("STRING<");
+
+    static private final SubLString $str_alt20$_ALexical_info_for__S = makeString("~ALexical info for ~S");
+
+    static private final SubLString $str_alt21$Verbose_ = makeString("Verbose ");
+
+    static private final SubLString $str_alt23$yui_skin_sam = makeString("yui-skin-sam");
+
+    static private final SubLString $str_alt24$Additional_lexical_links_ = makeString("Additional lexical links:");
+
+    static private final SubLString $str_alt25$To_see_documentation_on_NL_genera = makeString("To see documentation on NL generation functions: ");
+
+    static private final SubLString $str_alt27$This_term_is_not_sufficiently_lex = makeString("This term is not sufficiently lexified: ");
+
+    static private final SubLString $str_alt28$To_add_more_lexical_assertions__ = makeString("To add more lexical assertions: ");
+
+    static private final SubLString $str_alt30$To_clear_lexical_caches_for_this_ = makeString("To clear lexical caches for this term: ");
+
+    static private final SubLString $str_alt32$To_see_more__ = makeString("To see more: ");
+
+    static private final SubLString $str_alt33$_Clear_Lexical_Caches_ = makeString("[Clear Lexical Caches]");
+
+    static private final SubLString $str_alt34$clear_lexical_caches_for_term_wit = makeString("clear-lexical-caches-for-term-with-id&~A&~A");
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Helper function for sorting assertions alphabetically by mt name.
+     */
+    @LispMethod(comment = "@unknown baxter\r\nHelper function for sorting assertions alphabetically by mt name.")
+    public static final SubLObject str_assertion_mt_alt(SubLObject as) {
+        return string_utilities.str(assertions_high.assertion_mt(as));
+    }
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Helper function for sorting assertions alphabetically by mt name.
+     */
+    @LispMethod(comment = "@unknown baxter\r\nHelper function for sorting assertions alphabetically by mt name.")
     public static SubLObject str_assertion_mt(final SubLObject as) {
         return string_utilities.str(assertions_high.assertion_mt(as));
     }
 
+    static private final SubLList $list_alt36 = list(makeSymbol("FORT-SPEC"), makeSymbol("VERBOSE"));
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Helper function for sorting assertions alphabetically by predicate name
+     */
+    @LispMethod(comment = "@unknown baxter\r\nHelper function for sorting assertions alphabetically by predicate name")
+    public static final SubLObject str_assertion_arg0_alt(SubLObject as) {
+        return string_utilities.str(cycl_utilities.formula_arg0(assertions_high.assertion_formula(as)));
+    }
+
+    /**
+     *
+     *
+     * @unknown baxter
+    Helper function for sorting assertions alphabetically by predicate name
+     */
+    @LispMethod(comment = "@unknown baxter\r\nHelper function for sorting assertions alphabetically by predicate name")
     public static SubLObject str_assertion_arg0(final SubLObject as) {
         return string_utilities.str(cycl_utilities.formula_arg0(assertions_high.assertion_formula(as)));
     }
@@ -2766,6 +4745,10 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     public static SubLObject str_meta_assertion_p(final SubLObject as) {
         return string_utilities.str(assertion_utilities.meta_assertion_p(as));
     }
+
+    static private final SubLString $str_alt38$_Function_Documentation_ = makeString("[Function Documentation]");
+
+    static private final SubLString $str_alt40$show_generation_function_document = makeString("show-generation-function-documentation");
 
     public static SubLObject cb_link_nl_trie_browse(SubLObject linktext) {
         if (linktext == UNPROVIDED) {
@@ -2800,6 +4783,18 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return linktext;
     }
 
+    static private final SubLString $str_alt42$NL_Generation_Function_Documentat = makeString("NL Generation Function Documentation");
+
+    static private final SubLList $list_alt43 = cons(makeSymbol("PHRASE-TYPE"), makeSymbol("FUNCTIONS"));
+
+    static private final SubLString $str_alt44$_A = makeString("~A");
+
+    static private final SubLString $str_alt45$__lang_mentioned_in_code_rang_ = makeString(" &lang;mentioned in code&rang;");
+
+    static private final SubLString $str_alt49$_ = makeString(":");
+
+    static private final SubLList $list_alt50 = list(reader_make_constant_shell("comment"), reader_make_constant_shell("expansion"), reader_make_constant_shell("cyclistNotes"), reader_make_constant_shell("exampleAssertions"), reader_make_constant_shell("exampleSentences"), reader_make_constant_shell("exampleNATs"));
+
     public static SubLObject cb_show_nl_trie(SubLObject args) {
         if (args == UNPROVIDED) {
             args = NIL;
@@ -2811,6 +4806,8 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         cb_show_nl_trie_for_path(path);
         return NIL;
     }
+
+    static private final SubLString $str_alt60$_A_is_not_a__A = makeString("~A is not a ~A");
 
     public static SubLObject cb_show_nl_trie_for_path(final SubLObject path) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -2928,6 +4925,82 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         }
         return path;
     }
+
+    static private final SubLString $str_alt65$_A_is_not_a_valid__sbhl_type_erro = makeString("~A is not a valid *sbhl-type-error-action* value");
+
+    static private final SubLString $str_alt66$attempting_to_bind_direction_link = makeString("attempting to bind direction link variable, to NIL. macro body not executed.");
+
+    static private final SubLList $list_alt67 = list(makeUninternedSymbol("LINK-NODE"), makeUninternedSymbol("MT"), makeUninternedSymbol("TV"));
+
+    static private final SubLString $str_alt68$Node__a_does_not_pass_sbhl_type_t = makeString("Node ~a does not pass sbhl-type-test ~a~%");
+
+    static private final SubLSymbol $sym69$TERM__ = makeSymbol("TERM-<");
+
+    static private final SubLSymbol $sym71$SPEC_ = makeSymbol("SPEC?");
+
+    static private final SubLString $str_alt74$Click_to_go_to_functions_denoting = makeString("Click to go to functions denoting a phrase type.");
+
+    static private final SubLString $str_alt75$__A = makeString("#~A");
+
+    static private final SubLSymbol $sym76$NL_PHRASE_TYPE_ = makeSymbol("NL-PHRASE-TYPE?");
+
+    static private final SubLSymbol $sym77$GENLS_ = makeSymbol("GENLS?");
+
+    static private final SubLString $str_alt78$Invalid_attempt_to_reuse_memoizat = makeString("Invalid attempt to reuse memoization state in multiple threads simultaneously.");
+
+    static private final SubLString $str_alt80$Mt__ = makeString("Mt: ");
+
+    static private final SubLString $str_alt83$n_a = makeString("n/a");
+
+    static private final SubLString $str_alt84$generated_phrases___A = makeString("generated phrases: ~A");
+
+    static private final SubLString $$$NL = makeString("NL");
+
+    static private final SubLString $$$Unlexified_Term = makeString("Unlexified Term");
+
+    static private final SubLString $$$Bad_SemTrans = makeString("Bad SemTrans");
+
+    static private final SubLString $$$Bad_Lexification = makeString("Bad Lexification");
+
+    static private final SubLString $str_alt89$Lexification_problem___S = makeString("Lexification problem: ~S");
+
+    static private final SubLString $str_alt90$Unlexified_term___S = makeString("Unlexified term: ~S");
+
+    static private final SubLString $$$Bad_lexical_assertion = makeString("Bad lexical assertion");
+
+    static private final SubLString $str_alt92$__ = makeString(" (");
+
+    static private final SubLString $str_alt93$_S_ = makeString("~S ");
+
+    static private final SubLString $str_alt94$_____S = makeString(" -> ~S");
+
+    static private final SubLString $str_alt95$_ = makeString(")");
+
+    static private final SubLString $str_alt96$I_found_the_following_assertion_p = makeString("I found the following assertion problematic:~%~%~S~%~%");
+
+    static private final SubLString $str_alt97$There_doesn_t_seem_to_be_any_lexi = makeString("There doesn't seem to be any lexification for ~S.");
+
+    static private final SubLString $str_alt98$I_was_unhappy_with_the_lexificati = makeString("I was unhappy with the lexification status of ~S.");
+
+    static private final SubLString $str_alt99$Lexical_Info_for_ = makeString("Lexical Info for ");
+
+    static private final SubLString $str_alt100$WordNet_Synset_ = makeString("WordNet Synset:");
+
+    static private final SubLString $str_alt105$Other_generated_phrases__ = makeString("Other generated phrases: ");
+
+    static private final SubLString $str_alt106$_ = makeString("\"");
+
+    static private final SubLString $str_alt107$_ = makeString("'");
+
+    static private final SubLString $str_alt108$_A__ = makeString("~A: ");
+
+    static private final SubLString $str_alt110$___A_ = makeString(" (~A)");
+
+    static private final SubLString $str_alt112$Generated_based_on_ = makeString("Generated based on:");
+
+    static private final SubLString $str_alt113$This_paraphrase_is_cached_ = makeString("This paraphrase is cached.");
+
+    static private final SubLString $str_alt116$Other_generation_templates_ = makeString("Other generation templates:");
 
     public static SubLObject cb_show_nl_trie_get_subtrie_for_path(final SubLObject path) {
         final SubLThread thread = SubLProcess.currentSubLThread();
@@ -4224,74 +6297,195 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return path;
     }
 
+    public static final SubLObject declare_cb_lexical_info_file_alt() {
+        declareFunction("cb_c_lexical", "CB-C-LEXICAL", 1, 0, false);
+        declareFunction("cb_link_lexical", "CB-LINK-LEXICAL", 1, 2, false);
+        declareFunction("cb_c_verbose_lexical", "CB-C-VERBOSE-LEXICAL", 1, 0, false);
+        declareFunction("cb_link_verbose_lexical", "CB-LINK-VERBOSE-LEXICAL", 1, 0, false);
+        declareFunction("cb_print_lexical_information", "CB-PRINT-LEXICAL-INFORMATION", 1, 1, false);
+        declareFunction("cb_lexical_information", "CB-LEXICAL-INFORMATION", 1, 1, false);
+        declareFunction("cb_lexical_information_for_word_unit", "CB-LEXICAL-INFORMATION-FOR-WORD-UNIT", 1, 1, false);
+        declareFunction("cb_lexical_information_default", "CB-LEXICAL-INFORMATION-DEFAULT", 1, 1, false);
+        declareFunction("cb_sort_lexical_information", "CB-SORT-LEXICAL-INFORMATION", 1, 0, false);
+        declareFunction("cb_c_lexical_internal", "CB-C-LEXICAL-INTERNAL", 1, 2, false);
+        declareFunction("cb_c_lexical_internal_links", "CB-C-LEXICAL-INTERNAL-LINKS", 1, 1, false);
+        declareFunction("cb_link_clear_lexical_caches", "CB-LINK-CLEAR-LEXICAL-CACHES", 1, 2, false);
+        declareFunction("clear_lexical_caches_for_term_with_id", "CLEAR-LEXICAL-CACHES-FOR-TERM-WITH-ID", 1, 0, false);
+        declareFunction("cb_link_gen_function_documentation", "CB-LINK-GEN-FUNCTION-DOCUMENTATION", 0, 1, false);
+        declareFunction("show_generation_function_documentation", "SHOW-GENERATION-FUNCTION-DOCUMENTATION", 0, 1, false);
+        declareFunction("generation_function_alist", "GENERATION-FUNCTION-ALIST", 0, 0, false);
+        declareFunction("generation_function_toc", "GENERATION-FUNCTION-TOC", 1, 0, false);
+        declareFunction("generation_function_result_isas", "GENERATION-FUNCTION-RESULT-ISAS", 1, 1, false);
+        declareFunction("cb_c_lexical_internal_print_assertions", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTIONS", 1, 1, false);
+        declareFunction("cb_c_lexical_internal_print_assertion", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTION", 2, 1, false);
+        declareFunction("cb_bugzilla_lexicon_link", "CB-BUGZILLA-LEXICON-LINK", 1, 0, false);
+        declareFunction("cb_lexicon_bugzilla_component_for_term", "CB-LEXICON-BUGZILLA-COMPONENT-FOR-TERM", 1, 0, false);
+        declareFunction("cb_lexicon_bugzilla_summary_for_term", "CB-LEXICON-BUGZILLA-SUMMARY-FOR-TERM", 1, 0, false);
+        declareFunction("cb_lexicon_bugzilla_summary_for_fort", "CB-LEXICON-BUGZILLA-SUMMARY-FOR-FORT", 1, 0, false);
+        declareFunction("cb_lexicon_bugzilla_summary_for_as", "CB-LEXICON-BUGZILLA-SUMMARY-FOR-AS", 1, 0, false);
+        declareFunction("cb_lexicon_bugzilla_comment_for_term", "CB-LEXICON-BUGZILLA-COMMENT-FOR-TERM", 1, 0, false);
+        declareFunction("cb_c_lexical_internal_print_header", "CB-C-LEXICAL-INTERNAL-PRINT-HEADER", 1, 1, false);
+        declareFunction("cb_show_default_generated_phrase", "CB-SHOW-DEFAULT-GENERATED-PHRASE", 1, 1, false);
+        declareFunction("cb_print_paraphrase", "CB-PRINT-PARAPHRASE", 5, 2, false);
+        declareFunction("cb_print_dummy_formula_paraphrase", "CB-PRINT-DUMMY-FORMULA-PARAPHRASE", 2, 0, false);
+        declareFunction("str_assertion_mt", "STR-ASSERTION-MT", 1, 0, false);
+        declareFunction("str_assertion_arg0", "STR-ASSERTION-ARG0", 1, 0, false);
+        return NIL;
+    }
+
     public static SubLObject declare_cb_lexical_info_file() {
-        declareFunction(me, "cb_c_lexical", "CB-C-LEXICAL", 1, 0, false);
-        declareFunction(me, "cb_link_lexical", "CB-LINK-LEXICAL", 1, 3, false);
-        declareFunction(me, "cb_c_verbose_lexical", "CB-C-VERBOSE-LEXICAL", 1, 0, false);
-        declareFunction(me, "cb_link_verbose_lexical", "CB-LINK-VERBOSE-LEXICAL", 1, 0, false);
-        declareFunction(me, "cb_print_lexical_information", "CB-PRINT-LEXICAL-INFORMATION", 1, 1, false);
-        declareFunction(me, "cb_lexical_information", "CB-LEXICAL-INFORMATION", 1, 2, false);
-        declareFunction(me, "cb_lexical_information_for_word_unit", "CB-LEXICAL-INFORMATION-FOR-WORD-UNIT", 1, 1, false);
-        declareFunction(me, "cb_lexical_information_default", "CB-LEXICAL-INFORMATION-DEFAULT", 1, 2, false);
-        declareFunction(me, "cb_sort_lexical_information", "CB-SORT-LEXICAL-INFORMATION", 1, 0, false);
-        declareFunction(me, "cb_c_lexical_internal", "CB-C-LEXICAL-INTERNAL", 1, 2, false);
-        declareFunction(me, "cb_c_lexical_internal_links", "CB-C-LEXICAL-INTERNAL-LINKS", 1, 1, false);
-        declareFunction(me, "cb_link_clear_lexical_caches", "CB-LINK-CLEAR-LEXICAL-CACHES", 1, 2, false);
-        declareFunction(me, "clear_lexical_caches_for_term_with_id", "CLEAR-LEXICAL-CACHES-FOR-TERM-WITH-ID", 1, 0, false);
-        declareFunction(me, "cb_link_gen_function_documentation", "CB-LINK-GEN-FUNCTION-DOCUMENTATION", 0, 1, false);
-        declareFunction(me, "show_generation_function_documentation", "SHOW-GENERATION-FUNCTION-DOCUMENTATION", 0, 1, false);
-        declareFunction(me, "generation_function_alist", "GENERATION-FUNCTION-ALIST", 0, 0, false);
-        declareFunction(me, "generation_function_toc", "GENERATION-FUNCTION-TOC", 1, 0, false);
-        declareFunction(me, "generation_function_result_isas", "GENERATION-FUNCTION-RESULT-ISAS", 1, 1, false);
-        declareFunction(me, "cb_c_lexical_internal_print_assertions", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTIONS", 1, 1, false);
-        declareFunction(me, "cb_lexical_strength_links", "CB-LEXICAL-STRENGTH-LINKS", 1, 0, false);
-        declareFunction(me, "cb_genstringassertion_link", "CB-GENSTRINGASSERTION-LINK", 1, 0, false);
-        declareFunction(me, "lexical_assertion_strength", "LEXICAL-ASSERTION-STRENGTH", 1, 0, false);
-        declareFunction(me, "contextually_dependent_lexical_assertionP", "CONTEXTUALLY-DEPENDENT-LEXICAL-ASSERTION?", 1, 0, false);
-        declareFunction(me, "primary_lexical_assertionP", "PRIMARY-LEXICAL-ASSERTION?", 1, 0, false);
-        declareFunction(me, "default_strength_lexical_assertionP", "DEFAULT-STRENGTH-LEXICAL-ASSERTION?", 1, 0, false);
-        declareFunction(me, "vanishingly_rare_lexical_assertionP", "VANISHINGLY-RARE-LEXICAL-ASSERTION?", 1, 0, false);
-        declareFunction(me, "has_genstring_assertionP", "HAS-GENSTRING-ASSERTION?", 1, 0, false);
-        declareFunction(me, "cb_c_lexical_internal_print_assertion", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTION", 2, 1, false);
-        declareFunction(me, "cb_c_lexical_internal_print_header", "CB-C-LEXICAL-INTERNAL-PRINT-HEADER", 1, 1, false);
-        declareFunction(me, "cb_generate_phrase", "CB-GENERATE-PHRASE", 1, 0, false);
-        declareFunction(me, "cb_all_phrases_for_term", "CB-ALL-PHRASES-FOR-TERM", 1, 0, false);
-        declareFunction(me, "cb_show_default_generated_phrase", "CB-SHOW-DEFAULT-GENERATED-PHRASE", 1, 1, false);
-        declareFunction(me, "cb_print_paraphrase", "CB-PRINT-PARAPHRASE", 5, 3, false);
-        declareFunction(me, "cb_print_dummy_formula_paraphrase", "CB-PRINT-DUMMY-FORMULA-PARAPHRASE", 2, 0, false);
-        declareFunction(me, "str_assertion_mt", "STR-ASSERTION-MT", 1, 0, false);
-        declareFunction(me, "str_assertion_arg0", "STR-ASSERTION-ARG0", 1, 0, false);
-        declareFunction(me, "str_meta_assertion_p", "STR-META-ASSERTION-P", 1, 0, false);
-        declareFunction(me, "cb_link_nl_trie_browse", "CB-LINK-NL-TRIE-BROWSE", 0, 1, false);
-        declareFunction(me, "cb_show_nl_trie", "CB-SHOW-NL-TRIE", 0, 1, false);
-        declareFunction(me, "cb_show_nl_trie_for_path", "CB-SHOW-NL-TRIE-FOR-PATH", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_get_subtrie_for_path", "CB-SHOW-NL-TRIE-GET-SUBTRIE-FOR-PATH", 1, 0, false);
-        declareFunction(me, "cb_no_nl_trie_loaded", "CB-NO-NL-TRIE-LOADED", 0, 0, false);
-        declareFunction(me, "cb_show_nl_trie_implementation", "CB-SHOW-NL-TRIE-IMPLEMENTATION", 2, 0, false);
-        declareFunction(me, "cb_show_nl_trie_clustered_keys", "CB-SHOW-NL-TRIE-CLUSTERED-KEYS", 3, 0, false);
-        declareFunction(me, "cb_show_nl_trie_prefix_shortcuts", "CB-SHOW-NL-TRIE-PREFIX-SHORTCUTS", 1, 0, false);
-        declareFunction(me, "show_nl_trie_find_matching_cluster_members", "SHOW-NL-TRIE-FIND-MATCHING-CLUSTER-MEMBERS", 3, 0, false);
-        declareFunction(me, "cb_show_nl_trie_render_clusters", "CB-SHOW-NL-TRIE-RENDER-CLUSTERS", 3, 0, false);
-        declareFunction(me, "cb_link_cb_show_nl_trie_set_prefix", "CB-LINK-CB-SHOW-NL-TRIE-SET-PREFIX", 3, 1, false);
-        declareFunction(me, "cb_show_nl_trie_set_prefix", "CB-SHOW-NL-TRIE-SET-PREFIX", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_unclustered_keys", "CB-SHOW-NL-TRIE-UNCLUSTERED-KEYS", 3, 0, false);
-        declareFunction(me, "cb_show_nl_trie_unclustered_subentries", "CB-SHOW-NL-TRIE-UNCLUSTERED-SUBENTRIES", 3, 0, false);
-        declareFunction(me, "cb_show_nl_trie_maybe_render_null_key", "CB-SHOW-NL-TRIE-MAYBE-RENDER-NULL-KEY", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_render_header", "CB-SHOW-NL-TRIE-RENDER-HEADER", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_get_starting_entry_specification", "CB-SHOW-NL-TRIE-GET-STARTING-ENTRY-SPECIFICATION", 0, 0, false);
-        declareFunction(me, "cb_show_nl_trie_starting_at_entry", "CB-SHOW-NL-TRIE-STARTING-AT-ENTRY", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_render_path_elements", "CB-SHOW-NL-TRIE-RENDER-PATH-ELEMENTS", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_cluster_keys", "CB-SHOW-NL-TRIE-CLUSTER-KEYS", 1, 1, false);
-        declareFunction(me, "cb_show_nl_trie_first_key_from_cluster", "CB-SHOW-NL-TRIE-FIRST-KEY-FROM-CLUSTER", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_keys_share_prefix_of_widthP", "CB-SHOW-NL-TRIE-KEYS-SHARE-PREFIX-OF-WIDTH?", 3, 0, false);
-        declareFunction(me, "cb_show_nl_trie_pad_key_to_width", "CB-SHOW-NL-TRIE-PAD-KEY-TO-WIDTH", 2, 0, false);
-        declareFunction(me, "cb_show_nl_trie_preprocess_keys", "CB-SHOW-NL-TRIE-PREPROCESS-KEYS", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_render_drill_down", "CB-SHOW-NL-TRIE-RENDER-DRILL-DOWN", 2, 0, false);
-        declareFunction(me, "cb_show_nl_trie_render_terminal_values", "CB-SHOW-NL-TRIE-RENDER-TERMINAL-VALUES", 1, 1, false);
-        declareFunction(me, "cb_show_nl_trie_word_support_set", "CB-SHOW-NL-TRIE-WORD-SUPPORT-SET", 2, 0, false);
-        declareFunction(me, "cb_form_with_assertion_bias", "CB-FORM-WITH-ASSERTION-BIAS", 1, 0, false);
-        declareFunction(me, "cb_show_nl_trie_specific", "CB-SHOW-NL-TRIE-SPECIFIC", 1, 0, false);
-        declareFunction(me, "cb_link_show_nl_trie_specific", "CB-LINK-SHOW-NL-TRIE-SPECIFIC", 1, 1, false);
+        if (SubLFiles.USE_V1) {
+            declareFunction("cb_c_lexical", "CB-C-LEXICAL", 1, 0, false);
+            declareFunction("cb_link_lexical", "CB-LINK-LEXICAL", 1, 3, false);
+            declareFunction("cb_c_verbose_lexical", "CB-C-VERBOSE-LEXICAL", 1, 0, false);
+            declareFunction("cb_link_verbose_lexical", "CB-LINK-VERBOSE-LEXICAL", 1, 0, false);
+            declareFunction("cb_print_lexical_information", "CB-PRINT-LEXICAL-INFORMATION", 1, 1, false);
+            declareFunction("cb_lexical_information", "CB-LEXICAL-INFORMATION", 1, 2, false);
+            declareFunction("cb_lexical_information_for_word_unit", "CB-LEXICAL-INFORMATION-FOR-WORD-UNIT", 1, 1, false);
+            declareFunction("cb_lexical_information_default", "CB-LEXICAL-INFORMATION-DEFAULT", 1, 2, false);
+            declareFunction("cb_sort_lexical_information", "CB-SORT-LEXICAL-INFORMATION", 1, 0, false);
+            declareFunction("cb_c_lexical_internal", "CB-C-LEXICAL-INTERNAL", 1, 2, false);
+            declareFunction("cb_c_lexical_internal_links", "CB-C-LEXICAL-INTERNAL-LINKS", 1, 1, false);
+            declareFunction("cb_link_clear_lexical_caches", "CB-LINK-CLEAR-LEXICAL-CACHES", 1, 2, false);
+            declareFunction("clear_lexical_caches_for_term_with_id", "CLEAR-LEXICAL-CACHES-FOR-TERM-WITH-ID", 1, 0, false);
+            declareFunction("cb_link_gen_function_documentation", "CB-LINK-GEN-FUNCTION-DOCUMENTATION", 0, 1, false);
+            declareFunction("show_generation_function_documentation", "SHOW-GENERATION-FUNCTION-DOCUMENTATION", 0, 1, false);
+            declareFunction("generation_function_alist", "GENERATION-FUNCTION-ALIST", 0, 0, false);
+            declareFunction("generation_function_toc", "GENERATION-FUNCTION-TOC", 1, 0, false);
+            declareFunction("generation_function_result_isas", "GENERATION-FUNCTION-RESULT-ISAS", 1, 1, false);
+            declareFunction("cb_c_lexical_internal_print_assertions", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTIONS", 1, 1, false);
+            declareFunction("cb_lexical_strength_links", "CB-LEXICAL-STRENGTH-LINKS", 1, 0, false);
+            declareFunction("cb_genstringassertion_link", "CB-GENSTRINGASSERTION-LINK", 1, 0, false);
+            declareFunction("lexical_assertion_strength", "LEXICAL-ASSERTION-STRENGTH", 1, 0, false);
+            declareFunction("contextually_dependent_lexical_assertionP", "CONTEXTUALLY-DEPENDENT-LEXICAL-ASSERTION?", 1, 0, false);
+            declareFunction("primary_lexical_assertionP", "PRIMARY-LEXICAL-ASSERTION?", 1, 0, false);
+            declareFunction("default_strength_lexical_assertionP", "DEFAULT-STRENGTH-LEXICAL-ASSERTION?", 1, 0, false);
+            declareFunction("vanishingly_rare_lexical_assertionP", "VANISHINGLY-RARE-LEXICAL-ASSERTION?", 1, 0, false);
+            declareFunction("has_genstring_assertionP", "HAS-GENSTRING-ASSERTION?", 1, 0, false);
+            declareFunction("cb_c_lexical_internal_print_assertion", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTION", 2, 1, false);
+            declareFunction("cb_c_lexical_internal_print_header", "CB-C-LEXICAL-INTERNAL-PRINT-HEADER", 1, 1, false);
+            declareFunction("cb_generate_phrase", "CB-GENERATE-PHRASE", 1, 0, false);
+            declareFunction("cb_all_phrases_for_term", "CB-ALL-PHRASES-FOR-TERM", 1, 0, false);
+            declareFunction("cb_show_default_generated_phrase", "CB-SHOW-DEFAULT-GENERATED-PHRASE", 1, 1, false);
+            declareFunction("cb_print_paraphrase", "CB-PRINT-PARAPHRASE", 5, 3, false);
+            declareFunction("cb_print_dummy_formula_paraphrase", "CB-PRINT-DUMMY-FORMULA-PARAPHRASE", 2, 0, false);
+            declareFunction("str_assertion_mt", "STR-ASSERTION-MT", 1, 0, false);
+            declareFunction("str_assertion_arg0", "STR-ASSERTION-ARG0", 1, 0, false);
+            declareFunction("str_meta_assertion_p", "STR-META-ASSERTION-P", 1, 0, false);
+            declareFunction("cb_link_nl_trie_browse", "CB-LINK-NL-TRIE-BROWSE", 0, 1, false);
+            declareFunction("cb_show_nl_trie", "CB-SHOW-NL-TRIE", 0, 1, false);
+            declareFunction("cb_show_nl_trie_for_path", "CB-SHOW-NL-TRIE-FOR-PATH", 1, 0, false);
+            declareFunction("cb_show_nl_trie_get_subtrie_for_path", "CB-SHOW-NL-TRIE-GET-SUBTRIE-FOR-PATH", 1, 0, false);
+            declareFunction("cb_no_nl_trie_loaded", "CB-NO-NL-TRIE-LOADED", 0, 0, false);
+            declareFunction("cb_show_nl_trie_implementation", "CB-SHOW-NL-TRIE-IMPLEMENTATION", 2, 0, false);
+            declareFunction("cb_show_nl_trie_clustered_keys", "CB-SHOW-NL-TRIE-CLUSTERED-KEYS", 3, 0, false);
+            declareFunction("cb_show_nl_trie_prefix_shortcuts", "CB-SHOW-NL-TRIE-PREFIX-SHORTCUTS", 1, 0, false);
+            declareFunction("show_nl_trie_find_matching_cluster_members", "SHOW-NL-TRIE-FIND-MATCHING-CLUSTER-MEMBERS", 3, 0, false);
+            declareFunction("cb_show_nl_trie_render_clusters", "CB-SHOW-NL-TRIE-RENDER-CLUSTERS", 3, 0, false);
+            declareFunction("cb_link_cb_show_nl_trie_set_prefix", "CB-LINK-CB-SHOW-NL-TRIE-SET-PREFIX", 3, 1, false);
+            declareFunction("cb_show_nl_trie_set_prefix", "CB-SHOW-NL-TRIE-SET-PREFIX", 1, 0, false);
+            declareFunction("cb_show_nl_trie_unclustered_keys", "CB-SHOW-NL-TRIE-UNCLUSTERED-KEYS", 3, 0, false);
+            declareFunction("cb_show_nl_trie_unclustered_subentries", "CB-SHOW-NL-TRIE-UNCLUSTERED-SUBENTRIES", 3, 0, false);
+            declareFunction("cb_show_nl_trie_maybe_render_null_key", "CB-SHOW-NL-TRIE-MAYBE-RENDER-NULL-KEY", 1, 0, false);
+            declareFunction("cb_show_nl_trie_render_header", "CB-SHOW-NL-TRIE-RENDER-HEADER", 1, 0, false);
+            declareFunction("cb_show_nl_trie_get_starting_entry_specification", "CB-SHOW-NL-TRIE-GET-STARTING-ENTRY-SPECIFICATION", 0, 0, false);
+            declareFunction("cb_show_nl_trie_starting_at_entry", "CB-SHOW-NL-TRIE-STARTING-AT-ENTRY", 1, 0, false);
+            declareFunction("cb_show_nl_trie_render_path_elements", "CB-SHOW-NL-TRIE-RENDER-PATH-ELEMENTS", 1, 0, false);
+            declareFunction("cb_show_nl_trie_cluster_keys", "CB-SHOW-NL-TRIE-CLUSTER-KEYS", 1, 1, false);
+            declareFunction("cb_show_nl_trie_first_key_from_cluster", "CB-SHOW-NL-TRIE-FIRST-KEY-FROM-CLUSTER", 1, 0, false);
+            declareFunction("cb_show_nl_trie_keys_share_prefix_of_widthP", "CB-SHOW-NL-TRIE-KEYS-SHARE-PREFIX-OF-WIDTH?", 3, 0, false);
+            declareFunction("cb_show_nl_trie_pad_key_to_width", "CB-SHOW-NL-TRIE-PAD-KEY-TO-WIDTH", 2, 0, false);
+            declareFunction("cb_show_nl_trie_preprocess_keys", "CB-SHOW-NL-TRIE-PREPROCESS-KEYS", 1, 0, false);
+            declareFunction("cb_show_nl_trie_render_drill_down", "CB-SHOW-NL-TRIE-RENDER-DRILL-DOWN", 2, 0, false);
+            declareFunction("cb_show_nl_trie_render_terminal_values", "CB-SHOW-NL-TRIE-RENDER-TERMINAL-VALUES", 1, 1, false);
+            declareFunction("cb_show_nl_trie_word_support_set", "CB-SHOW-NL-TRIE-WORD-SUPPORT-SET", 2, 0, false);
+            declareFunction("cb_form_with_assertion_bias", "CB-FORM-WITH-ASSERTION-BIAS", 1, 0, false);
+            declareFunction("cb_show_nl_trie_specific", "CB-SHOW-NL-TRIE-SPECIFIC", 1, 0, false);
+            declareFunction("cb_link_show_nl_trie_specific", "CB-LINK-SHOW-NL-TRIE-SPECIFIC", 1, 1, false);
+        }
+        if (SubLFiles.USE_V2) {
+            declareFunction("cb_link_lexical", "CB-LINK-LEXICAL", 1, 2, false);
+            declareFunction("cb_lexical_information", "CB-LEXICAL-INFORMATION", 1, 1, false);
+            declareFunction("cb_lexical_information_default", "CB-LEXICAL-INFORMATION-DEFAULT", 1, 1, false);
+            declareFunction("cb_bugzilla_lexicon_link", "CB-BUGZILLA-LEXICON-LINK", 1, 0, false);
+            declareFunction("cb_lexicon_bugzilla_component_for_term", "CB-LEXICON-BUGZILLA-COMPONENT-FOR-TERM", 1, 0, false);
+            declareFunction("cb_lexicon_bugzilla_summary_for_term", "CB-LEXICON-BUGZILLA-SUMMARY-FOR-TERM", 1, 0, false);
+            declareFunction("cb_lexicon_bugzilla_summary_for_fort", "CB-LEXICON-BUGZILLA-SUMMARY-FOR-FORT", 1, 0, false);
+            declareFunction("cb_lexicon_bugzilla_summary_for_as", "CB-LEXICON-BUGZILLA-SUMMARY-FOR-AS", 1, 0, false);
+            declareFunction("cb_lexicon_bugzilla_comment_for_term", "CB-LEXICON-BUGZILLA-COMMENT-FOR-TERM", 1, 0, false);
+            declareFunction("cb_print_paraphrase", "CB-PRINT-PARAPHRASE", 5, 2, false);
+        }
+        return NIL;
+    }
+
+    public static SubLObject declare_cb_lexical_info_file_Previous() {
+        declareFunction("cb_c_lexical", "CB-C-LEXICAL", 1, 0, false);
+        declareFunction("cb_link_lexical", "CB-LINK-LEXICAL", 1, 3, false);
+        declareFunction("cb_c_verbose_lexical", "CB-C-VERBOSE-LEXICAL", 1, 0, false);
+        declareFunction("cb_link_verbose_lexical", "CB-LINK-VERBOSE-LEXICAL", 1, 0, false);
+        declareFunction("cb_print_lexical_information", "CB-PRINT-LEXICAL-INFORMATION", 1, 1, false);
+        declareFunction("cb_lexical_information", "CB-LEXICAL-INFORMATION", 1, 2, false);
+        declareFunction("cb_lexical_information_for_word_unit", "CB-LEXICAL-INFORMATION-FOR-WORD-UNIT", 1, 1, false);
+        declareFunction("cb_lexical_information_default", "CB-LEXICAL-INFORMATION-DEFAULT", 1, 2, false);
+        declareFunction("cb_sort_lexical_information", "CB-SORT-LEXICAL-INFORMATION", 1, 0, false);
+        declareFunction("cb_c_lexical_internal", "CB-C-LEXICAL-INTERNAL", 1, 2, false);
+        declareFunction("cb_c_lexical_internal_links", "CB-C-LEXICAL-INTERNAL-LINKS", 1, 1, false);
+        declareFunction("cb_link_clear_lexical_caches", "CB-LINK-CLEAR-LEXICAL-CACHES", 1, 2, false);
+        declareFunction("clear_lexical_caches_for_term_with_id", "CLEAR-LEXICAL-CACHES-FOR-TERM-WITH-ID", 1, 0, false);
+        declareFunction("cb_link_gen_function_documentation", "CB-LINK-GEN-FUNCTION-DOCUMENTATION", 0, 1, false);
+        declareFunction("show_generation_function_documentation", "SHOW-GENERATION-FUNCTION-DOCUMENTATION", 0, 1, false);
+        declareFunction("generation_function_alist", "GENERATION-FUNCTION-ALIST", 0, 0, false);
+        declareFunction("generation_function_toc", "GENERATION-FUNCTION-TOC", 1, 0, false);
+        declareFunction("generation_function_result_isas", "GENERATION-FUNCTION-RESULT-ISAS", 1, 1, false);
+        declareFunction("cb_c_lexical_internal_print_assertions", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTIONS", 1, 1, false);
+        declareFunction("cb_lexical_strength_links", "CB-LEXICAL-STRENGTH-LINKS", 1, 0, false);
+        declareFunction("cb_genstringassertion_link", "CB-GENSTRINGASSERTION-LINK", 1, 0, false);
+        declareFunction("lexical_assertion_strength", "LEXICAL-ASSERTION-STRENGTH", 1, 0, false);
+        declareFunction("contextually_dependent_lexical_assertionP", "CONTEXTUALLY-DEPENDENT-LEXICAL-ASSERTION?", 1, 0, false);
+        declareFunction("primary_lexical_assertionP", "PRIMARY-LEXICAL-ASSERTION?", 1, 0, false);
+        declareFunction("default_strength_lexical_assertionP", "DEFAULT-STRENGTH-LEXICAL-ASSERTION?", 1, 0, false);
+        declareFunction("vanishingly_rare_lexical_assertionP", "VANISHINGLY-RARE-LEXICAL-ASSERTION?", 1, 0, false);
+        declareFunction("has_genstring_assertionP", "HAS-GENSTRING-ASSERTION?", 1, 0, false);
+        declareFunction("cb_c_lexical_internal_print_assertion", "CB-C-LEXICAL-INTERNAL-PRINT-ASSERTION", 2, 1, false);
+        declareFunction("cb_c_lexical_internal_print_header", "CB-C-LEXICAL-INTERNAL-PRINT-HEADER", 1, 1, false);
+        declareFunction("cb_generate_phrase", "CB-GENERATE-PHRASE", 1, 0, false);
+        declareFunction("cb_all_phrases_for_term", "CB-ALL-PHRASES-FOR-TERM", 1, 0, false);
+        declareFunction("cb_show_default_generated_phrase", "CB-SHOW-DEFAULT-GENERATED-PHRASE", 1, 1, false);
+        declareFunction("cb_print_paraphrase", "CB-PRINT-PARAPHRASE", 5, 3, false);
+        declareFunction("cb_print_dummy_formula_paraphrase", "CB-PRINT-DUMMY-FORMULA-PARAPHRASE", 2, 0, false);
+        declareFunction("str_assertion_mt", "STR-ASSERTION-MT", 1, 0, false);
+        declareFunction("str_assertion_arg0", "STR-ASSERTION-ARG0", 1, 0, false);
+        declareFunction("str_meta_assertion_p", "STR-META-ASSERTION-P", 1, 0, false);
+        declareFunction("cb_link_nl_trie_browse", "CB-LINK-NL-TRIE-BROWSE", 0, 1, false);
+        declareFunction("cb_show_nl_trie", "CB-SHOW-NL-TRIE", 0, 1, false);
+        declareFunction("cb_show_nl_trie_for_path", "CB-SHOW-NL-TRIE-FOR-PATH", 1, 0, false);
+        declareFunction("cb_show_nl_trie_get_subtrie_for_path", "CB-SHOW-NL-TRIE-GET-SUBTRIE-FOR-PATH", 1, 0, false);
+        declareFunction("cb_no_nl_trie_loaded", "CB-NO-NL-TRIE-LOADED", 0, 0, false);
+        declareFunction("cb_show_nl_trie_implementation", "CB-SHOW-NL-TRIE-IMPLEMENTATION", 2, 0, false);
+        declareFunction("cb_show_nl_trie_clustered_keys", "CB-SHOW-NL-TRIE-CLUSTERED-KEYS", 3, 0, false);
+        declareFunction("cb_show_nl_trie_prefix_shortcuts", "CB-SHOW-NL-TRIE-PREFIX-SHORTCUTS", 1, 0, false);
+        declareFunction("show_nl_trie_find_matching_cluster_members", "SHOW-NL-TRIE-FIND-MATCHING-CLUSTER-MEMBERS", 3, 0, false);
+        declareFunction("cb_show_nl_trie_render_clusters", "CB-SHOW-NL-TRIE-RENDER-CLUSTERS", 3, 0, false);
+        declareFunction("cb_link_cb_show_nl_trie_set_prefix", "CB-LINK-CB-SHOW-NL-TRIE-SET-PREFIX", 3, 1, false);
+        declareFunction("cb_show_nl_trie_set_prefix", "CB-SHOW-NL-TRIE-SET-PREFIX", 1, 0, false);
+        declareFunction("cb_show_nl_trie_unclustered_keys", "CB-SHOW-NL-TRIE-UNCLUSTERED-KEYS", 3, 0, false);
+        declareFunction("cb_show_nl_trie_unclustered_subentries", "CB-SHOW-NL-TRIE-UNCLUSTERED-SUBENTRIES", 3, 0, false);
+        declareFunction("cb_show_nl_trie_maybe_render_null_key", "CB-SHOW-NL-TRIE-MAYBE-RENDER-NULL-KEY", 1, 0, false);
+        declareFunction("cb_show_nl_trie_render_header", "CB-SHOW-NL-TRIE-RENDER-HEADER", 1, 0, false);
+        declareFunction("cb_show_nl_trie_get_starting_entry_specification", "CB-SHOW-NL-TRIE-GET-STARTING-ENTRY-SPECIFICATION", 0, 0, false);
+        declareFunction("cb_show_nl_trie_starting_at_entry", "CB-SHOW-NL-TRIE-STARTING-AT-ENTRY", 1, 0, false);
+        declareFunction("cb_show_nl_trie_render_path_elements", "CB-SHOW-NL-TRIE-RENDER-PATH-ELEMENTS", 1, 0, false);
+        declareFunction("cb_show_nl_trie_cluster_keys", "CB-SHOW-NL-TRIE-CLUSTER-KEYS", 1, 1, false);
+        declareFunction("cb_show_nl_trie_first_key_from_cluster", "CB-SHOW-NL-TRIE-FIRST-KEY-FROM-CLUSTER", 1, 0, false);
+        declareFunction("cb_show_nl_trie_keys_share_prefix_of_widthP", "CB-SHOW-NL-TRIE-KEYS-SHARE-PREFIX-OF-WIDTH?", 3, 0, false);
+        declareFunction("cb_show_nl_trie_pad_key_to_width", "CB-SHOW-NL-TRIE-PAD-KEY-TO-WIDTH", 2, 0, false);
+        declareFunction("cb_show_nl_trie_preprocess_keys", "CB-SHOW-NL-TRIE-PREPROCESS-KEYS", 1, 0, false);
+        declareFunction("cb_show_nl_trie_render_drill_down", "CB-SHOW-NL-TRIE-RENDER-DRILL-DOWN", 2, 0, false);
+        declareFunction("cb_show_nl_trie_render_terminal_values", "CB-SHOW-NL-TRIE-RENDER-TERMINAL-VALUES", 1, 1, false);
+        declareFunction("cb_show_nl_trie_word_support_set", "CB-SHOW-NL-TRIE-WORD-SUPPORT-SET", 2, 0, false);
+        declareFunction("cb_form_with_assertion_bias", "CB-FORM-WITH-ASSERTION-BIAS", 1, 0, false);
+        declareFunction("cb_show_nl_trie_specific", "CB-SHOW-NL-TRIE-SPECIFIC", 1, 0, false);
+        declareFunction("cb_link_show_nl_trie_specific", "CB-LINK-SHOW-NL-TRIE-SPECIFIC", 1, 1, false);
         return NIL;
     }
 
@@ -4310,9 +6504,66 @@ public final class cb_lexical_info extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject setup_cb_lexical_info_file_alt() {
+        register_html_state_variable($verbose_lexical_infoP$);
+        register_html_interface_variable($verbose_lexical_infoP$);
+        html_macros.note_html_handler_function(CB_C_LEXICAL);
+        setup_cb_link_method($LEXICAL, CB_LINK_LEXICAL, THREE_INTEGER);
+        html_macros.note_html_handler_function(CB_C_VERBOSE_LEXICAL);
+        setup_cb_link_method($VERBOSE_LEXICAL, CB_LINK_VERBOSE_LEXICAL, ONE_INTEGER);
+        setup_cb_link_method($CLEAR_LEXICAL_CACHES, CB_LINK_CLEAR_LEXICAL_CACHES, THREE_INTEGER);
+        html_macros.note_html_handler_function(CLEAR_LEXICAL_CACHES_FOR_TERM_WITH_ID);
+        setup_cb_link_method($GEN_FUNCTION_DOCUMENTATION, CB_LINK_GEN_FUNCTION_DOCUMENTATION, ONE_INTEGER);
+        html_macros.note_html_handler_function(SHOW_GENERATION_FUNCTION_DOCUMENTATION);
+        return NIL;
+    }
+
     public static SubLObject setup_cb_lexical_info_file() {
-        register_html_state_variable($sym0$_VERBOSE_LEXICAL_INFO__);
-        register_html_interface_variable($sym0$_VERBOSE_LEXICAL_INFO__);
+        if (SubLFiles.USE_V1) {
+            register_html_state_variable($verbose_lexical_infoP$);
+            register_html_interface_variable($verbose_lexical_infoP$);
+            html_macros.note_cgi_handler_function(CB_C_LEXICAL, $HTML_HANDLER);
+            setup_cb_link_method($LEXICAL, CB_LINK_LEXICAL, FOUR_INTEGER);
+            html_macros.note_cgi_handler_function(CB_C_VERBOSE_LEXICAL, $HTML_HANDLER);
+            setup_cb_link_method($VERBOSE_LEXICAL, CB_LINK_VERBOSE_LEXICAL, ONE_INTEGER);
+            setup_cb_link_method($CLEAR_LEXICAL_CACHES, CB_LINK_CLEAR_LEXICAL_CACHES, THREE_INTEGER);
+            html_macros.note_cgi_handler_function(CLEAR_LEXICAL_CACHES_FOR_TERM_WITH_ID, $HTML_HANDLER);
+            setup_cb_link_method($GEN_FUNCTION_DOCUMENTATION, CB_LINK_GEN_FUNCTION_DOCUMENTATION, ONE_INTEGER);
+            html_macros.note_cgi_handler_function(SHOW_GENERATION_FUNCTION_DOCUMENTATION, $HTML_HANDLER);
+            sethash($HTML_NOT_GENSTRING_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str116$genstring_gray_20x20_png, $str117$_Add_genStringAssertion_));
+            sethash($HTML_GENSTRING_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str118$genstring_purple_20x20_png, $str119$_Has_a_genStringAssert_));
+            sethash($HTML_NOT_CONTEXTUAL_LEXICAL_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str121$graycaution_19x19_png, $str122$_Make_Contextually_Dependent_));
+            sethash($HTML_CONTEXTUAL_LEXICAL_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str124$caution_19x19_png, $str125$_Assertion_Contextually_Dependent));
+            sethash($HTML_VANISHING_LEXICAL_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str127$redcaution_19x19_png, $str128$_Assertion_Vanishingly_Rare_));
+            sethash($HTML_PRIMARY_LEXICAL_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str130$yellowstar_19x19_png, $str131$_Primary_Lexical_Assertion_));
+            sethash($HTML_NOT_PRIMARY_LEXICAL_IMG, cyc_file_dependencies.$html_icon_definitions$.getGlobalValue(), list($str133$graystar_19x19_gif, $str134$_Make_Primary_));
+            declare_cb_tool($NL_TRIE_BROWSE, $$$NL_Trie_Browser, $$$NLTrie, $$$Browse_the_NL_Trie);
+            setup_cb_link_method($NL_TRIE_BROWSE, CB_LINK_NL_TRIE_BROWSE, ONE_INTEGER);
+            register_html_state_variable($cb_show_nl_trie_filter_prefix$);
+            register_html_state_variable($cb_nl_trie_keylist_cutoff$);
+            register_html_state_variable($cb_nl_trie_null_entry_background_color_pair$);
+            html_macros.note_cgi_handler_function(CB_SHOW_NL_TRIE, $HTML_HANDLER);
+            setup_cb_link_method($CB_SHOW_NL_TRIE_SET_PREFIX, CB_LINK_CB_SHOW_NL_TRIE_SET_PREFIX, FOUR_INTEGER);
+            html_macros.note_cgi_handler_function(CB_SHOW_NL_TRIE_SET_PREFIX, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(CB_SHOW_NL_TRIE_STARTING_AT_ENTRY, $HTML_HANDLER);
+            html_macros.note_cgi_handler_function(CB_SHOW_NL_TRIE_SPECIFIC, $HTML_HANDLER);
+            setup_cb_link_method($SHOW_NL_TRIE_SPECIFIC, CB_LINK_SHOW_NL_TRIE_SPECIFIC, TWO_INTEGER);
+            register_html_state_variable($lexicon_webservice_host$);
+            register_html_state_variable($lexicon_webservice_port$);
+        }
+        if (SubLFiles.USE_V2) {
+            html_macros.note_html_handler_function(CB_C_LEXICAL);
+            setup_cb_link_method($LEXICAL, CB_LINK_LEXICAL, THREE_INTEGER);
+            html_macros.note_html_handler_function(CB_C_VERBOSE_LEXICAL);
+            html_macros.note_html_handler_function(CLEAR_LEXICAL_CACHES_FOR_TERM_WITH_ID);
+            html_macros.note_html_handler_function(SHOW_GENERATION_FUNCTION_DOCUMENTATION);
+        }
+        return NIL;
+    }
+
+    public static SubLObject setup_cb_lexical_info_file_Previous() {
+        register_html_state_variable($verbose_lexical_infoP$);
+        register_html_interface_variable($verbose_lexical_infoP$);
         html_macros.note_cgi_handler_function(CB_C_LEXICAL, $HTML_HANDLER);
         setup_cb_link_method($LEXICAL, CB_LINK_LEXICAL, FOUR_INTEGER);
         html_macros.note_cgi_handler_function(CB_C_VERBOSE_LEXICAL, $HTML_HANDLER);
@@ -4360,266 +6611,6 @@ public final class cb_lexical_info extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

@@ -30,6 +30,11 @@ public abstract class AbstractSubLSymbol extends FromSubLisp implements SubLSymb
 	return (Symbol) this;
     }
 
+    @Override
+    public Symbol toSymbol() {
+	return (Symbol) this;
+    }
+
     protected AbstractSubLSymbol() {
 	// hashCode = -1;
 	// value = SubLSymbol.UNBOUND;

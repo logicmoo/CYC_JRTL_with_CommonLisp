@@ -1,11 +1,28 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.harness;
 
 
+import static com.cyc.cycjava.cycl.access_macros.*;
+import static com.cyc.cycjava.cycl.control_vars.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.V12;
 import com.cyc.cycjava.cycl.dictionary;
 import com.cyc.cycjava.cycl.dictionary_contents;
 import com.cyc.cycjava.cycl.format_nil;
-import com.cyc.cycjava.cycl.inference.harness.new_root_tactician;
 import com.cyc.cycjava.cycl.number_utilities;
+import com.cyc.cycjava.cycl.queues;
 import com.cyc.cycjava.cycl.set;
 import com.cyc.cycjava.cycl.set_utilities;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sort;
@@ -16,69 +33,49 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLString;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.access_macros.*;
-import static com.cyc.cycjava.cycl.control_vars.$inference_trace_level$;
-import static com.cyc.cycjava.cycl.control_vars.*;
-import static com.cyc.cycjava.cycl.inference.harness.new_root_tactician.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class new_root_tactician extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      NEW-ROOT-TACTICIAN
+ * source file: /cyc/top/cycl/inference/harness/new-root-tactician.lisp
+ * created:     2019/07/03 17:37:41
+ */
+public final class new_root_tactician extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new new_root_tactician();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.new_root_tactician";
 
-    public static final String myFingerPrint = "ee220bfc58cbb88351a046ba222422e72903c9392dbb1204103bf987942dc612";
 
     // defparameter
+    @LispMethod(comment = "defparameter")
     public static final SubLSymbol $new_root_heuristics_enabledP$ = makeSymbol("*NEW-ROOT-HEURISTICS-ENABLED?*");
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $new_root_tactician_heuristics$ = makeSymbol("*NEW-ROOT-TACTICIAN-HEURISTICS*");
 
+    static private final SubLList $list1 = list(new SubLObject[]{ $NAME, makeString("The NEW-ROOT Tactician"), makeKeyword("COMMENT"), makeString("The NEW-ROOT Tactician needs no introduction."), makeKeyword("CONSTRUCTOR"), makeSymbol("NEW-ROOT-STRATEGY-INITIALIZE"), makeKeyword("DONE?"), makeSymbol("NEW-ROOT-STRATEGY-DONE?"), makeKeyword("DO-ONE-STEP"), makeSymbol("NEW-ROOT-STRATEGY-DO-ONE-STEP"), makeKeyword("POSSIBLY-ACTIVATE-PROBLEM"), makeSymbol("NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM"), makeKeyword("SELECT-BEST-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM"), makeKeyword("EXECUTE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-EXECUTE-STRATEGEM"), makeKeyword("QUIESCE"), makeSymbol("NEW-ROOT-STRATEGY-QUIESCE"), makeKeyword("PROBLEM-NOTHING-TO-DO?"), makeSymbol("NEW-ROOT-STRATEGY-NOTHING-TO-DO?"), makeKeyword("HAPPINESS-TABLE"), makeSymbol("NEW-ROOT-STRATEGY-HAPPINESS-TABLE"), makeKeyword("PEEK-NEXT-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-PEEK-NEXT-STRATEGEM"), makeKeyword("ACTIVATE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-ADD-NEW-ROOT"), makeKeyword("MOTIVATE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM"), makeKeyword("RECONSIDER-SET-ASIDES"), makeSymbol("ZERO"), makeKeyword("THROW-AWAY-UNINTERESTING-SET-ASIDES"), makeSymbol("ZERO"), makeKeyword("NEW-ARGUMENT-LINK"), makeSymbol("IGNORE"), makeKeyword("NEW-TACTIC"), makeSymbol("IGNORE"), makeKeyword("RELEVANT-TACTICS-WRT-REMOVAL"), makeSymbol("ERROR"), makeKeyword("SPLIT-TACTICS-POSSIBLE"), makeSymbol("IGNORE"), makeKeyword("PROBLEM-COULD-BE-PENDING"), makeSymbol("IGNORE"), makeKeyword("THROW-AWAY-PROBLEM"), makeSymbol("FALSE"), makeKeyword("SET-ASIDE-PROBLEM"), makeSymbol("FALSE"), makeKeyword("THROW-AWAY-TACTIC"), makeSymbol("FALSE"), makeKeyword("SET-ASIDE-TACTIC"), makeSymbol("FALSE"), makeKeyword("LINK-HEAD-MOTIVATED?"), makeSymbol("FALSE") });
 
+    static private final SubLList $list_alt1 = list(new SubLObject[]{ $NAME, makeString("The NEW-ROOT Tactician"), makeKeyword("COMMENT"), makeString("The NEW-ROOT Tactician needs no introduction."), makeKeyword("CONSTRUCTOR"), makeSymbol("NEW-ROOT-STRATEGY-INITIALIZE"), makeKeyword("DONE?"), makeSymbol("NEW-ROOT-STRATEGY-DONE?"), makeKeyword("DO-ONE-STEP"), makeSymbol("NEW-ROOT-STRATEGY-DO-ONE-STEP"), makeKeyword("POSSIBLY-ACTIVATE-PROBLEM"), makeSymbol("NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM"), makeKeyword("SELECT-BEST-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM"), makeKeyword("QUIESCE"), makeSymbol("NEW-ROOT-STRATEGY-QUIESCE"), makeKeyword("PEEK-NEXT-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-PEEK-NEXT-STRATEGEM"), makeKeyword("ACTIVATE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-ADD-NEW-ROOT"), makeKeyword("MOTIVATE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM"), makeKeyword("RECONSIDER-SET-ASIDES"), makeSymbol("ZERO"), makeKeyword("THROW-AWAY-UNINTERESTING-SET-ASIDES"), makeSymbol("ZERO"), makeKeyword("NEW-ARGUMENT-LINK"), makeSymbol("IGNORE"), makeKeyword("NEW-TACTIC"), makeSymbol("IGNORE"), makeKeyword("RELEVANT-TACTICS-WRT-REMOVAL"), makeSymbol("ERROR"), makeKeyword("SPLIT-TACTICS-POSSIBLE"), makeSymbol("IGNORE"), makeKeyword("PROBLEM-COULD-BE-PENDING"), makeSymbol("IGNORE"), makeKeyword("PROBLEM-NOTHING-TO-DO?"), makeSymbol("FALSE"), makeKeyword("THROW-AWAY-TACTIC"), makeSymbol("FALSE"), makeKeyword("SET-ASIDE-TACTIC"), makeSymbol("FALSE"), makeKeyword("LINK-HEAD-MOTIVATED?"), makeSymbol("FALSE") });
 
-    public static final SubLList $list1 = list(new SubLObject[]{ makeKeyword("NAME"), makeString("The NEW-ROOT Tactician"), makeKeyword("COMMENT"), makeString("The NEW-ROOT Tactician needs no introduction."), makeKeyword("CONSTRUCTOR"), makeSymbol("NEW-ROOT-STRATEGY-INITIALIZE"), makeKeyword("DONE?"), makeSymbol("NEW-ROOT-STRATEGY-DONE?"), makeKeyword("DO-ONE-STEP"), makeSymbol("NEW-ROOT-STRATEGY-DO-ONE-STEP"), makeKeyword("POSSIBLY-ACTIVATE-PROBLEM"), makeSymbol("NEW-ROOT-STRATEGY-POSSIBLY-ACTIVATE-PROBLEM"), makeKeyword("SELECT-BEST-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-SELECT-BEST-STRATEGEM"), makeKeyword("EXECUTE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-EXECUTE-STRATEGEM"), makeKeyword("QUIESCE"), makeSymbol("NEW-ROOT-STRATEGY-QUIESCE"), makeKeyword("PROBLEM-NOTHING-TO-DO?"), makeSymbol("NEW-ROOT-STRATEGY-NOTHING-TO-DO?"), makeKeyword("HAPPINESS-TABLE"), makeSymbol("NEW-ROOT-STRATEGY-HAPPINESS-TABLE"), makeKeyword("PEEK-NEXT-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-PEEK-NEXT-STRATEGEM"), makeKeyword("ACTIVATE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-ADD-NEW-ROOT"), makeKeyword("MOTIVATE-STRATEGEM"), makeSymbol("NEW-ROOT-STRATEGY-POSSIBLY-PROPAGATE-MOTIVATION-TO-PROBLEM"), makeKeyword("RECONSIDER-SET-ASIDES"), makeSymbol("ZERO"), makeKeyword("THROW-AWAY-UNINTERESTING-SET-ASIDES"), makeSymbol("ZERO"), makeKeyword("NEW-ARGUMENT-LINK"), makeSymbol("IGNORE"), makeKeyword("NEW-TACTIC"), makeSymbol("IGNORE"), makeKeyword("RELEVANT-TACTICS-WRT-REMOVAL"), makeSymbol("ERROR"), makeKeyword("SPLIT-TACTICS-POSSIBLE"), makeSymbol("IGNORE"), makeKeyword("PROBLEM-COULD-BE-PENDING"), makeSymbol("IGNORE"), makeKeyword("THROW-AWAY-PROBLEM"), makeSymbol("FALSE"), makeKeyword("SET-ASIDE-PROBLEM"), makeSymbol("FALSE"), makeKeyword("THROW-AWAY-TACTIC"), makeSymbol("FALSE"), makeKeyword("SET-ASIDE-TACTIC"), makeSymbol("FALSE"), makeKeyword("LINK-HEAD-MOTIVATED?"), makeSymbol("FALSE") });
+    private static final SubLSymbol NEW_ROOT_STRATEGY_INITIALIZE = makeSymbol("NEW-ROOT-STRATEGY-INITIALIZE");
 
-    public static final SubLSymbol NEW_ROOT_STRATEGY_INITIALIZE = makeSymbol("NEW-ROOT-STRATEGY-INITIALIZE");
-
-    public static final SubLSymbol NEW_ROOT_STRATEGY_P = makeSymbol("NEW-ROOT-STRATEGY-P");
+    private static final SubLSymbol NEW_ROOT_STRATEGY_P = makeSymbol("NEW-ROOT-STRATEGY-P");
 
     private static final SubLString $str4$_a_happiness___a__a__a__ = makeString("~a happiness: ~a ~a ~a~%");
-
-
 
     private static final SubLList $list6 = list(makeKeyword("RELEVANT-TERM"), makeKeyword("LITERAL-COUNT"), makeKeyword("SKOLEM-COUNT"), makeKeyword("SHALLOW-AND-CHEAP"), makeKeyword("OCCAMS-RAZOR"), makeKeyword("PROBLEM-RULE-HISTORICAL-UTILITY"), makeKeyword("PROBLEM-RULE-A-PRIORI-UTILITY"));
 
     private static final SubLList $list7 = list(list(makeSymbol("HEURISTIC"), makeSymbol("FUNCTION"), makeSymbol("SCALING-FACTOR"), makeSymbol("&KEY"), makeSymbol("DONE")), makeSymbol("&BODY"), makeSymbol("BODY"));
 
-    private static final SubLList $list8 = list(makeKeyword("DONE"));
+    private static final SubLList $list8 = list($DONE);
 
     private static final SubLSymbol $ALLOW_OTHER_KEYS = makeKeyword("ALLOW-OTHER-KEYS");
 
-
-
     private static final SubLSymbol DO_STRATEGIC_HEURISTICS = makeSymbol("DO-STRATEGIC-HEURISTICS");
-
-
 
     private static final SubLSymbol $sym13$NEW_ROOT_TACTICIAN_STRATEGIC_HEURISTIC_ = makeSymbol("NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC?");
 
@@ -88,10 +85,23 @@ public final class new_root_tactician extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym16$ABS_ = makeSymbol("ABS>");
 
+    // Definitions
+    public static final SubLObject new_root_strategy_p_alt(SubLObject v_object) {
+        return makeBoolean((NIL != inference_datastructures_strategy.strategy_p(v_object)) && ($NEW_ROOT == inference_datastructures_strategy.strategy_type(v_object)));
+    }
 
-
+    // Definitions
     public static SubLObject new_root_strategy_p(final SubLObject v_object) {
         return makeBoolean((NIL != inference_datastructures_strategy.strategy_p(v_object)) && ($NEW_ROOT == inference_datastructures_strategy.strategy_type(v_object)));
+    }
+
+    public static final SubLObject new_root_strategy_initialize_alt(SubLObject strategy) {
+        {
+            SubLObject new_root_index = queues.create_queue();
+            SubLObject data = new_root_tactician_datastructures.new_new_root_strategy_data(new_root_index);
+            inference_datastructures_strategy.set_strategy_data(strategy, data);
+        }
+        return strategy;
     }
 
     public static SubLObject new_root_strategy_initialize(final SubLObject strategy) {
@@ -101,8 +111,13 @@ public final class new_root_tactician extends SubLTranslatedFile {
         return strategy;
     }
 
+    public static final SubLObject new_root_strategy_current_contents_alt(SubLObject strategy) {
+        SubLTrampolineFile.checkType(strategy, NEW_ROOT_STRATEGY_P);
+        return queues.queue_elements(new_root_tactician_datastructures.new_root_strategy_new_root_index(strategy));
+    }
+
     public static SubLObject new_root_strategy_current_contents(final SubLObject strategy) {
-        assert NIL != new_root_strategy_p(strategy) : "new_root_tactician.new_root_strategy_p(strategy) " + "CommonSymbols.NIL != new_root_tactician.new_root_strategy_p(strategy) " + strategy;
+        assert NIL != new_root_strategy_p(strategy) : "! new_root_tactician.new_root_strategy_p(strategy) " + ("new_root_tactician.new_root_strategy_p(strategy) " + "CommonSymbols.NIL != new_root_tactician.new_root_strategy_p(strategy) ") + strategy;
         return inference_tactician.happiness_index_contents(new_root_tactician_datastructures.new_root_strategy_new_root_index(strategy));
     }
 
@@ -137,7 +152,7 @@ public final class new_root_tactician extends SubLTranslatedFile {
     }
 
     public static SubLObject new_root_strategy_add_new_root(final SubLObject strategy, final SubLObject problem) {
-        assert NIL != inference_datastructures_problem.problem_p(problem) : "inference_datastructures_problem.problem_p(problem) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(problem) " + problem;
+        assert NIL != inference_datastructures_problem.problem_p(problem) : "! inference_datastructures_problem.problem_p(problem) " + ("inference_datastructures_problem.problem_p(problem) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(problem) ") + problem;
         final SubLObject new_root_index = new_root_tactician_datastructures.new_root_strategy_new_root_index(strategy);
         final SubLObject happiness = new_root_strategy_new_root_happiness(problem, strategy);
         inference_tactician.happiness_index_add(new_root_index, happiness, problem);
@@ -209,8 +224,8 @@ public final class new_root_tactician extends SubLTranslatedFile {
 
     public static SubLObject new_root_strategy_new_root_happiness(final SubLObject new_root, final SubLObject strategy) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != inference_datastructures_problem.problem_p(new_root) : "inference_datastructures_problem.problem_p(new_root) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(new_root) " + new_root;
-        assert NIL != new_root_strategy_p(strategy) : "new_root_tactician.new_root_strategy_p(strategy) " + "CommonSymbols.NIL != new_root_tactician.new_root_strategy_p(strategy) " + strategy;
+        assert NIL != inference_datastructures_problem.problem_p(new_root) : "! inference_datastructures_problem.problem_p(new_root) " + ("inference_datastructures_problem.problem_p(new_root) " + "CommonSymbols.NIL != inference_datastructures_problem.problem_p(new_root) ") + new_root;
+        assert NIL != new_root_strategy_p(strategy) : "! new_root_tactician.new_root_strategy_p(strategy) " + ("new_root_tactician.new_root_strategy_p(strategy) " + "CommonSymbols.NIL != new_root_tactician.new_root_strategy_p(strategy) ") + strategy;
         SubLObject aggregate_happiness = ZERO_INTEGER;
         SubLObject iteration_state;
         for (iteration_state = dictionary_contents.do_dictionary_contents_state(dictionary.dictionary_contents(inference_strategic_heuristics.strategic_heuristic_index())); NIL == dictionary_contents.do_dictionary_contents_doneP(iteration_state); iteration_state = dictionary_contents.do_dictionary_contents_next(iteration_state)) {
@@ -243,19 +258,19 @@ public final class new_root_tactician extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_new_root_tactician_file() {
-        declareFunction(me, "new_root_strategy_p", "NEW-ROOT-STRATEGY-P", 1, 0, false);
-        declareFunction(me, "new_root_strategy_initialize", "NEW-ROOT-STRATEGY-INITIALIZE", 1, 0, false);
-        declareFunction(me, "new_root_strategy_current_contents", "NEW-ROOT-STRATEGY-CURRENT-CONTENTS", 1, 0, false);
-        declareFunction(me, "new_root_strategy_peek_new_root", "NEW-ROOT-STRATEGY-PEEK-NEW-ROOT", 1, 0, false);
-        declareFunction(me, "new_root_strategy_add_new_root", "NEW-ROOT-STRATEGY-ADD-NEW-ROOT", 2, 0, false);
-        declareFunction(me, "new_root_tactician_heuristics", "NEW-ROOT-TACTICIAN-HEURISTICS", 0, 0, false);
-        declareMacro(me, "do_new_root_tactician_strategic_heuristics", "DO-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTICS");
-        declareFunction(me, "new_root_tactician_strategic_heuristicP", "NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC?", 1, 0, false);
-        declareFunction(me, "enable_new_root_tactician_strategic_heuristic", "ENABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
-        declareFunction(me, "disable_new_root_tactician_strategic_heuristic", "DISABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
-        declareFunction(me, "new_root_strategy_new_root_happiness", "NEW-ROOT-STRATEGY-NEW-ROOT-HAPPINESS", 2, 0, false);
-        declareFunction(me, "new_root_strategy_happiness_table", "NEW-ROOT-STRATEGY-HAPPINESS-TABLE", 1, 0, false);
-        declareFunction(me, "new_root_strategy_happiness_breakdown", "NEW-ROOT-STRATEGY-HAPPINESS-BREAKDOWN", 2, 0, false);
+        declareFunction("new_root_strategy_p", "NEW-ROOT-STRATEGY-P", 1, 0, false);
+        declareFunction("new_root_strategy_initialize", "NEW-ROOT-STRATEGY-INITIALIZE", 1, 0, false);
+        declareFunction("new_root_strategy_current_contents", "NEW-ROOT-STRATEGY-CURRENT-CONTENTS", 1, 0, false);
+        declareFunction("new_root_strategy_peek_new_root", "NEW-ROOT-STRATEGY-PEEK-NEW-ROOT", 1, 0, false);
+        declareFunction("new_root_strategy_add_new_root", "NEW-ROOT-STRATEGY-ADD-NEW-ROOT", 2, 0, false);
+        declareFunction("new_root_tactician_heuristics", "NEW-ROOT-TACTICIAN-HEURISTICS", 0, 0, false);
+        declareMacro("do_new_root_tactician_strategic_heuristics", "DO-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTICS");
+        declareFunction("new_root_tactician_strategic_heuristicP", "NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC?", 1, 0, false);
+        declareFunction("enable_new_root_tactician_strategic_heuristic", "ENABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
+        declareFunction("disable_new_root_tactician_strategic_heuristic", "DISABLE-NEW-ROOT-TACTICIAN-STRATEGIC-HEURISTIC", 1, 0, false);
+        declareFunction("new_root_strategy_new_root_happiness", "NEW-ROOT-STRATEGY-NEW-ROOT-HAPPINESS", 2, 0, false);
+        declareFunction("new_root_strategy_happiness_table", "NEW-ROOT-STRATEGY-HAPPINESS-TABLE", 1, 0, false);
+        declareFunction("new_root_strategy_happiness_breakdown", "NEW-ROOT-STRATEGY-HAPPINESS-BREAKDOWN", 2, 0, false);
         return NIL;
     }
 
@@ -288,27 +303,6 @@ public final class new_root_tactician extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

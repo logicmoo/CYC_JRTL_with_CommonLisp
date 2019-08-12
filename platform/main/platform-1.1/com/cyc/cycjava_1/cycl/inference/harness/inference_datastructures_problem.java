@@ -1468,8 +1468,7 @@ Attempting to add an additional tactic after this number yields an error. */
   }
 
   public static final SubLObject setup_inference_datastructures_problem_file() {
-    // CVS_ID("Id: inference-datastructures-problem.lisp 128830 2009-09-23 21:54:25Z jantos ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_problem$.getGlobalValue(), Symbols.symbol_function($sym8$PROBLEM_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_problem$.getGlobalValue(), Symbols.symbol_function($sym8$PROBLEM_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$PROB_SUID, $sym10$_CSETF_PROB_SUID);
     Structures.def_csetf($sym11$PROB_STORE, $sym12$_CSETF_PROB_STORE);
     Structures.def_csetf($sym13$PROB_QUERY, $sym14$_CSETF_PROB_QUERY);

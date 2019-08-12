@@ -775,8 +775,7 @@ transformation rule statistics. */
   }
 
   public static final SubLObject setup_inference_analysis_file() {
-    // CVS_ID("Id: inference-analysis.lisp 128583 2009-08-20 16:30:45Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_TRANSFORMATION_RULE_STATISTICS_TABLE_);
+        subl_macro_promotions.declare_defglobal($sym0$_TRANSFORMATION_RULE_STATISTICS_TABLE_);
     subl_macro_promotions.declare_defglobal($sym2$_TRANSFORMATION_RULE_STATISTICS_LOCK_);
     subl_macro_promotions.declare_defglobal($sym4$_TRANSFORMATION_RULE_STATISTICS_FILENAME_LOAD_HISTORY_);
     access_macros.register_macro_helper($sym19$TRANSFORMATION_RULE_STATISTICS_TABLE, $sym20$DO_TRANSFORMATION_RULES_WITH_STATISTICS);

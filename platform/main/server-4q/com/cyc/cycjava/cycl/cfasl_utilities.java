@@ -1,7 +1,30 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.cfasl_utilities;
+import static com.cyc.cycjava.cycl.cfasl.*;
+import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
+import static com.cyc.cycjava.cycl.utilities_macros.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
@@ -12,69 +35,31 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility;
 import com.cyc.tool.subl.jrtl.translatedCode.sublisp.stream_macros;
 import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.cfasl.*;
-import static com.cyc.cycjava.cycl.cfasl_utilities.*;
-import static com.cyc.cycjava.cycl.cyc_testing.generic_testing.*;
-import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQUAL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.THREE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Eval.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.reader.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class cfasl_utilities extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      CFASL-UTILITIES
+ * source file: /cyc/top/cycl/cfasl-utilities.lisp
+ * created:     2019/07/03 17:37:14
+ */
+public final class cfasl_utilities extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new cfasl_utilities();
 
-    public static final String myName = "com.cyc.cycjava.cycl.cfasl_utilities";
+ public static final String myName = "com.cyc.cycjava.cycl.cfasl_utilities";
 
-    public static final String myFingerPrint = "741bc8815276cacf2d22c804d69b03a5920c08dce7b5b60b98690bc7979298fc";
 
     // deflexical
+    @LispMethod(comment = "deflexical")
     private static final SubLSymbol $cfasl_default_compression_options$ = makeSymbol("*CFASL-DEFAULT-COMPRESSION-OPTIONS*");
 
+    static private final SubLString $str2$Unable_to_open__S = makeString("Unable to open ~S");
 
+    static private final SubLString $str3$Cannot_open__A = makeString("Cannot open ~A");
 
-
-
-    public static final SubLString $str2$Unable_to_open__S = makeString("Unable to open ~S");
-
-    public static final SubLString $str3$Cannot_open__A = makeString("Cannot open ~A");
-
-
-
-
-
-    public static final SubLList $list6 = list(makeKeyword("ANALYZE"), makeKeyword("OBJECT"));
-
-
-
-
-
-
+    static private final SubLList $list6 = list(makeKeyword("ANALYZE"), makeKeyword("OBJECT"));
 
     private static final SubLSymbol IGNORE_ALL_CONSTANTS = makeSymbol("IGNORE-ALL-CONSTANTS");
 
@@ -88,27 +73,11 @@ public final class cfasl_utilities extends SubLTranslatedFile {
 
     private static final SubLSymbol IGNORE_ALL_CLAUSE_STRUCS = makeSymbol("IGNORE-ALL-CLAUSE-STRUCS");
 
-
-
-    private static final SubLList $list17 = list(list(makeSymbol("*CFASL-CONSTANT-HANDLE-LOOKUP-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("IGNORE-ALL-CONSTANTS"))), list(makeSymbol("*CFASL-NART-HANDLE-LOOKUP-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("IGNORE-ALL-NARTS"))), list(makeSymbol("*CFASL-ASSERTION-HANDLE-LOOKUP-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("IGNORE-ALL-ASSERTIONS"))), list(makeSymbol("*CFASL-DEDUCTION-HANDLE-LOOKUP-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("IGNORE-ALL-DEDUCTIONS"))), list(makeSymbol("*CFASL-KB-HL-SUPPORT-HANDLE-LOOKUP-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("IGNORE-ALL-KB-HL-SUPPORTS"))), list(makeSymbol("*CFASL-CLAUSE-STRUC-HANDLE-LOOKUP-FUNC*"), list(makeSymbol("QUOTE"), makeSymbol("IGNORE-ALL-CLAUSE-STRUCS"))));
+    private static final SubLList $list17 = list(list(makeSymbol("*CFASL-CONSTANT-HANDLE-LOOKUP-FUNC*"), list(QUOTE, makeSymbol("IGNORE-ALL-CONSTANTS"))), list(makeSymbol("*CFASL-NART-HANDLE-LOOKUP-FUNC*"), list(QUOTE, makeSymbol("IGNORE-ALL-NARTS"))), list(makeSymbol("*CFASL-ASSERTION-HANDLE-LOOKUP-FUNC*"), list(QUOTE, makeSymbol("IGNORE-ALL-ASSERTIONS"))), list(makeSymbol("*CFASL-DEDUCTION-HANDLE-LOOKUP-FUNC*"), list(QUOTE, makeSymbol("IGNORE-ALL-DEDUCTIONS"))), list(makeSymbol("*CFASL-KB-HL-SUPPORT-HANDLE-LOOKUP-FUNC*"), list(QUOTE, makeSymbol("IGNORE-ALL-KB-HL-SUPPORTS"))), list(makeSymbol("*CFASL-CLAUSE-STRUC-HANDLE-LOOKUP-FUNC*"), list(QUOTE, makeSymbol("IGNORE-ALL-CLAUSE-STRUCS"))));
 
     private static final SubLSymbol TEST_CFASL_DECODING_STREAM_POSITION = makeSymbol("TEST-CFASL-DECODING-STREAM-POSITION");
 
-
-
-
-
-
-
-
-
-
-
-
-
     private static final SubLList $list25 = list(list(list(list(makeString("abc"), makeInteger(123), list(ONE_INTEGER, TWO_INTEGER, THREE_INTEGER)), EQUAL), makeKeyword("SUCCESS")));
-
-
 
     private static final SubLList $list27 = list(makeSymbol("&KEY"), makeSymbol("POSITION"), makeSymbol("OBJECT"));
 
@@ -122,11 +91,65 @@ public final class cfasl_utilities extends SubLTranslatedFile {
 
     private static final SubLString $str32$Expected_to_have_read__A_hex_char = makeString("Expected to have read ~A hex-chars from stream, got ~A.");
 
+    // Definitions
+    /**
+     * Save out OBJECT to FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Save out OBJECT to FILENAME in CFASL format.")
+    public static final SubLObject cfasl_save_alt(SubLObject v_object, SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $OUTPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_1 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_1.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        cfasl_output(v_object, stream_1);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return T;
+        }
+    }
 
-
+    // Definitions
+    /**
+     * Save out OBJECT to FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Save out OBJECT to FILENAME in CFASL format.")
     public static SubLObject cfasl_save(final SubLObject v_object, final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject stream = NIL;
         try {
             final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
@@ -160,9 +183,69 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return T;
     }
 
+    /**
+     * Save out multiple OBJECTS to FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Save out multiple OBJECTS to FILENAME in CFASL format.")
+    public static final SubLObject cfasl_save_all_alt(SubLObject objects, SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $OUTPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_2 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_2.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        {
+                            SubLObject cdolist_list_var = objects;
+                            SubLObject v_object = NIL;
+                            for (v_object = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_object = cdolist_list_var.first()) {
+                                cfasl_output(v_object, stream_2);
+                            }
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return T;
+        }
+    }
+
+    /**
+     * Save out multiple OBJECTS to FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Save out multiple OBJECTS to FILENAME in CFASL format.")
     public static SubLObject cfasl_save_all(final SubLObject objects, final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject stream = NIL;
         try {
             final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
@@ -203,9 +286,64 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return T;
     }
 
+    /**
+     * Return the first object saved in FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Return the first object saved in FILENAME in CFASL format.")
+    public static final SubLObject cfasl_load_alt(SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject v_object = NIL;
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $INPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_3 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_3.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        v_object = cfasl_input(stream_3, UNPROVIDED, UNPROVIDED);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return v_object;
+            }
+        }
+    }
+
+    /**
+     * Return the first object saved in FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Return the first object saved in FILENAME in CFASL format.")
     public static SubLObject cfasl_load(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject v_object = NIL;
         SubLObject stream = NIL;
         try {
@@ -240,9 +378,66 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return v_object;
     }
 
+    public static final SubLObject cfasl_load_all_alt(SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject objects = NIL;
+                SubLObject eofP = NIL;
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $INPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_4 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_4.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        while (NIL == eofP) {
+                            {
+                                SubLObject v_object = cfasl_input(stream_4, NIL, $EOF);
+                                if (v_object == $EOF) {
+                                    eofP = T;
+                                } else {
+                                    objects = cons(v_object, objects);
+                                }
+                            }
+                        } 
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return objects;
+            }
+        }
+    }
+
     public static SubLObject cfasl_load_all(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject objects = NIL;
         SubLObject eofP = NIL;
         SubLObject stream = NIL;
@@ -285,9 +480,63 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return objects;
     }
 
+    /**
+     * Save out OBJECT to FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Save out OBJECT to FILENAME in CFASL format.")
+    public static final SubLObject cfasl_save_externalized_alt(SubLObject v_object, SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $OUTPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_5 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_5.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        cfasl_output_externalized(v_object, stream_5);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return T;
+        }
+    }
+
+    /**
+     * Save out OBJECT to FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Save out OBJECT to FILENAME in CFASL format.")
     public static SubLObject cfasl_save_externalized(final SubLObject v_object, final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject stream = NIL;
         try {
             final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
@@ -321,6 +570,14 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return T;
     }
 
+    public static final SubLObject cfasl_save_maybe_externalized_alt(SubLObject v_object, SubLObject filename, SubLObject externalizedP) {
+        if (NIL != externalizedP) {
+            return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_save_externalized(v_object, filename);
+        } else {
+            return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_save(v_object, filename);
+        }
+    }
+
     public static SubLObject cfasl_save_maybe_externalized(final SubLObject v_object, final SubLObject filename, final SubLObject externalizedP) {
         if (NIL != externalizedP) {
             return cfasl_save_externalized(v_object, filename);
@@ -350,11 +607,25 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return items;
     }
 
+    public static final SubLObject cfasl_output_compressed_alt(SubLObject v_object, SubLObject stream, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_output_compressed_int(v_object, stream, NIL, options);
+    }
+
     public static SubLObject cfasl_output_compressed(final SubLObject v_object, final SubLObject stream, SubLObject options) {
         if (options == UNPROVIDED) {
             options = $cfasl_default_compression_options$.getGlobalValue();
         }
         return cfasl_output_compressed_int(v_object, stream, NIL, options);
+    }
+
+    public static final SubLObject cfasl_output_compressed_externalized_alt(SubLObject v_object, SubLObject stream, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_output_compressed_int(v_object, stream, T, options);
     }
 
     public static SubLObject cfasl_output_compressed_externalized(final SubLObject v_object, final SubLObject stream, SubLObject options) {
@@ -364,11 +635,54 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return cfasl_output_compressed_int(v_object, stream, T, options);
     }
 
+    public static final SubLObject cfasl_output_compressed_maybe_externalized_alt(SubLObject v_object, SubLObject stream, SubLObject externalizedP, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_output_compressed_int(v_object, stream, externalizedP, options);
+    }
+
     public static SubLObject cfasl_output_compressed_maybe_externalized(final SubLObject v_object, final SubLObject stream, final SubLObject externalizedP, SubLObject options) {
         if (options == UNPROVIDED) {
             options = $cfasl_default_compression_options$.getGlobalValue();
         }
         return cfasl_output_compressed_int(v_object, stream, externalizedP, options);
+    }
+
+    public static final SubLObject cfasl_output_compressed_int_alt(SubLObject v_object, SubLObject stream, SubLObject externalizedP, SubLObject options) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            options = copy_list(options);
+            {
+                SubLObject not_list = getf(options, $NOT, UNPROVIDED);
+                not_list = cons(v_object, not_list);
+                options = putf(options, $NOT, not_list);
+            }
+            {
+                SubLObject analyze = getf(options, $ANALYZE, UNPROVIDED);
+                if ($OBJECT == analyze) {
+                    options = putf(options, $ANALYZE, v_object);
+                }
+            }
+            {
+                SubLObject _prev_bind_0 = cfasl_compression.$cfasl_output_compression_options$.currentBinding(thread);
+                SubLObject _prev_bind_1 = cfasl_compression.$cfasl_output_compression_code_isg$.currentBinding(thread);
+                SubLObject _prev_bind_2 = cfasl_compression.$cfasl_output_compression_table$.currentBinding(thread);
+                try {
+                    cfasl_compression.$cfasl_output_compression_options$.bind(options, thread);
+                    cfasl_compression.$cfasl_output_compression_code_isg$.bind(integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+                    cfasl_compression.$cfasl_output_compression_table$.bind(cfasl_compression.with_cfasl_compression_cfasl_output_compression_table(stream), thread);
+                    cfasl_compression.with_cfasl_compression_preamble(stream);
+                    cfasl_output_maybe_externalized(v_object, stream, externalizedP);
+                    cfasl_compression.with_cfasl_compression_postamble(stream);
+                } finally {
+                    cfasl_compression.$cfasl_output_compression_table$.rebind(_prev_bind_2, thread);
+                    cfasl_compression.$cfasl_output_compression_code_isg$.rebind(_prev_bind_1, thread);
+                    cfasl_compression.$cfasl_output_compression_options$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return v_object;
+        }
     }
 
     public static SubLObject cfasl_output_compressed_int(final SubLObject v_object, final SubLObject stream, final SubLObject externalizedP, SubLObject options) {
@@ -399,11 +713,25 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return v_object;
     }
 
+    public static final SubLObject cfasl_save_compressed_alt(SubLObject v_object, SubLObject filename, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_save_compressed_int(v_object, filename, NIL, options);
+    }
+
     public static SubLObject cfasl_save_compressed(final SubLObject v_object, final SubLObject filename, SubLObject options) {
         if (options == UNPROVIDED) {
             options = $cfasl_default_compression_options$.getGlobalValue();
         }
         return cfasl_save_compressed_int(v_object, filename, NIL, options);
+    }
+
+    public static final SubLObject cfasl_save_compressed_externalized_alt(SubLObject v_object, SubLObject filename, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_save_compressed_int(v_object, filename, T, options);
     }
 
     public static SubLObject cfasl_save_compressed_externalized(final SubLObject v_object, final SubLObject filename, SubLObject options) {
@@ -413,11 +741,67 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return cfasl_save_compressed_int(v_object, filename, T, options);
     }
 
+    public static final SubLObject cfasl_save_compressed_maybe_externalized_alt(SubLObject v_object, SubLObject filename, SubLObject externalizedP, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        return com.cyc.cycjava.cycl.cfasl_utilities.cfasl_save_compressed_int(v_object, filename, externalizedP, options);
+    }
+
     public static SubLObject cfasl_save_compressed_maybe_externalized(final SubLObject v_object, final SubLObject filename, final SubLObject externalizedP, SubLObject options) {
         if (options == UNPROVIDED) {
             options = $cfasl_default_compression_options$.getGlobalValue();
         }
         return cfasl_save_compressed_int(v_object, filename, externalizedP, options);
+    }
+
+    public static final SubLObject cfasl_save_compressed_int_alt(SubLObject v_object, SubLObject filename, SubLObject externalizedP, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject result = NIL;
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $OUTPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_6 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_6.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        result = com.cyc.cycjava.cycl.cfasl_utilities.cfasl_output_compressed_int(v_object, stream_6, externalizedP, options);
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return result;
+            }
+        }
     }
 
     public static SubLObject cfasl_save_compressed_int(final SubLObject v_object, final SubLObject filename, final SubLObject externalizedP, SubLObject options) {
@@ -459,12 +843,83 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject cfasl_save_all_compressed_alt(SubLObject objects, SubLObject filename, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $OUTPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_7 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_7.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        {
+                            SubLObject _prev_bind_0 = cfasl_compression.$cfasl_output_compression_options$.currentBinding(thread);
+                            SubLObject _prev_bind_1 = cfasl_compression.$cfasl_output_compression_code_isg$.currentBinding(thread);
+                            SubLObject _prev_bind_2 = cfasl_compression.$cfasl_output_compression_table$.currentBinding(thread);
+                            try {
+                                cfasl_compression.$cfasl_output_compression_options$.bind(options, thread);
+                                cfasl_compression.$cfasl_output_compression_code_isg$.bind(integer_sequence_generator.new_integer_sequence_generator(UNPROVIDED, UNPROVIDED, UNPROVIDED), thread);
+                                cfasl_compression.$cfasl_output_compression_table$.bind(cfasl_compression.with_cfasl_compression_cfasl_output_compression_table(stream_7), thread);
+                                cfasl_compression.with_cfasl_compression_preamble(stream_7);
+                                {
+                                    SubLObject cdolist_list_var = objects;
+                                    SubLObject v_object = NIL;
+                                    for (v_object = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , v_object = cdolist_list_var.first()) {
+                                        cfasl_output(v_object, stream_7);
+                                    }
+                                }
+                                cfasl_compression.with_cfasl_compression_postamble(stream_7);
+                            } finally {
+                                cfasl_compression.$cfasl_output_compression_table$.rebind(_prev_bind_2, thread);
+                                cfasl_compression.$cfasl_output_compression_code_isg$.rebind(_prev_bind_1, thread);
+                                cfasl_compression.$cfasl_output_compression_options$.rebind(_prev_bind_0, thread);
+                            }
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+            }
+            return T;
+        }
+    }
+
     public static SubLObject cfasl_save_all_compressed(final SubLObject objects, final SubLObject filename, SubLObject options) {
         if (options == UNPROVIDED) {
             options = $cfasl_default_compression_options$.getGlobalValue();
         }
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject stream = NIL;
         try {
             final SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
@@ -519,6 +974,22 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return T;
     }
 
+    /**
+     * Reads input from FILENAME and writes a compressed version of the object(s) in FILENAME to NEW-FILENAME.
+     */
+    @LispMethod(comment = "Reads input from FILENAME and writes a compressed version of the object(s) in FILENAME to NEW-FILENAME.")
+    public static final SubLObject cfasl_compress_alt(SubLObject filename, SubLObject new_filename, SubLObject options) {
+        if (options == UNPROVIDED) {
+            options = $cfasl_default_compression_options$.getGlobalValue();
+        }
+        {
+            SubLObject objects = com.cyc.cycjava.cycl.cfasl_utilities.cfasl_load_all(filename);
+            com.cyc.cycjava.cycl.cfasl_utilities.cfasl_save_all_compressed(objects, new_filename, options);
+        }
+        return new_filename;
+    }
+
+    @LispMethod(comment = "Reads input from FILENAME and writes a compressed version of the object(s) in FILENAME to NEW-FILENAME.")
     public static SubLObject cfasl_compress(final SubLObject filename, final SubLObject new_filename, SubLObject options) {
         if (options == UNPROVIDED) {
             options = $cfasl_default_compression_options$.getGlobalValue();
@@ -528,10 +999,106 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return new_filename;
     }
 
+    /**
+     * Byte compile the forms in INPUT-FILENAME into CFASL format and save to OUTPUT-FILENAME.
+     */
+    @LispMethod(comment = "Byte compile the forms in INPUT-FILENAME into CFASL format and save to OUTPUT-FILENAME.")
+    public static final SubLObject cfasl_byte_compile_alt(SubLObject input_filename, SubLObject output_filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(input_filename, STRINGP);
+            SubLTrampolineFile.checkType(output_filename, STRINGP);
+            {
+                SubLObject v_answer = NIL;
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_text(input_filename, $INPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, input_filename);
+                    }
+                    {
+                        SubLObject in_stream = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!in_stream.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, input_filename);
+                            }
+                        }
+                        {
+                            SubLObject stream_8 = NIL;
+                            try {
+                                {
+                                    SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                                    try {
+                                        stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                                        stream_8 = compatibility.open_binary(output_filename, $OUTPUT, NIL);
+                                    } finally {
+                                        stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                                if (!stream_8.isStream()) {
+                                    Errors.error($str_alt2$Unable_to_open__S, output_filename);
+                                }
+                                {
+                                    SubLObject out_stream = stream_8;
+                                    if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                                        if (!out_stream.isStream()) {
+                                            Errors.error($str_alt3$Cannot_open__A, output_filename);
+                                        }
+                                    }
+                                    {
+                                        SubLObject form = NIL;
+                                        for (form = read(in_stream, NIL, $EOF, UNPROVIDED); $EOF != form; form = read(in_stream, NIL, $EOF, UNPROVIDED)) {
+                                            cfasl_output(form, out_stream);
+                                        }
+                                        v_answer = T;
+                                    }
+                                }
+                            } finally {
+                                {
+                                    SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                    try {
+                                        $is_thread_performing_cleanupP$.bind(T, thread);
+                                        if (stream_8.isStream()) {
+                                            close(stream_8, UNPROVIDED);
+                                        }
+                                    } finally {
+                                        $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    @LispMethod(comment = "Byte compile the forms in INPUT-FILENAME into CFASL format and save to OUTPUT-FILENAME.")
     public static SubLObject cfasl_byte_compile(final SubLObject input_filename, final SubLObject output_filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(input_filename) : "Types.stringp(input_filename) " + "CommonSymbols.NIL != Types.stringp(input_filename) " + input_filename;
-        assert NIL != stringp(output_filename) : "Types.stringp(output_filename) " + "CommonSymbols.NIL != Types.stringp(output_filename) " + output_filename;
+        assert NIL != stringp(input_filename) : "! stringp(input_filename) " + ("Types.stringp(input_filename) " + "CommonSymbols.NIL != Types.stringp(input_filename) ") + input_filename;
+        assert NIL != stringp(output_filename) : "! stringp(output_filename) " + ("Types.stringp(output_filename) " + "CommonSymbols.NIL != Types.stringp(output_filename) ") + output_filename;
         SubLObject v_answer = NIL;
         SubLObject stream = NIL;
         try {
@@ -599,9 +1166,70 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return v_answer;
     }
 
+    /**
+     * Read and evaluate the byte-compiled forms saved in FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Read and evaluate the byte-compiled forms saved in FILENAME in CFASL format.")
+    public static final SubLObject cfasl_byte_load_alt(SubLObject filename) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(filename, STRINGP);
+            {
+                SubLObject v_answer = NIL;
+                SubLObject stream = NIL;
+                try {
+                    {
+                        SubLObject _prev_bind_0 = stream_macros.$stream_requires_locking$.currentBinding(thread);
+                        try {
+                            stream_macros.$stream_requires_locking$.bind(NIL, thread);
+                            stream = compatibility.open_binary(filename, $INPUT, NIL);
+                        } finally {
+                            stream_macros.$stream_requires_locking$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                    if (!stream.isStream()) {
+                        Errors.error($str_alt2$Unable_to_open__S, filename);
+                    }
+                    {
+                        SubLObject stream_9 = stream;
+                        if (NIL == Errors.$ignore_mustsP$.getDynamicValue(thread)) {
+                            if (!stream_9.isStream()) {
+                                Errors.error($str_alt3$Cannot_open__A, filename);
+                            }
+                        }
+                        {
+                            SubLObject form = NIL;
+                            for (form = cfasl_input(stream_9, NIL, $EOF); $EOF != form; form = cfasl_input(stream_9, NIL, $EOF)) {
+                                eval(form);
+                            }
+                            v_answer = T;
+                        }
+                    }
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                        try {
+                            $is_thread_performing_cleanupP$.bind(T, thread);
+                            if (stream.isStream()) {
+                                close(stream, UNPROVIDED);
+                            }
+                        } finally {
+                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0, thread);
+                        }
+                    }
+                }
+                return v_answer;
+            }
+        }
+    }
+
+    /**
+     * Read and evaluate the byte-compiled forms saved in FILENAME in CFASL format.
+     */
+    @LispMethod(comment = "Read and evaluate the byte-compiled forms saved in FILENAME in CFASL format.")
     public static SubLObject cfasl_byte_load(final SubLObject filename) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != stringp(filename) : "Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) " + filename;
+        assert NIL != stringp(filename) : "! stringp(filename) " + ("Types.stringp(filename) " + "CommonSymbols.NIL != Types.stringp(filename) ") + filename;
         SubLObject v_answer = NIL;
         SubLObject stream = NIL;
         try {
@@ -640,6 +1268,55 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return v_answer;
     }
 
+    /**
+     * Serialize the object into memory, then deserialize it again and return
+     * the result to the caller.
+     *
+     * @return the copy of the object created through deserialization
+     */
+    @LispMethod(comment = "Serialize the object into memory, then deserialize it again and return\r\nthe result to the caller.\r\n\r\n@return the copy of the object created through deserialization\nSerialize the object into memory, then deserialize it again and return\nthe result to the caller.")
+    public static final SubLObject cfasl_copy_object_alt(SubLObject v_object) {
+        {
+            SubLObject byte_vector = NIL;
+            SubLObject new_object = NIL;
+            {
+                SubLObject s = new_cfasl_encoding_stream();
+                try {
+                    cfasl_output(v_object, s);
+                    byte_vector = cfasl_encoding_stream_encoding(s);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            close_cfasl_encoding_stream(s);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            }
+            {
+                SubLObject s = new_cfasl_decoding_stream(byte_vector);
+                try {
+                    new_object = cfasl_input(s, UNPROVIDED, UNPROVIDED);
+                } finally {
+                    {
+                        SubLObject _prev_bind_0 = currentBinding($is_thread_performing_cleanupP$);
+                        try {
+                            bind($is_thread_performing_cleanupP$, T);
+                            close_cfasl_decoding_stream(s);
+                        } finally {
+                            rebind($is_thread_performing_cleanupP$, _prev_bind_0);
+                        }
+                    }
+                }
+            }
+            return new_object;
+        }
+    }
+
+    @LispMethod(comment = "Serialize the object into memory, then deserialize it again and return\r\nthe result to the caller.\r\n\r\n@return the copy of the object created through deserialization\nSerialize the object into memory, then deserialize it again and return\nthe result to the caller.")
     public static SubLObject cfasl_copy_object(final SubLObject v_object) {
         SubLObject byte_vector = NIL;
         SubLObject new_object = NIL;
@@ -673,7 +1350,13 @@ public final class cfasl_utilities extends SubLTranslatedFile {
             }
         }
         return new_object;
-    }
+    }/**
+     * Serialize the object into memory, then deserialize it again and return
+     * the result to the caller.
+     *
+     * @return the copy of the object created through deserialization
+     */
+
 
     public static SubLObject ignore_all_constants(final SubLObject id) {
         return cfasl_kb_methods.cfasl_invalid_constant();
@@ -840,36 +1523,42 @@ public final class cfasl_utilities extends SubLTranslatedFile {
         return $SUCCESS;
     }
 
+    static private final SubLString $str_alt2$Unable_to_open__S = makeString("Unable to open ~S");
+
+    static private final SubLString $str_alt3$Cannot_open__A = makeString("Cannot open ~A");
+
+    static private final SubLList $list_alt6 = list(makeKeyword("ANALYZE"), makeKeyword("OBJECT"));
+
     public static SubLObject declare_cfasl_utilities_file() {
-        declareFunction(me, "cfasl_save", "CFASL-SAVE", 2, 0, false);
-        declareFunction(me, "cfasl_save_all", "CFASL-SAVE-ALL", 2, 0, false);
-        declareFunction(me, "cfasl_load", "CFASL-LOAD", 1, 0, false);
-        declareFunction(me, "cfasl_load_all", "CFASL-LOAD-ALL", 1, 0, false);
-        declareFunction(me, "cfasl_save_externalized", "CFASL-SAVE-EXTERNALIZED", 2, 0, false);
-        declareFunction(me, "cfasl_save_maybe_externalized", "CFASL-SAVE-MAYBE-EXTERNALIZED", 3, 0, false);
-        declareFunction(me, "cfasl_load_all_from_string", "CFASL-LOAD-ALL-FROM-STRING", 1, 0, false);
-        declareFunction(me, "cfasl_output_compressed", "CFASL-OUTPUT-COMPRESSED", 2, 1, false);
-        declareFunction(me, "cfasl_output_compressed_externalized", "CFASL-OUTPUT-COMPRESSED-EXTERNALIZED", 2, 1, false);
-        declareFunction(me, "cfasl_output_compressed_maybe_externalized", "CFASL-OUTPUT-COMPRESSED-MAYBE-EXTERNALIZED", 3, 1, false);
-        declareFunction(me, "cfasl_output_compressed_int", "CFASL-OUTPUT-COMPRESSED-INT", 4, 0, false);
-        declareFunction(me, "cfasl_save_compressed", "CFASL-SAVE-COMPRESSED", 2, 1, false);
-        declareFunction(me, "cfasl_save_compressed_externalized", "CFASL-SAVE-COMPRESSED-EXTERNALIZED", 2, 1, false);
-        declareFunction(me, "cfasl_save_compressed_maybe_externalized", "CFASL-SAVE-COMPRESSED-MAYBE-EXTERNALIZED", 3, 1, false);
-        declareFunction(me, "cfasl_save_compressed_int", "CFASL-SAVE-COMPRESSED-INT", 3, 1, false);
-        declareFunction(me, "cfasl_save_all_compressed", "CFASL-SAVE-ALL-COMPRESSED", 2, 1, false);
-        declareFunction(me, "cfasl_compress", "CFASL-COMPRESS", 2, 1, false);
-        declareFunction(me, "cfasl_byte_compile", "CFASL-BYTE-COMPILE", 2, 0, false);
-        declareFunction(me, "cfasl_byte_load", "CFASL-BYTE-LOAD", 1, 0, false);
-        declareFunction(me, "cfasl_copy_object", "CFASL-COPY-OBJECT", 1, 0, false);
-        declareFunction(me, "ignore_all_constants", "IGNORE-ALL-CONSTANTS", 1, 0, false);
-        declareFunction(me, "ignore_all_narts", "IGNORE-ALL-NARTS", 1, 0, false);
-        declareFunction(me, "ignore_all_assertions", "IGNORE-ALL-ASSERTIONS", 1, 0, false);
-        declareFunction(me, "ignore_all_deductions", "IGNORE-ALL-DEDUCTIONS", 1, 0, false);
-        declareFunction(me, "ignore_all_kb_hl_supports", "IGNORE-ALL-KB-HL-SUPPORTS", 1, 0, false);
-        declareFunction(me, "ignore_all_clause_strucs", "IGNORE-ALL-CLAUSE-STRUCS", 1, 0, false);
-        declareMacro(me, "without_valid_kb_terms", "WITHOUT-VALID-KB-TERMS");
-        declareFunction(me, "cfasl_decode_encoding_completely", "CFASL-DECODE-ENCODING-COMPLETELY", 1, 0, false);
-        declareFunction(me, "test_cfasl_decoding_stream_position", "TEST-CFASL-DECODING-STREAM-POSITION", 2, 0, false);
+        declareFunction("cfasl_save", "CFASL-SAVE", 2, 0, false);
+        declareFunction("cfasl_save_all", "CFASL-SAVE-ALL", 2, 0, false);
+        declareFunction("cfasl_load", "CFASL-LOAD", 1, 0, false);
+        declareFunction("cfasl_load_all", "CFASL-LOAD-ALL", 1, 0, false);
+        declareFunction("cfasl_save_externalized", "CFASL-SAVE-EXTERNALIZED", 2, 0, false);
+        declareFunction("cfasl_save_maybe_externalized", "CFASL-SAVE-MAYBE-EXTERNALIZED", 3, 0, false);
+        declareFunction("cfasl_load_all_from_string", "CFASL-LOAD-ALL-FROM-STRING", 1, 0, false);
+        declareFunction("cfasl_output_compressed", "CFASL-OUTPUT-COMPRESSED", 2, 1, false);
+        declareFunction("cfasl_output_compressed_externalized", "CFASL-OUTPUT-COMPRESSED-EXTERNALIZED", 2, 1, false);
+        declareFunction("cfasl_output_compressed_maybe_externalized", "CFASL-OUTPUT-COMPRESSED-MAYBE-EXTERNALIZED", 3, 1, false);
+        declareFunction("cfasl_output_compressed_int", "CFASL-OUTPUT-COMPRESSED-INT", 4, 0, false);
+        declareFunction("cfasl_save_compressed", "CFASL-SAVE-COMPRESSED", 2, 1, false);
+        declareFunction("cfasl_save_compressed_externalized", "CFASL-SAVE-COMPRESSED-EXTERNALIZED", 2, 1, false);
+        declareFunction("cfasl_save_compressed_maybe_externalized", "CFASL-SAVE-COMPRESSED-MAYBE-EXTERNALIZED", 3, 1, false);
+        declareFunction("cfasl_save_compressed_int", "CFASL-SAVE-COMPRESSED-INT", 3, 1, false);
+        declareFunction("cfasl_save_all_compressed", "CFASL-SAVE-ALL-COMPRESSED", 2, 1, false);
+        declareFunction("cfasl_compress", "CFASL-COMPRESS", 2, 1, false);
+        declareFunction("cfasl_byte_compile", "CFASL-BYTE-COMPILE", 2, 0, false);
+        declareFunction("cfasl_byte_load", "CFASL-BYTE-LOAD", 1, 0, false);
+        declareFunction("cfasl_copy_object", "CFASL-COPY-OBJECT", 1, 0, false);
+        declareFunction("ignore_all_constants", "IGNORE-ALL-CONSTANTS", 1, 0, false);
+        declareFunction("ignore_all_narts", "IGNORE-ALL-NARTS", 1, 0, false);
+        declareFunction("ignore_all_assertions", "IGNORE-ALL-ASSERTIONS", 1, 0, false);
+        declareFunction("ignore_all_deductions", "IGNORE-ALL-DEDUCTIONS", 1, 0, false);
+        declareFunction("ignore_all_kb_hl_supports", "IGNORE-ALL-KB-HL-SUPPORTS", 1, 0, false);
+        declareFunction("ignore_all_clause_strucs", "IGNORE-ALL-CLAUSE-STRUCS", 1, 0, false);
+        declareMacro("without_valid_kb_terms", "WITHOUT-VALID-KB-TERMS");
+        declareFunction("cfasl_decode_encoding_completely", "CFASL-DECODE-ENCODING-COMPLETELY", 1, 0, false);
+        declareFunction("test_cfasl_decoding_stream_position", "TEST-CFASL-DECODING-STREAM-POSITION", 2, 0, false);
         return NIL;
     }
 
@@ -905,42 +1594,6 @@ public final class cfasl_utilities extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

@@ -43,10 +43,10 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class print_macros extends SubLTranslatedFile {
     public static SubLObject declare_print_macros_file() {
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros", "print_unreadable_object", "PRINT-UNREADABLE-OBJECT");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros", "print_unreadable_object_internal", "PRINT-UNREADABLE-OBJECT-INTERNAL", 5, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros", "print_unreadable_object_preamble", "PRINT-UNREADABLE-OBJECT-PREAMBLE", 4, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.print_macros", "print_unreadable_object_postamble", "PRINT-UNREADABLE-OBJECT-POSTAMBLE", 4, 0, false);
+        declareMacro("print_unreadable_object", "PRINT-UNREADABLE-OBJECT");
+        declareFunction("print_unreadable_object_internal", "PRINT-UNREADABLE-OBJECT-INTERNAL", 5, 0, false);
+        declareFunction("print_unreadable_object_preamble", "PRINT-UNREADABLE-OBJECT-PREAMBLE", 4, 0, false);
+        declareFunction("print_unreadable_object_postamble", "PRINT-UNREADABLE-OBJECT-POSTAMBLE", 4, 0, false);
         return SubLNil.NIL;
     }
 

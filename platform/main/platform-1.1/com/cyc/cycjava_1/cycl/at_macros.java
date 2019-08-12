@@ -158,8 +158,7 @@ public  final class at_macros extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_at_macros_file() {
-    // CVS_ID("Id: at-macros.lisp 126640 2008-12-04 13:39:36Z builder ");
-    access_macros.register_macro_helper($sym5$MAKE_DEFN_FN_HISTORY_TABLE, $sym6$WITH_NEW_DEFN_SPACE);
+        access_macros.register_macro_helper($sym5$MAKE_DEFN_FN_HISTORY_TABLE, $sym6$WITH_NEW_DEFN_SPACE);
     access_macros.register_macro_helper($sym7$MAKE_QUOTED_DEFN_FN_HISTORY_TABLE, $sym6$WITH_NEW_DEFN_SPACE);
     access_macros.register_macro_helper($sym8$MAKE_DEFN_COL_HISTORY_TABLE, $sym6$WITH_NEW_DEFN_SPACE);
     access_macros.register_macro_helper($sym9$MAKE_QUOTED_DEFN_COL_HISTORY_TABLE, $sym6$WITH_NEW_DEFN_SPACE);

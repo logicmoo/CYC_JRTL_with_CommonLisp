@@ -973,8 +973,7 @@ convert it to the simpler form. */
   }
 
   public static final SubLObject setup_simple_indexing_file() {
-    // CVS_ID("Id: simple-indexing.lisp 127736 2009-04-29 16:40:03Z pace ");
-    access_macros.register_macro_helper($sym24$NOTING_TERMS_TO_TOGGLE_INDEXING_MODE_INTERNAL, $sym25$NOTING_TERMS_TO_TOGGLE_INDEXING_MODE);
+        access_macros.register_macro_helper($sym24$NOTING_TERMS_TO_TOGGLE_INDEXING_MODE_INTERNAL, $sym25$NOTING_TERMS_TO_TOGGLE_INDEXING_MODE);
     access_macros.register_macro_helper($sym26$POSSIBLY_TOGGLE_TERM_INDEX_MODE, $sym25$NOTING_TERMS_TO_TOGGLE_INDEXING_MODE);
     return NIL;
   }

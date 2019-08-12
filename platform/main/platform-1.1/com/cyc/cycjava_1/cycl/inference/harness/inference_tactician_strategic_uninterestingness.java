@@ -1034,8 +1034,7 @@ public  final class inference_tactician_strategic_uninterestingness extends SubL
   }
 
   public static final SubLObject setup_inference_tactician_strategic_uninterestingness_file() {
-    // CVS_ID("Id: inference-tactician-strategic-uninterestingness.lisp 128760 2009-09-15 04:40:33Z pace ");
-    memoization_state.note_memoized_function($sym23$INFERENCE_CHOOSES_TO_THROW_AWAY_ALL_TRANSFORMATIONS_ON_PROBLEM_);
+        memoization_state.note_memoized_function($sym23$INFERENCE_CHOOSES_TO_THROW_AWAY_ALL_TRANSFORMATIONS_ON_PROBLEM_);
     memoization_state.note_memoized_function($sym29$SIMPLE_STRATEGY_CHOOSES_TO_THROW_AWAY_TRANSFORMATION_TACTIC_);
     access_macros.register_macro_helper($sym65$STRATEGY_NOTE_UNINTERESTINGNESS_EXPLANATION, $sym66$STRATEGY_POSSIBLY_NOTE_UNINTERESTINGNESS_EXPLANATION);
     return NIL;

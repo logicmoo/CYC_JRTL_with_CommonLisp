@@ -1,55 +1,94 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl;
 
 
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
 import com.cyc.cycjava.cycl.inference.harness.inference_kernel;
-import com.cyc.cycjava.cycl.rkf_todo_lists;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
 import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
 import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.rkf_todo_lists.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWENTY_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class rkf_todo_lists extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      RKF-TODO-LISTS
+ * source file: /cyc/top/cycl/rkf-todo-lists.lisp
+ * created:     2019/07/03 17:38:01
+ */
+public final class rkf_todo_lists extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new rkf_todo_lists();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rkf_todo_lists";
+ public static final String myName = "com.cyc.cycjava.cycl.rkf_todo_lists";
 
-    public static final String myFingerPrint = "3f718b86155894f83b0ece298c593137e7e49667d36329b9a3678b14dfa1a78e";
 
     // Internal Constants
-    public static final SubLSymbol $sym0$_ITEM = makeSymbol("?ITEM");
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLSymbol $sym0$_ITEM = makeSymbol("?ITEM");
 
     private static final SubLSymbol $MAX_TRANSFORMATION_DEPTH = makeKeyword("MAX-TRANSFORMATION-DEPTH");
 
 
 
-    private static final SubLObject $$thereExists = reader_make_constant_shell(makeString("thereExists"));
+    static private final SubLSymbol $sym4$_LIST = makeSymbol("?LIST");
 
-    public static final SubLSymbol $sym4$_LIST = makeSymbol("?LIST");
 
-    private static final SubLObject $$and = reader_make_constant_shell(makeString("and"));
 
-    private static final SubLObject $$myToDoList = reader_make_constant_shell(makeString("myToDoList"));
 
-    public static final SubLList $list7 = list(makeSymbol("?LIST"));
 
-    private static final SubLObject $$toDoListItem = reader_make_constant_shell(makeString("toDoListItem"));
+    static private final SubLList $list7 = list(makeSymbol("?LIST"));
 
+
+
+    // Definitions
+    /**
+     *
+     *
+     * @unknown rewrite using new-cycl-query material
+     */
+    @LispMethod(comment = "@unknown rewrite using new-cycl-query material")
+    public static final SubLObject rkf_get_todolist_items_alt(SubLObject owner, SubLObject mt, SubLObject number) {
+        if (number == UNPROVIDED) {
+            number = TWENTY_INTEGER;
+        }
+        {
+            SubLObject variable = $sym0$_ITEM;
+            SubLObject v_properties = list($MAX_TRANSFORMATION_DEPTH, ONE_INTEGER, $MAX_NUMBER, number);
+            SubLObject sentence = list($$thereExists, $sym4$_LIST, list($$and, listS($$myToDoList, owner, $list_alt7), list($$toDoListItem, $sym4$_LIST, variable)));
+            SubLObject v_bindings = NIL;
+            SubLObject results = NIL;
+            v_bindings = inference_kernel.new_cyc_query(sentence, mt, v_properties);
+            {
+                SubLObject cdolist_list_var = v_bindings;
+                SubLObject binding = NIL;
+                for (binding = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , binding = cdolist_list_var.first()) {
+                    {
+                        SubLObject result = assoc(variable, binding, UNPROVIDED, UNPROVIDED).rest();
+                        results = cons(result, results);
+                    }
+                }
+            }
+            return nreverse(results);
+        }
+    }
+
+    // Definitions
+    /**
+     *
+     *
+     * @unknown rewrite using new-cycl-query material
+     */
+    @LispMethod(comment = "@unknown rewrite using new-cycl-query material")
     public static SubLObject rkf_get_todolist_items(final SubLObject owner, final SubLObject mt, SubLObject number) {
         if (number == UNPROVIDED) {
             number = TWENTY_INTEGER;
@@ -73,7 +112,7 @@ public final class rkf_todo_lists extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_rkf_todo_lists_file() {
-        declareFunction(me, "rkf_get_todolist_items", "RKF-GET-TODOLIST-ITEMS", 2, 1, false);
+        declareFunction("rkf_get_todolist_items", "RKF-GET-TODOLIST-ITEMS", 2, 1, false);
         return NIL;
     }
 
@@ -100,17 +139,9 @@ public final class rkf_todo_lists extends SubLTranslatedFile {
         setup_rkf_todo_lists_file();
     }
 
+    static private final SubLList $list_alt7 = list(makeSymbol("?LIST"));
+
     static {
-
-
-
-
-
-
-
-
-
-
     }
 }
 

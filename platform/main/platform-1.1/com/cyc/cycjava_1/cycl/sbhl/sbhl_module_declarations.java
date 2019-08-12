@@ -175,8 +175,7 @@ public  final class sbhl_module_declarations extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sbhl_module_declarations_file() {
-    // CVS_ID("Id: sbhl-module-declarations.lisp 128885 2009-10-02 20:37:07Z rck ");
-    subl_macro_promotions.declare_defglobal($sym54$_SBHL_MODULES_INITIALIZED__);
+        subl_macro_promotions.declare_defglobal($sym54$_SBHL_MODULES_INITIALIZED__);
     return NIL;
   }
 

@@ -710,8 +710,7 @@ public  final class dictionary extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_dictionary_file() {
-    // CVS_ID("Id: dictionary.lisp 126640 2008-12-04 13:39:36Z builder ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_dictionary$.getGlobalValue(), Symbols.symbol_function($sym8$DICTIONARY_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_dictionary$.getGlobalValue(), Symbols.symbol_function($sym8$DICTIONARY_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$DICTIONARY_DATABASE, $sym10$_CSETF_DICTIONARY_DATABASE);
     Structures.def_csetf($sym11$DICTIONARY_TEST, $sym12$_CSETF_DICTIONARY_TEST);
     Equality.identity($sym0$DICTIONARY);

@@ -784,8 +784,7 @@ If not found, create a new intermediate index for KEY, with an equality test det
   }
 
   public static final SubLObject setup_kb_indexing_datastructures_file() {
-    // CVS_ID("Id: kb-indexing-datastructures.lisp 126640 2008-12-04 13:39:36Z builder ");
-    subl_macro_promotions.declare_defglobal($sym0$_ASSERTION_INDEXING_STORE_);
+        subl_macro_promotions.declare_defglobal($sym0$_ASSERTION_INDEXING_STORE_);
     utilities_macros.register_cyc_api_function($sym4$INDEXED_TERM_P, $list5, $str6$Returns_T_iff_OBJECT_is_an_indexe, NIL, $list7);
     access_macros.register_macro_helper($sym18$DO_SIMPLE_INDEX_TERM_ASSERTION_LIST, $sym19$DO_SIMPLE_INDEX);
     access_macros.register_macro_helper($sym31$DO_INTERMEDIATE_INDEX_VALID_INDEX_P, $sym34$DO_INTERMEDIATE_INDEX);

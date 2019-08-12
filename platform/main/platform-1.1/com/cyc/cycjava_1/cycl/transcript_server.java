@@ -111,8 +111,7 @@ public  final class transcript_server extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_transcript_server_file() {
-    // CVS_ID("Id: transcript-server.lisp 126640 2008-12-04 13:39:36Z builder ");
-    return NIL;
+        return NIL;
   }
 
   //// Internal Constants

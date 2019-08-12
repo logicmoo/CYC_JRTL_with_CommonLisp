@@ -92,8 +92,7 @@ public  final class meta_removal_modules extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_meta_removal_modules_file() {
-    // CVS_ID("Id: meta-removal-modules.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_meta_removal_module($kw1$META_REMOVAL_COMPLETELY_ENUMERABLE_POS, $list2);
+        inference_modules.inference_meta_removal_module($kw1$META_REMOVAL_COMPLETELY_ENUMERABLE_POS, $list2);
     inference_modules.inference_meta_removal_module($kw3$META_REMOVAL_COMPLETELY_DECIDABLE_POS, $list4);
     return NIL;
   }

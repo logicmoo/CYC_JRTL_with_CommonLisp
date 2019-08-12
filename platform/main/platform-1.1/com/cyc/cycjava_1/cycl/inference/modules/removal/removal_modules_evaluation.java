@@ -182,8 +182,7 @@ public  final class removal_modules_evaluation extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_removal_modules_evaluation_file() {
-    // CVS_ID("Id: removal-modules-evaluation.lisp 126640 2008-12-04 13:39:36Z builder ");
-    inference_modules.inference_removal_module($kw2$REMOVAL_EVAL, $list3);
+        inference_modules.inference_removal_module($kw2$REMOVAL_EVAL, $list3);
     inference_modules.inference_removal_module($kw4$REMOVAL_NOT_EVAL, $list5);
     preference_modules.inference_preference_module($kw6$EVALUATABLE_PREDICATE_DELAY_UNTIL_CLOSED, $list7);
     {

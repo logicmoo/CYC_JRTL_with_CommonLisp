@@ -148,8 +148,7 @@ public  final class constant_index_manager extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_constant_index_manager_file() {
-    // CVS_ID("Id: constant-index-manager.lisp 128689 2009-09-02 19:44:42Z rck ");
-    subl_macro_promotions.declare_defglobal($sym0$_CONSTANT_INDEX_MANAGER_);
+        subl_macro_promotions.declare_defglobal($sym0$_CONSTANT_INDEX_MANAGER_);
     return NIL;
   }
 

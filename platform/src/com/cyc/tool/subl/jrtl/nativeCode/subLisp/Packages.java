@@ -191,7 +191,7 @@ public class Packages extends SubLTrampolineFile {
     protected static SubLObject apropos_one_package(SubLString name, SubLPackage thePackage) {
         SubLList hits = thePackage.aproposList(name);
         while (hits.isCons()) {
-            SubLSymbol symbol = (SubLSymbol) hits.first().toSymbol();
+            SubLSymbol symbol = hits.first().toSymbol();
             apropos1Symbol(symbol);
             hits = (SubLList) hits.rest();
         }
@@ -212,7 +212,7 @@ public class Packages extends SubLTrampolineFile {
             print_high.princ(aprops_blank, SubLNil.NIL);
             print_high.princ(aprops_unbound, SubLNil.NIL);
         }
-        print_high.prin1(new SimpleString(symbol.toLispObject().toDebugString()), SubLNil.NIL);
+	print_high.prin1(new SimpleString(symbol.toLispObject().toDebugString(false)), SubLNil.NIL);
         streams_high.terpri(SubLNil.NIL);
     }
 

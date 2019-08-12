@@ -716,8 +716,7 @@ public  final class sdbc extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_sdbc_file() {
-    // CVS_ID("Id: sdbc.lisp 127036 2009-02-06 15:50:12Z goolsbey ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sql_connection$.getGlobalValue(), Symbols.symbol_function($sym44$SQL_CONNECTION_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_sql_connection$.getGlobalValue(), Symbols.symbol_function($sym44$SQL_CONNECTION_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym45$SQLC_DB, $sym46$_CSETF_SQLC_DB);
     Structures.def_csetf($sym47$SQLC_USER, $sym48$_CSETF_SQLC_USER);
     Structures.def_csetf($sym49$SQLC_DBMS_SERVER, $sym50$_CSETF_SQLC_DBMS_SERVER);

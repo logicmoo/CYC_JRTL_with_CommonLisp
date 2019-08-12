@@ -103,8 +103,7 @@ public  final class subl_macro_promotions extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_subl_macro_promotions_file() {
-    // CVS_ID("Id: subl-macro-promotions.lisp 126823 2009-01-14 04:03:56Z rck ");
-    declare_defglobal($sym9$_CATCH_ERROR_MESSAGE_TARGET_);
+        declare_defglobal($sym9$_CATCH_ERROR_MESSAGE_TARGET_);
     access_macros.register_macro_helper($sym26$WITH_TIMEOUT_MAKE_TAG, $sym27$WITH_TIMEOUT);
     access_macros.register_macro_helper($sym24$WITH_TIMEOUT_START_TIMER, $sym27$WITH_TIMEOUT);
     access_macros.register_macro_helper($sym25$WITH_TIMEOUT_STOP_TIMER, $sym27$WITH_TIMEOUT);

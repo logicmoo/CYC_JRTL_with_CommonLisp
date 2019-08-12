@@ -40,16 +40,16 @@ import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
 public class compatibility extends SubLTranslatedFile {
     public static SubLObject declare_compatibility_file() {
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "open_text", "OPEN-TEXT", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "open_binary", "OPEN-BINARY", 2, 0, false);
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "with_streamed_file_internal", "WITH-STREAMED-FILE-INTERNAL");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "with_text_file", "WITH-TEXT-FILE");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "with_private_text_file", "WITH-PRIVATE-TEXT-FILE");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "with_binary_file", "WITH-BINARY-FILE");
-        declareMacro("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "with_private_binary_file", "WITH-PRIVATE-BINARY-FILE");
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "get_file_position", "GET-FILE-POSITION", 1, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "set_file_position", "SET-FILE-POSITION", 2, 0, false);
-        declareFunction("com.cyc.tool.subl.jrtl.translatedCode.sublisp.compatibility", "default_struct_print_function", "DEFAULT-STRUCT-PRINT-FUNCTION", 3, 0, false);
+        declareFunction("open_text", "OPEN-TEXT", 2, 0, false);
+        declareFunction("open_binary", "OPEN-BINARY", 2, 0, false);
+        declareMacro("with_streamed_file_internal", "WITH-STREAMED-FILE-INTERNAL");
+        declareMacro("with_text_file", "WITH-TEXT-FILE");
+        declareMacro("with_private_text_file", "WITH-PRIVATE-TEXT-FILE");
+        declareMacro("with_binary_file", "WITH-BINARY-FILE");
+        declareMacro("with_private_binary_file", "WITH-PRIVATE-BINARY-FILE");
+        declareFunction("get_file_position", "GET-FILE-POSITION", 1, 0, false);
+        declareFunction("set_file_position", "SET-FILE-POSITION", 2, 0, false);
+        declareFunction("default_struct_print_function", "DEFAULT-STRUCT-PRINT-FUNCTION", 3, 0, false);
         return SubLNil.NIL;
     }
 

@@ -1476,8 +1476,7 @@ If SUBSTITUTE-VARS? is non-nil, then the original variable names are substituted
   }
 
   public static final SubLObject setup_fi_file() {
-    // CVS_ID("Id: fi.lisp 127877 2009-05-27 15:07:45Z pace ");
-    {
+        {
       SubLObject item_var = $sym3$_FI_WARNING_;
       if ((NIL == conses_high.member(item_var, utilities_macros.$fi_state_variables$.getGlobalValue(), Symbols.symbol_function(EQL), Symbols.symbol_function(IDENTITY)))) {
         utilities_macros.$fi_state_variables$.setGlobalValue(cons(item_var, utilities_macros.$fi_state_variables$.getGlobalValue()));

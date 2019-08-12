@@ -294,8 +294,7 @@ public  final class unicode_strings extends SubLTranslatedFile {
   }
 
   public static final SubLObject setup_unicode_strings_file() {
-    // CVS_ID("Id: unicode-strings.lisp 128916 2009-10-06 21:38:30Z daves ");
-    Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_unicode_char$.getGlobalValue(), Symbols.symbol_function($sym8$UNICODE_CHAR_PRINT_FUNCTION_TRAMPOLINE));
+        Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_unicode_char$.getGlobalValue(), Symbols.symbol_function($sym8$UNICODE_CHAR_PRINT_FUNCTION_TRAMPOLINE));
     Structures.def_csetf($sym9$UNICODE_CHAR_UCHAR, $sym10$_CSETF_UNICODE_CHAR_UCHAR);
     Equality.identity($sym1$UNICODE_CHAR);
     Structures.register_method(print_high.$print_object_method_table$.getGlobalValue(), $dtp_unicode_string$.getGlobalValue(), Symbols.symbol_function($sym23$UNICODE_STRING_PRINT_FUNCTION_TRAMPOLINE));

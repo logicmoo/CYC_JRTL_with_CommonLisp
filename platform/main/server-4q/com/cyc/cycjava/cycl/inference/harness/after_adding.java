@@ -1,63 +1,20 @@
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ */
 package com.cyc.cycjava.cycl.inference.harness;
 
 
-import com.cyc.cycjava.cycl.arguments;
-import com.cyc.cycjava.cycl.assertion_handles;
-import com.cyc.cycjava.cycl.assertions_high;
-import com.cyc.cycjava.cycl.forts;
-import com.cyc.cycjava.cycl.hl_macros;
-import com.cyc.cycjava.cycl.hlmt;
-import com.cyc.cycjava.cycl.inference.harness.after_adding;
-import com.cyc.cycjava.cycl.iteration;
-import com.cyc.cycjava.cycl.kb_mapping;
-import com.cyc.cycjava.cycl.kb_mapping_macros;
-import com.cyc.cycjava.cycl.list_utilities;
-import com.cyc.cycjava.cycl.mt_relevance_macros;
-import com.cyc.cycjava.cycl.somewhere_cache;
-import com.cyc.cycjava.cycl.subl_promotions;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
-import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
-import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
-import com.cyc.tool.subl.jrtl.nativeCode.type.number.SubLInteger;
-import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
-import com.cyc.tool.subl.util.SubLFile;
-import com.cyc.tool.subl.util.SubLTrampolineFile;
-import com.cyc.tool.subl.util.SubLTranslatedFile;
-
 import static com.cyc.cycjava.cycl.constant_handles.*;
-import static com.cyc.cycjava.cycl.control_vars.$hl_lock$;
-import static com.cyc.cycjava.cycl.control_vars.$mapping_target$;
 import static com.cyc.cycjava.cycl.control_vars.*;
 import static com.cyc.cycjava.cycl.el_utilities.*;
-import static com.cyc.cycjava.cycl.inference.harness.after_adding.*;
 import static com.cyc.cycjava.cycl.subl_macro_promotions.*;
-import static com.cyc.cycjava.cycl.utilities_macros.$is_noting_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_elapsed_seconds_for_notification$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_last_pacification_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_notification_count$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_pacifications_since_last_nl$;
-import static com.cyc.cycjava.cycl.utilities_macros.$progress_start_time$;
-import static com.cyc.cycjava.cycl.utilities_macros.$silent_progressP$;
-import static com.cyc.cycjava.cycl.utilities_macros.$suppress_all_progress_faster_than_seconds$;
 import static com.cyc.cycjava.cycl.utilities_macros.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.IDENTITY;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Functions.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Hashtables.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Locks.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Symbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Time.*;
 import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Types.*;
@@ -66,15 +23,32 @@ import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.cdestructuring_bind.*;
 import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
 import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
+
+import org.logicmoo.system.BeanShellCntrl;
+
+import com.cyc.cycjava.cycl.*;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
+import com.cyc.tool.subl.jrtl.nativeCode.subLisp.SubLThread;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLList;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObject;
+import com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLProcess;
+import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
+import com.cyc.tool.subl.util.SubLFile;
+import com.cyc.tool.subl.util.SubLTrampolineFile;
+import com.cyc.tool.subl.util.SubLTranslatedFile;
 
 
-public final class after_adding extends SubLTranslatedFile {
+/**
+ * Copyright (c) 1995 - 2019 Cycorp, Inc.  All rights reserved.
+ * module:      AFTER-ADDING
+ * source file: /cyc/top/cycl/inference/harness/after-adding.lisp
+ * created:     2019/07/03 17:37:37
+ */
+public final class after_adding extends SubLTranslatedFile implements V12 {
     public static final SubLFile me = new after_adding();
 
-    public static final String myName = "com.cyc.cycjava.cycl.inference.harness.after_adding";
+ public static final String myName = "com.cyc.cycjava.cycl.inference.harness.after_adding";
 
-    public static final String myFingerPrint = "029dedfcf09de50224069b5696f4f7eb7421e4c27cd06bd35146ce7a44ef04d6";
 
     // defparameter
     // Definitions
@@ -82,6 +56,7 @@ public final class after_adding extends SubLTranslatedFile {
      * Set this to T if you want to see errors caused by afterAddings instead of
      * catching them
      */
+    @LispMethod(comment = "Set this to T if you want to see errors caused by afterAddings instead of\r\ncatching them\ndefparameter\nSet this to T if you want to see errors caused by afterAddings instead of\ncatching them")
     public static final SubLSymbol $debug_after_addingsP$ = makeSymbol("*DEBUG-AFTER-ADDINGS?*");
 
     // deflexical
@@ -89,74 +64,65 @@ public final class after_adding extends SubLTranslatedFile {
      * The predicates whose extent implement the afterAdding and afterRemoving
      * support.
      */
+    @LispMethod(comment = "The predicates whose extent implement the afterAdding and afterRemoving\r\nsupport.\ndeflexical\nThe predicates whose extent implement the afterAdding and afterRemoving\nsupport.")
     public static final SubLSymbol $gaf_after_adding_predicates$ = makeSymbol("*GAF-AFTER-ADDING-PREDICATES*");
-
-
-
-
 
     // defparameter
     // When non-nil, afterAddings are disabled.
+    /**
+     * When non-nil, afterAddings are disabled.
+     */
+    @LispMethod(comment = "When non-nil, afterAddings are disabled.\ndefparameter")
     public static final SubLSymbol $after_addings_disabledP$ = makeSymbol("*AFTER-ADDINGS-DISABLED?*");
 
     // Internal Constants
-    public static final SubLList $list0 = list(reader_make_constant_shell(makeString("afterAdding")), reader_make_constant_shell(makeString("afterRemoving")));
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list0 = list(reader_make_constant_shell("afterAdding"), reader_make_constant_shell("afterRemoving"));
 
     public static final SubLSymbol $gaf_after_addings_hash$ = makeSymbol("*GAF-AFTER-ADDINGS-HASH*");
 
     public static final SubLSymbol $gaf_after_removings_hash$ = makeSymbol("*GAF-AFTER-REMOVINGS-HASH*");
 
+    static private final SubLList $list4 = list(list(makeSymbol("*AFTER-ADDINGS-DISABLED?*"), T));
 
-
-    public static final SubLList $list4 = list(list(makeSymbol("*AFTER-ADDINGS-DISABLED?*"), T));
-
-
-
-
-
-    public static final SubLList $list7 = cons(makeSymbol("FUN"), makeSymbol("FUN-MT"));
+    static private final SubLList $list7 = cons(makeSymbol("FUN"), makeSymbol("FUN-MT"));
 
     private static final SubLSymbol $IGNORE_ERRORS_TARGET = makeKeyword("IGNORE-ERRORS-TARGET");
 
-    public static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
+    private static final SubLSymbol IGNORE_ERRORS_HANDLER = makeSymbol("IGNORE-ERRORS-HANDLER", "SUBLISP");
 
 
-
-
-
-
-
-    private static final SubLObject $$EverythingPSC = reader_make_constant_shell(makeString("EverythingPSC"));
-
-    private static final SubLObject $$afterAdding = reader_make_constant_shell(makeString("afterAdding"));
 
 
 
     private static final SubLList $list16 = list(makeSymbol("GAF-AFTER-ADDING-PRED"), makeSymbol("PRED"), makeSymbol("GAF-AFTER-ADDING"));
 
-    private static final SubLObject $$afterRemoving = reader_make_constant_shell(makeString("afterRemoving"));
+
 
     private static final SubLList $list18 = list(makeSymbol("GAF-AFTER-REMOVING-PRED"), makeSymbol("PRED"), makeSymbol("GAF-AFTER-REMOVING"));
 
-
-
-
-
     private static final SubLSymbol PROPAGATE_GAF_AFTER_ADDING = makeSymbol("PROPAGATE-GAF-AFTER-ADDING");
-
-
-
-
 
     private static final SubLSymbol RELEVANT_MT_IS_SPEC_MT = makeSymbol("RELEVANT-MT-IS-SPEC-MT");
 
     private static final SubLSymbol REPROPAGATE_GAF_AFTER_ADDING_INTERNAL = makeSymbol("REPROPAGATE-GAF-AFTER-ADDING-INTERNAL");
 
-
+    public static final SubLObject clear_after_addings_alt() {
+        com.cyc.cycjava.cycl.inference.harness.after_adding.clear_gaf_after_addings();
+        rule_after_adding.clear_rule_after_addings();
+        return NIL;
+    }
 
     public static SubLObject clear_after_addings() {
         clear_gaf_after_addings();
         rule_after_adding.clear_rule_after_addings();
+        return NIL;
+    }
+
+    public static final SubLObject clear_gaf_after_addings_alt() {
+        if (NIL != $gaf_after_addings_hash$.getGlobalValue()) {
+            clrhash($gaf_after_addings_hash$.getGlobalValue());
+        }
         return NIL;
     }
 
@@ -167,9 +133,22 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject clear_after_removings_alt() {
+        com.cyc.cycjava.cycl.inference.harness.after_adding.clear_gaf_after_removings();
+        rule_after_adding.clear_rule_after_removings();
+        return NIL;
+    }
+
     public static SubLObject clear_after_removings() {
         clear_gaf_after_removings();
         rule_after_adding.clear_rule_after_removings();
+        return NIL;
+    }
+
+    public static final SubLObject clear_gaf_after_removings_alt() {
+        if (NIL != $gaf_after_removings_hash$.getGlobalValue()) {
+            clrhash($gaf_after_removings_hash$.getGlobalValue());
+        }
         return NIL;
     }
 
@@ -180,11 +159,38 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Execute BODY with all afterAddings (gaf and rule) disabled.
+     * This is normally only used for bootstrapping.
+     */
+    @LispMethod(comment = "Execute BODY with all afterAddings (gaf and rule) disabled.\r\nThis is normally only used for bootstrapping.\nExecute BODY with all afterAddings (gaf and rule) disabled.\nThis is normally only used for bootstrapping.")
+    public static final SubLObject disable_after_addings_alt(SubLObject macroform, SubLObject environment) {
+        {
+            SubLObject datum = macroform.rest();
+            SubLObject current = datum;
+            SubLObject body = current;
+            return listS(CLET, $list_alt4, append(body, NIL));
+        }
+    }
+
+    /**
+     * Execute BODY with all afterAddings (gaf and rule) disabled.
+     * This is normally only used for bootstrapping.
+     */
+    @LispMethod(comment = "Execute BODY with all afterAddings (gaf and rule) disabled.\r\nThis is normally only used for bootstrapping.\nExecute BODY with all afterAddings (gaf and rule) disabled.\nThis is normally only used for bootstrapping.")
     public static SubLObject disable_after_addings(final SubLObject macroform, final SubLObject environment) {
         final SubLObject datum = macroform.rest();
         final SubLObject body;
         final SubLObject current = body = datum;
         return listS(CLET, $list4, append(body, NIL));
+    }
+
+    public static final SubLObject handle_after_addings_alt(SubLObject argument, SubLObject assertion) {
+        com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_addings(argument, assertion);
+        if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+            rule_after_adding.handle_rule_after_addings(argument, assertion);
+        }
+        return NIL;
     }
 
     public static SubLObject handle_after_addings(final SubLObject argument, final SubLObject assertion) {
@@ -195,10 +201,88 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject handle_gaf_after_addings_alt(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            if (NIL == $after_addings_disabledP$.getDynamicValue(thread)) {
+                if (NIL != assertions_high.gaf_assertionP(assertion)) {
+                    {
+                        SubLObject pred = assertions_high.gaf_arg(assertion, ZERO_INTEGER);
+                        SubLObject mt = assertions_high.assertion_mt(assertion);
+                        if (NIL != forts.fort_p(pred)) {
+                            {
+                                SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                                {
+                                    SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                    SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                    try {
+                                        mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                        mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                        mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                        {
+                                            SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.harness.after_adding.get_gaf_after_addings(pred);
+                                            SubLObject info = NIL;
+                                            for (info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , info = cdolist_list_var.first()) {
+                                                {
+                                                    SubLObject datum = info;
+                                                    SubLObject current = datum;
+                                                    SubLObject fun = NIL;
+                                                    SubLObject fun_mt = NIL;
+                                                    destructuring_bind_must_consp(current, datum, $list_alt7);
+                                                    fun = current.first();
+                                                    current = current.rest();
+                                                    fun_mt = current;
+                                                    if (fun.isFunctionSpec() && (NIL != mt_relevance_macros.relevant_mtP(fun_mt))) {
+                                                        if (NIL == $debug_after_addingsP$.getDynamicValue(thread)) {
+                                                            {
+                                                                SubLObject ignore_errors_tag = NIL;
+                                                                try {
+                                                                    {
+                                                                        SubLObject _prev_bind_0_1 = Errors.$error_handler$.currentBinding(thread);
+                                                                        try {
+                                                                            Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                                                                            try {
+                                                                                com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_adding(fun, argument, assertion);
+                                                                            } catch (Throwable catch_var) {
+                                                                                Errors.handleThrowable(catch_var, NIL);
+                                                                            }
+                                                                        } finally {
+                                                                            Errors.$error_handler$.rebind(_prev_bind_0_1, thread);
+                                                                        }
+                                                                    }
+                                                                } catch (Throwable ccatch_env_var) {
+                                                                    ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                                                                }
+                                                            }
+                                                        } else {
+                                                            com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_adding(fun, argument, assertion);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    } finally {
+                                        mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                        mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject handle_gaf_after_addings(final SubLObject argument, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         if ((NIL == $after_addings_disabledP$.getDynamicValue(thread)) && (NIL != assertions_high.gaf_assertionP(assertion))) {
             final SubLObject pred = assertions_high.gaf_arg(assertion, ZERO_INTEGER);
             final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -328,6 +412,14 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject handle_after_removings_alt(SubLObject argument, SubLObject assertion) {
+        com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_removings(argument, assertion);
+        if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
+            rule_after_adding.handle_rule_after_removings(argument, assertion);
+        }
+        return NIL;
+    }
+
     public static SubLObject handle_after_removings(final SubLObject argument, final SubLObject assertion) {
         handle_gaf_after_removings(argument, assertion);
         if (NIL != assertion_handles.valid_assertionP(assertion, UNPROVIDED)) {
@@ -336,10 +428,86 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject handle_gaf_after_removings_alt(SubLObject argument, SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+            SubLTrampolineFile.checkType(assertion, ASSERTION_P);
+            if (NIL != assertions_high.gaf_assertionP(assertion)) {
+                {
+                    SubLObject pred = assertions_high.gaf_arg(assertion, ZERO_INTEGER);
+                    SubLObject mt = assertions_high.assertion_mt(assertion);
+                    if (NIL != forts.fort_p(pred)) {
+                        {
+                            SubLObject mt_var = mt_relevance_macros.with_inference_mt_relevance_validate(mt);
+                            {
+                                SubLObject _prev_bind_0 = mt_relevance_macros.$mt$.currentBinding(thread);
+                                SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                                SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mts$.currentBinding(thread);
+                                try {
+                                    mt_relevance_macros.$mt$.bind(mt_relevance_macros.update_inference_mt_relevance_mt(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mt_function$.bind(mt_relevance_macros.update_inference_mt_relevance_function(mt_var), thread);
+                                    mt_relevance_macros.$relevant_mts$.bind(mt_relevance_macros.update_inference_mt_relevance_mt_list(mt_var), thread);
+                                    {
+                                        SubLObject cdolist_list_var = com.cyc.cycjava.cycl.inference.harness.after_adding.get_gaf_after_removings(pred);
+                                        SubLObject info = NIL;
+                                        for (info = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , info = cdolist_list_var.first()) {
+                                            {
+                                                SubLObject datum = info;
+                                                SubLObject current = datum;
+                                                SubLObject fun = NIL;
+                                                SubLObject fun_mt = NIL;
+                                                destructuring_bind_must_consp(current, datum, $list_alt7);
+                                                fun = current.first();
+                                                current = current.rest();
+                                                fun_mt = current;
+                                                if (fun.isFunctionSpec() && (NIL != mt_relevance_macros.relevant_mtP(fun_mt))) {
+                                                    if (NIL == $debug_after_addingsP$.getDynamicValue(thread)) {
+                                                        {
+                                                            SubLObject ignore_errors_tag = NIL;
+                                                            try {
+                                                                {
+                                                                    SubLObject _prev_bind_0_2 = Errors.$error_handler$.currentBinding(thread);
+                                                                    try {
+                                                                        Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                                                                        try {
+                                                                            com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_removing(fun, argument, assertion);
+                                                                        } catch (Throwable catch_var) {
+                                                                            Errors.handleThrowable(catch_var, NIL);
+                                                                        }
+                                                                    } finally {
+                                                                        Errors.$error_handler$.rebind(_prev_bind_0_2, thread);
+                                                                    }
+                                                                }
+                                                            } catch (Throwable ccatch_env_var) {
+                                                                ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                                                            }
+                                                        }
+                                                    } else {
+                                                        com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_removing(fun, argument, assertion);
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                } finally {
+                                    mt_relevance_macros.$relevant_mts$.rebind(_prev_bind_2, thread);
+                                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                                    mt_relevance_macros.$mt$.rebind(_prev_bind_0, thread);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject handle_gaf_after_removings(final SubLObject argument, final SubLObject assertion) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
-        assert NIL != assertion_handles.assertion_p(assertion) : "assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) " + assertion;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
+        assert NIL != assertion_handles.assertion_p(assertion) : "! assertion_handles.assertion_p(assertion) " + ("assertion_handles.assertion_p(assertion) " + "CommonSymbols.NIL != assertion_handles.assertion_p(assertion) ") + assertion;
         if (NIL != assertions_high.gaf_assertionP(assertion)) {
             final SubLObject pred = assertions_high.gaf_arg(assertion, ZERO_INTEGER);
             final SubLObject mt = assertions_high.assertion_mt(assertion);
@@ -401,6 +569,19 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject get_gaf_after_addings_alt(SubLObject pred) {
+        if (NIL == $gaf_after_addings_hash$.getGlobalValue()) {
+            com.cyc.cycjava.cycl.inference.harness.after_adding.initialize_gaf_after_addings_hash();
+        }
+        {
+            SubLObject result = gethash_without_values(pred, $gaf_after_addings_hash$.getGlobalValue(), NIL);
+            if (NIL != somewhere_cache.somewhere_cached_pred_p(pred)) {
+                result = cons(somewhere_cache.$somewhere_cache_gaf_after_adding_info$.getGlobalValue(), result);
+            }
+            return result;
+        }
+    }
+
     public static SubLObject get_gaf_after_addings(final SubLObject pred) {
         if (NIL == $gaf_after_addings_hash$.getGlobalValue()) {
             initialize_gaf_after_addings_hash();
@@ -410,6 +591,19 @@ public final class after_adding extends SubLTranslatedFile {
             result = cons(somewhere_cache.$somewhere_cache_gaf_after_adding_info$.getGlobalValue(), result);
         }
         return result;
+    }
+
+    public static final SubLObject get_gaf_after_removings_alt(SubLObject pred) {
+        if (NIL == $gaf_after_removings_hash$.getGlobalValue()) {
+            com.cyc.cycjava.cycl.inference.harness.after_adding.initialize_gaf_after_removings_hash();
+        }
+        {
+            SubLObject result = gethash_without_values(pred, $gaf_after_removings_hash$.getGlobalValue(), NIL);
+            if (NIL != somewhere_cache.somewhere_cached_pred_p(pred)) {
+                result = cons(somewhere_cache.$somewhere_cache_gaf_after_adding_info$.getGlobalValue(), result);
+            }
+            return result;
+        }
     }
 
     public static SubLObject get_gaf_after_removings(final SubLObject pred) {
@@ -423,6 +617,22 @@ public final class after_adding extends SubLTranslatedFile {
         return result;
     }
 
+    public static final SubLObject handle_gaf_after_adding_alt(SubLObject function, SubLObject argument, SubLObject assertion) {
+        {
+            SubLObject lock = $hl_lock$.getGlobalValue();
+            SubLObject release = NIL;
+            try {
+                release = seize_lock(lock);
+                funcall(function, argument, assertion);
+            } finally {
+                if (NIL != release) {
+                    release_lock(lock);
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject handle_gaf_after_adding(final SubLObject function, final SubLObject argument, final SubLObject assertion) {
         SubLObject release = NIL;
         try {
@@ -431,6 +641,22 @@ public final class after_adding extends SubLTranslatedFile {
         } finally {
             if (NIL != release) {
                 release_lock($hl_lock$.getGlobalValue());
+            }
+        }
+        return NIL;
+    }
+
+    public static final SubLObject handle_gaf_after_removing_alt(SubLObject function, SubLObject argument, SubLObject assertion) {
+        {
+            SubLObject lock = $hl_lock$.getGlobalValue();
+            SubLObject release = NIL;
+            try {
+                release = seize_lock(lock);
+                funcall(function, argument, assertion);
+            } finally {
+                if (NIL != release) {
+                    release_lock(lock);
+                }
             }
         }
         return NIL;
@@ -449,9 +675,21 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject rebuild_after_adding_caches_alt() {
+        com.cyc.cycjava.cycl.inference.harness.after_adding.rebuild_gaf_after_adding_caches();
+        rule_after_adding.rebuild_rule_after_adding_caches();
+        return NIL;
+    }
+
     public static SubLObject rebuild_after_adding_caches() {
         rebuild_gaf_after_adding_caches();
         rule_after_adding.rebuild_rule_after_adding_caches();
+        return NIL;
+    }
+
+    public static final SubLObject rebuild_gaf_after_adding_caches_alt() {
+        com.cyc.cycjava.cycl.inference.harness.after_adding.initialize_gaf_after_addings_hash();
+        com.cyc.cycjava.cycl.inference.harness.after_adding.initialize_gaf_after_removings_hash();
         return NIL;
     }
 
@@ -459,6 +697,109 @@ public final class after_adding extends SubLTranslatedFile {
         initialize_gaf_after_addings_hash();
         initialize_gaf_after_removings_hash();
         return NIL;
+    }
+
+    public static final SubLObject initialize_gaf_after_addings_hash_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (NIL != $gaf_after_addings_hash$.getGlobalValue()) {
+                clrhash($gaf_after_addings_hash$.getGlobalValue());
+            } else {
+                $gaf_after_addings_hash$.setGlobalValue(make_hash_table($int$100, UNPROVIDED, UNPROVIDED));
+            }
+            {
+                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                try {
+                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                    {
+                        SubLObject pred_var = $$afterAdding;
+                        if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                    {
+                                                        SubLObject done_var_3 = NIL;
+                                                        SubLObject token_var_4 = NIL;
+                                                        while (NIL == done_var_3) {
+                                                            {
+                                                                SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_4);
+                                                                SubLObject valid_5 = makeBoolean(token_var_4 != ass);
+                                                                if (NIL != valid_5) {
+                                                                    {
+                                                                        SubLObject formula = assertions_high.gaf_formula(ass);
+                                                                        SubLObject datum = formula;
+                                                                        SubLObject current = datum;
+                                                                        SubLObject gaf_after_adding_pred = NIL;
+                                                                        SubLObject pred = NIL;
+                                                                        SubLObject gaf_after_adding = NIL;
+                                                                        destructuring_bind_must_consp(current, datum, $list_alt15);
+                                                                        gaf_after_adding_pred = current.first();
+                                                                        current = current.rest();
+                                                                        destructuring_bind_must_consp(current, datum, $list_alt15);
+                                                                        pred = current.first();
+                                                                        current = current.rest();
+                                                                        destructuring_bind_must_consp(current, datum, $list_alt15);
+                                                                        gaf_after_adding = current.first();
+                                                                        current = current.rest();
+                                                                        if (NIL == current) {
+                                                                            if (NIL != forts.valid_fortP(pred)) {
+                                                                                gaf_after_adding = cycl_subl_symbol_symbol(gaf_after_adding);
+                                                                                {
+                                                                                    SubLObject item_var = cons(gaf_after_adding, assertions_high.assertion_mt(ass));
+                                                                                    if (NIL == member(item_var, gethash(pred, $gaf_after_addings_hash$.getGlobalValue(), UNPROVIDED), symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                                                        sethash(pred, $gaf_after_addings_hash$.getGlobalValue(), cons(item_var, gethash(pred, $gaf_after_addings_hash$.getGlobalValue(), UNPROVIDED)));
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            cdestructuring_bind_error(datum, $list_alt15);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                done_var_3 = makeBoolean(NIL == valid_5);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0_6 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                        try {
+                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_6, thread);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                } finally {
+                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject initialize_gaf_after_addings_hash() {
@@ -575,6 +916,109 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject initialize_gaf_after_removings_hash_alt() {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            if (!$gaf_after_removings_hash$.getGlobalValue().isHashtable()) {
+                $gaf_after_removings_hash$.setGlobalValue(make_hash_table($int$100, UNPROVIDED, UNPROVIDED));
+            } else {
+                clrhash($gaf_after_removings_hash$.getGlobalValue());
+            }
+            {
+                SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                try {
+                    mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                    mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                    {
+                        SubLObject pred_var = $$afterRemoving;
+                        if (NIL != kb_mapping_macros.do_predicate_extent_index_key_validator(pred_var)) {
+                            {
+                                SubLObject iterator_var = kb_mapping_macros.new_predicate_extent_final_index_spec_iterator(pred_var);
+                                SubLObject done_var = NIL;
+                                SubLObject token_var = NIL;
+                                while (NIL == done_var) {
+                                    {
+                                        SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                        SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                        if (NIL != valid) {
+                                            {
+                                                SubLObject final_index_iterator = NIL;
+                                                try {
+                                                    final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                    {
+                                                        SubLObject done_var_7 = NIL;
+                                                        SubLObject token_var_8 = NIL;
+                                                        while (NIL == done_var_7) {
+                                                            {
+                                                                SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_8);
+                                                                SubLObject valid_9 = makeBoolean(token_var_8 != ass);
+                                                                if (NIL != valid_9) {
+                                                                    {
+                                                                        SubLObject formula = assertions_high.gaf_formula(ass);
+                                                                        SubLObject datum = formula;
+                                                                        SubLObject current = datum;
+                                                                        SubLObject gaf_after_removing_pred = NIL;
+                                                                        SubLObject pred = NIL;
+                                                                        SubLObject gaf_after_removing = NIL;
+                                                                        destructuring_bind_must_consp(current, datum, $list_alt17);
+                                                                        gaf_after_removing_pred = current.first();
+                                                                        current = current.rest();
+                                                                        destructuring_bind_must_consp(current, datum, $list_alt17);
+                                                                        pred = current.first();
+                                                                        current = current.rest();
+                                                                        destructuring_bind_must_consp(current, datum, $list_alt17);
+                                                                        gaf_after_removing = current.first();
+                                                                        current = current.rest();
+                                                                        if (NIL == current) {
+                                                                            if (NIL != forts.valid_fortP(pred)) {
+                                                                                gaf_after_removing = cycl_subl_symbol_symbol(gaf_after_removing);
+                                                                                {
+                                                                                    SubLObject item_var = cons(gaf_after_removing, assertions_high.assertion_mt(ass));
+                                                                                    if (NIL == member(item_var, gethash(pred, $gaf_after_removings_hash$.getGlobalValue(), UNPROVIDED), symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                                                        sethash(pred, $gaf_after_removings_hash$.getGlobalValue(), cons(item_var, gethash(pred, $gaf_after_removings_hash$.getGlobalValue(), UNPROVIDED)));
+                                                                                    }
+                                                                                }
+                                                                            }
+                                                                        } else {
+                                                                            cdestructuring_bind_error(datum, $list_alt17);
+                                                                        }
+                                                                    }
+                                                                }
+                                                                done_var_7 = makeBoolean(NIL == valid_9);
+                                                            }
+                                                        } 
+                                                    }
+                                                } finally {
+                                                    {
+                                                        SubLObject _prev_bind_0_10 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                        try {
+                                                            $is_thread_performing_cleanupP$.bind(T, thread);
+                                                            if (NIL != final_index_iterator) {
+                                                                kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                            }
+                                                        } finally {
+                                                            $is_thread_performing_cleanupP$.rebind(_prev_bind_0_10, thread);
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        done_var = makeBoolean(NIL == valid);
+                                    }
+                                } 
+                            }
+                        }
+                    }
+                } finally {
+                    mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                    mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject initialize_gaf_after_removings_hash() {
         final SubLThread thread = SubLProcess.currentSubLThread();
         if (!$gaf_after_removings_hash$.getGlobalValue().isHashtable()) {
@@ -689,9 +1133,97 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject recache_gaf_after_addings_alt(SubLObject predicate) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(predicate, FORT_P);
+            if (NIL == $gaf_after_addings_hash$.getGlobalValue()) {
+                com.cyc.cycjava.cycl.inference.harness.after_adding.initialize_gaf_after_addings_hash();
+            }
+            remhash(predicate, $gaf_after_addings_hash$.getGlobalValue());
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject pred_var = $$afterAdding;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(predicate, NIL, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(predicate, NIL, pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                        {
+                                                            SubLObject done_var_11 = NIL;
+                                                            SubLObject token_var_12 = NIL;
+                                                            while (NIL == done_var_11) {
+                                                                {
+                                                                    SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_12);
+                                                                    SubLObject valid_13 = makeBoolean(token_var_12 != ass);
+                                                                    if (NIL != valid_13) {
+                                                                        if (NIL != assertions_high.assertion_arguments(ass)) {
+                                                                            {
+                                                                                SubLObject gaf_after_adding = cycl_subl_symbol_symbol(assertions_high.gaf_arg(ass, TWO_INTEGER));
+                                                                                SubLObject item_var = cons(gaf_after_adding, assertions_high.assertion_mt(ass));
+                                                                                if (NIL == member(item_var, ans, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                                                    ans = cons(item_var, ans);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var_11 = makeBoolean(NIL == valid_13);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0_14 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_14, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != ans) {
+                    sethash(predicate, $gaf_after_addings_hash$.getGlobalValue(), nreverse(ans));
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject recache_gaf_after_addings(final SubLObject predicate) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(predicate) : "forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) " + predicate;
+        assert NIL != forts.fort_p(predicate) : "! forts.fort_p(predicate) " + ("forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) ") + predicate;
         if (NIL == $gaf_after_addings_hash$.getGlobalValue()) {
             initialize_gaf_after_addings_hash();
         }
@@ -755,9 +1287,97 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject recache_gaf_after_removings_alt(SubLObject predicate) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(predicate, FORT_P);
+            if (NIL == $gaf_after_removings_hash$.getGlobalValue()) {
+                com.cyc.cycjava.cycl.inference.harness.after_adding.initialize_gaf_after_removings_hash();
+            }
+            remhash(predicate, $gaf_after_removings_hash$.getGlobalValue());
+            {
+                SubLObject ans = NIL;
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_EVERYTHING, thread);
+                        mt_relevance_macros.$mt$.bind($$EverythingPSC, thread);
+                        {
+                            SubLObject pred_var = $$afterRemoving;
+                            if (NIL != kb_mapping_macros.do_gaf_arg_index_key_validator(predicate, NIL, pred_var)) {
+                                {
+                                    SubLObject iterator_var = kb_mapping_macros.new_gaf_arg_final_index_spec_iterator(predicate, NIL, pred_var);
+                                    SubLObject done_var = NIL;
+                                    SubLObject token_var = NIL;
+                                    while (NIL == done_var) {
+                                        {
+                                            SubLObject final_index_spec = iteration.iteration_next_without_values_macro_helper(iterator_var, token_var);
+                                            SubLObject valid = makeBoolean(token_var != final_index_spec);
+                                            if (NIL != valid) {
+                                                {
+                                                    SubLObject final_index_iterator = NIL;
+                                                    try {
+                                                        final_index_iterator = kb_mapping_macros.new_final_index_iterator(final_index_spec, $GAF, NIL, NIL);
+                                                        {
+                                                            SubLObject done_var_15 = NIL;
+                                                            SubLObject token_var_16 = NIL;
+                                                            while (NIL == done_var_15) {
+                                                                {
+                                                                    SubLObject ass = iteration.iteration_next_without_values_macro_helper(final_index_iterator, token_var_16);
+                                                                    SubLObject valid_17 = makeBoolean(token_var_16 != ass);
+                                                                    if (NIL != valid_17) {
+                                                                        if (NIL != assertions_high.assertion_arguments(ass)) {
+                                                                            {
+                                                                                SubLObject gaf_after_removing = cycl_subl_symbol_symbol(assertions_high.gaf_arg(ass, TWO_INTEGER));
+                                                                                SubLObject item_var = cons(gaf_after_removing, assertions_high.assertion_mt(ass));
+                                                                                if (NIL == member(item_var, ans, symbol_function(EQL), symbol_function(IDENTITY))) {
+                                                                                    ans = cons(item_var, ans);
+                                                                                }
+                                                                            }
+                                                                        }
+                                                                    }
+                                                                    done_var_15 = makeBoolean(NIL == valid_17);
+                                                                }
+                                                            } 
+                                                        }
+                                                    } finally {
+                                                        {
+                                                            SubLObject _prev_bind_0_18 = $is_thread_performing_cleanupP$.currentBinding(thread);
+                                                            try {
+                                                                $is_thread_performing_cleanupP$.bind(T, thread);
+                                                                if (NIL != final_index_iterator) {
+                                                                    kb_mapping_macros.destroy_final_index_iterator(final_index_iterator);
+                                                                }
+                                                            } finally {
+                                                                $is_thread_performing_cleanupP$.rebind(_prev_bind_0_18, thread);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            done_var = makeBoolean(NIL == valid);
+                                        }
+                                    } 
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+                if (NIL != ans) {
+                    sethash(predicate, $gaf_after_removings_hash$.getGlobalValue(), nreverse(ans));
+                }
+            }
+            return NIL;
+        }
+    }
+
     public static SubLObject recache_gaf_after_removings(final SubLObject predicate) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(predicate) : "forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) " + predicate;
+        assert NIL != forts.fort_p(predicate) : "! forts.fort_p(predicate) " + ("forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) ") + predicate;
         if (NIL == $gaf_after_removings_hash$.getGlobalValue()) {
             initialize_gaf_after_removings_hash();
         }
@@ -821,8 +1441,30 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    public static final SubLObject propagate_gaf_after_adding_alt(SubLObject argument, SubLObject assertion) {
+        SubLTrampolineFile.checkType(argument, ARGUMENT_P);
+        if ((NIL != assertions_high.gaf_assertionP(assertion)) && (NIL != assertions_high.assertion_has_truth(assertion, $TRUE))) {
+            {
+                SubLObject formula = assertions_high.gaf_formula(assertion);
+                if (literal_arity(formula, UNPROVIDED).numE(TWO_INTEGER)) {
+                    {
+                        SubLObject predicate = literal_arg1(formula, UNPROVIDED);
+                        SubLObject function = cycl_subl_symbol_symbol(literal_arg2(formula, UNPROVIDED));
+                        SubLObject mt = assertions_high.assertion_mt(assertion);
+                        if (((NIL != forts.fort_p(predicate)) && function.isSymbol()) && (NIL != fboundp(function))) {
+                            if (function != PROPAGATE_GAF_AFTER_ADDING) {
+                                com.cyc.cycjava.cycl.inference.harness.after_adding.repropagate_gaf_after_adding(predicate, function, mt);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return NIL;
+    }
+
     public static SubLObject propagate_gaf_after_adding(final SubLObject argument, final SubLObject assertion) {
-        assert NIL != arguments.argument_p(argument) : "arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) " + argument;
+        assert NIL != arguments.argument_p(argument) : "! arguments.argument_p(argument) " + ("arguments.argument_p(argument) " + "CommonSymbols.NIL != arguments.argument_p(argument) ") + argument;
         if ((NIL != assertions_high.gaf_assertionP(assertion)) && (NIL != assertions_high.assertion_has_truth(assertion, $TRUE))) {
             final SubLObject formula = assertions_high.gaf_formula(assertion);
             if (literal_arity(formula, UNPROVIDED).numE(TWO_INTEGER)) {
@@ -837,11 +1479,48 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    /**
+     * Completely repropagate the gaf-after-adding FUNCTION for all arguments supporting
+     * all assertions about PREDICATE in spec mts of MT.
+     */
+    @LispMethod(comment = "Completely repropagate the gaf-after-adding FUNCTION for all arguments supporting\r\nall assertions about PREDICATE in spec mts of MT.\nCompletely repropagate the gaf-after-adding FUNCTION for all arguments supporting\nall assertions about PREDICATE in spec mts of MT.")
+    public static final SubLObject repropagate_gaf_after_adding_alt(SubLObject predicate, SubLObject function, SubLObject mt) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            SubLTrampolineFile.checkType(predicate, FORT_P);
+            SubLTrampolineFile.checkType(function, SYMBOLP);
+            SubLTrampolineFile.checkType(mt, HLMT_P);
+            if (NIL != fboundp(function)) {
+                {
+                    SubLObject _prev_bind_0 = $mapping_target$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_2 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        $mapping_target$.bind(function, thread);
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_SPEC_MT, thread);
+                        mt_relevance_macros.$mt$.bind(mt, thread);
+                        kb_mapping.map_predicate_extent_index(symbol_function(REPROPAGATE_GAF_AFTER_ADDING_INTERNAL), predicate, UNPROVIDED, UNPROVIDED);
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_2, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_1, thread);
+                        $mapping_target$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
+    }
+
+    /**
+     * Completely repropagate the gaf-after-adding FUNCTION for all arguments supporting
+     * all assertions about PREDICATE in spec mts of MT.
+     */
+    @LispMethod(comment = "Completely repropagate the gaf-after-adding FUNCTION for all arguments supporting\r\nall assertions about PREDICATE in spec mts of MT.\nCompletely repropagate the gaf-after-adding FUNCTION for all arguments supporting\nall assertions about PREDICATE in spec mts of MT.")
     public static SubLObject repropagate_gaf_after_adding(final SubLObject predicate, final SubLObject function, final SubLObject mt) {
         final SubLThread thread = SubLProcess.currentSubLThread();
-        assert NIL != forts.fort_p(predicate) : "forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) " + predicate;
-        assert NIL != symbolp(function) : "Types.symbolp(function) " + "CommonSymbols.NIL != Types.symbolp(function) " + function;
-        assert NIL != hlmt.hlmt_p(mt) : "hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) " + mt;
+        assert NIL != forts.fort_p(predicate) : "! forts.fort_p(predicate) " + ("forts.fort_p(predicate) " + "CommonSymbols.NIL != forts.fort_p(predicate) ") + predicate;
+        assert NIL != symbolp(function) : "! symbolp(function) " + ("Types.symbolp(function) " + "CommonSymbols.NIL != Types.symbolp(function) ") + function;
+        assert NIL != hlmt.hlmt_p(mt) : "! hlmt.hlmt_p(mt) " + ("hlmt.hlmt_p(mt) " + "CommonSymbols.NIL != hlmt.hlmt_p(mt) ") + mt;
         if (NIL != fboundp(function)) {
             final SubLObject _prev_bind_0 = $mapping_target$.currentBinding(thread);
             final SubLObject _prev_bind_2 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
@@ -858,6 +1537,57 @@ public final class after_adding extends SubLTranslatedFile {
             }
         }
         return NIL;
+    }
+
+    public static final SubLObject repropagate_gaf_after_adding_internal_alt(SubLObject assertion) {
+        {
+            final SubLThread thread = SubLProcess.currentSubLThread();
+            {
+                SubLObject v_arguments = assertions_high.assertion_arguments(assertion);
+                {
+                    SubLObject _prev_bind_0 = mt_relevance_macros.$relevant_mt_function$.currentBinding(thread);
+                    SubLObject _prev_bind_1 = mt_relevance_macros.$mt$.currentBinding(thread);
+                    try {
+                        mt_relevance_macros.$relevant_mt_function$.bind(RELEVANT_MT_IS_GENL_MT, thread);
+                        mt_relevance_macros.$mt$.bind(assertions_high.assertion_mt(assertion), thread);
+                        {
+                            SubLObject cdolist_list_var = v_arguments;
+                            SubLObject argument = NIL;
+                            for (argument = cdolist_list_var.first(); NIL != cdolist_list_var; cdolist_list_var = cdolist_list_var.rest() , argument = cdolist_list_var.first()) {
+                                if (NIL == $debug_after_addingsP$.getDynamicValue(thread)) {
+                                    {
+                                        SubLObject ignore_errors_tag = NIL;
+                                        try {
+                                            {
+                                                SubLObject _prev_bind_0_19 = Errors.$error_handler$.currentBinding(thread);
+                                                try {
+                                                    Errors.$error_handler$.bind(symbol_function(IGNORE_ERRORS_HANDLER), thread);
+                                                    try {
+                                                        com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_adding($mapping_target$.getDynamicValue(thread), argument, assertion);
+                                                    } catch (Throwable catch_var) {
+                                                        Errors.handleThrowable(catch_var, NIL);
+                                                    }
+                                                } finally {
+                                                    Errors.$error_handler$.rebind(_prev_bind_0_19, thread);
+                                                }
+                                            }
+                                        } catch (Throwable ccatch_env_var) {
+                                            ignore_errors_tag = Errors.handleThrowable(ccatch_env_var, $IGNORE_ERRORS_TARGET);
+                                        }
+                                    }
+                                } else {
+                                    com.cyc.cycjava.cycl.inference.harness.after_adding.handle_gaf_after_adding($mapping_target$.getDynamicValue(thread), argument, assertion);
+                                }
+                            }
+                        }
+                    } finally {
+                        mt_relevance_macros.$mt$.rebind(_prev_bind_1, thread);
+                        mt_relevance_macros.$relevant_mt_function$.rebind(_prev_bind_0, thread);
+                    }
+                }
+            }
+            return NIL;
+        }
     }
 
     public static SubLObject repropagate_gaf_after_adding_internal(final SubLObject assertion) {
@@ -905,13 +1635,21 @@ public final class after_adding extends SubLTranslatedFile {
         return NIL;
     }
 
+    // Internal Constants
+    @LispMethod(comment = "Internal Constants")
+    static private final SubLList $list_alt0 = list(reader_make_constant_shell("afterAdding"), reader_make_constant_shell("afterRemoving"));
+
     public static SubLObject initial_assertion_argumentP(final SubLObject argument, final SubLObject assertion) {
         return assertion_sole_argumentP(argument, assertion);
     }
 
+    static private final SubLList $list_alt4 = list(list(makeSymbol("*AFTER-ADDINGS-DISABLED?*"), T));
+
     public static SubLObject final_assertion_argumentP(final SubLObject argument, final SubLObject assertion) {
         return assertion_sole_argumentP(argument, assertion);
     }
+
+    static private final SubLList $list_alt7 = cons(makeSymbol("FUN"), makeSymbol("FUN-MT"));
 
     public static SubLObject assertion_sole_argumentP(final SubLObject argument, final SubLObject assertion) {
         final SubLObject assertion_arguments = assertions_high.assertion_arguments(assertion);
@@ -919,35 +1657,63 @@ public final class after_adding extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_after_adding_file() {
-        declareFunction(me, "clear_after_addings", "CLEAR-AFTER-ADDINGS", 0, 0, false);
-        declareFunction(me, "clear_gaf_after_addings", "CLEAR-GAF-AFTER-ADDINGS", 0, 0, false);
-        declareFunction(me, "clear_after_removings", "CLEAR-AFTER-REMOVINGS", 0, 0, false);
-        declareFunction(me, "clear_gaf_after_removings", "CLEAR-GAF-AFTER-REMOVINGS", 0, 0, false);
-        declareMacro(me, "disable_after_addings", "DISABLE-AFTER-ADDINGS");
-        declareFunction(me, "handle_after_addings", "HANDLE-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(me, "handle_gaf_after_addings", "HANDLE-GAF-AFTER-ADDINGS", 2, 0, false);
-        declareFunction(me, "handle_after_removings", "HANDLE-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(me, "handle_gaf_after_removings", "HANDLE-GAF-AFTER-REMOVINGS", 2, 0, false);
-        declareFunction(me, "get_gaf_after_addings", "GET-GAF-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(me, "get_gaf_after_removings", "GET-GAF-AFTER-REMOVINGS", 1, 0, false);
-        declareFunction(me, "handle_gaf_after_adding", "HANDLE-GAF-AFTER-ADDING", 3, 0, false);
-        declareFunction(me, "handle_gaf_after_removing", "HANDLE-GAF-AFTER-REMOVING", 3, 0, false);
-        declareFunction(me, "rebuild_after_adding_caches", "REBUILD-AFTER-ADDING-CACHES", 0, 0, false);
-        declareFunction(me, "rebuild_gaf_after_adding_caches", "REBUILD-GAF-AFTER-ADDING-CACHES", 0, 0, false);
-        declareFunction(me, "initialize_gaf_after_addings_hash", "INITIALIZE-GAF-AFTER-ADDINGS-HASH", 0, 0, false);
-        declareFunction(me, "initialize_gaf_after_removings_hash", "INITIALIZE-GAF-AFTER-REMOVINGS-HASH", 0, 0, false);
-        declareFunction(me, "recache_gaf_after_addings", "RECACHE-GAF-AFTER-ADDINGS", 1, 0, false);
-        declareFunction(me, "recache_gaf_after_removings", "RECACHE-GAF-AFTER-REMOVINGS", 1, 0, false);
-        declareFunction(me, "propagate_gaf_after_adding", "PROPAGATE-GAF-AFTER-ADDING", 2, 0, false);
-        declareFunction(me, "repropagate_gaf_after_adding", "REPROPAGATE-GAF-AFTER-ADDING", 3, 0, false);
-        declareFunction(me, "repropagate_gaf_after_adding_internal", "REPROPAGATE-GAF-AFTER-ADDING-INTERNAL", 1, 0, false);
-        declareFunction(me, "initial_assertion_argumentP", "INITIAL-ASSERTION-ARGUMENT?", 2, 0, false);
-        declareFunction(me, "final_assertion_argumentP", "FINAL-ASSERTION-ARGUMENT?", 2, 0, false);
-        declareFunction(me, "assertion_sole_argumentP", "ASSERTION-SOLE-ARGUMENT?", 2, 0, false);
+        declareFunction("clear_after_addings", "CLEAR-AFTER-ADDINGS", 0, 0, false);
+        declareFunction("clear_gaf_after_addings", "CLEAR-GAF-AFTER-ADDINGS", 0, 0, false);
+        declareFunction("clear_after_removings", "CLEAR-AFTER-REMOVINGS", 0, 0, false);
+        declareFunction("clear_gaf_after_removings", "CLEAR-GAF-AFTER-REMOVINGS", 0, 0, false);
+        declareMacro("disable_after_addings", "DISABLE-AFTER-ADDINGS");
+        declareFunction("handle_after_addings", "HANDLE-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("handle_gaf_after_addings", "HANDLE-GAF-AFTER-ADDINGS", 2, 0, false);
+        declareFunction("handle_after_removings", "HANDLE-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("handle_gaf_after_removings", "HANDLE-GAF-AFTER-REMOVINGS", 2, 0, false);
+        declareFunction("get_gaf_after_addings", "GET-GAF-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("get_gaf_after_removings", "GET-GAF-AFTER-REMOVINGS", 1, 0, false);
+        declareFunction("handle_gaf_after_adding", "HANDLE-GAF-AFTER-ADDING", 3, 0, false);
+        declareFunction("handle_gaf_after_removing", "HANDLE-GAF-AFTER-REMOVING", 3, 0, false);
+        declareFunction("rebuild_after_adding_caches", "REBUILD-AFTER-ADDING-CACHES", 0, 0, false);
+        declareFunction("rebuild_gaf_after_adding_caches", "REBUILD-GAF-AFTER-ADDING-CACHES", 0, 0, false);
+        declareFunction("initialize_gaf_after_addings_hash", "INITIALIZE-GAF-AFTER-ADDINGS-HASH", 0, 0, false);
+        declareFunction("initialize_gaf_after_removings_hash", "INITIALIZE-GAF-AFTER-REMOVINGS-HASH", 0, 0, false);
+        declareFunction("recache_gaf_after_addings", "RECACHE-GAF-AFTER-ADDINGS", 1, 0, false);
+        declareFunction("recache_gaf_after_removings", "RECACHE-GAF-AFTER-REMOVINGS", 1, 0, false);
+        declareFunction("propagate_gaf_after_adding", "PROPAGATE-GAF-AFTER-ADDING", 2, 0, false);
+        declareFunction("repropagate_gaf_after_adding", "REPROPAGATE-GAF-AFTER-ADDING", 3, 0, false);
+        declareFunction("repropagate_gaf_after_adding_internal", "REPROPAGATE-GAF-AFTER-ADDING-INTERNAL", 1, 0, false);
+        declareFunction("initial_assertion_argumentP", "INITIAL-ASSERTION-ARGUMENT?", 2, 0, false);
+        declareFunction("final_assertion_argumentP", "FINAL-ASSERTION-ARGUMENT?", 2, 0, false);
+        declareFunction("assertion_sole_argumentP", "ASSERTION-SOLE-ARGUMENT?", 2, 0, false);
+        return NIL;
+    }
+
+    static private final SubLList $list_alt15 = list(makeSymbol("GAF-AFTER-ADDING-PRED"), makeSymbol("PRED"), makeSymbol("GAF-AFTER-ADDING"));
+
+    static private final SubLList $list_alt17 = list(makeSymbol("GAF-AFTER-REMOVING-PRED"), makeSymbol("PRED"), makeSymbol("GAF-AFTER-REMOVING"));
+
+    public static final SubLObject init_after_adding_file_alt() {
+        defparameter("*DEBUG-AFTER-ADDINGS?*", NIL);
+        deflexical("*GAF-AFTER-ADDING-PREDICATES*", $list_alt0);
+        deflexical("*GAF-AFTER-ADDINGS-HASH*", NIL != boundp($gaf_after_addings_hash$) ? ((SubLObject) ($gaf_after_addings_hash$.getGlobalValue())) : NIL);
+        deflexical("*GAF-AFTER-REMOVINGS-HASH*", NIL != boundp($gaf_after_removings_hash$) ? ((SubLObject) ($gaf_after_removings_hash$.getGlobalValue())) : NIL);
+        defparameter("*AFTER-ADDINGS-DISABLED?*", NIL);
         return NIL;
     }
 
     public static SubLObject init_after_adding_file() {
+        if (SubLFiles.USE_V1) {
+            defparameter("*DEBUG-AFTER-ADDINGS?*", NIL);
+            deflexical("*GAF-AFTER-ADDING-PREDICATES*", $list0);
+            deflexical("*GAF-AFTER-ADDINGS-HASH*", SubLTrampolineFile.maybeDefault($gaf_after_addings_hash$, $gaf_after_addings_hash$, NIL));
+            deflexical("*GAF-AFTER-REMOVINGS-HASH*", SubLTrampolineFile.maybeDefault($gaf_after_removings_hash$, $gaf_after_removings_hash$, NIL));
+            defparameter("*AFTER-ADDINGS-DISABLED?*", NIL);
+        }
+        if (SubLFiles.USE_V2) {
+            deflexical("*GAF-AFTER-ADDINGS-HASH*", NIL != boundp($gaf_after_addings_hash$) ? ((SubLObject) ($gaf_after_addings_hash$.getGlobalValue())) : NIL);
+            deflexical("*GAF-AFTER-REMOVINGS-HASH*", NIL != boundp($gaf_after_removings_hash$) ? ((SubLObject) ($gaf_after_removings_hash$.getGlobalValue())) : NIL);
+        }
+        return NIL;
+    }
+
+    public static SubLObject init_after_adding_file_Previous() {
         defparameter("*DEBUG-AFTER-ADDINGS?*", NIL);
         deflexical("*GAF-AFTER-ADDING-PREDICATES*", $list0);
         deflexical("*GAF-AFTER-ADDINGS-HASH*", SubLTrampolineFile.maybeDefault($gaf_after_addings_hash$, $gaf_after_addings_hash$, NIL));
@@ -978,39 +1744,6 @@ public final class after_adding extends SubLTranslatedFile {
     }
 
     static {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     }
 }
 

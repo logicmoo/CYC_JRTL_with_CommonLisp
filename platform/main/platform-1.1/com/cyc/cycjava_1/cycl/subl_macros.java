@@ -148,8 +148,7 @@ Otherwise, they expand into CHECK-TYPE and MUST statements, respectively. */
   }
 
   public static final SubLObject setup_subl_macros_file() {
-    // CVS_ID("Id: subl-macros.lisp 127877 2009-05-27 15:07:45Z pace ");
-    access_macros.register_macro_helper($sym17$DO_NUMBERS_ENDTEST_MACRO, $sym21$DO_NUMBERS);
+        access_macros.register_macro_helper($sym17$DO_NUMBERS_ENDTEST_MACRO, $sym21$DO_NUMBERS);
     access_macros.register_macro_helper($sym26$DO_NUMBERS_ENDTEST, $sym21$DO_NUMBERS);
     access_macros.register_external_symbol($sym27$DO_LIST);
     access_macros.register_macro_helper($sym137$DO_SEQUENCE_INDEX_DONE_, $sym129$DO_SEQUENCE_INDEX);

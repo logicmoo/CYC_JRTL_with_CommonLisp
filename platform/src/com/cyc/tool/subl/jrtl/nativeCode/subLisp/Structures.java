@@ -37,8 +37,14 @@ public class Structures implements SubLFile
 		return getter == null ? SubLNil.NIL : getter.toSymbol();
 	}
 
-	public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, SubLSymbol predicateName, SubLList slotNames, SubLList slotKeywordNames, String[] actualFieldNames, SubLList getterNames, SubLList setterNames, SubLSymbol printFunction)
-	{
+    public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, SubLSymbol predicateName, String[] actualFieldNames, SubLSymbol printFunction) {
+	String getterPrefix = null;
+	String setterPre_Prefix = null;
+	SubLStructDeclNative nativ = SubLStructDeclNative.makeStructDeclNative(structClass, typeName, predicateName, getterPrefix, setterPre_Prefix, actualFieldNames, printFunction);
+	return nativ;
+    }
+
+    public static SubLStructDeclNative makeStructDeclNative(Class structClass, SubLSymbol typeName, SubLSymbol predicateName, SubLList slotNames, SubLList slotKeywordNames, String[] actualFieldNames, SubLList getterNames, SubLList setterNames, SubLSymbol printFunction) {
 		SubLSymbol[] slotNamesArray = (SubLSymbol[]) slotNames.toArray(new SubLSymbol[slotNames.size()]);
 		SubLSymbol[] slotKeywordNamesArray = (SubLSymbol[]) slotKeywordNames.toArray(new SubLSymbol[slotKeywordNames.size()]);
 		SubLSymbol[] getterNamesArray = (SubLSymbol[]) getterNames.toArray(new SubLSymbol[getterNames.size()]);

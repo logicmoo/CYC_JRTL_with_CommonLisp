@@ -2861,8 +2861,7 @@ Therefore, we need to gate it based on whether these assertions came from the ot
   }
 
   public static final SubLObject setup_kb_mapping_macros_file() {
-    // CVS_ID("Id: kb-mapping-macros.lisp 127378 2009-03-13 17:56:45Z daves ");
-    access_macros.register_macro_helper($sym7$TRUTH_RELEVANT_P, $sym8$PWHEN_TRUTH_RELEVANT);
+        access_macros.register_macro_helper($sym7$TRUTH_RELEVANT_P, $sym8$PWHEN_TRUTH_RELEVANT);
     access_macros.register_macro_helper($sym37$SOME_ASSERTIONS_INTERNAL, $sym39$SOME_ASSERTIONS);
     access_macros.register_macro_helper($sym43$DO_FINAL_INDEX_FROM_SPEC, $list44);
     utilities_macros.register_cyc_api_macro($sym61$DO_GAF_ARG_INDEX, $list53, $str62$Iterate_over_an_index_of_gaf_asse);

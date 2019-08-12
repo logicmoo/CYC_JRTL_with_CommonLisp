@@ -1,7 +1,18 @@
 package com.cyc.cycjava.cycl;
 
 
-import com.cyc.cycjava.cycl.rkf_sme_lexification_wizard;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
+import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
+import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
+import static com.cyc.tool.subl.util.SubLFiles.*;
+
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Errors;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.Filesys;
 import com.cyc.tool.subl.jrtl.nativeCode.subLisp.StreamsLow;
@@ -15,37 +26,12 @@ import com.cyc.tool.subl.jrtl.nativeCode.type.symbol.SubLSymbol;
 import com.cyc.tool.subl.util.SubLFile;
 import com.cyc.tool.subl.util.SubLTranslatedFile;
 
-import static com.cyc.cycjava.cycl.rkf_sme_lexification_wizard.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.EQ;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.NIL;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ONE_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.T;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TEN_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.TWO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.UNPROVIDED;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.CommonSymbols.ZERO_INTEGER;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.ConsesLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Dynamic.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Numbers.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.PrintLow.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Sequences.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.$is_thread_performing_cleanupP$;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Threads.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.subLisp.Values.*;
-import static com.cyc.tool.subl.jrtl.nativeCode.type.core.SubLObjectFactory.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.conses_high.*;
-import static com.cyc.tool.subl.jrtl.translatedCode.sublisp.streams_high.*;
-import static com.cyc.tool.subl.util.SubLFiles.*;
-import static com.cyc.tool.subl.util.SubLTranslatedFile.*;
 
-
-public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
+public final class rkf_sme_lexification_wizard extends SubLTranslatedFile implements V10 {
     public static final SubLFile me = new rkf_sme_lexification_wizard();
 
-    public static final String myName = "com.cyc.cycjava.cycl.rkf_sme_lexification_wizard";
+    public static final String myName = "com.cyc.cycjava_2.cycl.rkf_sme_lexification_wizard";
 
-    public static final String myFingerPrint = "bf95b234d7cad9d446cddc8f3411a52c7c70ffc32cebf4ada40b7aa0acc49549";
 
     // deflexical
     public static final SubLSymbol $simulated_blackboardP$ = makeSymbol("*SIMULATED-BLACKBOARD?*");
@@ -197,7 +183,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list62 = list(makeKeyword("AUTO-UPDATE"), makeKeyword("PUBLIC"));
 
-    private static final SubLList $list63 = list(list(new SubLObject[]{ makeSymbol("CLET"), list(makeSymbol("NEW-ACTIONS")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), makeSymbol("TITLE")), makeSymbol("NEW-ACTIONS")), list(makeSymbol("PWHEN"), makeSymbol("ERROR-MESSAGE"), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), list(makeSymbol("FORMAT"), NIL, makeString("Error: ~a"), makeSymbol("ERROR-MESSAGE"))), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), makeSymbol("QUESTION")), makeSymbol("NEW-ACTIONS")), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("TIP"), makeSymbol("*SME-LEXWIZ-VERBOSE?*")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), list(makeSymbol("FORMAT"), NIL, makeString("Tip: ~a"), makeSymbol("TIP"))), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("PCASE"), makeSymbol("QUESTION-TYPE"), list(makeKeyword("BOOLEAN"), list(makeSymbol("CLET"), list(list(makeSymbol("NEGATIVE"), list(makeSymbol("NEGATIVE-CHOICE"), makeSymbol("SELF"))), list(makeSymbol("POSITIVE"), list(makeSymbol("POSITIVE-CHOICE"), makeSymbol("SELF")))), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("CHOOSE-ONE"), makeKeyword("ANSWER"), list(makeSymbol("BQ-LIST"), list(makeSymbol("QUOTE"), makeSymbol("QUOTE")), list(makeSymbol("BQ-LIST"), makeSymbol("NEGATIVE"), makeSymbol("POSITIVE")))), makeSymbol("NEW-ACTIONS")))), list(makeKeyword("ENUMERATED"), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("CHOOSE-ONE"), makeKeyword("ANSWER"), makeSymbol("CHOICES")), makeSymbol("NEW-ACTIONS"))), list(makeKeyword("MULTIPLE-SELECTION"), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("CHOOSE-MUTIPLE"), makeKeyword("ANSWER"), makeSymbol("CHOICES")), makeSymbol("NEW-ACTIONS"))), list(makeKeyword("FREE-FORM"), list(makeSymbol("CPUSH"), list(makeSymbol("QUOTE"), list(makeKeyword("ENTER-TEXT"), makeKeyword("ANSWER"))), makeSymbol("NEW-ACTIONS"))), list(makeKeyword("MULTIPLE-FREE-FORM"), list(makeSymbol("CDOTIMES"), list(makeSymbol("I"), list(makeSymbol("LENGTH"), makeSymbol("FIELD-LABELS"))), list(makeSymbol("CPUSH"), list(makeSymbol("QUOTE"), list(makeKeyword("ENTER-TEXT"), makeKeyword("ANSWER"))), makeSymbol("NEW-ACTIONS"))))), list(makeSymbol("LEX-DEBUG-OUT"), makeString("Adding new actions: ~%~S~%"), list(makeSymbol("REVERSE"), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("ADD-ACTIONS")), list(makeSymbol("REVERSE"), makeSymbol("NEW-ACTIONS"))) }), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list63 = list(list(new SubLObject[]{ makeSymbol("CLET"), list(makeSymbol("NEW-ACTIONS")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), makeSymbol("TITLE")), makeSymbol("NEW-ACTIONS")), list(makeSymbol("PWHEN"), makeSymbol("ERROR-MESSAGE"), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), list(makeSymbol("FORMAT"), NIL, makeString("Error: ~a"), makeSymbol("ERROR-MESSAGE"))), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), makeSymbol("QUESTION")), makeSymbol("NEW-ACTIONS")), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("TIP"), makeSymbol("*SME-LEXWIZ-VERBOSE?*")), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("SHOW-TEXT"), list(makeSymbol("FORMAT"), NIL, makeString("Tip: ~a"), makeSymbol("TIP"))), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("PCASE"), makeSymbol("QUESTION-TYPE"), list(makeKeyword("BOOLEAN"), list(makeSymbol("CLET"), list(list(makeSymbol("NEGATIVE"), list(makeSymbol("NEGATIVE-CHOICE"), makeSymbol("SELF"))), list(makeSymbol("POSITIVE"), list(makeSymbol("POSITIVE-CHOICE"), makeSymbol("SELF")))), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("CHOOSE-ONE"), makeKeyword("ANSWER"), list(makeSymbol("BQ-LIST"), list(QUOTE, QUOTE), list(makeSymbol("BQ-LIST"), makeSymbol("NEGATIVE"), makeSymbol("POSITIVE")))), makeSymbol("NEW-ACTIONS")))), list(makeKeyword("ENUMERATED"), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("CHOOSE-ONE"), makeKeyword("ANSWER"), makeSymbol("CHOICES")), makeSymbol("NEW-ACTIONS"))), list(makeKeyword("MULTIPLE-SELECTION"), list(makeSymbol("CPUSH"), list(makeSymbol("BQ-LIST"), makeKeyword("CHOOSE-MUTIPLE"), makeKeyword("ANSWER"), makeSymbol("CHOICES")), makeSymbol("NEW-ACTIONS"))), list(makeKeyword("FREE-FORM"), list(makeSymbol("CPUSH"), list(QUOTE, list(makeKeyword("ENTER-TEXT"), makeKeyword("ANSWER"))), makeSymbol("NEW-ACTIONS"))), list(makeKeyword("MULTIPLE-FREE-FORM"), list(makeSymbol("CDOTIMES"), list(makeSymbol("I"), list(makeSymbol("LENGTH"), makeSymbol("FIELD-LABELS"))), list(makeSymbol("CPUSH"), list(QUOTE, list(makeKeyword("ENTER-TEXT"), makeKeyword("ANSWER"))), makeSymbol("NEW-ACTIONS"))))), list(makeSymbol("LEX-DEBUG-OUT"), makeString("Adding new actions: ~%~S~%"), list(makeSymbol("REVERSE"), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("ADD-ACTIONS")), list(makeSymbol("REVERSE"), makeSymbol("NEW-ACTIONS"))) }), list(RET, NIL));
 
     private static final SubLSymbol $SHOW_TEXT = makeKeyword("SHOW-TEXT");
 
@@ -233,7 +219,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol GET_RESPONSE = makeSymbol("GET-RESPONSE");
 
-    private static final SubLList $list81 = list(list(makeSymbol("CLET"), list(list(makeSymbol("RESPONSE"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("GET-NEXT-RESPONSE"))))), list(makeSymbol("PUNLESS"), list(EQ, list(makeSymbol("FIRST"), makeSymbol("RESPONSE")), makeKeyword("ANSWER")), list(makeSymbol("LEX-WARN"), makeString("Unexpected response from blackboard: ~a~%"), makeSymbol("RESPONSE")), list(makeSymbol("RET"), NIL)), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), list(makeSymbol("SECOND"), makeSymbol("RESPONSE"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("NOTIFY-CLIENT")), makeKeyword("INPUT-READY"))), list(makeSymbol("RET"), makeSymbol("ANSWER")));
+    private static final SubLList $list81 = list(list(makeSymbol("CLET"), list(list(makeSymbol("RESPONSE"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("GET-NEXT-RESPONSE"))))), list(makeSymbol("PUNLESS"), list(EQ, list(makeSymbol("FIRST"), makeSymbol("RESPONSE")), makeKeyword("ANSWER")), list(makeSymbol("LEX-WARN"), makeString("Unexpected response from blackboard: ~a~%"), makeSymbol("RESPONSE")), list(RET, NIL)), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), list(makeSymbol("SECOND"), makeSymbol("RESPONSE"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(QUOTE, makeSymbol("NOTIFY-CLIENT")), makeKeyword("INPUT-READY"))), list(RET, makeSymbol("ANSWER")));
 
     private static final SubLSymbol GET_NEXT_RESPONSE = makeSymbol("GET-NEXT-RESPONSE");
 
@@ -249,7 +235,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list88 = list(makeKeyword("PUBLIC"));
 
-    private static final SubLList $list89 = list(list(new SubLObject[]{ makeSymbol("CLET"), list(list(makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeSymbol("TITLE"), makeString("")))), list(makeSymbol("PWHEN"), makeSymbol("ERROR-MESSAGE"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeString("Error:"), makeSymbol("ERROR-MESSAGE"), makeString("")))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeSymbol("QUESTION"), makeString(""))), list(makeSymbol("PCASE"), makeSymbol("QUESTION-TYPE"), list(makeKeyword("BOOLEAN"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), list(makeSymbol("FORMAT"), NIL, makeString("Answer (~a/~s): "), list(makeSymbol("POSITIVE-CHOICE"), makeSymbol("SELF")), list(makeSymbol("NEGATIVE-CHOICE"), makeSymbol("SELF")))))), list(makeKeyword("ENUMERATED"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), makeSymbol("CHOICES"))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), list(makeSymbol("FORMAT"), NIL, makeString("Answer (~a - ~a): "), ONE_INTEGER, list(makeSymbol("LENGTH"), makeSymbol("CHOICES")))))), list(makeKeyword("MULTIPLE-SELECTION"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), makeSymbol("CHOICES"))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), list(makeSymbol("FORMAT"), NIL, makeString("Answer (~a - ~a, including ranges): "), ONE_INTEGER, list(makeSymbol("LENGTH"), makeSymbol("CHOICES")))))), list(makeKeyword("FREE-FORM"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), list(makeSymbol("QUOTE"), list(makeString("Answer: ")))))), list(makeKeyword("MULTIPLE-FREE-FORM"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), list(makeSymbol("QUOTE"), list(makeString("List of answers: "))))))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), list(makeSymbol("QUOTE"), list(makeString(""))))), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("TIP"), makeSymbol("*SME-LEXWIZ-VERBOSE?*")), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeString("Tip:"), makeString(""), makeSymbol("TIP"), makeString("")))), list(makeSymbol("WRITE-TEXT-FILE"), makeSymbol("*BLACKBOARD-OUTPUT-FILE*"), makeSymbol("TEXT-LINES")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), makeSymbol("TEXT-LINES")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), list(makeSymbol("LIST"), makeSymbol("*BLACKBOARD-INPUT-DELIM*"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("NOTIFY-CLIENT")), makeKeyword("OUTPUT-DONE")) }), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list89 = list(list(new SubLObject[]{ makeSymbol("CLET"), list(list(makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeSymbol("TITLE"), makeString("")))), list(makeSymbol("PWHEN"), makeSymbol("ERROR-MESSAGE"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeString("Error:"), makeSymbol("ERROR-MESSAGE"), makeString("")))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeSymbol("QUESTION"), makeString(""))), list(makeSymbol("PCASE"), makeSymbol("QUESTION-TYPE"), list(makeKeyword("BOOLEAN"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), list(makeSymbol("FORMAT"), NIL, makeString("Answer (~a/~s): "), list(makeSymbol("POSITIVE-CHOICE"), makeSymbol("SELF")), list(makeSymbol("NEGATIVE-CHOICE"), makeSymbol("SELF")))))), list(makeKeyword("ENUMERATED"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), makeSymbol("CHOICES"))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), list(makeSymbol("FORMAT"), NIL, makeString("Answer (~a - ~a): "), ONE_INTEGER, list(makeSymbol("LENGTH"), makeSymbol("CHOICES")))))), list(makeKeyword("MULTIPLE-SELECTION"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), makeSymbol("CHOICES"))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), list(makeSymbol("FORMAT"), NIL, makeString("Answer (~a - ~a, including ranges): "), ONE_INTEGER, list(makeSymbol("LENGTH"), makeSymbol("CHOICES")))))), list(makeKeyword("FREE-FORM"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), list(QUOTE, list(makeString("Answer: ")))))), list(makeKeyword("MULTIPLE-FREE-FORM"), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), list(QUOTE, list(makeString("List of answers: "))))))), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("COPY-LIST"), list(QUOTE, list(makeString(""))))), list(makeSymbol("PWHEN"), list(makeSymbol("CAND"), makeSymbol("TIP"), makeSymbol("*SME-LEXWIZ-VERBOSE?*")), list(makeSymbol("NCONC"), makeSymbol("TEXT-LINES"), list(makeSymbol("LIST"), makeString("Tip:"), makeString(""), makeSymbol("TIP"), makeString("")))), list(makeSymbol("WRITE-TEXT-FILE"), makeSymbol("*BLACKBOARD-OUTPUT-FILE*"), makeSymbol("TEXT-LINES")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), makeSymbol("TEXT-LINES")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), list(makeSymbol("LIST"), makeSymbol("*BLACKBOARD-INPUT-DELIM*"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(QUOTE, makeSymbol("NOTIFY-CLIENT")), makeKeyword("OUTPUT-DONE")) }), list(RET, NIL));
 
     private static final SubLSymbol $sym90$OUTER_CATCH_FOR_SIM_BB_QUESTION_ANSWERING_AGENT_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-SIM-BB-QUESTION-ANSWERING-AGENT-METHOD");
 
@@ -275,7 +261,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol SIM_BB_QUESTION_ANSWERING_AGENT_DISPLAY_QUESTION_METHOD = makeSymbol("SIM-BB-QUESTION-ANSWERING-AGENT-DISPLAY-QUESTION-METHOD");
 
-    private static final SubLList $list102 = list(list(makeSymbol("CLET"), list(list(makeSymbol("TIMEOUT"), makeSymbol("*BLACKBOARD-TIMEOUT*")), list(makeSymbol("DELAY"), makeSymbol("*BLACKBOARD-DELAY*"))), list(makeSymbol("WHILE"), list(makeSymbol("CAND"), list(makeSymbol("CNOT"), list(makeSymbol("PROBE-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*"))), list(makeSymbol(">"), makeSymbol("TIMEOUT"), ZERO_INTEGER)), list(makeSymbol("SLEEP"), makeSymbol("DELAY")), list(makeSymbol("CDEC"), makeSymbol("TIMEOUT"), makeSymbol("DELAY"))), list(makeSymbol("PWHEN"), list(makeSymbol("PROBE-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")), list(makeSymbol("CLET"), list(list(makeSymbol("USER-RESPONSE"), list(makeSymbol("READ-TEXT-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")))), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), list(makeSymbol("FIRST"), list(makeSymbol("READ-TEXT-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")))), list(makeSymbol("DELETE-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), makeSymbol("USER-RESPONSE")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), list(makeSymbol("LIST"), makeSymbol("*BLACKBOARD-OUTPUT-DELIM*"))))), list(makeSymbol("PWHEN"), list(makeSymbol("PROBE-FILE"), makeSymbol("*BLACKBOARD-OUTPUT-FILE*")), list(makeSymbol("DELETE-FILE"), makeSymbol("*BLACKBOARD-OUTPUT-FILE*"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(makeSymbol("QUOTE"), makeSymbol("NOTIFY-CLIENT")), makeKeyword("INPUT-READY"))), list(makeSymbol("RET"), makeSymbol("ANSWER")));
+    private static final SubLList $list102 = list(list(makeSymbol("CLET"), list(list(makeSymbol("TIMEOUT"), makeSymbol("*BLACKBOARD-TIMEOUT*")), list(makeSymbol("DELAY"), makeSymbol("*BLACKBOARD-DELAY*"))), list(makeSymbol("WHILE"), list(makeSymbol("CAND"), list(makeSymbol("CNOT"), list(makeSymbol("PROBE-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*"))), list(makeSymbol(">"), makeSymbol("TIMEOUT"), ZERO_INTEGER)), list(makeSymbol("SLEEP"), makeSymbol("DELAY")), list(makeSymbol("CDEC"), makeSymbol("TIMEOUT"), makeSymbol("DELAY"))), list(makeSymbol("PWHEN"), list(makeSymbol("PROBE-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")), list(makeSymbol("CLET"), list(list(makeSymbol("USER-RESPONSE"), list(makeSymbol("READ-TEXT-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")))), list(makeSymbol("CSETQ"), makeSymbol("ANSWER"), list(makeSymbol("FIRST"), list(makeSymbol("READ-TEXT-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")))), list(makeSymbol("DELETE-FILE"), makeSymbol("*BLACKBOARD-INPUT-FILE*")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), makeSymbol("USER-RESPONSE")), list(makeSymbol("APPEND-TEXT-FILE"), makeSymbol("*BLACKBOARD-LOG-FILE*"), list(makeSymbol("LIST"), makeSymbol("*BLACKBOARD-OUTPUT-DELIM*"))))), list(makeSymbol("PWHEN"), list(makeSymbol("PROBE-FILE"), makeSymbol("*BLACKBOARD-OUTPUT-FILE*")), list(makeSymbol("DELETE-FILE"), makeSymbol("*BLACKBOARD-OUTPUT-FILE*"))), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("SELF"), list(QUOTE, makeSymbol("NOTIFY-CLIENT")), makeKeyword("INPUT-READY"))), list(RET, makeSymbol("ANSWER")));
 
     private static final SubLSymbol SIM_BB_QUESTION_ANSWERING_AGENT_GET_RESPONSE_METHOD = makeSymbol("SIM-BB-QUESTION-ANSWERING-AGENT-GET-RESPONSE-METHOD");
 
@@ -283,7 +269,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list105 = list(makeKeyword("PROTECTED"));
 
-    private static final SubLList $list106 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("PENDING-ACTIONS"), NIL), list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), NIL), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLList $list106 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("PENDING-ACTIONS"), NIL), list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), NIL), list(RET, makeSymbol("SELF")));
 
     private static final SubLSymbol $sym107$OUTER_CATCH_FOR_RKF_BB_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-PROXY-METHOD");
 
@@ -291,7 +277,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list110 = list(list(makeSymbol("RET"), makeSymbol("PENDING-ACTIONS")));
+    private static final SubLList $list110 = list(list(RET, makeSymbol("PENDING-ACTIONS")));
 
     private static final SubLSymbol $sym111$OUTER_CATCH_FOR_RKF_BB_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-PROXY-METHOD");
 
@@ -299,7 +285,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list113 = list(makeSymbol("NEW-ACTIONS"));
 
-    private static final SubLList $list114 = list(list(makeSymbol("CSETQ"), makeSymbol("PENDING-ACTIONS"), list(makeSymbol("APPEND"), makeSymbol("PENDING-ACTIONS"), makeSymbol("NEW-ACTIONS"))), list(makeSymbol("RET"), makeSymbol("PENDING-ACTIONS")));
+    private static final SubLList $list114 = list(list(makeSymbol("CSETQ"), makeSymbol("PENDING-ACTIONS"), list(makeSymbol("APPEND"), makeSymbol("PENDING-ACTIONS"), makeSymbol("NEW-ACTIONS"))), list(RET, makeSymbol("PENDING-ACTIONS")));
 
     private static final SubLSymbol $sym115$OUTER_CATCH_FOR_RKF_BB_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-PROXY-METHOD");
 
@@ -307,7 +293,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_ACTIONS = makeSymbol("CLEAR-ACTIONS");
 
-    private static final SubLList $list118 = list(list(makeSymbol("CSETQ"), makeSymbol("PENDING-ACTIONS"), NIL), list(makeSymbol("RET"), makeSymbol("PENDING-ACTIONS")));
+    private static final SubLList $list118 = list(list(makeSymbol("CSETQ"), makeSymbol("PENDING-ACTIONS"), NIL), list(RET, makeSymbol("PENDING-ACTIONS")));
 
     private static final SubLSymbol $sym119$OUTER_CATCH_FOR_RKF_BB_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-PROXY-METHOD");
 
@@ -317,25 +303,25 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list122 = list(makeSymbol("NEW-RESPONSE"));
 
-    private static final SubLList $list123 = list(list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), list(makeSymbol("APPEND"), makeSymbol("RESPONSES"), list(makeSymbol("LIST"), makeSymbol("NEW-RESPONSE")))), list(makeSymbol("RET"), makeSymbol("RESPONSES")));
+    private static final SubLList $list123 = list(list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), list(makeSymbol("APPEND"), makeSymbol("RESPONSES"), list(makeSymbol("LIST"), makeSymbol("NEW-RESPONSE")))), list(RET, makeSymbol("RESPONSES")));
 
     private static final SubLSymbol $sym124$OUTER_CATCH_FOR_RKF_BB_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-PROXY-METHOD");
 
     private static final SubLSymbol RKF_BB_PROXY_ADD_USER_RESPONSE_METHOD = makeSymbol("RKF-BB-PROXY-ADD-USER-RESPONSE-METHOD");
 
-    private static final SubLList $list126 = list(list(makeSymbol("CLET"), list(list(makeSymbol("RESPONSE"), list(makeSymbol("FIRST"), makeSymbol("RESPONSES")))), list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), list(makeSymbol("REST"), makeSymbol("RESPONSES"))), list(makeSymbol("RET"), makeSymbol("RESPONSE"))));
+    private static final SubLList $list126 = list(list(makeSymbol("CLET"), list(list(makeSymbol("RESPONSE"), list(makeSymbol("FIRST"), makeSymbol("RESPONSES")))), list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), list(makeSymbol("REST"), makeSymbol("RESPONSES"))), list(RET, makeSymbol("RESPONSE"))));
 
     private static final SubLSymbol RKF_BB_PROXY_GET_NEXT_RESPONSE_METHOD = makeSymbol("RKF-BB-PROXY-GET-NEXT-RESPONSE-METHOD");
 
     private static final SubLSymbol CLEAR_RESPONSES = makeSymbol("CLEAR-RESPONSES");
 
-    private static final SubLList $list129 = list(list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), NIL), list(makeSymbol("RET"), makeSymbol("RESPONSES")));
+    private static final SubLList $list129 = list(list(makeSymbol("CSETQ"), makeSymbol("RESPONSES"), NIL), list(RET, makeSymbol("RESPONSES")));
 
     private static final SubLSymbol $sym130$OUTER_CATCH_FOR_RKF_BB_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-PROXY-METHOD");
 
     private static final SubLSymbol RKF_BB_PROXY_CLEAR_RESPONSES_METHOD = makeSymbol("RKF-BB-PROXY-CLEAR-RESPONSES-METHOD");
 
-    private static final SubLList $list132 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("INTERACTION"), NIL), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLList $list132 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("INTERACTION"), NIL), list(RET, makeSymbol("SELF")));
 
     private static final SubLSymbol $sym133$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -345,7 +331,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list136 = list(makeSymbol("CONSTANT-NAME"));
 
-    private static final SubLList $list137 = list(list(makeSymbol("CLET"), list(makeSymbol("CONSTANT")), list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("DEPENDENT-MT"), list(makeSymbol("CB-UIAT-GET-LEXICAL-INTERACTION-MT"), makeSymbol("INTERACTION")))), list(makeSymbol("CSETQ"), makeSymbol("CONSTANT"), list(makeSymbol("RKF-CREATE"), makeSymbol("CONSTANT-NAME"), makeSymbol("DEPENDENT-MT")))), list(makeSymbol("CSETQ"), makeSymbol("CONSTANT"), list(makeSymbol("KE-CREATE-NOW"), makeSymbol("CONSTANT-NAME")))), list(makeSymbol("RET"), makeSymbol("CONSTANT"))));
+    private static final SubLList $list137 = list(list(makeSymbol("CLET"), list(makeSymbol("CONSTANT")), list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("DEPENDENT-MT"), list(makeSymbol("CB-UIAT-GET-LEXICAL-INTERACTION-MT"), makeSymbol("INTERACTION")))), list(makeSymbol("CSETQ"), makeSymbol("CONSTANT"), list(makeSymbol("RKF-CREATE"), makeSymbol("CONSTANT-NAME"), makeSymbol("DEPENDENT-MT")))), list(makeSymbol("CSETQ"), makeSymbol("CONSTANT"), list(makeSymbol("KE-CREATE-NOW"), makeSymbol("CONSTANT-NAME")))), list(RET, makeSymbol("CONSTANT"))));
 
     private static final SubLSymbol $sym138$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -355,7 +341,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list141 = list(makeSymbol("TERM"));
 
-    private static final SubLList $list142 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(makeSymbol("RET"), list(makeSymbol("UIA-TERM-PHRASE-PRECISE"), makeSymbol("AGENDA"), makeSymbol("TERM")))), list(makeSymbol("RET"), list(makeSymbol("DESCRIBE-TERM"), makeSymbol("SUPER"), makeSymbol("TERM")))));
+    private static final SubLList $list142 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(RET, list(makeSymbol("UIA-TERM-PHRASE-PRECISE"), makeSymbol("AGENDA"), makeSymbol("TERM")))), list(RET, list(makeSymbol("DESCRIBE-TERM"), makeSymbol("SUPER"), makeSymbol("TERM")))));
 
     private static final SubLSymbol $sym143$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -365,7 +351,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list146 = list(makeSymbol("TERM-LABEL"));
 
-    private static final SubLList $list147 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION"))), list(makeSymbol("TERMS"), list(makeSymbol("UIA-PHRASE-CANDIDATE-TERMS"), makeSymbol("AGENDA"), makeSymbol("TERM-LABEL"))), list(makeSymbol("CLARIFICATIONS"), list(makeSymbol("UIA-TERMS-DISTINGUISHING-PHRASES"), makeSymbol("AGENDA"), makeSymbol("TERMS")))), list(makeSymbol("RET"), makeSymbol("CLARIFICATIONS"))), list(makeSymbol("RET"), list(makeSymbol("RESOLVE-TERM"), makeSymbol("SUPER"), makeSymbol("TERM-LABEL")))));
+    private static final SubLList $list147 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION"))), list(makeSymbol("TERMS"), list(makeSymbol("UIA-PHRASE-CANDIDATE-TERMS"), makeSymbol("AGENDA"), makeSymbol("TERM-LABEL"))), list(makeSymbol("CLARIFICATIONS"), list(makeSymbol("UIA-TERMS-DISTINGUISHING-PHRASES"), makeSymbol("AGENDA"), makeSymbol("TERMS")))), list(RET, makeSymbol("CLARIFICATIONS"))), list(RET, list(makeSymbol("RESOLVE-TERM"), makeSymbol("SUPER"), makeSymbol("TERM-LABEL")))));
 
     private static final SubLSymbol $sym148$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -375,7 +361,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list151 = list(makeSymbol("MESSAGE"));
 
-    private static final SubLList $list152 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(makeSymbol("LEX-TRACE"), makeSymbol("*LEX-BASIC*"), makeString("~&mumbling: ~a~%"), makeSymbol("MESSAGE")), list(makeSymbol("RET"), list(makeSymbol("UIA-MUMBLE"), makeSymbol("AGENDA"), makeSymbol("MESSAGE")))), list(makeSymbol("RET"), list(makeSymbol("MUMBLE"), makeSymbol("SUPER"), makeSymbol("MESSAGE")))));
+    private static final SubLList $list152 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(makeSymbol("LEX-TRACE"), makeSymbol("*LEX-BASIC*"), makeString("~&mumbling: ~a~%"), makeSymbol("MESSAGE")), list(RET, list(makeSymbol("UIA-MUMBLE"), makeSymbol("AGENDA"), makeSymbol("MESSAGE")))), list(RET, list(makeSymbol("MUMBLE"), makeSymbol("SUPER"), makeSymbol("MESSAGE")))));
 
     private static final SubLSymbol $sym153$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -383,7 +369,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol $sym155$FORGE_AHEAD_ = makeSymbol("FORGE-AHEAD?");
 
-    private static final SubLList $list156 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(makeSymbol("RET"), list(makeSymbol("UIA-FORGE-AHEAD?"), makeSymbol("AGENDA")))), list(makeSymbol("RET"), list(makeSymbol("FORGE-AHEAD?"), makeSymbol("SUPER")))));
+    private static final SubLList $list156 = list(list(makeSymbol("PIF-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLET"), list(list(makeSymbol("AGENDA"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(RET, list(makeSymbol("UIA-FORGE-AHEAD?"), makeSymbol("AGENDA")))), list(RET, list(makeSymbol("FORGE-AHEAD?"), makeSymbol("SUPER")))));
 
     private static final SubLSymbol $sym157$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -391,13 +377,13 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol END_SESSION = makeSymbol("END-SESSION");
 
-    private static final SubLList $list160 = list(list(makeSymbol("END-INTERACTION"), makeSymbol("SELF")), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list160 = list(list(makeSymbol("END-INTERACTION"), makeSymbol("SELF")), list(RET, NIL));
 
     private static final SubLSymbol RKF_UIA_PROXY_END_SESSION_METHOD = makeSymbol("RKF-UIA-PROXY-END-SESSION-METHOD");
 
     private static final SubLSymbol GET_INTERACTION = makeSymbol("GET-INTERACTION");
 
-    private static final SubLList $list163 = list(list(makeSymbol("RET"), makeSymbol("INTERACTION")));
+    private static final SubLList $list163 = list(list(RET, makeSymbol("INTERACTION")));
 
     private static final SubLSymbol $sym164$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -407,7 +393,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list167 = list(makeSymbol("NEW-INTERACTION"));
 
-    private static final SubLList $list168 = list(list(makeSymbol("CSETQ"), makeSymbol("INTERACTION"), makeSymbol("NEW-INTERACTION")), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list168 = list(list(makeSymbol("CSETQ"), makeSymbol("INTERACTION"), makeSymbol("NEW-INTERACTION")), list(RET, NIL));
 
     private static final SubLSymbol $sym169$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -415,7 +401,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
 
 
-    private static final SubLList $list172 = list(list(makeSymbol("PWHEN"), makeSymbol("INTERACTION"), list(makeSymbol("PWHEN-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CB-UIAT-END-LEXIFICATION-WIZARD"), makeSymbol("INTERACTION")))), list(makeSymbol("CLEAR-PARAPHRASE-CACHES")), list(makeSymbol("PWHEN-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLEAR-UIA-PARAPHRASE-CACHES"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list172 = list(list(makeSymbol("PWHEN"), makeSymbol("INTERACTION"), list(makeSymbol("PWHEN-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CB-UIAT-END-LEXIFICATION-WIZARD"), makeSymbol("INTERACTION")))), list(makeSymbol("CLEAR-PARAPHRASE-CACHES")), list(makeSymbol("PWHEN-FEATURE"), makeKeyword("CYC-UIA"), list(makeSymbol("CLEAR-UIA-PARAPHRASE-CACHES"), list(makeSymbol("UI-AGENDA"), makeSymbol("INTERACTION")))), list(RET, NIL));
 
     private static final SubLSymbol $sym173$OUTER_CATCH_FOR_RKF_UIA_PROXY_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-PROXY-METHOD");
 
@@ -423,13 +409,13 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list175 = list(makeKeyword("AUTO-UPDATE"), makeKeyword("PROTECTED"));
 
-    private static final SubLList $list176 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("PROXY"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(makeSymbol("QUOTE"), makeSymbol("RKF-BB-PROXY")), list(makeSymbol("QUOTE"), makeSymbol("NEW")))), list(makeSymbol("PIF"), makeSymbol("*SIMULATED-BLACKBOARD?*"), list(makeSymbol("CSETQ"), makeSymbol("QUESTION-ANSWERING-AGENT-CLASS"), list(makeSymbol("QUOTE"), makeSymbol("SIM-BB-QUESTION-ANSWERING-AGENT"))), list(makeSymbol("CSETQ"), makeSymbol("QUESTION-ANSWERING-AGENT-CLASS"), list(makeSymbol("QUOTE"), makeSymbol("RKF-BB-QUESTION-ANSWERING-AGENT")))), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLList $list176 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("PROXY"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(QUOTE, makeSymbol("RKF-BB-PROXY")), list(QUOTE, makeSymbol("NEW")))), list(makeSymbol("PIF"), makeSymbol("*SIMULATED-BLACKBOARD?*"), list(makeSymbol("CSETQ"), makeSymbol("QUESTION-ANSWERING-AGENT-CLASS"), list(QUOTE, makeSymbol("SIM-BB-QUESTION-ANSWERING-AGENT"))), list(makeSymbol("CSETQ"), makeSymbol("QUESTION-ANSWERING-AGENT-CLASS"), list(QUOTE, makeSymbol("RKF-BB-QUESTION-ANSWERING-AGENT")))), list(RET, makeSymbol("SELF")));
 
 
 
     private static final SubLSymbol RKF_BB_SME_LEXIFICATION_WIZARD_INITIALIZE_METHOD = makeSymbol("RKF-BB-SME-LEXIFICATION-WIZARD-INITIALIZE-METHOD");
 
-    private static final SubLList $list179 = list(list(makeSymbol("RET"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("GET-PENDING-ACTIONS")))));
+    private static final SubLList $list179 = list(list(RET, list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("GET-PENDING-ACTIONS")))));
 
     private static final SubLSymbol $sym180$OUTER_CATCH_FOR_RKF_BB_SME_LEXIFICATION_WIZARD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-SME-LEXIFICATION-WIZARD-METHOD");
 
@@ -437,7 +423,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_PENDING_ACTIONS = makeSymbol("CLEAR-PENDING-ACTIONS");
 
-    private static final SubLList $list183 = list(list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("CLEAR-ACTIONS"))), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list183 = list(list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("CLEAR-ACTIONS"))), list(RET, NIL));
 
     private static final SubLSymbol $sym184$OUTER_CATCH_FOR_RKF_BB_SME_LEXIFICATION_WIZARD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-SME-LEXIFICATION-WIZARD-METHOD");
 
@@ -447,7 +433,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list187 = list(makeSymbol("RESPONSE"));
 
-    private static final SubLList $list188 = list(list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("ADD-USER-RESPONSE")), makeSymbol("RESPONSE")), list(makeSymbol("PUNLESS"), list(EQ, makeSymbol("CURRENT-INTERACTION"), makeSymbol("NEW-CURRENT-INTERACTION")), list(makeSymbol("LEX-WARN"), makeString("Issuing shameless hack updating current interaction~%")), list(makeSymbol("CSETQ"), makeSymbol("CURRENT-INTERACTION"), makeSymbol("NEW-CURRENT-INTERACTION"))), list(makeSymbol("PWHEN"), makeSymbol("CURRENT-INTERACTION"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CURRENT-INTERACTION"), list(makeSymbol("QUOTE"), makeSymbol("PROCESS-STATUS-UPDATE")), makeKeyword("OUTPUT-DONE"))), list(makeSymbol("RET"), T));
+    private static final SubLList $list188 = list(list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("ADD-USER-RESPONSE")), makeSymbol("RESPONSE")), list(makeSymbol("PUNLESS"), list(EQ, makeSymbol("CURRENT-INTERACTION"), makeSymbol("NEW-CURRENT-INTERACTION")), list(makeSymbol("LEX-WARN"), makeString("Issuing shameless hack updating current interaction~%")), list(makeSymbol("CSETQ"), makeSymbol("CURRENT-INTERACTION"), makeSymbol("NEW-CURRENT-INTERACTION"))), list(makeSymbol("PWHEN"), makeSymbol("CURRENT-INTERACTION"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("CURRENT-INTERACTION"), list(QUOTE, makeSymbol("PROCESS-STATUS-UPDATE")), makeKeyword("OUTPUT-DONE"))), list(RET, T));
 
     private static final SubLString $str189$Issuing_shameless_hack_updating_c = makeString("Issuing shameless hack updating current interaction~%");
 
@@ -457,13 +443,13 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLSymbol CLEAR_USER_RESPONSES = makeSymbol("CLEAR-USER-RESPONSES");
 
-    private static final SubLList $list193 = list(list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("CLEAR-RESPONSES"))), list(makeSymbol("RET"), NIL));
+    private static final SubLList $list193 = list(list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("CLEAR-RESPONSES"))), list(RET, NIL));
 
     private static final SubLSymbol $sym194$OUTER_CATCH_FOR_RKF_BB_SME_LEXIFICATION_WIZARD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-BB-SME-LEXIFICATION-WIZARD-METHOD");
 
     private static final SubLSymbol RKF_BB_SME_LEXIFICATION_WIZARD_CLEAR_USER_RESPONSES_METHOD = makeSymbol("RKF-BB-SME-LEXIFICATION-WIZARD-CLEAR-USER-RESPONSES-METHOD");
 
-    private static final SubLList $list196 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("PROXY"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(makeSymbol("QUOTE"), makeSymbol("RKF-UIA-PROXY")), list(makeSymbol("QUOTE"), makeSymbol("NEW")))), list(makeSymbol("CSETQ"), makeSymbol("QUESTION-ANSWERING-AGENT-CLASS"), list(makeSymbol("QUOTE"), makeSymbol("UIA-HTML-QUESTION-ANSWERING-AGENT"))), list(makeSymbol("CSETQ"), makeSymbol("*USE-INFERRED-PHRASES?*"), T), list(makeSymbol("CSETQ"), makeSymbol("*SME-LEXWIZ-VERBOSE?*"), NIL), list(makeSymbol("RET"), makeSymbol("SELF")));
+    private static final SubLList $list196 = list(list(makeSymbol("INITIALIZE"), makeSymbol("SUPER")), list(makeSymbol("CSETQ"), makeSymbol("PROXY"), list(makeSymbol("FUNCALL-CLASS-METHOD"), list(QUOTE, makeSymbol("RKF-UIA-PROXY")), list(QUOTE, makeSymbol("NEW")))), list(makeSymbol("CSETQ"), makeSymbol("QUESTION-ANSWERING-AGENT-CLASS"), list(QUOTE, makeSymbol("UIA-HTML-QUESTION-ANSWERING-AGENT"))), list(makeSymbol("CSETQ"), makeSymbol("*USE-INFERRED-PHRASES?*"), T), list(makeSymbol("CSETQ"), makeSymbol("*SME-LEXWIZ-VERBOSE?*"), NIL), list(RET, makeSymbol("SELF")));
 
     private static final SubLSymbol UIA_HTML_QUESTION_ANSWERING_AGENT = makeSymbol("UIA-HTML-QUESTION-ANSWERING-AGENT");
 
@@ -471,7 +457,7 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
 
     private static final SubLList $list199 = list(makeKeyword("PROTECTED"), makeKeyword("PUBLIC"));
 
-    private static final SubLList $list200 = list(list(makeSymbol("PWHEN"), makeSymbol("PROXY"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(makeSymbol("QUOTE"), makeSymbol("SET-INTERACTION")), makeSymbol("NEW-INTERACTION"))));
+    private static final SubLList $list200 = list(list(makeSymbol("PWHEN"), makeSymbol("PROXY"), list(makeSymbol("FUNCALL-INSTANCE-METHOD"), makeSymbol("PROXY"), list(QUOTE, makeSymbol("SET-INTERACTION")), makeSymbol("NEW-INTERACTION"))));
 
     private static final SubLSymbol $sym201$OUTER_CATCH_FOR_RKF_UIA_SME_LEXIFICATION_WIZARD_METHOD = makeUninternedSymbol("OUTER-CATCH-FOR-RKF-UIA-SME-LEXIFICATION-WIZARD-METHOD");
 
@@ -1402,58 +1388,58 @@ public final class rkf_sme_lexification_wizard extends SubLTranslatedFile {
     }
 
     public static SubLObject declare_rkf_sme_lexification_wizard_file() {
-        declareFunction(me, "get_rkf_bb_proxy_responses", "GET-RKF-BB-PROXY-RESPONSES", 1, 0, false);
-        declareFunction(me, "set_rkf_bb_proxy_responses", "SET-RKF-BB-PROXY-RESPONSES", 2, 0, false);
-        declareFunction(me, "get_rkf_bb_proxy_pending_actions", "GET-RKF-BB-PROXY-PENDING-ACTIONS", 1, 0, false);
-        declareFunction(me, "set_rkf_bb_proxy_pending_actions", "SET-RKF-BB-PROXY-PENDING-ACTIONS", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_bb_proxy_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-PROXY-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_bb_proxy_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-PROXY-INSTANCE", 1, 0, false);
-        declareFunction(me, "rkf_bb_proxy_p", "RKF-BB-PROXY-P", 1, 0, false);
-        declareFunction(me, "get_rkf_uia_proxy_interaction", "GET-RKF-UIA-PROXY-INTERACTION", 1, 0, false);
-        declareFunction(me, "set_rkf_uia_proxy_interaction", "SET-RKF-UIA-PROXY-INTERACTION", 2, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_uia_proxy_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-PROXY-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_uia_proxy_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-PROXY-INSTANCE", 1, 0, false);
-        declareFunction(me, "rkf_uia_proxy_p", "RKF-UIA-PROXY-P", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_bb_question_answering_agent_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-QUESTION-ANSWERING-AGENT-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_bb_question_answering_agent_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-QUESTION-ANSWERING-AGENT-INSTANCE", 1, 0, false);
-        declareFunction(me, "rkf_bb_question_answering_agent_p", "RKF-BB-QUESTION-ANSWERING-AGENT-P", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sim_bb_question_answering_agent_class", "SUBLOOP-RESERVED-INITIALIZE-SIM-BB-QUESTION-ANSWERING-AGENT-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_sim_bb_question_answering_agent_instance", "SUBLOOP-RESERVED-INITIALIZE-SIM-BB-QUESTION-ANSWERING-AGENT-INSTANCE", 1, 0, false);
-        declareFunction(me, "sim_bb_question_answering_agent_p", "SIM-BB-QUESTION-ANSWERING-AGENT-P", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_bb_sme_lexification_wizard_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-SME-LEXIFICATION-WIZARD-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_bb_sme_lexification_wizard_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-SME-LEXIFICATION-WIZARD-INSTANCE", 1, 0, false);
-        declareFunction(me, "rkf_bb_sme_lexification_wizard_p", "RKF-BB-SME-LEXIFICATION-WIZARD-P", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_uia_sme_lexification_wizard_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-SME-LEXIFICATION-WIZARD-CLASS", 1, 0, false);
-        declareFunction(me, "subloop_reserved_initialize_rkf_uia_sme_lexification_wizard_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-SME-LEXIFICATION-WIZARD-INSTANCE", 1, 0, false);
-        declareFunction(me, "rkf_uia_sme_lexification_wizard_p", "RKF-UIA-SME-LEXIFICATION-WIZARD-P", 1, 0, false);
-        declareFunction(me, "rkf_bb_question_answering_agent_display_question_method", "RKF-BB-QUESTION-ANSWERING-AGENT-DISPLAY-QUESTION-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_question_answering_agent_get_response_method", "RKF-BB-QUESTION-ANSWERING-AGENT-GET-RESPONSE-METHOD", 1, 0, false);
-        declareFunction(me, "sim_bb_question_answering_agent_display_question_method", "SIM-BB-QUESTION-ANSWERING-AGENT-DISPLAY-QUESTION-METHOD", 1, 0, false);
-        declareFunction(me, "sim_bb_question_answering_agent_get_response_method", "SIM-BB-QUESTION-ANSWERING-AGENT-GET-RESPONSE-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_proxy_initialize_method", "RKF-BB-PROXY-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_proxy_get_pending_actions_method", "RKF-BB-PROXY-GET-PENDING-ACTIONS-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_proxy_add_actions_method", "RKF-BB-PROXY-ADD-ACTIONS-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_bb_proxy_clear_actions_method", "RKF-BB-PROXY-CLEAR-ACTIONS-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_proxy_add_user_response_method", "RKF-BB-PROXY-ADD-USER-RESPONSE-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_bb_proxy_get_next_response_method", "RKF-BB-PROXY-GET-NEXT-RESPONSE-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_proxy_clear_responses_method", "RKF-BB-PROXY-CLEAR-RESPONSES-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_proxy_initialize_method", "RKF-UIA-PROXY-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_proxy_create_constant_method", "RKF-UIA-PROXY-CREATE-CONSTANT-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_uia_proxy_describe_term_method", "RKF-UIA-PROXY-DESCRIBE-TERM-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_uia_proxy_resolve_term_method", "RKF-UIA-PROXY-RESOLVE-TERM-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_uia_proxy_mumble_method", "RKF-UIA-PROXY-MUMBLE-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_uia_proxy_forge_aheadP_method", "RKF-UIA-PROXY-FORGE-AHEAD?-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_proxy_end_session_method", "RKF-UIA-PROXY-END-SESSION-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_proxy_get_interaction_method", "RKF-UIA-PROXY-GET-INTERACTION-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_proxy_set_interaction_method", "RKF-UIA-PROXY-SET-INTERACTION-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_uia_proxy_end_interaction_method", "RKF-UIA-PROXY-END-INTERACTION-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_sme_lexification_wizard_initialize_method", "RKF-BB-SME-LEXIFICATION-WIZARD-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_sme_lexification_wizard_get_pending_actions_method", "RKF-BB-SME-LEXIFICATION-WIZARD-GET-PENDING-ACTIONS-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_sme_lexification_wizard_clear_pending_actions_method", "RKF-BB-SME-LEXIFICATION-WIZARD-CLEAR-PENDING-ACTIONS-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_bb_sme_lexification_wizard_set_user_response_method", "RKF-BB-SME-LEXIFICATION-WIZARD-SET-USER-RESPONSE-METHOD", 2, 0, false);
-        declareFunction(me, "rkf_bb_sme_lexification_wizard_clear_user_responses_method", "RKF-BB-SME-LEXIFICATION-WIZARD-CLEAR-USER-RESPONSES-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_sme_lexification_wizard_initialize_method", "RKF-UIA-SME-LEXIFICATION-WIZARD-INITIALIZE-METHOD", 1, 0, false);
-        declareFunction(me, "rkf_uia_sme_lexification_wizard_set_interaction_method", "RKF-UIA-SME-LEXIFICATION-WIZARD-SET-INTERACTION-METHOD", 2, 0, false);
+        declareFunction("get_rkf_bb_proxy_responses", "GET-RKF-BB-PROXY-RESPONSES", 1, 0, false);
+        declareFunction("set_rkf_bb_proxy_responses", "SET-RKF-BB-PROXY-RESPONSES", 2, 0, false);
+        declareFunction("get_rkf_bb_proxy_pending_actions", "GET-RKF-BB-PROXY-PENDING-ACTIONS", 1, 0, false);
+        declareFunction("set_rkf_bb_proxy_pending_actions", "SET-RKF-BB-PROXY-PENDING-ACTIONS", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_bb_proxy_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-PROXY-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_bb_proxy_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-PROXY-INSTANCE", 1, 0, false);
+        declareFunction("rkf_bb_proxy_p", "RKF-BB-PROXY-P", 1, 0, false);
+        declareFunction("get_rkf_uia_proxy_interaction", "GET-RKF-UIA-PROXY-INTERACTION", 1, 0, false);
+        declareFunction("set_rkf_uia_proxy_interaction", "SET-RKF-UIA-PROXY-INTERACTION", 2, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_uia_proxy_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-PROXY-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_uia_proxy_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-PROXY-INSTANCE", 1, 0, false);
+        declareFunction("rkf_uia_proxy_p", "RKF-UIA-PROXY-P", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_bb_question_answering_agent_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-QUESTION-ANSWERING-AGENT-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_bb_question_answering_agent_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-QUESTION-ANSWERING-AGENT-INSTANCE", 1, 0, false);
+        declareFunction("rkf_bb_question_answering_agent_p", "RKF-BB-QUESTION-ANSWERING-AGENT-P", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_sim_bb_question_answering_agent_class", "SUBLOOP-RESERVED-INITIALIZE-SIM-BB-QUESTION-ANSWERING-AGENT-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_sim_bb_question_answering_agent_instance", "SUBLOOP-RESERVED-INITIALIZE-SIM-BB-QUESTION-ANSWERING-AGENT-INSTANCE", 1, 0, false);
+        declareFunction("sim_bb_question_answering_agent_p", "SIM-BB-QUESTION-ANSWERING-AGENT-P", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_bb_sme_lexification_wizard_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-SME-LEXIFICATION-WIZARD-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_bb_sme_lexification_wizard_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-BB-SME-LEXIFICATION-WIZARD-INSTANCE", 1, 0, false);
+        declareFunction("rkf_bb_sme_lexification_wizard_p", "RKF-BB-SME-LEXIFICATION-WIZARD-P", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_uia_sme_lexification_wizard_class", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-SME-LEXIFICATION-WIZARD-CLASS", 1, 0, false);
+        declareFunction("subloop_reserved_initialize_rkf_uia_sme_lexification_wizard_instance", "SUBLOOP-RESERVED-INITIALIZE-RKF-UIA-SME-LEXIFICATION-WIZARD-INSTANCE", 1, 0, false);
+        declareFunction("rkf_uia_sme_lexification_wizard_p", "RKF-UIA-SME-LEXIFICATION-WIZARD-P", 1, 0, false);
+        declareFunction("rkf_bb_question_answering_agent_display_question_method", "RKF-BB-QUESTION-ANSWERING-AGENT-DISPLAY-QUESTION-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_question_answering_agent_get_response_method", "RKF-BB-QUESTION-ANSWERING-AGENT-GET-RESPONSE-METHOD", 1, 0, false);
+        declareFunction("sim_bb_question_answering_agent_display_question_method", "SIM-BB-QUESTION-ANSWERING-AGENT-DISPLAY-QUESTION-METHOD", 1, 0, false);
+        declareFunction("sim_bb_question_answering_agent_get_response_method", "SIM-BB-QUESTION-ANSWERING-AGENT-GET-RESPONSE-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_proxy_initialize_method", "RKF-BB-PROXY-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_proxy_get_pending_actions_method", "RKF-BB-PROXY-GET-PENDING-ACTIONS-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_proxy_add_actions_method", "RKF-BB-PROXY-ADD-ACTIONS-METHOD", 2, 0, false);
+        declareFunction("rkf_bb_proxy_clear_actions_method", "RKF-BB-PROXY-CLEAR-ACTIONS-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_proxy_add_user_response_method", "RKF-BB-PROXY-ADD-USER-RESPONSE-METHOD", 2, 0, false);
+        declareFunction("rkf_bb_proxy_get_next_response_method", "RKF-BB-PROXY-GET-NEXT-RESPONSE-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_proxy_clear_responses_method", "RKF-BB-PROXY-CLEAR-RESPONSES-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_proxy_initialize_method", "RKF-UIA-PROXY-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_proxy_create_constant_method", "RKF-UIA-PROXY-CREATE-CONSTANT-METHOD", 2, 0, false);
+        declareFunction("rkf_uia_proxy_describe_term_method", "RKF-UIA-PROXY-DESCRIBE-TERM-METHOD", 2, 0, false);
+        declareFunction("rkf_uia_proxy_resolve_term_method", "RKF-UIA-PROXY-RESOLVE-TERM-METHOD", 2, 0, false);
+        declareFunction("rkf_uia_proxy_mumble_method", "RKF-UIA-PROXY-MUMBLE-METHOD", 2, 0, false);
+        declareFunction("rkf_uia_proxy_forge_aheadP_method", "RKF-UIA-PROXY-FORGE-AHEAD?-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_proxy_end_session_method", "RKF-UIA-PROXY-END-SESSION-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_proxy_get_interaction_method", "RKF-UIA-PROXY-GET-INTERACTION-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_proxy_set_interaction_method", "RKF-UIA-PROXY-SET-INTERACTION-METHOD", 2, 0, false);
+        declareFunction("rkf_uia_proxy_end_interaction_method", "RKF-UIA-PROXY-END-INTERACTION-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_sme_lexification_wizard_initialize_method", "RKF-BB-SME-LEXIFICATION-WIZARD-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_sme_lexification_wizard_get_pending_actions_method", "RKF-BB-SME-LEXIFICATION-WIZARD-GET-PENDING-ACTIONS-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_sme_lexification_wizard_clear_pending_actions_method", "RKF-BB-SME-LEXIFICATION-WIZARD-CLEAR-PENDING-ACTIONS-METHOD", 1, 0, false);
+        declareFunction("rkf_bb_sme_lexification_wizard_set_user_response_method", "RKF-BB-SME-LEXIFICATION-WIZARD-SET-USER-RESPONSE-METHOD", 2, 0, false);
+        declareFunction("rkf_bb_sme_lexification_wizard_clear_user_responses_method", "RKF-BB-SME-LEXIFICATION-WIZARD-CLEAR-USER-RESPONSES-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_sme_lexification_wizard_initialize_method", "RKF-UIA-SME-LEXIFICATION-WIZARD-INITIALIZE-METHOD", 1, 0, false);
+        declareFunction("rkf_uia_sme_lexification_wizard_set_interaction_method", "RKF-UIA-SME-LEXIFICATION-WIZARD-SET-INTERACTION-METHOD", 2, 0, false);
         return NIL;
     }
 
